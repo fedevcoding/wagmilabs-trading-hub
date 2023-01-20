@@ -32,7 +32,7 @@ const CartModal = ({modalOpen, closeCartModal}) => {
                         <header className='cart-modal-header'>
                             <div className='modal-cart-your-cart'>
                                 <p>Your cart</p>
-                                <i class="fa-solid fa-xmark" onClick={e => closeCartModal(e)}></i>
+                                <i className="fa-solid fa-xmark" onClick={e => closeCartModal(e)}></i>
                             </div>
                             <hr className='cart-hr'></hr>
                         </header>

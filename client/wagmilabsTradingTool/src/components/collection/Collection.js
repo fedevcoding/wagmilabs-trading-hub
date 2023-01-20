@@ -301,7 +301,7 @@ const Collection = () => {
                     <div className='collection-address-copy' onClick={copyAddress} onMouseOver={() => handleHoverCopy(true)} onMouseOut={() => handleHoverCopy(false)}>
                         <div>{formatContractAddress(address)}</div>
                         <div className='collection-address-copy-btn inactive'>{copyState.value}</div>
-                        <i class="fa-solid fa-clipboard"></i>
+                        <i className="fa-solid fa-clipboard"></i>
                     </div>
 
                     <div className='flex-normal'>

@@ -8,6 +8,9 @@ import Skeleton, {SkeletonTheme } from "react-loading-skeleton"
 import 'react-loading-skeleton/dist/skeleton.css'
 import "./nfts.css"
 
+import notFound from "../../../../assets/notFound.svg"
+
+
 import { getClient } from "@reservoir0x/reservoir-kit-client";
 import { roundPrice } from '../../../../utils/formats/formats'
 import { marketListingMapping } from '../../../../utils/mappings'
@@ -255,7 +258,7 @@ const Nfts = ({userItems, setProfileImage, collections, loadingNfts, listingSett
           return(
               <div className='single-item-container' key={id} onMouseOver={()=> activateList(index)} onMouseOut={()=> deactivateList(index)}>
                   <div className='profile-item-listing'>
-                      {/* {item.seaport_sell_orders ? Math.round((item.seaport_sell_orders[0].current_price / 1000000000000000000 * 10000)) / 10000 : <></>} */}
+                      {item.seaport_sell_orders ? Math.round((item.seaport_sell_orders[0].current_price / 1000000000000000000 * 10000)) / 10000 : <></>}
                   </div>
                 <div className={`${selectBulk ? "profile-items-details-container-bulk" : "profile-items-details-container"}`}>
                   <div className='image-hover-overflow'>
@@ -281,8 +284,8 @@ const Nfts = ({userItems, setProfileImage, collections, loadingNfts, listingSett
                   <img src={collectionImage} alt="" className='profile-item-collection-image' onClick={() => window.open(`/collection/${contractAddress}`)}/>
                   <div className='profile-item-stats'>
                     <div>
+                      <p className='single-item-name'>{name || tokenId}</p>
                       {/* <p className='single-item-collection-name'>{collectionName}</p> */}
-                      <p className='single-item-name'>{name}</p>
                       <p className='single-item-rarity'>Floor price: {floor_price && roundPrice(floor_price)}</p>
                     </div>
                     <hr></hr>
@@ -393,9 +396,19 @@ const Nfts = ({userItems, setProfileImage, collections, loadingNfts, listingSett
             </>
           }
 
-          <div className="profile-items">
-            {itemMapping}
-          </div>
+            {
+            userItems.length === 0 ?
+
+            <div className='profile-user-no-items'>
+              <img src={notFound}></img>
+              <p>No NFTs found.</p>
+            </div>
+            :
+            <div className="profile-items">
+              {itemMapping}
+            </div>
+            }
+
         </div>
       }
     </>

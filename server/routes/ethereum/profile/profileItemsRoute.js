@@ -1,33 +1,33 @@
 const express = require("express")
-const User = require("../../../models/userModel.js")
 const checkAuth = require("../../../middleware/checkAuth")
-// const {ZDK} = require("@zoralabs/zdk")
 
 const profileItemsRoute = express()
 
+
+const RESERVOIR_API_KEY = "9fc22ad1-29da-4a2d-a977-327f6bf1926f" 
+
+
+
 profileItemsRoute.get("/", checkAuth, async (req, res)=> {
 
-    const userAddress = req.userDetails.address
-
-
-
-    // let moreInfo = await fetch(`https://eth-mainnet.g.alchemy.com/nft/v2/sIct87hLyULWBtGD7oHMLsQz2UHYfxV1/getNFTs?owner=${userAddress}&withMetadata=true`)
-    // moreInfo = (await moreInfo.json()).ownedNfts
-
-
-    let items = await fetch(`https://api.reservoir.tools/users/${userAddress}/tokens/v6?normalizeRoyalties=false&sortDirection=desc&limit=100&includeTopBid=false`, {
-        headers: {
-        "accept": "*/*",
-        "x-api-key": "9fc22ad1-29da-4a2d-a977-327f6bf1926f" 
-        }
-    })
-    items = (await items.json()).tokens
+    try{
+        const userAddress = req.userDetails.address
     
-    const userCollections =  []
-    // [...new Map(items.map(item =>
-        // [item.token.collection.id, item.token.collection])).values()];
+        let items = await fetch(`https://api.reservoir.tools/users/${userAddress}/tokens/v6?normalizeRoyalties=false&sortDirection=desc&limit=100&includeTopBid=false`, {
+            headers: {
+            "accept": "*/*",
+            "x-api-key": RESERVOIR_API_KEY
+            }
+        })
+        items = (await items.json())?.tokens
+        
+    
+        res.status(200).json({items, ok: true})
+    }
+    catch(e){
+        res.status(400).json({ok: false, items, userCollections})
+    }
 
-    res.json({items, userCollections})
 })
 
 

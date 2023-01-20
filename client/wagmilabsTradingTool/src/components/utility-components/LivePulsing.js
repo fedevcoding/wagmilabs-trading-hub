@@ -4,7 +4,7 @@ import "./livePulsing.css"
 
 const LivePulsing = () => {
   return (
-    <div class="blob"></div>
+    <div className="blob"></div>
   )
 }
 
