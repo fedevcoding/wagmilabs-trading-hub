@@ -1,0 +1,356 @@
+.table-container {
+  width: 95vw;
+  color: white;
+  height: 76vh;
+  display: block;
+  border-radius: 10px;
+  background-color: #1e1f25;
+  margin: 0 auto;
+  overflow-y: scroll;
+  table-layout: fixed;
+  position: relative;
+  font-family: inherit;
+  letter-spacing: 1.2px;
+  overflow-x: hidden;
+}
+.trending-container {
+  width: 100%;
+  /* overflow: hidden; */
+}
+
+.trending-details tr th {
+  display: table-cell;
+  position: sticky;
+  top: 0px;
+  text-align: center;
+  border-bottom: 2px solid rgb(44, 44, 58);
+  background-color: #222840;
+  padding: 20px 0;
+  z-index: 1;
+  color: white;
+}
+
+.trending-details td:nth-child(1) {
+  text-align: left;
+}
+
+.image-name-container {
+  display: flex;
+  align-items: center;
+  padding-left: 30px;
+}
+
+.single-collection-container td {
+  text-align: center;
+  cursor: pointer;
+  border-bottom: 1px solid rgb(44, 44, 58);
+}
+.single-collection-container:nth-child(odd) {
+  background-color: #171719;
+}
+
+.trending-name {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.trending-image {
+  width: 50px;
+  height: 50px;
+  border-radius: 10px;
+}
+
+th,
+td {
+  width: 250px;
+  overflow: hidden;
+}
+.single-collection-container {
+  transition: all 0.5s;
+}
+.single-collection-container:hover {
+  transform: scale(1.02);
+}
+
+.trending-floor-price {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.trending-floor-price i {
+  margin-right: 10px;
+}
+
+/* .trending-chart-floor-price{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+} */
+.fp-chart .highcharts-container, .volume-chart .highcharts-container{
+  margin: 0 auto;
+}
+
+.trending-average-price {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.trending-average-price i {
+  margin-right: 10px;
+}
+
+.trending-volume {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.trending-volume i {
+  margin-right: 10px;
+}
+
+.trending-details tr th div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+.nameSelected{
+  opacity: 1 !important;
+}
+
+.trending-details tr th div p{
+  opacity: 0.5;
+}
+
+.trending-details tr th div i {
+  margin-left: 10px;
+}
+
+.arrow {
+  transform: rotate(0deg);
+  transition: all 1s;
+  opacity: 0.5;
+}
+.arrow.rotate {
+  transition: all 1s;
+  transform: rotate(180deg);
+}
+.selected {
+  opacity: 1;
+}
+
+.filtered {
+  /* color: lime; */
+}
+
+/* .scroll{
+    position: sticky;
+    bottom: 30px;
+    left: 40px;
+    height: 35px;
+    width: 100px;
+    border-radius: 10px;
+    background-color: skyblue;
+    border-color: transparent;
+    border: 2px solid grey;
+    cursor: pointer;
+    z-index: 100;
+} */
+
+.trending-details {
+  position: relative;
+}
+
+.refresh {
+  position: absolute;
+  top: 0;
+  top: 50%;
+  left: 30px;
+  transform: translateY(-55%);
+  display: flex;
+  cursor: pointer;
+  z-index: 99;
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 13px 0;
+}
+
+.spinner {
+  animation: rotator 1.4s linear infinite;
+  width: 20px;
+  height: 20px;
+  margin-left: 30px;
+}
+
+@keyframes rotator {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(270deg);
+  }
+}
+
+.path {
+  stroke-dasharray: 187;
+  stroke-dashoffset: 0;
+  transform-origin: center;
+  animation: dash 1.4s ease-in-out infinite, colors 5.6s ease-in-out infinite;
+}
+
+@keyframes colors {
+  0% {
+    stroke: #4285f4;
+  }
+
+  25% {
+    stroke: #de3e35;
+  }
+
+  50% {
+    stroke: #f7c223;
+  }
+
+  75% {
+    stroke: #1b9a59;
+  }
+
+  100% {
+    stroke: #4285f4;
+  }
+}
+
+@keyframes dash {
+  0% {
+    stroke-dashoffset: 187;
+  }
+
+  50% {
+    stroke-dashoffset: 46.75;
+    transform: rotate(135deg);
+  }
+
+  100% {
+    stroke-dashoffset: 187;
+    transform: rotate(450deg);
+  }
+}
+
+
+
+@-webkit-keyframes rotating /* Safari and Chrome */ {
+  from {
+    -webkit-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@keyframes rotating {
+  from {
+    -ms-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -webkit-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  to {
+    -ms-transform: rotate(360deg);
+    -moz-transform: rotate(360deg);
+    -webkit-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+.rotatingReloader {
+  -webkit-animation: rotating 2s linear infinite;
+  -moz-animation: rotating 2s linear infinite;
+  -ms-animation: rotating 2s linear infinite;
+  -o-animation: rotating 2s linear infinite;
+  animation: rotating 2s linear infinite;
+}
+
+
+.trending-sales-pending{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+
+.pending{
+    margin-left: 6px;
+    height: 18px;
+    color: #fff;
+    position: relative;
+    display: inline-block;
+}
+
+.iconfont{
+  margin-top: 0;
+  border-top-width: 1px;
+  border-right-width: 1px;
+  width: 18px;
+  height: 18px;
+  display: inline-block;
+  border-radius: 99999px;
+  border-color: currentcolor currentcolor transparent transparent;
+  border-style: solid;
+  border-width: 2px;
+  -webkit-animation: animation-rotate .45s linear 0s infinite normal none running;
+  animation: animation-rotate .45s linear 0s infinite normal none running;
+  --spinner-size: 1rem;
+  margin-top: -3px;
+}
+.quantity{
+  position: absolute;
+  left: 0;
+  top: 1px;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  line-height: 16px;
+  font-size: 12px;
+}
+
+
+
+.trending-name-date{
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  justify-content: start;
+  padding: 30px 0;
+  margin-left: 20px;
+  text-align: left;
+
+}
+
+.trending-created-date{
+  font-size: 12px;
+  opacity: 0.8;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+@keyframes animation-rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

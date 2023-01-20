@@ -1,0 +1,276 @@
+:root{
+    --nfts-width: 220px;
+    --stats-margin-top: 30px;
+    --stats-height: 80px;
+}
+
+
+.profile-section-container{
+    padding: 30px 2vw 0 2vw;
+    background-color: var(--grey-1);
+    margin: 0 auto;
+}
+
+.address-copy-btn{
+    translate: 10px 0;
+}
+.profile-skeleton-container p span{
+    display: grid;
+    grid-template-columns: repeat(auto-fill,minmax(var(--nfts-width),1fr));
+    width: 100%;
+    gap: 1.5rem;
+}
+.profilePfp{
+    width: 70px;
+    height: 70px;
+    display: block;
+    margin: 0 auto;
+    margin-top: 10px;
+    border-radius: 50%;
+}
+.profile-container{
+
+    gap: 50px;
+    height: 230px;
+    display: flex;
+    font-family: inherit;
+    color: white;
+}
+.profile-ens-address{
+    margin-top: 15px;
+    text-align: center;
+    cursor: pointer;
+}
+.profileDetails{
+    width: 35vw;
+    background-color: #272727;
+    border: 1px solid rgb(96, 94, 94);
+    border-radius: 10px;
+}
+
+
+.profile-details-container{
+    display: flex;
+    justify-content: space-around;
+    background-color: #343434;
+    border: 1px solid rgb(73, 71, 71);
+    width: 90%;
+    margin: 0 auto;
+    margin-top: 15px;
+    border-radius: 10px;
+    padding: 15px 0;
+}
+
+.single-profile-detail p{
+    text-align: center;
+    color: lime;
+}
+
+.profile-upload-info{
+    position: absolute;
+    background-color: white;
+    right: 20px;
+    top: 150px;
+    border-radius: 10px;
+    color: black;
+    padding: 3px 7px;
+}
+
+
+.profilePnl{
+    width: 65vw;
+    border-radius: 10px;
+    background-color: #272727;
+    border: 1px solid rgb(96, 94, 94);
+    display: flex;
+    flex-wrap: wrap;
+    align-items:center;
+}
+
+.number-profits-losses{
+    flex-basis: 95%;
+    height: 35%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+.number-profits-losses p{
+    padding: 7px calc(5% / 2);
+    border: 1px solid rgb(73, 71, 71);
+    border-radius: 10px;
+    background-color: #343434;
+}
+.number-profits-losses p > div{
+    padding: 5px 0;
+    text-align: center;
+}
+
+.avg-pnl{
+    flex-basis: 90%;
+    height: 80px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    border: 1px solid rgb(73, 71, 71);
+    border-radius: 10px;
+    background-color: #343434;
+    margin: 0 auto;
+}
+
+.avg-pnl p > div{
+    padding: 5px 0;
+    text-align: center;
+}
+
+.nft-pnl-profit{
+    color: lime;
+}
+.nft-pnl-loss{
+    color: red;
+}
+
+
+.profile-sections-tabs{
+    margin: 10px 0 0 0;
+    display: flex;
+    justify-content: space-between;
+}
+
+.profile-sections{
+    color: white;
+    padding: 10px 0;
+    font-family: inherit;
+    display: flex;
+}
+
+.search-result-count{
+    margin-left: 20px;
+}
+
+.single-profile-section{
+    transition: background-color 200ms;
+    margin-right: 15px;
+    padding: 10px 25px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+
+.single-profile-section:hover, .single-profile-section.selected{
+    background-color: #343434;
+    /* border: 1px solid rgb(73, 71, 71); */
+}
+
+.profile-watchList, .profile-filters, .profile-settings{
+    color: white;
+    padding: 10px 0;
+    font-family: inherit;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.profile-watchList-button, .profile-settings-button{
+    cursor: pointer;
+    border-radius: 10px;
+    color: white;
+    padding: 9px 20px;
+    background-color: #343434;
+    border: 1px solid rgb(73, 71, 71);
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.profile-settings-button{
+    width: 150px;
+    justify-content: space-between;
+}
+.profile-watchList-button .circle{
+    position: absolute;
+    background-color: rgb(194, 186, 186);
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    animation: scale 0.5s linear;
+}
+
+.profile-watchList-button i{
+    margin-left: 5px;
+}
+
+
+.profile-spinner{
+    animation: rotator 1.4s linear infinite;
+    width: 15px;
+    height: 15px;
+}
+
+.loader-container{
+    translate: 0 7px;
+}
+
+
+
+
+.profile-watchList-settings{
+    display: flex;
+    gap: 30px;
+}
+
+
+
+
+
+/* modal styles */
+
+.nft-listing-modal{
+    width: 30vw;
+    height: 80vh;
+    background-color: black;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999999999;
+    border-radius: 10px;
+    color: white;
+}
+
+.bg-modal{
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(90, 89, 89, 0.385);
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 99999999;
+}
+
+
+
+.listing-settings-title{
+    margin-top: 15px;
+    text-align: center;
+    font-size: 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.listing-settings-price{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    margin-bottom: 40px;
+}
+
+
+#not-allowed{
+    cursor: not-allowed;
+}

@@ -1,0 +1,32 @@
+.global-footer{
+    background-color: #272727;
+    width: calc(100% - 80px);
+    height: 40px;
+    position: fixed;
+    bottom: 0;
+    color: white;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 40px;
+    z-index: 20;
+    box-shadow: 0px -1px 11px 4px black;;
+}
+
+.footer-eth-settings, .footer-links{
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    cursor: pointer;
+}
+
+.footer-blocks-mined, .footer-gas-preset{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.footer-gas-preset{
+    position: relative;
+}

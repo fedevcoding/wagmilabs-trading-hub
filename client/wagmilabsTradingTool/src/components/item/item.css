@@ -1,0 +1,45 @@
+.item-image{
+    width: 350px;
+    height: 350px;
+    border-radius: 20px;
+}
+
+.item-container{
+    display: flex;
+}
+
+.item-image-container{
+    margin-left: 50px;
+    font-family: inherit;
+    margin-top: 50px;
+    display: flex;
+    color: white;
+}
+
+.item-name-container{
+    margin-left: 30px;
+}
+.item-name{
+    font-size: 25px;
+}
+.item-collection-name{
+    vertical-align: middle;
+    margin-left: 10px;
+}
+.item-collection-image{
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+}
+
+.item-collection-info{
+    margin-top: 15px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.item-star-container{
+    display: flex;
+    align-items: center;
+}

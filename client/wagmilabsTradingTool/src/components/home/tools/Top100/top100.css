@@ -1,0 +1,106 @@
+.top100-image {
+  width: 50px;
+  border-radius: 10px;
+}
+
+.top100-container {
+  width: 100%;
+}
+
+.top100-details tr th {
+  display: table-cell;
+  position: sticky;
+  top: 0px;
+  text-align: center;
+  border-bottom: 2px solid rgb(44, 44, 58);
+  background-color: #222840;
+  padding: 20px 0;
+  z-index: 1;
+  color: white;
+}
+
+.top100-name {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.top100-image {
+  width: 50px;
+  height: 50px;
+  border-radius: 10px;
+}
+
+.top100-floor-price {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.top100-floor-price i {
+  margin-right: 10px;
+}
+
+.top100-volume {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.top100-volume i {
+  margin-right: 10px;
+}
+
+.top100-total-volume {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.top100-total-volume i {
+  margin-right: 10px;
+}
+
+.top100-market-cap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.top100-market-cap i {
+  margin-right: 10px;
+}
+
+.top100-details tr th div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+.top100-details tr th div p {
+  opacity: 0.5;
+}
+.top100-details tr th div i {
+  margin-left: 10px;
+}
+
+.top100-details {
+  position: relative;
+}
+
+
+
+.top100-name-date{
+  display: flex;
+  flex-direction: column;
+  align-items: left;
+  justify-content: start;
+  padding: 30px 0;
+  margin-left: 20px;
+  text-align: left;
+
+}
+
+.top100-created-date{
+  font-size: 12px;
+  opacity: 0.8;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}

@@ -1,0 +1,171 @@
+.wallet-modal-overlay{
+    position: absolute;
+    left: 0;
+    width: 100vw;
+    top: 0;
+    height: 100vh;
+    backdrop-filter: blur(2px);
+    background-color: #11111166;
+    z-index: 100000;
+}
+
+
+.wallet-modal-container{
+    background-color: #1e1e1e;
+    box-shadow: #000000e3 0px 0px 19px 5px;
+    color: white;
+    position: absolute;
+    right: -22%;
+    top: 0;
+    height: 100%;
+    width: 22%;
+
+    transition: right 350ms;
+}
+
+.wallet-modal-container.visible{
+    right: 0;
+    z-index: 999;
+
+}
+
+
+.wallet-modal-header{
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 25px;
+}
+.wallet-modal-header img{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+}
+
+.wallet-modal-address-container{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.wallet-modal-ens-name{
+    font-size: 12px;
+    opacity: 0.8;
+}
+
+
+.wallet-modal-logout-container{
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+
+
+
+
+
+
+.wallet-modal-total-balance-container{
+    width: calc(100% - 40px);
+    margin: 20px auto 0 auto;
+    border-top: 1px solid grey;
+    border-left: 1px solid grey;
+    border-right: 1px solid grey;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    text-align: center;
+    padding: 20px 0;
+}
+.wallet-modal-add-funds-button{
+    width: calc(100% - 38px);
+    margin: 0 auto;
+}
+
+.wallet-modal-total-balance-text{
+    opacity: 0.8;
+}
+
+.wallet-modal-total-balance-value{
+    font-weight: 600;
+    font-size: 20px;
+    letter-spacing: 1.4px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+}
+
+
+
+
+
+
+
+
+.wallet-modal-currency-container{
+    width: calc(100% - 40px);
+    margin: 20px auto;
+    background-color: #151516;
+    border: 1px solid grey;
+    border-radius: 10px;
+}
+
+.wallet-modal-currency-name{
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    font-size: 14px;
+}
+
+.wallet-modal-currency-details{
+    display: flex;
+    justify-content: space-between;
+    padding: 15px 20px;
+}
+.wallet-modal-currency-details img{
+    width: 25px;
+    height: 25px;
+    object-fit: fill;
+}
+
+
+.wallet-modal-hr-2{
+    background-color: grey;
+    border: 0 none;
+    color: grey;
+    height: 1px;
+}
+
+
+.wallet-modal-crypto-fiat{
+    display: flex;
+    flex-direction: column;
+    text-align: right;
+}
+
+.wallet-modal-usd-currency{
+    font-size: 12px;
+    opacity: 0.8;
+}
+
+.wallet-swap-overlay{
+    backdrop-filter: blur(2px);
+    background-color: #11111166;
+    position: relative;
+    z-index: 1000000;
+    width: 100vw;
+    height: 100vw;
+
+}
+
+
+.wallet-swap-container{
+    padding-top: 5%;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, 0);
+}

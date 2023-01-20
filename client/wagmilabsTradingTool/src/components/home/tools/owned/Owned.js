@@ -1,0 +1,269 @@
+import React, {useState, useEffect, useMemo} from 'react'
+import question from "../../../../assets/question.png"
+import "./owned.css"
+import times from "./times"
+
+const Owned = ({setTimeFrame, tool, timeFrame, resetTime}) => {
+
+    const [collections, setCollections] = useState([])
+    const [loading, setLoading] = useState(false)
+
+    const [sort, setSort] = useState({name: "owned", type: "desc"})
+
+
+    useEffect(()=>{
+        resetTime("24H")
+        setTimeFrame("24H")
+    }, [tool])
+
+    useEffect(()=>{
+      getOwnedCollections()
+    }, [timeFrame])
+
+    useEffect(()=>{
+      if(loading){
+        document.querySelector(".reloadIcon").classList.add("rotatingReloader")
+      }
+      else{
+        document.querySelector(".reloadIcon").classList.remove("rotatingReloader")
+      }
+    }, [loading])
+
+    useEffect(()=>{
+      collections && sortData()
+    }, [sort])
+
+
+
+    const time = times[timeFrame]
+
+
+    async function getOwnedCollections(){
+
+      try{
+          setLoading(true)
+          
+          let data = await fetch(`https://api.reservoir.tools/users/0xfe697C5527ab86DaA1e4c08286D2bE744a0E321E/collections/v2?includeTopBid=true&includeLiquidCount=true&offset=0&limit=100`, {
+            headers: {
+              'x-api-key': '9a16bf8e-ec68-5d88-a7a5-a24044de3f38'
+            }
+          })
+          data = (await data.json()).collections
+          setTimeout(()=> setLoading(false), 500)
+          
+          sortData(data)
+      }
+      catch(err){
+          console.error(err)
+          alert("error")
+      }
+
+    }
+
+
+
+
+    
+  function sortData(data){
+
+    let statsToSort
+    if(data) statsToSort = data
+    else statsToSort = collections
+
+    const {name, type} = sort
+
+    switch(name){
+      case "floor-price":
+        const filteredFloor = statsToSort.sort((a, b) => {
+          if(type === "asc") return a.collection?.floorAskPrice - b.collection?.floorAskPrice
+          else if(type === "desc") return b.collection?.floorAskPrice - a.collection?.floorAskPrice
+        })
+        setCollections([...filteredFloor])
+        break
+      case "volume":
+        const filteredVolume = statsToSort.sort((a, b) => {
+          if(type === "asc") return a.collection?.volume[time] - b.collection?.volume[time]
+          else if(type === "desc") return b.collection?.volume[time] - a.collection?.volume[time]
+        })
+        setCollections([...filteredVolume])
+        break
+      case "top-bid":
+        const filteredBid = statsToSort.sort((a, b) => {
+          if(type === "asc") return a.collection?.topBidValue - b.collection?.topBidValue
+          else if(type === "desc") return b.collection?.topBidValue - a.collection?.topBidValue
+        })
+        setCollections([...filteredBid])
+        break
+      case "total-volume":
+        const filteredTotalVolume = statsToSort.sort((a, b) => {
+          if(type === "asc") return a.collection?.volume?.allTime - b.collection?.volume?.allTime
+          else if(type === "desc") return b.collection?.volume?.allTime - a.collection?.volume?.allTime
+        })
+        setCollections([...filteredTotalVolume])
+        break
+      case "supply":
+        const filteredSupply = statsToSort.sort((a, b) => {
+          if(type === "asc") return a.collection?.tokenCount - b.collection?.tokenCount
+          else if(type === "desc") return b.collection?.tokenCount - a.collection?.tokenCount
+        })
+        setCollections([...filteredSupply])
+        break
+      case "owned":
+        const filteredOwned = statsToSort.sort((a, b) => {
+          if(type === "asc") return a.ownership?.tokenCount - b.ownership?.tokenCount
+          else if(type === "desc") return b.ownership?.tokenCount - a.ownership?.tokenCount
+        })
+        setCollections([...filteredOwned])
+        break
+
+
+
+
+    }
+  }
+
+
+  function changeSort(e, sortName){
+    const {name, type} = sort
+    let sortingType = "desc"
+
+    if(name === sortName && type === "desc") sortingType = "asc"
+    
+    setArrows(e)
+    setSort({name: sortName, type: sortingType})
+  }
+
+  function setArrows(e){
+    document.querySelectorAll(".arrow").forEach(a => { 
+      if(e.currentTarget.children[1] == a){
+        return
+      }
+      a.classList.remove("rotate")
+      a.classList.remove("selected")
+      a.previousElementSibling.classList.remove("nameSelected")
+    })
+    e.currentTarget.children[1].classList.add("selected")
+    e.currentTarget.children[1].classList.toggle("rotate")
+    e.currentTarget.children[1].previousElementSibling.classList.add("nameSelected")
+  }
+
+
+
+
+  const collectionsMapping = useMemo(()=> collections.map((collection, index) => {
+
+      const collectionData = collection.collection
+      const collectionOwnershipData = collection.ownership
+
+      const {name, image, floorAskPrice} = collectionData
+
+      const total_volume = collectionData?.volume?.allTime
+      const owned = collectionOwnershipData.tokenCount
+      const supply = collectionData.tokenCount
+      const address = collectionData?.id
+      const {topBidValue} = collectionData
+      const topBidSource = collectionData.topBidSourceDomain
+      
+      const volume = collectionData?.volume[time]
+
+      return (
+        <tr key={index} className='single-collection-container' onClick={()=> window.open(`/collection/${address}`, "_blank")}>
+          <td className='image-name-container'>
+            <img src={image || question} className="owned-image"></img>
+            <p className='owned-name'>{name}</p>
+          </td>
+          <td>
+            <div className='owned-floor-price'>
+              <i className="fa-brands fa-ethereum"></i>
+              <p>{floorAskPrice || "---"}</p>
+            </div>
+          </td>
+          <td>
+            <div className='owned-volume filtered'>
+              <i className="fa-brands fa-ethereum"></i>
+              <p>{volume || "---"}</p>
+            </div>
+          </td>
+          <td>
+            <div className='owned-market-cap'>
+              <i className="fa-brands fa-ethereum"></i>
+              <p>{topBidValue || "- - -"}</p>
+            </div>
+          </td>
+          <td>
+            <div className="owned-total-volume">
+              <i className="fa-brands fa-ethereum"></i>
+              <p>{total_volume || "---"}</p>
+            </div>
+          </td>
+          <td className="owned-total-sales">
+            <p>{supply}</p>
+          </td>
+          <td className="owned-total-sales">
+            <p>{owned}</p>
+          </td>
+        </tr>
+      )
+  }), [collections])
+
+  return (
+
+    <div className='table-container'>
+      <table cellSpacing={0} className='owned-container'>
+        <thead className='owned-details'>
+          <tr>
+            <th>
+              <div className='refresh'><i className="fa-solid fa-rotate reloadIcon" onClick={getOwnedCollections}></i></div>
+              <p>Collection</p>
+            </th>
+            <th>
+            <div onClick={(e) => changeSort(e, "floor-price")}>
+                <p>Floor price</p>
+                <i className="fa-solid fa-caret-down arrow"></i>
+              </div>
+            </th>
+            <th>
+            <div onClick={(e) => changeSort(e, "volume")}>
+                <p>Volume</p>
+                <i className="fa-solid fa-caret-down arrow"></i>
+              </div>
+            </th>
+            <th>
+              <div onClick={(e) => changeSort(e, "top-bid")}>
+                <p>Top bid</p>
+                <i className="fa-solid fa-caret-down arrow"></i>
+              </div>
+            </th>
+            <th>
+              <div onClick={(e) => changeSort(e, "total-volume")}>
+                <p>Total volume</p>
+                <i className="fa-solid fa-caret-down arrow"></i>
+              </div>
+            </th>
+            <th>
+              <div onClick={(e) => changeSort(e, "supply")}>
+                <p>Supply</p>
+                <i className="fa-solid fa-caret-down arrow"></i>
+              </div>
+            </th>
+            <th>
+              <div onClick={(e) => changeSort(e, "owned")}>
+                <p className='nameSelected'>Owned</p>
+                <i className="fa-solid fa-caret-down arrow selected rotate"></i>
+              </div>
+            </th>
+          </tr>
+        {loading && <tr><td colSpan={7}><div className='loading'>Loading data   <svg className="spinner" width="65px" height="65px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg"><circle className="path" fill="none" strokeWidth="6" strokeLinecap="round" cx="33" cy="33" r="30"></circle></svg>     </div></td></tr>}
+        </thead>
+        <tbody>
+          {
+            collectionsMapping
+          }
+        </tbody>
+
+      </table>
+    </div>
+  )
+}
+
+export default Owned

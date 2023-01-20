@@ -1,0 +1,214 @@
+.search-header {
+  font-family: inherit;
+  height: 70px;
+  background-color: #0e0f0e;
+  border-bottom: 2px solid transparent;
+  border-image: linear-gradient(45deg, #3494e6, #ec6ead);
+  border-image-slice: 1;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 99;
+  /* margin-bottom: 40px; */
+}
+
+.logo-image {
+  width: 170px;
+  cursor: pointer;
+}
+
+.search-bar {
+  height: 20px;
+  width: 370px;
+  border-radius: 10px;
+  outline: none;
+  padding: 5px 0px;
+  border-color: transparent;
+  background-color: #272727;
+  padding-left: 40px;
+  color: rgb(225, 225, 225);
+  font-family: inherit;
+  font-size: 15px;
+  letter-spacing: 0.5px;
+}
+.search-bar:hover {
+  background-color: #343434;
+}
+.search-bar:focus {
+  background-color: #343434;
+  border: 2px solid #606060;
+}
+
+.header-links-container {
+  display: flex;
+}
+.header-links {
+  color: #cecece;
+  cursor: pointer;
+  transition: all 0.6s;
+  padding: 13px 16px;
+  border-radius: 10px;
+  margin: 0px 18px;
+  font-family: inherit;
+  letter-spacing: 1.3px;
+  font-weight: 500;
+}
+.header-links:hover {
+  background-color: #262626;
+}
+
+.input-lens-container {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.lens {
+  font-size: 14px;
+  color: #73726b;
+  position: absolute;
+  left: 15px;
+  width: 5px;
+}
+
+.connect-button {
+  color: white;
+  background-color: transparent;
+  border: 2px solid #fff;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 8px 10px;
+  margin-left: 0px;
+  font-family: inherit;
+  transition: all 400ms;
+}
+
+.connect-button:hover {
+  background-color: white;
+  color: black;
+}
+
+a {
+  all: unset;
+}
+.pfp{
+    cursor: pointer;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    position: relative;
+}
+
+.pfp-options-container{
+  position: relative;
+}
+
+.profile-options{
+  transition: opacity 350ms;
+  border-radius: 10px;
+  cursor: pointer;
+  width: 230px;
+  top: 50px;
+  right: -30px;
+  background-color: black;
+  color: white;
+  position: absolute;
+  box-shadow: 1px 1px 12px 2px #4f4a4a;
+}
+.profile-options div:first-child{
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+.profile-options div:last-child{
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+.profile-options div{
+  padding: 10px 25px;
+  transition: all 300ms;
+}
+
+.profile-options div:hover{
+  color: black;
+  background-color: rgb(205, 188, 188);
+}
+
+.profile-options.visible{
+  visibility: visible;
+  opacity: 1;
+}
+
+.profile-options.invisible{
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s linear 250ms, opacity 350ms;
+}
+
+.logout-container, .pfp-icon-container, .switch-account-option-container{
+  display: flex;
+  align-items: center;
+}
+
+.logout-container i, .pfp-icon-container i, .switch-account-option-container i{
+  margin-right: 20px;
+}
+
+.log-out-checking{
+  -webkit-box-ordinal-group: 3;
+    -webkit-animation: in4 1s;
+    animation: in4 1s;
+    background-color: #000;
+    color: white;
+    font-family: inherit;
+    border: 3px solid #fff;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 10px;
+}
+
+
+.calendars-button, .bots-button{
+  position: relative;
+}
+
+.calendars-options-dropdown.invisible, .bots-options-dropdown.invisible{
+  display: none;
+}
+
+.calendars-options-dropdown, .bots-options-dropdown{
+  background-color: #262626;
+  width: 180px;
+  position: absolute;
+  top: 130%;
+  left: 0;
+  border-radius: 10px;
+}
+.calendars-options-dropdown div, .bots-options-dropdown div{
+  padding: 10px 0;
+  text-align: center;
+}
+
+.calendars-options-dropdown div:hover, .bots-options-dropdown div:hover{
+  background-color: #343434;
+}
+
+.calendars-options-dropdown div:first-child:hover, .bots-options-dropdown div:first-child:hover{
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+.calendars-options-dropdown div:last-child:hover, .bots-options-dropdown div:last-child:hover{
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+.chakra-portal:has(#chakra-modal-cart) .chakra-modal__content-container{
+  justify-content: right;
+}
+
+#chakra-modal-cart{
+  border-radius: 0;
+}
