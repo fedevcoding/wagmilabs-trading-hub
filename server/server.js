@@ -214,8 +214,8 @@ app.use("/api/v1/wagmilabs/salesBot/", saleBotRoute)
 server.listen(port, async () => {
     console.log('App is listening on port ' + port)
     await connectDB()
-    // require("./websockets/sales")
-    // require("./websockets/listings")
+    require("./websockets/sales")
+    require("./websockets/listings")
 })
 //
 

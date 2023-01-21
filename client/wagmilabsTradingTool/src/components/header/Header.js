@@ -120,6 +120,32 @@ const Header = () => {
   }, []) 
 
 
+  // pnl dropdown hover
+  useEffect(()=>{
+      const pnlOptionContainer = document.querySelector(".pnl-button")
+      const profileOptions = document.querySelector(".pnl-options-dropdown")
+  
+      let hovered;
+  
+      pnlOptionContainer.addEventListener("mouseover", () => {
+          hovered = true
+          profileOptions.classList.remove("invisible")
+      })
+  
+      pnlOptionContainer.addEventListener("mouseout", () => {
+        hovered = false
+        setTimeout(()=> {
+          if(!hovered){
+            profileOptions.classList.add("invisible")
+          }
+        }, 300)
+      })
+  
+      pnlOptionContainer.addEventListener("click", () => {
+          profileOptions.classList.add("invisible")
+      })
+  }, []) 
+
 
   // get user infos
   useEffect(()=>{
@@ -212,7 +238,7 @@ const Header = () => {
       <EthereumSearch />
 
       <div className='header-links-container'>
-      <a>
+        <a>
           <div className='bots-button header-links'>
             <span>Bots</span>
             
@@ -223,20 +249,29 @@ const Header = () => {
             </div>
         </div>
         </a>
-        <a onClick={() => navigate("/calculators")}><div className='calcs-button header-links'>Calcs</div></a>
         <a onClick={() => navigate("/volumes")}><div className='volumes-button header-links'>Volumes</div></a>
-        <a onClick={() => navigate("/profitandloss")}><div className='pnl-button header-links'>P&L</div></a>
+        <a>
+          <div className='pnl-button header-links'>
+            <span>P&L</span>
+            
+            <div className='pnl-options-dropdown invisible'>
+              <div onClick={() => navigate("/pnl/all")}>All</div>
+              <div onClick={() => navigate("/pnl/taxes")}>Taxes</div>
+            </div>
+          </div>
+        </a>
+        <a onClick={() => navigate("/feed")}><div className='feed-button header-links'>Feed</div></a>
         <a>
           <div className='calendars-button header-links'>
             <span>Calendars</span>
             
             <div className='calendars-options-dropdown invisible'>
-              <div onClick={() => navigate("/profitandloss/drops")}>NFT drops</div>
-              <div onClick={() => navigate("/profitandloss/spaces")}>Twitter spaces</div>
-              <div onClick={() => navigate("/profitandloss/raffles")}>Raffle/allowlist</div>
-              <div onClick={() => navigate("/profitandloss/events")}>IRL events</div>
+              <div onClick={() => navigate("/calendars/drops")}>NFT drops</div>
+              <div onClick={() => navigate("/calendars/spaces")}>Twitter spaces</div>
+              <div onClick={() => navigate("/calendars/raffles")}>Raffle/allowlist</div>
+              <div onClick={() => navigate("/calendars/events")}>IRL events</div>
             </div>
-        </div>
+          </div>
         </a>
       </div>
       

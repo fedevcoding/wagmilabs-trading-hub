@@ -36,13 +36,9 @@ const Profile = () => {
 
   const [loadingNfts, setLoadingNfts] = useState(true)
 
-  // const [copyState, setCopyState] = useState("Copy")
-  // const [copyActive, setCopyActive] = useState(false)
-
 
 
   useEffect(() => {
-    new ClipboardJS(".address-copy-btn")
     fetchUserItems()
     fetchUserData()
   }, [])
@@ -143,6 +139,12 @@ const Profile = () => {
 
 
 
+  const changeSection = (section, e) => {
+    document.querySelectorAll(".single-profile-section").forEach(el => el.classList.remove("selected"))
+    e.target.classList.add("selected")
+    setSection(section)
+  }
+
 
 
 
@@ -231,11 +233,6 @@ const Profile = () => {
   }
 
 
-  const changeSection = (section, e) => {
-    document.querySelectorAll(".single-profile-section").forEach(el => el.classList.remove("selected"))
-    e.target.classList.add("selected")
-    setSection(section)
-  }
 
 
   return (
@@ -249,10 +246,9 @@ const Profile = () => {
             {
               listingSettings ?
                 <>
-                  <button onClick={() => toggleListingSettings(false)}>x</button>
+                  <button onClick={() => toggleListingSettings(false)}  className="smart-listings-close-btn"><i className="fa-solid fa-xmark"></i></button>
                   <div className='listing-settings-title'>
                     <p>Smart listing settings</p>
-                    <p>Custom preset</p>
                   </div>
 
                   <div className='listing-settings-price'>
@@ -559,6 +555,7 @@ const Profile = () => {
 
           <div className='profile-watchList-settings'>
             <div className='profile-settings'>
+              <div className='profile-calcs-button'>Calcs</div>
               <div className='profile-settings-button' onClick={() => toggleListingSettings(true)}>Listing settings<i className="fa-solid fa-gear"></i></div>
             </div>
           </div>

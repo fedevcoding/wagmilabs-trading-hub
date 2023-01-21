@@ -25,6 +25,13 @@ const Top100 = ({tool, timeFrame, setTimeFrame, resetTime}) => {
   const timeRef = useRef(time)
 
   const [sort, setSort] = useState({name: "volume", type: "desc"})
+  const sortRef = useRef(sort)
+
+
+    
+  useEffect(()=>{
+    sortRef.current = sort
+  }, [sort])
   
 
   useEffect(()=>{
@@ -76,7 +83,7 @@ const Top100 = ({tool, timeFrame, setTimeFrame, resetTime}) => {
     if(data) statsToSort = data
     else statsToSort = stats
 
-    const {name, type} = sort
+    const {name, type} = sortRef.current
 
     switch(name){
       case "floor-price":

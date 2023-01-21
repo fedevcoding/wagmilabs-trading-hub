@@ -24,6 +24,13 @@ const Minting = ({tool, timeFrame, setTimeFrame, resetTime}) => {
 
 
   const [sort, setSort] = useState({name: "right-mints", type: "desc"})
+  const sortRef = useRef(sort)
+
+
+  
+  useEffect(()=>{
+    sortRef.current = sort
+  }, [sort])
 
 
   useEffect(()=>{
@@ -80,8 +87,9 @@ const Minting = ({tool, timeFrame, setTimeFrame, resetTime}) => {
     let statsToSort
     if(data) statsToSort = data
     else statsToSort = stats
+    
+    const {name, type} = sortRef.current
 
-    const {name, type} = sort
 
     switch(name){
       case "floor-price":

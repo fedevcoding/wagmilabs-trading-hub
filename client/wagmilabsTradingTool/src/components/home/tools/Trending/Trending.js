@@ -25,6 +25,12 @@ const Trending = ({tool, timeFrame, setTimeFrame, resetTime}) => {
   const timeRef = useRef(time)
 
   const [sort, setSort] = useState({name: "sales", type: "desc"})
+  const sortRef = useRef(sort)
+
+
+  useEffect(()=>{
+    sortRef.current = sort
+  }, [sort])
 
 
   useEffect(()=>{
@@ -78,7 +84,7 @@ const Trending = ({tool, timeFrame, setTimeFrame, resetTime}) => {
     if(data) statsToSort = data
     else statsToSort = stats
 
-    const {name, type} = sort
+    const {name, type} = sortRef.current
 
     switch(name){
       case "floor-price":

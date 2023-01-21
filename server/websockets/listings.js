@@ -1,5 +1,5 @@
-const WEBSOCKET_URL = 'ws://localhost:3333/ws'
-// wss://wagmilabs-websocket-server.herokuapp.com/ws
+const {WEBSOCKET_URL, LOCAL_WEBSOCKET_URL} = require("./websocketUrl")
+
 
 const {newListing} = require("../server")
 const WebSocket = require('ws');

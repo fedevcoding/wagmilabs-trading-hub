@@ -9,7 +9,7 @@ verifyRoute.post("/", async (req, res) => {
     const {token} = req.body
 
     if(!token){
-        return res.status(400).json({message: "No token found", authenticated: false})
+        return res.status(400).json({message: "No token found", authenticated: false, verified: false})
     }
 
     try{

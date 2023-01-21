@@ -171,15 +171,15 @@ a {
 }
 
 
-.calendars-button, .bots-button{
+.calendars-button, .bots-button, .pnl-button{
   position: relative;
 }
 
-.calendars-options-dropdown.invisible, .bots-options-dropdown.invisible{
+.calendars-options-dropdown.invisible, .bots-options-dropdown.invisible, .pnl-options-dropdown.invisible{
   display: none;
 }
 
-.calendars-options-dropdown, .bots-options-dropdown{
+.calendars-options-dropdown, .bots-options-dropdown, .pnl-options-dropdown{
   background-color: #262626;
   width: 180px;
   position: absolute;
@@ -187,20 +187,25 @@ a {
   left: 0;
   border-radius: 10px;
 }
-.calendars-options-dropdown div, .bots-options-dropdown div{
+
+.pnl-options-dropdown{
+  width: 110px;
+}
+
+.calendars-options-dropdown div, .bots-options-dropdown div, .pnl-options-dropdown div{
   padding: 10px 0;
   text-align: center;
 }
 
-.calendars-options-dropdown div:hover, .bots-options-dropdown div:hover{
+.calendars-options-dropdown div:hover, .bots-options-dropdown div:hover, .pnl-options-dropdown div:hover{
   background-color: #343434;
 }
 
-.calendars-options-dropdown div:first-child:hover, .bots-options-dropdown div:first-child:hover{
+.calendars-options-dropdown div:first-child:hover, .bots-options-dropdown div:first-child:hover, .pnl-options-dropdown div:first-child:hover{
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
 }
-.calendars-options-dropdown div:last-child:hover, .bots-options-dropdown div:last-child:hover{
+.calendars-options-dropdown div:last-child:hover, .bots-options-dropdown div:last-child:hover, .pnl-options-dropdown div:last-child:hover{
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
 }

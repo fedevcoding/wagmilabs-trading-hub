@@ -11,8 +11,8 @@ const loginRoute = express()
 
 const JWT_PRIVATE_KEY = process.env.JWT_PRIVATE_KEY
 const JWT_REFRESH_PRIVATE_KEY = process.env.JWT_REFRESH_PRIVATE_KEY
-const REFRESH_JWT_DAYS = 1
-const ACCESS_JWT_SECONDS = 80
+const REFRESH_JWT_DAYS = 100
+const ACCESS_JWT_SECONDS = 100
 
 
 loginRoute.post("/", checkOwnership, async (req, res)=> {

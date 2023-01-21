@@ -25,7 +25,7 @@ profileItemsRoute.get("/", checkAuth, async (req, res)=> {
         res.status(200).json({items, ok: true})
     }
     catch(e){
-        res.status(400).json({ok: false, items, userCollections})
+        res.status(400).json({ok: false, userCollections})
     }
 
 })
