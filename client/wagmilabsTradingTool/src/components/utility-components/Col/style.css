@@ -1,0 +1,7 @@
+.col {
+    flex: 1;
+}
+
+*+.col {
+    margin-left: 1rem;
+}

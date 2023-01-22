@@ -12,7 +12,7 @@ const Volumes = () => {
   return (
     <PageWrapper page="volumes">
       <Tabs tabs={tabs} active={tab} setTab={setTab} />
-      {tab === "Overview" && <Overview />}
+      {tab === "Overview" && <Overview marketplaces={marketplaces} />}
     </PageWrapper>
   );
 };
