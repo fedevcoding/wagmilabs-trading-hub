@@ -1,8 +1,8 @@
-.chart-box {
+.chart-box, .leader-board {
     position: relative;
 }
 
-.chart-box .select-period {
+.chart-box .select-period, .leader-board .select-period{
     position: absolute;
     right: 10px;
     top: 10px;
@@ -13,4 +13,29 @@
 .overview .spinner {
     width: 100px;
     height: 100px;
+}
+
+.overview .row + .row {
+    margin-top: 1rem;
+}
+
+.overview .leader-board {
+    background-color: #2E2E30;
+    border-radius: 10px;
+    padding: 1rem;
+    margin-bottom: 3rem;
+}
+
+.overview table {
+    width: 100%;
+}
+
+.overview th {
+    text-align: left;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #666;
+}
+
+.overview td {
+    padding: 0.5rem 0;
 }
