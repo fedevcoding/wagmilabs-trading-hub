@@ -1,0 +1,16 @@
+.tabs {
+    display: flex;
+    margin-bottom: 1rem;
+}
+
+.tabs > .btn {
+    padding: 10px 30px;
+    margin-right: 10px;
+    transition: all 0.5s;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.tabs > .btn.active, .tabs > .btn:hover {
+    background-color: var(--light-dark);
+}

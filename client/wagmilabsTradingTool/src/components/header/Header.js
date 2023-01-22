@@ -222,12 +222,7 @@ const Header = () => {
 
   }, [modalOpen])
 
-
-
-
-
-
-
+  const isVolumesPage = window.location.pathname === "/volumes";
 
   return (
     <>
@@ -249,7 +244,11 @@ const Header = () => {
             </div>
         </div>
         </a>
-        <a onClick={() => navigate("/volumes")}><div className='volumes-button header-links'>Volumes</div></a>
+        <a onClick={() => navigate("/volumes")}>
+          <div className={`${isVolumesPage ? "active" : ""} volumes-button header-links`}>
+            Volumes
+          </div>
+        </a>
         <a>
           <div className='pnl-button header-links'>
             <span>P&L</span>
