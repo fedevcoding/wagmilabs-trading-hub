@@ -9,3 +9,8 @@
     width: 90px;
     z-index: 1;
 }
+
+.overview .spinner {
+    width: 100px;
+    height: 100px;
+}

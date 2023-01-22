@@ -1,5 +1,4 @@
 import React from "react";
-import baseUrl from "../../../../variables/baseUrl";
 
 export const useGetData = (marketplaces, period) => {
   const [data, setData] = React.useState({});
