@@ -4,8 +4,8 @@ import { Overview } from "./Components";
 
 import "./style.css";
 
-const Volumes = () => {
-  const marketplaces = ["OpenSea", "Blur", "X2Y2", "LooksRare", "Sudoswap"];
+const Volumes = React.memo(() => {
+  const marketplaces = ["OpenSea", "Blur", "X2Y2", "LooksRare", "SudoSwap"];
   const tabs = ["Overview", ...marketplaces];
   const [tab, setTab] = React.useState("Overview");
 
@@ -15,6 +15,6 @@ const Volumes = () => {
       {tab === "Overview" && <Overview marketplaces={marketplaces} />}
     </PageWrapper>
   );
-};
+});
 
 export default Volumes;

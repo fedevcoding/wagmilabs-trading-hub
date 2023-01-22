@@ -30,6 +30,7 @@ const searchCollectionsRoute = require("./routes/ethereum/collections/searchColl
 const updateGasSettingsRoute = require("./routes/ethereum/profile/updateGasSettingsRoute.js")
 const userBalancesRoute = require("./routes/ethereum/profile/userBalancesRoute.js")
 const profileStatsRoute = require("./routes/ethereum/profile/profileStatsRoute.js")
+const volumesRoute = require("./routes/ethereum/volumesRoute.js")
 //
 
 
@@ -199,6 +200,7 @@ app.use("/api/v1/wagmilabs/minting", mintingRoute)
 app.use("/api/v1/wagmilabs/ranking", rankingRoute)
 app.use("/api/v1/wagmilabs/charts", chartsRoute)
 app.use("/api/v1/wagmilabs/collectionListings/", collectionListingsRoute)
+app.use("/api/v1/wagmilabs/volumes", volumesRoute)
 
 
 // bots routes

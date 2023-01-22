@@ -1,0 +1,11 @@
+.chart-box {
+    position: relative;
+}
+
+.chart-box .select-period {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    width: 90px;
+    z-index: 1;
+}
