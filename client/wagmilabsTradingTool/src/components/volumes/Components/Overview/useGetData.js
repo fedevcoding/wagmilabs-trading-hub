@@ -1,5 +1,4 @@
 import React from "react";
-import baseUrl from "../../../../variables/baseUrl";
 
 export const useGetData = (marketplaces, period) => {
   const [data, setData] = React.useState({});
@@ -18,7 +17,7 @@ export const useGetData = (marketplaces, period) => {
       const nftGoPath = "https://api.nftgo.io/api/v1/ranking/marketplace-list";
 
       let nftgoData = await fetch(
-        `${nftGoPath}?limit=100&offset=0&range=${period.toLowerCase()}&fields=volumeEth,traderNum&by=volumeEth&asc=-1&excludeWashTrading=-1`
+        `${nftGoPath}?limit=100&offset=0&range=${period.toLowerCase()}&fields=volumeEth,traderNum,saleNum&by=volumeEth&asc=-1&excludeWashTrading=-1`
       );
 
       nftgoData = (await nftgoData.json()).data.list.filter(v =>
@@ -36,6 +35,7 @@ export const useGetData = (marketplaces, period) => {
           labels,
           values: nftgoData.map(m => m.traderNum),
         },
+        leaderBoard: nftgoData,
       });
     })();
   }, [marketplaces, period]);
