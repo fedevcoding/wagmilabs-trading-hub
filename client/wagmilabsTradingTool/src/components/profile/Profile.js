@@ -10,13 +10,13 @@ import ClipboardJS from "clipboard"
 import { formatAddress } from '../../utils/formats/formats'
 import { useAccount, useEnsName, useSigner } from 'wagmi'
 
+import {RadioGroup, Stack, Radio} from "@chakra-ui/react"
+
 import { UserDataContext } from '../../context/userContext'
 
 
 
 const Profile = () => {
-  const navigate = useNavigate()
-
   const { address } = useAccount()
   const ensName = useEnsName({ address })
 
@@ -27,15 +27,14 @@ const Profile = () => {
   const [userAddress] = useState(address)
   const [pnl, setPnl] = useState({})
   const [userEns] = useState(ensName?.data)
-  const [collections, setCollections] = useState(null)
-  const [activityTransactions, setActivityTransactions] = useState(null)
+  const [collections, setCollections] = useState([])
+  const [activityTransactions, setActivityTransactions] = useState([])
   const [section, setSection] = useState("nft")
   const [loadingData, setLoadingData] = useState(true)
-
-  const [openListingSettings, setOpenListingSettings] = useState(false)
-
   const [loadingNfts, setLoadingNfts] = useState(true)
-
+  
+  const [openListingSettings, setOpenListingSettings] = useState(false)
+  const [stageListingSettings, setStageListingSettings] = useState(listingSettings)
 
 
   useEffect(() => {
@@ -43,49 +42,49 @@ const Profile = () => {
     fetchUserData()
   }, [])
 
-  useEffect(() => {
-    if (openListingSettings && listingSettings) {
-      let monthsValue = listingSettings.time.months
-      document.querySelectorAll(`#listing-settings-months option`)[monthsValue].selected = true
+  // useEffect(() => {
+  //   if (openListingSettings && listingSettings) {
+  //     let monthsValue = listingSettings.time.months
+  //     document.querySelectorAll(`#listing-settings-months option`)[monthsValue].selected = true
 
-      let daysValue = listingSettings.time.days
-      document.querySelectorAll(`#listing-settings-days option`)[daysValue].selected = true
+  //     let daysValue = listingSettings.time.days
+  //     document.querySelectorAll(`#listing-settings-days option`)[daysValue].selected = true
 
-      let hoursValue = listingSettings.time.hours
-      document.querySelectorAll(`#listing-settings-hours option`)[hoursValue].selected = true
+  //     let hoursValue = listingSettings.time.hours
+  //     document.querySelectorAll(`#listing-settings-hours option`)[hoursValue].selected = true
 
-      let minutesValue = listingSettings.time.minutes
-      document.querySelectorAll(`#listing-settings-minutes option`)[minutesValue].selected = true
+  //     let minutesValue = listingSettings.time.minutes
+  //     document.querySelectorAll(`#listing-settings-minutes option`)[minutesValue].selected = true
 
 
-      const marketplaceMapping = {
-        "opensea": 0,
-        "x2y2": 1,
-        "looksrare": 2,
-      }
+  //     const marketplaceMapping = {
+  //       "opensea": 0,
+  //       "x2y2": 1,
+  //       "looksrare": 2,
+  //     }
 
-      let marketplaceValue = listingSettings.marketplace
-      document.querySelectorAll("#listing-settings-marketplace option")[marketplaceMapping[marketplaceValue]].selected = true
+  //     let marketplaceValue = listingSettings.marketplace
+  //     document.querySelectorAll("#listing-settings-marketplace option")[marketplaceMapping[marketplaceValue]].selected = true
 
-      if (listingSettings.price.type === "profit") {
-        let value = listingSettings.price.value
-        document.querySelector(".listing-settings-value").value = value
+  //     if (listingSettings.price.type === "profit") {
+  //       let value = listingSettings.price.value
+  //       document.querySelector(".listing-settings-value").value = value
 
-        const currencyMapping = {
-          "%": 0,
-          "eth": 1,
-          "usd": 2,
-        }
+  //       const currencyMapping = {
+  //         "%": 0,
+  //         "eth": 1,
+  //         "usd": 2,
+  //       }
 
-        let currencyType = listingSettings.price.currency
-        document.querySelectorAll(".listing-settings-currency-type option")[currencyMapping[currencyType]].selected = true
+  //       let currencyType = listingSettings.price.currency
+  //       document.querySelectorAll(".listing-settings-currency-type option")[currencyMapping[currencyType]].selected = true
 
-      }
-      else {
-        document.querySelector(".listing-settings-profit-values").style.display = "none"
-      }
-    }
-  }, [openListingSettings])
+  //     }
+  //     else {
+  //       document.querySelector(".listing-settings-profit-values").style.display = "none"
+  //     }
+  //   }
+  // }, [openListingSettings])
 
 
 
@@ -156,49 +155,8 @@ const Profile = () => {
   }
 
   const saveListingSettings = async () => {
-    let monthsSelector = document.querySelector(`#listing-settings-months`)
-    let months = parseInt(monthsSelector.options[monthsSelector.selectedIndex].value)
-
-    let daysSelector = document.querySelector(`#listing-settings-days`)
-    let days = parseInt(daysSelector.options[daysSelector.selectedIndex].value)
-
-    let hoursSelector = document.querySelector(`#listing-settings-hours`)
-    let hours = parseInt(hoursSelector.options[hoursSelector.selectedIndex].value)
-
-    let minutesSelector = document.querySelector(`#listing-settings-minutes`)
-    let minutes = parseInt(minutesSelector.options[minutesSelector.selectedIndex].value)
-
-    let marketplaceSelector = document.querySelector("#listing-settings-marketplace")
-    let marketplace = marketplaceSelector.options[marketplaceSelector.selectedIndex].value
-
-    const priceTypesArray = document.querySelectorAll(".listing-settings-radio-button")
-    const type = [...priceTypesArray].filter(el => el.checked)[0].getAttribute("pricetype")
-
-    let value = undefined;
-    let currency = undefined;
-
-    if (type === "profit") {
-      value = parseInt(document.querySelector(".listing-settings-value").value)
-      let currencyEl = document.querySelector(".listing-settings-currency-type")
-      currency = currencyEl.options[currencyEl.selectedIndex].value
-    }
-
-
     try {
-      let bodyObj = {
-        marketplace,
-        price: {
-          type,
-          value,
-          currency
-        },
-        time: {
-          months,
-          days,
-          hours,
-          minutes
-        }
-      }
+      let bodyObj = stageListingSettings
 
       let response = await fetch(`${baseUrl}/updateListingSettings`, {
         method: "POST",
@@ -212,27 +170,24 @@ const Profile = () => {
       if (response.updated) {
         setListingSettings(bodyObj)
       }
-
     }
     catch (e) {
       console.log(e)
     }
 
-  }
+    toggleListingSettings(false)
 
-  const priceTypeHandler = e => {
-    const el = e.target
-    if (el.classList.contains("profit-listing-settings")) {
-      document.querySelector(".break-even-listing-settings").checked = false
-      document.querySelector(".listing-settings-profit-values").style.display = "block"
-    }
-    else {
-      document.querySelector(".profit-listing-settings").checked = false
-      document.querySelector(".listing-settings-profit-values").style.display = "none"
-    }
   }
 
 
+  function modifyStageListing(value){
+    setStageListingSettings(old => ({...old, price: {type: value}}))
+    console.log(value)
+  }
+
+  useEffect(()=>{
+    !openListingSettings && setStageListingSettings(listingSettings)
+  }, [openListingSettings])
 
 
   return (
@@ -254,22 +209,28 @@ const Profile = () => {
                   <div className='listing-settings-price'>
                     <p>Price:</p>
                     <div>
-                      <input type="radio" pricetype="break-even" className='break-even-listing-settings listing-settings-radio-button' id="break-even-radio-button" defaultChecked={listingSettings.price.type === "break-even" ? true : false} onChange={e => priceTypeHandler(e)} />
-                      <label htmlFor="break-even-radio-button">Break Even</label>
+                      <RadioGroup onChange={(value) => modifyStageListing(value)} value={stageListingSettings.price.type}>
+                        <Stack direction='column'>
+                          <Radio value='break-even'>Break even</Radio>
+                          <Radio value='profit'>Profit</Radio>
+                        </Stack>
+                      </RadioGroup>
                     </div>
 
-                    <div>
-                      <input type="radio" pricetype="profit" id="profit-radio-button" className='profit-listing-settings listing-settings-radio-button' defaultChecked={listingSettings.price.type === "profit" ? true : false} onChange={e => priceTypeHandler(e)} />
-                      <label htmlFor="profit-radio-button">Profit</label>
-                      <div className='listing-settings-profit-values'>
-                        <input type="number" className='listing-settings-value' />
-                        <select name="" id="" className='listing-settings-currency-type'>
-                          <option value="%">%</option>
-                          <option value="eth">Eth</option>
-                          <option value="usd">Usd</option>
-                        </select>
+                      {
+                      stageListingSettings.price.type === "profit" &&
+                      <div>
+                        <label htmlFor="profit-radio-button">Profit</label>
+                        <div className='listing-settings-profit-values'>
+                          <input type="number" className='listing-settings-value' />
+                          <select name="" id="" className='listing-settings-currency-type'>
+                            <option value="%">%</option>
+                            <option value="eth">Eth</option>
+                            <option value="usd">Usd</option>
+                          </select>
+                        </div>
                       </div>
-                    </div>
+                      }
                   </div>
 
                   <div>
