@@ -40,7 +40,12 @@ export const LeaderBoard = React.memo(
             {l.map(m => (
               <tr key={m.name}>
                 <td>{m.name}</td>
-                <td>{m.volumeEth.toFixed(2)}</td>
+                <td>
+                  {m.volumeEth.toFixed(2) +
+                    " (" +
+                    parseInt(m.volume).toLocaleString("EN-us") +
+                    "$)"}
+                </td>
                 <td>{m.saleNum}</td>
                 <td>{m.traderNum}</td>
                 <td>{m.feeRateList[0].minValue}%</td>

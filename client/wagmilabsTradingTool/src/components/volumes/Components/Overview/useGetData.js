@@ -18,7 +18,7 @@ export const useGetData = (marketplaces, period) => {
       const nftGoPath = "https://api.nftgo.io/api/v1/ranking/marketplace-list";
 
       let nftgoData = await fetch(
-        `${nftGoPath}?limit=100&offset=0&range=${period.toLowerCase()}&fields=volumeEth,traderNum,saleNum&by=volumeEth&asc=-1&excludeWashTrading=-1`
+        `${nftGoPath}?limit=100&offset=0&range=${period.toLowerCase()}&fields=volume,volumeEth,traderNum,saleNum&by=volumeEth&asc=-1&excludeWashTrading=-1`
       );
 
       nftgoData = (await nftgoData.json()).data.list.filter(v =>

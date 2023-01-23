@@ -16,7 +16,7 @@ export const useGetLeaderBoard = (
           "https://api.nftgo.io/api/v1/ranking/marketplace-list";
 
         let nftgoData = await fetch(
-          `${nftGoPath}?limit=100&offset=0&range=${currentPeriod.toLowerCase()}&fields=volumeEth,traderNum,saleNum&by=volumeEth&asc=-1&excludeWashTrading=-1`
+          `${nftGoPath}?limit=100&offset=0&range=${currentPeriod.toLowerCase()}&fields=volume,volumeEth,traderNum,saleNum&by=volumeEth&asc=-1&excludeWashTrading=-1`
         );
 
         nftgoData = (await nftgoData.json()).data.list.filter(v =>
