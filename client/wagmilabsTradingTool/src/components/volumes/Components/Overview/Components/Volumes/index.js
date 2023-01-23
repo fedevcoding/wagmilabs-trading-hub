@@ -1,5 +1,9 @@
 import React from "react";
-import { BarChart, Select } from "../../../../../utility-components";
+import {
+  BarChart,
+  LoadingSpinner,
+  Select,
+} from "../../../../../utility-components";
 import { useGetVolumes } from "./useGetVolumes";
 
 export const Volumes = React.memo(({ volumes, period, marketplaces }) => {
@@ -9,7 +13,12 @@ export const Volumes = React.memo(({ volumes, period, marketplaces }) => {
   }));
 
   const [currentPeriod, setPeriod] = React.useState(period);
-  const v = useGetVolumes(volumes, period, currentPeriod, marketplaces);
+  const [v, isLoading] = useGetVolumes(
+    volumes,
+    period,
+    currentPeriod,
+    marketplaces
+  );
 
   return (
     <div className="volumes-chart chart-box">
@@ -19,13 +28,17 @@ export const Volumes = React.memo(({ volumes, period, marketplaces }) => {
         className="select-period"
         onChange={value => setPeriod(value.value)}
       />
-      <BarChart
-        title="Volumes"
-        subTitle="The ranking of top marketplaces by the volume over the selected time range."
-        yAxisText="Quantity"
-        tooltipSuffix=" ETH"
-        values={v}
-      />
+      {isLoading ? (
+        <LoadingSpinner />
+      ) : (
+        <BarChart
+          title="Volumes"
+          subTitle="The ranking of top marketplaces by the volume over the selected time range."
+          yAxisText="Quantity"
+          tooltipSuffix=" ETH"
+          values={v}
+        />
+      )}
     </div>
   );
 });

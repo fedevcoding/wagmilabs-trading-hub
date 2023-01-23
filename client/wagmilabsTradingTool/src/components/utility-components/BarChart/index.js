@@ -54,6 +54,11 @@ export const BarChart = ({
         },
         tooltip: {
           valueSuffix: tooltipSuffix,
+          formatter: function () {
+            return this.point.secondValue
+              ? this.y + " ETH<br>$" + this.point.secondValue
+              : this.y + tooltipSuffix;
+          },
         },
         legend: {
           enabled: false,

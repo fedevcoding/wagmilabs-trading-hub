@@ -1,12 +1,15 @@
 import React from "react";
+import { getTraderSortedValues } from "../../functions";
 
 export const useGetTraders = (traders, period, currentPeriod, marketplaces) => {
   const [data, setData] = React.useState(traders);
+  const [isLoading, setLoding] = React.useState(false);
   const [renderDefaultPeriod, setRenderDefaultPeriod] = React.useState(false);
 
   React.useEffect(() => {
     if (period !== currentPeriod || renderDefaultPeriod) {
       (async () => {
+        setLoding(true);
         const nftGoPath =
           "https://api.nftgo.io/api/v1/ranking/marketplace-list";
 
@@ -18,17 +21,13 @@ export const useGetTraders = (traders, period, currentPeriod, marketplaces) => {
           marketplaces.includes(v.name)
         );
 
-        const labels = nftgoData.map(m => m.name);
-
-        setData({
-          labels,
-          values: nftgoData.map(m => m.traderNum),
-        });
+        setData(getTraderSortedValues(nftgoData));
         setRenderDefaultPeriod(true);
+        setLoding(false);
       })();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [marketplaces, period, currentPeriod]);
 
-  return data;
+  return [data, isLoading];
 };

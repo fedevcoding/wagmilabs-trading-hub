@@ -1,4 +1,5 @@
 import React from "react";
+import { getTraderSortedValues } from "./functions";
 
 export const useGetData = (marketplaces, period) => {
   const [data, setData] = React.useState({});
@@ -17,7 +18,7 @@ export const useGetData = (marketplaces, period) => {
       const nftGoPath = "https://api.nftgo.io/api/v1/ranking/marketplace-list";
 
       let nftgoData = await fetch(
-        `${nftGoPath}?limit=100&offset=0&range=${period.toLowerCase()}&fields=volumeEth,traderNum,saleNum&by=volumeEth&asc=-1&excludeWashTrading=-1`
+        `${nftGoPath}?limit=100&offset=0&range=${period.toLowerCase()}&fields=volume,volumeEth,traderNum,saleNum&by=volumeEth&asc=-1&excludeWashTrading=-1`
       );
 
       nftgoData = (await nftgoData.json()).data.list.filter(v =>
@@ -26,15 +27,18 @@ export const useGetData = (marketplaces, period) => {
 
       const labels = nftgoData.map(m => m.name);
 
+      const traders = getTraderSortedValues(nftgoData);
+
       setData({
         volumes: {
           labels,
-          values: nftgoData.map(m => m.volumeEth),
+          values: nftgoData.map((m, i) => ({
+            x: i + 1,
+            y: +m.volumeEth.toFixed(2),
+            secondValue: parseInt(m.volume).toLocaleString("EN-us"),
+          })),
         },
-        traders: {
-          labels,
-          values: nftgoData.map(m => m.traderNum),
-        },
+        traders: traders,
         leaderBoard: nftgoData,
       });
     })();

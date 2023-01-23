@@ -22,7 +22,11 @@ export const Overview = React.memo(({ marketplaces }) => {
               volumes={volumes}
               period={defaultPeriod}
             />
-          )) || <LoadingSpinner />}
+          )) || (
+            <div className="empty-box">
+              <LoadingSpinner />
+            </div>
+          )}
         </Col>
         <Col>
           {(traders && (
@@ -31,7 +35,11 @@ export const Overview = React.memo(({ marketplaces }) => {
               traders={traders}
               period={defaultPeriod}
             />
-          )) || <LoadingSpinner />}
+          )) || (
+            <div className="empty-box">
+              <LoadingSpinner />
+            </div>
+          )}
         </Col>
       </Row>
       <Row>
@@ -42,7 +50,11 @@ export const Overview = React.memo(({ marketplaces }) => {
               leaderBoard={leaderBoard}
               period={defaultPeriod}
             />
-          )) || <LoadingSpinner />}
+          )) || (
+            <div className="empty-box">
+              <LoadingSpinner />
+            </div>
+          )}
         </Col>
       </Row>
     </div>
