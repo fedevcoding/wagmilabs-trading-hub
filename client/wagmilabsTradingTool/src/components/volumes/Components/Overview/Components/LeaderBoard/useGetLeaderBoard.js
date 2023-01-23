@@ -7,11 +7,13 @@ export const useGetLeaderBoard = (
   marketplaces
 ) => {
   const [data, setData] = React.useState(leaderBoard);
+  const [isLoading, setLoding] = React.useState(false);
   const [renderDefaultPeriod, setRenderDefaultPeriod] = React.useState(false);
 
   React.useEffect(() => {
     if (period !== currentPeriod || renderDefaultPeriod) {
       (async () => {
+        setLoding(true);
         const nftGoPath =
           "https://api.nftgo.io/api/v1/ranking/marketplace-list";
 
@@ -25,10 +27,11 @@ export const useGetLeaderBoard = (
 
         setData(nftgoData);
         setRenderDefaultPeriod(true);
+        setLoding(false);
       })();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [marketplaces, period, currentPeriod]);
 
-  return data;
+  return [data, isLoading];
 };
