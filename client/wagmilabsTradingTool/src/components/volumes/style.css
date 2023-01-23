@@ -1,3 +1,18 @@
-#volumes-page {
-    padding-top: 1rem;
+#page-volumes .row + .row {
+    margin-top: 1rem;
+}
+
+#page-volumes .empty-box {
+    background-color: #2E2E30;
+    border-radius: 10px;
+    height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#page-volumes .spinner {
+    margin: 5rem 0;
+    width: 100px;
+    height: 100px;
 }
