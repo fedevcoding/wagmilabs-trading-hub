@@ -6,7 +6,7 @@ import { useGetData } from "./useGetData";
 import "./style.css";
 
 export const Overview = React.memo(({ marketplaces }) => {
-  const defaultPeriod = "24H";
+  const defaultPeriod = "24h";
   const { volumes, traders, leaderBoard } = useGetData(
     marketplaces,
     defaultPeriod

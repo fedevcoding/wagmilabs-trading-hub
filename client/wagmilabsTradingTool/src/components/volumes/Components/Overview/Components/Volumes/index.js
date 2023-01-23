@@ -7,7 +7,7 @@ import {
 import { useGetVolumes } from "./useGetVolumes";
 
 export const Volumes = React.memo(({ volumes, period, marketplaces }) => {
-  const periods = ["24H", "7D", "30D", "3M", "1Y", "All"].map(p => ({
+  const periods = ["24h", "7d", "30d", "3M", "1y", "all"].map(p => ({
     value: p,
     label: p,
   }));
@@ -19,6 +19,8 @@ export const Volumes = React.memo(({ volumes, period, marketplaces }) => {
     currentPeriod,
     marketplaces
   );
+
+  console.log(v);
 
   return (
     <div className="volumes-chart chart-box">

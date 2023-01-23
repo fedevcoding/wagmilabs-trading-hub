@@ -5,7 +5,7 @@ import { useGetLeaderBoard } from "./useGetLeaderBoard";
 
 export const LeaderBoard = React.memo(
   ({ leaderBoard, period, marketplaces }) => {
-    const periods = ["24H", "7D", "30D", "3M", "1Y", "All"].map(p => ({
+    const periods = ["24h", "7d", "30d", "3M", "1y", "all"].map(p => ({
       value: p,
       label: p,
     }));
