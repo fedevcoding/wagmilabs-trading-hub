@@ -1,4 +1,5 @@
 import React from "react";
+import { getTraderSortedValues } from "../../functions";
 
 export const useGetTraders = (traders, period, currentPeriod, marketplaces) => {
   const [data, setData] = React.useState(traders);
@@ -18,12 +19,7 @@ export const useGetTraders = (traders, period, currentPeriod, marketplaces) => {
           marketplaces.includes(v.name)
         );
 
-        const labels = nftgoData.map(m => m.name);
-
-        setData({
-          labels,
-          values: nftgoData.map(m => m.traderNum),
-        });
+        setData(getTraderSortedValues(nftgoData));
         setRenderDefaultPeriod(true);
       })();
     }
