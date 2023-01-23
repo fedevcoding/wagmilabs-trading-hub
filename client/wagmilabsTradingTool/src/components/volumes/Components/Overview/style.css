@@ -42,6 +42,31 @@
     margin-bottom: 3rem;
 }
 
+.overview .leader-board-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+}
+
+.overview .leader-board .tabs {
+    border: 1px solid var(--light-dark);
+    padding: 3px;
+    border-radius: 6px;
+    margin-bottom: 0;
+}
+
+.overview .leader-board .tabs .btn {
+    padding: 8px 0;
+    font-size: 12px;
+    width: 34px;
+    text-align: center;
+}
+
+.overview .leader-board .tabs .btn:last-child {
+    margin-right: 0;
+}
+
 .overview table {
     width: 100%;
 }

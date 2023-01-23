@@ -1,6 +1,6 @@
 import React from "react";
 import getMarketplaceImage from "../../../../../../utils/marketplaceImageMapping";
-import { LoadingSpinner, Select } from "../../../../../utility-components";
+import { LoadingSpinner, Tabs } from "../../../../../utility-components";
 import { useGetLeaderBoard } from "./useGetLeaderBoard";
 
 export const LeaderBoard = React.memo(
@@ -20,13 +20,14 @@ export const LeaderBoard = React.memo(
 
     return (
       <div className="leader-board">
-        <Select
-          options={periods}
-          value={periods.find(p => p.value === currentPeriod)}
-          className="select-period"
-          onChange={value => setPeriod(value.value)}
-        />
-        <h2>Leader board</h2>
+        <div className="leader-board-header">
+          <h2>Leader board</h2>
+          <Tabs
+            tabs={periods.map(p => p.value)}
+            active={currentPeriod}
+            setTab={value => setPeriod(value)}
+          />
+        </div>
         {isLoading ? (
           <LoadingSpinner />
         ) : (
