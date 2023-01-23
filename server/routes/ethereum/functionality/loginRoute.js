@@ -63,6 +63,8 @@ loginRoute.post("/", checkOwnership, async (req, res)=> {
                     listSettings: {
                         price: {
                             type: "break-even",
+                            profitType: "usd",
+                            profitValue: "100",
                         },
                         time: {
                             months: 0,

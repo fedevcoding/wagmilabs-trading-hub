@@ -7,7 +7,7 @@ const updateListingSettingsRoute = express()
 updateListingSettingsRoute.post("/", checkAuth, async (req, res)=> {
     const {marketplace} = req.body
     const {months, days, hours, minutes} = req.body.time
-    const {type, value, currency} = req.body.price
+    const {type, profitType, profitValue} = req.body.price
 
     const address = req.userDetails.address
     const signature = req.userDetails.signature
@@ -17,8 +17,8 @@ updateListingSettingsRoute.post("/", checkAuth, async (req, res)=> {
     user.listSettings = {
         price: {
             type,
-            value,
-            currency
+            profitType,
+            profitValue
         },
         time: {
             months,

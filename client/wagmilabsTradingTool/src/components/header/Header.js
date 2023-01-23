@@ -171,7 +171,6 @@ const Header = () => {
       body: JSON.stringify({address: localStorage.userAddress})
     })
     userData = (await userData.json()).user
-    
 
     setGasSettings(userData.gasSettings)
     setProfileImage(userData.profileImage)

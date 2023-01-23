@@ -20,6 +20,7 @@ export const Traders = React.memo(({ traders, period, marketplaces }) => {
     marketplaces
   );
 
+
   return (
     <div className="tranders-chart chart-box">
       <Select

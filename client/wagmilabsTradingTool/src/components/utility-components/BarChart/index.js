@@ -1,6 +1,7 @@
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import DarkUnica from "highcharts/themes/dark-unica";
+import getMarketplaceImage from "../../../utils/marketplaceImageMapping";
 
 import "./style.css";
 
@@ -38,6 +39,15 @@ export const BarChart = ({
         },
         xAxis: {
           categories: values.labels,
+          labels: {
+            useHTML: true,
+            formatter: function (e) {
+              console.log(e)
+              const marketplace = e.value
+              const marketplaceImg = getMarketplaceImage(marketplace)
+              return `<div style='display: flex; align-items: center; gap: 7px'><img src='${marketplaceImg}' style='width: 17px'> </img>${marketplace}</div>`;
+            }
+          },
           title: {
             text: null,
           },

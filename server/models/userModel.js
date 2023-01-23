@@ -86,10 +86,12 @@ const userSchema = mongoose.Schema({
                 type: String,
                 required: true
             },
-            currency: {
+            profitType: {
+                type: String
             },
-            value: {
-            }
+            profitValue: {
+                type: String
+            },
         },
         time: {
             months: {
