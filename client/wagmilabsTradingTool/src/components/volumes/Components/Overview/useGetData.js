@@ -32,7 +32,7 @@ export const useGetData = (marketplaces, period) => {
       setData({
         volumes: {
           labels,
-          values: nftgoData.map(m => m.volumeEth),
+          values: nftgoData.map(m => +m.volumeEth.toFixed(2)),
         },
         traders: traders,
         leaderBoard: nftgoData,

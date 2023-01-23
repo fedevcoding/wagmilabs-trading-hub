@@ -22,7 +22,7 @@ export const useGetVolumes = (volumes, period, currentPeriod, marketplaces) => {
 
         setData({
           labels,
-          values: nftgoData.map(m => m.volumeEth),
+          values: nftgoData.map(m => +m.volumeEth.toFixed(2)),
         });
         setRenderDefaultPeriod(true);
       })();
