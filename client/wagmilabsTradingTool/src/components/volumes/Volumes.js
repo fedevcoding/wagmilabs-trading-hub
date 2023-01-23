@@ -1,6 +1,7 @@
 import React from "react";
 import { PageWrapper, Tabs } from "../utility-components";
 import { Overview } from "./Components";
+import { Markets } from "./Components/Markets";
 
 import "./style.css";
 
@@ -12,7 +13,11 @@ const Volumes = React.memo(() => {
   return (
     <PageWrapper page="volumes">
       <Tabs tabs={tabs} active={tab} setTab={setTab} />
-      {tab === "Overview" && <Overview marketplaces={marketplaces} />}
+      {tab === "Overview" ? (
+        <Overview marketplaces={marketplaces} />
+      ) : (
+        <Markets marketplace={tabs} />
+      )}
     </PageWrapper>
   );
 });

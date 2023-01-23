@@ -31,10 +31,6 @@
     height: 100px;
 }
 
-.overview .row + .row {
-    margin-top: 1rem;
-}
-
 .overview .leader-board {
     background-color: #2E2E30;
     border-radius: 10px;
