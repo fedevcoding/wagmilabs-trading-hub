@@ -1,4 +1,5 @@
 import React from "react";
+import getMarketplaceImage from "../../../../../../utils/marketplaceImageMapping";
 import { Select } from "../../../../../utility-components";
 import { useGetLeaderBoard } from "./useGetLeaderBoard";
 
@@ -39,7 +40,14 @@ export const LeaderBoard = React.memo(
           <tbody>
             {l.map(m => (
               <tr key={m.name}>
-                <td>{m.name}</td>
+                <td className="market-name">
+                  <img
+                    width={30}
+                    src={getMarketplaceImage(m.name)}
+                    alt={m.name}
+                  />
+                  {m.name}
+                </td>
                 <td>
                   {m.volumeEth.toFixed(2) +
                     " (" +

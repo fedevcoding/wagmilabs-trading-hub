@@ -31,6 +31,12 @@
     width: 100%;
 }
 
+.overview table .market-name img {
+    margin-right: 0.7rem;
+    width: 22px;
+    vertical-align: text-bottom;
+}
+
 .overview th {
     text-align: left;
     padding: 0.5rem 0;
@@ -38,5 +44,5 @@
 }
 
 .overview td {
-    padding: 0.5rem 0;
+    padding: 0.7rem 0;
 }
