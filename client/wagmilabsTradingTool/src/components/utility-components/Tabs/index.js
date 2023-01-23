@@ -1,10 +1,15 @@
 import "./style.css";
 
-export const Tabs = ({ tabs, setTab, active }) => (
+export const Tabs = ({ tabs, setTab, active, updateUrl = false }) => (
   <div className="tabs">
     {tabs.map(t => (
       <div
-        onClick={() => setTab(t)}
+        onClick={() => {
+          if (updateUrl) {
+            window.location.hash = `#${t.toLowerCase()}`;
+          }
+          setTab(t);
+        }}
         key={t}
         className={`btn ${t === active ? "active" : ""}`}
       >

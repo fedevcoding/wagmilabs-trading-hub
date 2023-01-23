@@ -3,16 +3,15 @@ import { Col, LoadingSpinner, Row } from "../../../utility-components";
 import { ActiveTraders, Comparison, Sales, Volumes } from "./Components";
 
 import "./style.css";
+import { useGetData } from "./useGetData";
 
 export const Markets = React.memo(({ marketplace }) => {
   const defaultPeriod = "24H";
 
-  const { volumes, sales, activeTraders, comparisonData } = {
-    volumes: {},
-    sales: {},
-    activeTraders: {},
-    comparisonData: {},
-  };
+  const { volumes, sales, activeTraders, comparisonData } = useGetData(
+    marketplace,
+    defaultPeriod
+  );
 
   return (
     <div className={`markets market-${marketplace}`}>

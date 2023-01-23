@@ -8,21 +8,12 @@
     position: relative;
 }
 
-.chart-box .select-period, .leader-board .select-period{
+.chart-box .select-period, .leader-board .select-period {
     position: absolute;
     right: 10px;
     top: 10px;
     width: 90px;
     z-index: 1;
-}
-
-.overview .empty-box {
-    background-color: #2E2E30;
-    border-radius: 10px;
-    height: 400px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
 }
 
 .overview .spinner {
