@@ -42,7 +42,6 @@ export const BarChart = ({
           labels: {
             useHTML: true,
             formatter: function (e) {
-              console.log(e)
               const marketplace = e.value
               const marketplaceImg = getMarketplaceImage(marketplace)
               return `<div style='display: flex; align-items: center; gap: 7px'><img src='${marketplaceImg}' style='width: 17px'> </img>${marketplace}</div>`;

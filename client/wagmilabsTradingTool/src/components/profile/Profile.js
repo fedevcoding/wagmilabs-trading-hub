@@ -14,7 +14,10 @@ import {RadioGroup, Stack, Radio, Select, HStack, Button, Input} from "@chakra-u
 
 import { UserDataContext } from '../../context/userContext'
 
-
+const sortItemsOptions = [
+  { value: 'desc', label: 'Newest' },
+  { value: 'asc', label: 'Oldest' },
+];
 
 const Profile = () => {
   const { address } = useAccount()
@@ -35,23 +38,54 @@ const Profile = () => {
   const [openListingSettings, setOpenListingSettings] = useState(false)
   const [stageListingSettings, setStageListingSettings] = useState(listingSettings)
 
+  const [selectedSortOption, setSelectedSortOption] = useState(sortItemsOptions[0])
+
   console.log(listingSettings)
 
 
   useEffect(() => {
-    fetchUserItems()
     fetchUserData()
+    fetchUserCollections()
   }, [])
 
 
-  async function fetchUserItems() {
+  useEffect(()=>{
+    fetchUserItems()
+  }, [selectedSortOption])
+
+  async function fetchUserCollections(){
     try {
-      let data = await fetch(`${baseUrl}/profileItems`, {
+
+      let data = await fetch(`${baseUrl}/profileCollections?search=&offset=0&limit=15`, {
         headers: {
           "Content-Type": "application/json",
           "x-auth-token": localStorage.jsonwebtoken
         },
       })
+      data = await data.json()
+
+      const { results } = data.collections
+
+      console.log(results)
+      setCollections(results)
+
+    }
+    catch (e) {
+      setCollections([])
+    }
+  }
+
+
+  async function fetchUserItems() {
+    try {
+      setLoadingNfts(true)
+      let data = await fetch(`${baseUrl}/profileItems?sortDirection=${selectedSortOption.value}`, {
+        headers: {
+          "Content-Type": "application/json",
+          "x-auth-token": localStorage.jsonwebtoken
+        },
+      })
+
       data = await data.json()
 
       const { items } = data
@@ -508,7 +542,7 @@ const Profile = () => {
 
           <div className='profile-watchList-settings'>
             <div className='profile-settings'>
-              <div className='profile-calcs-button'>Calcs</div>
+              <a className='profile-calcs-button' href='https://profitcalc.wagmilabs.tools/' target={"_blank"}>Calcs<i className="fa-solid fa-calculator"></i></a>
               <div className='profile-settings-button' onClick={() => toggleListingSettings(true)}>Listing settings<i className="fa-solid fa-gear"></i></div>
             </div>
           </div>
@@ -519,7 +553,7 @@ const Profile = () => {
           (() => {
             if (section === "nft") {
               return (
-                <Nfts activityTransactions={activityTransactions} userItems={userItems} setProfileImage={setProfileImage} collections={collections} loadingNfts={loadingNfts} listingSettings={listingSettings} />
+                <Nfts selectedSortOption={selectedSortOption} setSelectedSortOption={setSelectedSortOption} activityTransactions={activityTransactions} userItems={userItems} setProfileImage={setProfileImage} collections={collections} loadingNfts={loadingNfts} listingSettings={listingSettings} />
               )
             }
             else if (section === "activity") {

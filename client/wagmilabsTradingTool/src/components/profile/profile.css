@@ -183,12 +183,9 @@
     align-items: center;
     position: relative;
     overflow: hidden;
+    gap: 15px;
 }
 
-.profile-settings-button{
-    width: 150px;
-    justify-content: space-between;
-}
 .profile-watchList-button .circle{
     position: absolute;
     background-color: rgb(194, 186, 186);

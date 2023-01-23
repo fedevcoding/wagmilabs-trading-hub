@@ -16,40 +16,20 @@ import { roundPrice } from '../../../../utils/formats/formats'
 import { marketListingMapping } from '../../../../utils/mappings'
 import { fetchSigner } from '@wagmi/core'
 
-const Nfts = ({userItems, setProfileImage, collections, loadingNfts, listingSettings, activityTransactions}) => {
 
-    const [collectionFilter, setCollectionFilter] = useState([])
-    const [searchFilter, setSearchFilter] = useState("")
-    const [filteredCollections, setFilteredCollections] = useState(null)
+const sortItemsOptions = [
+  { value: 'desc', label: 'Newest' },
+  { value: 'asc', label: 'Oldest' },
+];
+
+
+const Nfts = ({userItems, setProfileImage, collections, loadingNfts, listingSettings, activityTransactions, selectedSortOption, setSelectedSortOption}) => {
+
     const [confirmListing, setConfirmListing] = useState(null)
     const [selectBulk, setSelectBulk] = useState(false)
     const [bulkItems, setBulkItems] = useState([])
-
-
-    useEffect(()=>{
-      collections && handleCollectiondropdownFilter("")
-    }, [collections])
     
-
-    const filteredItems = useMemo((() => {
-      console.log("running")
-      let filteredItems
-      if(collectionFilter.length > 0){
-        filteredItems = userItems.filter(item => {
-            return collectionFilter.includes(item?.moreInfo?.contract?.address)
-        })
-      }
-      else{
-        filteredItems = userItems
-      }
-
-      const filterParam = searchFilter.toLowerCase()
-      filteredItems = filteredItems.filter(item => {
-        return item?.moreInfo?.title?.toLowerCase().includes(filterParam) ? item : null
-      })
-
-      return filteredItems
-    }), [collectionFilter, userItems, searchFilter]) 
+    const [showSortItemsOptions, setShowSortItemsOptions] = useState(false);
 
 
     function toggleCollectionDropdown(e){
@@ -57,42 +37,6 @@ const Nfts = ({userItems, setProfileImage, collections, loadingNfts, listingSett
             document.querySelector(".profile-collection-arrow").classList.toggle("selected")
             document.querySelector(".collection-dropdown").classList.toggle("invisible")
           }
-    }
-
-    const handleCollectiondropdownFilter = (filter) => {
-      if(filter === ""){
-        setFilteredCollections(collections)
-      }
-      else{
-        let filterText = filter.target.value.toLowerCase()
-        let newFilteredCollections = collections.filter(collection => collection?.primary_asset_contracts[0]?.name.toLowerCase().includes(filterText))
-        setFilteredCollections(newFilteredCollections)
-      }
-    }
-    
-    
-    const filterCollections = (e, address, index) => {
-      const el = e.currentTarget
-      const checked = el.getAttribute("active")
-      const img = document.querySelectorAll(".single-collection-dropdown-check")[index]
-
-      if(checked === "true"){
-        el.setAttribute("active", "false")
-        img.classList.remove("active")
-        img.classList.add("inactive")
-
-        const newCollections = collectionFilter.filter(add => {
-          return add != address
-        })
-        setCollectionFilter(newCollections)
-      }
-      else{
-        img.classList.remove("inactive")
-        img.classList.add("active")
-
-        el.setAttribute("active", "true")
-        setCollectionFilter(addresses => [...addresses, address])
-      }
     }
 
 
@@ -223,7 +167,6 @@ const Nfts = ({userItems, setProfileImage, collections, loadingNfts, listingSett
 
 
 
-
     const itemMapping = useMemo(()=> userItems?.map((item, index) => {
 
           let image = item?.token?.image || "https://www.pngfind.com/pngs/m/2-24050_question-mark-png-image-transparent-white-question-mark.png";
@@ -300,52 +243,81 @@ const Nfts = ({userItems, setProfileImage, collections, loadingNfts, listingSett
     }), [userItems, bulkItems, selectBulk])
 
 
+
+    const toggleSortOptions = () => {
+      setShowSortItemsOptions(old => !old);
+    };
+
+
   return (
     <>
     <ListingsSettings confirmListing={confirmListing} setConfirmListing={setConfirmListing} listingSettings={listingSettings} listNft={listNft}/>
 
     <div className='profile-token-filters'>
-      <div className='profile-search-collections'>
-            <div className='profile-filter-collection'>
-              Most recent <i className="fa-solid fa-caret-down profile-collection-arrow"></i>
-            </div> 
-      </div>
+      <div className='profile-sort-items-container'>
+        <div className='profile-sort-items' onClick={toggleSortOptions}>
+          <div className='profile-sort-items-option'>
+            {selectedSortOption.label}
+            <i className="fa-solid fa-caret-down profile-collection-arrow"></i>
+          </div>
+
+          {
+            showSortItemsOptions &&
+            <div className="profile-sort-items-options">
+              {
+                sortItemsOptions.map(option => (
+                  <div key={option.value} className="profile-sort-item-single-option" onClick={() => setSelectedSortOption(option)}>
+                    {option.label}
+                  </div>
+                ))
+              }
+            </div>
+          }
+
+
+        </div>
+      </div> 
       
       <div className='profile-filters'> 
-          <div className='profile-filter-collection' onClick={(e) => toggleCollectionDropdown(e)}>
-            {collectionFilter.length > 0 &&
+        <div className='profile-filter-collection' onClick={(e) => toggleCollectionDropdown(e)}>
+            {/* {collectionFilter.length > 0 &&
               <p className='collection-filter-indicator'>{collectionFilter.length}</p>
-            }
+            } */}
             Collection <i className="fa-solid fa-caret-down profile-collection-arrow"></i>
             <div className='collection-dropdown invisible'>
               
-              {filteredCollections &&
+              {collections &&
                 <div className='collection-dropdown-search'>
                   <i className="fa-solid fa-magnifying-glass lens"></i>
-                  <input type="text" className='collection-dropdown-search' placeholder='Search' onChange={e => handleCollectiondropdownFilter(e)}/>
+                  <input type="text" className='collection-dropdown-search' placeholder='Search'
+                  //  onChange={e => handleCollectiondropdownFilter(e)}
+                   />
                 </div> 
               }
               {
-              filteredCollections ?
-              filteredCollections.length > 0 ?
-                filteredCollections.map((collection, index) => {
-                  const image = collection?.imageUrl
-                  const name = collection?.name
-                  const address = collection?.id
+              collections ?
+                collections.length > 0 ?
+                  collections.map((collection, index) => {
+                    const image = collection?.image_url
+                    const name = collection?.name
+                    const address = collection?.id
 
-                  return(
-                    <div className='single-collection-dropdown' key={index} active="false" onClick={(e)=> filterCollections(e, address, index)}>
-                      <div className='single-collection-dropdown-nameimage'>
-                        <img src={image} alt="" />
-                        <div>{name}</div>
+                    return(
+                      <div className='single-collection-dropdown' key={index} active="false"
+                      //  onClick={(e)=> filterCollections(e, address, index)}
+                       >
+                        <div className='single-collection-dropdown-nameimage'>
+                          <img src={image} alt="" />
+                          <div>{name}</div>
+                        </div>
+                        <i className="fa-solid fa-check single-collection-dropdown-check inactive"></i>
                       </div>
-                      <i className="fa-solid fa-check single-collection-dropdown-check inactive"></i>
-                    </div>
-                  )
-                }) :
-                <div className='collection-dropdown-notfound'>
-                  No collection found.
-                </div>
+                    )
+                  }) 
+                  :
+                  <div className='collection-dropdown-notfound'>
+                    No collection found.
+                  </div>
                 :
                 <div className='collection-dropdown-notfound'>
                   Loading collections...

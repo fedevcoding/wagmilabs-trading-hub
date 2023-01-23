@@ -12,8 +12,9 @@ profileItemsRoute.get("/", checkAuth, async (req, res)=> {
 
     try{
         const userAddress = req.userDetails.address
+        const sortDirection = req.query.sortDirection
     
-        let items = await fetch(`https://api.reservoir.tools/users/${userAddress}/tokens/v6?normalizeRoyalties=false&sortDirection=desc&limit=100&includeTopBid=false`, {
+        let items = await fetch(`https://api.reservoir.tools/users/${userAddress}/tokens/v6?normalizeRoyalties=false&sortDirection=${sortDirection}&limit=100&includeTopBid=false`, {
             headers: {
             "accept": "*/*",
             "x-api-key": RESERVOIR_API_KEY
@@ -21,7 +22,6 @@ profileItemsRoute.get("/", checkAuth, async (req, res)=> {
         })
         items = (await items.json())?.tokens
         
-    
         res.status(200).json({items, ok: true})
     }
     catch(e){
