@@ -23,7 +23,7 @@ export const Traders = React.memo(({ traders, period, marketplaces }) => {
         title="Traders"
         subTitle="The ranking of top marketplaces by the number of traders, buyers and sellers over the selected time range."
         yAxisText="Quantity"
-        tooltipSuffix=" ETH"
+        tooltipSuffix=" traders"
         values={t}
       />
     </div>
