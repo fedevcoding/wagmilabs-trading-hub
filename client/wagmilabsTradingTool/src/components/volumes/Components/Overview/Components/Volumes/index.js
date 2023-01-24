@@ -39,6 +39,7 @@ export const Volumes = React.memo(({ volumes, period, marketplaces }) => {
           yAxisText="Quantity"
           tooltipSuffix=" ETH"
           values={v}
+          useMarketImg
         />
       )}
     </div>

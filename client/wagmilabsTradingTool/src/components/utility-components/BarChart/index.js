@@ -13,6 +13,7 @@ export const BarChart = ({
   values,
   yAxisText = "",
   tooltipSuffix = undefined,
+  useMarketImg = false,
 }) => (
   <div className="bar-chart">
     <HighchartsReact
@@ -39,14 +40,23 @@ export const BarChart = ({
         },
         xAxis: {
           categories: values.labels,
-          labels: {
-            useHTML: true,
-            formatter: function (e) {
-              const marketplace = e.value
-              const marketplaceImg = getMarketplaceImage(marketplace)
-              return `<div style='display: flex; align-items: center; gap: 7px'><img src='${marketplaceImg}' style='width: 17px'> </img>${marketplace}</div>`;
-            }
-          },
+          ...(useMarketImg
+            ? {
+                labels: {
+                  useHTML: true,
+                  formatter: function (e) {
+                    const marketplace = e.value;
+                    const marketplaceImg = getMarketplaceImage(marketplace);
+                    return `
+                <div class="market-img">
+                  <img src="${marketplaceImg}" width="17px" />
+                  ${marketplace}
+                </div>
+              `;
+                  },
+                },
+              }
+            : {}),
           title: {
             text: null,
           },

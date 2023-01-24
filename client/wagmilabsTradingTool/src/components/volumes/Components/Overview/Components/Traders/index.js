@@ -20,7 +20,6 @@ export const Traders = React.memo(({ traders, period, marketplaces }) => {
     marketplaces
   );
 
-
   return (
     <div className="tranders-chart chart-box">
       <Select
@@ -38,6 +37,7 @@ export const Traders = React.memo(({ traders, period, marketplaces }) => {
           yAxisText="Quantity"
           tooltipSuffix=" traders"
           values={t}
+          useMarketImg
         />
       )}
     </div>
