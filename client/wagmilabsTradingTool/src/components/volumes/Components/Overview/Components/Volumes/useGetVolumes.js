@@ -1,4 +1,5 @@
 import React from "react";
+import { getVolumesSortedValues } from "../../functions";
 
 export const useGetVolumes = (volumes, period, currentPeriod, marketplaces) => {
   const [data, setData] = React.useState(volumes);
@@ -20,16 +21,7 @@ export const useGetVolumes = (volumes, period, currentPeriod, marketplaces) => {
           marketplaces.includes(v.name)
         );
 
-        const labels = nftgoData.map(m => m.name);
-
-        setData({
-          labels,
-          values: nftgoData.map((m, i) => ({
-            x: i,
-            y: +m.volumeEth.toFixed(2),
-            secondValue: parseInt(m.volume).toLocaleString("EN-us"),
-          })),
-        });
+        setData(getVolumesSortedValues(nftgoData));
         setRenderDefaultPeriod(true);
         setLoding(false);
       })();
