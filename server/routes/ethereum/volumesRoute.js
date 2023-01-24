@@ -50,11 +50,11 @@ volumesRoute.get("/:marketplace", checkAuth, async (req, res) => {
 
   const marketplace =
     {
-      OpenSea: "OpenSea",
-      Blur: "Blur",
-      X2Y2: "X2Y2",
-      LooksRare: "LooksRare",
-      SudoSwap: "SudoSwap",
+      opensea: "OpenSea",
+      blur: "Blur",
+      x2y2: "X2Y2",
+      looksrare: "LooksRare",
+      sudoswap: "SudoSwap",
     }[req.params.marketplace] || "OpenSea";
 
   const interval = intervals[period?.toLowerCase() || "30d"] || "30 days";
@@ -70,13 +70,12 @@ volumesRoute.get("/:marketplace", checkAuth, async (req, res) => {
       DATE_TRUNC('day', timestamp) AS ts,
       SUM(eth_price) AS volume_eth,
       SUM(usd_price) AS volume
-      FROM ethereum.opensea_nft_sales
+      FROM ethereum.${marketplace.toLowerCase()}_nft_sales
       WHERE ${
         interval === "all"
           ? "1"
           : `timestamp >= (NOW() - INTERVAL '${interval}')`
       }
-      AND exchange_name = '${marketplace.toLowerCase()}'
       GROUP BY ts
       ORDER BY ts DESC;`,
     }),
