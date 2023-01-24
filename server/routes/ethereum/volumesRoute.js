@@ -38,28 +38,8 @@ volumesRoute.get("/", checkAuth, async (req, res) => {
   getData();
 });
 
-volumesRoute.get("/:marketplace", checkAuth, async (req, res) => {
-  const { period } = req.query;
-
-  const intervals = {
-    "30d": "30 days",
-    "6m": "180 days",
-    "1y": "1 year",
-    all: "all",
-  };
-
-  const marketplace =
-    {
-      opensea: "OpenSea",
-      blur: "Blur",
-      x2y2: "X2Y2",
-      looksrare: "LooksRare",
-      sudoswap: "SudoSwap",
-    }[req.params.marketplace] || "OpenSea";
-
-  const interval = intervals[period?.toLowerCase() || "30d"] || "30 days";
-
-  let volumes = await fetch("https://api.transpose.io/sql", {
+const getVolumes = async (marketplace, interval) => {
+  const volumes = await fetch("https://api.transpose.io/sql", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -81,19 +61,56 @@ volumesRoute.get("/:marketplace", checkAuth, async (req, res) => {
     }),
   });
 
-  volumes = (await volumes.json()).results.map((r) => ({
+  /*
+  group by week
+
+  SELECT
+      (extract(epoch from timestamp) / (7*24*60*60))::numeric::integer AS ts,
+      SUM(eth_price) AS volume_eth,
+      SUM(usd_price) AS volume
+      FROM ethereum.opensea_nft_sales
+      WHERE timestamp >= (NOW() - INTERVAL '180 days')
+      GROUP BY ts
+      ORDER BY ts asc;
+
+  */
+
+  return (await volumes.json()).results.map((r) => ({
     ...r,
     volume_eth: +Number(r.volume_eth).toFixed(2),
     volume: parseInt(r.volume),
   }));
+};
+
+volumesRoute.get("/:marketplace", checkAuth, async (req, res) => {
+  const { period, filter } = req.query;
+
+  const intervals = {
+    "30d": "30 days",
+    "6m": "180 days",
+    "1y": "1 year",
+    all: "all",
+  };
+  const interval = intervals[period?.toLowerCase() || "30d"] || "30 days";
+
+  const marketplaces = ["opensea", "blur", "x2y2", "looksrare", "sudoswap"];
+  const marketplace = marketplaces.includes(req.params.marketplace)
+    ? req.params.marketplace
+    : "opensea";
+
+  const volumes = await getVolumes(marketplace, interval);
 
   async function getData() {
-    res.status(200).json({
-      volumes: volumes,
-      sales: {},
-      activeTraders: {},
-      comparisonData: {},
-    });
+    res.status(200).json(
+      filter === "volumes"
+        ? volumes
+        : {
+            volumes: volumes,
+            sales: {},
+            activeTraders: {},
+            comparisonData: {},
+          }
+    );
   }
   getData();
 });

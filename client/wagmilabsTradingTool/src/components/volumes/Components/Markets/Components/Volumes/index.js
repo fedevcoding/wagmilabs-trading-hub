@@ -5,6 +5,7 @@ import {
   LoadingSpinner,
   Select,
 } from "../../../../../utility-components";
+import { useGetVolumes } from "./useGetVolumes";
 
 export const Volumes = React.memo(({ volumes, period, marketplace }) => {
   const periods = ["30D", "6M", "1Y", "All"].map(p => ({
@@ -13,13 +14,17 @@ export const Volumes = React.memo(({ volumes, period, marketplace }) => {
   }));
 
   const [currentPeriod, setPeriod] = React.useState(period);
-
-  const isLoading = false;
+  const [v, isLoading] = useGetVolumes(
+    volumes,
+    period,
+    currentPeriod,
+    marketplace
+  );
 
   const values = {
-    labels: volumes.map(v => moment(v.ts).format("DD/MM/YYYY")),
-    values: volumes.map(v => v.volume_eth),
-    secondValue: volumes.map(v => v.volume.toLocaleString("EN-us")),
+    labels: v.map(v => moment(v.ts).format("DD/MM/YYYY")),
+    values: v.map(v => v.volume_eth),
+    secondValue: v.map(v => v.volume.toLocaleString("EN-us")),
   };
 
   return (
