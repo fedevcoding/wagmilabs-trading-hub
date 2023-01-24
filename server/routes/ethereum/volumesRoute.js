@@ -57,7 +57,7 @@ const getVolumes = async (marketplace, interval) => {
           : `timestamp >= (NOW() - INTERVAL '${interval}')`
       }
       GROUP BY ts
-      ORDER BY ts DESC;`,
+      ORDER BY ts ASC;`,
     }),
   });
 
