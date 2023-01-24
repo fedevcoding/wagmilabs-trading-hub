@@ -16,12 +16,6 @@
     z-index: 1;
 }
 
-.overview .spinner {
-    margin: 5rem 0;
-    width: 100px;
-    height: 100px;
-}
-
 .overview .leader-board {
     background-color: #2E2E30;
     border-radius: 10px;

@@ -1,6 +1,6 @@
 import React from "react";
 import {
-  BarChart,
+  OrizontalBarChart,
   LoadingSpinner,
   Select,
 } from "../../../../../utility-components";
@@ -33,7 +33,7 @@ export const Volumes = React.memo(({ volumes, period, marketplaces }) => {
       {isLoading ? (
         <LoadingSpinner />
       ) : (
-        <BarChart
+        <OrizontalBarChart
           title="Volumes"
           subTitle="The ranking of top marketplaces by the volume over the selected time range."
           yAxisText="Quantity"

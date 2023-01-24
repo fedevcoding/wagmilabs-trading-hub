@@ -1,4 +1,5 @@
 const express = require("express");
+require("dotenv").config();
 const checkAuth = require("../../middleware/checkAuth");
 
 const volumesRoute = express();
@@ -39,17 +40,57 @@ volumesRoute.get("/", checkAuth, async (req, res) => {
 
 volumesRoute.get("/:marketplace", checkAuth, async (req, res) => {
   const { period } = req.query;
-  const marketplace = req.params.marketplace;
 
-  /*
+  const intervals = {
+    "30d": "30 days",
+    "6m": "180 days",
+    "1y": "1 year",
+    all: "all",
+  };
 
-  query
+  const marketplace =
+    {
+      OpenSea: "OpenSea",
+      Blur: "Blur",
+      X2Y2: "X2Y2",
+      LooksRare: "LooksRare",
+      SudoSwap: "SudoSwap",
+    }[req.params.marketplace] || "OpenSea";
 
-  */
+  const interval = intervals[period?.toLowerCase() || "30d"] || "30 days";
+
+  let volumes = await fetch("https://api.transpose.io/sql", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-API-KEY": process.env.TRANSPOSE_API,
+    },
+    body: JSON.stringify({
+      sql: `SELECT
+      DATE_TRUNC('day', timestamp) AS ts,
+      SUM(eth_price) AS volume_eth,
+      SUM(usd_price) AS volume
+      FROM ethereum.opensea_nft_sales
+      WHERE ${
+        interval === "all"
+          ? "1"
+          : `timestamp >= (NOW() - INTERVAL '${interval}')`
+      }
+      AND exchange_name = '${marketplace}'
+      GROUP BY ts
+      ORDER BY ts DESC;`,
+    }),
+  });
+
+  volumes = (await volumes.json()).results.map((r) => ({
+    ...r,
+    volume_eth: +Number(r.volume_eth).toFixed(2),
+    volume: parseInt(r.volume),
+  }));
 
   async function getData() {
     res.status(200).json({
-      volumes: {},
+      volumes: volumes,
       sales: {},
       activeTraders: {},
       comparisonData: {},

@@ -1,0 +1,10 @@
+.bar-chart {
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.bar-chart .market-img {
+    display: flex; 
+    align-items: center; 
+    gap: 7px
+}

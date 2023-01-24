@@ -3,7 +3,7 @@ import { Select } from "../../../../../utility-components";
 
 export const ActiveTraders = React.memo(
   ({ activeTraders, period, marketplace }) => {
-    const periods = ["24H", "7D", "30D", "3M", "1Y", "All"].map(p => ({
+    const periods = ["30D", "6M", "1Y", "All"].map(p => ({
       value: p,
       label: p,
     }));

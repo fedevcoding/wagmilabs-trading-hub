@@ -1,13 +1,13 @@
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import DarkUnica from "highcharts/themes/dark-unica";
-import getMarketplaceImage from "../../../utils/marketplaceImageMapping";
+import getMarketplaceImage from "../../../../utils/marketplaceImageMapping";
 
 import "./style.css";
 
 DarkUnica(Highcharts);
 
-export const OrizontalBarChart = ({
+export const BarChart = ({
   title,
   subTitle,
   values,
