@@ -1,6 +1,6 @@
 :root{
     --nfts-width: 220px;
-    --stats-margin-top: 30px;
+    --stats-margin-top: 20px;
     --stats-height: 80px;
 }
 
@@ -154,12 +154,13 @@
     padding: 10px 25px;
     border-radius: 10px;
     cursor: pointer;
+    border: 1px solid transparent;
 }
 
 
 .single-profile-section:hover, .single-profile-section.selected{
     background-color: #343434;
-    /* border: 1px solid rgb(73, 71, 71); */
+    border: 1px solid rgb(73, 71, 71);
 }
 
 .profile-filters, .profile-settings{

@@ -15,6 +15,7 @@ import { getClient } from "@reservoir0x/reservoir-kit-client";
 import { roundPrice } from '../../../../utils/formats/formats'
 import { marketListingMapping } from '../../../../utils/mappings'
 import { fetchSigner } from '@wagmi/core'
+import { Tooltip } from '@chakra-ui/react'
 
 
 const sortItemsOptions = [
@@ -52,8 +53,19 @@ const Nfts = ({userItems, setProfileImage, collections, loadingNfts, listingSett
     
     
     const toggleOptions = (index) => {
-      document.querySelectorAll(".single-nft-options")[index].classList.toggle("invisible")
-      
+      const element = document.querySelectorAll(".single-nft-options")[index]
+      if(element.classList.contains("invisible")){
+        closeAllOptions()
+        element.classList.toggle("invisible")
+      }
+      else{
+        element.classList.toggle("invisible")        
+        closeAllOptions()
+      }
+    }
+
+    const closeAllOptions = ()=> {
+      document.querySelectorAll(".single-nft-options").forEach(el => el.classList.add("invisible"))
     }
 
     const changeBulk = (state) => {
@@ -201,16 +213,16 @@ const Nfts = ({userItems, setProfileImage, collections, loadingNfts, listingSett
           return(
               <div className='single-item-container' key={id} onMouseOver={()=> activateList(index)} onMouseOut={()=> deactivateList(index)}>
                   <div className='profile-item-listing'>
-                      {item.seaport_sell_orders ? Math.round((item.seaport_sell_orders[0].current_price / 1000000000000000000 * 10000)) / 10000 : <></>}
+                    {item.seaport_sell_orders ? Math.round((item.seaport_sell_orders[0].current_price / 1000000000000000000 * 10000)) / 10000 : <></>}
                   </div>
                 <div className={`${selectBulk ? "profile-items-details-container-bulk" : "profile-items-details-container"}`}>
                   <div className='image-hover-overflow'>
-                    <img src={image} alt="" className={`profile-single-item-image ${selectBulk ? "single-item-image" : "single-item-image-scale"}`} onClick={(e) => changeBulkItems(contractAddress, tokenId, id, e)}/>
+                    <img src={image} alt="" className={`profile-single-item-image ${selectBulk ? "single-item-image" : "single-item-image-scale"}`} onClick={(e) => selectBulk && changeBulkItems(contractAddress, tokenId, id, e)}/>
                   </div>
 
                   <div className="option-button" onClick={()=> toggleOptions(index)}>
-                    <i className="fa-solid fa-ellipsis-vertical"></i>
-
+                    <i className="fa-regular fa-ellipsis item-option-button"></i>
+                    
                     <div className='single-nft-options invisible'>
                       <div onClick={updateUserImage}>
                         <i className="fa-solid fa-image"></i>
@@ -224,9 +236,13 @@ const Nfts = ({userItems, setProfileImage, collections, loadingNfts, listingSett
                   </div>
 
                   {/* <img src={optionButton} className="option-button" onMouseOver={(e)=> uploadInfo(e)} onMouseOut={e=> removeInfo(e)} onClick={updateUserImage}/> */}
-                  <img src={collectionImage} alt="" className='profile-item-collection-image' onClick={() => window.open(`/collection/${contractAddress}`)}/>
+                  <a href={`/collection/${contractAddress}`} target="_blank">
+                    <Tooltip hasArrow label={collectionName} fontSize='xs' bg="black" color={"white"} placement='top' borderRadius={"7px"}>
+                      <img src={collectionImage} alt="" className='profile-item-collection-image'/>
+                    </Tooltip>
+                  </a>
                   <div className='profile-item-stats'>
-                    <div>
+                    <div className='profile-item-name-stats'>
                       <p className='single-item-name'>{name || tokenId}</p>
                       {/* <p className='single-item-collection-name'>{collectionName}</p> */}
                       <p className='single-item-rarity'>Floor price: {floor_price && roundPrice(floor_price)}</p>
@@ -248,6 +264,29 @@ const Nfts = ({userItems, setProfileImage, collections, loadingNfts, listingSett
       setShowSortItemsOptions(old => !old);
     };
 
+
+    useEffect(()=>{
+      
+    const handleClick = (event) => {
+      const path = event.composedPath()
+      const el1 = document.querySelector(".profile-sort-items")
+      const el2 = "item-option-button"
+
+      if(!path.includes(el1)){
+        setShowSortItemsOptions(false)
+      }
+
+      const classLists = Array.from(event.target.classList)
+      console.log(classLists)
+      if(!classLists.includes(el2)){
+        closeAllOptions()
+      }
+    }
+    document.addEventListener('click', handleClick);
+    return () => {
+      document.removeEventListener('click', handleClick);
+    };
+    }, [])
 
   return (
     <>

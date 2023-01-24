@@ -1,5 +1,6 @@
 
 .profile-list-nft{
+    font-size: 13px;
     display: flex;
     align-items: center;
 }
@@ -17,9 +18,7 @@
 .profile-list-nft i{
     margin-right: 10px;
 }
-.profile-list-nft span{
-    font-size: 14px;
-}
+
 
 
 
@@ -114,6 +113,12 @@
 }
 
 
+.profile-item-name-stats{
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
 .profile-item-stats{
     height: var(--stats-height);
     margin-top: var(--stats-margin-top);
@@ -161,12 +166,13 @@
     justify-content: center;
     width: 25px;
     height: 25px;
-    background-color: white;
+    background-color: rgb(41, 41, 41);
     box-shadow: #000000 0px 0px 8px 1px;
-    color: #000;
-    border-radius: 5px;
+    color: rgb(255, 255, 255);
+    border-radius: 50%;
     right: 30px;
     bottom: calc(var(--stats-height) - 10.5px + var(--stats-margin-top));
+    font-size: 22px;
 }
 
 .single-nft-options.invisible{
@@ -174,10 +180,11 @@
 }
 
 .single-nft-options{
+    font-size: 14px;
     position: absolute;
-    bottom: 160%;
+    bottom: 140%;
     right: 0;
-    width: 170px;
+    width: 130px;
     background-color: #272727;
     color: white;
     border-radius: 10px;

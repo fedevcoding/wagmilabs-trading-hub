@@ -487,10 +487,8 @@ const ItemSortSelect = ({ options, changeSorting }) => {
 
   const toggleSelector = (e) => {
     const container = document.querySelector(".item-sort-select-container");
-    console.log(e.path.includes(container));
-    console.log(active);
-
-    if (!active && !e.path.includes(container)) return;
+    const path = e.composedPath()
+    if (!active && !path.includes(container)) return;
 
     setActive((prev) => !prev);
   };
