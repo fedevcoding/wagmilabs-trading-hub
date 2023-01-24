@@ -76,7 +76,7 @@ volumesRoute.get("/:marketplace", checkAuth, async (req, res) => {
           ? "1"
           : `timestamp >= (NOW() - INTERVAL '${interval}')`
       }
-      AND exchange_name = '${marketplace}'
+      AND exchange_name = '${marketplace.toLowerCase()}'
       GROUP BY ts
       ORDER BY ts DESC;`,
     }),

@@ -1,5 +1,10 @@
 import React from "react";
-import { Select } from "../../../../../utility-components";
+import moment from "moment";
+import {
+  BarChart,
+  LoadingSpinner,
+  Select,
+} from "../../../../../utility-components";
 
 export const Volumes = React.memo(({ volumes, period, marketplace }) => {
   const periods = ["30D", "6M", "1Y", "All"].map(p => ({
@@ -9,6 +14,14 @@ export const Volumes = React.memo(({ volumes, period, marketplace }) => {
 
   const [currentPeriod, setPeriod] = React.useState(period);
 
+  const isLoading = false;
+
+  const values = {
+    labels: volumes.map(v => moment(v.ts).format("DD/MM/YYYY")),
+    values: volumes.map(v => v.volume_eth),
+    secondValue: volumes.map(v => v.volume.toLocaleString("EN-us")),
+  };
+
   return (
     <div className="volumes-chart chart-box">
       <Select
@@ -17,6 +30,17 @@ export const Volumes = React.memo(({ volumes, period, marketplace }) => {
         className="select-period"
         onChange={value => setPeriod(value.value)}
       />
+      {isLoading ? (
+        <LoadingSpinner />
+      ) : (
+        <BarChart
+          title="Volumes"
+          subTitle="The volume of exchanges in dollars and ETHs in the selected range is shown."
+          tooltipSuffix=" ETH"
+          yAxisText="Quantity"
+          values={values}
+        />
+      )}
     </div>
   );
 });

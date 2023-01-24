@@ -20,8 +20,6 @@ export const Volumes = React.memo(({ volumes, period, marketplaces }) => {
     marketplaces
   );
 
-  console.log(v);
-
   return (
     <div className="volumes-chart chart-box">
       <Select

@@ -1,7 +1,6 @@
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import DarkUnica from "highcharts/themes/dark-unica";
-import getMarketplaceImage from "../../../../utils/marketplaceImageMapping";
 
 import "./style.css";
 
@@ -13,7 +12,6 @@ export const BarChart = ({
   values,
   yAxisText = "",
   tooltipSuffix = undefined,
-  useMarketImg = false,
 }) => (
   <div className="bar-chart">
     <HighchartsReact
@@ -21,7 +19,7 @@ export const BarChart = ({
       highcharts={Highcharts}
       options={{
         chart: {
-          type: "bar",
+          type: "column",
           marginLeft: 100,
           marginRight: 30,
         },
@@ -40,23 +38,6 @@ export const BarChart = ({
         },
         xAxis: {
           categories: values.labels,
-          ...(useMarketImg
-            ? {
-                labels: {
-                  useHTML: true,
-                  formatter: function (e) {
-                    const marketplace = e.value;
-                    const marketplaceImg = getMarketplaceImage(marketplace);
-                    return `
-                <div class="market-img">
-                  <img src="${marketplaceImg}" width="17px" />
-                  ${marketplace}
-                </div>
-              `;
-                  },
-                },
-              }
-            : {}),
           title: {
             text: null,
           },
@@ -65,7 +46,6 @@ export const BarChart = ({
           min: 0,
           title: {
             text: yAxisText,
-            align: "high",
           },
           labels: {
             overflow: "justify",
@@ -74,8 +54,9 @@ export const BarChart = ({
         tooltip: {
           valueSuffix: tooltipSuffix,
           formatter: function () {
-            return this.point.secondValue
-              ? this.y + " ETH<br>$" + this.point.secondValue
+            const dollarValue = (values?.secondValue || [])[this.point.index];
+            return dollarValue
+              ? this.y + ` ${tooltipSuffix}<br>$` + dollarValue
               : this.y + tooltipSuffix;
           },
         },
@@ -83,10 +64,9 @@ export const BarChart = ({
           enabled: false,
         },
         plotOptions: {
-          bar: {
-            dataLabels: {
-              enabled: true,
-            },
+          column: {
+            pointPadding: 0.2,
+            borderWidth: 0,
           },
         },
         credits: {
