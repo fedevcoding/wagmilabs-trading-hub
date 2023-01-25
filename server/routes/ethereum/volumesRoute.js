@@ -7,6 +7,8 @@ const {
   getVolumeActiveTraders,
 } = require("../../models/queries/volumes");
 
+const { lruCache } = require("../../services/cache/lru");
+
 const volumesRoute = express();
 
 // currently this endpoint is not used as the call fails due to missing permissions
@@ -46,6 +48,8 @@ volumesRoute.get("/", checkAuth, async (req, res) => {
 volumesRoute.get("/:marketplace", checkAuth, async (req, res) => {
   const { period, filter } = req.query;
 
+  const ttl = 6 * 60 * 60 * 1000; // 6h
+
   const intervals = {
     "10d": "10 days",
     "30d": "30 days",
@@ -67,20 +71,38 @@ volumesRoute.get("/:marketplace", checkAuth, async (req, res) => {
 
   if (!filter) {
     [volumes, sales, activeTraders] = await Promise.all([
-      getVolumes(marketplace, interval),
-      getVolumeSales(marketplace, interval),
-      getVolumeActiveTraders(marketplace, interval),
+      lruCache(getVolumes(marketplace, interval), {
+        key: `volumes#${marketplace}#${interval}`,
+        ttl,
+      }),
+      lruCache(getVolumeSales(marketplace, interval), {
+        key: `volumes#sales#${marketplace}#${interval}`,
+        ttl,
+      }),
+      lruCache(getVolumeActiveTraders(marketplace, interval), {
+        key: `volumes#active-traders#${marketplace}#${interval}`,
+        ttl,
+      }),
     ]);
   } else {
     switch (filter) {
       case "volumes":
-        volumes = await getVolumes(marketplace, interval);
+        volumes = await lruCache(getVolumes(marketplace, interval), {
+          key: `volumes#${marketplace}#${interval}`,
+          ttl,
+        });
         break;
       case "sales":
-        sales = await getVolumeSales(marketplace, interval);
+        sales = await lruCache(getVolumeSales(marketplace, interval), {
+          key: `volumes#sales#${marketplace}#${interval}`,
+          ttl,
+        });
         break;
       case "activeTraders":
-        sales = await getVolumeActiveTraders(marketplace, interval);
+        sales = await lruCache(getVolumeActiveTraders(marketplace, interval), {
+          key: `volumes#active-traders#${marketplace}#${interval}`,
+          ttl,
+        });
         break;
     }
   }

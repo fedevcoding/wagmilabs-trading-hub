@@ -27,6 +27,11 @@ export const ActiveTraders = React.memo(
       values: v.map(v => v.active_traders),
     };
 
+    React.useEffect(() => {
+      setPeriod(period);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [marketplace]);
+
     return (
       <div className="volumes-chart chart-box">
         <Select

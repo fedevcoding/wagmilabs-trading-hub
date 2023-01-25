@@ -28,7 +28,11 @@ export const useGetSales = (sales, period, currentPeriod, marketplace) => {
       })();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [marketplace, period, currentPeriod]);
+  }, [period, currentPeriod]);
+
+  React.useEffect(() => {
+    setData(sales);
+  }, [sales]);
 
   return [data, isLoading];
 };

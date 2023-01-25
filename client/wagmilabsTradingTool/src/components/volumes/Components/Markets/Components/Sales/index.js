@@ -21,6 +21,11 @@ export const Sales = React.memo(({ sales, period, marketplace }) => {
     values: v.map(v => v.sales),
   };
 
+  React.useEffect(() => {
+    setPeriod(period);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [marketplace]);
+
   return (
     <div className="volumes-chart chart-box">
       <Select

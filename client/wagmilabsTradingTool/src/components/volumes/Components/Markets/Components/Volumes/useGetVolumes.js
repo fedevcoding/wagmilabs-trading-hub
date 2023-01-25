@@ -28,7 +28,11 @@ export const useGetVolumes = (volumes, period, currentPeriod, marketplace) => {
       })();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [marketplace, period, currentPeriod]);
+  }, [period, currentPeriod]);
+
+  React.useEffect(() => {
+    setData(volumes);
+  }, [volumes]);
 
   return [data, isLoading];
 };
