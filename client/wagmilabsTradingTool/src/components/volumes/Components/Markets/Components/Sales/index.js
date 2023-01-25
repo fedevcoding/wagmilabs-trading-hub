@@ -1,5 +1,11 @@
+import moment from "moment";
 import React from "react";
-import { Select } from "../../../../../utility-components";
+import {
+  BarChart,
+  LoadingSpinner,
+  Select,
+} from "../../../../../utility-components";
+import { useGetSales } from "./useGetSales";
 
 export const Sales = React.memo(({ sales, period, marketplace }) => {
   const periods = ["30D", "6M", "1Y", "All"].map(p => ({
@@ -8,6 +14,12 @@ export const Sales = React.memo(({ sales, period, marketplace }) => {
   }));
 
   const [currentPeriod, setPeriod] = React.useState(period);
+  const [v, isLoading] = useGetSales(sales, period, currentPeriod, marketplace);
+
+  const values = {
+    labels: v.map(v => moment(v.ts).format("DD/MM/YYYY")),
+    values: v.map(v => v.sales),
+  };
 
   return (
     <div className="volumes-chart chart-box">
@@ -17,6 +29,17 @@ export const Sales = React.memo(({ sales, period, marketplace }) => {
         className="select-period"
         onChange={value => setPeriod(value.value)}
       />
+      {isLoading ? (
+        <LoadingSpinner />
+      ) : (
+        <BarChart
+          title="Sales"
+          subTitle="The number of sales in the marketplace over the selected time range."
+          tooltipSuffix=" Sales"
+          yAxisText="Sales"
+          values={values}
+        />
+      )}
     </div>
   );
 });

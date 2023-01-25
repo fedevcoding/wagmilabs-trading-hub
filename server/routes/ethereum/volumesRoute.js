@@ -1,6 +1,7 @@
 const express = require("express");
 require("dotenv").config();
 const checkAuth = require("../../middleware/checkAuth");
+const { getVolumes, getVolumeSales } = require("../../models/queries/volumes");
 
 const volumesRoute = express();
 
@@ -38,50 +39,6 @@ volumesRoute.get("/", checkAuth, async (req, res) => {
   getData();
 });
 
-const getVolumes = async (marketplace, interval) => {
-  const volumes = await fetch("https://api.transpose.io/sql", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "X-API-KEY": process.env.TRANSPOSE_API,
-    },
-    body: JSON.stringify({
-      sql: `SELECT
-      DATE_TRUNC('day', timestamp) AS ts,
-      SUM(eth_price) AS volume_eth,
-      SUM(usd_price) AS volume
-      FROM ethereum.${marketplace.toLowerCase()}_nft_sales
-      WHERE ${
-        interval === "all"
-          ? "1"
-          : `timestamp >= (NOW() - INTERVAL '${interval}')`
-      }
-      GROUP BY ts
-      ORDER BY ts ASC;`,
-    }),
-  });
-
-  /*
-  group by week
-
-  SELECT
-      (extract(epoch from timestamp) / (7*24*60*60))::numeric::integer AS ts,
-      SUM(eth_price) AS volume_eth,
-      SUM(usd_price) AS volume
-      FROM ethereum.opensea_nft_sales
-      WHERE timestamp >= (NOW() - INTERVAL '180 days')
-      GROUP BY ts
-      ORDER BY ts asc;
-
-  */
-
-  return (await volumes.json()).results.map((r) => ({
-    ...r,
-    volume_eth: +Number(r.volume_eth).toFixed(2),
-    volume: parseInt(r.volume),
-  }));
-};
-
 volumesRoute.get("/:marketplace", checkAuth, async (req, res) => {
   const { period, filter } = req.query;
 
@@ -98,19 +55,36 @@ volumesRoute.get("/:marketplace", checkAuth, async (req, res) => {
     ? req.params.marketplace
     : "opensea";
 
-  const volumes = await getVolumes(marketplace, interval);
+  let volumes = {};
+  let sales = {};
+  let activeTraders = {};
+  let comparisonData = {};
+
+  if (!filter) {
+    [volumes, sales] = await Promise.all([
+      getVolumes(marketplace, interval),
+      getVolumeSales(marketplace, interval),
+    ]);
+  } else {
+    switch (filter) {
+      case "volumes":
+        volumes = await getVolumes(marketplace, interval);
+        break;
+      case "sales":
+        sales = await getVolumeSales(marketplace, interval);
+        break;
+    }
+  }
+
+  const result = {
+    volumes,
+    sales,
+    activeTraders,
+    comparisonData,
+  };
 
   async function getData() {
-    res.status(200).json(
-      filter === "volumes"
-        ? volumes
-        : {
-            volumes: volumes,
-            sales: {},
-            activeTraders: {},
-            comparisonData: {},
-          }
-    );
+    res.status(200).json(filter ? result[filter] : result);
   }
   getData();
 });
