@@ -51,15 +51,21 @@ export const BarChart = ({
             overflow: "justify",
           },
         },
-        tooltip: {
-          valueSuffix: tooltipSuffix,
-          formatter: function () {
-            const dollarValue = (values?.secondValue || [])[this.point.index];
-            return dollarValue
-              ? this.y + ` ${tooltipSuffix}<br>$` + dollarValue
-              : this.y + tooltipSuffix;
-          },
-        },
+        ...(tooltipSuffix
+          ? {
+              tooltip: {
+                valueSuffix: tooltipSuffix,
+                formatter: function () {
+                  const dollarValue = (values?.secondValue || [])[
+                    this.point.index
+                  ];
+                  return dollarValue
+                    ? this.y + ` ${tooltipSuffix}<br>$` + dollarValue
+                    : this.y + tooltipSuffix;
+                },
+              },
+            }
+          : {}),
         legend: {
           enabled: false,
         },

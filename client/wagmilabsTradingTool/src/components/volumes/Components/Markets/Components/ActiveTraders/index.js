@@ -1,14 +1,31 @@
+import moment from "moment";
 import React from "react";
-import { Select } from "../../../../../utility-components";
+import {
+  BarChart,
+  LoadingSpinner,
+  Select,
+} from "../../../../../utility-components";
+import { useGetActiveTraders } from "./useGetActiveTraders";
 
 export const ActiveTraders = React.memo(
   ({ activeTraders, period, marketplace }) => {
-    const periods = ["30D", "6M", "1Y", "All"].map(p => ({
+    const periods = ["10D", "30D", "6M", "1Y", "All"].map(p => ({
       value: p,
       label: p,
     }));
 
     const [currentPeriod, setPeriod] = React.useState(period);
+    const [v, isLoading] = useGetActiveTraders(
+      activeTraders,
+      period,
+      currentPeriod,
+      marketplace
+    );
+
+    const values = {
+      labels: v.map(v => moment(v.ts).format("DD/MM/YYYY")),
+      values: v.map(v => v.active_traders),
+    };
 
     return (
       <div className="volumes-chart chart-box">
@@ -18,6 +35,16 @@ export const ActiveTraders = React.memo(
           className="select-period"
           onChange={value => setPeriod(value.value)}
         />
+        {isLoading ? (
+          <LoadingSpinner />
+        ) : (
+          <BarChart
+            title="Active Traders"
+            subTitle="The number of Active Traders in the marketplace over the selected time range."
+            yAxisText="Active Traders"
+            values={values}
+          />
+        )}
       </div>
     );
   }

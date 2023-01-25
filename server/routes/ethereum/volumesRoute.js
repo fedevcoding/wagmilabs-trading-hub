@@ -1,7 +1,11 @@
 const express = require("express");
 require("dotenv").config();
 const checkAuth = require("../../middleware/checkAuth");
-const { getVolumes, getVolumeSales } = require("../../models/queries/volumes");
+const {
+  getVolumes,
+  getVolumeSales,
+  getVolumeActiveTraders,
+} = require("../../models/queries/volumes");
 
 const volumesRoute = express();
 
@@ -43,6 +47,7 @@ volumesRoute.get("/:marketplace", checkAuth, async (req, res) => {
   const { period, filter } = req.query;
 
   const intervals = {
+    "10d": "10 days",
     "30d": "30 days",
     "6m": "180 days",
     "1y": "1 year",
@@ -61,9 +66,10 @@ volumesRoute.get("/:marketplace", checkAuth, async (req, res) => {
   let comparisonData = {};
 
   if (!filter) {
-    [volumes, sales] = await Promise.all([
+    [volumes, sales, activeTraders] = await Promise.all([
       getVolumes(marketplace, interval),
       getVolumeSales(marketplace, interval),
+      getVolumeActiveTraders(marketplace, interval),
     ]);
   } else {
     switch (filter) {
@@ -72,6 +78,9 @@ volumesRoute.get("/:marketplace", checkAuth, async (req, res) => {
         break;
       case "sales":
         sales = await getVolumeSales(marketplace, interval);
+        break;
+      case "activeTraders":
+        sales = await getVolumeActiveTraders(marketplace, interval);
         break;
     }
   }

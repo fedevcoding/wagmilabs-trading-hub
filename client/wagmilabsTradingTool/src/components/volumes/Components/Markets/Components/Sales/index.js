@@ -8,7 +8,7 @@ import {
 import { useGetSales } from "./useGetSales";
 
 export const Sales = React.memo(({ sales, period, marketplace }) => {
-  const periods = ["30D", "6M", "1Y", "All"].map(p => ({
+  const periods = ["10D", "30D", "6M", "1Y", "All"].map(p => ({
     value: p,
     label: p,
   }));
@@ -35,7 +35,6 @@ export const Sales = React.memo(({ sales, period, marketplace }) => {
         <BarChart
           title="Sales"
           subTitle="The number of sales in the marketplace over the selected time range."
-          tooltipSuffix=" Sales"
           yAxisText="Sales"
           values={values}
         />

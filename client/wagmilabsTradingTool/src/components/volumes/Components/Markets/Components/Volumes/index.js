@@ -8,7 +8,7 @@ import {
 import { useGetVolumes } from "./useGetVolumes";
 
 export const Volumes = React.memo(({ volumes, period, marketplace }) => {
-  const periods = ["30D", "6M", "1Y", "All"].map(p => ({
+  const periods = ["10D", "30D", "6M", "1Y", "All"].map(p => ({
     value: p,
     label: p,
   }));

@@ -76,7 +76,39 @@ const getVolumeSales = async (marketplace, interval) => {
     : result;
 };
 
+const getVolumeActiveTraders = async (marketplace, interval) => {
+  const grupByWeek = interval === "180 days";
+  const date = getQueryDate(grupByWeek);
+
+  const where = `WHERE ${
+    interval === "all" ? "1" : `timestamp >= (NOW() - INTERVAL '${interval}')`
+  }`;
+
+  const result = await execTranseposeAPI(`SELECT
+    ${date}
+    COUNT(DISTINCT address) AS active_traders
+    FROM (
+        SELECT seller_address as address, timestamp
+        FROM ethereum.${marketplace.toLowerCase()}_nft_sales
+        ${where}
+        UNION
+        SELECT buyer_address as address, timestamp
+        FROM ethereum.${marketplace.toLowerCase()}_nft_sales
+        ${where}
+    ) as traders
+    GROUP BY ts
+    ORDER BY ts DESC;`);
+
+  return grupByWeek
+    ? result.map((r) => ({
+        active_traders: r.active_traders,
+        ts: r.timestamp,
+      }))
+    : result;
+};
+
 module.exports = {
   getVolumes,
   getVolumeSales,
+  getVolumeActiveTraders,
 };
