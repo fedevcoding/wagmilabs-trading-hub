@@ -8,7 +8,6 @@ import Charts from "./sections/charts/Charts"
 import Leaderboard from "./sections/leaderboard/Leaderboard"
 import fullStar from "../../assets/full-star.png"
 import emptyStar from "../../assets/empty-star.png"
-import hoverStar from "../../assets/hover-star.png"
 
 // import { useMoralisWeb3Api } from "react-moralis";
 import "./collection.css"
@@ -45,13 +44,13 @@ import copy from 'copy-to-clipboard';
 
 
     
-let sortMapping = {
-    "p-lth": "lowestAsk",
-    "p-htl": "highestAsk",
-    "t-htl": "tokenId-desc",
-    "t-lth": "tokenId-asc",
-    "r-htl": "rarity",
-}
+// let sortMapping = {
+//     "p-lth": "lowestAsk",
+//     "p-htl": "highestAsk",
+//     "t-htl": "tokenId-desc",
+//     "t-lth": "tokenId-asc",
+//     "r-htl": "rarity",
+// }
 
 
 const Collection = () => {
@@ -69,91 +68,21 @@ const Collection = () => {
 
 
     // items.js states
-    const [sorts, setSorts] = useState({
+    const [itemFilters, setItemFilters] = useState({
         sortBy: "p-lth",
-        buyNow: false,
+        attributeFilter: [],
+        buyNowChecked: false,
         priceFilter: {
-          min: undefined,
-          max: undefined
+            min: undefined,
+            max: undefined
         },
-        marketplaces: {
-          opensea: false,
-          x2y2: false,
-          looksrare: false
-        }
+        tokenId: undefined
     })
+
+
     const [loadingItems, setLoadingItems] = useState(true)
     const [buyNowChecked, setBuyNowChecked] = useState(false)
     const [items, setItems] = useState([])
-
-
-    useEffect(()=>{
-        address && fetchTokens()
-    }, [sorts])
-
-
-    // async function fetchTokens(){
-    //     setLoadingItems(true)
-
-    //     const {opensea, x2y2, looksrare} = sorts.marketplaces
-    //     let marketplaces = ""
-    //     if(opensea && x2y2 && looksrare) marketplaces = "&marketplaces=opensea,x2y2,looksrare"
-    //     else if(opensea && x2y2) marketplaces = "&marketplaces=opensea,x2y2"
-    //     else if(opensea && looksrare) marketplaces = "&marketplaces=opensea,looksrare"
-    //     else if(x2y2 && looksrare) marketplaces = "&marketplaces=x2y2,looksrare"
-    //     else if(opensea) marketplaces = "&marketplaces=opensea"
-    //     else if(x2y2) marketplaces = "&marketplaces=x2y2"
-    //     else if(looksrare) marketplaces = "&marketplaces=looksrare"
-
-    //     const {min, max} = sorts.priceFilter
-    //     let priceFilter = ""
-    //     if(sorts.buyNow) priceFilter = "&priceFilter=ETH,0,"
-    //     if(min) priceFilter = `&priceFilter=ETH,${min},`
-    //     if(max) priceFilter = `&priceFilter=ETH,0,${max}`
-    //     if(max && min) priceFilter = `&priceFilter=ETH,${min},${max}`
-
-    //     let url = `https://api.gomu.co/rest/nfts/by-contract?limit=100&includeLastTransfer=false&contractAddress=${address}&sortBy=${sortMapping[sorts.sortBy]}${priceFilter}${marketplaces}`
-
-    //     let data = await fetch(url)
-    //     data = (await data.json()).data
-    //     console.log(data)
-    //     setItems(data)
-    //     setLoadingItems(false)
-    // }
-    async function fetchTokens(){
-        setLoadingItems(true)
-
-        const {opensea, x2y2, looksrare} = sorts.marketplaces
-        let marketplaces = ""
-        if(opensea && x2y2 && looksrare) marketplaces = "&marketplaces=opensea,x2y2,looksrare"
-        else if(opensea && x2y2) marketplaces = "&marketplaces=opensea,x2y2"
-        else if(opensea && looksrare) marketplaces = "&marketplaces=opensea,looksrare"
-        else if(x2y2 && looksrare) marketplaces = "&marketplaces=x2y2,looksrare"
-        else if(opensea) marketplaces = "&marketplaces=opensea"
-        else if(x2y2) marketplaces = "&marketplaces=x2y2"
-        else if(looksrare) marketplaces = "&marketplaces=looksrare"
-
-        const {min, max} = sorts.priceFilter
-        let priceFilter = ""
-        if(sorts.buyNow) priceFilter = "&priceFilter=ETH,0,"
-        if(min) priceFilter = `&priceFilter=ETH,${min},`
-        if(max) priceFilter = `&priceFilter=ETH,0,${max}`
-        if(max && min) priceFilter = `&priceFilter=ETH,${min},${max}`
-
-        // let url = `https://api.gomu.co/rest/nfts/by-contract?limit=100&includeLastTransfer=false&contractAddress=${address}&sortBy=${sortMapping[sorts.sortBy]}${priceFilter}${marketplaces}`
-        let url = `https://api.reservoir.tools/tokens/v5?collection=${address}&sortBy=floorAskPrice&sortDirection=asc&limit=50&includeTopBid=false&includeAttributes=false&includeQuantity=false&includeDynamicPricing=false&normalizeRoyalties=false`
-
-        let data = await fetch(url)
-        data = (await data.json()).tokens
-
-        console.log(data)
-        setItems(data)
-        setLoadingItems(false)
-    }
-    //
-
-
-
 
 
     useEffect(()=>{
@@ -162,6 +91,41 @@ const Collection = () => {
             getInfo()
         }
     }, [address])
+
+    useEffect(()=>{
+        address && fetchTokens()
+    }, [itemFilters, address])
+
+
+
+
+    async function fetchTokens(){
+        setLoadingItems(true)
+
+        console.log(itemFilters)
+        const {sortBy, tokenId} = itemFilters
+        let {min, max} = itemFilters.priceFilter
+
+        let attributeFilter = ""
+        itemFilters.attributeFilter.forEach(attribute => {
+            const {attributeKey, attributeValue} = attribute
+            attributeFilter += `-attributes[${attributeKey}]:${attributeValue}`
+        })
+
+
+        if(!min && itemFilters.buyNowChecked) min = 0 
+
+        let data = await fetch(`${baseUrl}/collectionItems/${address}?sortBy=${sortBy}&minAsk=${min}&maxAsk=${max}&attributes=${attributeFilter}&tokenId=${tokenId}`, {
+            headers: {
+                "Content-Type": "application/json",
+                "x-auth-token": localStorage.jsonwebtoken
+            }
+        })
+        data = await data.json()
+
+        setItems(data)
+        setLoadingItems(false)
+    }
 
     async function getInfo(){
         try{
@@ -186,6 +150,9 @@ const Collection = () => {
             const owners = openseaData?.stats?.num_owners
             const daySales = openseaData?.stats?.one_day_sales
             const totalSales = openseaData?.stats?.total_sales
+
+
+            console.log(attributes)
 
             data["attributes"] = attributes
             data["collectionRoyalties"] = royalties 
@@ -235,7 +202,15 @@ const Collection = () => {
         setSection(section)
     }
 
-    function listingsItems(){
+
+
+
+
+
+
+    // utility function
+
+    const listingsItems = () => {
         const {onSaleCount, tokenCount} = collectionInfo
         let data = "- - -"
         if(onSaleCount && tokenCount){
@@ -244,7 +219,7 @@ const Collection = () => {
         return data
     }
 
-    function copyAddress(){
+    const copyAddress = () => {
         copy(address)
         setCopyState({value: "Copied"})
         setTimeout(()=>{
@@ -252,7 +227,7 @@ const Collection = () => {
         }, 700)
     }
 
-    function handleHoverCopy(hover){
+    const handleHoverCopy = (hover) => {
         const el = document.querySelector(".collection-address-copy-btn")
             if(hover){
                 el.classList.add("active")
@@ -496,31 +471,32 @@ const Collection = () => {
             <div section="charts" onClick={e => changeCollectionSection(e)} className="single-collection-section">Charts</div>
             <div section="leaderboard" onClick={e => changeCollectionSection(e)} className="single-collection-section">Leaderboard</div>
         </div>
+        
 
-        <Section section={section} collectionInfo={collectionInfo} setItems={setItems} address={address} items={items} sorts={sorts} setSorts={setSorts} loadingItems={loadingItems} setLoadingItems={setLoadingItems} buyNowChecked={buyNowChecked} setBuyNowChecked={setBuyNowChecked}/>
+
+        {(()=>{
+            if(section === "items"){
+                return <Items address={address} items={items} setItems={setItems} itemFilters={itemFilters} setItemFilters={setItemFilters} loadingItems={loadingItems} setLoadingItems={setLoadingItems} buyNowChecked={buyNowChecked} setBuyNowChecked={setBuyNowChecked} collectionInfo={collectionInfo}/>
+            }
+            else if(section === "liveview"){
+                return <LiveView address={address} items={items} setItems={setItems} itemFilters={itemFilters} setItemFilters={setItemFilters} loadingItems={loadingItems} setLoadingItems={setLoadingItems} buyNowChecked={buyNowChecked} setBuyNowChecked={setBuyNowChecked} collectionInfo={collectionInfo} collectionImage={collectionInfo?.image}/>
+            }
+            else if(section === "activity"){
+                return <Activity />
+            }
+            else if(section === "charts"){
+                return <Charts />
+            }
+            else if(section === "leaderboard"){
+                return <Leaderboard />
+            }
+        })()}
     </>
 
     )
 }
 
 
-const Section = ({section, collectionInfo, address, items, setItems, sorts, setSorts, loadingItems, setLoadingItems, buyNowChecked, setBuyNowChecked})=>{
-    if(section === "items"){
-        return <Items address={address} items={items} setItems={setItems} sorts={sorts} setSorts={setSorts} loadingItems={loadingItems} setLoadingItems={setLoadingItems} buyNowChecked={buyNowChecked} setBuyNowChecked={setBuyNowChecked} collectionInfo={collectionInfo}/>
-    }
-    else if(section === "liveview"){
-        return <LiveView address={address} items={items} setItems={setItems} sorts={sorts} setSorts={setSorts} loadingItems={loadingItems} setLoadingItems={setLoadingItems} buyNowChecked={buyNowChecked} setBuyNowChecked={setBuyNowChecked} collectionInfo={collectionInfo} collectionImage={collectionInfo?.image}/>
-    }
-    else if(section === "activity"){
-        return <Activity />
-    }
-    else if(section === "charts"){
-        return <Charts />
-    }
-    else if(section === "leaderboard"){
-        return <Leaderboard />
-    }
-}
 
 const Loader = ({className}) => {
     let borderRadius = "6px"

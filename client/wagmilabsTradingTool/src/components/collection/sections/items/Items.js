@@ -1,7 +1,5 @@
 import React, { useEffect, useState, useContext, useMemo } from "react";
 import "./items.css";
-import question from "../../../../assets/question.png";
-import baseUrl from "../../../../variables/baseUrl";
 
 import _ from "lodash";
 import {
@@ -23,16 +21,15 @@ import {
 } from "@chakra-ui/react";
 
 import { UserDataContext } from "../../../../context/userContext";
-import { getClient, Execute } from "@reservoir0x/reservoir-kit-client";
+import { getClient } from "@reservoir0x/reservoir-kit-client";
 import addToCart from "../../../../utils/database-functions/addToCart";
-import { formatIpfs, roundPrice } from "../../../../utils/formats/formats";
+import { roundPrice } from "../../../../utils/formats/formats";
 
-import openseaImg from "../../../../assets/opensea.svg";
-import x2y2Img from "../../../../assets/x2y2.svg";
-import looksrareImg from "../../../../assets/looksrare.svg";
-import sudoswapImg from "../../../../assets/sudoswap.svg";
 import { fetchSigner } from "@wagmi/core";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
+import getMarketplaceImage from "../../../../utils/marketplaceImageMapping";
+import {useDebounce} from "use-debounce"
+
 
 const options = [
   { value: "p-lth", label: "Price: low to high" },
@@ -40,89 +37,36 @@ const options = [
   { value: "t-lth", label: "TokenId: low to high" },
   { value: "t-htl", label: "TokenId: high to low" },
   { value: "r-htl", label: "Rarity: high to low" },
+  { value: "r-lth", label: "Rarity: low to high" },
 ];
 
-const Items = ({
-  address,
-  items,
-  sorts,
-  setSorts,
-  buyNowChecked,
-  setBuyNowChecked,
-  collectionInfo,
-  loadingItems,
-}) => {
+
+const Items = ({ address, items, itemFilters, setItemFilters, collectionInfo, loadingItems }) => {
+
+  const [searchText, setSearchText] = useState("")
+  const [debounceSearch] = useDebounce(searchText, 400)
+
+
+  useEffect(()=>{
+    changeSorting("tokenId", debounceSearch)
+  }, [debounceSearch])
+
+
+
+  const conditionallyBuynowProps = {
+
+  }
+  if((itemFilters.priceFilter.min || itemFilters.priceFilter.max)){
+    conditionallyBuynowProps.isChecked = true
+    conditionallyBuynowProps.isDisabled = true
+  }
+
+
   const { setUserCartItems, gasSettings } = useContext(UserDataContext);
 
-  function changeSorting(parameter, value) {
-    if (value && parameter === "buynow") setBuyNowChecked(true);
-    else if (
-      !value &&
-      !sorts.marketplaces.opensea &&
-      !sorts.marketplaces.x2y2 &&
-      !sorts.marketplaces.looksrare &&
-      !sorts.priceFilter.max &&
-      !sorts.priceFilter.min &&
-      parameter === "buynow"
-    )
-      setBuyNowChecked(false);
 
-    switch (parameter) {
-      case "buynow":
-        if (
-          !sorts.marketplaces.opensea &&
-          !sorts.marketplaces.x2y2 &&
-          !sorts.marketplaces.looksrare &&
-          !sorts.priceFilter.max &&
-          !sorts.priceFilter.min
-        ) {
-          setSorts((prev) => ({ ...prev, buyNow: value }));
-        }
-        break;
-      case "sortby":
-        setSorts((prev) => ({ ...prev, sortBy: value }));
-    }
-  }
 
-  function applyChanges() {
-    const marketplaceOptions = Array.from(
-      document.querySelectorAll(".collection-item-marketplace-filter input")
-    );
-    const priceOptions = Array.from(
-      document.querySelectorAll(".collection-item-price-filter")
-    );
-    const opensea = marketplaceOptions[0].checked;
-    const x2y2 = marketplaceOptions[1].checked;
-    const looksrare = marketplaceOptions[2].checked;
-
-    const max = priceOptions[1].value ? priceOptions[1].value : undefined;
-    const min = priceOptions[0].value
-      ? priceOptions[0].value
-      : !opensea && !x2y2 && !looksrare && !max
-      ? undefined
-      : "0";
-    console.log(min);
-
-    if (
-      !_.isEqual(
-        { ...sorts },
-        {
-          ...sorts,
-          marketplaces: { opensea, x2y2, looksrare },
-          priceFilter: { min, max },
-        }
-      )
-    ) {
-      if (min === undefined) setBuyNowChecked(false);
-      else setBuyNowChecked(true);
-      setSorts((prev) => ({
-        ...prev,
-        marketplaces: { opensea, x2y2, looksrare },
-        priceFilter: { min, max },
-      }));
-    }
-  }
-
+  
   async function addItemToCart(name, tokenId, price, image, marketplace) {
     let pushStatus = await addToCart({
       name,
@@ -147,14 +91,9 @@ const Items = ({
       gasSettings.maxPriorityFeePerGas * 1000000000
     ).toString();
 
-    console.log(maxFeePerGas, maxPriorityFeePerGas);
-
     getClient()?.actions.buyToken({
       tokens: [{ tokenId, contract: contract }],
       signer,
-      // options: {
-      // preferredOrderSource: "x2y2.io"
-      // },
       options: {
         maxFeePerGas,
         maxPriorityFeePerGas,
@@ -166,8 +105,59 @@ const Items = ({
     });
   }
 
-  const itemsMapping = useMemo(
-    () =>
+
+
+
+  function changeSorting(parameter, value) {
+    switch (parameter) {
+      case "sortby":
+        setItemFilters((prev) => ({ ...prev, sortBy: value }));
+        break;
+      case "buynow":
+        if(value) setItemFilters((prev) => ({ ...prev, buyNowChecked: true}));
+        else setItemFilters((prev) => ({ ...prev, buyNowChecked: false}));
+        break;
+      case "tokenId":
+        setItemFilters(prev => ({...prev, tokenId: value}))
+    }
+  }
+
+  function changeAttributeFilter(checked, attributeKey, attributeValue){
+    if(checked){
+      setItemFilters((prev) => ({
+        ...prev,
+        attributeFilter: [...prev.attributeFilter, {attributeKey, attributeValue}],
+      }));
+    }
+    else{
+      let filteredAttributes = itemFilters.attributeFilter.filter(attr => attr.attributeValue !== attributeValue)
+      setItemFilters((prev) => ({
+        ...prev,
+        attributeFilter: filteredAttributes
+      }))
+    }
+  }
+
+  function applyChanges() {
+    const priceOptions = Array.from(
+      document.querySelectorAll(".collection-item-price-filter")
+    );
+
+    const max = priceOptions[1].value ? priceOptions[1].value : undefined;
+    const min = priceOptions[0].value ? priceOptions[0].value : undefined;
+
+    if (!_.isEqual({ ...itemFilters },{...itemFilters, priceFilter: { min, max }}) ){
+      setItemFilters((prev) => ({
+        ...prev,
+        priceFilter: { min, max },
+      }));
+    }
+  }
+
+
+
+
+  const itemsMapping = useMemo(() => 
       items.map((item, index) => {
         const { tokenId, name, image, rarityRank } = item?.token;
         const collectionImage = item?.token?.collection?.image;
@@ -180,30 +170,7 @@ const Items = ({
         let isListed = false;
         if (value) isListed = true;
 
-        let marketplaceImg;
-        let marketplaceLink;
-
-        switch (marketplace?.toLowerCase()) {
-          case "opensea":
-            marketplaceImg = openseaImg;
-            marketplaceLink = `https://opensea.io/assets/ethereum/${address}/${tokenId}`;
-            break;
-          case "x2y2":
-            marketplaceImg = x2y2Img;
-            marketplaceLink = `https://x2y2.io/eth/${address}/${tokenId}`;
-            break;
-          case "looksrare":
-            marketplaceImg = looksrareImg;
-            marketplaceLink = `https://looksrare.org/collections/${address}/${tokenId}`;
-            break;
-          case "sudoswap":
-            marketplaceImg = sudoswapImg;
-            marketplaceLink = `https://sudoswap.xyz/browse/buy/${address}`;
-            break;
-          default:
-            marketplaceImg = marketplaceIcon
-            marketplaceLink = marketplaceUrl
-        }
+        const marketplaceImg = getMarketplaceImage(marketplace) || marketplaceIcon;
 
         return (
           <div className="collection-single-item-container" key={index}>
@@ -216,7 +183,7 @@ const Items = ({
                 />
 
                 {isListed && (
-                  <a href={marketplaceLink} target="_blank">
+                  <a href={marketplaceUrl} target="_blank">
                     <img
                       src={marketplaceImg}
                       className="collection-item-marketplace-image"
@@ -294,11 +261,12 @@ const Items = ({
 
       <div className="collection-item-section">
         <div className="collection-item-filters-container">
+          
           <div className="collection-item-filter-section1">
             <div className="collection-item-filter-buynow">
               <p>BUY NOW</p>
               <Switch
-                isChecked={buyNowChecked}
+                {...conditionallyBuynowProps}
                 colorScheme={"red"}
                 onChange={(e) => changeSorting("buynow", e.target.checked)}
               />
@@ -337,37 +305,21 @@ const Items = ({
               <p className="collection-item-filter-marketplace-name">
                 Marketplace:
               </p>
-              <Checkbox
-                defaultChecked={false}
-                size={"sm"}
-                className="collection-item-marketplace-filter"
-              >
+              <Checkbox defaultChecked={true} isDisabled size={"sm"} className="collection-item-marketplace-filter">
                 Opensea
               </Checkbox>
               <br />
-              <Checkbox
-                defaultChecked={false}
-                size={"sm"}
-                className="collection-item-marketplace-filter"
-              >
+              <Checkbox defaultChecked={true} isDisabled  size={"sm"} className="collection-item-marketplace-filter">
                 X2Y2
               </Checkbox>
               <br />
-              <Checkbox
-                defaultChecked={false}
-                size={"sm"}
-                className="collection-item-marketplace-filter"
-              >
+              <Checkbox defaultChecked={true} isDisabled  size={"sm"} className="collection-item-marketplace-filter">
                 LooksRare
               </Checkbox>
               <br />
             </div>
 
-            <Button
-              colorScheme={"blue"}
-              onClick={applyChanges}
-              className="collection-item-filter-apply"
-            >
+            <Button colorScheme={"blue"} onClick={applyChanges} className="collection-item-filter-apply">
               Apply
             </Button>
           </div>
@@ -408,6 +360,9 @@ const Items = ({
                                     defaultChecked={false}
                                     size={"sm"}
                                     className="collection-item-marketplace-filter"
+                                    key={innerIndex}
+                                    value={innerKey}
+                                    onChange={(e) => changeAttributeFilter(e.target.checked, key, innerKey)}
                                   >
                                     {innerKey}
                                   </Checkbox>
@@ -435,6 +390,7 @@ const Items = ({
                 <Input
                   placeholder="Search by token ID"
                   className="collection-items-search-bar"
+                  onChange={({target}) => setSearchText(target.value)} 
                 ></Input>
               </InputGroup>
             </HStack>

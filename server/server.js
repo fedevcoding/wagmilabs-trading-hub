@@ -76,6 +76,7 @@ const server = new http.createServer(app)
 const { Server } = require("socket.io");
 const saleBotRoute = require("./routes/ethereum/bots/saleBotRoute.js")
 const profileCollectionsRoute = require("./routes/ethereum/profile/profileCollectionsRoute.js")
+const collectionItemsRoute = require("./routes/ethereum/collections/collectionItemsRoute.js")
 const io = new Server(server);
 
 app.set('socketio', io);
@@ -203,6 +204,7 @@ app.use("/api/v1/wagmilabs/ranking", rankingRoute)
 app.use("/api/v1/wagmilabs/charts", chartsRoute)
 app.use("/api/v1/wagmilabs/collectionListings/", collectionListingsRoute)
 app.use("/api/v1/wagmilabs/volumes", volumesRoute)
+app.use("/api/v1/wagmilabs/collectionItems", collectionItemsRoute)
 
 
 // bots routes
