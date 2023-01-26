@@ -3,6 +3,8 @@ import "./minting.css"
 import times from "./times"
 import baseUrl from '../../../../variables/baseUrl'
 
+import notFound from "../../../../assets/notFound.svg"
+
 import Highcharts from "highcharts"
 import HighchartsReact from "highcharts-react-official"
 import { roundPrice } from '../../../../utils/formats/formats'
@@ -271,7 +273,15 @@ const Minting = ({tool, timeFrame, setTimeFrame, resetTime}) => {
           </thead>
           <tbody>
           {
-            mappedStats
+              !loading &&
+              stats.length === 0 ?
+
+              <div className='watchlist-not-found'>
+                  <img src={notFound}/>
+                  <p>No collections found...</p>
+              </div>
+              :
+              mappedStats
           }
         </tbody>
 

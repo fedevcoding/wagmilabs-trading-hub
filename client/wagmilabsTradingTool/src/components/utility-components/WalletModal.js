@@ -13,13 +13,13 @@ import wrappedEthereumImage from "../../assets/weth.svg"
 
 
 import logOut from '../../utils/functions/logout'
-import { Button } from '@chakra-ui/react'
+import { Button, Tooltip } from '@chakra-ui/react'
 import LivePulsing from './LivePulsing'
 import getUserBalances from '../../utils/database-functions/getUserBalances'
 
 
 // uniswap widget
-
+import copy from 'copy-to-clipboard'
 import { SwapWidget } from '@uniswap/widgets'
 import '@uniswap/widgets/fonts.css'
 
@@ -46,6 +46,8 @@ const WalletModal = ({walletModalOpen, closeWalletModal}) => {
 
   const [provider, setProvider] = useState()
   const [swapModal, setSwapModal] = useState(false)
+
+  const [copyState, setCopyState] = useState("Copy")
 
   const {address, connector} = useAccount()
   const {ens, userBalances, profileImage, cryptoPrices, setUserBalances} = useContext(UserDataContext)
@@ -93,7 +95,15 @@ const WalletModal = ({walletModalOpen, closeWalletModal}) => {
     setSwapModal(true)
   }
 
-  console.log("h2llo")
+  const handleCopy = text => {
+    copy(text)
+
+    setCopyState("Copied!")
+
+    setTimeout(()=>{
+      setCopyState("Copy")
+    }, 1000)
+  }
 
     return (
     <>
@@ -115,8 +125,15 @@ const WalletModal = ({walletModalOpen, closeWalletModal}) => {
                         <img src={profileImage}></img>
 
                         <div>
-                          <p>{formatAddress(address)}</p>
-                          <p className='wallet-modal-ens-name'>{ens}</p>
+                          <a href={`https://etherscan.io/address/${address}`} target="_blank">
+                            <p>{formatAddress(address)}</p>
+                          </a>
+
+                          <Tooltip closeOnClick={false} hasArrow label={copyState} fontSize='xs' bg="black" color={"white"} placement='top' borderRadius={"7px"}>
+                            <p className='wallet-modal-ens-name' onClick={()=> handleCopy(ens)}>
+                              {ens}
+                            </p>
+                          </Tooltip>
                         </div>
                       </div>
 

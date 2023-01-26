@@ -360,6 +360,10 @@
     background-color: #272727;
 }
 
+.single-collection-dropdown.selected{
+    background-color: #1d1d1d;
+}
+
 
 .single-collection-dropdown-check.inactive{
     visibility: hidden;
@@ -386,14 +390,20 @@
 
 .collection-filter-indicator{
     position: absolute;
-    top: -15px;
-    left: -15px;
+    top: -10px;
+    left: -10px;
     color: lightgreen;
-    background-color: red;
-    width: 30px;
-    height: 30px;
+    background-color: rgb(0, 0, 0);
+    width: 20px;
+    height: 20px;
     text-align: center;
     border-radius: 50%;
+
+    font-size: 12px;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 
@@ -408,12 +418,12 @@
 }
 
 
-.profile-collection-arrow{
+.profile-collection-arrow, .profile-collection-sort-arrow{
     margin-left: 10px;
     transition: transform 500ms;
 }
 
-.profile-collection-arrow.selected{
+.profile-collection-arrow.selected, .profile-collection-sort-arrow.selected{
     transform: rotate(180deg);
 }
 

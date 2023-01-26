@@ -8,6 +8,8 @@ import "./top100.css"
 import Highcharts from "highcharts"
 import HighchartsReact from "highcharts-react-official"
 
+import notFound from "../../../../assets/notFound.svg"
+
 import useFirstRender from '../../../../custom-hooks/useFirstRender'
 import moment from 'moment'
 
@@ -312,6 +314,14 @@ const Top100 = ({tool, timeFrame, setTimeFrame, resetTime}) => {
         </thead>
         <tbody>
           {
+            !loading &&
+            stats.length === 0 ?
+
+            <div className='watchlist-not-found'>
+                <img src={notFound}/>
+                <p>No collections found...</p>
+            </div>
+            :
             mappedStats
           }
         </tbody>

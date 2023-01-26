@@ -1,7 +1,10 @@
 import React, {useState, useEffect, useMemo} from 'react'
 import question from "../../../../assets/question.png"
+import baseUrl from '../../../../variables/baseUrl'
 import "./owned.css"
 import times from "./times"
+
+import notFound from "../../../../assets/notFound.svg"
 
 const Owned = ({setTimeFrame, tool, timeFrame, resetTime}) => {
 
@@ -43,19 +46,19 @@ const Owned = ({setTimeFrame, tool, timeFrame, resetTime}) => {
       try{
           setLoading(true)
           
-          let data = await fetch(`https://api.reservoir.tools/users/0xfe697C5527ab86DaA1e4c08286D2bE744a0E321E/collections/v2?includeTopBid=true&includeLiquidCount=true&offset=0&limit=100`, {
-            headers: {
-              'x-api-key': '9a16bf8e-ec68-5d88-a7a5-a24044de3f38'
-            }
+          let data = await fetch(`${baseUrl}/ownedCollections`, {
+              headers: {
+                  "content-type": "application/json",
+                  "X-Auth-Token": localStorage.jsonwebtoken
+              }
           })
-          data = (await data.json()).collections
-          setTimeout(()=> setLoading(false), 500)
+          data = await data.json()
           
+          setTimeout(()=> setLoading(false), 500)
           sortData(data)
       }
       catch(err){
           console.error(err)
-          alert("error")
       }
 
     }
@@ -162,7 +165,6 @@ const Owned = ({setTimeFrame, tool, timeFrame, resetTime}) => {
       const supply = collectionData.tokenCount
       const address = collectionData?.id
       const {topBidValue} = collectionData
-      const topBidSource = collectionData.topBidSourceDomain
       
       const volume = collectionData?.volume[time]
 
@@ -257,6 +259,14 @@ const Owned = ({setTimeFrame, tool, timeFrame, resetTime}) => {
         </thead>
         <tbody>
           {
+            !loading &&
+            collections.length === 0 ?
+
+            <div className='watchlist-not-found'>
+                <img src={notFound}/>
+                <p>No collections found...</p>
+            </div>
+            :
             collectionsMapping
           }
         </tbody>

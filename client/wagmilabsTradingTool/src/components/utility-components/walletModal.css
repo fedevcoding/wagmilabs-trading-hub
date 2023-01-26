@@ -49,6 +49,10 @@
     gap: 10px;
 }
 
+.wallet-modal-address-container p{
+    cursor: pointer;
+}
+
 .wallet-modal-ens-name{
     font-size: 12px;
     opacity: 0.8;

@@ -3,6 +3,8 @@ import baseUrl from "../../../../variables/baseUrl"
 import "./watchlist.css"
 import question from "../../../../assets/question.png"
 
+import notFound from "../../../../assets/notFound.svg"
+
 import times from './times'
 
 import useFirstRender from '../../../../custom-hooks/useFirstRender'
@@ -48,23 +50,14 @@ const WatchList = ({tool, timeFrame, setTimeFrame, resetTime}) => {
     async function getWatchListCollections(){
         try{
             setLoading(true)
-            let collections = await fetch(`${baseUrl}/watchList`, {
+
+            let collectionData = await fetch(`${baseUrl}/watchlistCollections`, {
                 headers: {
                     "COntent-Type": "application/json",
                     "x-auth-token": localStorage.jsonwebtoken
                 }
             })
-            collections = await collections.json()
-            collections = collections.watchListCollections
-
-            let contracts = ""
-            for(let i = 0; i < collections.length; i++){
-                if(i === 0) contracts += `contract=${collections[i]}`
-                else contracts += `&contract=${collections[i]}`
-            }
-
-            let collectionData = await fetch(`https://api.reservoir.tools/collections/v5?${contracts}&includeTopBid=true&normalizeRoyalties=false&useNonFlaggedFloorAsk=false&sortBy=1DayVolume&limit=20`)
-            collectionData = (await collectionData.json()).collections
+            collectionData = await collectionData.json()
             console.log(collectionData)
 
             sortData(collectionData)
@@ -249,8 +242,16 @@ const WatchList = ({tool, timeFrame, setTimeFrame, resetTime}) => {
             </thead>
 
             <tbody>
-                {
-                    collectionsMapping
+                {   
+                    !loading &&
+                        collections.length === 0 ?
+                        
+                        <div className='watchlist-not-found'>
+                            <img src={notFound}/>
+                            <p>No collections found...</p>
+                        </div>
+                        :
+                        collectionsMapping
                 }
             </tbody>
         </table>

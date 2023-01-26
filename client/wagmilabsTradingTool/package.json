@@ -48,6 +48,7 @@
     "react-chartlet": "^1.2.0",
     "react-dom": "^18.2.0",
     "react-jsx-highcharts": "^5.0.0",
+    "react-lazy-load-image-component": "^1.5.6",
     "react-loading-skeleton": "^3.1.0",
     "react-lottie-player": "^1.4.3",
     "react-portal": "^4.2.2",

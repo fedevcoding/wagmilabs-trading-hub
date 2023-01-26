@@ -16,6 +16,7 @@ import { roundPrice } from '../../../../utils/formats/formats'
 import { marketListingMapping } from '../../../../utils/mappings'
 import { fetchSigner } from '@wagmi/core'
 import { Tooltip } from '@chakra-ui/react'
+import {useDebounce} from "use-debounce"
 
 
 const sortItemsOptions = [
@@ -24,7 +25,8 @@ const sortItemsOptions = [
 ];
 
 
-const Nfts = ({userItems, setProfileImage, collections, loadingNfts, listingSettings, activityTransactions, selectedSortOption, setSelectedSortOption}) => {
+const Nfts = ({nftsCollectionFilter, setNftsCollectionFilter, searchCollectionText, userItems, setProfileImage, collections, loadingNfts, listingSettings, selectedSortOption, setSelectedSortOption, setSearchCollectionText}) => {
+
 
     const [confirmListing, setConfirmListing] = useState(null)
     const [selectBulk, setSelectBulk] = useState(false)
@@ -34,10 +36,15 @@ const Nfts = ({userItems, setProfileImage, collections, loadingNfts, listingSett
 
 
     function toggleCollectionDropdown(e){
-          if (e.target == document.querySelector(".profile-collection-arrow") || e.target == e.currentTarget) {
-            document.querySelector(".profile-collection-arrow").classList.toggle("selected")
-            document.querySelector(".collection-dropdown").classList.toggle("invisible")
-          }
+      if (e.target == document.querySelector(".profile-collection-arrow") || e.target == e.currentTarget) {
+        document.querySelector(".profile-collection-arrow").classList.toggle("selected")
+        document.querySelector(".collection-dropdown").classList.toggle("invisible")
+      }
+    }
+
+    function closeCollectionDropdown(){
+      document.querySelector(".profile-collection-arrow").classList.remove("selected")
+      document.querySelector(".collection-dropdown").classList.add("invisible")
     }
 
 
@@ -83,7 +90,6 @@ const Nfts = ({userItems, setProfileImage, collections, loadingNfts, listingSett
         if(item.id === id) contains = true
       })
 
-      console.log(contains)
       if(contains){
         const filteredBulks = bulkItems.filter(item => item.id != id)
         container.classList.remove("profile-single-item-bulk-selected")
@@ -267,26 +273,45 @@ const Nfts = ({userItems, setProfileImage, collections, loadingNfts, listingSett
 
     useEffect(()=>{
       
-    const handleClick = (event) => {
-      const path = event.composedPath()
-      const el1 = document.querySelector(".profile-sort-items")
-      const el2 = "item-option-button"
+      const handleClick = (event) => {
+        const path = event.composedPath()
+        const el1 = document.querySelector(".profile-sort-items")
+        const el2 = "item-option-button"
+        const el3 = document.querySelector(".profile-filter-collection")
 
-      if(!path.includes(el1)){
-        setShowSortItemsOptions(false)
-      }
+        if(!path.includes(el3)){
+          closeCollectionDropdown()
+        }
 
-      const classLists = Array.from(event.target.classList)
-      console.log(classLists)
-      if(!classLists.includes(el2)){
-        closeAllOptions()
+        if(!path.includes(el1)){
+          setShowSortItemsOptions(false)
+        }
+
+        const classLists = Array.from(event.target.classList)
+        console.log(classLists)
+        if(!classLists.includes(el2)){
+          closeAllOptions()
+        }
       }
-    }
-    document.addEventListener('click', handleClick);
-    return () => {
-      document.removeEventListener('click', handleClick);
-    };
+      document.addEventListener('click', handleClick);
+      return () => {
+        document.removeEventListener('click', handleClick);
+      };
     }, [])
+
+
+
+    const handleFilterCollection = (collectionAddress, e) => {
+
+      if(collectionAddress?.toLowerCase() === nftsCollectionFilter?.toLowerCase()){
+        setNftsCollectionFilter("")
+      } 
+      else{
+        setNftsCollectionFilter(collectionAddress)
+      } 
+    }
+
+
 
   return (
     <>
@@ -297,7 +322,7 @@ const Nfts = ({userItems, setProfileImage, collections, loadingNfts, listingSett
         <div className='profile-sort-items' onClick={toggleSortOptions}>
           <div className='profile-sort-items-option'>
             {selectedSortOption.label}
-            <i className="fa-solid fa-caret-down profile-collection-arrow"></i>
+            <i className={`fa-solid fa-caret-down profile-collection-sort-arrow ${showSortItemsOptions && "selected"}`}></i>
           </div>
 
           {
@@ -319,18 +344,20 @@ const Nfts = ({userItems, setProfileImage, collections, loadingNfts, listingSett
       
       <div className='profile-filters'> 
         <div className='profile-filter-collection' onClick={(e) => toggleCollectionDropdown(e)}>
-            {/* {collectionFilter.length > 0 &&
-              <p className='collection-filter-indicator'>{collectionFilter.length}</p>
-            } */}
+            {nftsCollectionFilter?.length > 0 &&
+              <p className='collection-filter-indicator'>1</p>
+            }
             Collection <i className="fa-solid fa-caret-down profile-collection-arrow"></i>
             <div className='collection-dropdown invisible'>
               
               {collections &&
                 <div className='collection-dropdown-search'>
                   <i className="fa-solid fa-magnifying-glass lens"></i>
-                  <input type="text" className='collection-dropdown-search' placeholder='Search'
-                  //  onChange={e => handleCollectiondropdownFilter(e)}
-                   />
+                  <input type="text" className='collection-dropdown-search'
+                    placeholder='Search'
+                    value={searchCollectionText}
+                    onChange={e => setSearchCollectionText(e.target.value)}
+                  />
                 </div> 
               }
               {
@@ -339,12 +366,10 @@ const Nfts = ({userItems, setProfileImage, collections, loadingNfts, listingSett
                   collections.map((collection, index) => {
                     const image = collection?.image_url
                     const name = collection?.name
-                    const address = collection?.id
+                    const address = collection?.contract_address
 
                     return(
-                      <div className='single-collection-dropdown' key={index} active="false"
-                      //  onClick={(e)=> filterCollections(e, address, index)}
-                       >
+                      <div className={`single-collection-dropdown ${address === nftsCollectionFilter && "selected"}`} key={index} active="false" onClick={(e) => handleFilterCollection(address, e)}>
                         <div className='single-collection-dropdown-nameimage'>
                           <img src={image} alt="" />
                           <div>{name}</div>

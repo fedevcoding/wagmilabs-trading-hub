@@ -10,6 +10,7 @@ import ClipboardJS from "clipboard"
 import { formatAddress } from '../../utils/formats/formats'
 import { useAccount, useEnsName, useSigner } from 'wagmi'
 
+import { useDebounce } from 'use-debounce'
 import {RadioGroup, Stack, Radio, Select, HStack, Button, Input} from "@chakra-ui/react"
 
 import { UserDataContext } from '../../context/userContext'
@@ -40,23 +41,28 @@ const Profile = () => {
 
   const [selectedSortOption, setSelectedSortOption] = useState(sortItemsOptions[0])
 
-  console.log(listingSettings)
+  const [nftsCollectionFilter, setNftsCollectionFilter] = useState("")
+
+  const [searchCollectionText, setSearchCollectionText] = useState("")
+  const [debounceCollectionSearch] = useDebounce(searchCollectionText, 400)
 
 
   useEffect(() => {
     fetchUserData()
-    fetchUserCollections()
   }, [])
 
+  useEffect(()=>{
+    fetchUserCollections(debounceCollectionSearch, 0, 20)
+  }, [debounceCollectionSearch])
 
   useEffect(()=>{
     fetchUserItems()
-  }, [selectedSortOption])
+  }, [selectedSortOption, nftsCollectionFilter])
 
-  async function fetchUserCollections(){
+  async function fetchUserCollections(query, offset, limit){
     try {
 
-      let data = await fetch(`${baseUrl}/profileCollections?search=&offset=0&limit=15`, {
+      let data = await fetch(`${baseUrl}/profileCollections?search=${query}&offset=${offset}&limit=${limit}`, {
         headers: {
           "Content-Type": "application/json",
           "x-auth-token": localStorage.jsonwebtoken
@@ -64,11 +70,9 @@ const Profile = () => {
       })
       data = await data.json()
 
-      const { results } = data.collections
+      const { collections } = data
 
-      console.log(results)
-      setCollections(results)
-
+      setCollections(collections)
     }
     catch (e) {
       setCollections([])
@@ -79,7 +83,7 @@ const Profile = () => {
   async function fetchUserItems() {
     try {
       setLoadingNfts(true)
-      let data = await fetch(`${baseUrl}/profileItems?sortDirection=${selectedSortOption.value}`, {
+      let data = await fetch(`${baseUrl}/profileItems?sortDirection=${selectedSortOption.value}&collection=${nftsCollectionFilter}`, {
         headers: {
           "Content-Type": "application/json",
           "x-auth-token": localStorage.jsonwebtoken
@@ -203,9 +207,6 @@ const Profile = () => {
   useEffect(()=>{
     !openListingSettings && listingSettings && setStageListingSettings(listingSettings)
   }, [openListingSettings, listingSettings])
-
-  console.log(listingSettings)
-  console.log(stageListingSettings)
 
   return (
     <>
@@ -553,7 +554,7 @@ const Profile = () => {
           (() => {
             if (section === "nft") {
               return (
-                <Nfts selectedSortOption={selectedSortOption} setSelectedSortOption={setSelectedSortOption} activityTransactions={activityTransactions} userItems={userItems} setProfileImage={setProfileImage} collections={collections} loadingNfts={loadingNfts} listingSettings={listingSettings} />
+                <Nfts nftsCollectionFilter={nftsCollectionFilter} setNftsCollectionFilter={setNftsCollectionFilter} searchCollectionText={searchCollectionText} setSearchCollectionText={setSearchCollectionText} selectedSortOption={selectedSortOption} setSelectedSortOption={setSelectedSortOption} activityTransactions={activityTransactions} userItems={userItems} setProfileImage={setProfileImage} collections={collections} loadingNfts={loadingNfts} listingSettings={listingSettings} />
               )
             }
             else if (section === "activity") {

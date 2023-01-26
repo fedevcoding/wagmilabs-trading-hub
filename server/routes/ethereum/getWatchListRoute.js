@@ -4,7 +4,7 @@ const checkAuth = require("../../middleware/checkAuth")
 
 const getWatchListRoute = express()
 
-getWatchListRoute.post("/", checkAuth, async (req, res)=> {
+getWatchListRoute.get("/", checkAuth, async (req, res)=> {
     const {address, signature} = req.userDetails
     const {contract, type} = req.body
     if(!address){

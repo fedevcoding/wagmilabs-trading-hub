@@ -6,20 +6,15 @@ module.exports = {newSale, newListing, newPendingSnipe}
 const trendingRoute = require("./routes/ethereum/trendingRoute.js")
 const mintingRoute = require("./routes/ethereum/mintingRoute.js")
 const rankingRoute = require("./routes/ethereum/rankingRoute.js")
-const chartsRoute = require("./routes/ethereum/collections/chartsRoute.js")
 const verifyRoute = require("./routes/ethereum/functionality/verifyRoute.js")
 const loginRoute = require("./routes/ethereum/functionality/loginRoute.js")
 const refreshRoute = require("./routes/ethereum/refreshRoute.js")
-const userAddressRoute = require("./routes/ethereum/functionality/userAddressRoute.js")
 const profileImageRoute = require("./routes/ethereum/profile/profileImageRoute.js")
 const updateListingSettingsRoute = require("./routes/ethereum/updateListingSettingsRoute.js")
-const userDetailsRoute = require("./routes/ethereum/profile/userDetailsRoute.js")
 const updateWatchListRoute = require("./routes/ethereum/updateWatchListRoute.js")
 const removeRefreshTokenRoute = require("./routes/ethereum/removeRefreshTokenRoute.js")
-const profilePnlRoute = require("./routes/ethereum/profile/profilePnlRoute.js")
 const getWatchListRoute = require("./routes/ethereum/getWatchListRoute.js")
 const watchListRoute = require("./routes/ethereum/watchListRoute.js")
-const collectionListingsRoute = require("./routes/ethereum/collections/collectionListingsRoute.js")
 const listingSettingsRoute = require("./routes/ethereum/profile/listingSettingsRoute.js")
 const profileItemsRoute = require("./routes/ethereum/profile/profileItemsRoute")
 const breakEvenRoute = require("./routes/ethereum/profile/breakEvenRoute")
@@ -32,8 +27,6 @@ const userBalancesRoute = require("./routes/ethereum/profile/userBalancesRoute.j
 const profileStatsRoute = require("./routes/ethereum/profile/profileStatsRoute.js")
 const volumesRoute = require("./routes/ethereum/volumesRoute.js")
 //
-
-
 
 
 
@@ -77,6 +70,9 @@ const { Server } = require("socket.io");
 const saleBotRoute = require("./routes/ethereum/bots/saleBotRoute.js")
 const profileCollectionsRoute = require("./routes/ethereum/profile/profileCollectionsRoute.js")
 const collectionItemsRoute = require("./routes/ethereum/collections/collectionItemsRoute.js")
+const watchlistCollectionsRoute = require("./routes/ethereum/watchlistCollectionsRoute.js")
+const ownedCollectionsRoute = require("./routes/ethereum/ownedCollectionsRoute.js")
+const userDetailsRoute = require("./routes/ethereum/profile/userDetailsRoute.js")
 const io = new Server(server);
 
 app.set('socketio', io);
@@ -177,16 +173,15 @@ function newPendingSnipe(accountAddress, id){
 app.use("/api/v1/wagmilabs/login", loginRoute)
 app.use("/api/v1/wagmilabs/refresh", refreshRoute)
 app.use("/api/v1/wagmilabs/verify", verifyRoute)
-app.use("/api/v1/wagmilabs/userAddress", userAddressRoute)
 app.use("/api/v1/wagmilabs/setUserImage", profileImageRoute)
 app.use("/api/v1/wagmilabs/updateListingSettings", updateListingSettingsRoute)
 app.use("/api/v1/wagmilabs/updateWatchList", updateWatchListRoute)
 app.use("/api/v1/wagmilabs/removeRefreshToken", removeRefreshTokenRoute)
-app.use("/api/v1/wagmilabs/userDetails", userDetailsRoute)
 app.use("/api/v1/wagmilabs/updateUserCart", updateUserCartRoute)
 app.use("/api/v1/wagmilabs/updateGasSettings", updateGasSettingsRoute)
 app.use("/api/v1/wagmilabs/emptyCart", emptyCartRoute)
 app.use("/api/v1/wagmilabs/profileStats", profileStatsRoute)
+app.use("/api/v1/wagmilabs/userDetails", userDetailsRoute)
 
 app.use("/api/v1/wagmilabs/userBalances", userBalancesRoute)
 app.use("/api/v1/wagmilabs/searchCollection", searchCollectionsRoute)
@@ -197,14 +192,13 @@ app.use("/api/v1/wagmilabs/breakEven", breakEvenRoute)
 app.use("/api/v1/wagmilabs/listingSettings", listingSettingsRoute)
 app.use("/api/v1/wagmilabs/getWatchList", getWatchListRoute)
 app.use("/api/v1/wagmilabs/watchList", watchListRoute)
-app.use("/api/v1/wagmilabs/profilePnl", profilePnlRoute)
 app.use("/api/v1/wagmilabs/trending", trendingRoute)
 app.use("/api/v1/wagmilabs/minting", mintingRoute)
 app.use("/api/v1/wagmilabs/ranking", rankingRoute)
-app.use("/api/v1/wagmilabs/charts", chartsRoute)
-app.use("/api/v1/wagmilabs/collectionListings/", collectionListingsRoute)
 app.use("/api/v1/wagmilabs/volumes", volumesRoute)
 app.use("/api/v1/wagmilabs/collectionItems", collectionItemsRoute)
+app.use("/api/v1/wagmilabs/watchlistCollections", watchlistCollectionsRoute)
+app.use("/api/v1/wagmilabs/ownedCollections", ownedCollectionsRoute)
 
 
 // bots routes

@@ -10,6 +10,8 @@ import useFirstRender from '../../../../custom-hooks/useFirstRender'
 import moment from 'moment'
 
 
+import notFound from "../../../../assets/notFound.svg"
+
 const defaultTimeFrame = "1H"
 
 const Trending = ({tool, timeFrame, setTimeFrame, resetTime}) => {
@@ -322,6 +324,14 @@ const Trending = ({tool, timeFrame, setTimeFrame, resetTime}) => {
         </thead>
         <tbody>
           {
+            !loading &&
+            stats.length === 0 ?
+            
+            <div className='trending-not-found'>
+                <img src={notFound}/>
+                <p>No collections found...</p>
+            </div>
+            :
             mappedStats
           }
         </tbody>
