@@ -128,9 +128,9 @@ io.on('connection', (socket) => {
 
 
 function newListing(listingData){
-    try{
 
-        const contractAddress = listingData.data.contractAddress.toLowerCase()
+    try{
+        const contractAddress = listingData?.data?.contractAddress?.toLowerCase()
         const channel = `listings${contractAddress}`
         io.sockets.to(channel).emit('listing', listingData);
     }
