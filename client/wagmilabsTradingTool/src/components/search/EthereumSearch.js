@@ -6,6 +6,7 @@ import question from "../../assets/question.png"
 import baseUrl from "../../variables/baseUrl"
 
 import useFirstRender from "../../custom-hooks/useFirstRender"
+import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
 
 const EthereumSearch = () => {
 
@@ -13,7 +14,7 @@ const EthereumSearch = () => {
 
     const [text, setText] = useState("")
     const [value] = useDebounce(text, 500)
-
+    const [loadingCollections, setLoadingCollections] = useState(false)
     const [collections, setCollections] = useState([])
 
     useEffect(()=>{
@@ -53,6 +54,8 @@ const EthereumSearch = () => {
     
     async function fetchCollections(type){
 
+        setLoadingCollections(true)
+
         let collections = await fetch(`${baseUrl}/searchCollection/${value}/${type}`, {
             headers: {
                 "x-auth-token": localStorage.jsonwebtoken
@@ -60,6 +63,8 @@ const EthereumSearch = () => {
         })
         collections = (await collections.json()).collections
 
+
+        setLoadingCollections(false)
         setCollections(collections)
     }
 
@@ -122,19 +127,34 @@ const EthereumSearch = () => {
         }
     }
 
-return (
+    return (
     <>
     <div className='input-lens-container'>
 
         <i className="fa-solid fa-magnifying-glass lens"></i>
         <input type="text" className='search-bar' placeholder='Search collections' onChange={({target}) => setText(target.value)} onClick={() => loadCollections(true)}></input>
 
-        {
+
+        {   
+        loadingCollections ?
+
+            <div className="container">
+                <SkeletonTheme baseColor="#202020" highlightColor="#444">
+                    <div className="search-skeleton-row">
+                        <Skeleton circle={true} width={30} height={30} count={5}/>
+                        <Skeleton height={30} count={5}/>
+                    </div>
+                </SkeletonTheme>
+            </div>
+
+            :
             collections.length > 0 &&
             <div className="container">
                 {memoList}
             </div>
         }
+
+
     </div>
     </>
   )
