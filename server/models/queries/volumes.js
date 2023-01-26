@@ -1,23 +1,10 @@
+const { execTranseposeAPI } = require("../../services/externalAPI/transpose");
+
 const getQueryDate = (grupByWeek) => {
   return grupByWeek
     ? `(extract(epoch from timestamp) / (7*24*60*60))::numeric::integer AS ts,
             MIN(timestamp) AS timestamp,`
     : `DATE_TRUNC('day', timestamp) AS ts,`;
-};
-
-const execTranseposeAPI = async (sql) => {
-  const result = await fetch("https://api.transpose.io/sql", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "X-API-KEY": process.env.TRANSPOSE_API,
-    },
-    body: JSON.stringify({
-      sql,
-    }),
-  });
-
-  return (await result.json()).results;
 };
 
 const getVolumes = async (marketplace, interval) => {
@@ -28,12 +15,13 @@ const getVolumes = async (marketplace, interval) => {
     ${date}
     SUM(eth_price) AS volume_eth,
     SUM(usd_price) AS volume
-    FROM ethereum.${marketplace.toLowerCase()}_nft_sales
+    FROM ethereum.nft_sales
     WHERE ${
       interval === "all" ? "1" : `timestamp >= (NOW() - INTERVAL '${interval}')`
     }
+    AND exchange_name = '${marketplace.toLowerCase()}'
     GROUP BY ts
-    ORDER BY ts DESC;`);
+    ORDER BY ts ASC;`);
 
   return (
     grupByWeek
@@ -61,12 +49,13 @@ const getVolumeSales = async (marketplace, interval) => {
   const result = await execTranseposeAPI(`SELECT
     ${date}
     count(*) AS sales
-    FROM ethereum.${marketplace.toLowerCase()}_nft_sales
+    FROM ethereum.nft_sales
     WHERE ${
       interval === "all" ? "1" : `timestamp >= (NOW() - INTERVAL '${interval}')`
     }
+    AND exchange_name = '${marketplace.toLowerCase()}'
     GROUP BY ts
-    ORDER BY ts DESC;`);
+    ORDER BY ts ASC;`);
 
   return grupByWeek
     ? result.map((r) => ({
@@ -82,22 +71,22 @@ const getVolumeActiveTraders = async (marketplace, interval) => {
 
   const where = `WHERE ${
     interval === "all" ? "1" : `timestamp >= (NOW() - INTERVAL '${interval}')`
-  }`;
+  } AND exchange_name = '${marketplace.toLowerCase()}'`;
 
   const result = await execTranseposeAPI(`SELECT
     ${date}
     COUNT(DISTINCT address) AS active_traders
     FROM (
         SELECT seller_address as address, timestamp
-        FROM ethereum.${marketplace.toLowerCase()}_nft_sales
+        FROM ethereum.nft_sales
         ${where}
         UNION
         SELECT buyer_address as address, timestamp
-        FROM ethereum.${marketplace.toLowerCase()}_nft_sales
+        FROM ethereum.nft_sales
         ${where}
     ) as traders
     GROUP BY ts
-    ORDER BY ts DESC;`);
+    ORDER BY ts ASC;`);
 
   return grupByWeek
     ? result.map((r) => ({
