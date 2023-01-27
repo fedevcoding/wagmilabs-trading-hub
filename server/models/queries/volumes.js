@@ -6,15 +6,7 @@ const {
   groupByWeek,
 } = require("../../services/volumes/utils");
 
-const getQueryDate = (grupByWeek) => {
-  return grupByWeek
-    ? `(extract(epoch from timestamp) / (7*24*60*60))::numeric::integer AS ts,
-            MIN(timestamp) AS timestamp,`
-    : `DATE_TRUNC('day', timestamp) AS ts,`;
-};
-
 const groupData = (data, countDays, elements) => {
-  console.log(data, countDays, elements);
   if (countDays === "180") {
     data = groupByWeek(data, elements);
   }
@@ -98,8 +90,29 @@ const getVolumeActiveTraders = async (marketplace, countDays) => {
   );
 };
 
+const getVolumeComparison = async (marketplace, countDays) => {
+  return groupData(
+    (
+      await findMarketplaceVolumes(marketplace, countDays, {
+        createdAt: 1,
+        _id: 0,
+        count_eth_sales: 1,
+        count_weth_sales: 1,
+        day: 1,
+      })
+    ).map((x) => ({
+      count_eth_sales: x.count_eth_sales,
+      count_weth_sales: x.count_weth_sales,
+      ts: x.day,
+    })),
+    countDays,
+    ["count_eth_sales", "count_weth_sales"]
+  );
+};
+
 module.exports = {
   getVolumes,
   getVolumeSales,
   getVolumeActiveTraders,
+  getVolumeComparison,
 };

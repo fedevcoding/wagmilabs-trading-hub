@@ -5,6 +5,7 @@ const {
   getVolumes,
   getVolumeSales,
   getVolumeActiveTraders,
+  getVolumeComparison,
 } = require("../../models/queries/volumes");
 
 const { lruCache } = require("../../services/cache/lru");
@@ -67,7 +68,7 @@ volumesRoute.get("/:marketplace", checkAuth, async (req, res) => {
   let comparisonData = {};
 
   if (!filter) {
-    [volumes, sales, activeTraders] = await Promise.all([
+    [volumes, sales, activeTraders, comparisonData] = await Promise.all([
       lruCache(getVolumes(marketplace, countDays), {
         key: `volumes#${marketplace}#${countDays}`,
         ttl,
@@ -78,6 +79,10 @@ volumesRoute.get("/:marketplace", checkAuth, async (req, res) => {
       }),
       lruCache(getVolumeActiveTraders(marketplace, countDays), {
         key: `volumes#active-traders#${marketplace}#${countDays}`,
+        ttl,
+      }),
+      lruCache(getVolumeComparison(marketplace, countDays), {
+        key: `volumes#comparison#${marketplace}#${countDays}`,
         ttl,
       }),
     ]);
@@ -100,6 +105,15 @@ volumesRoute.get("/:marketplace", checkAuth, async (req, res) => {
           getVolumeActiveTraders(marketplace, countDays),
           {
             key: `volumes#active-traders#${marketplace}#${countDays}`,
+            ttl,
+          }
+        );
+        break;
+      case "comparisonData":
+        comparisonData = await lruCache(
+          getVolumeComparison(marketplace, countDays),
+          {
+            key: `volumes#comparison#${marketplace}#${countDays}`,
             ttl,
           }
         );
