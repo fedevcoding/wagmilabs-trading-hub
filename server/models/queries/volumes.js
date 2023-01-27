@@ -1,4 +1,10 @@
+const Marketplaces = require("../../models/MarketplacesModel");
 const { execTranseposeAPI } = require("../../services/externalAPI/transpose");
+const {
+  groupBy2Weeks,
+  groupByMonth,
+  groupByWeek,
+} = require("../../services/volumes/utils");
 
 const getQueryDate = (grupByWeek) => {
   return grupByWeek
@@ -7,62 +13,70 @@ const getQueryDate = (grupByWeek) => {
     : `DATE_TRUNC('day', timestamp) AS ts,`;
 };
 
-const getVolumes = async (marketplace, interval) => {
-  const grupByWeek = interval === "180 days";
-  const date = getQueryDate(grupByWeek);
+const groupData = (data, countDays, elements) => {
+  if (countDays === "180") {
+    data = groupByWeek(data, elements);
+  }
+  if (countDays === "365") {
+    data = groupBy2Weeks(data, elements);
+  }
+  if (countDays === "all") {
+    data = groupByMonth(data, elements);
+  }
+  return data;
+};
 
-  const result = await execTranseposeAPI(`SELECT
-    ${date}
-    SUM(eth_price) AS volume_eth,
-    SUM(usd_price) AS volume
-    FROM ethereum.nft_sales
-    WHERE ${
-      interval === "all" ? "1" : `timestamp >= (NOW() - INTERVAL '${interval}')`
-    }
-    AND exchange_name = '${marketplace.toLowerCase()}'
-    GROUP BY ts
-    ORDER BY ts ASC;`);
-
+const findMarketplaceVolumes = async (marketplace, countDays, fields) => {
   return (
-    grupByWeek
-      ? result.map((r) => ({
-          volume_eth: r.volume_eth,
-          volume: r.volume,
-          ts: r.timestamp,
-        }))
-      : result
-  ).map((r) => ({
-    ...r,
-    volume_eth: +Number(r.volume_eth).toFixed(2),
-    volume: parseInt(r.volume),
-  }));
+    await Marketplaces.find(
+      {
+        marketplace,
+      },
+      fields
+    )
+      .limit(countDays === "all" ? 365 * 10 : countDays)
+      .sort({ createdAt: "desc" })
+  ).sort(
+    (x, y) => new Date(x.createdAt).getTime() - new Date(y.createdAt).getTime()
+  );
 };
 
-module.exports = {
-  getVolumes,
+const getVolumes = async (marketplace, countDays) => {
+  return groupData(
+    (
+      await findMarketplaceVolumes(marketplace, countDays, {
+        createdAt: 1,
+        _id: 0,
+        eth_volume: 1,
+        dollar_volume: 1,
+        day: 1,
+      })
+    ).map((x) => ({
+      volume_eth: +Number(x.eth_volume).toFixed(2),
+      volume: parseInt(x.dollar_volume),
+      ts: x.day,
+    })),
+    countDays,
+    ["volume_eth", "volume"]
+  );
 };
 
-const getVolumeSales = async (marketplace, interval) => {
-  const grupByWeek = interval === "180 days";
-  const date = getQueryDate(grupByWeek);
-
-  const result = await execTranseposeAPI(`SELECT
-    ${date}
-    count(*) AS sales
-    FROM ethereum.nft_sales
-    WHERE ${
-      interval === "all" ? "1" : `timestamp >= (NOW() - INTERVAL '${interval}')`
-    }
-    AND exchange_name = '${marketplace.toLowerCase()}'
-    GROUP BY ts
-    ORDER BY ts ASC;`);
-
-  return grupByWeek
-    ? result.map((r) => ({
-        sales: r.sales,
-        ts: r.timestamp,
-      }))
-    : result;
+const getVolumeSales = async (marketplace, countDays) => {
+  return groupData(
+    (
+      await findMarketplaceVolumes(marketplace, countDays, {
+        createdAt: 1,
+        _id: 0,
+        count_sales: 1,
+        day: 1,
+      })
+    ).map((x) => ({
+      sales: x.count_sales,
+      ts: x.day,
+    })),
+    countDays,
+    ["sales"]
+  );
 };
 
 const getVolumeActiveTraders = async (marketplace, interval) => {

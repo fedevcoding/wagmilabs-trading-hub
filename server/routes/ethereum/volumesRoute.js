@@ -57,7 +57,15 @@ volumesRoute.get("/:marketplace", checkAuth, async (req, res) => {
     "1y": "1 year",
     all: "all",
   };
+  const days = {
+    "10d": "10",
+    "30d": "30",
+    "6m": "180",
+    "1y": "365",
+    all: "all",
+  };
   const interval = intervals[period?.toLowerCase() || "30d"] || "30 days";
+  const countDays = days[period?.toLowerCase() || "30d"] || "30";
 
   const marketplaces = ["opensea", "blur", "x2y2", "looksrare", "sudoswap"];
   const marketplace = marketplaces.includes(req.params.marketplace)
@@ -71,12 +79,12 @@ volumesRoute.get("/:marketplace", checkAuth, async (req, res) => {
 
   if (!filter) {
     [volumes, sales, activeTraders] = await Promise.all([
-      lruCache(getVolumes(marketplace, interval), {
-        key: `volumes#${marketplace}#${interval}`,
+      lruCache(getVolumes(marketplace, countDays), {
+        key: `volumes#${marketplace}#${countDays}`,
         ttl,
       }),
-      lruCache(getVolumeSales(marketplace, interval), {
-        key: `volumes#sales#${marketplace}#${interval}`,
+      lruCache(getVolumeSales(marketplace, countDays), {
+        key: `volumes#sales#${marketplace}#${countDays}`,
         ttl,
       }),
       lruCache(getVolumeActiveTraders(marketplace, interval), {
@@ -87,14 +95,14 @@ volumesRoute.get("/:marketplace", checkAuth, async (req, res) => {
   } else {
     switch (filter) {
       case "volumes":
-        volumes = await lruCache(getVolumes(marketplace, interval), {
-          key: `volumes#${marketplace}#${interval}`,
+        volumes = await lruCache(getVolumes(marketplace, countDays), {
+          key: `volumes#${marketplace}#${countDays}`,
           ttl,
         });
         break;
       case "sales":
-        sales = await lruCache(getVolumeSales(marketplace, interval), {
-          key: `volumes#sales#${marketplace}#${interval}`,
+        sales = await lruCache(getVolumeSales(marketplace, countDays), {
+          key: `volumes#sales#${marketplace}#${countDays}`,
           ttl,
         });
         break;
