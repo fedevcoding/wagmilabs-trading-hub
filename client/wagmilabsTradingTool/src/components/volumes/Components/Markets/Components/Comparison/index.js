@@ -3,7 +3,7 @@ import { Select } from "../../../../../utility-components";
 
 export const Comparison = React.memo(
   ({ comparisonData, period, marketplace }) => {
-    const periods = ["10D", "30D", "6M", "1Y", "All"].map(p => ({
+    const periods = ["30D", "6M", "1Y", "All"].map(p => ({
       value: p,
       label: p,
     }));

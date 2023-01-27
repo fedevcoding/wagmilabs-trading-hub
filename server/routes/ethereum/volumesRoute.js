@@ -47,24 +47,13 @@ volumesRoute.get("/", checkAuth, async (req, res) => {
 
 volumesRoute.get("/:marketplace", checkAuth, async (req, res) => {
   const { period, filter } = req.query;
-
   const ttl = 6 * 60 * 60 * 1000; // 6h
-
-  const intervals = {
-    "10d": "10 days",
-    "30d": "30 days",
-    "6m": "180 days",
-    "1y": "1 year",
-    all: "all",
-  };
   const days = {
-    "10d": "10",
     "30d": "30",
     "6m": "180",
     "1y": "365",
     all: "all",
   };
-  const interval = intervals[period?.toLowerCase() || "30d"] || "30 days";
   const countDays = days[period?.toLowerCase() || "30d"] || "30";
 
   const marketplaces = ["opensea", "blur", "x2y2", "looksrare", "sudoswap"];
@@ -87,8 +76,8 @@ volumesRoute.get("/:marketplace", checkAuth, async (req, res) => {
         key: `volumes#sales#${marketplace}#${countDays}`,
         ttl,
       }),
-      lruCache(getVolumeActiveTraders(marketplace, interval), {
-        key: `volumes#active-traders#${marketplace}#${interval}`,
+      lruCache(getVolumeActiveTraders(marketplace, countDays), {
+        key: `volumes#active-traders#${marketplace}#${countDays}`,
         ttl,
       }),
     ]);
@@ -107,10 +96,13 @@ volumesRoute.get("/:marketplace", checkAuth, async (req, res) => {
         });
         break;
       case "activeTraders":
-        sales = await lruCache(getVolumeActiveTraders(marketplace, interval), {
-          key: `volumes#active-traders#${marketplace}#${interval}`,
-          ttl,
-        });
+        activeTraders = await lruCache(
+          getVolumeActiveTraders(marketplace, countDays),
+          {
+            key: `volumes#active-traders#${marketplace}#${countDays}`,
+            ttl,
+          }
+        );
         break;
     }
   }

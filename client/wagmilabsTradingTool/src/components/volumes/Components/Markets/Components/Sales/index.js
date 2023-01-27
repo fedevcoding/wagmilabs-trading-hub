@@ -8,7 +8,7 @@ import {
 import { useGetSales } from "./useGetSales";
 
 export const Sales = React.memo(({ sales, period, marketplace }) => {
-  const periods = ["10D", "30D", "6M", "1Y", "All"].map(p => ({
+  const periods = ["30D", "6M", "1Y", "All"].map(p => ({
     value: p,
     label: p,
   }));
