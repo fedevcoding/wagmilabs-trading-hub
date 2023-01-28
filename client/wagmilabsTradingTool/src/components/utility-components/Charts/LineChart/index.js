@@ -7,7 +7,13 @@ import "./style.css";
 
 DarkUnica(Highcharts);
 
-export const LineChart = ({ title, subTitle, values, yAxisText = "" }) => {
+export const LineChart = ({
+  title,
+  subTitle,
+  values,
+  yAxisText = "",
+  tooltipSuffix = null,
+}) => {
   const options = {
     chart: {
       type: "line",
@@ -40,6 +46,23 @@ export const LineChart = ({ title, subTitle, values, yAxisText = "" }) => {
         overflow: "justify",
       },
     },
+    ...(tooltipSuffix
+      ? {
+          tooltip: {
+            formatter: function () {
+              return (
+                this.key +
+                `<br>` +
+                this.series.name +
+                " " +
+                yAxisText +
+                ": " +
+                this.y
+              );
+            },
+          },
+        }
+      : {}),
     legend: {
       enabled: false,
     },

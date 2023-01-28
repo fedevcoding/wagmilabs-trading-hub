@@ -34,8 +34,6 @@ export const Comparison = React.memo(
           data: v.map(s => s.count_weth_sales),
         },
       ],
-
-      // v.map(v => v.comparisonData),
     };
 
     React.useEffect(() => {
@@ -59,6 +57,7 @@ export const Comparison = React.memo(
             subTitle="The comparison between sales and offer in the marketplace over the selected time range."
             yAxisText="Sales"
             values={values}
+            tooltipSuffix={true}
           />
         )}
       </div>
