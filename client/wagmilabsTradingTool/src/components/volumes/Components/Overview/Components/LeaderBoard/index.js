@@ -10,6 +10,14 @@ export const LeaderBoard = React.memo(
       label: p,
     }));
 
+    const fees = {
+      OpenSea: "2.5%",
+      X2Y2: "0.5%",
+      Blur: "0",
+      LooksRare: "2%",
+      SudoSwap: "0.5%",
+    };
+
     const [currentPeriod, setPeriod] = React.useState(period);
     const [l, isLoading] = useGetLeaderBoard(
       leaderBoard,
@@ -53,14 +61,14 @@ export const LeaderBoard = React.memo(
                     {m.name}
                   </td>
                   <td>
-                    {m.volumeEth.toFixed(2) +
+                    {m.volumeEth +
                       " (" +
-                      parseInt(m.volume).toLocaleString("EN-us") +
+                      m.volume.toLocaleString("EN-us") +
                       "$)"}
                   </td>
                   <td>{m.saleNum}</td>
                   <td>{m.traderNum}</td>
-                  <td>{m.feeRateList[0].minValue}%</td>
+                  <td>{fees[m.name]}</td>
                 </tr>
               ))}
             </tbody>

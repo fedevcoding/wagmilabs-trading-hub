@@ -18,27 +18,13 @@ export const useGetData = (marketplaces, period) => {
 
       data = await data.json();
 
-      console.log(data);
-
-      const nftGoPath = "https://api.nftgo.io/api/v1/ranking/marketplace-list";
-
-      let nftgoData = await fetch(
-        `${nftGoPath}?limit=100&offset=0&range=${period}&fields=volume,volumeEth,traderNum,saleNum&by=volumeEth&asc=-1&excludeWashTrading=-1`
-      );
-
-      nftgoData = (await nftgoData.json()).data.list.filter(v =>
-        marketplaces.includes(v.name)
-      );
-
-      console.log(nftgoData);
-
-      const traders = getTraderSortedValues(nftgoData);
+      const traders = getTraderSortedValues(data);
       const volumes = getVolumesSortedValues(data);
 
       setData({
         volumes,
         traders,
-        leaderBoard: nftgoData,
+        leaderBoard: data,
       });
     })();
   }, [marketplaces, period]);

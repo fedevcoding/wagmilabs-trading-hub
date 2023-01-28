@@ -39,10 +39,14 @@ volumesRoute.get("/overview", checkAuth, async (req, res) => {
         marketplace: curr.marketplace,
         volumeEth: 0,
         volume: 0,
+        traderNum: 0,
+        saleNum: 0,
       };
     }
     acc[curr.marketplace].volumeEth += curr.eth_volume;
     acc[curr.marketplace].volume += curr.dollar_volume;
+    acc[curr.marketplace].traderNum += curr.active_traders;
+    acc[curr.marketplace].saleNum += curr.count_sales;
     return acc;
   }, {});
 
@@ -50,9 +54,9 @@ volumesRoute.get("/overview", checkAuth, async (req, res) => {
     name: marketplacesArr.find((m) => m.toLowerCase() === d.marketplace),
     volumeEth: +d.volumeEth.toFixed(2),
     volume: parseInt(d.volume),
+    traderNum: d.traderNum,
+    saleNum: d.saleNum,
   }));
-
-  console.log(data);
 
   async function getData() {
     res.status(200).json(data);

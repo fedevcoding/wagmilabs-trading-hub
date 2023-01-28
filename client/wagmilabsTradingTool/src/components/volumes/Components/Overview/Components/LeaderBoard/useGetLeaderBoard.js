@@ -1,4 +1,5 @@
 import React from "react";
+import baseUrl from "../../../../../../variables/baseUrl";
 
 export const useGetLeaderBoard = (
   leaderBoard,
@@ -14,18 +15,18 @@ export const useGetLeaderBoard = (
     if (period !== currentPeriod || renderDefaultPeriod) {
       (async () => {
         setLoding(true);
-        const nftGoPath =
-          "https://api.nftgo.io/api/v1/ranking/marketplace-list";
-
-        let nftgoData = await fetch(
-          `${nftGoPath}?limit=100&offset=0&range=${currentPeriod}&fields=volume,volumeEth,traderNum,saleNum&by=volumeEth&asc=-1&excludeWashTrading=-1`
+        let data = await fetch(
+          `${baseUrl}/volumes/overview?period=${currentPeriod}&marketplaces=${marketplaces.join()}`,
+          {
+            headers: {
+              "x-auth-token": localStorage.jsonwebtoken,
+            },
+          }
         );
 
-        nftgoData = (await nftgoData.json()).data.list.filter(v =>
-          marketplaces.includes(v.name)
-        );
+        data = await data.json();
 
-        setData(nftgoData);
+        setData(data);
         setRenderDefaultPeriod(true);
         setLoding(false);
       })();

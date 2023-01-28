@@ -42,6 +42,8 @@ const getVolumesLastDays = async (marketplaces, countDays) => {
       eth_volume: 1,
       dollar_volume: 1,
       marketplace: 1,
+      active_traders: 1,
+      count_sales: 1,
     });
     for (const volume of volumes) {
       result.push(volume);
