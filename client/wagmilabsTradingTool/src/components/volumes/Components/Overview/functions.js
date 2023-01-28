@@ -14,8 +14,8 @@ export function getVolumesSortedValues(data) {
     labels: sortedData.map(m => m.name),
     values: sortedData.map((m, i) => ({
       x: i,
-      y: +m.volumeEth.toFixed(2),
-      secondValue: parseInt(m.volume).toLocaleString("EN-us"),
+      y: m.volumeEth,
+      secondValue: m.volume.toLocaleString("EN-us"),
     })),
   };
 }

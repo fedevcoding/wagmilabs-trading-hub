@@ -9,7 +9,7 @@ import { useGetActiveTraders } from "./useGetActiveTraders";
 
 export const ActiveTraders = React.memo(
   ({ activeTraders, period, marketplace }) => {
-    const periods = ["10D", "30D", "6M", "1Y", "All"].map(p => ({
+    const periods = ["30D", "6M", "1Y", "All"].map(p => ({
       value: p,
       label: p,
     }));

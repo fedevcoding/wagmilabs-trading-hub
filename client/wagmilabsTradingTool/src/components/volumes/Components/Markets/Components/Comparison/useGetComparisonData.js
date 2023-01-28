@@ -1,9 +1,13 @@
 import React from "react";
-import { getVolumesSortedValues } from "../../functions";
 import baseUrl from "../../../../../../variables/baseUrl";
 
-export const useGetVolumes = (volumes, period, currentPeriod, marketplaces) => {
-  const [data, setData] = React.useState(volumes);
+export const useGetComparisonData = (
+  comparisonData,
+  period,
+  currentPeriod,
+  marketplace
+) => {
+  const [data, setData] = React.useState(comparisonData);
   const [isLoading, setLoding] = React.useState(false);
   const [renderDefaultPeriod, setRenderDefaultPeriod] = React.useState(false);
 
@@ -11,8 +15,8 @@ export const useGetVolumes = (volumes, period, currentPeriod, marketplaces) => {
     if (period !== currentPeriod || renderDefaultPeriod) {
       (async () => {
         setLoding(true);
-        let data = await fetch(
-          `${baseUrl}/volumes/overview?period=${currentPeriod}&marketplaces=${marketplaces.join()}`,
+        let apiData = await fetch(
+          `${baseUrl}/volumes/${marketplace.toLowerCase()}?period=${currentPeriod.toLowerCase()}&filter=comparisonData`,
           {
             headers: {
               "x-auth-token": localStorage.jsonwebtoken,
@@ -20,15 +24,20 @@ export const useGetVolumes = (volumes, period, currentPeriod, marketplaces) => {
           }
         );
 
-        data = await data.json();
+        apiData = await apiData.json();
 
-        setData(getVolumesSortedValues(data));
+        setData(apiData);
+
         setRenderDefaultPeriod(true);
         setLoding(false);
       })();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [marketplaces, period, currentPeriod]);
+  }, [period, currentPeriod]);
+
+  React.useEffect(() => {
+    setData(comparisonData);
+  }, [comparisonData]);
 
   return [data, isLoading];
 };
