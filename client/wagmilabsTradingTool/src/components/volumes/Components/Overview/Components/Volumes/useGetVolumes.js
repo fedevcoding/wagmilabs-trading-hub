@@ -1,5 +1,6 @@
 import React from "react";
 import { getVolumesSortedValues } from "../../functions";
+import baseUrl from "../../../../../../variables/baseUrl";
 
 export const useGetVolumes = (volumes, period, currentPeriod, marketplaces) => {
   const [data, setData] = React.useState(volumes);
@@ -10,18 +11,18 @@ export const useGetVolumes = (volumes, period, currentPeriod, marketplaces) => {
     if (period !== currentPeriod || renderDefaultPeriod) {
       (async () => {
         setLoding(true);
-        const nftGoPath =
-          "https://api.nftgo.io/api/v1/ranking/marketplace-list";
-
-        let nftgoData = await fetch(
-          `${nftGoPath}?limit=100&offset=0&range=${currentPeriod}&fields=volume,volumeEth&by=volumeEth&asc=-1&excludeWashTrading=-1`
+        let data = await fetch(
+          `${baseUrl}/volumes/overview?period=${currentPeriod}&marketplaces=${marketplaces.join()}`,
+          {
+            headers: {
+              "x-auth-token": localStorage.jsonwebtoken,
+            },
+          }
         );
 
-        nftgoData = (await nftgoData.json()).data.list.filter(v =>
-          marketplaces.includes(v.name)
-        );
+        data = await data.json();
 
-        setData(getVolumesSortedValues(nftgoData));
+        setData(getVolumesSortedValues(data));
         setRenderDefaultPeriod(true);
         setLoding(false);
       })();
