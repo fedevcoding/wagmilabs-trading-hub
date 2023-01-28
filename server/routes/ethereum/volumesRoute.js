@@ -9,6 +9,8 @@ const {
   getVolumesLastDays,
 } = require("../../models/queries/volumes");
 
+const { formatOverviewData } = require("../../services/volumes/utils");
+
 const { lruCache } = require("../../services/cache/lru");
 
 const volumesRoute = express();
@@ -31,32 +33,15 @@ volumesRoute.get("/overview", checkAuth, async (req, res) => {
   const marketplacesArr = marketplaces.split(",");
   const countDays = getCountDays(period);
 
-  const result = await getVolumesLastDays(marketplacesArr, countDays);
+  const getOverviewData = async (marketplaces, countDays) => {
+    const result = await getVolumesLastDays(marketplaces, countDays);
+    return formatOverviewData(result, marketplaces);
+  };
 
-  let data = result.reduce((acc, curr) => {
-    if (!acc[curr.marketplace]) {
-      acc[curr.marketplace] = {
-        marketplace: curr.marketplace,
-        volumeEth: 0,
-        volume: 0,
-        traderNum: 0,
-        saleNum: 0,
-      };
-    }
-    acc[curr.marketplace].volumeEth += curr.eth_volume;
-    acc[curr.marketplace].volume += curr.dollar_volume;
-    acc[curr.marketplace].traderNum += curr.active_traders;
-    acc[curr.marketplace].saleNum += curr.count_sales;
-    return acc;
-  }, {});
-
-  data = Object.values(data).map((d) => ({
-    name: marketplacesArr.find((m) => m.toLowerCase() === d.marketplace),
-    volumeEth: +d.volumeEth.toFixed(2),
-    volume: parseInt(d.volume),
-    traderNum: d.traderNum,
-    saleNum: d.saleNum,
-  }));
+  const data = await lruCache(getOverviewData(marketplacesArr, countDays), {
+    key: `volumes#overview#${marketplacesArr.join()}#${countDays}`,
+    ttl: 3 * 60 * 60 * 1000, // 3h,
+  });
 
   async function getData() {
     res.status(200).json(data);
