@@ -6,42 +6,56 @@ const {
   getVolumeSales,
   getVolumeActiveTraders,
   getVolumeComparison,
+  getVolumesLastDays,
 } = require("../../models/queries/volumes");
 
 const { lruCache } = require("../../services/cache/lru");
 
 const volumesRoute = express();
 
-// currently this endpoint is not used as the call fails due to missing permissions
-volumesRoute.get("/", checkAuth, async (req, res) => {
+const getCountDays = (period) => {
+  const days = {
+    "24h": "1",
+    "7d": "7",
+    "30d": "30",
+    "3m": "30",
+    "6m": "180",
+    "1y": "365",
+    all: "all",
+  };
+  return days[period?.toLowerCase() || "30d"] || "30";
+};
+
+volumesRoute.get("/overview", checkAuth, async (req, res) => {
   const { period, marketplaces } = req.query;
-  const marketplacesArr = marketplaces.split();
+  const marketplacesArr = marketplaces.split(",");
+  const countDays = getCountDays(period);
 
-  const nftGoPath = "https://api.nftgo.io/api/v1/ranking/marketplace-list";
+  const result = await getVolumesLastDays(marketplacesArr, countDays);
 
-  let data = await fetch(
-    `${nftGoPath}?limit=100&offset=0&range=${period.toLowerCase()}&fields=volumeEth,traderNum&by=volumeEth&asc=-1&excludeWashTrading=-1`
-  );
+  let data = result.reduce((acc, curr) => {
+    if (!acc[curr.marketplace]) {
+      acc[curr.marketplace] = {
+        marketplace: curr.marketplace,
+        volumeEth: 0,
+        volume: 0,
+      };
+    }
+    acc[curr.marketplace].volumeEth += curr.eth_volume;
+    acc[curr.marketplace].volume += curr.dollar_volume;
+    return acc;
+  }, {});
 
-  console.log("nftgo API", data);
+  data = Object.values(data).map((d) => ({
+    name: marketplacesArr.find((m) => m.toLowerCase() === d.marketplace),
+    volumeEth: +d.volumeEth.toFixed(2),
+    volume: parseInt(d.volume),
+  }));
 
-  nftgoData = (await nftgoData.json()).data.list.filter((v) =>
-    marketplacesArr.includes(v.name)
-  );
-
-  const labels = nftgoData.map((m) => m.name);
+  console.log(data);
 
   async function getData() {
-    res.status(200).json({
-      volumes: {
-        labels,
-        values: nftgoData.map((m) => m.volumeEth),
-      },
-      traders: {
-        labels,
-        values: nftgoData.map((m) => m.traderNum),
-      },
-    });
+    res.status(200).json(data);
   }
   getData();
 });
@@ -49,13 +63,7 @@ volumesRoute.get("/", checkAuth, async (req, res) => {
 volumesRoute.get("/:marketplace", checkAuth, async (req, res) => {
   const { period, filter } = req.query;
   const ttl = 6 * 60 * 60 * 1000; // 6h
-  const days = {
-    "30d": "30",
-    "6m": "180",
-    "1y": "365",
-    all: "all",
-  };
-  const countDays = days[period?.toLowerCase() || "30d"] || "30";
+  const countDays = getCountDays(period);
 
   const marketplaces = ["opensea", "blur", "x2y2", "looksrare", "sudoswap"];
   const marketplace = marketplaces.includes(req.params.marketplace)

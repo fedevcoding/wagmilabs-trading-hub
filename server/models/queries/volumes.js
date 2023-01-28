@@ -1,5 +1,4 @@
 const Marketplaces = require("../../models/MarketplacesModel");
-const { execTranseposeAPI } = require("../../services/externalAPI/transpose");
 const {
   groupBy2Weeks,
   groupByMonth,
@@ -32,6 +31,23 @@ const findMarketplaceVolumes = async (marketplace, countDays, fields) => {
   ).sort(
     (x, y) => new Date(x.createdAt).getTime() - new Date(y.createdAt).getTime()
   );
+};
+
+const getVolumesLastDays = async (marketplaces, countDays) => {
+  const result = [];
+  for (const m of marketplaces) {
+    const volumes = await findMarketplaceVolumes(m.toLowerCase(), countDays, {
+      createdAt: 1,
+      _id: 0,
+      eth_volume: 1,
+      dollar_volume: 1,
+      marketplace: 1,
+    });
+    for (const volume of volumes) {
+      result.push(volume);
+    }
+  }
+  return result;
 };
 
 const getVolumes = async (marketplace, countDays) => {
@@ -115,4 +131,5 @@ module.exports = {
   getVolumeSales,
   getVolumeActiveTraders,
   getVolumeComparison,
+  getVolumesLastDays,
 };
