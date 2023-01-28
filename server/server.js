@@ -74,6 +74,7 @@ const watchlistCollectionsRoute = require("./routes/ethereum/watchlistCollection
 const ownedCollectionsRoute = require("./routes/ethereum/ownedCollectionsRoute.js")
 const userDetailsRoute = require("./routes/ethereum/profile/userDetailsRoute.js")
 const activityChartRoute = require("./routes/ethereum/charts/activityChartRoute.js")
+const collectionActivityRoute = require("./routes/ethereum/collections/collectionActivityRoute.js")
 const io = new Server(server);
 
 app.set('socketio', io);
@@ -184,6 +185,7 @@ app.use("/api/v1/wagmilabs/emptyCart", emptyCartRoute)
 app.use("/api/v1/wagmilabs/profileStats", profileStatsRoute)
 app.use("/api/v1/wagmilabs/userDetails", userDetailsRoute)
 app.use("/api/v1/wagmilabs/activityChart", activityChartRoute)
+app.use("/api/v1/wagmilabs/collectionActivity", collectionActivityRoute)
 
 app.use("/api/v1/wagmilabs/userBalances", userBalancesRoute)
 app.use("/api/v1/wagmilabs/searchCollection", searchCollectionsRoute)

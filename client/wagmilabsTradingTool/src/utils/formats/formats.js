@@ -1,5 +1,5 @@
 const formatAddress = address => {
-    return address && address.substring(0, 6) + "..." + address.substring(38)
+    return address ? address.substring(0, 6) + "..." + address.substring(38) : undefined
 }
 
 const formatContractAddress = address => {
@@ -15,12 +15,16 @@ const formatAddress2 = (address, userAddress) => {
     }
 }
 
+const formatAddress3 = address => {
+    return address ? address.slice(0, 8) : undefined
+}
+
 const roundPrice = (price) => {
-    return Math.round(price * 100000) / 100000
+    return price ? Math.round(price * 100000) / 100000 : undefined
 }
 
 const roundPrice2 = (price) => {
-    return Math.round(price * 1000) / 1000
+    return price ? Math.round(price * 1000) / 1000 : undefined
 }
 
 const getFiatPrice = (cryptoValue, fiatPrice) => {
@@ -93,6 +97,7 @@ module.exports = {
     roundPrice,
     roundPrice2,
     dateFormat1,
+    formatAddress3,
     getFiatPrice,
     formatIpfs,
     formatTime

@@ -24,6 +24,8 @@ const getMarketplaceImage = (marketplaceName) => {
                 return looksrare
             case "blur":
                 return blur
+            case "blur.io":
+                return blur
             case "sudoswap":
                 return sudoswap
             case "cryptopunks":

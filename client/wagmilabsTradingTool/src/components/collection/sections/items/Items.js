@@ -159,7 +159,7 @@ const Items = ({ address, items, itemFilters, setItemFilters, collectionInfo, lo
 
 
   const itemsMapping = useMemo(() => 
-      items.map((item, index) => {
+      items && items.map((item, index) => {
         const { tokenId, name, image, rarityRank } = item?.token;
 
         const collectionName = item?.token?.collection?.name

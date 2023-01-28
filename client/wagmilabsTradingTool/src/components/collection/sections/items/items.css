@@ -20,7 +20,7 @@
     border-right: 2px solid rgb(81, 81, 81);
     padding: 20px 20px;
     position: sticky;
-    top: 72px;
+    top: calc(1px * var(--header-height));
 }
 
 .collection-item-filter-section1{
