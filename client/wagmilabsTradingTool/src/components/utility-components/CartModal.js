@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useCallback, useContext, useMemo } from 'react'
 import {Portal} from "react-portal"
 
 import "./cartModal.css"
@@ -6,10 +6,18 @@ import {Button} from "@chakra-ui/react"
 import { useNavigate } from 'react-router-dom'
 import { UserDataContext } from '../../context/userContext'
 import emptyCart from '../../utils/database-functions/emptyCart'
+import { getFiatPrice, roundPrice } from '../../utils/formats/formats'
+
+import { fetchSigner } from "@wagmi/core";
+import { getClient } from "@reservoir0x/reservoir-kit-client";
+import removeFromCart from '../../utils/database-functions/removeFromCart'
+
+
 
 const CartModal = ({modalOpen, closeCartModal}) => {
+
     
-    const {userCartItems, setUserCartItems} = useContext(UserDataContext)
+    const {userCartItems, setUserCartItems, ethData} = useContext(UserDataContext)
     const navigate = useNavigate()
     
 
@@ -22,6 +30,60 @@ const CartModal = ({modalOpen, closeCartModal}) => {
         let status = await emptyCart()
         if(status === "success") setUserCartItems([])
     }
+
+    async function removeTokenFromCart(contractAddress, tokenId){
+        const filteredItems = userCartItems.filter(item => item.contractAddress + item.tokenId !== contractAddress + tokenId)
+
+        await removeFromCart(tokenId, contractAddress)
+        
+        setUserCartItems(filteredItems)
+    }
+
+    const batchBuyItems = async () => {
+        const signer = await fetchSigner()
+
+        const tokens = userCartItems.map(item => {
+            const {tokenId, contractAddress} = item
+            return {tokenId, contract: contractAddress}
+        })
+
+        getClient()?.actions.buyToken({
+            tokens,
+            signer,
+            onProgress: (steps) => {
+                console.log(steps)
+            }
+        })
+    }
+
+
+    const totalPrice = useMemo(() => userCartItems.reduce((total, item) => item.price + total, 0), [userCartItems])
+
+    const userCartMapping = useMemo(()=> userCartItems.map((item)=> {
+        const {name, tokenId, contractAddress, image, price, marketplace, collectionName} = item
+
+
+        return(
+            <div className='user-cart-single-item'>
+                <img src={image} className="user-cart-item-image"/>
+                <div className='user-cart-item-details-container'>
+                    <p className='user-cart-item-name'>{name}</p>
+                    <p className='user-cart-collection-name'>{collectionName}</p>
+                </div>
+                <div className='user-cart-item-price-container'>
+
+                    <p className='user-cart-item-price'>
+                        {roundPrice(price)} ETH
+                    </p>
+
+                    <p className='user-cart-item-remove' onClick={() => removeTokenFromCart(contractAddress, tokenId)}>
+                        <i className="fa-solid fa-trash-can"></i>
+                    </p>
+                </div>
+                
+            </div>
+        )
+    }), [userCartItems])
 
     return (
         <>
@@ -45,24 +107,24 @@ const CartModal = ({modalOpen, closeCartModal}) => {
                                     <p className='clear-all-cart' onClick={clearCart}>Clear all</p>
                                 </div>
                                 <div className='cart-items-container'>
-                                    {
-                                        userCartItems.map((item)=>{
-                                            const {name, tokenId, contractAddress, image, price, marketplace} = item
-                                            return(
-                                                <div className='user-cart-single-item'>
-                                                    <img src={image} className="user-cart-item-image"/>
-                                                    <div className='user-cart-item-details-container'>
-                                                        <p>{name}</p>
-                                                        <p>{tokenId}</p>
-                                                    </div>
-                                                    <div>
-                                                        {price}
-                                                    </div>
-                                                    
-                                                </div>
-                                            )
-                                        })
-                                    }
+                                    {userCartMapping}
+                                </div>
+
+                                <div className='cart-total-buy-container'>
+                                    <hr className='cart-buy-now-hr'/>
+
+                                    <div className='user-cart-total-price'>
+                                        <div>
+                                            <p className='user-cart-price-total-price'>Total price:</p>
+                                        </div>
+
+                                        <div className='user-cart-price-currencies'>
+                                            <p className='user-cart-price-currencies-eth'>{roundPrice(totalPrice)} ETH</p>
+                                            <p className='user-cart-price-currencies-usd'>${getFiatPrice(ethData.ethPrice, totalPrice)}</p>
+                                        </div>
+                                    </div>
+                                    
+                                    <Button className='user-cart-buy-button' colorScheme={"blue"} onClick={batchBuyItems} height="50px">Complete purchase</Button>
                                 </div>
                             </div>
                             :

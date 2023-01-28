@@ -28,7 +28,10 @@ const sortItemsOptions = [
 const Nfts = ({nftsCollectionFilter, setNftsCollectionFilter, searchCollectionText, userItems, setProfileImage, collections, loadingNfts, listingSettings, selectedSortOption, setSelectedSortOption, setSearchCollectionText}) => {
 
 
+    const [confirmListingData, setConfirmListingData] = useState({})
+    const [showListingConfirmation, setShowListingConfirmation] = useState(false)
     const [confirmListing, setConfirmListing] = useState(null)
+
     const [selectBulk, setSelectBulk] = useState(false)
     const [bulkItems, setBulkItems] = useState([])
     

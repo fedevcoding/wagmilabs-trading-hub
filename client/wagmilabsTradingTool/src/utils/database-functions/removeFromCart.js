@@ -1,17 +1,15 @@
 import baseUrl from "../../variables/baseUrl"
 
 
-async function addToCart({name, collectionName, tokenId, price, image, marketplace, contractAddress}){
-    
+async function removeFromCart(tokenId, contractAddress){
     try{
-
         let pushStatus = await fetch(`${baseUrl}/updateUserCart`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
                 "x-auth-token": localStorage.jsonwebtoken
             },
-            body: JSON.stringify({name, collectionName, tokenId, price, image, contractAddress, marketplace, type: "add"})
+            body: JSON.stringify({tokenId, contractAddress, type: "remove"})
         })
         pushStatus = (await pushStatus.json()).pushStatus
         return pushStatus
@@ -21,4 +19,4 @@ async function addToCart({name, collectionName, tokenId, price, image, marketpla
     }
 }
 
-export default addToCart
+export default removeFromCart

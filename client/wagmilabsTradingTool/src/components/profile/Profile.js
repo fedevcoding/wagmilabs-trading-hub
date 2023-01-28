@@ -11,7 +11,7 @@ import { formatAddress } from '../../utils/formats/formats'
 import { useAccount, useEnsName, useSigner } from 'wagmi'
 
 import { useDebounce } from 'use-debounce'
-import {RadioGroup, Stack, Radio, Select, HStack, Button, Input} from "@chakra-ui/react"
+import {RadioGroup, Stack, Radio, Select, HStack, Button, Input, NumberInput, NumberInputField} from "@chakra-ui/react"
 
 import { UserDataContext } from '../../context/userContext'
 
@@ -206,6 +206,8 @@ const Profile = () => {
 
   useEffect(()=>{
     !openListingSettings && listingSettings && setStageListingSettings(listingSettings)
+    console.log(stageListingSettings)
+    console.log(listingSettings)
   }, [openListingSettings, listingSettings])
 
   return (
@@ -225,10 +227,10 @@ const Profile = () => {
                   </div>
 
                   <div className='listing-settings-price'>
-                    <p>Price:</p>
+                    <p>Price type:</p>
                     <div>
                       <RadioGroup onChange={(value) => modifyStageListing("priceType", value)} value={stageListingSettings.price.type}>
-                        <Stack direction='column'>
+                        <Stack direction='row'>
                           <Radio value='break-even'>Break even</Radio>
                           <Radio value='profit'>Profit</Radio>
                         </Stack>
@@ -237,28 +239,34 @@ const Profile = () => {
 
                       {
                       stageListingSettings.price.type === "profit" &&
-                      <div>
-                        <label htmlFor="profit-radio-button">Profit</label>
+                      <div className='listing-settings-profit-amount'>
+                        <label htmlFor="profit-radio-button">Profit amount</label>
                         <div className='listing-settings-profit-values'>
-                          <HStack>
-                            <Input type="number" className='listing-settings-value' placeholder='Amount' value={stageListingSettings?.price?.profitValue} onChange={(e) => modifyStageListing("profitValue", e.target.value)}/>
+                          <Stack direction={"row"} alignItems="center">
+
+                            <HStack>
+                              <NumberInput value={stageListingSettings?.price?.profitValue}>
+                                <NumberInputField className='listing-settings-value' placeholder='Amount' onChange={(e) => modifyStageListing("profitValue", e.target.value)}/>
+                              </NumberInput>
+                            </HStack>
+
                             <Select name="" id="" className='listing-settings-currency-type' value={stageListingSettings?.price?.profitType} onChange={(e) => modifyStageListing("profitType", e.target.value)}>
                               <option value="%">%</option>
                               <option value="eth">Eth</option>
                               <option value="usd">Usd</option>
                             </Select>
-                          </HStack>
+                          </Stack>
                         </div>
                       </div>
                       }
                   </div>
 
-                  <div>
+                  <div className='listing-settings-time'>
                     <div>Listing will be active for:</div>
 
                     <HStack>
 
-                      <Select id="listing-settings-months" onChange={e => modifyStageListing("months", e.target.value)} value={stageListingSettings?.time?.months}>
+                      <Select id="listing-settings-months" onChange={e => modifyStageListing("months", e.target.value)} value={stageListingSettings?.time?.months} size="sm">
                         <option value="0">0</option>
                         <option value="1">1</option>
                         <option value="2">2</option>
@@ -270,7 +278,7 @@ const Profile = () => {
                       <label htmlFor="listing-settings-months">Months</label>
 
 
-                      <Select id="listing-settings-days" onChange={e => modifyStageListing("days", e.target.value)} value={stageListingSettings?.time?.days}>
+                      <Select id="listing-settings-days" onChange={e => modifyStageListing("days", e.target.value)} value={stageListingSettings?.time?.days} size="sm">
                         <option value="0">0</option>
                         <option value="1">1</option>
                         <option value="2">2</option>
@@ -306,7 +314,7 @@ const Profile = () => {
                       <label htmlFor="listing-settings-days">Days</label>
 
 
-                      <Select id="listing-settings-hours" onChange={e => modifyStageListing("hours", e.target.value)} value={stageListingSettings?.time?.hours}>
+                      <Select id="listing-settings-hours" onChange={e => modifyStageListing("hours", e.target.value)} value={stageListingSettings?.time?.hours} size="sm">
                         <option value="0">0</option>
                         <option value="1">1</option>
                         <option value="2">2</option>
@@ -335,7 +343,7 @@ const Profile = () => {
                       </Select>
                       <label htmlFor="listing-settings-hours">hours</label>
 
-                      <Select id="listing-settings-minutes" onChange={e => modifyStageListing("minutes", e.target.value)} value={stageListingSettings?.time?.minutes}>
+                      <Select id="listing-settings-minutes" onChange={e => modifyStageListing("minutes", e.target.value)} value={stageListingSettings?.time?.minutes} size="sm">
                         <option value="0">0</option>
                         <option value="1">1</option>
                         <option value="2">2</option>
@@ -400,19 +408,20 @@ const Profile = () => {
                       </Select>
                       <label htmlFor="listing-settings-minutes">Minutes</label>
                     </HStack>
-
                   </div>
 
-                  <div>
+                  <div className='listing-settings-marketplace'>
                     <label htmlFor="listing-settings-marketplace">Marketplace:</label>
-                    <Select name="" id="listing-settings-marketplace" onChange={e => modifyStageListing("marketplace", e.target.value)} value={stageListingSettings.marketplace}>
-                      <option value="opensea">Opensea</option>
-                      <option value="x2y2">X2Y2</option>
-                      <option value="looksrare">LooksRare</option>
-                    </Select>
+                    <HStack>
+                      <Select name="" id="listing-settings-marketplace" onChange={e => modifyStageListing("marketplace", e.target.value)} value={stageListingSettings.marketplace}>
+                        <option value="opensea">Opensea</option>
+                        <option value="x2y2">X2Y2</option>
+                        <option value="looksrare">LooksRare</option>
+                      </Select>
+                      <Button onClick={saveListingSettings}>Save</Button>
+                    </HStack>
                   </div>
 
-                  <Button onClick={saveListingSettings}>Save</Button>
                 </>
                 :
                 <>loading</>

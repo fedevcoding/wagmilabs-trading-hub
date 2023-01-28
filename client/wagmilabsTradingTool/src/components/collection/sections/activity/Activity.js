@@ -1,66 +1,92 @@
 import React, { useEffect, useState } from 'react'
 import baseUrl from "../../../../variables/baseUrl.js"
-import { OpenSeaStreamClient, Network } from '@opensea/stream-js';
 import { useParams } from 'react-router-dom';
 
-const Activity = ({openseaSlug}) => {
+import HighchartsReact from "highcharts-react-official"
+import Highcharts from "highcharts"
+import { roundPrice2 } from '../../../../utils/formats/formats.js';
 
-  const params = useParams()
+
+import "./activity.css"
+import moment from 'moment';
+
+const Activity = ({address}) => {
+
+  const [activityChartData, setActivityChartData] = useState({})
+  const [loadingChart, setLoadingChart] = useState(true)
 
 
-  const [listings, setListings] = useState(undefined)
 
   useEffect(()=>{
-    const fetchActivity = async () => {
-      try{
-        let data = await fetch(`${baseUrl}/collectionListings/${params.address}`, {
-          headers: {
-            "Content-Type": "application/json",
-            "x-auth-token": localStorage.jsonwebtoken
-          }
-        })
-        data = await data.json()
-        data = data.data
-        setListings(data)
-        const client = new OpenSeaStreamClient({
-          network: Network.MAINNET,
-          token: '2b069923a89d416aa68613d5543306e0'
-        });
-      
-        client.onItemListed(openseaSlug, (item) => {
-          const {name, image_url} = item?.payload?.item?.metadata
-          // console.log(item)
-          setListings(oldListings => [{asset_name: name, asset_image_url: image_url}, ...oldListings] )
-        })
-  
-        // console.log(data)
+    getChartData()
+  }, [])
+
+  async function getChartData(){
+    setLoadingChart(true)
+    
+    let data = await fetch(`${baseUrl}/activityChart/${address}`, {
+      headers: {
+        "x-auth-token": localStorage.jsonwebtoken
       }
-      catch(e){
-        console.log(e)
-      }
-    }
-    openseaSlug && fetchActivity()
-  }, [openseaSlug])
+    })
+
+    data = await data.json()
+
+    console.log(data)
+
+    const averagePrices = data.map(item => roundPrice2(item.averageprice))
+    const volumes = data.map(item => roundPrice2(item.volume))
+    const days = data.map(item => moment(item.day).format("DD/MM/YYYY"))
+    const sales = data.map(item => item.sales)
+
+    setActivityChartData({averagePrices: averagePrices, volumes: volumes, sales, days})
+    setLoadingChart(false)
+  }
 
 
   return (
     <>
-    <div style={{color: "white"}}>Listings</div>
-    
-    <div>
-      {
-        listings && listings.map(listing => {
-
-          const {asset_name, asset_image_url, marketplace, asset_id} = listing
-
-          return(
-            <>
-              <img src={asset_image_url} alt="" style={{width: "30px"}}/>
-              <p style={{color: "white"}}>{asset_name}</p>
-            </>
-          )
-        })
-      }
+    <div className='collection-activity-section'>
+      <HighchartsReact className="activity-chart" highcharts={Highcharts} options={{
+                      series: [{
+                        type: 'column',
+                        name: 'Volume',
+                        data: activityChartData?.volumes,
+                        yAxis: 1
+                    }, {
+                        type: 'spline',
+                        name: 'Average price',
+                        data: activityChartData?.averagePrices,
+                    }],
+                      xAxis: {
+                        categories: activityChartData?.days
+                      },
+                      yAxis: [{
+                          title: {
+                              text: 'Million liters'
+                          }
+                      }, {
+                          title: {
+                              text: 'Million liters'
+                          },
+                          opposite: true
+                      }],
+                      legend: {
+                      },
+                      title: {
+                        text: ''
+                      },
+                      chart: {
+                        type: "spline",
+                        backgroundColor: "transparent",
+                        borderRadius: 10
+                      },
+                      tooltip: {
+                        followPointer: true,
+                        hideDelay: 200,
+                        outside: true,
+                      }
+      }}/>
     </div>
     </>
   )

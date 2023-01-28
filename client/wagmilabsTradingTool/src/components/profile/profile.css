@@ -1,26 +1,25 @@
-:root{
+:root {
     --nfts-width: 220px;
     --stats-margin-top: 20px;
     --stats-height: 80px;
 }
 
-
-.profile-section-container{
+.profile-section-container {
     padding: 30px 2vw 0 2vw;
     background-color: var(--grey-1);
     margin: 0 auto;
 }
 
-.address-copy-btn{
+.address-copy-btn {
     translate: 10px 0;
 }
-.profile-skeleton-container p span{
+.profile-skeleton-container p span {
     display: grid;
-    grid-template-columns: repeat(auto-fill,minmax(var(--nfts-width),1fr));
+    grid-template-columns: repeat(auto-fill, minmax(var(--nfts-width), 1fr));
     width: 100%;
     gap: 1.5rem;
 }
-.profilePfp{
+.profilePfp {
     width: 70px;
     height: 70px;
     display: block;
@@ -28,28 +27,26 @@
     margin-top: 10px;
     border-radius: 50%;
 }
-.profile-container{
-
+.profile-container {
     gap: 50px;
     height: 230px;
     display: flex;
     font-family: inherit;
     color: white;
 }
-.profile-ens-address{
+.profile-ens-address {
     margin-top: 15px;
     text-align: center;
     cursor: pointer;
 }
-.profileDetails{
+.profileDetails {
     width: 35vw;
     background-color: #272727;
     border: 1px solid rgb(96, 94, 94);
     border-radius: 10px;
 }
 
-
-.profile-details-container{
+.profile-details-container {
     display: flex;
     justify-content: space-around;
     background-color: #343434;
@@ -61,12 +58,12 @@
     padding: 15px 0;
 }
 
-.single-profile-detail p{
+.single-profile-detail p {
     text-align: center;
     color: lime;
 }
 
-.profile-upload-info{
+.profile-upload-info {
     position: absolute;
     background-color: white;
     right: 20px;
@@ -76,18 +73,17 @@
     padding: 3px 7px;
 }
 
-
-.profilePnl{
+.profilePnl {
     width: 65vw;
     border-radius: 10px;
     background-color: #272727;
     border: 1px solid rgb(96, 94, 94);
     display: flex;
     flex-wrap: wrap;
-    align-items:center;
+    align-items: center;
 }
 
-.number-profits-losses{
+.number-profits-losses {
     flex-basis: 95%;
     height: 35%;
     margin: 0 auto;
@@ -95,18 +91,18 @@
     justify-content: space-around;
     align-items: center;
 }
-.number-profits-losses p{
+.number-profits-losses p {
     padding: 7px calc(5% / 2);
     border: 1px solid rgb(73, 71, 71);
     border-radius: 10px;
     background-color: #343434;
 }
-.number-profits-losses p > div{
+.number-profits-losses p > div {
     padding: 5px 0;
     text-align: center;
 }
 
-.avg-pnl{
+.avg-pnl {
     flex-basis: 90%;
     height: 80px;
     display: flex;
@@ -118,37 +114,36 @@
     margin: 0 auto;
 }
 
-.avg-pnl p > div{
+.avg-pnl p > div {
     padding: 5px 0;
     text-align: center;
 }
 
-.nft-pnl-profit{
+.nft-pnl-profit {
     color: lime;
 }
-.nft-pnl-loss{
+.nft-pnl-loss {
     color: red;
 }
 
-
-.profile-sections-tabs{
+.profile-sections-tabs {
     margin: 10px 0 0 0;
     display: flex;
     justify-content: space-between;
 }
 
-.profile-sections{
+.profile-sections {
     color: white;
     padding: 10px 0;
     font-family: inherit;
     display: flex;
 }
 
-.search-result-count{
+.search-result-count {
     margin-left: 20px;
 }
 
-.single-profile-section{
+.single-profile-section {
     transition: background-color 200ms;
     margin-right: 15px;
     padding: 10px 25px;
@@ -157,13 +152,14 @@
     border: 1px solid transparent;
 }
 
-
-.single-profile-section:hover, .single-profile-section.selected{
+.single-profile-section:hover,
+.single-profile-section.selected {
     background-color: #343434;
     border: 1px solid rgb(73, 71, 71);
 }
 
-.profile-filters, .profile-settings{
+.profile-filters,
+.profile-settings {
     color: white;
     padding: 10px 0;
     gap: 15px;
@@ -173,7 +169,9 @@
     cursor: pointer;
 }
 
-.profile-watchList-button, .profile-settings-button, .profile-calcs-button{
+.profile-watchList-button,
+.profile-settings-button,
+.profile-calcs-button {
     cursor: pointer;
     border-radius: 10px;
     color: white;
@@ -187,7 +185,7 @@
     gap: 15px;
 }
 
-.profile-watchList-button .circle{
+.profile-watchList-button .circle {
     position: absolute;
     background-color: rgb(194, 186, 186);
     width: 100px;
@@ -197,25 +195,21 @@
     animation: scale 0.5s linear;
 }
 
-.profile-watchList-button i{
+.profile-watchList-button i {
     margin-left: 5px;
 }
 
-
-.profile-spinner{
+.profile-spinner {
     animation: rotator 1.4s linear infinite;
     width: 15px;
     height: 15px;
 }
 
-.loader-container{
+.loader-container {
     translate: 0 7px;
 }
 
-
-
-
-.profile-watchList-settings{
+.profile-watchList-settings {
     display: flex;
     gap: 30px;
 }
@@ -224,11 +218,41 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 /* modal styles */
 
-.nft-listing-modal{
-    width: 30vw;
-    height: 80vh;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.nft-listing-modal {
+    width: 32vw;
+    height: 57vh;
     background-color: rgb(66 66 66);
     box-shadow: black 0px 0px 20px 10px;
     position: fixed;
@@ -238,9 +262,19 @@
     z-index: 9999999999;
     border-radius: 10px;
     color: white;
+
+    padding: 0 30px;
 }
 
-.bg-modal{
+.nft-listing-modal input, .nft-listing-modal select{
+    color: white;
+}
+
+.nft-listing-modal option {
+    color: black;
+}
+
+.bg-modal {
     width: 100vw;
     height: 100vh;
     background-color: rgb(0 0 0 / 39%);
@@ -252,36 +286,55 @@
     z-index: 99999999;
 }
 
-
-
-.listing-settings-title{
+.listing-settings-title {
     margin-top: 15px;
     text-align: center;
     font-size: 22px;
     display: flex;
     flex-direction: column;
+    font-weight: 600;
+    letter-spacing: 1.2px;
     gap: 10px;
 }
 
-.listing-settings-price{
+.listing-settings-price {
     display: flex;
     flex-direction: column;
     gap: 10px;
 
+    margin-top: 10px;
     margin-bottom: 40px;
 }
 
-
-#not-allowed{
+#not-allowed {
     cursor: not-allowed;
 }
 
-
-.smart-listings-close-btn{
+.smart-listings-close-btn {
     position: absolute;
     top: 5px;
     right: 15px;
     background-color: transparent;
     font-size: 26px;
     color: white;
+}
+
+
+.listing-settings-time{
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+
+    margin-bottom: 40px;
+}
+
+
+.listing-settings-marketplace{
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.listing-settings-profit-amount{
+    margin-top: 20px;
 }

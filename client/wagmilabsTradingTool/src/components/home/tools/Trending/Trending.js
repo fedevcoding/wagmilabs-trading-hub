@@ -153,7 +153,7 @@ const Trending = ({tool, timeFrame, setTimeFrame, resetTime}) => {
     const {volumeStats} = stat
     const {floorStats} = stat
 
-    
+
     const creationDay = moment(creationDate).fromNow()
     
       return (

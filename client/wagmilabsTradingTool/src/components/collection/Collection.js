@@ -482,7 +482,7 @@ const Collection = () => {
                 return <LiveView address={address} items={items} setItems={setItems} itemFilters={itemFilters} setItemFilters={setItemFilters} loadingItems={loadingItems} setLoadingItems={setLoadingItems} buyNowChecked={buyNowChecked} setBuyNowChecked={setBuyNowChecked} collectionInfo={collectionInfo} collectionImage={collectionInfo?.image}/>
             }
             else if(section === "activity"){
-                return <Activity />
+                return <Activity address={address}/>
             }
             else if(section === "charts"){
                 return <Charts />

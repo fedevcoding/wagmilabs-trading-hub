@@ -7,6 +7,9 @@ const cartSchema = new mongoose.Schema({
         type: String,
         // required: true
     },
+    colelctionName: {
+        type: String
+    },
     tokenId: {
         type: Number,
         required: true

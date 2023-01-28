@@ -67,9 +67,10 @@ const Items = ({ address, items, itemFilters, setItemFilters, collectionInfo, lo
 
 
   
-  async function addItemToCart(name, tokenId, price, image, marketplace) {
+  async function addItemToCart(name, tokenId, price, image, marketplace, collectionName) {
     let pushStatus = await addToCart({
       name,
+      collectionName,
       tokenId,
       price,
       image,
@@ -79,7 +80,7 @@ const Items = ({ address, items, itemFilters, setItemFilters, collectionInfo, lo
     if (pushStatus === "success") {
       setUserCartItems((prevItems) => [
         ...prevItems,
-        { name, tokenId, price, image, marketplace, contractAddress: address },
+        { name, tokenId, price, image, marketplace, collectionName, contractAddress: address },
       ]);
     }
   }
@@ -160,6 +161,8 @@ const Items = ({ address, items, itemFilters, setItemFilters, collectionInfo, lo
   const itemsMapping = useMemo(() => 
       items.map((item, index) => {
         const { tokenId, name, image, rarityRank } = item?.token;
+
+        const collectionName = item?.token?.collection?.name
         const collectionImage = item?.token?.collection?.image;
 
         const value = item?.market?.floorAsk?.price?.amount?.decimal;
@@ -229,18 +232,7 @@ const Items = ({ address, items, itemFilters, setItemFilters, collectionInfo, lo
 
                       <div>
                         <i className="fa-light fa-cart-shopping item-buy-not-visible"></i>
-                        <p
-                          className="item-buy-not-visible"
-                          onClick={() =>
-                            addItemToCart(
-                              name,
-                              tokenId,
-                              value,
-                              image,
-                              marketplace
-                            )
-                          }
-                        >
+                        <p className="item-buy-not-visible" onClick={() => addItemToCart( name, tokenId, value, image, marketplace, collectionName)}>
                           Add
                         </p>
                       </div>
@@ -317,6 +309,13 @@ const Items = ({ address, items, itemFilters, setItemFilters, collectionInfo, lo
                 LooksRare
               </Checkbox>
               <br />
+              <Checkbox defaultChecked={true} isDisabled  size={"sm"} className="collection-item-marketplace-filter">
+                Sudoswap
+              </Checkbox>
+              <br />
+              <Checkbox defaultChecked={true} isDisabled  size={"sm"} className="collection-item-marketplace-filter">
+                Alienswap
+              </Checkbox>
             </div>
 
             <Button colorScheme={"blue"} onClick={applyChanges} className="collection-item-filter-apply">

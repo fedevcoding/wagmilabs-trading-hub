@@ -1,7 +1,7 @@
 :root{
-    --modal-width: 16%;
+    --modal-width: 17%;
     --modal-height: calc(100% - 50px);
-    --modal-lateral-padding: 30px;
+    --modal-lateral-padding: 20px;
 }
 
 
@@ -35,6 +35,7 @@
     transform: translate(0, -50%);
     right: calc(var(--modal-width) * -1);
     transition: right 500ms ease;
+
 }
 .cart-modal i{
     cursor: pointer;
@@ -110,12 +111,20 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 0;
+    border-radius: 10px;
+    margin: 5px 0;
+    padding: 7px 5px;
+
+    transition: background 250ms;
+}
+
+.user-cart-single-item:hover{
+    background-color: rgb(63, 63, 63);
 }
 
 .user-cart-item-image{
-    width: 75px;
-    height: 75px;
+    width: 55px;
+    height: 55px;
     border-radius: 10px;
     margin-right: 10px;
 }
@@ -125,14 +134,94 @@
     display: flex;
     flex-direction: column;
     width: 100%;
+
+    flex: 1 1 auto;
 }
 
 .cart-items-container{
-    max-height: 50%;
+    max-height: 70%;
     overflow: scroll;
 }
 
 
 .cart-items-clearall-container{
     height: calc(100% - 9%);
+}
+
+
+.user-cart-item-name{
+    font-size: 15px;
+}
+
+.user-cart-collection-name{
+    font-size: 13px;
+    opacity: 0.8;
+}
+
+
+.user-cart-item-price-container{
+    flex: 0 0 auto;
+}
+
+.user-cart-item-remove{
+    font-size: 18px;
+    margin-right: 10px;
+
+    display: none;
+}
+
+.user-cart-single-item:hover .user-cart-item-remove{
+    display: inline;
+}
+
+.user-cart-single-item:hover .user-cart-item-price{
+    display: none;
+}
+
+.user-cart-item-price{
+    font-size: 15px;
+}
+
+
+
+.cart-buy-now-hr{
+    width: calc(100% + var(--modal-lateral-padding) * 2 - 3px);
+}
+
+
+.cart-total-buy-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.user-cart-total-price{
+    padding: 20px 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+
+.user-cart-price-total-price, .user-cart-price-currencies-eth{
+    font-weight: 600;
+    letter-spacing: 1.2px;
+}
+
+.user-cart-price-currencies{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+
+.user-cart-price-currencies-usd{
+    opacity: 0.8;
+    font-size: 13px;
+}
+
+
+.user-cart-buy-button{
+    width: 100%;
+    letter-spacing: 1.2px;
 }
