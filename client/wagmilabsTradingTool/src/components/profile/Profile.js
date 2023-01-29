@@ -260,12 +260,12 @@ const Profile = () => {
                         <div className='listing-settings-profit-values'>
                           <Stack direction={"row"} alignItems="center">
 
-                            <HStack>
                               <NumberInput value={stageListingSettings?.price?.profitValue}>
+                            <HStack>
                                 <NumberInputField className='listing-settings-value' placeholder='Amount' onChange={(e) => modifyStageListing("profitValue", e.target.value)}/>
-                              </NumberInput>
                             </HStack>
-
+                              </NumberInput>
+                            
                             <Select name="" id="" className='listing-settings-currency-type' value={stageListingSettings?.price?.profitType} onChange={(e) => modifyStageListing("profitType", e.target.value)}>
                               <option value="%">%</option>
                               <option value="eth">Eth</option>

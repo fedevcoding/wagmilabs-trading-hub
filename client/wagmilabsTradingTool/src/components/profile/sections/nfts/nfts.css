@@ -488,3 +488,11 @@
 }
 
 
+.smart-list-close-modal{
+    background-color: transparent;
+    color: white;
+    font-size: 19px;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}

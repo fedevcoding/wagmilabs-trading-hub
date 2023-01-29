@@ -338,3 +338,7 @@
 .listing-settings-profit-amount{
     margin-top: 20px;
 }
+
+.listing-settings-profit-values .chakra-numberinput{
+    width: 100%;
+}

@@ -1,8 +1,10 @@
-import React, {useEffect, useMemo, useState} from 'react'
+import React, {useContext, useEffect, useMemo, useState} from 'react'
 import baseUrl from '../../../../variables/baseUrl'
 import { Portal } from 'react-portal'
 
 // import { useAccount } from 'wagmi'
+
+import moment from "moment"
 
 import Skeleton, {SkeletonTheme } from "react-loading-skeleton"
 import 'react-loading-skeleton/dist/skeleton.css'
@@ -15,8 +17,9 @@ import { getClient } from "@reservoir0x/reservoir-kit-client";
 import { roundPrice } from '../../../../utils/formats/formats'
 import { marketListingMapping } from '../../../../utils/mappings'
 import { fetchSigner } from '@wagmi/core'
-import { Tooltip } from '@chakra-ui/react'
+import { Button, Tooltip } from '@chakra-ui/react'
 import {useDebounce} from "use-debounce"
+import { UserDataContext } from '../../../../context/userContext'
 
 
 const sortItemsOptions = [
@@ -27,16 +30,66 @@ const sortItemsOptions = [
 
 const Nfts = ({nftsCollectionFilter, setNftsCollectionFilter, searchCollectionText, userItems, setProfileImage, collections, loadingNfts, listingSettings, selectedSortOption, setSelectedSortOption, setSearchCollectionText}) => {
 
+    const {cryptoPrices} = useContext(UserDataContext)
 
-    const [confirmListingData, setConfirmListingData] = useState({})
-    const [showListingConfirmation, setShowListingConfirmation] = useState(false)
-    const [confirmListing, setConfirmListing] = useState(null)
+
+    const [quickListData, setQuickListData] = useState({})
+    const [showQuickListingModal, setShowQuickListingModal] = useState(false)
+
 
     const [selectBulk, setSelectBulk] = useState(false)
     const [bulkItems, setBulkItems] = useState([])
     
     const [showSortItemsOptions, setShowSortItemsOptions] = useState(false);
 
+
+
+    useEffect(()=>{
+      
+      const handleClick = (event) => {
+        const path = event.composedPath()
+        const el1 = document.querySelector(".profile-sort-items")
+        const el2 = "item-option-button"
+        const el3 = document.querySelector(".profile-filter-collection")
+
+        if(!path.includes(el3)){
+          closeCollectionDropdown()
+        }
+
+        if(!path.includes(el1)){
+          setShowSortItemsOptions(false)
+        }
+
+        const classLists = Array.from(event.target.classList)
+        console.log(classLists)
+        if(!classLists.includes(el2)){
+          closeAllOptions()
+        }
+      }
+      document.addEventListener('click', handleClick);
+      return () => {
+        document.removeEventListener('click', handleClick);
+      };
+    }, [])
+
+
+    useEffect(()=>{
+      if(!selectBulk){
+        setBulkItems([])
+      }
+    }, [selectBulk])
+
+
+    
+    const handleFilterCollection = (collectionAddress, e) => {
+
+      if(collectionAddress?.toLowerCase() === nftsCollectionFilter?.toLowerCase()){
+        setNftsCollectionFilter("")
+      } 
+      else{
+        setNftsCollectionFilter(collectionAddress)
+      } 
+    }
 
     function toggleCollectionDropdown(e){
       if (e.target == document.querySelector(".profile-collection-arrow") || e.target == e.currentTarget) {
@@ -120,50 +173,33 @@ const Nfts = ({nftsCollectionFilter, setNftsCollectionFilter, searchCollectionTe
       document.querySelectorAll(".profile-single-item-bulk-selected").forEach(el => el.classList.remove("profile-single-item-bulk-selected"))
     }
 
-    async function getListingInfo(tokenId, contractAddress, floorPrice){
-      let tokenDetails = {
-        approvalFee: 0.00016,
-        gas: 0.00016,
-        singleBuyPrice: 0.016,
-      };
-      // for(let i = 0; i < activityTransactions.length; i++){
-      //   const tx = activityTransactions[i]
-      //   if(tx.contractAddress == contractAddress && tx.tokenId == tokenId){
-      //     tokenDetails = tx
-      //     break
-      //   }
-      // }
-      const {approvalFee} = tokenDetails
-      const gas = tokenDetails.buyGas || tokenDetails.gas
-      const singleBuyPrice = tokenDetails.singleBuyPrice || tokenDetails.buyPrice
-      // console.log(hash)
-      const {marketplace } = listingSettings
-      let breakEven = await fetch(`${baseUrl}/breakEven`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "x-auth-token": localStorage.jsonwebtoken
-        },
-        body: JSON.stringify({contractAddress, singleBuyPrice, gas, approvalFee, marketplace})
-      })
-      breakEven = (await breakEven.json()).calculation
+    const toggleSortOptions = () => {
+      setShowSortItemsOptions(old => !old);
+    };
 
 
-      const expirationTime = (new Date((Math.round(Date.now() + 60 * 60 * 24 * 2)))).toString()
-      console.log(expirationTime)
 
 
-      setConfirmListing({breakEven, floorPrice, tokenId, contractAddress, expirationTime})
 
+    function openSmartListingModal(tokenId, contractAddress, floorPrice){
+      setShowQuickListingModal(true)
+      setQuickListData({tokenId, contractAddress, floorPrice})
     }
+
+    function closeSmartListingModal(){
+      setShowQuickListingModal(false)
+      setQuickListData({})
+    }
+
     
     async function listNft(contractAddress, tokenId, weiPrice){
       const signer = await fetchSigner()
       const marketplace = listingSettings.marketplace
-      const expirationTime =  (Math.round(Date.now() / 1000 + 60 * 60 * 24 * 2)).toString()
+      const expirationTime = ((getListingExpirationDate(listingSettings).getTime()) / 1000).toString()
       const orderbook = marketListingMapping[marketplace].orderbook
       const orderKind = marketListingMapping[marketplace].orderKind
-      weiPrice = weiPrice.toString()
+
+      weiPrice = (weiPrice * 1000000000000000000).toString()
   
       getClient()?.actions.listToken({
         listings: [{  
@@ -180,11 +216,7 @@ const Nfts = ({nftsCollectionFilter, setNftsCollectionFilter, searchCollectionTe
       })
     }
 
-    useEffect(()=>{
-      if(!selectBulk){
-        setBulkItems([])
-      }
-    }, [selectBulk])
+
 
 
 
@@ -257,7 +289,8 @@ const Nfts = ({nftsCollectionFilter, setNftsCollectionFilter, searchCollectionTe
                       <p className='single-item-rarity'>Floor price: {floor_price && roundPrice(floor_price)}</p>
                     </div>
                     <hr></hr>
-                    <div className='profile-list-nft inactive' onClick={() => getListingInfo(tokenId, contractAddress, floor_price)}>
+                    {/* getListingInfo(tokenId, contractAddress, floor_price) */}
+                    <div className='profile-list-nft inactive' onClick={() => openSmartListingModal(tokenId, contractAddress, floor_price)}>
                       <i className="fa-solid fa-tag"></i>
                       <span>Smart list</span>
                     </div>
@@ -269,56 +302,13 @@ const Nfts = ({nftsCollectionFilter, setNftsCollectionFilter, searchCollectionTe
 
 
 
-    const toggleSortOptions = () => {
-      setShowSortItemsOptions(old => !old);
-    };
-
-
-    useEffect(()=>{
-      
-      const handleClick = (event) => {
-        const path = event.composedPath()
-        const el1 = document.querySelector(".profile-sort-items")
-        const el2 = "item-option-button"
-        const el3 = document.querySelector(".profile-filter-collection")
-
-        if(!path.includes(el3)){
-          closeCollectionDropdown()
-        }
-
-        if(!path.includes(el1)){
-          setShowSortItemsOptions(false)
-        }
-
-        const classLists = Array.from(event.target.classList)
-        console.log(classLists)
-        if(!classLists.includes(el2)){
-          closeAllOptions()
-        }
-      }
-      document.addEventListener('click', handleClick);
-      return () => {
-        document.removeEventListener('click', handleClick);
-      };
-    }, [])
-
-
-
-    const handleFilterCollection = (collectionAddress, e) => {
-
-      if(collectionAddress?.toLowerCase() === nftsCollectionFilter?.toLowerCase()){
-        setNftsCollectionFilter("")
-      } 
-      else{
-        setNftsCollectionFilter(collectionAddress)
-      } 
-    }
-
-
 
   return (
     <>
-    <ListingsSettings confirmListing={confirmListing} setConfirmListing={setConfirmListing} listingSettings={listingSettings} listNft={listNft}/>
+    {
+      showQuickListingModal &&
+      <SmartListModal quickListData={quickListData} listingSettings={listingSettings} listNft={listNft} closeSmartListingModal={closeSmartListingModal} ethPrice={cryptoPrices?.ethPrice} setQuickListData={setQuickListData}/>
+    }
 
     <div className='profile-token-filters'>
       <div className='profile-sort-items-container'>
@@ -466,34 +456,99 @@ const Box = ({children}) => {
 
 
 
-const ListingsSettings = ({confirmListing, setConfirmListing, listingSettings, listNft}) => {
+const SmartListModal = ({quickListData, listingSettings, listNft, closeSmartListingModal, ethPrice, setQuickListData}) => {
+
+  const [loadingData, setLoadingData] = useState(true)
+
+  useEffect(()=>{
+    getTokenData()
+  }, [])
   
+
+  async function getTokenData(){
+
+    setLoadingData(true)
+
+    const {profitType, profitValue, type} = listingSettings?.price
+
+    let listingType = ""
+    if(type === "profit") listingType = `${type}-${profitValue}-${profitType}`
+    else if(type === "break-even") listingType = type
+
+    const {tokenId, contractAddress} = quickListData
+    const {marketplace} = listingSettings
+
+    let data = await fetch(`${baseUrl}/tokenListPrice?tokenId=${tokenId}&contractAddress=${contractAddress}&marketplace=${marketplace}&listingType=${listingType}&ethPrice=${ethPrice}`, {
+      headers: {
+        "x-auth-token": localStorage.jsonwebtoken
+      }
+    })
+    data = await data.json()
+
+    const {listingPrice} = data
+
+    setQuickListData(prev => ({...prev, listingPrice}))
+    setLoadingData(false)
+  }
+
+
+
+
   return(
     <>
-    {
-      confirmListing && 
       <Portal>
         <div className='bg-modal'></div>
-        <section className='nft-listing-modal'>
-          <br/>
-          <br/>
-          You are going to list your nft at {confirmListing.breakEven / 1000000000000000000} on {listingSettings.marketplace.toUpperCase()}
-          <br/>
-          <br/>
-          Collection floor price: {confirmListing.floorPrice}
-          <br/>
-          <br/>
-          Listing will expire: {confirmListing.expirationTime}
-          <br/>
-          <br/>
-          <button onClick={() => {
-            listNft(confirmListing.contractAddress, confirmListing.tokenId, confirmListing.breakEven)
-          }}>Confirm</button>
-          <button onClick={() => setConfirmListing(null)}>Cancel</button>
-        </section>
+        
+        <div className='nft-listing-modal'>
+          <button className="smart-list-close-modal" onClick={closeSmartListingModal}>
+            <i className="fa-solid fa-xmark"></i>
+          </button>
+
+          {
+            loadingData ?
+            <p>Loading listing price...</p>
+            :
+            <>
+              <br/>
+              <br/>
+              You are going to list your NFT at {quickListData?.listingPrice} on {listingSettings?.marketplace?.toUpperCase()}
+              <br/>
+              <br/>
+              Collection floor price: {quickListData.floorPrice}
+              <br/>
+              <br/>
+              Listing will expire:{moment(getListingExpirationDate(listingSettings)).fromNow()}
+              <br/>
+              <br/>
+              <Button onClick={() => {listNft(quickListData.contractAddress, quickListData.tokenId, quickListData?.listingPrice)}}>Confirm</Button>
+            </>
+          }
+        </div>
       </Portal>
-      }
     </>
   )
 }
 export default Nfts
+
+
+
+function getListingExpirationDate(listingSettings){
+
+  if(!listingSettings) return
+  const {months, days, hours, minutes} = listingSettings?.time
+
+
+  console.log(months, days, hours, minutes)
+
+  const now = new Date()
+  const listingExpiration = new Date(
+    now.getFullYear(),
+    now.getMonth() + parseInt(months),
+    now.getDate() + parseInt(days),
+    now.getHours() + parseInt(hours),
+    now.getMinutes() + parseInt(minutes)
+  );
+  
+
+  return listingExpiration
+}
