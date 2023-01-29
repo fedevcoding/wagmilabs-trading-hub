@@ -185,9 +185,118 @@ a{
 
 
 
+.sign-message-container-box{
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  text-align: center;
+  flex-direction: column;
+  position: absolute;
+  top: 55vh;
+  left: 50vw;
+  transform: translate(-50%, -50%);
+  width: 35vw;
+  height: 40vh;
+  
+  border-radius: 10px;
+  border: 3px solid black;
+}
+
+.sign-in-terms-container{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 50px;
+}
+
+
+.accept-terms .chakra-checkbox__label{
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.sign-message-button{
+  width: 210px;
+  height: 60px !important;
+  font-size: 18px !important;
+  cursor: unset;
+  pointer-events: none;
+  border: 2px solid black;
+  background-color: rgba(255, 255, 255, 0.559) !important;
+  color: black;
+}
+
+.sign-message-button.active{
+  cursor: pointer;
+  pointer-events: all;
+  background-color: white !important;
+  color: black;
+}
+
+
+.sign-message-container-box .check-text{
+  font-size: 28px;
+  padding: 0;
+}
+
+
+.terms-and-conditions-link{
+  text-decoration: underline;
+}
 
 
 
+
+
+
+.login-general-links{
+  position: fixed;
+  bottom: 5%;
+  left: 50%;
+  width: 20%;
+  transform: translate(-50%, 0);
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.login-general-links-line{
+  height: 4px;
+  width: 70px;
+  border-radius: 10px;
+  background-color: white;
+}
+
+.login-general-links a{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.login-general-links-img{
+  width: 35px;
+}
+
+
+.legal-btn {
+  position: absolute;
+  bottom: 20px;
+  font-size: 20px;
+  font-family: "Poppins";
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  color: black;
+}
+
+.legal-btn div {
+  margin-left: 10px;
+}
+
+.legal-img {
+  height: 18px;
+  margin-left: 30px;
+}
 
 
 
@@ -264,3 +373,41 @@ a{
       padding: 6px;
     }
   }
+
+
+
+  
+
+
+
+
+  .lazyloader {
+    content: '';
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    -webkit-animation: loader-rotation .8s infinite linear;
+    animation: loader-rotation .8s infinite linear;
+    border-left: 2px solid rgba(114, 144, 182, 0.15);
+    border-right: 2px solid rgba(114, 144, 182, 0.15);
+    border-bottom: 2px solid rgba(114, 144, 182, 0.15);
+    border-top: 2px solid black;
+    border-radius: 100%;
+}
+
+@-webkit-keyframes loader-rotation {
+  0% {
+    -webkit-transform: rotate(0deg); }
+  100% {
+    -webkit-transform: rotate(360deg); } }
+
+@keyframes loader-rotation {
+  0% {
+    transform: rotate(0deg); }
+  100% {
+    transform: rotate(360deg); } }

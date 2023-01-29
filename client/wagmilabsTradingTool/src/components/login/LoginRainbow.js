@@ -9,7 +9,12 @@ import baseUrl from '../../variables/baseUrl';
 
 import "@rainbow-me/rainbowkit/styles.css";
 import { useAccount, useSignMessage } from 'wagmi'
+import { Button, Checkbox } from '@chakra-ui/react'
 
+
+import wwwImg from "../../assets/www.svg"
+import twitterImg from "../../assets/twitter2.svg"
+import discordImg from "../../assets/discord2.svg"
 
 
 const message = `Welcome to Wagmi Labs!
@@ -25,17 +30,22 @@ If you're connecting a hardware wallet, you'll need to sign the message on your 
 
 const Login = ({setConnected}) => {
 
+    const [messageText, setMessage] = useState("Please connect your wallet to access the NFT tool.")
+    const [walletConnected, setWalletConnected] = useState(false)
+    const [acceptTerms, setAcceptTerms] = useState(false)
+    const [loadingSign, setLoadingSign] = useState(false)
+
     const { address } = useAccount()
 
     const { signMessage } = useSignMessage({
         onError(err){
+            setLoadingSign(false)
             if(err?.toString()?.includes("rejected")) setMessage("User rejected signature.")
             else setMessage("Something went wrong, please retry.")
         },
         onSuccess(signature) {
             
             async function checkSignature(){
-
                 try{
                     setMessage("Checking your assets...")
 
@@ -60,6 +70,7 @@ const Login = ({setConnected}) => {
                     else{
                         setMessage(res?.message)
                     }
+                    setLoadingSign(false)
                 }
                 catch(e){
                     setMessage("Something went wrong, please retry.")
@@ -71,8 +82,18 @@ const Login = ({setConnected}) => {
 
 
 
-    const [messageText, setMessage] = useState("Please connect your wallet to access the NFT tool.")
-    const [walletConnected, setWalletConnected] = useState(false)
+    const callSignMessage = () => {
+        if(!loadingSign){
+            setLoadingSign(true)
+            signMessage({ message })
+        }
+    }
+
+
+    function changeAccept(e){
+        console.log(e.target.checked)
+        setAcceptTerms(e.target.checked)
+    }
 
 
   return (
@@ -88,15 +109,45 @@ const Login = ({setConnected}) => {
         </div>
 
         <div>
-            <div className='check-text-container'>
-                <p className='check-text'>{messageText}</p>
-                {walletConnected && <button onClick={() => signMessage({message})}>Sign message</button>}
-            </div>
-            
-            <a className="instructions-btn" href='https://docs.wagmilabs.tools/tradinghub/' target={"_blank"}>
-                <img className='instructions-img' alt="" src={instructionsLogo}/>
-                <div>instructions</div>
-            </a>
+
+                {
+                    walletConnected ?
+                    <>
+                    <div className='sign-message-container-box'>
+                        <p className='check-text'>{messageText}</p>
+                        <div className='sign-in-terms-container'>
+                            <Checkbox colorScheme={"blue"} borderColor="black" className='accept-terms' onChange={e => changeAccept(e)}>
+                                I accept the <a className='terms-and-conditions-link' href="" target={"_blank"}>terms and conditions.</a>
+                            </Checkbox>
+                        </div>
+                        {walletConnected && <Button className={`sign-message-button ${acceptTerms && "active"}`} onClick={callSignMessage}>{loadingSign ? <Loader /> : "Sign message"}</Button>}
+                    </div>
+                    </>
+                    :
+                    <div className='check-text-container'>
+                        <p className='check-text'>{messageText}</p>
+                    </div>
+                }
+
+                <div className='login-general-links'>
+                    <div className='login-general-links-line'></div>
+
+                    <a target="_blank" href="https://wagmilabs.tools"><img src={wwwImg} className="login-general-links-img"/></a>
+                    <a target="_blank" href="https://twitter.com/wagmi_labs"><img src={twitterImg} className="login-general-links-img"/></a>
+                    <a target="_blank" href="https://discord.gg/PZsVtxdyQu"><img src={discordImg} className="login-general-links-img"/></a>
+
+                    <div className='login-general-links-line'></div>
+                </div>
+                
+                <a className="legal-btn" href='/legal.html' target={"_blank"}>
+                    <img className='legal-img' alt="" src={instructionsLogo}/>
+                    <div>Legal</div>
+                </a>
+
+                <a className="instructions-btn" href='https://docs.wagmilabs.tools/profitcalc/' target={"_blank"}>
+                    <img className='instructions-img' alt="" src={instructionsLogo}/>
+                    <div>instructions</div>
+                </a>
         </div>
     </>
   )
@@ -109,3 +160,9 @@ export default Login
 
 
 
+const Loader = () => {
+
+    return(
+        <div class="lazyloader"></div>
+    )
+}
