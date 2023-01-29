@@ -7,6 +7,10 @@ import baseUrl from "../../variables/baseUrl"
 
 import useFirstRender from "../../custom-hooks/useFirstRender"
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
+import { placeholderImage } from '../../utils/images'
+
+
+import {LazyLoadImage} from "react-lazy-load-image-component"
 
 const EthereumSearch = () => {
 
@@ -71,18 +75,22 @@ const EthereumSearch = () => {
 
     const memoList = useMemo(()=> collections.map((collection, index) => {
 
-        const {image, collectionId, name, openseaVerificationStatus} = collection
+        const {image, collectionId, name, openseaVerificationStatus, isLocaleStorage} = collection
         const link = `/collection/${collectionId}`
 
         return (
-            <a className='container-div' href={link} target="_blank" key={index} onClick={() => addToLocalStorage(image, collectionId, name, openseaVerificationStatus)}>
-                <img className='collection-image' src={image || question}/>
+            <a className='container-div' href={link} target="_blank" key={index} onClick={(e) => addToLocalStorage(e, image, collectionId, name, openseaVerificationStatus)}>
+                <LazyLoadImage visibleByDefault={true} src={image} className="collection-image" effect='blur' placeholderSrc={placeholderImage}/>
                 <div className="searchbar-collection-infos">
                     <div className='name-verified-container'>
                         <p className='searchbar-collection-name'>{name || "-------"}</p>
                         {openseaVerificationStatus === "verified" && <img className='verified' src={verified}/>}
                     </div>
                     <p className='searchbar-collection-address'>{collectionId}</p>
+                    {
+                        isLocaleStorage &&
+                        <i class="fa-solid fa-xmark searchbar-collection-remove" onClick={(e) => removeFromLocalStorage(e, collectionId)}></i>
+                    }
                 </div>
             </a>
         )
@@ -93,8 +101,28 @@ const EthereumSearch = () => {
     // function removeFromLocalStorage(image, collectionId, name, openseaVerificationStatus){
 
     // }
+    function removeFromLocalStorage(e, collectionId){
+        e.preventDefault()
 
-    function addToLocalStorage(image, collectionId, name, openseaVerificationStatus){
+        let clickedCollections = localStorage.getItem("clickedCollections") || false
+        let collectionObject;
+
+        if(clickedCollections){
+            clickedCollections = JSON.parse(clickedCollections)
+            clickedCollections = clickedCollections.filter(collection => collection.collectionId !== collectionId)
+            collectionObject = JSON.stringify([...clickedCollections])
+        }
+        else{
+            collectionObject = JSON.stringify([])
+        }
+
+        localStorage.setItem("clickedCollections", collectionObject)
+        setCollections(clickedCollections)
+    }
+    function addToLocalStorage(e, image, collectionId, name, openseaVerificationStatus){
+        const i = document.querySelector(".searchbar-collection-remove")
+        if(e.target === i) return
+
         let clickedCollections = localStorage.getItem("clickedCollections") || false
         let collectionObject;
 
@@ -103,10 +131,15 @@ const EthereumSearch = () => {
         if(clickedCollections){
             clickedCollections = JSON.parse(clickedCollections)
             clickedCollections = clickedCollections.filter(collection => collection.collectionId !== collectionId)
-            collectionObject = JSON.stringify([...clickedCollections, {image, collectionId, name, openseaVerificationStatus, time}])
+
+            if(clickedCollections.length >= 5){
+                clickedCollections.shift()
+            }
+
+            collectionObject = JSON.stringify([...clickedCollections, {image, collectionId, name, openseaVerificationStatus, time, isLocaleStorage: true}])
         }
         else{
-            collectionObject = JSON.stringify([{image, collectionId, name, openseaVerificationStatus, time}])
+            collectionObject = JSON.stringify([{image, collectionId, name, openseaVerificationStatus, time, isLocaleStorage: true}])
         }
 
         localStorage.setItem("clickedCollections", collectionObject) 

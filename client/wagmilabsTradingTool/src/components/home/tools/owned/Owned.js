@@ -5,6 +5,10 @@ import "./owned.css"
 import times from "./times"
 
 import notFound from "../../../../assets/notFound.svg"
+import { placeholderImage } from '../../../../utils/images'
+
+import {LazyLoadImage} from 'react-lazy-load-image-component';
+
 
 const Owned = ({setTimeFrame, tool, timeFrame, resetTime}) => {
 
@@ -171,7 +175,7 @@ const Owned = ({setTimeFrame, tool, timeFrame, resetTime}) => {
       return (
         <tr key={index} className='single-collection-container' onClick={()=> window.open(`/collection/${address}`, "_blank")}>
           <td className='image-name-container'>
-            <img src={image || question} className="owned-image"></img>
+            <LazyLoadImage src={image} className="owned-image" effect='blur' placeholderSrc={placeholderImage}/>
             <p className='owned-name'>{name}</p>
           </td>
           <td>

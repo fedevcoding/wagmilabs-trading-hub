@@ -15,7 +15,6 @@ import wrappedEthereumImage from "../../assets/weth.svg"
 import logOut from '../../utils/functions/logout'
 import { Button, Tooltip } from '@chakra-ui/react'
 import LivePulsing from './LivePulsing'
-import getUserBalances from '../../utils/database-functions/getUserBalances'
 
 
 // uniswap widget
@@ -24,9 +23,9 @@ import { SwapWidget } from '@uniswap/widgets'
 import '@uniswap/widgets/fonts.css'
 
 const jsonRpcUrlMap = { 
-  1: ["https://mainnet.infura.io/v3/65b930ca2b6d44f3aca1217115af002e"], 
+  1: ["https://mainnet.infura.io/v3/1997ee05c99b4373bf5ba7b5d3e467d7"], 
 }
-
+ 
 console.warn = function() {}
 
 const theme = {
@@ -50,7 +49,7 @@ const WalletModal = ({walletModalOpen, closeWalletModal}) => {
   const [copyState, setCopyState] = useState("Copy")
 
   const {address, connector} = useAccount()
-  const {ens, userBalances, profileImage, cryptoPrices, setUserBalances} = useContext(UserDataContext)
+  const {ens, userBalances, profileImage, cryptoPrices} = useContext(UserDataContext)
 
 
   useEffect(()=>{
@@ -159,8 +158,8 @@ const WalletModal = ({walletModalOpen, closeWalletModal}) => {
                         </div>
 
                         <div className='wallet-modal-crypto-fiat'>
-                          <p>{roundPrice(userBalances.eth)}</p>
-                          <p className='wallet-modal-usd-currency'>${getFiatPrice(userBalances.eth, cryptoPrices.ethPrice)}</p>
+                          <p>{userBalances?.eth ? roundPrice(userBalances.eth) : "0"}</p>
+                          <p className='wallet-modal-usd-currency'>${userBalances?.eth ? getFiatPrice(userBalances.eth, cryptoPrices.ethPrice) : "0"}</p>
                         </div>
 
                       </div>
@@ -173,8 +172,8 @@ const WalletModal = ({walletModalOpen, closeWalletModal}) => {
                         </div>
 
                         <div className='wallet-modal-crypto-fiat'>
-                          <p>{roundPrice(userBalances.weth)}</p>
-                          <p className='wallet-modal-usd-currency'>${getFiatPrice(userBalances.weth, cryptoPrices.ethPrice)}</p>
+                          <p>{userBalances?.weth ? roundPrice(userBalances.weth) : "0"}</p>
+                          <p className='wallet-modal-usd-currency'>${userBalances?.weth ? getFiatPrice(userBalances.weth, cryptoPrices.ethPrice) : "0"}</p>
 
                         </div>
                       </div>
@@ -187,8 +186,8 @@ const WalletModal = ({walletModalOpen, closeWalletModal}) => {
                         </div>
 
                         <div className='wallet-modal-crypto-fiat'>
-                          <p>{roundPrice(userBalances.usdc)}</p>
-                          <p className='wallet-modal-usd-currency'>${getFiatPrice(userBalances.usdc, cryptoPrices.usdcPrice)}</p>
+                          <p>{userBalances?.usdc ? roundPrice(userBalances.usdc) : "0"}</p>
+                          <p className='wallet-modal-usd-currency'>${userBalances?.usdc ? getFiatPrice(userBalances.usdc, cryptoPrices.usdcPrice) : "0"}</p>
                         </div>
                       </div>
                       <hr className='wallet-modal-hr-2'></hr>
@@ -200,8 +199,8 @@ const WalletModal = ({walletModalOpen, closeWalletModal}) => {
                         </div>
 
                         <div className='wallet-modal-crypto-fiat'>
-                          <p>{roundPrice(userBalances.usdt)}</p>
-                          <p className='wallet-modal-usd-currency'>${getFiatPrice(userBalances.usdt, cryptoPrices.usdtPrice)}</p>
+                          <p>{userBalances?.usdt ? roundPrice(userBalances.usdt) : "0"}</p>
+                          <p className='wallet-modal-usd-currency'>${userBalances?.usdt ? getFiatPrice(userBalances.usdt, cryptoPrices.usdtPrice) : "0"}</p>
                         </div>
                       </div>
                     </div>

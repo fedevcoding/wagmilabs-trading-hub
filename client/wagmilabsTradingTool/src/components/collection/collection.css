@@ -31,6 +31,8 @@
 .collection-info-image-loader{
   width: calc(100% - 3px);
   height: calc(100% - 3px);
+
+  translate: 0px -3px;
 }
 
 
@@ -66,6 +68,12 @@
 .collection-info-created-at{
   position: absolute;
   top: 80px;
+  right: 25px;
+}
+
+.collection-info-erc-type{
+  position: absolute;
+  top: 110px;
   right: 25px;
 }
 
@@ -132,7 +140,11 @@
   top: 50px;
   left: 130px;
   width: 150px;
-  z-index: 99999999;
+  z-index: 9;
+}
+
+.loading-texts .react-loading-skeleton{
+  border: 2px solid black;
 }
 
 .collection-info-royalties i {
@@ -196,6 +208,7 @@
   padding: 5px 10px;
   border-radius: 10px;
   transition: transform 1s;
+  border: 2px solid black;
 }
 
 .info-arrow.rotate {

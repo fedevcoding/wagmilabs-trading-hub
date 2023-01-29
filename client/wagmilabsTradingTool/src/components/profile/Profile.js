@@ -11,9 +11,11 @@ import { formatAddress } from '../../utils/formats/formats'
 import { useAccount, useEnsName, useSigner } from 'wagmi'
 
 import { useDebounce } from 'use-debounce'
-import {RadioGroup, Stack, Radio, Select, HStack, Button, Input, NumberInput, NumberInputField} from "@chakra-ui/react"
+import {RadioGroup, Stack, Radio, Select, HStack, Button, Input, NumberInput, NumberInputField, Tooltip} from "@chakra-ui/react"
 
 import { UserDataContext } from '../../context/userContext'
+
+import { copy } from 'clipboard'
 
 const sortItemsOptions = [
   { value: 'desc', label: 'Newest' },
@@ -45,6 +47,9 @@ const Profile = () => {
 
   const [searchCollectionText, setSearchCollectionText] = useState("")
   const [debounceCollectionSearch] = useDebounce(searchCollectionText, 400)
+
+
+  const [copyState, setCopyState] = useState({ens: "Copy", address: "Copy"})
 
 
   useEffect(() => {
@@ -209,6 +214,17 @@ const Profile = () => {
     console.log(stageListingSettings)
     console.log(listingSettings)
   }, [openListingSettings, listingSettings])
+
+
+
+  function copyData (type, data){
+    copy(data)
+
+    setCopyState(old => ({...old, [type]: "Copied!"}))
+    setTimeout(() => {
+      setCopyState(old => ({...old, [type]: "Copy"}))
+    }, 1000)
+  }
 
   return (
     <>
@@ -436,9 +452,21 @@ const Profile = () => {
           <div className='profileDetails'>
             <img className='profilePfp' src={profileImage} alt="" />
             <div className='profile-ens-address'>
-              <span>{userEns && userEns}</span>
-              <span>{userAddress && userEns && "/"}</span>
-              <span className='profile-address-copy'>{userAddress && formatAddress(userAddress)}</span>
+
+              {userEns && 
+              <Tooltip closeOnClick={false} hasArrow label={copyState.ens} fontSize='xs' bg="black" color={"white"} placement='top' borderRadius={"7px"}>
+                <span onClick={() => copyData("ens", userEns)}>{userEns}</span>
+              </Tooltip>
+              }
+
+                <span>{userAddress && userEns && "/"}</span>
+
+              {userAddress && 
+              <Tooltip closeOnClick={false} hasArrow label={copyState.address} fontSize='xs' bg="black" color={"white"} placement='top' borderRadius={"7px"}>
+                <span onClick={() => copyData("address", userAddress)} className='profile-address-copy'>{formatAddress(userAddress)}</span>
+              </Tooltip>
+              }
+              
 
             </div>
 

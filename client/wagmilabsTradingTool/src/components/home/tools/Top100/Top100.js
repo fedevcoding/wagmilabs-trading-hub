@@ -12,6 +12,10 @@ import notFound from "../../../../assets/notFound.svg"
 
 import useFirstRender from '../../../../custom-hooks/useFirstRender'
 import moment from 'moment'
+import { placeholderImage } from '../../../../utils/images'
+
+import {LazyLoadImage} from 'react-lazy-load-image-component';
+
 
 
 const defaultTimeFrame = "1D"
@@ -160,7 +164,7 @@ const Top100 = ({tool, timeFrame, setTimeFrame, resetTime}) => {
       return (
         <tr onClick={ () =>  window.open(`/collection/${contractAddress}`, '_blank')} className='single-collection-container' key={index}>
           <td className='image-name-container'>
-            <img src={image || question} className="top100-image"></img>
+            <LazyLoadImage src={image} className="top100-image" effect='blur' placeholderSrc={placeholderImage}/>
             <div className='top100-name-date'>
               <p className='top100-name'>{name}</p>
               <p className='top100-created-date'>{creationDay}</p>

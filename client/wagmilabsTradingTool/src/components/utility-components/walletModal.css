@@ -1,5 +1,5 @@
 .wallet-modal-overlay{
-    position: absolute;
+    position: fixed;
     left: 0;
     width: 100vw;
     top: 0;
@@ -14,7 +14,7 @@
     background-color: #1e1e1e;
     box-shadow: #000000e3 0px 0px 19px 5px;
     color: white;
-    position: absolute;
+    position: fixed;
     right: -22%;
     top: 0;
     height: 100%;
@@ -169,7 +169,7 @@
 
 .wallet-swap-container{
     padding-top: 5%;
-    position: absolute;
+    position: fixed;
     left: 50%;
     transform: translate(-50%, 0);
 }

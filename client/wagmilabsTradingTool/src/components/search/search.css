@@ -72,6 +72,7 @@
 
 .collection-image{
     width: 35px;
+    aspect-ratio: 1;
     border-radius: 50%;
 }
 
@@ -115,3 +116,15 @@
     width: 87%;
   }
   
+
+
+  .searchbar-collection-remove{
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0.8;
+    cursor: pointer;
+    color: #fff;
+    font-size: 20px;
+  }

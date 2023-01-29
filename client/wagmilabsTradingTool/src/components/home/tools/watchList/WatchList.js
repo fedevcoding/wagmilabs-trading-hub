@@ -8,6 +8,10 @@ import notFound from "../../../../assets/notFound.svg"
 import times from './times'
 
 import useFirstRender from '../../../../custom-hooks/useFirstRender'
+import { placeholderImage } from '../../../../utils/images'
+
+import {LazyLoadImage} from 'react-lazy-load-image-component';
+
 
 const WatchList = ({tool, timeFrame, setTimeFrame, resetTime}) => {
 
@@ -160,7 +164,8 @@ const WatchList = ({tool, timeFrame, setTimeFrame, resetTime}) => {
                 <tr className='single-collection-container' key={index} onClick={()=> window.open(`/collection/${contractAddress}`, "_blank")}>
                     <td>
                         <div className='image-name-container'>
-                            <img src={image ? image : question} alt="" className='owned-image'/>
+                            <LazyLoadImage src={image} className="owned-image" effect='blur' placeholderSrc={placeholderImage}/>
+
                             <p className='owned-name'>{name}</p>
                         </div>
                     </td>

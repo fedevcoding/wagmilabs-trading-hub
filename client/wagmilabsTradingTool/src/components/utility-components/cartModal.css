@@ -9,7 +9,7 @@
 
 
 .cart-modal-overlay{
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
@@ -30,7 +30,7 @@
     width: var(--modal-width);
     background-color: #1e1e1e;
     box-shadow: #000000e3 0px 0px 19px 5px;
-    position: absolute;
+    position: fixed;
     top: 50%;
     transform: translate(0, -50%);
     right: calc(var(--modal-width) * -1);

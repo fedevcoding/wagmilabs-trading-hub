@@ -22,7 +22,13 @@ userBalancesRoute.get("/", checkAuth, async (req, res)=> {
     // Print token balances of USDC in Vitalik's address
     let data = (await alchemy.core.getTokenBalances(address, [usdcContract, wethContract, usdtContract]))
 
-    res.json({data})
+    userBalances = data.tokenBalances
+    
+    const usdc = parseInt(userBalances[0].tokenBalance) / 1000000
+    const weth = parseInt(userBalances[1].tokenBalance) / 1000000000000000000
+    const usdt = parseInt(userBalances[2].tokenBalance) / 1000000
+
+    res.json({usdc, weth, usdt})
 
 })
 

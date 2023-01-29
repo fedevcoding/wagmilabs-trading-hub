@@ -9,12 +9,10 @@ async function getUserBalances(address, setUserBalances){
             "x-auth-token": localStorage.jsonwebtoken
         }
     })
-    userBalances = (await userBalances.json()).data.tokenBalances
+    userBalances = (await userBalances.json())
     
     const eth = (await fetchBalance({addressOrName: address})).formatted
-    const usdc = parseInt(userBalances[0].tokenBalance) / 1000000
-    const weth = parseInt(userBalances[1].tokenBalance) / 1000000
-    const usdt = parseInt(userBalances[2].tokenBalance) / 1000000
+    const {usdc, weth, usdt} = userBalances
 
 
     setUserBalances({eth, weth, usdc, usdt})

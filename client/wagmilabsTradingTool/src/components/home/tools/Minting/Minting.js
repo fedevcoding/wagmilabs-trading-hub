@@ -11,6 +11,9 @@ import { roundPrice } from '../../../../utils/formats/formats'
 
 import moment from "moment"
 import useFirstRender from '../../../../custom-hooks/useFirstRender'
+import { placeholderImage } from '../../../../utils/images'
+
+import {LazyLoadImage} from 'react-lazy-load-image-component';
 
 const defaultTimeFrame = "1H"
 
@@ -173,7 +176,7 @@ const Minting = ({tool, timeFrame, setTimeFrame, resetTime}) => {
       return (
         <tr onClick={ () =>  window.open(`/collection/${contractAddress}`, '_blank')} className='single-collection-container' key={index}>
           <td className='image-name-container'>
-            <img src={image} className="minting-image"></img>
+            <LazyLoadImage src={image} className="minting-image" effect='blur' placeholderSrc={placeholderImage}/>
             <div className='minting-name-date'>
               <p className='minting-name'>{name || "- - -"}</p>
               <p className='minting-created-date'>{creationDay}</p>

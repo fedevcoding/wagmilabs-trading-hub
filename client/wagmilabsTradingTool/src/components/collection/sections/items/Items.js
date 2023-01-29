@@ -29,25 +29,19 @@ import { fetchSigner } from "@wagmi/core";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import getMarketplaceImage from "../../../../utils/marketplaceImageMapping";
 import {useDebounce} from "use-debounce"
+import useFirstRender from "../../../../custom-hooks/useFirstRender";
 
 
-const options = [
-  { value: "p-lth", label: "Price: low to high" },
-  { value: "p-htl", label: "Price: high to low" },
-  { value: "t-lth", label: "TokenId: low to high" },
-  { value: "t-htl", label: "TokenId: high to low" },
-  { value: "r-htl", label: "Rarity: high to low" },
-  { value: "r-lth", label: "Rarity: low to high" },
-];
+const Items = ({ address, items, itemFilters, setItemFilters, collectionInfo, loadingItems, searchText, setSearchText, debounceSearch, options, selectedItem, setSelectedItem}) => {
+
+  const { setUserCartItems, gasSettings } = useContext(UserDataContext);
+  const firstRender = useFirstRender();
 
 
-const Items = ({ address, items, itemFilters, setItemFilters, collectionInfo, loadingItems }) => {
-
-  const [searchText, setSearchText] = useState("")
-  const [debounceSearch] = useDebounce(searchText, 400)
 
 
   useEffect(()=>{
+    if(firstRender) return
     changeSorting("tokenId", debounceSearch)
   }, [debounceSearch])
 
@@ -61,29 +55,6 @@ const Items = ({ address, items, itemFilters, setItemFilters, collectionInfo, lo
     conditionallyBuynowProps.isDisabled = true
   }
 
-
-  const { setUserCartItems, gasSettings } = useContext(UserDataContext);
-
-
-
-  
-  async function addItemToCart(name, tokenId, price, image, marketplace, collectionName) {
-    let pushStatus = await addToCart({
-      name,
-      collectionName,
-      tokenId,
-      price,
-      image,
-      marketplace,
-      contractAddress: address,
-    });
-    if (pushStatus === "success") {
-      setUserCartItems((prevItems) => [
-        ...prevItems,
-        { name, tokenId, price, image, marketplace, collectionName, contractAddress: address },
-      ]);
-    }
-  }
 
   async function buyNow(contract, tokenId, marketplace, value) {
     const signer = await fetchSigner();
@@ -155,7 +126,23 @@ const Items = ({ address, items, itemFilters, setItemFilters, collectionInfo, lo
     }
   }
 
-
+  async function addItemToCart(name, tokenId, price, image, marketplace, collectionName) {
+    let pushStatus = await addToCart({
+      name,
+      collectionName,
+      tokenId,
+      price,
+      image,
+      marketplace,
+      contractAddress: address,
+    });
+    if (pushStatus === "success") {
+      setUserCartItems((prevItems) => [
+        ...prevItems,
+        { name, tokenId, price, image, marketplace, collectionName, contractAddress: address },
+      ]);
+    }
+  }
 
 
   const itemsMapping = useMemo(() => 
@@ -218,21 +205,20 @@ const Items = ({ address, items, itemFilters, setItemFilters, collectionInfo, lo
                   {/* {rarityRank} */}
                   {isListed && (
                     <>
-                      <div>
+                      <div onClick={() =>
+                            buyNow(address, tokenId, marketplace, value)
+                          }>
                         <i className="fa-regular fa-bolt"></i>
                         <p
                           className="item-buy-not-visible"
-                          onClick={() =>
-                            buyNow(address, tokenId, marketplace, value)
-                          }
                         >
                           Buy now
                         </p>
                       </div>
 
-                      <div>
+                      <div onClick={() => addItemToCart( name, tokenId, value, image, marketplace, collectionName)}>
                         <i className="fa-light fa-cart-shopping item-buy-not-visible"></i>
-                        <p className="item-buy-not-visible" onClick={() => addItemToCart( name, tokenId, value, image, marketplace, collectionName)}>
+                        <p className="item-buy-not-visible">
                           Add
                         </p>
                       </div>
@@ -273,7 +259,7 @@ const Items = ({ address, items, itemFilters, setItemFilters, collectionInfo, lo
                 PRICE RANGE
               </p>
               <HStack>
-                <NumberInput>
+                <NumberInput defaultValue={itemFilters?.priceFilter?.min}>
                   <HStack>
                     <NumberInputField
                       placeholder="Min"
@@ -282,7 +268,7 @@ const Items = ({ address, items, itemFilters, setItemFilters, collectionInfo, lo
                   </HStack>
                 </NumberInput>
                 <p>-</p>
-                <NumberInput>
+                <NumberInput defaultValue={itemFilters?.priceFilter?.max}>
                   <HStack>
                     <NumberInputField
                       placeholder="Max"
@@ -355,8 +341,12 @@ const Items = ({ address, items, itemFilters, setItemFilters, collectionInfo, lo
                             (innerKey, innerIndex) => {
                               return (
                                 <>
+                                      {/* setItemFilters((prev) => ({
+                                        ...prev,
+                                        attributeFilter: [...prev.attributeFilter, {attributeKey, attributeValue}],
+                                      })); */}
                                   <Checkbox
-                                    defaultChecked={false}
+                                    defaultChecked={itemFilters?.attributeFilter?.filter(item => item.attributeKey === key && item.attributeValue === innerKey).length > 0 ? true : false}
                                     size={"sm"}
                                     className="collection-item-marketplace-filter"
                                     key={innerIndex}
@@ -383,11 +373,12 @@ const Items = ({ address, items, itemFilters, setItemFilters, collectionInfo, lo
         <div className="collection-item-tokens-container">
           <div className="collection-item-token-sorts">
             <HStack gap="20px">
-              <ItemSortSelect options={options} changeSorting={changeSorting} />
+              <ItemSortSelect options={options} changeSorting={changeSorting} selectedItem={selectedItem} setSelectedItem={setSelectedItem}/>
               <InputGroup>
                 <i className="fa-regular fa-magnifying-glass collection-search-bar-lens"></i>
                 <Input
                   placeholder="Search by token ID"
+                  value={searchText}
                   className="collection-items-search-bar"
                   onChange={({target}) => setSearchText(target.value)} 
                 ></Input>
@@ -423,8 +414,7 @@ const SkeletonWrapper = ({ children }) => {
   return <span className="collection-items-single-skeleton">{children}</span>;
 };
 
-const ItemSortSelect = ({ options, changeSorting }) => {
-  const [selectedItem, setSelectedItem] = useState(options[0]);
+const ItemSortSelect = ({ options, changeSorting, selectedItem, setSelectedItem }) => {
   const [active, setActive] = useState(false);
 
   const changeSelector = (option) => {

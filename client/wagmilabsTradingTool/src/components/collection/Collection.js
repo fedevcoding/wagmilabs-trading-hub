@@ -38,25 +38,28 @@ import LivePulsing from '../utility-components/LivePulsing';
 import { formatTime } from '../../utils/formats/formats';
 import getMarketplaceImage from '../../utils/marketplaceImageMapping';
 
-
-
 import copy from 'copy-to-clipboard';
+import { useDebounce } from 'use-debounce';
+import { Badge } from '@chakra-ui/react';
 
 
-    
-// let sortMapping = {
-//     "p-lth": "lowestAsk",
-//     "p-htl": "highestAsk",
-//     "t-htl": "tokenId-desc",
-//     "t-lth": "tokenId-asc",
-//     "r-htl": "rarity",
-// }
+
+
+// Item.js
+const options = [
+    { value: "p-lth", label: "Price: low to high" },
+    { value: "p-htl", label: "Price: high to low" },
+    { value: "t-lth", label: "TokenId: low to high" },
+    { value: "t-htl", label: "TokenId: high to low" },
+    { value: "r-htl", label: "Rarity: high to low" },
+    { value: "r-lth", label: "Rarity: low to high" },
+];
 
 
 const Collection = () => {
 
     const {address} = useParams();
-    // const Web3Api = useMoralisWeb3Api();
+
     const [collectionInfo, setCollectionInfo] = useState({})
     const [extra, setExtra] = useState(false)
     const [isWatchList, setIsWatchList] = useState()
@@ -78,11 +81,12 @@ const Collection = () => {
         },
         tokenId: undefined
     })
-
-
     const [loadingItems, setLoadingItems] = useState(true)
     const [buyNowChecked, setBuyNowChecked] = useState(false)
     const [items, setItems] = useState([])
+    const [searchText, setSearchText] = useState("")
+    const [debounceSearch] = useDebounce(searchText, 400)
+    const [selectedItem, setSelectedItem] = useState(options[0]);
 
 
     useEffect(()=>{
@@ -92,6 +96,8 @@ const Collection = () => {
         }
     }, [address])
 
+
+    //Items.js
     useEffect(()=>{
         address && fetchTokens()
     }, [itemFilters, address])
@@ -137,22 +143,23 @@ const Collection = () => {
                 }
             })
             data = await data.json()
-            const {slug} = data
 
-            let openseaData = await fetch(`https://api.opensea.io/api/v1/collection/${slug}`)
-            openseaData = (await openseaData.json()).collection
+            const openseContractDataApi = await fetch(`https://api.opensea.io/api/v1/asset_contract/${address}`)
+            const openseContractData = await openseContractDataApi.json()
+            const {slug} = openseContractData?.collection || data
 
-            const royalties = openseaData?.dev_seller_fee_basis_point || data?.royalties?.bps || ""
+            const openseaDataApi = await fetch(`https://api.opensea.io/api/v1/collection/${slug}`)
+            const openseaData = (await openseaDataApi.json())?.collection
+
+            const royalties = openseaData?.dev_seller_fee_basis_point || openseContractData?.dev_seller_fee_basis_points || data?.royalties?.bps || ""
             const attributes = openseaData?.traits
-            const createdDate = openseaData?.created_date
+            const createdDate = openseaData?.created_date || openseContractData?.created_date
             const marketCap = openseaData?.stats?.market_cap
             const avgPrice = openseaData?.stats?.average_price
-            const owners = openseaData?.stats?.num_owners
+            const owners = openseaData?.stats?.num_owners || openseContractData?.owner
             const daySales = openseaData?.stats?.one_day_sales
             const totalSales = openseaData?.stats?.total_sales
-
-
-            console.log(attributes)
+            const ercType = openseContractData?.schema_name
 
             data["attributes"] = attributes
             data["collectionRoyalties"] = royalties 
@@ -162,8 +169,8 @@ const Collection = () => {
             data["ownerCount"] = owners 
             data["oneDaySales"] = daySales 
             data["totalSales"] = totalSales 
+            data["ercType"] = ercType
 
-            console.log(data, openseaData)
             setCollectionInfo(data)
             setLoadingCollection(false)
         }
@@ -316,10 +323,16 @@ const Collection = () => {
                 </div>
                 
                 { !loadingCollection &&
-                <div className='collection-info-created-at'>
-                    Creation date: 
-                    <span className='low-opacity'> {collectionInfo.createdAt ? formatTime(collectionInfo.createdAt) : "- - -"}</span>
-                </div>
+                <>
+                    <div className='collection-info-created-at'>
+                        Creation date: 
+                        <span className='low-opacity'> {collectionInfo.createdAt ? formatTime(collectionInfo.createdAt) : "- - -"}</span>
+                    </div>
+
+                    <div className='collection-info-erc-type'>
+                        <Badge colorScheme={"red"}>{collectionInfo?.ercType}</Badge>
+                    </div>
+                </>
                 }
             </div>
 
@@ -476,7 +489,7 @@ const Collection = () => {
 
         {(()=>{
             if(section === "items"){
-                return <Items address={address} items={items} setItems={setItems} itemFilters={itemFilters} setItemFilters={setItemFilters} loadingItems={loadingItems} setLoadingItems={setLoadingItems} buyNowChecked={buyNowChecked} setBuyNowChecked={setBuyNowChecked} collectionInfo={collectionInfo}/>
+                return <Items address={address} items={items} setItems={setItems} itemFilters={itemFilters} setItemFilters={setItemFilters} loadingItems={loadingItems} setLoadingItems={setLoadingItems} buyNowChecked={buyNowChecked} setBuyNowChecked={setBuyNowChecked} collectionInfo={collectionInfo} searchText={searchText} setSearchText={setSearchText} debounceSearch={debounceSearch} selectedItem={selectedItem} setSelectedItem={setSelectedItem} options={options}/>
             }
             else if(section === "liveview"){
                 return <LiveView address={address} items={items} setItems={setItems} itemFilters={itemFilters} setItemFilters={setItemFilters} loadingItems={loadingItems} setLoadingItems={setLoadingItems} buyNowChecked={buyNowChecked} setBuyNowChecked={setBuyNowChecked} collectionInfo={collectionInfo} collectionImage={collectionInfo?.image}/>

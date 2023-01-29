@@ -12,6 +12,10 @@ import moment from 'moment'
 
 import notFound from "../../../../assets/notFound.svg"
 
+
+import {LazyLoadImage} from "react-lazy-load-image-component"
+import { placeholderImage } from '../../../../utils/images'
+
 const defaultTimeFrame = "1H"
 
 const Trending = ({tool, timeFrame, setTimeFrame, resetTime}) => {
@@ -159,7 +163,7 @@ const Trending = ({tool, timeFrame, setTimeFrame, resetTime}) => {
       return (
         <tr onClick={ () =>  window.open(`/collection/${contractAddress}`, '_blank')} className='single-collection-container' key={index}>
           <td className='image-name-container'>
-            <img src={image || question} className="trending-image"></img>
+            <LazyLoadImage src={image} className="trending-image" effect='blur' placeholderSrc={placeholderImage}/>
             <div className='minting-name-date'>
               <p className='trending-name'>{name || "- - -"}</p>
               <p className='trending-created-date'>{creationDay}</p>
