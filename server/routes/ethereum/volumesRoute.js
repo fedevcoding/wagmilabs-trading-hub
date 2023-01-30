@@ -9,8 +9,6 @@ const {
   getVolumesLastDays,
 } = require("../../models/queries/volumes");
 
-const { formatOverviewData } = require("../../services/volumes/utils");
-
 const { lruCache } = require("../../services/cache/lru");
 
 const volumesRoute = express();
@@ -34,8 +32,7 @@ volumesRoute.get("/overview", checkAuth, async (req, res) => {
   const countDays = getCountDays(period);
 
   const getOverviewData = async (marketplaces, countDays) => {
-    const result = await getVolumesLastDays(marketplaces, countDays);
-    return formatOverviewData(result, marketplaces);
+    return await getVolumesLastDays(marketplaces, countDays);
   };
 
   const data = await lruCache(getOverviewData(marketplacesArr, countDays), {

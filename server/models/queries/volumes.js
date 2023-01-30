@@ -36,18 +36,35 @@ const findMarketplaceVolumes = async (marketplace, countDays, fields) => {
 const getVolumesLastDays = async (marketplaces, countDays) => {
   const result = [];
   for (const m of marketplaces) {
-    const volumes = await findMarketplaceVolumes(m.toLowerCase(), countDays, {
-      createdAt: 1,
-      _id: 0,
-      eth_volume: 1,
-      dollar_volume: 1,
-      marketplace: 1,
-      active_traders: 1,
-      count_sales: 1,
+    const pipeline = [
+      {
+        $match: {
+          marketplace: m.toLowerCase(),
+        },
+      },
+      {
+        $sort: { createdAt: -1 },
+      },
+      {
+        $limit: countDays === "all" ? 365 * 10 : parseInt(countDays),
+      },
+      {
+        $group: {
+          _id: "$marketplace",
+          volumeEth: { $sum: "$eth_volume" },
+          volume: { $sum: "$dollar_volume" },
+          traderNum: { $sum: "$active_traders" },
+          saleNum: { $sum: "$count_sales" },
+        },
+      },
+    ];
+    const data = (await Marketplaces.aggregate(pipeline).exec())[0];
+    result.push({
+      ...data,
+      volume: parseInt(data.volume),
+      name: m,
+      volumeEth: +data.volumeEth.toFixed(2),
     });
-    for (const volume of volumes) {
-      result.push(volume);
-    }
   }
   return result;
 };
