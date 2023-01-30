@@ -495,4 +495,53 @@
     position: absolute;
     top: 10px;
     right: 10px;
+    z-index: 99;
+}
+
+
+
+
+
+.nft-listing-modal, .nft-listings-settings-modal{
+    width: 30vw;
+    height: 40vh;
+    background-color: rgb(66 66 66);
+    box-shadow: black 0px 0px 20px 10px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999999999;
+    border-radius: 10px;
+    color: white;
+}
+
+.nft-listings-settings-modal{
+    width: 45vw;
+    height: 57vh;
+    padding: 0 30px;
+}
+
+.nft-listing-modal input, .nft-listing-modal select, .nft-listings-settings-modal input, .nft-listings-settings-modal select {
+    color: white;
+}
+
+.nft-listing-modal option, .nft-listings-settings-modal option {
+    color: black;
+}
+
+
+
+.nft-listing-modal .react-loading-skeleton, .nft-listings-settings-modal .react-loading-skeleton {
+    translate: 0px -5px;
+}
+
+
+.smart-list-modal-container{
+    padding: 0 20px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    /* align-items: center; */
+    justify-content: space-around;
 }

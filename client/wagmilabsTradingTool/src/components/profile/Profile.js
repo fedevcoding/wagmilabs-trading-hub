@@ -233,211 +233,213 @@ const Profile = () => {
         openListingSettings &&
         <Portal>
           <div className='bg-modal'></div>
-          <section className='nft-listing-modal'>
+          <section className='nft-listings-settings-modal'>
             {
               listingSettings ?
                 <>
                   <button onClick={() => toggleListingSettings(false)}  className="smart-listings-close-btn"><i className="fa-solid fa-xmark"></i></button>
-                  <div className='listing-settings-title'>
-                    <p>Smart listing settings</p>
-                  </div>
-
-                  <div className='listing-settings-price'>
-                    <p>Price type:</p>
-                    <div>
-                      <RadioGroup onChange={(value) => modifyStageListing("priceType", value)} value={stageListingSettings.price.type}>
-                        <Stack direction='row'>
-                          <Radio value='break-even'>Break even</Radio>
-                          <Radio value='profit'>Profit</Radio>
-                        </Stack>
-                      </RadioGroup>
+                  
+                  <div className='nft-listing-settings-modal-container'>
+                    <div className='listing-settings-title'>
+                      <p>Smart listing settings</p>
                     </div>
 
-                      {
-                      stageListingSettings.price.type === "profit" &&
-                      <div className='listing-settings-profit-amount'>
-                        <label htmlFor="profit-radio-button">Profit amount</label>
-                        <div className='listing-settings-profit-values'>
-                          <Stack direction={"row"} alignItems="center">
-
-                              <NumberInput value={stageListingSettings?.price?.profitValue}>
-                            <HStack>
-                                <NumberInputField className='listing-settings-value' placeholder='Amount' onChange={(e) => modifyStageListing("profitValue", e.target.value)}/>
-                            </HStack>
-                              </NumberInput>
-                            
-                            <Select name="" id="" className='listing-settings-currency-type' value={stageListingSettings?.price?.profitType} onChange={(e) => modifyStageListing("profitType", e.target.value)}>
-                              <option value="%">%</option>
-                              <option value="eth">Eth</option>
-                              <option value="usd">Usd</option>
-                            </Select>
+                    <div className='listing-settings-price'>
+                      <p>Price type:</p>
+                      <div>
+                        <RadioGroup onChange={(value) => modifyStageListing("priceType", value)} value={stageListingSettings.price.type}>
+                          <Stack direction='row'>
+                            <Radio value='break-even'>Break even</Radio>
+                            <Radio value='profit'>Profit</Radio>
                           </Stack>
-                        </div>
+                        </RadioGroup>
                       </div>
-                      }
+
+                        {
+                        stageListingSettings.price.type === "profit" &&
+                        <div className='listing-settings-profit-amount'>
+                          <label htmlFor="profit-radio-button">Profit amount</label>
+                          <div className='listing-settings-profit-values'>
+                            <Stack direction={"row"} alignItems="center">
+
+                                <NumberInput value={stageListingSettings?.price?.profitValue}>
+                              <HStack>
+                                  <NumberInputField className='listing-settings-value' placeholder='Amount' onChange={(e) => modifyStageListing("profitValue", e.target.value)}/>
+                              </HStack>
+                                </NumberInput>
+                              
+                              <Select name="" id="" className='listing-settings-currency-type' value={stageListingSettings?.price?.profitType} onChange={(e) => modifyStageListing("profitType", e.target.value)}>
+                                <option value="%">%</option>
+                                <option value="eth">Eth</option>
+                                <option value="usd">Usd</option>
+                              </Select>
+                            </Stack>
+                          </div>
+                        </div>
+                        }
+                    </div>
+
+                    <div className='listing-settings-time'>
+                      <div>Listing will be active for:</div>
+
+                      <HStack>
+
+                        <Select id="listing-settings-months" onChange={e => modifyStageListing("months", e.target.value)} value={stageListingSettings?.time?.months} size="sm">
+                          <option value="0">0</option>
+                          <option value="1">1</option>
+                          <option value="2">2</option>
+                          <option value="3">3</option>
+                          <option value="4">4</option>
+                          <option value="5">5</option>
+                          <option value="6">6</option>
+                        </Select>
+                        <label htmlFor="listing-settings-months">Months</label>
+
+
+                        <Select id="listing-settings-days" onChange={e => modifyStageListing("days", e.target.value)} value={stageListingSettings?.time?.days} size="sm">
+                          <option value="0">0</option>
+                          <option value="1">1</option>
+                          <option value="2">2</option>
+                          <option value="3">3</option>
+                          <option value="4">4</option>
+                          <option value="5">5</option>
+                          <option value="6">6</option>
+                          <option value="7">7</option>
+                          <option value="8">8</option>
+                          <option value="9">9</option>
+                          <option value="10">10</option>
+                          <option value="11">11</option>
+                          <option value="12">12</option>
+                          <option value="13">13</option>
+                          <option value="14">14</option>
+                          <option value="15">15</option>
+                          <option value="16">16</option>
+                          <option value="17">17</option>
+                          <option value="18">18</option>
+                          <option value="19">19</option>
+                          <option value="20">20</option>
+                          <option value="21">21</option>
+                          <option value="22">22</option>
+                          <option value="23">23</option>
+                          <option value="24">24</option>
+                          <option value="25">25</option>
+                          <option value="26">26</option>
+                          <option value="27">27</option>
+                          <option value="28">28</option>
+                          <option value="29">29</option>
+                          <option value="30">30</option>
+                        </Select>
+                        <label htmlFor="listing-settings-days">Days</label>
+
+
+                        <Select id="listing-settings-hours" onChange={e => modifyStageListing("hours", e.target.value)} value={stageListingSettings?.time?.hours} size="sm">
+                          <option value="0">0</option>
+                          <option value="1">1</option>
+                          <option value="2">2</option>
+                          <option value="3">3</option>
+                          <option value="4">4</option>
+                          <option value="5">5</option>
+                          <option value="6">6</option>
+                          <option value="7">7</option>
+                          <option value="8">8</option>
+                          <option value="9">9</option>
+                          <option value="10">10</option>
+                          <option value="11">11</option>
+                          <option value="12">12</option>
+                          <option value="13">13</option>
+                          <option value="14">14</option>
+                          <option value="15">15</option>
+                          <option value="16">16</option>
+                          <option value="17">17</option>
+                          <option value="18">18</option>
+                          <option value="19">19</option>
+                          <option value="20">20</option>
+                          <option value="21">21</option>
+                          <option value="22">22</option>
+                          <option value="23">23</option>
+                          <option value="24">24</option>
+                        </Select>
+                        <label htmlFor="listing-settings-hours">hours</label>
+
+                        <Select id="listing-settings-minutes" onChange={e => modifyStageListing("minutes", e.target.value)} value={stageListingSettings?.time?.minutes} size="sm">
+                          <option value="0">0</option>
+                          <option value="1">1</option>
+                          <option value="2">2</option>
+                          <option value="3">3</option>
+                          <option value="4">4</option>
+                          <option value="5">5</option>
+                          <option value="6">6</option>
+                          <option value="7">7</option>
+                          <option value="8">8</option>
+                          <option value="9">9</option>
+                          <option value="10">10</option>
+                          <option value="11">11</option>
+                          <option value="12">12</option>
+                          <option value="13">13</option>
+                          <option value="14">14</option>
+                          <option value="15">15</option>
+                          <option value="16">16</option>
+                          <option value="17">17</option>
+                          <option value="18">18</option>
+                          <option value="19">19</option>
+                          <option value="20">20</option>
+                          <option value="21">21</option>
+                          <option value="22">22</option>
+                          <option value="23">23</option>
+                          <option value="24">24</option>
+                          <option value="25">25</option>
+                          <option value="26">26</option>
+                          <option value="27">27</option>
+                          <option value="28">28</option>
+                          <option value="29">29</option>
+                          <option value="39">30</option>
+                          <option value="31">31</option>
+                          <option value="32">32</option>
+                          <option value="33">33</option>
+                          <option value="34">34</option>
+                          <option value="35">35</option>
+                          <option value="36">36</option>
+                          <option value="37">37</option>
+                          <option value="38">38</option>
+                          <option value="39">39</option>
+                          <option value="40">40</option>
+                          <option value="41">41</option>
+                          <option value="42">42</option>
+                          <option value="43">43</option>
+                          <option value="44">44</option>
+                          <option value="45">45</option>
+                          <option value="46">46</option>
+                          <option value="47">47</option>
+                          <option value="48">48</option>
+                          <option value="49">49</option>
+                          <option value="50">50</option>
+                          <option value="51">51</option>
+                          <option value="52">52</option>
+                          <option value="53">53</option>
+                          <option value="54">54</option>
+                          <option value="55">55</option>
+                          <option value="56">56</option>
+                          <option value="57">57</option>
+                          <option value="58">58</option>
+                          <option value="59">59</option>
+                          <option value="60">60</option>
+                        </Select>
+                        <label htmlFor="listing-settings-minutes">Minutes</label>
+                      </HStack>
+                    </div>
+
+                    <div className='listing-settings-marketplace'>
+                      <label htmlFor="listing-settings-marketplace">Marketplace:</label>
+                      <HStack>
+                        <Select name="" id="listing-settings-marketplace" onChange={e => modifyStageListing("marketplace", e.target.value)} value={stageListingSettings.marketplace}>
+                          <option value="opensea">Opensea</option>
+                          <option value="x2y2">X2Y2</option>
+                          <option value="looksrare">LooksRare</option>
+                        </Select>
+                        <Button onClick={saveListingSettings}>Save</Button>
+                      </HStack>
+                    </div>
                   </div>
-
-                  <div className='listing-settings-time'>
-                    <div>Listing will be active for:</div>
-
-                    <HStack>
-
-                      <Select id="listing-settings-months" onChange={e => modifyStageListing("months", e.target.value)} value={stageListingSettings?.time?.months} size="sm">
-                        <option value="0">0</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                        <option value="6">6</option>
-                      </Select>
-                      <label htmlFor="listing-settings-months">Months</label>
-
-
-                      <Select id="listing-settings-days" onChange={e => modifyStageListing("days", e.target.value)} value={stageListingSettings?.time?.days} size="sm">
-                        <option value="0">0</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                        <option value="6">6</option>
-                        <option value="7">7</option>
-                        <option value="8">8</option>
-                        <option value="9">9</option>
-                        <option value="10">10</option>
-                        <option value="11">11</option>
-                        <option value="12">12</option>
-                        <option value="13">13</option>
-                        <option value="14">14</option>
-                        <option value="15">15</option>
-                        <option value="16">16</option>
-                        <option value="17">17</option>
-                        <option value="18">18</option>
-                        <option value="19">19</option>
-                        <option value="20">20</option>
-                        <option value="21">21</option>
-                        <option value="22">22</option>
-                        <option value="23">23</option>
-                        <option value="24">24</option>
-                        <option value="25">25</option>
-                        <option value="26">26</option>
-                        <option value="27">27</option>
-                        <option value="28">28</option>
-                        <option value="29">29</option>
-                        <option value="30">30</option>
-                      </Select>
-                      <label htmlFor="listing-settings-days">Days</label>
-
-
-                      <Select id="listing-settings-hours" onChange={e => modifyStageListing("hours", e.target.value)} value={stageListingSettings?.time?.hours} size="sm">
-                        <option value="0">0</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                        <option value="6">6</option>
-                        <option value="7">7</option>
-                        <option value="8">8</option>
-                        <option value="9">9</option>
-                        <option value="10">10</option>
-                        <option value="11">11</option>
-                        <option value="12">12</option>
-                        <option value="13">13</option>
-                        <option value="14">14</option>
-                        <option value="15">15</option>
-                        <option value="16">16</option>
-                        <option value="17">17</option>
-                        <option value="18">18</option>
-                        <option value="19">19</option>
-                        <option value="20">20</option>
-                        <option value="21">21</option>
-                        <option value="22">22</option>
-                        <option value="23">23</option>
-                        <option value="24">24</option>
-                      </Select>
-                      <label htmlFor="listing-settings-hours">hours</label>
-
-                      <Select id="listing-settings-minutes" onChange={e => modifyStageListing("minutes", e.target.value)} value={stageListingSettings?.time?.minutes} size="sm">
-                        <option value="0">0</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                        <option value="6">6</option>
-                        <option value="7">7</option>
-                        <option value="8">8</option>
-                        <option value="9">9</option>
-                        <option value="10">10</option>
-                        <option value="11">11</option>
-                        <option value="12">12</option>
-                        <option value="13">13</option>
-                        <option value="14">14</option>
-                        <option value="15">15</option>
-                        <option value="16">16</option>
-                        <option value="17">17</option>
-                        <option value="18">18</option>
-                        <option value="19">19</option>
-                        <option value="20">20</option>
-                        <option value="21">21</option>
-                        <option value="22">22</option>
-                        <option value="23">23</option>
-                        <option value="24">24</option>
-                        <option value="25">25</option>
-                        <option value="26">26</option>
-                        <option value="27">27</option>
-                        <option value="28">28</option>
-                        <option value="29">29</option>
-                        <option value="39">30</option>
-                        <option value="31">31</option>
-                        <option value="32">32</option>
-                        <option value="33">33</option>
-                        <option value="34">34</option>
-                        <option value="35">35</option>
-                        <option value="36">36</option>
-                        <option value="37">37</option>
-                        <option value="38">38</option>
-                        <option value="39">39</option>
-                        <option value="40">40</option>
-                        <option value="41">41</option>
-                        <option value="42">42</option>
-                        <option value="43">43</option>
-                        <option value="44">44</option>
-                        <option value="45">45</option>
-                        <option value="46">46</option>
-                        <option value="47">47</option>
-                        <option value="48">48</option>
-                        <option value="49">49</option>
-                        <option value="50">50</option>
-                        <option value="51">51</option>
-                        <option value="52">52</option>
-                        <option value="53">53</option>
-                        <option value="54">54</option>
-                        <option value="55">55</option>
-                        <option value="56">56</option>
-                        <option value="57">57</option>
-                        <option value="58">58</option>
-                        <option value="59">59</option>
-                        <option value="60">60</option>
-                      </Select>
-                      <label htmlFor="listing-settings-minutes">Minutes</label>
-                    </HStack>
-                  </div>
-
-                  <div className='listing-settings-marketplace'>
-                    <label htmlFor="listing-settings-marketplace">Marketplace:</label>
-                    <HStack>
-                      <Select name="" id="listing-settings-marketplace" onChange={e => modifyStageListing("marketplace", e.target.value)} value={stageListingSettings.marketplace}>
-                        <option value="opensea">Opensea</option>
-                        <option value="x2y2">X2Y2</option>
-                        <option value="looksrare">LooksRare</option>
-                      </Select>
-                      <Button onClick={saveListingSettings}>Save</Button>
-                    </HStack>
-                  </div>
-
                 </>
                 :
                 <>loading</>

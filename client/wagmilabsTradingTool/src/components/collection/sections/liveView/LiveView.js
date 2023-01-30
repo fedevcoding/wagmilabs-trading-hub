@@ -44,8 +44,6 @@ const LiveView = ({address, collectionImage}) => {
 
         socket.on("sale", saleData => {
 
-            console.log("new sale")
-            
             const {tokenId, tokenAddress, timestamp, marketplace, hash, value} = saleData
             const {name, image} = saleData?.tokenInfo
             if(tokenAddress.toLowerCase() === address.toLowerCase()){
@@ -56,7 +54,7 @@ const LiveView = ({address, collectionImage}) => {
 
         socket.on("listing", listingData => {
 
-            const {contractAddress, tokenId, price, image, name, timestamp} = listingData.data
+            const {contractAddress, tokenId, price, image, name, timestamp} = listingData
             const {marketplace} = listingData
 
             const dataObj = {
@@ -79,8 +77,6 @@ const LiveView = ({address, collectionImage}) => {
                     }
                 }
             }
-
-            console.log(listingData)
 
             if(contractAddress.toLowerCase() === address.toLowerCase()){
                 setListings(oldListings => [dataObj, ...oldListings])

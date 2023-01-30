@@ -15,6 +15,7 @@ import { Button, Checkbox } from '@chakra-ui/react'
 import wwwImg from "../../assets/www.svg"
 import twitterImg from "../../assets/twitter2.svg"
 import discordImg from "../../assets/discord2.svg"
+import Loader from '../utility-components/Loaders/Loader'
 
 
 const message = `Welcome to Wagmi Labs!
@@ -120,7 +121,7 @@ const Login = ({setConnected}) => {
                                 I accept the <a className='terms-and-conditions-link' href="" target={"_blank"}>terms and conditions.</a>
                             </Checkbox>
                         </div>
-                        {walletConnected && <Button className={`sign-message-button ${acceptTerms && "active"}`} onClick={callSignMessage}>{loadingSign ? <Loader /> : "Sign message"}</Button>}
+                        {walletConnected && <Button className={`sign-message-button ${acceptTerms && "active"}`} onClick={callSignMessage}>{loadingSign ? <Loader width={"25px"} height={"25px"} /> : "Sign message"}</Button>}
                     </div>
                     </>
                     :
@@ -154,15 +155,3 @@ const Login = ({setConnected}) => {
 }
 
 export default Login
-
-
-
-
-
-
-const Loader = () => {
-
-    return(
-        <div class="lazyloader"></div>
-    )
-}

@@ -76,6 +76,7 @@ const userDetailsRoute = require("./routes/ethereum/profile/userDetailsRoute.js"
 const activityChartRoute = require("./routes/ethereum/charts/activityChartRoute.js")
 const collectionActivityRoute = require("./routes/ethereum/collections/collectionActivityRoute.js")
 const tokenLisrPriceRoute = require("./routes/ethereum/profile/tokenLisrPriceRoute.js")
+const profileActivityRoute = require("./routes/ethereum/profile/profileActivityRoute.js")
 const io = new Server(server);
 
 app.set('socketio', io);
@@ -133,7 +134,7 @@ io.on('connection', (socket) => {
 function newListing(listingData){
 
     try{
-        const contractAddress = listingData?.data?.contractAddress?.toLowerCase()
+        const contractAddress = listingData?.contractAddress?.toLowerCase()
         const channel = `listings${contractAddress}`
         io.sockets.to(channel).emit('listing', listingData);
     }
@@ -188,6 +189,7 @@ app.use("/api/v1/wagmilabs/userDetails", userDetailsRoute)
 app.use("/api/v1/wagmilabs/activityChart", activityChartRoute)
 app.use("/api/v1/wagmilabs/collectionActivity", collectionActivityRoute)
 app.use("/api/v1/wagmilabs/tokenListPrice", tokenLisrPriceRoute)
+app.use("/api/v1/wagmilabs/profileActivity", profileActivityRoute)
 
 app.use("/api/v1/wagmilabs/userBalances", userBalancesRoute)
 app.use("/api/v1/wagmilabs/searchCollection", searchCollectionsRoute)

@@ -20,6 +20,7 @@ import { fetchSigner } from '@wagmi/core'
 import { Button, Tooltip } from '@chakra-ui/react'
 import {useDebounce} from "use-debounce"
 import { UserDataContext } from '../../../../context/userContext'
+import Loader from '../../../utility-components/Loaders/Loader'
 
 
 const sortItemsOptions = [
@@ -182,38 +183,52 @@ const Nfts = ({nftsCollectionFilter, setNftsCollectionFilter, searchCollectionTe
 
 
     function openSmartListingModal(tokenId, contractAddress, floorPrice){
+      document.body.style.overflow = "hidden"
       setShowQuickListingModal(true)
       setQuickListData({tokenId, contractAddress, floorPrice})
     }
 
     function closeSmartListingModal(){
+      document.body.style.overflow = "unset"
       setShowQuickListingModal(false)
       setQuickListData({})
     }
 
     
-    async function listNft(contractAddress, tokenId, weiPrice){
-      const signer = await fetchSigner()
-      const marketplace = listingSettings.marketplace
-      const expirationTime = ((getListingExpirationDate(listingSettings).getTime()) / 1000).toString()
-      const orderbook = marketListingMapping[marketplace].orderbook
-      const orderKind = marketListingMapping[marketplace].orderKind
+    async function listNft(setConfirmingList){
 
-      weiPrice = (weiPrice * 1000000000000000000).toString()
+      try{
+        setConfirmingList(true)
   
-      getClient()?.actions.listToken({
-        listings: [{  
-                token: `${contractAddress}:${tokenId}`,
-                weiPrice,
-                orderbook,
-                orderKind,
-                expirationTime  
-        }],
-        signer,
-        onProgress: (steps) => {
-          console.log(steps)
-        }
-      })
+        const {contractAddress, tokenId, listingPrice} = quickListData
+  
+        const signer = await fetchSigner()
+        const marketplace = listingSettings.marketplace
+        const expirationTime = ((getListingExpirationDate(listingSettings).getTime()) / 1000).toString()
+        const orderbook = marketListingMapping[marketplace].orderbook
+        const orderKind = marketListingMapping[marketplace].orderKind
+  
+        const weiPrice = (listingPrice * 1000000000000000000).toString()
+    
+        await getClient()?.actions.listToken({
+          listings: [{  
+                  token: `${contractAddress}:${tokenId}`,
+                  weiPrice,
+                  orderbook,
+                  orderKind,
+                  expirationTime  
+          }],
+          signer,
+          onProgress: (steps) => {
+            console.log(steps)
+          },
+        })
+        setConfirmingList(false)
+      }
+      catch(e){
+        setConfirmingList(false)
+      }
+
     }
 
 
@@ -459,6 +474,7 @@ const Box = ({children}) => {
 const SmartListModal = ({quickListData, listingSettings, listNft, closeSmartListingModal, ethPrice, setQuickListData}) => {
 
   const [loadingData, setLoadingData] = useState(true)
+  const [confirmingList, setConfirmingList] = useState(false)
 
   useEffect(()=>{
     getTokenData()
@@ -491,9 +507,6 @@ const SmartListModal = ({quickListData, listingSettings, listNft, closeSmartList
     setLoadingData(false)
   }
 
-
-
-
   return(
     <>
       <Portal>
@@ -506,22 +519,26 @@ const SmartListModal = ({quickListData, listingSettings, listNft, closeSmartList
 
           {
             loadingData ?
-            <p>Loading listing price...</p>
+
+            <SkeletonTheme baseColor="#202020" highlightColor="#444" height={"100%"} borderRadius={"10px"}>
+              <Skeleton count={1}/>
+            </SkeletonTheme>
             :
-            <>
-              <br/>
-              <br/>
-              You are going to list your NFT at {quickListData?.listingPrice} on {listingSettings?.marketplace?.toUpperCase()}
-              <br/>
-              <br/>
-              Collection floor price: {quickListData.floorPrice}
-              <br/>
-              <br/>
-              Listing will expire:{moment(getListingExpirationDate(listingSettings)).fromNow()}
-              <br/>
-              <br/>
-              <Button onClick={() => {listNft(quickListData.contractAddress, quickListData.tokenId, quickListData?.listingPrice)}}>Confirm</Button>
-            </>
+            <div className='smart-list-modal-container'>
+              <p>
+                You are going to list your NFT at {quickListData?.listingPrice} on {listingSettings?.marketplace?.toUpperCase()}
+              </p>
+
+              <p>
+                Collection floor price: {quickListData?.floorPrice}
+              </p>
+
+              <p>
+                Listing will expire: {moment(getListingExpirationDate(listingSettings)).format("DD/MM/YYYY hh:mm A")}
+              </p>
+
+              <Button onClick={() => !confirmingList && listNft(setConfirmingList)}>{confirmingList ? <Loader width={"20px"} height={"20px"}/> : "Confirm"}</Button>
+            </div>
           }
         </div>
       </Portal>
