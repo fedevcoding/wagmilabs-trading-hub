@@ -2,20 +2,21 @@ import React from "react";
 import baseUrl from "../../variables/baseUrl";
 
 export function useGetNews() {
-  const [news, setNews] = React.useState(null);
+  const [news, setNews] = React.useState({});
 
-  (async () => {
-    setNews(
-      await (
-        await fetch(`${baseUrl}/feed/list`, {
-          headers: {
-            "x-auth-token": localStorage.jsonwebtoken,
-          },
-        })
-      ).json()
-    );
-  })();
+  React.useEffect(() => {
+    (async () => {
+      setNews(
+        await (
+          await fetch(`${baseUrl}/feed/list`, {
+            headers: {
+              "x-auth-token": localStorage.jsonwebtoken,
+            },
+          })
+        ).json()
+      );
+    })();
+  }, []);
 
-  console.log(news);
   return news;
 }

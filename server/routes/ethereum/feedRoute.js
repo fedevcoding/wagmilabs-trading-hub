@@ -9,7 +9,7 @@ feedRoute.get("/list", checkAuth, async (req, res) => {
   const feeds = await lruCache(
     (
       await fetch(
-        `https://public-api.luckytrader.com/news?limit=10&offset=10`,
+        `https://public-api.luckytrader.com/news?limit=20&offset=10`,
         {
           headers: {
             "x-api-key": "JSeT6UcNZo2JCStayI8KV6aZnYYzBPOX9yHuSKb8",

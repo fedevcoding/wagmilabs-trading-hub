@@ -1,3 +1,5 @@
 import "./style.css";
 
-export const Col = ({ children }) => <div className="col">{children}</div>;
+export const Col = ({ children, className = "" }) => (
+  <div className={`col ${className}`}>{children}</div>
+);

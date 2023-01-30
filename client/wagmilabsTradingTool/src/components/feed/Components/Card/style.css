@@ -1,0 +1,74 @@
+#page-feed .card {
+    background-color: var(--secondary-color);
+    border-radius: 10px;
+    padding: 1rem;
+    margin-bottom: 2rem;
+    padding: 1rem;
+    width: calc(50% - 4rem);
+    margin: 1rem;
+    cursor: pointer;
+    position: relative;
+}
+
+#page-feed .card:hover {
+    box-shadow: 0 0 1rem 0 #aaa;
+}
+
+#page-feed .card .info {
+    padding-right: 1rem;
+    margin-bottom: 2.5rem;
+}
+
+#page-feed .card .info .date {
+    position: absolute;
+    bottom: 1rem;
+    left: 1rem;
+}
+
+#page-feed .card p {
+    margin-top: 1rem;
+}
+
+#page-feed .card img {
+    width: 100%;
+    border-radius: 10px;
+}
+
+#page-feed .card .tags {
+    margin-top: 0.5rem;
+}
+
+#page-feed .card .tag {
+    background-color: black;
+    padding: 0.2rem 0.5rem;
+    border-radius: 0.3rem;
+    display: inline-block;
+    font-size: 12px;
+}
+
+#page-feed .card .tag + .tag {
+    margin-left: 0.5rem;
+}
+
+#page-feed .card .contract {
+    color: var(--light-gray);
+    font-size: 12px;
+    margin-top: 0.5rem;
+}
+
+@media (max-width: 800px) {
+    #page-feed .card .row {
+        display: block;
+    }
+    #page-feed .card .col + .col {
+        margin-left: 0;
+    }
+
+    #page-feed .card {
+        padding-bottom: 2.5rem;
+    }
+
+    #page-feed .card .info {
+        margin-bottom: 1rem;
+    }
+}

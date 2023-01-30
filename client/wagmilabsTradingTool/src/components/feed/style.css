@@ -1,3 +1,25 @@
-/* #page-feed {
-     
-} */
+#page-feed  .cards {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin: 1rem -1rem;
+}
+
+@media (max-width: 800px) {
+    #page-feed .cards {
+        display: block;
+        margin: 1rem 0;
+    }
+
+    #page-feed .cards > a {
+        display: block;
+        width: 100%;
+        box-sizing: border-box;
+        margin: 0;
+    }
+
+    #page-feed .card + .card {
+        margin-top: 2rem;
+    }
+}
+  

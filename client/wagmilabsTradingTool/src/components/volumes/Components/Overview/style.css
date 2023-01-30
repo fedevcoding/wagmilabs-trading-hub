@@ -1,5 +1,5 @@
 .chart-box {
-    background-color: #2E2E30;
+    background-color: var(--secondary-color);
     border-radius: 10px;
     min-height: 400px;
 }
@@ -17,7 +17,7 @@
 }
 
 .overview .leader-board {
-    background-color: #2E2E30;
+    background-color: var(--secondary-color);
     border-radius: 10px;
     padding: 1rem;
     margin-bottom: 3rem;
