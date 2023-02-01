@@ -196,6 +196,7 @@ profileActivityRoute.get("/", checkAuth, async (req, res)=> {
             COUNT(transaction_hash) AS count
         FROM sales s
         WHERE s.transaction_hash = sales.transaction_hash) AS tx_count
+        
     ${price2Query(minPrice, maxPrice)}
     ORDER BY createdAt DESC
     LIMIT 200`
