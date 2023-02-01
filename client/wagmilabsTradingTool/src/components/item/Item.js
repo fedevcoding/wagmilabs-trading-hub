@@ -1,37 +1,18 @@
-import React, {useEffect, useState} from 'react'
-import { useParams, useNavigate } from 'react-router-dom';
-import "./item.css"
-import fullStar from "../../assets/full-star.png"
-import emptyStar from "../../assets/empty-star.png"
-import removeFromWatchList from '../../utils/database-functions/removeFromWatchList';
-import addToWatchList from '../../utils/database-functions/addToWatchList';
-import getWatchListCollections from '../../utils/database-functions/getWatchList';
+import React from "react";
+import { useParams } from "react-router-dom";
+import { LoadingSpinner, PageWrapper } from "../utility-components";
+import { useGetData } from "./useGetData";
 
-const Item = () => {
-  const params = useParams();
-  const navigate = useNavigate()
+import "./style.css";
 
-  const [itemData, setItemData] = useState(null)
-  const [isWatchList, setIsWatchList] = useState()
+const Item = React.memo(() => {
+  const { address, id } = useParams();
+  const [details, isLoading] = useGetData(address, id);
 
-  useEffect(()=>{
-        getWatchListCollections("nft", `${params.address}/${params.id}`, setIsWatchList)
-  }, [])
-
-  useEffect(()=>{
-    async function getNftInfo(){
-      let data = await fetch(`https://api.opensea.io/api/v1/asset/${params.address}/${params.id}/?include_orders=false`)
-      data = await data.json()
-
-      console.log(data)
-      setItemData([data])
-    }
-    getNftInfo()
-  }, [])
-
-
-  return (
-    <div>
+  // eslint-disable-next-line no-lone-blocks
+  {
+    /**
+  <div>
       {
         itemData && itemData.map(item => {
           const image_url = item?.image_url
@@ -45,7 +26,6 @@ const Item = () => {
                 <div className='item-name-container'>
                   <div className='item-star-container'>
                     <div className='item-name'>{name}</div>
-                    <img onClick={isWatchList ? () => removeFromWatchList("nft", `${params.address}/${params.id}`, setIsWatchList) : () => addToWatchList("nft", `${params.address}/${params.id}`, setIsWatchList)} className='starWatchlist' src={isWatchList ? fullStar : emptyStar} alt="" />
                   </div>
 
                   <div className='item-collection-info' onClick={()=> navigate(`/collection/${params.address}`)}>
@@ -60,7 +40,14 @@ const Item = () => {
         })
       }
     </div>
-  )
-}
+ */
+  }
 
-export default Item
+  return (
+    <PageWrapper page="token-detail">
+      {(details && !isLoading && <h1>Data</h1>) || <LoadingSpinner />}
+    </PageWrapper>
+  );
+});
+
+export default Item;

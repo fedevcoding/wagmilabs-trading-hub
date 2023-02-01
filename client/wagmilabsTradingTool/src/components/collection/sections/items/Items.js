@@ -173,7 +173,7 @@ const Items = ({ address, items, itemFilters, setItemFilters, collectionInfo, lo
                   src={image || collectionImage}
                   alt=""
                   className="collection-single-item-image"
-                  onClick={()=> navigate(`/collection/${collectionId}/token/${tokenId}`)}
+                  onClick={()=> navigate(`/item/${collectionId}/${tokenId}`)}
                 />
 
                 {isListed && (

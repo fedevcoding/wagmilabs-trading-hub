@@ -1,5 +1,5 @@
 import React from "react";
-import baseUrl from "../../../variables/baseUrl";
+import baseUrl from "../../variables/baseUrl";
 
 export function useGetData(address, id) {
   const [details, setDetails] = React.useState(null);
