@@ -1,0 +1,31 @@
+
+#page-token-detail .item-name-container {
+    margin-left: 30px;
+}
+
+#page-token-detail .item-name{
+    font-size: 25px;
+}
+
+#page-token-detail .item-collection-name {
+    vertical-align: middle;
+    margin-left: 10px;
+}
+
+#page-token-detail .item-collection-image {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+}
+
+#page-token-detail .item-collection-info {
+    margin-top: 15px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+#page-token-detail .item-star-container {
+    display: flex;
+    align-items: center;
+}

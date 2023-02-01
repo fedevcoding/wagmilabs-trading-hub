@@ -1,3 +1,8 @@
+#page-token-detail {
+    margin-top: 2rem;
+    padding-bottom: 3rem;
+}
+
 #page-token-detail .loading {
     margin: 0 auto;
 }
@@ -8,51 +13,6 @@
     height: 100px;
 }
 
-#page-token-detail .item-image {
-    width: 350px;
-    height: 350px;
-    border-radius: 20px;
-}
-
-#page-token-detail .item-container {
+#page-token-detail .nft-container {
     display: flex;
-}
-
-#page-token-detail .item-image-container {
-    margin-left: 50px;
-    font-family: inherit;
-    margin-top: 50px;
-    display: flex;
-    color: white;
-}
-
-#page-token-detail .item-name-container {
-    margin-left: 30px;
-}
-
-#page-token-detail .item-name{
-    font-size: 25px;
-}
-
-#page-token-detail .item-collection-name {
-    vertical-align: middle;
-    margin-left: 10px;
-}
-
-#page-token-detail .item-collection-image {
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-}
-
-#page-token-detail .item-collection-info {
-    margin-top: 15px;
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-}
-
-#page-token-detail .item-star-container {
-    display: flex;
-    align-items: center;
 }
