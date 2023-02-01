@@ -30,12 +30,14 @@ import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import getMarketplaceImage from "../../../../utils/marketplaceImageMapping";
 import {useDebounce} from "use-debounce"
 import useFirstRender from "../../../../custom-hooks/useFirstRender";
+import { useNavigate } from "react-router-dom";
 
 
 const Items = ({ address, items, itemFilters, setItemFilters, collectionInfo, loadingItems, searchText, setSearchText, debounceSearch, options, selectedItem, setSelectedItem}) => {
 
   const { setUserCartItems, gasSettings } = useContext(UserDataContext);
   const firstRender = useFirstRender();
+  const navigate = useNavigate()
 
 
 
@@ -149,6 +151,7 @@ const Items = ({ address, items, itemFilters, setItemFilters, collectionInfo, lo
       items && items.map((item, index) => {
         const { tokenId, name, image, rarityRank } = item?.token;
 
+        const collectionId = item?.token?.collection?.id;
         const collectionName = item?.token?.collection?.name
         const collectionImage = item?.token?.collection?.image;
 
@@ -170,6 +173,7 @@ const Items = ({ address, items, itemFilters, setItemFilters, collectionInfo, lo
                   src={image || collectionImage}
                   alt=""
                   className="collection-single-item-image"
+                  onClick={()=> navigate(`/collection/${collectionId}/token/${tokenId}`)}
                 />
 
                 {isListed && (

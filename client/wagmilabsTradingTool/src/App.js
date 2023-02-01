@@ -6,6 +6,7 @@ import { useState, useEffect, useRef, useMemo } from "react";
 import Header from "./components/header/Header";
 import Home from "./components/home/Home"
 import Collection from "./components/collection/Collection"
+import TokenDetail from "./components/collection/token/Detail"
 import Calculators from "./components/calculators/Calculators"
 import Volumes from "./components/volumes/Volumes"
 import Feed from "./components/feed/Feed"
@@ -211,6 +212,7 @@ function App() {
                         } />
 
                         <Route exact path='/collection/:address' element={<><Header /> <Collection /> <Footer /> </>}/>
+                        <Route exact path='/collection/:address/token/:id' element={<><Header /> <TokenDetail /> <Footer /> </>}/>
 
                         <Route exact path='/item/:address/:id' element={<><Header /><Item /><Footer /></>}/>
 

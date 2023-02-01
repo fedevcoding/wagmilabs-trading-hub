@@ -27,6 +27,7 @@ const userBalancesRoute = require("./routes/ethereum/profile/userBalancesRoute.j
 const profileStatsRoute = require("./routes/ethereum/profile/profileStatsRoute.js")
 const volumesRoute = require("./routes/ethereum/volumesRoute.js")
 const feedRoute = require("./routes/ethereum/feedRoute.js")
+const tokenRoute = require("./routes/ethereum/collections/token/tokenRoute.js")
 //
 
 
@@ -195,6 +196,8 @@ app.use("/api/v1/wagmilabs/profileActivity", profileActivityRoute)
 app.use("/api/v1/wagmilabs/userBalances", userBalancesRoute)
 app.use("/api/v1/wagmilabs/searchCollection", searchCollectionsRoute)
 app.use("/api/v1/wagmilabs/collectionInfo", collectionInfoRoute)
+app.use("/api/v1/wagmilabs/collection", tokenRoute)
+
 app.use("/api/v1/wagmilabs/profileItems", profileItemsRoute)
 app.use("/api/v1/wagmilabs/profileCollections", profileCollectionsRoute)
 app.use("/api/v1/wagmilabs/breakEven", breakEvenRoute)
