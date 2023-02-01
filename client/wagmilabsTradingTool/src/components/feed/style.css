@@ -1,4 +1,22 @@
-#page-feed  .cards {
+#page-feed {
+    padding-bottom: 3rem;
+}
+
+#page-feed #powered-by {
+    cursor: pointer;
+}
+
+#page-feed .loading {
+    margin: 0 auto;
+}
+
+#page-feed .spinner {
+    margin: 5rem 0;
+    width: 100px;
+    height: 100px;
+}
+
+#page-feed .cards {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;

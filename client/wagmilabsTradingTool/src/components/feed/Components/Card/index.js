@@ -44,7 +44,7 @@ export const Card = React.memo(({ news }) => {
           )) ||
             ""}
           <b className="date">
-            {`${moment(publishedAt).utc().format("MMM DD, YYYY HH:mm:ss")} GMT`}
+            {`${moment(publishedAt).utc().format("MMM DD, YYYY HH:mm")} GMT`}
           </b>
         </Col>
         <Col>

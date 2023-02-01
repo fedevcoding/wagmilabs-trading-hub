@@ -6,10 +6,15 @@ const { lruCache } = require("../../services/cache/lru");
 const feedRoute = express();
 
 feedRoute.get("/list", checkAuth, async (req, res) => {
+  const limit = 20;
+  const { page } = req.query;
+
   const feeds = await lruCache(
     (
       await fetch(
-        `https://public-api.luckytrader.com/news?limit=20&offset=10`,
+        `https://public-api.luckytrader.com/news?limit=${limit}&offset=${
+          (page - 1) * limit
+        }`,
         {
           headers: {
             "x-api-key": "JSeT6UcNZo2JCStayI8KV6aZnYYzBPOX9yHuSKb8",
@@ -18,8 +23,8 @@ feedRoute.get("/list", checkAuth, async (req, res) => {
       )
     ).json(),
     {
-      key: `feeds#list`,
-      ttl: 60 * 60 * 1000, // 1h,
+      key: `feeds#list${page}`,
+      ttl: 30 * 60 * 1000, // 30 min,
     }
   );
 

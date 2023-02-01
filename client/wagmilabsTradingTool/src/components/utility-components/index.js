@@ -6,3 +6,4 @@ export { PageWrapper } from "./PageWrapper";
 export { Row } from "./Row";
 export { Col } from "./Col";
 export { LoadingSpinner } from "./LoadingSpinner";
+export { Pagination } from "./Pagination";
