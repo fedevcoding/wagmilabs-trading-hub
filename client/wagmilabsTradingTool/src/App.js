@@ -8,6 +8,7 @@ import Home from "./components/home/Home"
 import Collection from "./components/collection/Collection"
 import Calculators from "./components/calculators/Calculators"
 import Volumes from "./components/volumes/Volumes"
+import Feed from "./components/feed/Feed"
 import Pnl from "./components/pnl/Pnl"
 import Login from "./components/login/LoginRainbow"
 import Profile from "./components/profile/Profile"
@@ -218,6 +219,8 @@ function App() {
                         <Route exact path='/calculators' element={<><Header /><Calculators /><Footer /></>}/>
 
                         <Route exact path='/volumes' element={<><Header /><Volumes /><Footer /></>}/>
+
+                        <Route exact path='/feed' element={<><Header /><Feed /><Footer /></>}/>
 
                         <Route exact path='/profitandloss' element={<><Header /><Pnl /><Footer /></>}/>
 
