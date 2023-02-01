@@ -7,23 +7,33 @@ const tokenRoute = express();
 
 tokenRoute.get("/:address/token/:id/details", checkAuth, async (req, res) => {
   const { address, id } = req.params;
+  let data = {};
 
-  console.log("API", address, id);
+  try {
+    const tokenInfo = await lruCache(
+      (
+        await fetch(
+          `https://api.reservoir.tools/tokens/v5?tokens=${address}%3A${id}`,
+          {
+            headers: {
+              accept: "*/*",
+              "x-api-key": "9a16bf8e-ec68-5d88-a7a5-a24044de3f38",
+            },
+          }
+        )
+      ).json(),
+      {
+        key: `collection#${address}#token#${id}#details`,
+        ttl: 12 * 60 * 60 * 1000, // 12 hours
+      }
+    );
 
-  /* const { period, marketplaces } = req.query;
-  const marketplacesArr = marketplaces.split(",");
-  const countDays = getCountDays(period);
-
-  const getOverviewData = async (marketplaces, countDays) => {
-    return await getVolumesLastDays(marketplaces, countDays);
-  };
-
-  const data = await lruCache(getOverviewData(marketplacesArr, countDays), {
-    key: `volumes#overview#${marketplacesArr.join()}#${countDays}`,
-    ttl: 3 * 60 * 60 * 1000, // 3h,
-  }); */
-
-  const data = {};
+    if ((tokenInfo?.tokens || [])[0]) {
+      data = tokenInfo?.tokens[0];
+    }
+  } catch (error) {
+    // token not found or reservoir error
+  }
 
   async function getData() {
     res.status(200).json(data);
