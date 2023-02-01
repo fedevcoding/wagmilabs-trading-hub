@@ -6,10 +6,130 @@ const profileActivityRoute = express()
 
 
 
+function toBool(value) {
+    if (value === 'true') {
+        return true
+    } else if (value === 'false') {
+        return false
+    } else {
+        return false
+    }
+}
+
+const type1Query = (includeSale, includeBuy) => {
+    if (includeSale && includeBuy) {
+        return `WHERE (type = 'buy' OR type = 'sale')`
+    } else if (includeSale && !includeBuy) {
+        return `WHERE (type = 'sale')`
+    } else if (!includeSale && includeBuy) {
+        return `WHERE (type = 'buy')`
+    } else {
+        return `WHERE (type = '')`
+    }
+}
+const type2Query = (includeMint, includeBurn, includeSend, includeReceive) => {
+    if (includeMint && includeBurn && includeSend && includeReceive) {
+        return `WHERE (type = 'mint' OR type = 'burn' OR type = 'send' OR type = 'receive')`
+    } else if (includeMint && includeBurn && includeSend && !includeReceive) {
+        return `WHERE (type = 'mint' OR type = 'burn' OR type = 'send')`
+    } else if (includeMint && includeBurn && !includeSend && includeReceive) {
+        return `WHERE (type = 'mint' OR type = 'burn' OR type = 'receive')`
+    } else if (includeMint && !includeBurn && includeSend && includeReceive) {
+        return `WHERE (type = 'mint' OR type = 'send' OR type = 'receive')`
+    } else if (!includeMint && includeBurn && includeSend && includeReceive) {
+        return `WHERE (type = 'burn' OR type = 'send' OR type = 'receive')`
+    } else if (includeMint && includeBurn && !includeSend && !includeReceive) {
+        return `WHERE (type = 'mint' OR type = 'burn')`
+    } else if (includeMint && !includeBurn && includeSend && !includeReceive) {
+        return `WHERE (type = 'mint' OR type = 'send')`
+    } else if (includeMint && !includeBurn && !includeSend && includeReceive) {
+        return `WHERE (type = 'mint' OR type = 'receive')`
+    } else if (!includeMint && includeBurn && includeSend && !includeReceive) {
+        return `WHERE (type = 'burn' OR type = 'send')`
+    } else if (!includeMint && includeBurn && !includeSend && includeReceive) {
+        return `WHERE (type = 'burn' OR type = 'receive')`
+    } else if (!includeMint && !includeBurn && includeSend && includeReceive) {
+        return `WHERE (type = 'send' OR type = 'receive')`
+    } else if (includeMint && !includeBurn && !includeSend && !includeReceive) {
+        return `WHERE (type = 'mint')`
+    } else if (!includeMint && includeBurn && !includeSend && !includeReceive) {
+        return `WHERE (type = 'burn')`
+    } else if (!includeMint && !includeBurn && includeSend && !includeReceive) {
+        return `WHERE (type = 'send')`
+    } else if (!includeMint && !includeBurn && !includeSend && includeReceive) {
+        return `WHERE (type = 'receive')`
+    } else {
+        return `WHERE type = ''`
+    }
+}
+const addressQuery = (fromAddress, toAddress) => {
+    if (fromAddress && toAddress) {
+        return `AND (from_address = '${fromAddress}' OR to_address = '${toAddress}')`
+    } else if (fromAddress && !toAddress) {
+        return `AND from_address = '${fromAddress}'`
+    } else if (!fromAddress && toAddress) {
+        return `AND to_address = '${toAddress}'`
+    } else {
+        return ``
+    }
+}
+
+const priceQuery = (minPrice, maxPrice) => {
+    if (minPrice && maxPrice) {
+        return `AND (price >= ${minPrice} AND price <= ${maxPrice})`
+    } else if (minPrice && !maxPrice) {
+        return `AND (price >= ${minPrice})`
+    } else if (!minPrice && maxPrice) {
+        return `AND (price <= ${maxPrice})`
+    } else {
+        return ``
+    }
+}
+
+const price2Query = (minPrice, maxPrice) => {
+    if (minPrice && maxPrice) {
+        return `WHERE (price >= ${minPrice} AND price <= ${maxPrice})`
+    } else if (minPrice && !maxPrice) {
+        return `WHERE (price >= ${minPrice})`
+    } else if (!minPrice && maxPrice) {
+        return `WHERE (price <= ${maxPrice})`
+    } else {
+        return ``
+    }
+}
+
+const marketplaceQuery = (marketplace) => {
+    if (marketplace) {
+        return `AND exchange_name = '${marketplace}'`
+    } else {
+        return ``
+    }
+}
+
+const tokenIdQuery = (tokenId) => {
+    if (tokenId) {
+        return `AND token_id = '${tokenId}'`
+    }
+    else {
+        return ``
+    }
+}
+
+
 
 profileActivityRoute.get("/", checkAuth, async (req, res)=> {
 
     const userAddress = req.userDetails.address
+    let {includeMint, includeBurn, includeSend, includeReceive, includeBuy, includeSale, includeList, fromAddress, toAddress, minPrice, maxPrice, marketplace, tokenId} = req.query || {}
+
+    includeMint = toBool(includeMint)
+    includeBurn = toBool(includeBurn)
+    includeSend = toBool(includeSend)
+    includeReceive = toBool(includeReceive)
+    includeBuy = toBool(includeBuy)
+    includeSale = toBool(includeSale)
+    includeList = toBool(includeList)
+
 
     const SQL = `WITH sales AS (
         SELECT *
@@ -19,14 +139,18 @@ profileActivityRoute.get("/", checkAuth, async (req, res)=> {
                     WHEN buyer_address = '${userAddress}' THEN 'buy'
                     ELSE 'sale'
                 END AS type,
-            token_id, contract_address, timestamp, buyer_address  AS from_address, seller_address AS to_address, transaction_hASh, quantity, exchange_name AS marketplace, price, payment_token_address AS payment_token
+            token_id, contract_address, timestamp AS createdAt, buyer_address  AS from_address, seller_address AS to_address, transaction_hASh, quantity, exchange_name AS marketplace, eth_price AS price, payment_token_address AS payment_token
     
     
             FROM ethereum.nft_sales
-            WHERE buyer_address = '${userAddress}'
-                OR seller_address = '${userAddress}'
+            WHERE (buyer_address = '${userAddress}'
+                OR seller_address = '${userAddress}')
+            ${marketplaceQuery(marketplace)}
+            ${tokenIdQuery(tokenId)}
+            ${priceQuery(minPrice, maxPrice)}
         ) subq
-    
+        ${type1Query(includeSale, includeBuy)}
+        ${addressQuery(fromAddress, toAddress)}
     
         UNION
     
@@ -39,27 +163,28 @@ profileActivityRoute.get("/", checkAuth, async (req, res)=> {
                     WHEN from_address = '${userAddress}' THEN 'send'
                     ELSE 'receive'
                 END AS type,
-                token_id, contract_address, timestamp, from_address AS from_address, to_address AS to_address, transaction_hASh, quantity,'' AS marketplace, 0 AS price, '0x0000000000000000000000000000000000000000' AS payment_token
+                token_id, contract_address, timestamp AS createdAt, from_address AS from_address, to_address AS to_address, transaction_hASh, quantity,'' AS marketplace, 0 AS price, '0x0000000000000000000000000000000000000000' AS payment_token
             FROM ethereum.nft_transfers
-            WHERE from_address = '${userAddress}'
-                OR to_address = '${userAddress}'
+            WHERE (from_address = '${userAddress}'
+                OR to_address = '${userAddress}')
+            ${tokenIdQuery(tokenId)}
         ) subq
+        ${type2Query(includeMint, includeBurn, includeSend, includeReceive)}
+        ${addressQuery(fromAddress, toAddress)}
     
     
-        ORDER BY timestamp DESC
-        LIMIT 20
     )
     SELECT
         type,
         token_id,
         contract_address,
-        timestamp,
+        createdAt,
         from_address,
         to_address,
         transaction_hash,
         quantity,
         marketplace,
-        CASE WHEN sales.type::text = 'mint' AND price = 0 THEN value / count ELSE price END AS price,
+        CASE WHEN sales.type::text = 'mint' AND price = 0 THEN value / count / POWER(10, 18) ELSE price END AS price,
         payment_token
     FROM sales
     CROSS JOIN LATERAL (
@@ -70,18 +195,105 @@ profileActivityRoute.get("/", checkAuth, async (req, res)=> {
         SELECT
             COUNT(transaction_hash) AS count
         FROM sales s
-        WHERE s.transaction_hash = sales.transaction_hash) AS tx_count;`
+        WHERE s.transaction_hash = sales.transaction_hash) AS tx_count
+    ${price2Query(minPrice, maxPrice)}
+    ORDER BY createdAt DESC
+    LIMIT 200`
 
     try{
         const onChainActivity = await execTranseposeAPI(SQL)
 
-        res.json({ok: true, onChainActivity})
+        await addTokenData(onChainActivity)
+
+        const listingsData = await getListingData(includeList, fromAddress, toAddress, userAddress, minPrice, maxPrice, marketplace, tokenId)
+
+        const activity = [...onChainActivity, ...listingsData].sort((a, b) => (new Date(b.createdAt).getTime()) - (new Date(a.createdAt).getTime()))
+
+        res.json({ok: true, activity})
     }
     catch(e){
+        console.log(e)
         res.status(400).json({ok: false})
     }
-
 })
+
+
+
+async function getListingData(includeList, fromAddress, toAddress, userAddress, minPrice, maxPrice, marketplace, tokenId){
+    let listingsData = []
+
+    if((includeList && !toAddress) && (!marketplace || marketplace === "opensea" || marketplace === "looksrare" || marketplace === "x2y2")){
+        if(!(fromAddress && fromAddress !== userAddress)){
+            const minWeiPrice = minPrice && (minPrice * 1000000000000000000).toString()
+            const maxWeiPrice = maxPrice && (maxPrice * 1000000000000000000).toString()
+
+            const getMinMaxFilter = () => {
+                if(minWeiPrice && maxWeiPrice){
+                    return `&minPrice=${minWeiPrice}&maxPrice=${maxWeiPrice}`
+                } else if(minWeiPrice && !maxWeiPrice){
+                    return `&minPrice=${minWeiPrice}`
+                } else if(maxWeiPrice && !minWeiPrice){
+                    return `&maxPrice=${maxWeiPrice}`
+                } else {
+                    return ``
+                }
+            }
+            const getMarketplaceFilter = () => {
+                return marketplace ? `&marketplace=${marketplace}` : ``
+            }
+            const getTokenIdFilter = () => {
+                return tokenId ? `&tokenId=${tokenId}` : ``
+            }
+
+            const minMaxFilter = getMinMaxFilter()
+            const marketplaceFilter = getMarketplaceFilter()
+            const tokenIdFilter = getTokenIdFilter()
+
+            const listingsApiData = await fetch(`https://api.modulenft.xyz/api/v2/eth/nft/listings?active=true&listedAfter=1580489577000&count=20&offset=0&sortDirection=timeDesc&seller=${userAddress}&withMetadata=false${minMaxFilter}${marketplaceFilter}${tokenIdFilter}`, {
+                headers: {
+                    "X-API-KEY": "2183af1a-3d8e-4f24-b8a0-47fba900a366"
+                }
+            })
+
+            listingsData = (await listingsApiData.json())?.data
+
+            listingsData?.forEach(item => {
+                item["type"] = "list"
+                item["from_address"] = userAddress
+                item["price"] = item.price / 1000000000000000000
+                item["token_id"] = item.tokenId
+                item["tokenData"] = {token: {name: item?.tokenName || item?.metadata?.name, image: item?.metadata?.image, collection: {name: item?.collection}}}
+            })
+        }
+    }
+
+    return listingsData
+}
+
+
+async function addTokenData(onChainActivity){
+    let urlData = ""
+    onChainActivity.forEach(item => {
+        const {token_id, contract_address} = item
+        const urlType = `&tokens=${contract_address}:${token_id}`
+        urlData = urlData + urlType
+    })
+
+    const reservoirApiData = await fetch(`https://api.reservoir.tools/tokens/v5?limit=20&includeAttributes=false${urlData}`, {
+        headers: {
+            "x-api-key": process.env.RESERVOIR_API_KEY
+        }
+    })
+    const reservoirData = (await reservoirApiData.json())?.tokens
+
+
+    onChainActivity.forEach(item => {
+        const {token_id, contract_address} = item
+        const tokenData = reservoirData?.find(token => token.token.contract.toLowerCase() === contract_address.toLowerCase() && token.token.tokenId == token_id)
+        item["tokenData"] = tokenData
+        item["createdAt"] = item.createdat
+    })
+}
 
 
 module.exports = profileActivityRoute

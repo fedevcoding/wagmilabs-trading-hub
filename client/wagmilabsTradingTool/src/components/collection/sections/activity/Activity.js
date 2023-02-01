@@ -133,13 +133,13 @@ const Activity = ({address}) => {
         
         <td className='collection-activity-single-token'>
           <img src={tokenImage || collectionImage} alt="" className="collection-activity-single-image"/>
-          <div>
-            <p>{tokenName || collectionName}</p>
-            <p className='low-opacity little-text'>{collectionName}</p>
+          <div className='wrap-text'>
+            <p className='wrap-text'>{tokenName || collectionName}</p>
+            <p className='low-opacity little-text wrap-text'>{collectionName}</p>
           </div>
         </td>
-        <td className='collection-activity-single-price'>{roundPrice2(price)} ETH</td>
-        <td className='collection-activity-single-from'>{formatAddress3(fromAddress)}</td>
+        <td className='collection-activity-single-price'>{price ? roundPrice2(price) : 0} ETH</td>
+        <td className='collection-activity-single-from'>{fromAddress ? formatAddress3(fromAddress) : "- - -"}</td>
         <td className='collection-activity-single-to'>{toAddress ? formatAddress3(toAddress) : "- - -"}</td>
         <td className='collection-activity-single-time'>{moment(timestamp * 1000).fromNow()}</td>
       </tr>
