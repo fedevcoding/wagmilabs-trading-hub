@@ -2,6 +2,10 @@
     padding-bottom: 3rem;
 }
 
+#page-feed h1 {
+    text-align: center;
+}
+
 #page-feed #powered-by {
     cursor: pointer;
 }

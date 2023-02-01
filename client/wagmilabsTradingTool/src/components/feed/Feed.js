@@ -17,31 +17,31 @@ const Feed = React.memo(() => {
   return (
     <PageWrapper page="feed">
       <h1>NFT news</h1>
-      <div className="cards">
-        {(news && !isLoading && (
-          <>
+      {(news && !isLoading && (
+        <>
+          <div className="cards">
             {news.map(n => (
               <Card key={n.link} news={n} />
             ))}
-          </>
-        )) || <LoadingSpinner />}
-      </div>
-      <Pagination
-        currentPage={currentPage}
-        setCurrentPage={p => {
-          window.scrollTo({ top: 0, behavior: "smooth" });
-          setCurrentPage(p);
-        }}
-      />
-      <div id="powered-by">
-        <a
-          title="Powered By Luckytrader"
-          href="https://www.luckytrader.com/?tag=WagmiLabs"
-          rel="sponsored"
-        >
-          <img src={PoweredBy} alt="Powered By Luckytrader" width={200} />
-        </a>
-      </div>
+          </div>
+          <Pagination
+            currentPage={currentPage}
+            setCurrentPage={p => {
+              window.scrollTo({ top: 0, behavior: "smooth" });
+              setCurrentPage(p);
+            }}
+          />
+          <div id="powered-by">
+            <a
+              title="Powered By Luckytrader"
+              href="https://www.luckytrader.com/?tag=WagmiLabs"
+              rel="sponsored"
+            >
+              <img src={PoweredBy} alt="Powered By Luckytrader" width={200} />
+            </a>
+          </div>
+        </>
+      )) || <LoadingSpinner />}
     </PageWrapper>
   );
 });
