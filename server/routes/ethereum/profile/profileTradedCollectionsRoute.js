@@ -37,7 +37,7 @@ profileTradedCollectionsRoute.get("/", checkAuth, async (req, res)=> {
 
         const collections = await execTranseposeAPI(sql)
 
-        res.status(200).json({collections, ok: true})
+        res.status(200).json({collections})
     }
     catch(e){
         console.log(e)

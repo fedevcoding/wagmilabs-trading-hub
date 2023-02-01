@@ -6,7 +6,8 @@ import getMarketplaceImage from '../../../../utils/marketplaceImageMapping'
 import moment from 'moment'
 import { useAccount } from 'wagmi'
 import { Button, HStack, Input, NumberInput, NumberInputField, Select } from '@chakra-ui/react'
-
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const activityTypeMapping = {
   "list": "List",
@@ -57,6 +58,12 @@ const Activity = ({}) => {
   const [activityPriceFilter, setActivityPriceFilter] = useState({min: "", max: ""})
   const [activityMarketplaceFilter, setActivityMarketplaceFilter] = useState("")
   const [activityTokenIdFilter, setActivityTokenIdFilter] = useState("")
+  const [activityContractAddressFilter, setActivityContractAddressFilter] = useState({name: "", address: "", image: ""})
+
+  const [showActivityCollectionFilter, setShowActivityCollectionFilter] = useState(false)
+
+  const [profileTradedCollections, setProfileTradedCollections] = useState([])
+  const [loadingProfileTradedCollections, setLoadingProfileTradedCollections] = useState(false)
 
   const [profileActivity, setProfileActivity] = useState([])
   const [profileActivityLoading, setProfileActivityLoading] = useState(true)
@@ -66,13 +73,36 @@ const Activity = ({}) => {
     activityAddressFilter,
     activityPriceFilter,
     activityMarketplaceFilter,
-    activityTokenIdFilter
+    activityTokenIdFilter,
+    activityContractAddressFilter
   })
+
+  const [dateRange, setDateRange] = useState([null, null]);
+  const [startDate, endDate] = dateRange;
 
   useEffect(()=>{
     fetchActivity()
-    console.log(activityFilters)
   }, [activityFilters])
+
+  useEffect(()=>{
+    fetchProfileTradedCollections()
+
+    document.addEventListener("click", checkClick)
+
+    function checkClick(e){
+      const path = e.composedPath()
+      const collectionDropdown = document.querySelector(".profile-activity-collection-dropdown-title")
+      if(!path.includes(collectionDropdown)){
+        setShowActivityCollectionFilter(false)
+      }
+    }
+
+    return () => {
+      document.removeEventListener("click", checkClick)
+    }
+
+
+  }, [])
 
 
 
@@ -139,9 +169,33 @@ const Activity = ({}) => {
     const tokenIdFilter = activityTokenIdFilter ? `&tokenId=${activityTokenIdFilter}` : ""
     return tokenIdFilter
   }
+  const getContractFilter = () => {
+    const {activityContractAddressFilter} = activityFilters
+    const contractFilter = activityContractAddressFilter.address ? `&contractAddress=${activityContractAddressFilter.address}` : ""
+    return contractFilter
+  }
 
 
+  function toggleCollectionActivityFilterDropdown(){
+    setShowActivityCollectionFilter(old => !old)
+  }
 
+
+  async function fetchProfileTradedCollections(){
+
+    setLoadingProfileTradedCollections(true)
+
+    const response = await fetch(`${baseUrl}/profileTradedCollections?search=&offset=0&limit=10`, {
+      headers: {
+        "x-auth-token": localStorage.jsonwebtoken,
+      }
+    })
+    const collections = (await response.json()).collections
+
+    setLoadingProfileTradedCollections(false)
+    setProfileTradedCollections(collections)
+  }
+    
   async function fetchActivity(){
     setProfileActivityLoading(true)
 
@@ -150,9 +204,10 @@ const Activity = ({}) => {
     const priceFilter = getPriceFilter()
     const marketplaceFilter = getMarketplaceFilter()
     const tokenIdFilter = getTokenIdFilter()
+    const contractFilter = getContractFilter()
 
 
-    const response = await fetch(`${baseUrl}/profileActivity?hello=hello${typeFilter}${addressFilter}${priceFilter}${marketplaceFilter}${tokenIdFilter}`, {
+    const response = await fetch(`${baseUrl}/profileActivity?hello=hello${typeFilter}${addressFilter}${priceFilter}${marketplaceFilter}${tokenIdFilter}${contractFilter}`, {
       headers: {
         "x-auth-token": localStorage.jsonwebtoken,
       }
@@ -161,7 +216,6 @@ const Activity = ({}) => {
     const {activity} = await response.json()
     setProfileActivity(activity)
     setProfileActivityLoading(false)
-    console.log(activity)
   }
 
 
@@ -179,8 +233,20 @@ const Activity = ({}) => {
 
 
   function saveActivityFilters(){
-    setActivityFilters({activityCategory, activityAddressFilter, activityPriceFilter, activityMarketplaceFilter, activityTokenIdFilter})
+    setActivityFilters({activityCategory, activityAddressFilter, activityPriceFilter, activityMarketplaceFilter, activityTokenIdFilter, activityContractAddressFilter})
   }
+
+  function changeActivityCollectionSelected(contractAddress, name, image){
+    if(activityContractAddressFilter.address === contractAddress) setActivityContractAddressFilter({name: "", address: "", image: ""})
+    else setActivityContractAddressFilter({name, address: contractAddress, image})
+  }
+
+  useEffect(()=>{
+    console.log("activityAddressFilter", activityContractAddressFilter)
+  }, [activityContractAddressFilter])
+
+
+
 
   const profileActivityMapping = useMemo(() => profileActivity.map(item => {
     const {type, from_address, marketplace, price, quantity, createdAt, to_address, token_id, transacton_hash} = item || {}
@@ -286,6 +352,20 @@ const Activity = ({}) => {
             </div>
 
             <div className='profile-activity-filter-section'>
+              <p>DATE</p>
+
+              <DatePicker       selectsRange={true}
+      startDate={startDate}
+      endDate={endDate}
+      onChange={(update) => {
+        setDateRange(update);
+      }}
+      isClearable={true}
+      className="profile-activity-date-picker"
+      />
+            </div>
+
+            <div className='profile-activity-filter-section'>
               <p>ADDDRESSES</p>
 
               <HStack>
@@ -312,6 +392,43 @@ const Activity = ({}) => {
                 </NumberInput>
               </HStack>
 
+            </div>
+
+            <div className='profile-activity-filter-section'>
+              <p>COLLECTION</p>
+              
+              <div className='profile-activity-collection-dropdown-container'>
+                <div className='profile-activity-collection-dropdown-title' onClick={toggleCollectionActivityFilterDropdown}>
+                  <div className='wrap-text'>
+                    {activityContractAddressFilter.name ?
+                    <>
+                    <img src={activityContractAddressFilter.image}></img>
+                    <p className='wrap-text'>{activityContractAddressFilter.name}</p>
+                    </>
+                    : "All Collections"}
+                  </div>
+                  <i className="fa-solid fa-caret-down"></i>
+                </div>
+
+                {
+                  showActivityCollectionFilter &&
+                  <div className='profile-activity-collection-dropdown'>
+                    {
+                      profileTradedCollections && profileTradedCollections.map(collection => {
+                        const {contract_address, name, image_url} = collection
+
+                        return(
+                          <div key={contract_address} className={`profile-activity-collection-dropdown-item wrap-text ${activityContractAddressFilter.address == contract_address ? "active" : ""}`} onClick={() => changeActivityCollectionSelected(contract_address, name, image_url)}>
+                            <img src={image_url}></img>
+                            <p className='wrap-text'>{name}</p>
+                          </div>
+                        )
+                      })
+                    }
+                  </div>
+                }
+
+              </div>
             </div>
 
             <div className='profile-activity-filter-section'>

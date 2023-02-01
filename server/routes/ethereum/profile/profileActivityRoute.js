@@ -2,6 +2,7 @@ const express = require("express")
 const checkAuth = require("../../../middleware/checkAuth")
 const { execTranseposeAPI } = require("../../../services/externalAPI/transpose")
 
+
 const profileActivityRoute = express()
 
 
@@ -16,53 +17,64 @@ function toBool(value) {
     }
 }
 
-const type1Query = (includeSale, includeBuy) => {
+const type1Query = (includeSale, includeBuy, userAddress) => {
     if (includeSale && includeBuy) {
-        return `WHERE (type = 'buy' OR type = 'sale')`
+        return `WHERE (buyer_address = '${userAddress}' OR seller_address = '${userAddress}')`
     } else if (includeSale && !includeBuy) {
-        return `WHERE (type = 'sale')`
+        return `WHERE (seller_address = '${userAddress}')`
     } else if (!includeSale && includeBuy) {
-        return `WHERE (type = 'buy')`
+        return `WHERE (buyer_address = '${userAddress}')`
     } else {
-        return `WHERE (type = '')`
+        return `WHERE (buyer_address = '')`
     }
 }
-const type2Query = (includeMint, includeBurn, includeSend, includeReceive) => {
+const type2Query = (includeMint, includeBurn, includeSend, includeReceive, userAddress) => {
     if (includeMint && includeBurn && includeSend && includeReceive) {
-        return `WHERE (type = 'mint' OR type = 'burn' OR type = 'send' OR type = 'receive')`
+        return `WHERE ((to_address = '${userAddress}' AND from_address IS NULL) OR (from_address = '${userAddress}' AND to_address IS NULL) OR (from_address = '${userAddress}' OR to_address = '${userAddress}'))`
     } else if (includeMint && includeBurn && includeSend && !includeReceive) {
-        return `WHERE (type = 'mint' OR type = 'burn' OR type = 'send')`
+        return `WHERE ((to_address = '${userAddress}' AND from_address IS NULL) OR (from_address = '${userAddress}' AND to_address IS NULL) OR (from_address = '${userAddress}'))`
     } else if (includeMint && includeBurn && !includeSend && includeReceive) {
-        return `WHERE (type = 'mint' OR type = 'burn' OR type = 'receive')`
+        return `WHERE ((to_address = '${userAddress}' AND from_address IS NULL) OR (from_address = '${userAddress}' AND to_address IS NULL) OR (to_address = '${userAddress}'))`
     } else if (includeMint && !includeBurn && includeSend && includeReceive) {
-        return `WHERE (type = 'mint' OR type = 'send' OR type = 'receive')`
+        return `WHERE ((to_address = '${userAddress}' AND from_address IS NULL) OR (from_address = '${userAddress}' OR to_address = '${userAddress}'))`
     } else if (!includeMint && includeBurn && includeSend && includeReceive) {
-        return `WHERE (type = 'burn' OR type = 'send' OR type = 'receive')`
+        return `WHERE ((from_address = '${userAddress}' AND to_address IS NULL) OR (from_address = '${userAddress}' OR to_address = '${userAddress}'))`
     } else if (includeMint && includeBurn && !includeSend && !includeReceive) {
-        return `WHERE (type = 'mint' OR type = 'burn')`
+        return `WHERE ((to_address = '${userAddress}' AND from_address IS NULL) OR (from_address = '${userAddress}' AND to_address IS NULL))`
     } else if (includeMint && !includeBurn && includeSend && !includeReceive) {
-        return `WHERE (type = 'mint' OR type = 'send')`
+        return `WHERE ((to_address = '${userAddress}' AND from_address IS NULL) OR (from_address = '${userAddress}'))`
     } else if (includeMint && !includeBurn && !includeSend && includeReceive) {
-        return `WHERE (type = 'mint' OR type = 'receive')`
+        return `WHERE ((to_address = '${userAddress}' AND from_address IS NULL) OR (to_address = '${userAddress}'))`
     } else if (!includeMint && includeBurn && includeSend && !includeReceive) {
-        return `WHERE (type = 'burn' OR type = 'send')`
+        return `WHERE ((from_address = '${userAddress}' AND to_address IS NULL) OR (from_address = '${userAddress}'))`
     } else if (!includeMint && includeBurn && !includeSend && includeReceive) {
-        return `WHERE (type = 'burn' OR type = 'receive')`
+        return `WHERE ((from_address = '${userAddress}' AND to_address IS NULL) OR (to_address = '${userAddress}'))`
     } else if (!includeMint && !includeBurn && includeSend && includeReceive) {
-        return `WHERE (type = 'send' OR type = 'receive')`
+        return `WHERE (from_address = '${userAddress}' OR to_address = '${userAddress}')`
     } else if (includeMint && !includeBurn && !includeSend && !includeReceive) {
-        return `WHERE (type = 'mint')`
+        return `WHERE (to_address = '${userAddress}' AND from_address IS NULL)`
     } else if (!includeMint && includeBurn && !includeSend && !includeReceive) {
-        return `WHERE (type = 'burn')`
+        return `WHERE (from_address = '${userAddress}' AND to_address IS NULL)`
     } else if (!includeMint && !includeBurn && includeSend && !includeReceive) {
-        return `WHERE (type = 'send')`
+        return `WHERE (from_address = '${userAddress}')`
     } else if (!includeMint && !includeBurn && !includeSend && includeReceive) {
-        return `WHERE (type = 'receive')`
+        return `WHERE (to_address = '${userAddress}' AND from_address IS NOT NULL)`
     } else {
-        return `WHERE type = ''`
+        return `WHERE to_address = ''`
     }
 }
-const addressQuery = (fromAddress, toAddress) => {
+const address1Query = (fromAddress, toAddress) => {
+    if (fromAddress && toAddress) {
+        return `AND (buyer_address = '${fromAddress}' OR seller_address = '${toAddress}')`
+    } else if (fromAddress && !toAddress) {
+        return `AND buyer_address = '${fromAddress}'`
+    } else if (!fromAddress && toAddress) {
+        return `AND seller_address = '${toAddress}'`
+    } else {
+        return ``
+    }
+}
+const address2Query = (fromAddress, toAddress) => {
     if (fromAddress && toAddress) {
         return `AND (from_address = '${fromAddress}' OR to_address = '${toAddress}')`
     } else if (fromAddress && !toAddress) {
@@ -76,27 +88,16 @@ const addressQuery = (fromAddress, toAddress) => {
 
 const priceQuery = (minPrice, maxPrice) => {
     if (minPrice && maxPrice) {
-        return `AND (price >= ${minPrice} AND price <= ${maxPrice})`
+        return `AND (eth_price >= '${minPrice}' AND eth_price <= '${maxPrice}')`
     } else if (minPrice && !maxPrice) {
-        return `AND (price >= ${minPrice})`
+        return `AND (eth_price >= '${minPrice}')`
     } else if (!minPrice && maxPrice) {
-        return `AND (price <= ${maxPrice})`
+        return `AND (eth_price <= '${maxPrice}')`
     } else {
         return ``
     }
 }
 
-const price2Query = (minPrice, maxPrice) => {
-    if (minPrice && maxPrice) {
-        return `WHERE (price >= ${minPrice} AND price <= ${maxPrice})`
-    } else if (minPrice && !maxPrice) {
-        return `WHERE (price >= ${minPrice})`
-    } else if (!minPrice && maxPrice) {
-        return `WHERE (price <= ${maxPrice})`
-    } else {
-        return ``
-    }
-}
 
 const marketplaceQuery = (marketplace) => {
     if (marketplace) {
@@ -114,14 +115,29 @@ const tokenIdQuery = (tokenId) => {
         return ``
     }
 }
+const contractQuery = (contractAddress) => {
+    if (contractAddress) {
+        return `AND contract_address = '${contractAddress}'`
+    }
+    else {
+        return ``
+    }
+}
 
-
-
+const limitQuery = (includeMint, includeBurn, includeSend, includeReceive, includeBuy, includeSale) => {
+    if((includeBuy || includeSale) && (includeMint || includeBurn || includeSend || includeReceive)) {
+        return `LIMIT 10`
+    }
+    else{
+        return `LIMIT 20`
+    }
+}
 profileActivityRoute.get("/", checkAuth, async (req, res)=> {
 
     const userAddress = req.userDetails.address
-    let {includeMint, includeBurn, includeSend, includeReceive, includeBuy, includeSale, includeList, fromAddress, toAddress, minPrice, maxPrice, marketplace, tokenId} = req.query || {}
+    let {includeMint, includeBurn, includeSend, includeReceive, includeBuy, includeSale, includeList, fromAddress, toAddress, minPrice, maxPrice, marketplace, tokenId, contractAddress} = req.query || {}
 
+    console.log(contractAddress)
     includeMint = toBool(includeMint)
     includeBurn = toBool(includeBurn)
     includeSend = toBool(includeSend)
@@ -143,14 +159,17 @@ profileActivityRoute.get("/", checkAuth, async (req, res)=> {
     
     
             FROM ethereum.nft_sales
-            WHERE (buyer_address = '${userAddress}'
-                OR seller_address = '${userAddress}')
+
+            ${type1Query(includeSale, includeBuy, userAddress)}
+
             ${marketplaceQuery(marketplace)}
             ${tokenIdQuery(tokenId)}
             ${priceQuery(minPrice, maxPrice)}
+            ${address1Query(fromAddress, toAddress)}
+            ${contractQuery(contractAddress)}
+            ORDER BY timestamp DESC
+            ${limitQuery(includeMint, includeBurn, includeSend, includeReceive, includeBuy, includeSale)}
         ) subq
-        ${type1Query(includeSale, includeBuy)}
-        ${addressQuery(fromAddress, toAddress)}
     
         UNION
     
@@ -165,12 +184,15 @@ profileActivityRoute.get("/", checkAuth, async (req, res)=> {
                 END AS type,
                 token_id, contract_address, timestamp AS createdAt, from_address AS from_address, to_address AS to_address, transaction_hASh, quantity,'' AS marketplace, 0 AS price, '0x0000000000000000000000000000000000000000' AS payment_token
             FROM ethereum.nft_transfers
-            WHERE (from_address = '${userAddress}'
-                OR to_address = '${userAddress}')
-            ${tokenIdQuery(tokenId)}
+
+            ${type2Query(includeMint, includeBurn, includeSend, includeReceive, userAddress)}
+            ${tokenIdQuery(tokenId)}            
+            ${address2Query(fromAddress, toAddress)}
+            ${contractQuery(contractAddress)}
+
+            ORDER BY timestamp DESC
+            ${limitQuery(includeMint, includeBurn, includeSend, includeReceive, includeBuy, includeSale)}
         ) subq
-        ${type2Query(includeMint, includeBurn, includeSend, includeReceive)}
-        ${addressQuery(fromAddress, toAddress)}
     
     
     )
@@ -196,17 +218,15 @@ profileActivityRoute.get("/", checkAuth, async (req, res)=> {
             COUNT(transaction_hash) AS count
         FROM sales s
         WHERE s.transaction_hash = sales.transaction_hash) AS tx_count
-        
-    ${price2Query(minPrice, maxPrice)}
-    ORDER BY createdAt DESC
-    LIMIT 200`
+    `
+
 
     try{
         const onChainActivity = await execTranseposeAPI(SQL)
 
         await addTokenData(onChainActivity)
 
-        const listingsData = await getListingData(includeList, fromAddress, toAddress, userAddress, minPrice, maxPrice, marketplace, tokenId)
+        const listingsData = await getListingData(includeList, fromAddress, toAddress, userAddress, minPrice, maxPrice, marketplace, tokenId, contractAddress)
 
         const activity = [...onChainActivity, ...listingsData].sort((a, b) => (new Date(b.createdAt).getTime()) - (new Date(a.createdAt).getTime()))
 
@@ -220,7 +240,7 @@ profileActivityRoute.get("/", checkAuth, async (req, res)=> {
 
 
 
-async function getListingData(includeList, fromAddress, toAddress, userAddress, minPrice, maxPrice, marketplace, tokenId){
+async function getListingData(includeList, fromAddress, toAddress, userAddress, minPrice, maxPrice, marketplace, tokenId, contractAddress){
     let listingsData = []
 
     if((includeList && !toAddress) && (!marketplace || marketplace === "opensea" || marketplace === "looksrare" || marketplace === "x2y2")){
@@ -245,18 +265,22 @@ async function getListingData(includeList, fromAddress, toAddress, userAddress, 
             const getTokenIdFilter = () => {
                 return tokenId ? `&tokenId=${tokenId}` : ``
             }
+            const getContractFilter = () => {
+                return contractAddress ? `&contractAddress=${contractAddress}` : ``
+            }
 
             const minMaxFilter = getMinMaxFilter()
             const marketplaceFilter = getMarketplaceFilter()
             const tokenIdFilter = getTokenIdFilter()
+            const contractFilter = getContractFilter()
 
-            const listingsApiData = await fetch(`https://api.modulenft.xyz/api/v2/eth/nft/listings?active=true&listedAfter=1580489577000&count=20&offset=0&sortDirection=timeDesc&seller=${userAddress}&withMetadata=false${minMaxFilter}${marketplaceFilter}${tokenIdFilter}`, {
+            const listingsApiData = await fetch(`https://api.modulenft.xyz/api/v2/eth/nft/listings?active=true&listedAfter=1580489577000&count=20&offset=0&sortDirection=timeDesc&seller=${userAddress}&withMetadata=false${minMaxFilter}${marketplaceFilter}${tokenIdFilter}${contractFilter}`, {
                 headers: {
                     "X-API-KEY": "2183af1a-3d8e-4f24-b8a0-47fba900a366"
                 }
             })
-
-            listingsData = (await listingsApiData.json())?.data
+            const listingDataResult = await listingsApiData.json()
+            listingsData = listingDataResult?.data ? listingDataResult.data : []
 
             listingsData?.forEach(item => {
                 item["type"] = "list"
