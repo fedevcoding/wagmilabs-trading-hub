@@ -42,6 +42,7 @@
     transition: background-color 200ms;
 }
 
+
 .profile-activity-single-container:hover{
     background-color: #1d1d22;
     border-radius: 10px;

@@ -16,7 +16,6 @@ function toBool(value) {
         return false
     }
 }
-
 const type1Query = (includeSale, includeBuy, userAddress) => {
     if (includeSale && includeBuy) {
         return `WHERE (buyer_address = '${userAddress}' OR seller_address = '${userAddress}')`
@@ -85,7 +84,6 @@ const address2Query = (fromAddress, toAddress) => {
         return ``
     }
 }
-
 const priceQuery = (minPrice, maxPrice) => {
     if (minPrice && maxPrice) {
         return `AND (eth_price >= '${minPrice}' AND eth_price <= '${maxPrice}')`
@@ -97,8 +95,6 @@ const priceQuery = (minPrice, maxPrice) => {
         return ``
     }
 }
-
-
 const marketplaceQuery = (marketplace) => {
     if (marketplace) {
         return `AND exchange_name = '${marketplace}'`
@@ -106,7 +102,6 @@ const marketplaceQuery = (marketplace) => {
         return ``
     }
 }
-
 const tokenIdQuery = (tokenId) => {
     if (tokenId) {
         return `AND token_id = '${tokenId}'`
@@ -123,7 +118,6 @@ const contractQuery = (contractAddress) => {
         return ``
     }
 }
-
 const limitQuery = (includeMint, includeBurn, includeSend, includeReceive, includeBuy, includeSale) => {
     if((includeBuy || includeSale) && (includeMint || includeBurn || includeSend || includeReceive)) {
         return `LIMIT 10`
@@ -132,101 +126,119 @@ const limitQuery = (includeMint, includeBurn, includeSend, includeReceive, inclu
         return `LIMIT 20`
     }
 }
+const dateQuery = (startDate, endDate) => {
+    if(startDate) startDate = new Date(parseInt(startDate)).toISOString()
+    if(endDate) endDate = new Date(parseInt(endDate)).toISOString()
+
+    if (startDate && endDate) {
+        return `AND (timestamp >= '${startDate}' AND timestamp <= '${endDate}')`
+    } else if (startDate && !endDate) {
+        return `AND (timestamp >= '${startDate}')`
+    } else if (!startDate && endDate) {
+        return `AND (timestamp <= '${endDate}')`
+    } else {
+        return ``
+    }
+}
+
+
+
 profileActivityRoute.get("/", checkAuth, async (req, res)=> {
 
-    const userAddress = req.userDetails.address
-    let {includeMint, includeBurn, includeSend, includeReceive, includeBuy, includeSale, includeList, fromAddress, toAddress, minPrice, maxPrice, marketplace, tokenId, contractAddress} = req.query || {}
-
-    console.log(contractAddress)
-    includeMint = toBool(includeMint)
-    includeBurn = toBool(includeBurn)
-    includeSend = toBool(includeSend)
-    includeReceive = toBool(includeReceive)
-    includeBuy = toBool(includeBuy)
-    includeSale = toBool(includeSale)
-    includeList = toBool(includeList)
-
-
-    const SQL = `WITH sales AS (
-        SELECT *
-        FROM (
-            SELECT 
-                CASE
-                    WHEN buyer_address = '${userAddress}' THEN 'buy'
-                    ELSE 'sale'
-                END AS type,
-            token_id, contract_address, timestamp AS createdAt, buyer_address  AS from_address, seller_address AS to_address, transaction_hASh, quantity, exchange_name AS marketplace, eth_price AS price, payment_token_address AS payment_token
-    
-    
-            FROM ethereum.nft_sales
-
-            ${type1Query(includeSale, includeBuy, userAddress)}
-
-            ${marketplaceQuery(marketplace)}
-            ${tokenIdQuery(tokenId)}
-            ${priceQuery(minPrice, maxPrice)}
-            ${address1Query(fromAddress, toAddress)}
-            ${contractQuery(contractAddress)}
-            ORDER BY timestamp DESC
-            ${limitQuery(includeMint, includeBurn, includeSend, includeReceive, includeBuy, includeSale)}
-        ) subq
-    
-        UNION
-    
-        SELECT *
-        FROM (
-            SELECT 
-                CASE 
-                    WHEN to_address = '${userAddress}' AND from_address IS NULL THEN 'mint'
-                    WHEN from_address = '${userAddress}' AND to_address IS NULL THEN 'burn'
-                    WHEN from_address = '${userAddress}' THEN 'send'
-                    ELSE 'receive'
-                END AS type,
-                token_id, contract_address, timestamp AS createdAt, from_address AS from_address, to_address AS to_address, transaction_hASh, quantity,'' AS marketplace, 0 AS price, '0x0000000000000000000000000000000000000000' AS payment_token
-            FROM ethereum.nft_transfers
-
-            ${type2Query(includeMint, includeBurn, includeSend, includeReceive, userAddress)}
-            ${tokenIdQuery(tokenId)}            
-            ${address2Query(fromAddress, toAddress)}
-            ${contractQuery(contractAddress)}
-
-            ORDER BY timestamp DESC
-            ${limitQuery(includeMint, includeBurn, includeSend, includeReceive, includeBuy, includeSale)}
-        ) subq
-    
-    
-    )
-    SELECT
-        type,
-        token_id,
-        contract_address,
-        createdAt,
-        from_address,
-        to_address,
-        transaction_hash,
-        quantity,
-        marketplace,
-        CASE WHEN sales.type::text = 'mint' AND price = 0 THEN value / count / POWER(10, 18) ELSE price END AS price,
-        payment_token
-    FROM sales
-    CROSS JOIN LATERAL (
-        SELECT value
-        FROM ethereum.transactions t
-        WHERE t.transaction_hash = sales.transaction_hash) AS tx
-    CROSS JOIN LATERAL (
-        SELECT
-            COUNT(transaction_hash) AS count
-        FROM sales s
-        WHERE s.transaction_hash = sales.transaction_hash) AS tx_count
-    `
-
-
     try{
+        const userAddress = req.userDetails.address
+        let {includeMint, includeBurn, includeSend, includeReceive, includeBuy, includeSale, includeList, fromAddress, toAddress, minPrice, maxPrice, marketplace, tokenId, contractAddress, startDate, endDate} = req.query || {}
+
+        includeMint = toBool(includeMint)
+        includeBurn = toBool(includeBurn)
+        includeSend = toBool(includeSend)
+        includeReceive = toBool(includeReceive)
+        includeBuy = toBool(includeBuy)
+        includeSale = toBool(includeSale)
+        includeList = toBool(includeList)
+
+
+        const SQL = `WITH sales AS (
+            SELECT *
+            FROM (
+                SELECT 
+                    CASE
+                        WHEN buyer_address = '${userAddress}' THEN 'buy'
+                        ELSE 'sale'
+                    END AS type,
+                token_id, contract_address, timestamp AS createdAt, buyer_address  AS from_address, seller_address AS to_address, transaction_hASh, quantity, exchange_name AS marketplace, eth_price AS price, payment_token_address AS payment_token
+        
+        
+                FROM ethereum.nft_sales
+
+                ${type1Query(includeSale, includeBuy, userAddress)}
+
+                ${marketplaceQuery(marketplace)}
+                ${tokenIdQuery(tokenId)}
+                ${priceQuery(minPrice, maxPrice)}
+                ${address1Query(fromAddress, toAddress)}
+                ${contractQuery(contractAddress)}
+                ${dateQuery(startDate, endDate)}
+                ORDER BY timestamp DESC
+                ${limitQuery(includeMint, includeBurn, includeSend, includeReceive, includeBuy, includeSale)}
+            ) subq
+        
+            UNION
+        
+            SELECT *
+            FROM (
+                SELECT 
+                    CASE 
+                        WHEN to_address = '${userAddress}' AND from_address IS NULL THEN 'mint'
+                        WHEN from_address = '${userAddress}' AND to_address IS NULL THEN 'burn'
+                        WHEN from_address = '${userAddress}' THEN 'send'
+                        ELSE 'receive'
+                    END AS type,
+                    token_id, contract_address, timestamp AS createdAt, from_address AS from_address, to_address AS to_address, transaction_hASh, quantity,'' AS marketplace, 0 AS price, '0x0000000000000000000000000000000000000000' AS payment_token
+                FROM ethereum.nft_transfers
+
+                ${type2Query(includeMint, includeBurn, includeSend, includeReceive, userAddress)}
+                ${tokenIdQuery(tokenId)}            
+                ${address2Query(fromAddress, toAddress)}
+                ${contractQuery(contractAddress)}
+                ${dateQuery(startDate, endDate)}
+
+                ORDER BY timestamp DESC
+                ${limitQuery(includeMint, includeBurn, includeSend, includeReceive, includeBuy, includeSale)}
+            ) subq
+        
+        
+        )
+        SELECT
+            type,
+            token_id,
+            contract_address,
+            createdAt,
+            from_address,
+            to_address,
+            transaction_hash,
+            quantity,
+            marketplace,
+            CASE WHEN sales.type::text = 'mint' AND price = 0 THEN value / count / POWER(10, 18) ELSE price END AS price,
+            payment_token
+        FROM sales
+        CROSS JOIN LATERAL (
+            SELECT value
+            FROM ethereum.transactions t
+            WHERE t.transaction_hash = sales.transaction_hash) AS tx
+        CROSS JOIN LATERAL (
+            SELECT
+                COUNT(transaction_hash) AS count
+            FROM sales s
+            WHERE s.transaction_hash = sales.transaction_hash) AS tx_count
+        `
+
+        console.log(dateQuery(startDate, endDate))
         const onChainActivity = await execTranseposeAPI(SQL)
 
         await addTokenData(onChainActivity)
 
-        const listingsData = await getListingData(includeList, fromAddress, toAddress, userAddress, minPrice, maxPrice, marketplace, tokenId, contractAddress)
+        const listingsData = await getListingData(includeList, fromAddress, toAddress, userAddress, minPrice, maxPrice, marketplace, tokenId, contractAddress, startDate, endDate)
 
         const activity = [...onChainActivity, ...listingsData].sort((a, b) => (new Date(b.createdAt).getTime()) - (new Date(a.createdAt).getTime()))
 
@@ -240,7 +252,7 @@ profileActivityRoute.get("/", checkAuth, async (req, res)=> {
 
 
 
-async function getListingData(includeList, fromAddress, toAddress, userAddress, minPrice, maxPrice, marketplace, tokenId, contractAddress){
+async function getListingData(includeList, fromAddress, toAddress, userAddress, minPrice, maxPrice, marketplace, tokenId, contractAddress, startDate, endDate){
     let listingsData = []
 
     if((includeList && !toAddress) && (!marketplace || marketplace === "opensea" || marketplace === "looksrare" || marketplace === "x2y2")){
@@ -268,13 +280,27 @@ async function getListingData(includeList, fromAddress, toAddress, userAddress, 
             const getContractFilter = () => {
                 return contractAddress ? `&contractAddress=${contractAddress}` : ``
             }
+            const getDateFilter = () => {
+                if(startDate) startDate = startDate / 1000
+                if(endDate) endDate = endDate / 1000
+                if(startDate && endDate){
+                    return `&listedAfter=${startDate}&listedBefore=${endDate}`
+                } else if(startDate && !endDate){
+                    return `&listedAfter=${startDate}`
+                } else if(endDate && !startDate){
+                    return `&listedAfter=1580489577000&listedBefore=${endDate}`
+                } else {
+                    return `&listedAfter=1580489577000`
+                }
+            }
 
             const minMaxFilter = getMinMaxFilter()
             const marketplaceFilter = getMarketplaceFilter()
             const tokenIdFilter = getTokenIdFilter()
             const contractFilter = getContractFilter()
+            const dateFilter = getDateFilter()
 
-            const listingsApiData = await fetch(`https://api.modulenft.xyz/api/v2/eth/nft/listings?active=true&listedAfter=1580489577000&count=20&offset=0&sortDirection=timeDesc&seller=${userAddress}&withMetadata=false${minMaxFilter}${marketplaceFilter}${tokenIdFilter}${contractFilter}`, {
+            const listingsApiData = await fetch(`https://api.modulenft.xyz/api/v2/eth/nft/listings?active=true${dateFilter}&count=20&offset=0&sortDirection=timeDesc&seller=${userAddress}&withMetadata=false${minMaxFilter}${marketplaceFilter}${tokenIdFilter}${contractFilter}`, {
                 headers: {
                     "X-API-KEY": "2183af1a-3d8e-4f24-b8a0-47fba900a366"
                 }

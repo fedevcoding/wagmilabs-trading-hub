@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState, useRef } from 'react'
 import "./activity.css"
 import { roundPrice, formatAddress, dateFormat1, formatAddress2, roundPrice2, formatAddress3, formatIpfs } from '../../../../utils/formats/formats'
 import baseUrl from '../../../../variables/baseUrl'
@@ -67,6 +67,12 @@ const Activity = ({}) => {
 
   const [profileActivity, setProfileActivity] = useState([])
   const [profileActivityLoading, setProfileActivityLoading] = useState(true)
+  
+  const [dateRange, setDateRange] = useState([null, null]);
+  const [startDate, endDate] = dateRange;
+
+  const observer = useRef();
+
 
   const [activityFilters, setActivityFilters] = useState({
     activityCategory,
@@ -74,35 +80,55 @@ const Activity = ({}) => {
     activityPriceFilter,
     activityMarketplaceFilter,
     activityTokenIdFilter,
-    activityContractAddressFilter
+    activityContractAddressFilter,
+    dateRange
   })
 
-  const [dateRange, setDateRange] = useState([null, null]);
-  const [startDate, endDate] = dateRange;
+
 
   useEffect(()=>{
     fetchActivity()
   }, [activityFilters])
 
   useEffect(()=>{
-    fetchProfileTradedCollections()
+    // fetchProfileTradedCollections()
 
-    document.addEventListener("click", checkClick)
+    // document.addEventListener("click", checkClick)
 
-    function checkClick(e){
-      const path = e.composedPath()
-      const collectionDropdown = document.querySelector(".profile-activity-collection-dropdown-title")
-      if(!path.includes(collectionDropdown)){
-        setShowActivityCollectionFilter(false)
+    // function checkClick(e){
+    //   const path = e.composedPath()
+    //   const collectionDropdown = document.querySelector(".profile-activity-collection-dropdown-title")
+    //   if(!path.includes(collectionDropdown)){
+    //     setShowActivityCollectionFilter(false)
+    //   }
+    // }
+
+
+    const options = {
+      root: null,
+      rootMargin: '0px',
+      threshold: 1.0
+    };
+
+    observer.current = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) {
+        alert("end of items")
       }
+    }, options);
+
+    const target = document.querySelector('.profile-activity-single-container.last-token');
+    if (target) {
+      observer.current.observe(target);
     }
+
 
     return () => {
-      document.removeEventListener("click", checkClick)
+      if (observer.current) {
+        observer.current.disconnect();
+      }
+      // document.removeEventListener("click", checkClick)
     }
-
-
-  }, [])
+  }, [profileActivity])
 
 
 
@@ -174,6 +200,24 @@ const Activity = ({}) => {
     const contractFilter = activityContractAddressFilter.address ? `&contractAddress=${activityContractAddressFilter.address}` : ""
     return contractFilter
   }
+  const getDateFilter = () => {
+    const {dateRange} = activityFilters
+    const [startDate, endDate] = dateRange
+
+    let dateFilter = ""
+
+    if(startDate && endDate){
+      dateFilter = `&startDate=${new Date(startDate).getTime()}&endDate=${new Date(endDate).getTime()}`
+    }
+    else if(startDate && !endDate){
+      dateFilter = `&startDate=${new Date(startDate).getTime()}`
+    }
+    else if(!startDate && endDate){
+      dateFilter = `&endDate=${new Date(endDate).getTime()}`
+    }
+
+    return dateFilter
+  }
 
 
   function toggleCollectionActivityFilterDropdown(){
@@ -205,9 +249,12 @@ const Activity = ({}) => {
     const marketplaceFilter = getMarketplaceFilter()
     const tokenIdFilter = getTokenIdFilter()
     const contractFilter = getContractFilter()
+    const dateFilter = getDateFilter()
+
+    console.log(dateFilter)
 
 
-    const response = await fetch(`${baseUrl}/profileActivity?hello=hello${typeFilter}${addressFilter}${priceFilter}${marketplaceFilter}${tokenIdFilter}${contractFilter}`, {
+    const response = await fetch(`${baseUrl}/profileActivity?hello=hello${typeFilter}${addressFilter}${priceFilter}${marketplaceFilter}${tokenIdFilter}${contractFilter}${dateFilter}`, {
       headers: {
         "x-auth-token": localStorage.jsonwebtoken,
       }
@@ -233,7 +280,7 @@ const Activity = ({}) => {
 
 
   function saveActivityFilters(){
-    setActivityFilters({activityCategory, activityAddressFilter, activityPriceFilter, activityMarketplaceFilter, activityTokenIdFilter, activityContractAddressFilter})
+    setActivityFilters({activityCategory, activityAddressFilter, activityPriceFilter, activityMarketplaceFilter, activityTokenIdFilter, activityContractAddressFilter, dateRange})
   }
 
   function changeActivityCollectionSelected(contractAddress, name, image){
@@ -248,7 +295,7 @@ const Activity = ({}) => {
 
 
 
-  const profileActivityMapping = useMemo(() => profileActivity.map(item => {
+  const profileActivityMapping = useMemo(() => profileActivity.map((item, index) => {
     const {type, from_address, marketplace, price, quantity, createdAt, to_address, token_id, transacton_hash} = item || {}
     let {name: tokenName, image: tokenImage} = item?.tokenData?.token || {}
     const {name: collectionName} = item?.tokenData?.token?.collection || {}
@@ -264,10 +311,13 @@ const Activity = ({}) => {
 
     if(tokenImage?.includes("ipfs")) tokenImage = formatIpfs(tokenImage)
 
+
+    const isLast = index === profileActivity.length - 1
+
     return(
 
       <>
-      <tr key={key} className="profile-activity-single-container">
+      <tr key={key} className={`profile-activity-single-container ${isLast && "last-token"}`}>
         
         <td className="profile-activity-single-type">
           <div className='profile-activity-marketplace-container'>
@@ -354,15 +404,16 @@ const Activity = ({}) => {
             <div className='profile-activity-filter-section'>
               <p>DATE</p>
 
-              <DatePicker       selectsRange={true}
-      startDate={startDate}
-      endDate={endDate}
-      onChange={(update) => {
-        setDateRange(update);
-      }}
-      isClearable={true}
-      className="profile-activity-date-picker"
-      />
+              <DatePicker 
+                selectsRange={true}
+                startDate={startDate}
+                endDate={endDate}
+                onChange={(update) => {
+                  setDateRange(update);
+                }}
+                isClearable={true}
+                className="profile-activity-date-picker"
+              />
             </div>
 
             <div className='profile-activity-filter-section'>
