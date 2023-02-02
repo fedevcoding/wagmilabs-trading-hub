@@ -60,8 +60,8 @@ const Activity = ({}) => {
   const [activityTokenIdFilter, setActivityTokenIdFilter] = useState("")
   const [activityContractAddressFilter, setActivityContractAddressFilter] = useState({name: "", address: "", image: ""})
 
+  
   const [showActivityCollectionFilter, setShowActivityCollectionFilter] = useState(false)
-
   const [profileTradedCollections, setProfileTradedCollections] = useState([])
   const [loadingProfileTradedCollections, setLoadingProfileTradedCollections] = useState(false)
 
@@ -70,6 +70,11 @@ const Activity = ({}) => {
   
   const [dateRange, setDateRange] = useState([null, null]);
   const [startDate, endDate] = dateRange;
+
+  const [activityOffsets, setActivityOffsets] = useState({0: 0, 1: 0, 2: 0})
+  const [profileActivityLoadMore, setProfileActivityLoadMore] = useState(false)
+  
+  const hasMoreActivity = useRef(true)
 
   const observer = useRef();
 
@@ -81,7 +86,7 @@ const Activity = ({}) => {
     activityMarketplaceFilter,
     activityTokenIdFilter,
     activityContractAddressFilter,
-    dateRange
+    dateRange,
   })
 
 
@@ -91,17 +96,16 @@ const Activity = ({}) => {
   }, [activityFilters])
 
   useEffect(()=>{
-    // fetchProfileTradedCollections()
 
-    // document.addEventListener("click", checkClick)
+    document.addEventListener("click", checkClick)
 
-    // function checkClick(e){
-    //   const path = e.composedPath()
-    //   const collectionDropdown = document.querySelector(".profile-activity-collection-dropdown-title")
-    //   if(!path.includes(collectionDropdown)){
-    //     setShowActivityCollectionFilter(false)
-    //   }
-    // }
+    function checkClick(e){
+      const path = e.composedPath()
+      const collectionDropdown = document.querySelector(".profile-activity-collection-dropdown-title")
+      if(!path.includes(collectionDropdown)){
+        setShowActivityCollectionFilter(false)
+      }
+    }
 
 
     const options = {
@@ -111,8 +115,8 @@ const Activity = ({}) => {
     };
 
     observer.current = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting) {
-        alert("end of items")
+      if (entries[0].isIntersecting && hasMoreActivity.current) {
+        loadMoreActivity()
       }
     }, options);
 
@@ -126,9 +130,14 @@ const Activity = ({}) => {
       if (observer.current) {
         observer.current.disconnect();
       }
-      // document.removeEventListener("click", checkClick)
+      document.removeEventListener("click", checkClick)
     }
   }, [profileActivity])
+
+
+  useEffect(()=>{
+    fetchProfileTradedCollections()
+  }, [])
 
 
 
@@ -218,6 +227,15 @@ const Activity = ({}) => {
 
     return dateFilter
   }
+  const getActivityOffsets = () => {
+    let offset = ""
+
+    Object.keys(activityOffsets).forEach(key => {
+      offset = offset + `&offset${key}=${activityOffsets[key]}`
+    })
+
+    return offset
+  }
 
 
   function toggleCollectionActivityFilterDropdown(){
@@ -239,7 +257,32 @@ const Activity = ({}) => {
     setLoadingProfileTradedCollections(false)
     setProfileTradedCollections(collections)
   }
-    
+  
+  async function loadMoreActivity(){
+    setProfileActivityLoadMore(true)
+
+    const addressFilter = getAddressFilter()
+    const typeFilter = getTypeFilter()
+    const priceFilter = getPriceFilter()
+    const marketplaceFilter = getMarketplaceFilter()
+    const tokenIdFilter = getTokenIdFilter()
+    const contractFilter = getContractFilter()
+    const dateFilter = getDateFilter()
+
+    const offsetFilters = getActivityOffsets()
+
+    const response = await fetch(`${baseUrl}/profileActivity?hello=hello${typeFilter}${addressFilter}${priceFilter}${marketplaceFilter}${tokenIdFilter}${contractFilter}${dateFilter}${offsetFilters}`, {
+      headers: {
+        "x-auth-token": localStorage.jsonwebtoken,
+      }
+    })
+
+    const {activity, newOffset1, newOffset2, newOffset3, hasMore} = await response.json()
+    hasMoreActivity.current = hasMore
+    setActivityOffsets({1: newOffset1, 2: newOffset2, 3: newOffset3})
+    setProfileActivity(old => [...old, ...activity])
+    setProfileActivityLoadMore(false)
+  }
   async function fetchActivity(){
     setProfileActivityLoading(true)
 
@@ -251,16 +294,15 @@ const Activity = ({}) => {
     const contractFilter = getContractFilter()
     const dateFilter = getDateFilter()
 
-    console.log(dateFilter)
-
-
-    const response = await fetch(`${baseUrl}/profileActivity?hello=hello${typeFilter}${addressFilter}${priceFilter}${marketplaceFilter}${tokenIdFilter}${contractFilter}${dateFilter}`, {
+    const response = await fetch(`${baseUrl}/profileActivity?hello=hello${typeFilter}${addressFilter}${priceFilter}${marketplaceFilter}${tokenIdFilter}${contractFilter}${dateFilter}&offset1=0&offset2=0&offset3=0`, {
       headers: {
         "x-auth-token": localStorage.jsonwebtoken,
       }
     })
 
-    const {activity} = await response.json()
+    const {activity, newOffset1, newOffset2, newOffset3, hasMore} = await response.json()
+    hasMoreActivity.current = hasMore
+    setActivityOffsets({1: newOffset1, 2: newOffset2, 3: newOffset3})
     setProfileActivity(activity)
     setProfileActivityLoading(false)
   }
@@ -280,7 +322,10 @@ const Activity = ({}) => {
 
 
   function saveActivityFilters(){
-    setActivityFilters({activityCategory, activityAddressFilter, activityPriceFilter, activityMarketplaceFilter, activityTokenIdFilter, activityContractAddressFilter, dateRange})
+
+    const activityOffsets = {0: 0, 1: 0, 2: 0}
+
+    setActivityFilters({activityCategory, activityAddressFilter, activityPriceFilter, activityMarketplaceFilter, activityTokenIdFilter, activityContractAddressFilter, dateRange, activityOffsets})
   }
 
   function changeActivityCollectionSelected(contractAddress, name, image){
@@ -526,9 +571,14 @@ const Activity = ({}) => {
 
                 
                 <tbody>
-
+                  {
+                    profileActivityLoading && "loading"
+                  }
                   {
                     !profileActivityLoading && profileActivityMapping
+                  }
+                  {
+                    profileActivityLoadMore && "loadng"
                   }
                 </tbody>
               </table>

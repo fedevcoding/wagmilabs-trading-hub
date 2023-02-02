@@ -35,27 +35,27 @@ const type2Query = (includeMint, includeBurn, includeSend, includeReceive, userA
     } else if (includeMint && includeBurn && !includeSend && includeReceive) {
         return `WHERE ((to_address = '${userAddress}' AND from_address IS NULL) OR (from_address = '${userAddress}' AND to_address IS NULL) OR (to_address = '${userAddress}'))`
     } else if (includeMint && !includeBurn && includeSend && includeReceive) {
-        return `WHERE ((to_address = '${userAddress}' AND from_address IS NULL) OR (from_address = '${userAddress}' OR to_address = '${userAddress}'))`
+        return `WHERE ((to_address = '${userAddress}' AND from_address IS NULL) OR ((from_address = '${userAddress}' AND to_address IS NOT NULL) OR to_address = '${userAddress}'))`
     } else if (!includeMint && includeBurn && includeSend && includeReceive) {
-        return `WHERE ((from_address = '${userAddress}' AND to_address IS NULL) OR (from_address = '${userAddress}' OR to_address = '${userAddress}'))`
+        return `WHERE ((from_address = '${userAddress}' AND to_address IS NULL) OR (from_address = '${userAddress}' OR (to_address = '${userAddress}' AND from_address IS NOT NULL)))`
     } else if (includeMint && includeBurn && !includeSend && !includeReceive) {
         return `WHERE ((to_address = '${userAddress}' AND from_address IS NULL) OR (from_address = '${userAddress}' AND to_address IS NULL))`
     } else if (includeMint && !includeBurn && includeSend && !includeReceive) {
-        return `WHERE ((to_address = '${userAddress}' AND from_address IS NULL) OR (from_address = '${userAddress}'))`
+        return `WHERE ((to_address = '${userAddress}' AND from_address IS NULL) OR (from_address = '${userAddress}' AND to_address IS NOT NULL))`
     } else if (includeMint && !includeBurn && !includeSend && includeReceive) {
         return `WHERE ((to_address = '${userAddress}' AND from_address IS NULL) OR (to_address = '${userAddress}'))`
     } else if (!includeMint && includeBurn && includeSend && !includeReceive) {
         return `WHERE ((from_address = '${userAddress}' AND to_address IS NULL) OR (from_address = '${userAddress}'))`
     } else if (!includeMint && includeBurn && !includeSend && includeReceive) {
-        return `WHERE ((from_address = '${userAddress}' AND to_address IS NULL) OR (to_address = '${userAddress}'))`
+        return `WHERE ((from_address = '${userAddress}' AND to_address IS NULL) OR (to_address = '${userAddress}' AND from_address IS NOT NULL))`
     } else if (!includeMint && !includeBurn && includeSend && includeReceive) {
-        return `WHERE (from_address = '${userAddress}' OR to_address = '${userAddress}')`
+        return `WHERE (from_address = '${userAddress}' OR to_address = '${userAddress}' AND from_address IS NOT NULL AND to_address IS NOT NULL)`
     } else if (includeMint && !includeBurn && !includeSend && !includeReceive) {
         return `WHERE (to_address = '${userAddress}' AND from_address IS NULL)`
     } else if (!includeMint && includeBurn && !includeSend && !includeReceive) {
         return `WHERE (from_address = '${userAddress}' AND to_address IS NULL)`
     } else if (!includeMint && !includeBurn && includeSend && !includeReceive) {
-        return `WHERE (from_address = '${userAddress}')`
+        return `WHERE (from_address = '${userAddress}' AND to_address IS NOT NULL)`
     } else if (!includeMint && !includeBurn && !includeSend && includeReceive) {
         return `WHERE (to_address = '${userAddress}' AND from_address IS NOT NULL)`
     } else {
@@ -118,14 +118,7 @@ const contractQuery = (contractAddress) => {
         return ``
     }
 }
-const limitQuery = (includeMint, includeBurn, includeSend, includeReceive, includeBuy, includeSale) => {
-    if((includeBuy || includeSale) && (includeMint || includeBurn || includeSend || includeReceive)) {
-        return `LIMIT 10`
-    }
-    else{
-        return `LIMIT 20`
-    }
-}
+
 const dateQuery = (startDate, endDate) => {
     if(startDate) startDate = new Date(parseInt(startDate)).toISOString()
     if(endDate) endDate = new Date(parseInt(endDate)).toISOString()
@@ -147,7 +140,7 @@ profileActivityRoute.get("/", checkAuth, async (req, res)=> {
 
     try{
         const userAddress = req.userDetails.address
-        let {includeMint, includeBurn, includeSend, includeReceive, includeBuy, includeSale, includeList, fromAddress, toAddress, minPrice, maxPrice, marketplace, tokenId, contractAddress, startDate, endDate} = req.query || {}
+        let {includeMint, includeBurn, includeSend, includeReceive, includeBuy, includeSale, includeList, fromAddress, toAddress, minPrice, maxPrice, marketplace, tokenId, contractAddress, startDate, endDate, offset1, offset2, offset3} = req.query || {}
 
         includeMint = toBool(includeMint)
         includeBurn = toBool(includeBurn)
@@ -157,6 +150,12 @@ profileActivityRoute.get("/", checkAuth, async (req, res)=> {
         includeSale = toBool(includeSale)
         includeList = toBool(includeList)
 
+        const listingsLimit = 20
+        let onChainLimit = 25
+
+        if((includeMint || includeBurn || includeSend || includeReceive) && (includeBuy || includeSale || includeList)){
+            onChainLimit = 20
+        }
 
         const SQL = `WITH sales AS (
             SELECT *
@@ -180,7 +179,8 @@ profileActivityRoute.get("/", checkAuth, async (req, res)=> {
                 ${contractQuery(contractAddress)}
                 ${dateQuery(startDate, endDate)}
                 ORDER BY timestamp DESC
-                ${limitQuery(includeMint, includeBurn, includeSend, includeReceive, includeBuy, includeSale)}
+                LIMIT ${onChainLimit}
+                ${offset1 ? `OFFSET '${offset1}'` : ``}
             ) subq
         
             UNION
@@ -204,7 +204,8 @@ profileActivityRoute.get("/", checkAuth, async (req, res)=> {
                 ${dateQuery(startDate, endDate)}
 
                 ORDER BY timestamp DESC
-                ${limitQuery(includeMint, includeBurn, includeSend, includeReceive, includeBuy, includeSale)}
+                LIMIT ${onChainLimit}
+                ${offset2 ? `OFFSET '${offset2}'` : ``}
             ) subq
         
         
@@ -233,16 +234,25 @@ profileActivityRoute.get("/", checkAuth, async (req, res)=> {
             WHERE s.transaction_hash = sales.transaction_hash) AS tx_count
         `
 
-        console.log(dateQuery(startDate, endDate))
         const onChainActivity = await execTranseposeAPI(SQL)
+        const listingsData = await getListingData(includeList, fromAddress, toAddress, userAddress, minPrice, maxPrice, marketplace, tokenId, contractAddress, startDate, endDate, listingsLimit, offset3)
 
-        await addTokenData(onChainActivity)
+        const rawActivity = [...onChainActivity, ...listingsData].sort((a, b) => (new Date(b.createdAt ? b.createdAt : b.createdat).getTime()) - (new Date(a.createdAt ? a.createdAt : a.createdat).getTime()))
+        
+        let hasMore = true
+        if(onChainActivity.length <= 20) hasMore = false
 
-        const listingsData = await getListingData(includeList, fromAddress, toAddress, userAddress, minPrice, maxPrice, marketplace, tokenId, contractAddress, startDate, endDate)
+        const activity = rawActivity.splice(0, 20)
 
-        const activity = [...onChainActivity, ...listingsData].sort((a, b) => (new Date(b.createdAt).getTime()) - (new Date(a.createdAt).getTime()))
+        const newOffset1 = parseInt(offset1) + activity.filter(a => a.type === 'sale' || a.type === 'buy').length
+        const newOffset2 = parseInt(offset2) + activity.filter(a => a.type === 'mint' || a.type === 'burn' || a.type === 'send' || a.type === 'receive').length
+        const newOffset3 = parseInt(offset3) + listingsData.length
 
-        res.json({ok: true, activity})
+        await addTokenData(activity)
+
+
+
+        res.json({ok: true, activity, newOffset1, newOffset2, newOffset3, hasMore})
     }
     catch(e){
         console.log(e)
@@ -252,7 +262,7 @@ profileActivityRoute.get("/", checkAuth, async (req, res)=> {
 
 
 
-async function getListingData(includeList, fromAddress, toAddress, userAddress, minPrice, maxPrice, marketplace, tokenId, contractAddress, startDate, endDate){
+async function getListingData(includeList, fromAddress, toAddress, userAddress, minPrice, maxPrice, marketplace, tokenId, contractAddress, startDate, endDate, listingsLimit, offset3){
     let listingsData = []
 
     if((includeList && !toAddress) && (!marketplace || marketplace === "opensea" || marketplace === "looksrare" || marketplace === "x2y2")){
@@ -300,7 +310,7 @@ async function getListingData(includeList, fromAddress, toAddress, userAddress, 
             const contractFilter = getContractFilter()
             const dateFilter = getDateFilter()
 
-            const listingsApiData = await fetch(`https://api.modulenft.xyz/api/v2/eth/nft/listings?active=true${dateFilter}&count=20&offset=0&sortDirection=timeDesc&seller=${userAddress}&withMetadata=false${minMaxFilter}${marketplaceFilter}${tokenIdFilter}${contractFilter}`, {
+            const listingsApiData = await fetch(`https://api.modulenft.xyz/api/v2/eth/nft/listings?active=true${dateFilter}&count=${listingsLimit}&offset=${offset3}&sortDirection=timeDesc&seller=${userAddress}&withMetadata=false${minMaxFilter}${marketplaceFilter}${tokenIdFilter}${contractFilter}`, {
                 headers: {
                     "X-API-KEY": "2183af1a-3d8e-4f24-b8a0-47fba900a366"
                 }
@@ -322,11 +332,13 @@ async function getListingData(includeList, fromAddress, toAddress, userAddress, 
 }
 
 
-async function addTokenData(onChainActivity){
+async function addTokenData(activity){
     let urlData = ""
-    onChainActivity.forEach(item => {
+    activity.forEach(item => {
+        if(item.type === "list") return
         const {token_id, contract_address} = item
-        const urlType = `&tokens=${contract_address}:${token_id}`
+        const tokenId = BigInt(token_id).toString()
+        const urlType = `&tokens=${contract_address}:${tokenId}`
         urlData = urlData + urlType
     })
 
@@ -338,8 +350,9 @@ async function addTokenData(onChainActivity){
     const reservoirData = (await reservoirApiData.json())?.tokens
 
 
-    onChainActivity.forEach(item => {
-        const {token_id, contract_address} = item
+    activity.forEach(item => {
+        const {token_id, contract_address, type} = item
+        if(type === "list") return
         const tokenData = reservoirData?.find(token => token.token.contract.toLowerCase() === contract_address.toLowerCase() && token.token.tokenId == token_id)
         item["tokenData"] = tokenData
         item["createdAt"] = item.createdat
