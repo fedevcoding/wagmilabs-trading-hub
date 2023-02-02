@@ -1,3 +1,5 @@
 import "./style.css";
 
-export const Row = ({ children }) => <div className="row">{children}</div>;
+export const Row = ({ children, className = "" }) => (
+  <div className={`row ${className}`}>{children}</div>
+);

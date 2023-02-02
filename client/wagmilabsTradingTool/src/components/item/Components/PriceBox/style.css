@@ -12,6 +12,7 @@
 }
 
 #page-token-detail .price-box {
+    margin-top: 2rem;
     padding: 1rem;
     border-radius: 10px;
     border: 1px solid var(--light-gray);
@@ -19,6 +20,7 @@
 }
 
 #page-token-detail .valid-until + .price-box {
+    margin-top: 0rem;
     border-top-left-radius: 0;
     border-top-right-radius: 0;
 }
@@ -29,4 +31,27 @@
 
 #page-token-detail .price-box .price small {
     margin-left: 1rem;
+}
+
+#page-token-detail .actions {
+    margin-top: 1rem;
+    display: flex;
+    font-size: 16px;
+}
+
+#page-token-detail .actions i {
+    margin-right: 0.5rem;
+}
+
+#page-token-detail .actions .btn {
+    padding: 1rem;
+    background-color: var(--secondary-color);
+    border: 1px solid var(--light-gray);
+    border-radius: 10px;
+    cursor: pointer;
+    text-align: center;
+}
+
+#page-token-detail .actions .btn:hover {
+    filter: brightness(120%);
 }

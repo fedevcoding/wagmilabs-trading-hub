@@ -1,6 +1,7 @@
 import moment from "moment";
 import React from "react";
 import { useAccount } from "wagmi";
+import { Col, Row } from "../../../utility-components";
 
 import "./style.css";
 
@@ -24,13 +25,38 @@ export const PriceBox = React.memo(({ details }) => {
             </p>
           )) ||
             ""}
-          {(market?.validUntil && (
+          {(market?.price && market?.price?.amount && (
             <div className="price-box">
               <p className="current-price">Current price</p>
               <div className="price">
-                0,004 ETH
-                <small>$6,69</small>
+                {market.price.amount.decimal} {market.price.currency.symbol}
+                <small>
+                  $
+                  {market.price.amount.usd.toLocaleString("EN-us", {
+                    maximumFractionDigits: 2,
+                  })}
+                </small>
               </div>
+              <Row className="actions">
+                <Col>
+                  <div className="btn">
+                    <i className="fa fa-cart-shopping" />
+                    Add to cart
+                  </div>
+                </Col>
+                <Col>
+                  <div className="btn">
+                    <i className="fa fa-tag" />
+                    Make offer
+                  </div>
+                </Col>
+                <Col>
+                  <div className="btn">
+                    <i className="fa fa-bolt" />
+                    Buy now
+                  </div>
+                </Col>
+              </Row>
             </div>
           )) ||
             ""}
