@@ -1,22 +1,15 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { useAccount } from "wagmi";
+import { PriceBox } from "..";
 
 import "./style.css";
 
 export const InfoCol = React.memo(({ details, address }) => {
   const navigate = useNavigate();
-  const { address: accountAddress } = useAccount();
-  const isOwner = details ? accountAddress === details?.token?.owner : false;
-
-  console.log("isOwner", isOwner);
 
   return (
     <div className="item-name-container">
-      <div className="item-star-container">
-        <h1 className="item-name">{details.token.name}</h1>
-      </div>
-
+      <h1 className="item-name">{details.token.name}</h1>
       <div
         className="item-collection-info"
         onClick={() => navigate(`/collection/${address}`)}
@@ -30,6 +23,8 @@ export const InfoCol = React.memo(({ details, address }) => {
           {details.token.collection.name}
         </div>
       </div>
+
+      <PriceBox details={details} />
     </div>
   );
 });

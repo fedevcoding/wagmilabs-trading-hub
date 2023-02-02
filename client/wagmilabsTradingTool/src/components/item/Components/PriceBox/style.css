@@ -1,0 +1,32 @@
+#page-token-detail .valid-until {
+    padding: 1rem;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border: 1px solid var(--light-gray);
+    margin-top: 2rem;
+    font-size: 18px;
+}
+
+#page-token-detail .valid-until i {
+    margin-right: 0.5rem;
+}
+
+#page-token-detail .price-box {
+    padding: 1rem;
+    border-radius: 10px;
+    border: 1px solid var(--light-gray);
+    font-size: 18px;
+}
+
+#page-token-detail .valid-until + .price-box {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
+#page-token-detail .price-box .price {
+    font-size: 26px;
+}
+
+#page-token-detail .price-box .price small {
+    margin-left: 1rem;
+}
