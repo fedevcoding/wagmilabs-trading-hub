@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { PriceBox } from "..";
+import { BestOfferBox, BestOfferTable, PriceBox } from "..";
 
 import "./style.css";
 
@@ -25,6 +25,8 @@ export const InfoCol = React.memo(({ details, address }) => {
       </div>
 
       <PriceBox details={details} />
+      <BestOfferBox details={details} />
+      <BestOfferTable details={details} />
     </div>
   );
 });

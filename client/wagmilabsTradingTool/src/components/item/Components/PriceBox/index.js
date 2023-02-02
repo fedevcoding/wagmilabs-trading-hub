@@ -8,10 +8,7 @@ import "./style.css";
 export const PriceBox = React.memo(({ details }) => {
   const { address: accountAddress } = useAccount();
   const isOwner = details ? accountAddress === details?.token?.owner : false;
-
   const market = Object.values(details.market)[0];
-
-  console.log(market);
 
   return (
     <>

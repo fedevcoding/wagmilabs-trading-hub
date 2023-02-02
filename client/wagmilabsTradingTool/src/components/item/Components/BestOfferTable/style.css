@@ -1,0 +1,21 @@
+#page-token-detail .best-offer {
+    margin-top: 2rem;
+    padding: 1rem;
+    border-radius: 10px;
+    border: 1px solid var(--light-gray);
+    font-size: 18px;
+}
+
+#page-token-detail .best-offer p {
+    margin: 0 -1rem 1rem -1rem;
+    padding: 0 1rem 1rem 1rem;
+    border-bottom: 1px solid var(--light-gray);
+}
+
+#page-token-detail .best-offer table {
+    width: 100%;
+}
+
+#page-token-detail .best-offer td {
+    text-align: center;
+}

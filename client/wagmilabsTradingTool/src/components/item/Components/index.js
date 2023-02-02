@@ -3,3 +3,5 @@ export { InfoCol } from "./InfoCol";
 export { MoreInfo } from "./MoreInfo";
 export { Attributes } from "./Attributes";
 export { PriceBox } from "./PriceBox";
+export { BestOfferBox } from "./BestOfferBox";
+export { BestOfferTable } from "./BestOfferTable";

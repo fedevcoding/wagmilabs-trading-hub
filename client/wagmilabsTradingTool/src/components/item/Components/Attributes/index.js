@@ -5,8 +5,6 @@ import "./style.css";
 export const Attributes = React.memo(({ attributes }) => {
   const [visible, setVisible] = React.useState(false);
 
-  console.log("attributes", attributes);
-
   return (
     <>
       <div className="dropdown-btn" onClick={() => setVisible(!visible)}>
