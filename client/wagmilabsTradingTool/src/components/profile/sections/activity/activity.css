@@ -175,59 +175,18 @@
 
 
 
-
-.profile-activity-collection-dropdown-title{
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-    padding: 10px 10px;
-    width: calc(100% - 20px);
-    justify-content: space-between;
-    border: 1px solid white;
+.profile-activity-date-picker{
+    color: white !important;
+    border: none;
     border-radius: 8px;
-}
-
-.profile-activity-collection-dropdown-title div{
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.profile-activity-collection-dropdown-container{
-    position: relative;
-}
-
-.profile-activity-collection-dropdown{
+    width: calc(100% - 20px);
+    cursor: pointer;
+    height: 30px;
     background-color: var(--grey-1);
     border: 1px solid white;
-    border-radius: 8px;
-    padding: 5px 0;
-    position: absolute;
-    top: 50px;
-    z-index: 99;
-    width: 100%;
+    padding: 3px 10px;
 }
 
-
-.profile-activity-collection-dropdown-item{
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    cursor: pointer;
-    padding: 5px 10px;
-}
-
-.profile-activity-collection-dropdown-item:hover, .profile-activity-collection-dropdown-item.active{
-    background-color: grey;
-}
-
-.profile-activity-collection-dropdown-item img, .profile-activity-collection-dropdown-title img{
-    width: 25px;
-    aspect-ratio: 1;
-    border-radius: 50%;
-}
-
-
-.profile-activity-date-picker{
-    color: black !important;
+.profile-activity-date-picker:focus{
+    outline: none;
 }

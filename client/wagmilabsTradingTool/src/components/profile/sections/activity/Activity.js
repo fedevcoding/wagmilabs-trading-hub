@@ -58,12 +58,9 @@ const Activity = ({}) => {
   const [activityPriceFilter, setActivityPriceFilter] = useState({min: "", max: ""})
   const [activityMarketplaceFilter, setActivityMarketplaceFilter] = useState("")
   const [activityTokenIdFilter, setActivityTokenIdFilter] = useState("")
-  const [activityContractAddressFilter, setActivityContractAddressFilter] = useState({name: "", address: "", image: ""})
+  const [activityContractAddressFilter, setActivityContractAddressFilter] = useState("")
 
-  
-  const [showActivityCollectionFilter, setShowActivityCollectionFilter] = useState(false)
-  const [profileTradedCollections, setProfileTradedCollections] = useState([])
-  const [loadingProfileTradedCollections, setLoadingProfileTradedCollections] = useState(false)
+
 
   const [profileActivity, setProfileActivity] = useState([])
   const [profileActivityLoading, setProfileActivityLoading] = useState(true)
@@ -97,17 +94,6 @@ const Activity = ({}) => {
 
   useEffect(()=>{
 
-    document.addEventListener("click", checkClick)
-
-    function checkClick(e){
-      const path = e.composedPath()
-      const collectionDropdown = document.querySelector(".profile-activity-collection-dropdown-title")
-      if(!path.includes(collectionDropdown)){
-        setShowActivityCollectionFilter(false)
-      }
-    }
-
-
     const options = {
       root: null,
       rootMargin: '0px',
@@ -130,14 +116,8 @@ const Activity = ({}) => {
       if (observer.current) {
         observer.current.disconnect();
       }
-      document.removeEventListener("click", checkClick)
     }
   }, [profileActivity])
-
-
-  useEffect(()=>{
-    fetchProfileTradedCollections()
-  }, [])
 
 
 
@@ -206,7 +186,7 @@ const Activity = ({}) => {
   }
   const getContractFilter = () => {
     const {activityContractAddressFilter} = activityFilters
-    const contractFilter = activityContractAddressFilter.address ? `&contractAddress=${activityContractAddressFilter.address}` : ""
+    const contractFilter = activityContractAddressFilter ? `&contractAddress=${activityContractAddressFilter}` : ""
     return contractFilter
   }
   const getDateFilter = () => {
@@ -238,25 +218,6 @@ const Activity = ({}) => {
   }
 
 
-  function toggleCollectionActivityFilterDropdown(){
-    setShowActivityCollectionFilter(old => !old)
-  }
-
-
-  async function fetchProfileTradedCollections(){
-
-    setLoadingProfileTradedCollections(true)
-
-    const response = await fetch(`${baseUrl}/profileTradedCollections?search=&offset=0&limit=10`, {
-      headers: {
-        "x-auth-token": localStorage.jsonwebtoken,
-      }
-    })
-    const collections = (await response.json()).collections
-
-    setLoadingProfileTradedCollections(false)
-    setProfileTradedCollections(collections)
-  }
   
   async function loadMoreActivity(){
     setProfileActivityLoadMore(true)
@@ -327,15 +288,6 @@ const Activity = ({}) => {
 
     setActivityFilters({activityCategory, activityAddressFilter, activityPriceFilter, activityMarketplaceFilter, activityTokenIdFilter, activityContractAddressFilter, dateRange, activityOffsets})
   }
-
-  function changeActivityCollectionSelected(contractAddress, name, image){
-    if(activityContractAddressFilter.address === contractAddress) setActivityContractAddressFilter({name: "", address: "", image: ""})
-    else setActivityContractAddressFilter({name, address: contractAddress, image})
-  }
-
-  useEffect(()=>{
-    console.log("activityAddressFilter", activityContractAddressFilter)
-  }, [activityContractAddressFilter])
 
 
 
@@ -457,6 +409,7 @@ const Activity = ({}) => {
                   setDateRange(update);
                 }}
                 isClearable={true}
+                placeholderText="Select date"
                 className="profile-activity-date-picker"
               />
             </div>
@@ -492,39 +445,10 @@ const Activity = ({}) => {
 
             <div className='profile-activity-filter-section'>
               <p>COLLECTION</p>
+              <HStack>
+                <Input placeholder='Collection address' onChange={e => setActivityContractAddressFilter(e.target.value)}/>
+              </HStack>
               
-              <div className='profile-activity-collection-dropdown-container'>
-                <div className='profile-activity-collection-dropdown-title' onClick={toggleCollectionActivityFilterDropdown}>
-                  <div className='wrap-text'>
-                    {activityContractAddressFilter.name ?
-                    <>
-                    <img src={activityContractAddressFilter.image}></img>
-                    <p className='wrap-text'>{activityContractAddressFilter.name}</p>
-                    </>
-                    : "All Collections"}
-                  </div>
-                  <i className="fa-solid fa-caret-down"></i>
-                </div>
-
-                {
-                  showActivityCollectionFilter &&
-                  <div className='profile-activity-collection-dropdown'>
-                    {
-                      profileTradedCollections && profileTradedCollections.map(collection => {
-                        const {contract_address, name, image_url} = collection
-
-                        return(
-                          <div key={contract_address} className={`profile-activity-collection-dropdown-item wrap-text ${activityContractAddressFilter.address == contract_address ? "active" : ""}`} onClick={() => changeActivityCollectionSelected(contract_address, name, image_url)}>
-                            <img src={image_url}></img>
-                            <p className='wrap-text'>{name}</p>
-                          </div>
-                        )
-                      })
-                    }
-                  </div>
-                }
-
-              </div>
             </div>
 
             <div className='profile-activity-filter-section'>
