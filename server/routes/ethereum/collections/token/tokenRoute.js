@@ -13,7 +13,7 @@ tokenRoute.get("/:address/token/:id/details", checkAuth, async (req, res) => {
     const tokenInfo = await lruCache(
       (
         await fetch(
-          `https://api.reservoir.tools/tokens/v5?tokens=${address}%3A${id}`,
+          `https://api.reservoir.tools/tokens/v5?tokens=${address}%3A${id}&includeTopBid=true&includeAttributes=true&includeQuantity=true&includeDynamicPricing=true`,
           {
             headers: {
               accept: "*/*",
