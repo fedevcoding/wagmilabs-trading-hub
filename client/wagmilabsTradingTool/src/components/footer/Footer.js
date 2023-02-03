@@ -1,6 +1,8 @@
 import React, { useContext, useState } from 'react'
+import { NotificationContainer } from "react-notifications";
 import GasModal from '../utility-components/GasModal'
 import LivePulsing from '../utility-components/LivePulsing'
+import 'react-notifications/lib/notifications.css';
 import "./Footer.css"
 
 import { UserDataContext } from '../../context/userContext'
@@ -24,7 +26,7 @@ const Footer = () => {
     }
 
   return (
-
+    <>
     <footer className='global-footer'>
 
 
@@ -65,6 +67,8 @@ const Footer = () => {
             </a>
         </div>
     </footer>
+    <NotificationContainer />
+    </>
 )
 }
 

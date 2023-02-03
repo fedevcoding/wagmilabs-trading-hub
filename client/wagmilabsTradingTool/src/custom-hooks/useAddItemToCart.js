@@ -1,4 +1,5 @@
 import React from "react";
+import { NotificationManager } from "react-notifications";
 import { UserDataContext } from "../context/userContext";
 import addToCart from "../utils/database-functions/addToCart";
 
@@ -36,6 +37,7 @@ export const useAddItemToCart = address => {
           contractAddress: address,
         },
       ]);
+      NotificationManager.success("Item successfully added");
     }
   }
 
