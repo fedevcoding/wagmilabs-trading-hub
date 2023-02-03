@@ -1,10 +1,12 @@
-import moment from "moment";
 import React from "react";
 import { useGetItemFunctions } from "../../../../custom-hooks";
 import { Col, Row } from "../../../utility-components";
 import { useGetVariables } from "./useGetVariables";
 
 import "./style.css";
+import { MakeOffer } from "./MakeOffer";
+import { CurrentPrice } from "./CurrentPrice";
+import { SaleEnds } from "./SaleEnds";
 
 export const PriceBox = React.memo(({ details, address }) => {
   const { addItemToCart, buyNow } = useGetItemFunctions(address);
@@ -23,26 +25,10 @@ export const PriceBox = React.memo(({ details, address }) => {
     <>
       {(!isOwner && (
         <>
-          {(market?.validUntil && (
-            <p className="valid-until">
-              <i className="fa fa-clock" />
-              {"Sale ends "}
-              {moment(market.validUntil * 1000).format("MMM DD, YYYY HH:mm")}
-            </p>
-          )) ||
-            ""}
+          <SaleEnds validUntil={market?.validUntil} />
           {(market?.price && market?.price?.amount && (
             <div className="price-box">
-              <p className="current-price">Current price</p>
-              <div className="price">
-                {market.price.amount.decimal} {market.price.currency.symbol}
-                <small>
-                  $
-                  {market.price.amount.usd.toLocaleString("EN-us", {
-                    maximumFractionDigits: 2,
-                  })}
-                </small>
-              </div>
+              <CurrentPrice market={market} />
               <Row className="actions">
                 <Col>
                   <div
@@ -63,10 +49,7 @@ export const PriceBox = React.memo(({ details, address }) => {
                   </div>
                 </Col>
                 <Col>
-                  <div className="btn">
-                    <i className="fa fa-tag" />
-                    Make offer
-                  </div>
+                  <MakeOffer />
                 </Col>
                 <Col>
                   <div
