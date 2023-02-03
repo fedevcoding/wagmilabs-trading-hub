@@ -49,7 +49,11 @@ export const PriceBox = React.memo(({ details, address }) => {
                   </div>
                 </Col>
                 <Col>
-                  <MakeOffer />
+                  <MakeOffer
+                    address={address}
+                    tokenId={tokenId}
+                    marketplace={marketplace}
+                  />
                 </Col>
                 <Col>
                   <div
