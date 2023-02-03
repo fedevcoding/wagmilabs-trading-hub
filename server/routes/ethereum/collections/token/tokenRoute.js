@@ -10,23 +10,19 @@ tokenRoute.get("/:address/token/:id/details", checkAuth, async (req, res) => {
   let data = {};
 
   try {
-    const tokenInfo = await lruCache(
-      (
-        await fetch(
-          `https://api.reservoir.tools/tokens/v5?tokens=${address}%3A${id}&includeTopBid=true&includeAttributes=true&includeQuantity=true&includeDynamicPricing=true`,
-          {
-            headers: {
-              accept: "*/*",
-              "x-api-key": "9a16bf8e-ec68-5d88-a7a5-a24044de3f38",
-            },
-          }
-        )
-      ).json(),
-      {
-        key: `collection#${address}#token#${id}#details`,
-        ttl: 12 * 60 * 60 * 1000, // 12 hours
-      }
-    );
+    const tokenInfo = await (
+      await fetch(
+        `https://api.reservoir.tools/tokens/v5?tokens=${address}%3A${id}&includeTopBid=true&includeAttributes=true&includeQuantity=true&includeDynamicPricing=true`,
+        {
+          headers: {
+            accept: "*/*",
+            "x-api-key": "9a16bf8e-ec68-5d88-a7a5-a24044de3f38",
+          },
+        }
+      )
+    ).json();
+
+    console.log(tokenInfo);
 
     if ((tokenInfo?.tokens || [])[0]) {
       data = tokenInfo?.tokens[0];
