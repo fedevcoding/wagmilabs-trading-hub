@@ -24,7 +24,7 @@ export const InfoCol = React.memo(({ details, address }) => {
         </div>
       </div>
 
-      <PriceBox details={details} />
+      <PriceBox details={details} address={address} />
       <BestOfferBox details={details} />
       <BestOfferTable details={details} />
     </div>

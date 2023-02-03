@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext, useMemo } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import "./items.css";
 
 import _ from "lodash";
@@ -20,22 +20,17 @@ import {
   InputGroup,
 } from "@chakra-ui/react";
 
-import { UserDataContext } from "../../../../context/userContext";
-import { getClient } from "@reservoir0x/reservoir-kit-client";
-import addToCart from "../../../../utils/database-functions/addToCart";
 import { roundPrice } from "../../../../utils/formats/formats";
 
-import { fetchSigner } from "@wagmi/core";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import getMarketplaceImage from "../../../../utils/marketplaceImageMapping";
-import {useDebounce} from "use-debounce"
 import useFirstRender from "../../../../custom-hooks/useFirstRender";
 import { useNavigate } from "react-router-dom";
+import { useGetItemFunctions } from "../../../../custom-hooks";
 
 
 const Items = ({ address, items, itemFilters, setItemFilters, collectionInfo, loadingItems, searchText, setSearchText, debounceSearch, options, selectedItem, setSelectedItem}) => {
 
-  const { setUserCartItems, gasSettings } = useContext(UserDataContext);
   const firstRender = useFirstRender();
   const navigate = useNavigate()
 
@@ -56,30 +51,6 @@ const Items = ({ address, items, itemFilters, setItemFilters, collectionInfo, lo
     conditionallyBuynowProps.isChecked = true
     conditionallyBuynowProps.isDisabled = true
   }
-
-
-  async function buyNow(contract, tokenId, marketplace, value) {
-    const signer = await fetchSigner();
-    const maxFeePerGas = (gasSettings.maxFeePerGas * 1000000000).toString();
-    const maxPriorityFeePerGas = (
-      gasSettings.maxPriorityFeePerGas * 1000000000
-    ).toString();
-
-    getClient()?.actions.buyToken({
-      tokens: [{ tokenId, contract: contract }],
-      signer,
-      options: {
-        maxFeePerGas,
-        maxPriorityFeePerGas,
-      },
-      expectedPrice: value,
-      onProgress: (steps) => {
-        console.log(steps);
-      },
-    });
-  }
-
-
 
 
   function changeSorting(parameter, value) {
@@ -128,24 +99,7 @@ const Items = ({ address, items, itemFilters, setItemFilters, collectionInfo, lo
     }
   }
 
-  async function addItemToCart(name, tokenId, price, image, marketplace, collectionName) {
-    let pushStatus = await addToCart({
-      name,
-      collectionName,
-      tokenId,
-      price,
-      image,
-      marketplace,
-      contractAddress: address,
-    });
-    if (pushStatus === "success") {
-      setUserCartItems((prevItems) => [
-        ...prevItems,
-        { name, tokenId, price, image, marketplace, collectionName, contractAddress: address },
-      ]);
-    }
-  }
-
+  const { addItemToCart, buyNow } = useGetItemFunctions(address);
 
   const itemsMapping = useMemo(() => 
       items && items.map((item, index) => {
@@ -210,7 +164,7 @@ const Items = ({ address, items, itemFilters, setItemFilters, collectionInfo, lo
                   {isListed && (
                     <>
                       <div onClick={() =>
-                            buyNow(address, tokenId, marketplace, value)
+                            buyNow(address, tokenId, value)
                           }>
                         <i className="fa-regular fa-bolt"></i>
                         <p

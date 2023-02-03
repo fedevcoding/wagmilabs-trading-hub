@@ -1,14 +1,23 @@
 import moment from "moment";
 import React from "react";
-import { useAccount } from "wagmi";
+import { useGetItemFunctions } from "../../../../custom-hooks";
 import { Col, Row } from "../../../utility-components";
+import { useGetVariables } from "./useGetVariables";
 
 import "./style.css";
 
-export const PriceBox = React.memo(({ details }) => {
-  const { address: accountAddress } = useAccount();
-  const isOwner = details ? accountAddress === details?.token?.owner : false;
-  const market = Object.values(details.market)[0];
+export const PriceBox = React.memo(({ details, address }) => {
+  const { addItemToCart, buyNow } = useGetItemFunctions(address);
+  const {
+    name,
+    tokenId,
+    value,
+    image,
+    marketplace,
+    collectionName,
+    market,
+    isOwner,
+  } = useGetVariables(details);
 
   return (
     <>
@@ -36,7 +45,19 @@ export const PriceBox = React.memo(({ details }) => {
               </div>
               <Row className="actions">
                 <Col>
-                  <div className="btn">
+                  <div
+                    className="btn"
+                    onClick={() =>
+                      addItemToCart(
+                        name,
+                        tokenId,
+                        value,
+                        image,
+                        marketplace,
+                        collectionName
+                      )
+                    }
+                  >
                     <i className="fa fa-cart-shopping" />
                     Add to cart
                   </div>
@@ -48,7 +69,10 @@ export const PriceBox = React.memo(({ details }) => {
                   </div>
                 </Col>
                 <Col>
-                  <div className="btn">
+                  <div
+                    className="btn"
+                    onClick={() => buyNow(address, tokenId, value)}
+                  >
                     <i className="fa fa-bolt" />
                     Buy now
                   </div>
