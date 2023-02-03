@@ -31,6 +31,8 @@ import getMarketplaceImage from "../../../../utils/marketplaceImageMapping";
 import {useDebounce} from "use-debounce"
 import useFirstRender from "../../../../custom-hooks/useFirstRender";
 
+import flaggedImg from "../../../../assets/flagged.svg";
+
 
 const Items = ({ address, items, itemFilters, setItemFilters, collectionInfo, loadingItems, searchText, setSearchText, debounceSearch, options, selectedItem, setSelectedItem}) => {
 
@@ -147,7 +149,7 @@ const Items = ({ address, items, itemFilters, setItemFilters, collectionInfo, lo
 
   const itemsMapping = useMemo(() => 
       items && items.map((item, index) => {
-        const { tokenId, name, image, rarityRank } = item?.token;
+        const { tokenId, name, image, rarityRank, isFlagged } = item?.token;
 
         const collectionName = item?.token?.collection?.name
         const collectionImage = item?.token?.collection?.image;
@@ -172,14 +174,29 @@ const Items = ({ address, items, itemFilters, setItemFilters, collectionInfo, lo
                   className="collection-single-item-image"
                 />
 
-                {isListed && (
-                  <a href={marketplaceUrl} target="_blank">
-                    <img
-                      src={marketplaceImg}
-                      className="collection-item-marketplace-image"
-                    ></img>
-                  </a>
-                )}
+                {isListed && 
+
+                <>
+                    <a href={marketplaceUrl} target="_blank">
+                      <img
+                        src={marketplaceImg}
+                        className="collection-item-marketplace-image"
+                      ></img>
+                    </a>
+
+                    {
+                      isFlagged && 
+                      <img src={flaggedImg} className="collection-items-flagged-img"/>
+                    }
+                </>
+                }
+
+                {
+                  rarityRank && 
+                  <div className="collection-item-rarity-box">
+                    <p># {rarityRank}</p>
+                  </div>
+                }
               </div>
 
               <div className="collection-items-item-stats">
@@ -313,8 +330,13 @@ const Items = ({ address, items, itemFilters, setItemFilters, collectionInfo, lo
 
           <div className="collection-item-filter-section3">
             <Accordion allowMultiple>
-              {collectionInfo.attributes &&
-                Object.keys(collectionInfo?.attributes).map((key, index) => {
+
+
+              {
+                useMemo(() => collectionInfo?.attributes?.map((item, index) => {
+
+                  const attributeName = item.key
+
                   return (
                     <AccordionItem>
                       <AccordionButton
@@ -330,42 +352,41 @@ const Items = ({ address, items, itemFilters, setItemFilters, collectionInfo, lo
                           gap="10px"
                         >
                           <i className="fa-solid fa-filters"></i>
-                          <p>{key}</p>
+                          <p>{attributeName}</p>
                         </Box>
                         <AccordionIcon />
                       </AccordionButton>
 
                       <AccordionPanel pb={4}>
-                        {collectionInfo?.attributes[key] &&
-                          Object.keys(collectionInfo?.attributes[key]).map(
-                            (innerKey, innerIndex) => {
-                              return (
+                        {
+                          item?.values && item.values.map(innerItem => {
+                            const attributeValue = innerItem.value
+
+                            return (
                                 <>
-                                      {/* setItemFilters((prev) => ({
-                                        ...prev,
-                                        attributeFilter: [...prev.attributeFilter, {attributeKey, attributeValue}],
-                                      })); */}
                                   <Checkbox
-                                    defaultChecked={itemFilters?.attributeFilter?.filter(item => item.attributeKey === key && item.attributeValue === innerKey).length > 0 ? true : false}
+                                    defaultChecked={itemFilters?.attributeFilter?.filter(item => item.attributeKey === attributeName && item.attributeValue === attributeValue).length > 0 ? true : false}
                                     size={"sm"}
                                     className="collection-item-marketplace-filter"
-                                    key={innerIndex}
-                                    value={innerKey}
-                                    onChange={(e) => changeAttributeFilter(e.target.checked, key, innerKey)}
+                                    key={crypto.randomUUID()}
+                                    value={attributeValue}
+                                    onChange={(e) => changeAttributeFilter(e.target.checked, attributeName, attributeValue)}
                                   >
-                                    {innerKey}
+                                    {attributeValue}
                                   </Checkbox>
                                   <br />
                                 </>
-                              );
-                            }
-                          )}
+                            );
+                          })
+                        }
 
                         <Divider />
                       </AccordionPanel>
                     </AccordionItem>
                   );
-                })}
+                }), [collectionInfo])
+              }
+
             </Accordion>
           </div>
         </div>
@@ -433,9 +454,12 @@ const ItemSortSelect = ({ options, changeSorting, selectedItem, setSelectedItem 
   const toggleSelector = (e) => {
     const container = document.querySelector(".item-sort-select-container");
     const path = e.composedPath()
-    if (!active && !path.includes(container)) return;
-
-    setActive((prev) => !prev);
+    if (!active && !path.includes(container)){
+      setActive(false)
+    }
+    else{
+      setActive((prev) => !prev);
+    }
   };
 
   const mappedOptions = useMemo(() => {

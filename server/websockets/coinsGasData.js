@@ -33,8 +33,8 @@ const getCoinsGasData = async () => {
         return data
     }
     catch(e){
-        // console.log(e)
-        console.log("coin error")
+        console.log(e.message)
+        // console.log("coin error")
     }
 }
 

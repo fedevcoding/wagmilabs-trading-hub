@@ -152,7 +152,6 @@ const Collection = () => {
             const openseaData = (await openseaDataApi.json())?.collection
 
             const royalties = openseaData?.dev_seller_fee_basis_point || openseContractData?.dev_seller_fee_basis_points || data?.royalties?.bps || ""
-            const attributes = openseaData?.traits
             const createdDate = openseaData?.created_date || openseContractData?.created_date
             const marketCap = openseaData?.stats?.market_cap
             const avgPrice = openseaData?.stats?.average_price
@@ -161,7 +160,7 @@ const Collection = () => {
             const totalSales = openseaData?.stats?.total_sales
             const ercType = openseContractData?.schema_name
 
-            data["attributes"] = attributes
+            // data["attributes"] = attributes
             data["collectionRoyalties"] = royalties 
             data["createdAt"] = createdDate
             data["marketCap"] = marketCap 
