@@ -21,15 +21,52 @@ import { SocketContext } from '../../../../context/SocketContext'
 
 import { formatTime } from '../../../../utils/formats/formats'
 import baseUrl from '../../../../variables/baseUrl'
+import BuyNowModal from '../../../utility-components/BuyNowModal'
+import { getClient } from "@reservoir0x/reservoir-kit-client";
 
+import { fetchSigner } from "@wagmi/core";
+import { UserDataContext } from '../../../../context/userContext'
 
 const saleHashes = []
 const listingHashes = []
 
 const LiveView = ({address, collectionImage}) => {
 
+    const [showBuyNowModal, setShowBuyNowModal] = useState(false)
+    const [buyNowModalData, setBuyNowModalData] = useState({
+        name: "",
+        image: "",
+        tokenId: "",
+        price: "",
+        marketplace: "",
+        contract: "",
+        collectionName: ""
+    })
+
+    function openBuyModal(name, image, tokenId, price, marketplace, contract, collectionName){
+        document.body.style.overflow = "hidden"
+        setBuyNowModalData({
+            name,
+            image,
+            tokenId,
+            price,
+            marketplace,
+            contract,
+            collectionName
+        })
+        setShowBuyNowModal(true)
+    }
+    
+    function closeBuynowModal(e){
+        if(e.target !== e.currentTarget) return
+        document.body.style.overflow = "unset"
+        setShowBuyNowModal(false)
+    }
+
 
     const socket = useContext(SocketContext)
+    const { gasSettings } = useContext(UserDataContext);
+
 
     const [listings, setListings] = useState([])
     const [sales, setSales] = useState([])
@@ -142,6 +179,30 @@ const LiveView = ({address, collectionImage}) => {
         setSales(activities)
     }
 
+
+    
+    async function buyNow(contract, tokenId, value) {
+        const signer = await fetchSigner();
+        const maxFeePerGas = (gasSettings.maxFeePerGas * 1000000000).toString();
+        const maxPriorityFeePerGas = (
+        gasSettings.maxPriorityFeePerGas * 1000000000
+        ).toString();
+
+        await getClient()?.actions.buyToken({
+        tokens: [{ tokenId, contract: contract }],
+        signer,
+        options: {
+            maxFeePerGas,
+            maxPriorityFeePerGas,
+        },
+        expectedPrice: value,
+        onProgress: (steps) => {
+            console.log(steps);
+        },
+        });
+    }
+
+
     const listingsMapping = useMemo(()=> listings.map(listing => {
         
         const {name, image, tokenId} = listing?.criteria?.data?.token || {}
@@ -169,7 +230,7 @@ const LiveView = ({address, collectionImage}) => {
                     <p>{roundPrice(readableValue)} ETH</p>
                     <div className='live-view-listing-marketplace-container'>
                         <img src={marketplaceImg} className="live-view-listing-marketplace"></img>
-                        <Button colorScheme={"blue"} className='live-view-buy'>Buy</Button>
+                        <Button colorScheme={"blue"} className='live-view-buy' onClick={() => openBuyModal(name, image, tokenId, readableValue, marketplace, address, "chyngos")}>Buy</Button>
                     </div>
                 </div>
             </div>
@@ -211,7 +272,11 @@ const LiveView = ({address, collectionImage}) => {
     }), [sales, refreshDate])
 
   return (
+    
     <div className='live-view-container'>
+        {
+        <BuyNowModal buyNowModalData={buyNowModalData} showBuyNowModal={showBuyNowModal} buyNow={buyNow} closeBuynowModal={closeBuynowModal}/>
+        }
         <section className='live-view-section'>
             <div className='live-view-listings-container'>
                 <p className='live-view-listing-text'>Listings</p>
