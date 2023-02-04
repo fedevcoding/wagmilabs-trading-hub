@@ -5,3 +5,4 @@ export { Attributes } from "./Attributes";
 export { PriceBox } from "./PriceBox";
 export { BestOfferBox } from "./BestOfferBox";
 export { BestOfferTable } from "./BestOfferTable";
+export { MakeOffer } from "./MakeOffer";

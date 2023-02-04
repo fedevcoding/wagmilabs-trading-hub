@@ -1,12 +1,15 @@
 import React from "react";
 import { useAccount } from "wagmi";
 import { Col, Row } from "../../../utility-components";
+import { MakeOffer } from "..";
 
-export const BestOfferBox = React.memo(({ details }) => {
+export const BestOfferBox = React.memo(({ details, address }) => {
   const { address: accountAddress } = useAccount();
   const isOwner = details ? accountAddress === details?.token?.owner : false;
   const market = Object.values(details.market)[0];
   const topBid = details?.market?.topBid;
+  const tokenId = details?.token?.tokenId || "";
+  const marketplace = market?.source?.name || "";
 
   return (
     <>
@@ -24,10 +27,11 @@ export const BestOfferBox = React.memo(({ details }) => {
           </div>
           <Row className="actions">
             <Col>
-              <div className="btn">
-                <i className="fa fa-tag" />
-                Make offer
-              </div>
+              <MakeOffer
+                address={address}
+                tokenId={tokenId}
+                marketplace={marketplace}
+              />
             </Col>
           </Row>
         </div>

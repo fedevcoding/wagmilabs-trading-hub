@@ -2,11 +2,11 @@ import React from "react";
 import { useGetItemFunctions } from "../../../../custom-hooks";
 import { Col, Row } from "../../../utility-components";
 import { useGetVariables } from "./useGetVariables";
-
-import "./style.css";
-import { MakeOffer } from "./MakeOffer";
+import { MakeOffer } from "..";
 import { CurrentPrice } from "./CurrentPrice";
 import { SaleEnds } from "./SaleEnds";
+
+import "./style.css";
 
 export const PriceBox = React.memo(({ details, address }) => {
   const { addItemToCart, buyNow } = useGetItemFunctions(address);
