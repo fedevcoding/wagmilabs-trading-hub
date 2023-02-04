@@ -30,6 +30,10 @@
     margin-bottom: 50px;
 }
 
+.profile-items-container .profile-skeleton-container{
+    padding: 20px 0;
+}
+
 .profile-items{
     margin-bottom: 40px;
     display: grid;

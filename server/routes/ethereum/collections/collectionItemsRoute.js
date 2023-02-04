@@ -7,9 +7,9 @@ const collectionItemsRoute = express()
 collectionItemsRoute.get('/:address', checkAuth, (req, res) => {
 
     const {address} = req.params
-    const {sortBy, minAsk, maxAsk, attributes, tokenId} = req.query
+    const {sortBy, minAsk, maxAsk, attributes, tokenId, continuation} = req.query
 
-    const filterUrl = encodeURI(getUrl(address, sortBy, minAsk, maxAsk, attributes, tokenId))
+    const filterUrl = encodeURI(getUrl(address, sortBy, minAsk, maxAsk, attributes, tokenId, continuation))
 
 
     async function getData(){
@@ -21,9 +21,12 @@ collectionItemsRoute.get('/:address', checkAuth, (req, res) => {
                     "x-api-key": '9a16bf8e-ec68-5d88-a7a5-a24044de3f38'
                 }
             })
-            data = (await data.json()).tokens
 
-            res.json(data)
+            data = await data.json()
+
+            const {tokens, continuation} = data
+
+            res.json({tokens, continuation})
         }
         catch(err){
             console.log(err)
@@ -33,7 +36,7 @@ collectionItemsRoute.get('/:address', checkAuth, (req, res) => {
 })
 
 
-const getUrl = (contractAddress, sort, minAsk, maxAsk, attributes, tokenId) => {
+const getUrl = (contractAddress, sort, minAsk, maxAsk, attributes, tokenId, continuation) => {
 
 
     let url = "";
@@ -77,6 +80,9 @@ const getUrl = (contractAddress, sort, minAsk, maxAsk, attributes, tokenId) => {
     }
     if(maxAsk && maxAsk !== "undefined"){
         url = `${url}&maxFloorAskPrice=${maxAsk}`
+    }
+    if(continuation && continuation !== "undefined"){
+        url = `${url}&continuation=${continuation}`
     }
 
 

@@ -297,7 +297,7 @@ const Header = () => {
 
         <i className="fa-solid fa-wallet" style={{fontSize: "25px", cursor:"pointer"}} onClick={openWalletModal}></i>
 
-        <i className="fa-solid fa-cart-shopping" style={{fontSize: "25px", cursor:"pointer"}} onClick={openCartModal}></i>
+        <i className="header-cart-item fa-solid fa-cart-shopping" style={{fontSize: "25px", cursor:"pointer"}} onClick={openCartModal}></i>
 
 
         

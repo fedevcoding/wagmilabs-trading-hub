@@ -1,10 +1,11 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState, useRef } from 'react'
 import baseUrl from "../../../../variables/baseUrl.js"
 import { useParams } from 'react-router-dom';
 
 import HighchartsReact from "highcharts-react-official"
 import Highcharts from "highcharts"
 import { formatAddress, formatAddress2, formatAddress3, roundPrice2 } from '../../../../utils/formats/formats.js';
+import Skeleton, {SkeletonTheme } from "react-loading-skeleton"
 
 
 import "./activity.css"
@@ -29,6 +30,11 @@ const activityTypeMapping = {
 
 const Activity = ({address}) => {
 
+  const [loadingMoreActivity, setLoadingMoreActivity] = useState(false)
+  const activityContinuation = useRef()
+  const observer = useRef(null)
+
+
   const [activityChartData, setActivityChartData] = useState({})
   const [loadingChart, setLoadingChart] = useState(true)
   const [chartPeriod, setChartPeriod] = useState("24h")
@@ -39,6 +45,34 @@ const Activity = ({address}) => {
   const [collectuonActivityFilter, setCollectionActivityFilter] = useState(["sale"])
 
 
+
+  useEffect(()=>{
+
+    const options = {
+      root: null,
+      rootMargin: '0px',
+      threshold: 1.0
+    };
+
+    observer.current = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting && activityContinuation.current) {
+        // alert("hello")
+        getMoreActivity()
+      }
+    }, options);
+
+    const target = document.querySelector('.collection-activity-single-container.last-token');
+    if (target) {
+      observer.current.observe(target);
+    }
+
+
+    return () => {
+      if (observer.current) {
+        observer.current.disconnect();
+      }
+    }
+  }, [collectionActivity])
 
   useEffect(()=>{
     getChartData()
@@ -81,10 +115,34 @@ const Activity = ({address}) => {
     })
     data = await data.json()
 
-    console.log(data)
+    const {continuation, activities} = data
+
+    activityContinuation.current = continuation
 
 
-    setCollectionActivity(data)
+    setCollectionActivity(activities)
+    setCollectionActivityLoading(false)
+  }
+  async function getMoreActivity(){
+    setLoadingMoreActivity(true)
+
+    const filters = collectuonActivityFilter.join("-")
+    const continuationFilter = activityContinuation.current ? `&continuation=${activityContinuation.current}` : ""
+
+
+    let data = await fetch(`${baseUrl}/collectionActivity/${address}?types=${filters}${continuationFilter}`, {
+      headers: {
+        "x-auth-token": localStorage.jsonwebtoken
+      }
+    })
+    data = await data.json()
+
+    const {continuation, activities} = data
+
+    activityContinuation.current = continuation
+
+
+    setCollectionActivity(prev => [...prev, ...activities])
     setCollectionActivityLoading(false)
   }
 
@@ -103,7 +161,7 @@ const Activity = ({address}) => {
 
 
 
-  const collectionActivityMapping = useMemo(() => collectionActivity.map(item => {
+  const collectionActivityMapping = useMemo(() => collectionActivity.map((item, index) => {
     const {type, fromAddress, toAddress, price, timestamp, txHash, amount} = item
     const {tokenName, tokenImage, tokenId} = item.token
     const {collectionName, collectionImage} = item.collection
@@ -112,12 +170,12 @@ const Activity = ({address}) => {
 
     const marketplaceName = item?.order?.source?.name
     const marketplaceImage = getMarketplaceImage(marketplaceName)
-
+    const isLast = index === collectionActivity.length - 1
     const key = crypto.randomUUID()
     return(
 
       <>
-      <tr key={key} className="collection-activity-single-container">
+      <tr key={key} className={`collection-activity-single-container ${isLast && "last-token"}`}>
         
         <td className="collection-activity-single-type">
           <div className='collection-activity-marketplace-container'>
@@ -214,10 +272,18 @@ const Activity = ({address}) => {
             </thead>
 
             
+
             <tbody>
+              {
+                collectionActivityLoading ?
+                <tr><td colSpan={6}><div className='loading'>Loading activity   <svg className="spinner" width="65px" height="65px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg"><circle className="path" fill="none" strokeWidth="6" strokeLinecap="round" cx="33" cy="33" r="30"></circle></svg>     </div></td></tr>
+                :
+                collectionActivityMapping
+              }
 
               {
-                !collectionActivityLoading && collectionActivityMapping
+                loadingMoreActivity &&
+                <tr><td colSpan={6}><div className='loading'>Loading activity   <svg className="spinner" width="65px" height="65px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg"><circle className="path" fill="none" strokeWidth="6" strokeLinecap="round" cx="33" cy="33" r="30"></circle></svg>     </div></td></tr>
               }
             </tbody>
           </table>
@@ -291,7 +357,6 @@ const ActivityChart = ({activityChartData}) => {
     </div>
   )
 }
-
 
 
 const ActivityIcon = ({type}) => {

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext, useMemo } from "react";
+import React, { useEffect, useState, useContext, useMemo, useRef } from "react";
 import "./items.css";
 
 import _ from "lodash";
@@ -28,18 +28,59 @@ import { roundPrice } from "../../../../utils/formats/formats";
 import { fetchSigner } from "@wagmi/core";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import getMarketplaceImage from "../../../../utils/marketplaceImageMapping";
-import {useDebounce} from "use-debounce"
 import useFirstRender from "../../../../custom-hooks/useFirstRender";
 
 import flaggedImg from "../../../../assets/flagged.svg";
+import BuyNowModal from "../../../utility-components/BuyNowModal";
+import removeFromCart from "../../../../utils/database-functions/removeFromCart";
 
 
-const Items = ({ address, items, itemFilters, setItemFilters, collectionInfo, loadingItems, searchText, setSearchText, debounceSearch, options, selectedItem, setSelectedItem}) => {
+const Items = ({ loadingMoreItems, tokensContinuation, address, items, itemFilters, setItemFilters, collectionInfo, loadingItems, searchText, setSearchText, debounceSearch, options, selectedItem, setSelectedItem, fetchMoreTokens}) => {
 
-  const { setUserCartItems, gasSettings } = useContext(UserDataContext);
+  const { setUserCartItems, userCartItems, gasSettings } = useContext(UserDataContext);
   const firstRender = useFirstRender();
 
+  const observer = useRef(null);
 
+
+  const [showBuyNowModal, setShowBuyNowModal] = useState(false)
+  const [buyNowModalData, setBuyNowModalData] = useState({
+    name: "",
+    image: "",
+    tokenId: "",
+    price: "",
+    marketplace: "",
+    contract: "",
+    collectionName: ""
+  })
+
+
+  useEffect(()=>{
+
+    const options = {
+      root: null,
+      rootMargin: '0px',
+      threshold: 1.0
+    };
+
+    observer.current = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting && tokensContinuation.current) {
+        fetchMoreTokens()
+      }
+    }, options);
+
+    const target = document.querySelector('.collection-single-item-container.last-token');
+    if (target) {
+      observer.current.observe(target);
+    }
+
+
+    return () => {
+      if (observer.current) {
+        observer.current.disconnect();
+      }
+    }
+  }, [items])
 
 
   useEffect(()=>{
@@ -56,30 +97,6 @@ const Items = ({ address, items, itemFilters, setItemFilters, collectionInfo, lo
     conditionallyBuynowProps.isChecked = true
     conditionallyBuynowProps.isDisabled = true
   }
-
-
-  async function buyNow(contract, tokenId, marketplace, value) {
-    const signer = await fetchSigner();
-    const maxFeePerGas = (gasSettings.maxFeePerGas * 1000000000).toString();
-    const maxPriorityFeePerGas = (
-      gasSettings.maxPriorityFeePerGas * 1000000000
-    ).toString();
-
-    getClient()?.actions.buyToken({
-      tokens: [{ tokenId, contract: contract }],
-      signer,
-      options: {
-        maxFeePerGas,
-        maxPriorityFeePerGas,
-      },
-      expectedPrice: value,
-      onProgress: (steps) => {
-        console.log(steps);
-      },
-    });
-  }
-
-
 
 
   function changeSorting(parameter, value) {
@@ -128,7 +145,62 @@ const Items = ({ address, items, itemFilters, setItemFilters, collectionInfo, lo
     }
   }
 
-  async function addItemToCart(name, tokenId, price, image, marketplace, collectionName) {
+  function animateAddToCart(index, image){
+    const item = document.querySelectorAll(".collection-single-item-container")[index]
+    const cart = document.querySelector(".header-cart-item")
+
+    const cartX = (-1 * (window.screenX - cart.getBoundingClientRect().x)) - cart.getBoundingClientRect().width
+    const cartY = cart.getBoundingClientRect().y
+
+    const itemX = (window.screenX - item.getBoundingClientRect().x)
+    const itemY = item.getBoundingClientRect().y
+
+    const imageTag = document.createElement("img")
+    imageTag.src = image
+    imageTag.style.height = "200px"
+    imageTag.style.position = "fixed"
+    imageTag.style.top = itemY + "px"
+    imageTag.style.right = itemX + "px"
+    imageTag.style.zIndex = "1000"
+    imageTag.style.borderRadius = "10px"
+    imageTag.style.transition = "all 250ms linear"
+
+    
+    item.appendChild(imageTag)
+
+    setTimeout(()=>{
+      imageTag.style.top = cartY + "px"
+      imageTag.style.right = cartX + "px"
+      imageTag.style.height = "30px"
+
+      setTimeout(()=>{
+        imageTag.remove()
+      }, 240)
+    }, 10)
+  }
+
+
+  function openBuyModal(name, image, tokenId, price, marketplace, contract, collectionName){
+    document.body.style.overflow = "hidden"
+    setBuyNowModalData({
+      name,
+      image,
+      tokenId,
+      price,
+      marketplace,
+      contract,
+      collectionName
+    })
+    setShowBuyNowModal(true)
+  }
+
+  function closeBuynowModal(e){
+    if(e.target !== e.currentTarget) return
+    document.body.style.overflow = "unset"
+    setShowBuyNowModal(false)
+  }
+
+  async function addItemToCart(name, tokenId, price, image, marketplace, collectionName, index) {
     let pushStatus = await addToCart({
       name,
       collectionName,
@@ -139,6 +211,8 @@ const Items = ({ address, items, itemFilters, setItemFilters, collectionInfo, lo
       contractAddress: address,
     });
     if (pushStatus === "success") {
+
+      animateAddToCart(index, image)
       setUserCartItems((prevItems) => [
         ...prevItems,
         { name, tokenId, price, image, marketplace, collectionName, contractAddress: address },
@@ -146,10 +220,43 @@ const Items = ({ address, items, itemFilters, setItemFilters, collectionInfo, lo
     }
   }
 
+  async function buyNow(contract, tokenId, value) {
+    const signer = await fetchSigner();
+    const maxFeePerGas = (gasSettings.maxFeePerGas * 1000000000).toString();
+    const maxPriorityFeePerGas = (
+      gasSettings.maxPriorityFeePerGas * 1000000000
+    ).toString();
+
+    await getClient()?.actions.buyToken({
+      tokens: [{ tokenId, contract: contract }],
+      signer,
+      options: {
+        maxFeePerGas,
+        maxPriorityFeePerGas,
+      },
+      expectedPrice: value,
+      onProgress: (steps) => {
+        console.log(steps);
+      },
+    });
+  }
+
+
+
+  async function removeItemFromCart(tokenId, contractAddress){
+    const filteredItems = userCartItems.filter(item => item.contractAddress + item.tokenId !== contractAddress + tokenId)
+
+    await removeFromCart(tokenId, contractAddress)
+    
+    setUserCartItems(filteredItems)
+  }
 
   const itemsMapping = useMemo(() => 
       items && items.map((item, index) => {
+
+        
         const { tokenId, name, image, rarityRank, isFlagged } = item?.token;
+        const isInCart = userCartItems.some(item => item.tokenId == tokenId)
 
         const collectionName = item?.token?.collection?.name
         const collectionImage = item?.token?.collection?.image;
@@ -164,9 +271,11 @@ const Items = ({ address, items, itemFilters, setItemFilters, collectionInfo, lo
 
         const marketplaceImg = getMarketplaceImage(marketplace) || marketplaceIcon;
 
+        const isLast = index === items.length - 1
+
         return (
-          <div className="collection-single-item-container" key={index}>
-            <div className="collection-item-details-container">
+          <div className={`collection-single-item-container ${isLast && "last-token"}`} key={index}>
+            <div className={`collection-item-details-container ${isInCart && "item-cart-selected"}`}>
               <div className="collection-item-image-hover-overflow">
                 <img
                   src={image || collectionImage}
@@ -197,6 +306,13 @@ const Items = ({ address, items, itemFilters, setItemFilters, collectionInfo, lo
                     <p># {rarityRank}</p>
                   </div>
                 }
+
+                {
+                  isInCart &&
+                  <div className="collection-item-selected-cart-check">
+                    <i className="fa-solid fa-check"></i>
+                  </div>
+                }
               </div>
 
               <div className="collection-items-item-stats">
@@ -223,7 +339,7 @@ const Items = ({ address, items, itemFilters, setItemFilters, collectionInfo, lo
                   {isListed && (
                     <>
                       <div onClick={() =>
-                            buyNow(address, tokenId, marketplace, value)
+                            openBuyModal(name, image, tokenId, value, marketplace, address, collectionName)
                           }>
                         <i className="fa-regular fa-bolt"></i>
                         <p
@@ -233,10 +349,10 @@ const Items = ({ address, items, itemFilters, setItemFilters, collectionInfo, lo
                         </p>
                       </div>
 
-                      <div onClick={() => addItemToCart( name, tokenId, value, image, marketplace, collectionName)}>
+                      <div onClick={() => isInCart ? removeItemFromCart(tokenId, address) : addItemToCart( name, tokenId, value, image, marketplace, collectionName, index)}>
                         <i className="fa-light fa-cart-shopping item-buy-not-visible"></i>
                         <p className="item-buy-not-visible">
-                          Add
+                          {isInCart ? "Remove" : "Add"}
                         </p>
                       </div>
                     </>
@@ -247,11 +363,14 @@ const Items = ({ address, items, itemFilters, setItemFilters, collectionInfo, lo
           </div>
         );
       }),
-    [items]
+    [items, userCartItems]
   );
 
   return (
     <>
+      {
+        <BuyNowModal buyNowModalData={buyNowModalData} showBuyNowModal={showBuyNowModal} buyNow={buyNow} closeBuynowModal={closeBuynowModal}/>
+      }
       <hr className="collection-item-hr"></hr>
 
       <div className="collection-item-section">
@@ -407,7 +526,7 @@ const Items = ({ address, items, itemFilters, setItemFilters, collectionInfo, lo
             </HStack>
           </div>
 
-          {loadingItems ? (
+          {loadingItems ? 
             <div className="collection-skeleton-container">
               <SkeletonTheme
                 baseColor="#202020"
@@ -420,9 +539,32 @@ const Items = ({ address, items, itemFilters, setItemFilters, collectionInfo, lo
                 </p>
               </SkeletonTheme>
             </div>
-          ) : (
-            <div className="collection-items">{itemsMapping}</div>
-          )}
+            :
+            <>
+              <div className="collection-items">{itemsMapping}
+              {
+                loadingMoreItems &&
+                <>
+                {
+                  [...Array(18)].map(item => {
+                    return (
+                      <SkeletonTheme
+                        baseColor="#202020"
+                        highlightColor="#444"
+                        height={"301px"}
+                        borderRadius={"10px"}
+                      >
+                          <Skeleton count={1} wrapper={SkeletonWrapper} />
+                      </SkeletonTheme>
+                    )
+                  })
+                }
+                </>
+              }
+              </div>
+            </>
+
+          }
         </div>
       </div>
     </>

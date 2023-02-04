@@ -189,3 +189,10 @@
 .activity-chart-wrapper{
     padding: 20px 0 40px 0;
 }
+
+
+
+
+.collection-activity-table tbody .loading{
+    padding-bottom: 60px;
+}

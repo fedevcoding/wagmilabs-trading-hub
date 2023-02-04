@@ -7,25 +7,27 @@ const collectionActivityRoute = express()
 collectionActivityRoute.get('/:address', checkAuth, (req, res) => {
 
     const {address} = req.params
-    const {types} = req.query
+    const {types, continuation} = req.query
 
 
     const filters = getFiltersUrl(types)
-    console.log(filters)
 
+    const continuationFilter = continuation ? `&continuation=${continuation}` : ""
 
     async function getData(){
         try{
-            let url = `https://api.reservoir.tools/collections/activity/v5?collection=${address}${filters}`
+            let url = `https://api.reservoir.tools/collections/activity/v5?collection=${address}${filters}${continuationFilter}`
 
             let data = await fetch(url, {
                 headers: {
                     "x-api-key": '9a16bf8e-ec68-5d88-a7a5-a24044de3f38'
                 }
             })
-            data = (await data.json()).activities
+            data = await data.json()
 
-            res.json(data)
+            const {continuation, activities} = data
+
+            res.json({continuation, activities})
         }
         catch(err){
             console.log(err)

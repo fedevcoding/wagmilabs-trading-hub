@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { useParams } from 'react-router-dom';
 import questionImage from "../../assets/question.png"
 
@@ -82,6 +82,10 @@ const Collection = () => {
         tokenId: undefined
     })
     const [loadingItems, setLoadingItems] = useState(true)
+
+    const [loadingMoreItems, setLoadingMoreItems] = useState(false)
+    const tokensContinuation = useRef(false)
+
     const [buyNowChecked, setBuyNowChecked] = useState(false)
     const [items, setItems] = useState([])
     const [searchText, setSearchText] = useState("")
@@ -104,7 +108,34 @@ const Collection = () => {
 
 
 
+    async function fetchMoreTokens(){
+        setLoadingMoreItems(true)
 
+        const {sortBy, tokenId} = itemFilters
+        let {min, max} = itemFilters.priceFilter
+
+        let attributeFilter = ""
+        itemFilters.attributeFilter.forEach(attribute => {
+            const {attributeKey, attributeValue} = attribute
+            attributeFilter += `-attributes[${attributeKey}]:${attributeValue}`
+        })
+
+        if(!min && itemFilters.buyNowChecked) min = 0 
+
+        let data = await fetch(`${baseUrl}/collectionItems/${address}?sortBy=${sortBy}&minAsk=${min}&maxAsk=${max}&attributes=${attributeFilter}&tokenId=${tokenId}&continuation=${tokensContinuation.current}`, {
+            headers: {
+                "Content-Type": "application/json",
+                "x-auth-token": localStorage.jsonwebtoken
+            }
+        })
+        data = await data.json()
+
+        const {tokens, continuation} = data
+
+        tokensContinuation.current = continuation
+        setItems(prev => [...prev, ...tokens])
+        setLoadingMoreItems(false)
+    }
     async function fetchTokens(){
         setLoadingItems(true)
 
@@ -118,7 +149,6 @@ const Collection = () => {
             attributeFilter += `-attributes[${attributeKey}]:${attributeValue}`
         })
 
-
         if(!min && itemFilters.buyNowChecked) min = 0 
 
         let data = await fetch(`${baseUrl}/collectionItems/${address}?sortBy=${sortBy}&minAsk=${min}&maxAsk=${max}&attributes=${attributeFilter}&tokenId=${tokenId}`, {
@@ -129,7 +159,10 @@ const Collection = () => {
         })
         data = await data.json()
 
-        setItems(data)
+        const {tokens, continuation} = data
+
+        tokensContinuation.current = continuation
+        setItems(tokens)
         setLoadingItems(false)
     }
 
@@ -488,7 +521,7 @@ const Collection = () => {
 
         {(()=>{
             if(section === "items"){
-                return <Items address={address} items={items} setItems={setItems} itemFilters={itemFilters} setItemFilters={setItemFilters} loadingItems={loadingItems} setLoadingItems={setLoadingItems} buyNowChecked={buyNowChecked} setBuyNowChecked={setBuyNowChecked} collectionInfo={collectionInfo} searchText={searchText} setSearchText={setSearchText} debounceSearch={debounceSearch} selectedItem={selectedItem} setSelectedItem={setSelectedItem} options={options}/>
+                return <Items loadingMoreItems={loadingMoreItems} fetchMoreTokens={fetchMoreTokens} tokensContinuation={tokensContinuation} address={address} items={items} setItems={setItems} itemFilters={itemFilters} setItemFilters={setItemFilters} loadingItems={loadingItems} setLoadingItems={setLoadingItems} buyNowChecked={buyNowChecked} setBuyNowChecked={setBuyNowChecked} collectionInfo={collectionInfo} searchText={searchText} setSearchText={setSearchText} debounceSearch={debounceSearch} selectedItem={selectedItem} setSelectedItem={setSelectedItem} options={options}/>
             }
             else if(section === "liveview"){
                 return <LiveView address={address} items={items} setItems={setItems} itemFilters={itemFilters} setItemFilters={setItemFilters} loadingItems={loadingItems} setLoadingItems={setLoadingItems} buyNowChecked={buyNowChecked} setBuyNowChecked={setBuyNowChecked} collectionInfo={collectionInfo} collectionImage={collectionInfo?.image}/>

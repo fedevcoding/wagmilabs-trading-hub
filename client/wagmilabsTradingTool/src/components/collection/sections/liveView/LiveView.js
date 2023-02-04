@@ -20,9 +20,11 @@ import { SocketContext } from '../../../../context/SocketContext'
 // utils
 
 import { formatTime } from '../../../../utils/formats/formats'
+import baseUrl from '../../../../variables/baseUrl'
 
 
 const saleHashes = []
+const listingHashes = []
 
 const LiveView = ({address, collectionImage}) => {
 
@@ -46,8 +48,25 @@ const LiveView = ({address, collectionImage}) => {
 
             const {tokenId, tokenAddress, timestamp, marketplace, hash, value} = saleData
             const {name, image} = saleData?.tokenInfo
+
+            const dataObj = {
+                liveSale: true,
+                txHash: hash,
+                price: value,
+                timestamp: timestamp / 1000,
+                token: {
+                    tokenId,
+                    tokenName: name,
+                    tokenImage: image
+                },
+                order: {
+                    source: {
+                        name: marketplace
+                    }
+                }
+            }
             if(tokenAddress.toLowerCase() === address.toLowerCase()){
-                setSales(oldSales => [{name: name, token_id: tokenId, image_url: image, eth_price: value, exchange_name: marketplace, timestamp, liveSale: true, hash}, ...oldSales])
+                setSales(oldSales => [dataObj, ...oldSales])
             }
         })
 
@@ -58,6 +77,7 @@ const LiveView = ({address, collectionImage}) => {
             const {marketplace} = listingData
 
             const dataObj = {
+                liveListing: true,
                 criteria: {
                     data: {
                         token: {
@@ -86,7 +106,6 @@ const LiveView = ({address, collectionImage}) => {
         const dateInterval = setInterval(() => setRefreshDate(crypto.randomUUID()), 1000)
 
         return () => {
-            // clearInterval(interval);
             socket.emit("leaveSales", address.toLowerCase())
             socket.emit("leaveListings", address.toLowerCase())
             clearInterval(dateInterval)
@@ -95,31 +114,37 @@ const LiveView = ({address, collectionImage}) => {
 
 
     async function fetchListings(){
-        let listings = await fetch(`https://api.reservoir.tools/orders/asks/v4?contracts=${address}&native=false&includePrivate=false&includeCriteriaMetadata=true&normalizeRoyalties=false&sortBy=createdAt&limit=50`)
-        listings = (await listings.json()).orders
-        console.log(listings)
-        setListings(listings)
+        const listingsData = await fetch(`${baseUrl}/collectionListings/${address}`, {
+            headers: {
+                "x-auth-token": localStorage.jsonwebtoken
+            }
+        })
+        const listingsApi = await listingsData.json()
+
+        const {orders, continuation} = listingsApi
+
+        console.log(orders)
+        setListings(orders)
     }
 
     async function fetchSales(){
-        let data = await fetch("https://api.transpose.io/sql", {
-            method: "POST",
+        const salesData = await fetch(`${baseUrl}/collectionSales/${address}`, {
             headers: {
-                'Content-Type': 'application/json',
-                'X-API-KEY': 'C4fApvFQlRelzwhzM0BW7loRbVPLt3E9',
-            },
-            body: JSON.stringify({
-                sql: `SELECT * FROM ethereum.nft_sales s INNER JOIN ethereum.nfts n ON (s.contract_address, s.token_id) = (n.contract_address, n.token_id) WHERE s.contract_address = '${address}' AND s.usd_price > 0 ORDER BY timestamp desc  LIMIT 100`
-            })
+                "x-auth-token": localStorage.jsonwebtoken
+            }
         })
-        data = (await data.json()).results
-        // console.log(data)
-        setSales(data)
+        const salesApi = await salesData.json()
+
+        const {activities, continuation} = salesApi
+
+        console.log(activities)
+
+        setSales(activities)
     }
 
     const listingsMapping = useMemo(()=> listings.map(listing => {
         
-        const {name, image, tokenId} = listing?.criteria?.data?.token
+        const {name, image, tokenId} = listing?.criteria?.data?.token || {}
         const readableValue = listing?.price?.amount?.decimal
         const marketplace = listing?.source?.name
         const listingTime = new Date(listing?.createdAt).getTime()
@@ -151,38 +176,36 @@ const LiveView = ({address, collectionImage}) => {
         )
     }), [listings, refreshDate])
 
-    const salesMapping = useMemo(()=> sales.map((sale, index) => {
-            const {eth_price, liveSale, token_id} = sale
+    const salesMapping = useMemo(()=> sales.map(sale => {
+            const {price, liveSale, timestamp, txHash, } = sale
+            const {tokenName, tokenImage, tokenId} = sale?.token
+            const {collectionImage, collectionName} = sale?.collection || {}
+            const {name: marketplaceName} = sale?.order?.source
 
-            const hash = sale?.hash || sale?.transaction_hash
-            const name = sale?.name || token_id
-            const image = sale?.image_url || collectionImage
-            const marketplaceName = sale?.exchange_name
-            const saleTime = new Date(sale?.timestamp).getTime()
             
             const marketplaceImage = getMarketplaceImage(marketplaceName)
             
-            let time = formatTime(saleTime)
+            const time = formatTime(timestamp * 1000)
 
             const randomUUID = crypto.randomUUID()
             return(
-                <div key={randomUUID} className={`live-view-single-sale-item ${liveSale ? saleHashes.includes(hash) ? "" : "animate" : ""}`}>
+                <div key={randomUUID} className={`live-view-single-sale-item ${liveSale ? saleHashes.includes(txHash) ? "" : "animate" : ""}`}>
                     <div className='live-view-sale-container'>
-                        <img src={image} className="live-view-sale-image"/>
+                        <img src={tokenImage} className="live-view-sale-image"/>
                         <div>
-                            <p>{name}</p>
+                            <p>{tokenName}</p>
                             <p className='live-view-sale-time'>{time}</p>
                         </div>
                     </div>
     
                     <div className='flex-col-left'>
-                        <p>{roundPrice(eth_price)} ETH</p>
+                        <p>{roundPrice(price)} ETH</p>
                         <div className='live-view-sales-logos'>
                             <img src={marketplaceImage}/>
-                            <a href={`https://etherscan.io/tx/${hash}`} target="_blank"><img src={etherscan}/></a>
+                            <a href={`https://etherscan.io/tx/${txHash}`} target="_blank"><img src={etherscan}/></a>
                         </div>
                     </div>
-                    {(() => {!saleHashes.includes(hash) && liveSale && saleHashes.push(hash)})()}
+                    {(() => {!saleHashes.includes(txHash) && liveSale && saleHashes.push(txHash)})()}
                 </div>
             )
     }), [sales, refreshDate])

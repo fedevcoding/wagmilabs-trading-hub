@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import "./profile.css"
 import baseUrl from "../../variables/baseUrl"
@@ -37,6 +37,11 @@ const Profile = () => {
   const [section, setSection] = useState("nft")
   const [loadingData, setLoadingData] = useState(true)
   const [loadingNfts, setLoadingNfts] = useState(true)
+
+  const [loadingMoreNfts, setLoadingMoreNfts] = useState(false)
+  const nftsContinuation = useRef()
+
+
   
   const [openListingSettings, setOpenListingSettings] = useState(false)
   const [stageListingSettings, setStageListingSettings] = useState(listingSettings)
@@ -85,6 +90,34 @@ const Profile = () => {
   }
 
 
+  async function fetchMoreItems() {
+    try {
+      setLoadingMoreNfts(true)
+
+      const continuationFilter = nftsContinuation.current ? `&continuation=${nftsContinuation.current}` : ""
+      let data = await fetch(`${baseUrl}/profileItems?sortDirection=${selectedSortOption.value}&collection=${nftsCollectionFilter}${continuationFilter}`, {
+        headers: {
+          "Content-Type": "application/json",
+          "x-auth-token": localStorage.jsonwebtoken
+        },
+      })
+
+      data = await data.json()
+
+      const { tokens, continuation } = data
+
+      console.log(tokens)
+      nftsContinuation.current = continuation
+
+
+      setUserItems(prev => [...prev, ...tokens])
+      setLoadingMoreNfts(false)
+    }
+    catch (e) {
+      setUserItems([])
+      setLoadingNfts(false)
+    }
+  }
   async function fetchUserItems() {
     try {
       setLoadingNfts(true)
@@ -97,9 +130,10 @@ const Profile = () => {
 
       data = await data.json()
 
-      const { items } = data
+      const { tokens, continuation } = data
+      nftsContinuation.current = continuation
 
-      setUserItems(items)
+      setUserItems(tokens)
       setLoadingNfts(false)
     }
     catch (e) {
@@ -177,8 +211,6 @@ const Profile = () => {
 
   function modifyStageListing(type, value){
 
-    console.log(value)
-
     switch(type){
       case "priceType":
         setStageListingSettings(old => ({...old, price: {...old.price, type: value}}))
@@ -211,8 +243,6 @@ const Profile = () => {
 
   useEffect(()=>{
     !openListingSettings && listingSettings && setStageListingSettings(listingSettings)
-    console.log(stageListingSettings)
-    console.log(listingSettings)
   }, [openListingSettings, listingSettings])
 
 
@@ -593,7 +623,7 @@ const Profile = () => {
           (() => {
             if (section === "nft") {
               return (
-                <Nfts nftsCollectionFilter={nftsCollectionFilter} setNftsCollectionFilter={setNftsCollectionFilter} searchCollectionText={searchCollectionText} setSearchCollectionText={setSearchCollectionText} selectedSortOption={selectedSortOption} setSelectedSortOption={setSelectedSortOption} activityTransactions={activityTransactions} userItems={userItems} setProfileImage={setProfileImage} collections={collections} loadingNfts={loadingNfts} listingSettings={listingSettings} />
+                <Nfts loadingMoreNfts={loadingMoreNfts} fetchMoreItems={fetchMoreItems} nftsContinuation={nftsContinuation} nftsCollectionFilter={nftsCollectionFilter} setNftsCollectionFilter={setNftsCollectionFilter} searchCollectionText={searchCollectionText} setSearchCollectionText={setSearchCollectionText} selectedSortOption={selectedSortOption} setSelectedSortOption={setSelectedSortOption} activityTransactions={activityTransactions} userItems={userItems} setProfileImage={setProfileImage} collections={collections} loadingNfts={loadingNfts} listingSettings={listingSettings} />
               )
             }
             else if (section === "activity") {

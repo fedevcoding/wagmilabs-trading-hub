@@ -79,6 +79,8 @@ const collectionActivityRoute = require("./routes/ethereum/collections/collectio
 const tokenLisrPriceRoute = require("./routes/ethereum/profile/tokenLisrPriceRoute.js")
 const profileActivityRoute = require("./routes/ethereum/profile/profileActivityRoute.js")
 const profileTradedCollectionsRoute = require("./routes/ethereum/profile/profileTradedCollectionsRoute.js")
+const collectionListingsRoute = require("./routes/ethereum/collections/collectionListingsRoute.js")
+const collectionSalesRoute = require("./routes/ethereum/collections/collectionSalesRoute.js")
 const io = new Server(server);
 
 app.set('socketio', io);
@@ -193,6 +195,8 @@ app.use("/api/v1/wagmilabs/collectionActivity", collectionActivityRoute)
 app.use("/api/v1/wagmilabs/tokenListPrice", tokenLisrPriceRoute)
 app.use("/api/v1/wagmilabs/profileActivity", profileActivityRoute)
 app.use("/api/v1/wagmilabs/profileTradedCollections", profileTradedCollectionsRoute)
+app.use("/api/v1/wagmilabs/collectionListings", collectionListingsRoute)
+app.use("/api/v1/wagmilabs/collectionSales", collectionSalesRoute)
 
 app.use("/api/v1/wagmilabs/userBalances", userBalancesRoute)
 app.use("/api/v1/wagmilabs/searchCollection", searchCollectionsRoute)

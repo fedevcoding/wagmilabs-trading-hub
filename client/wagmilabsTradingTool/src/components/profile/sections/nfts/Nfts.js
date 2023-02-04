@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useMemo, useState} from 'react'
+import React, {useContext, useEffect, useMemo, useState, useRef} from 'react'
 import baseUrl from '../../../../variables/baseUrl'
 import { Portal } from 'react-portal'
 
@@ -18,7 +18,6 @@ import { roundPrice } from '../../../../utils/formats/formats'
 import { marketListingMapping } from '../../../../utils/mappings'
 import { fetchSigner } from '@wagmi/core'
 import { Button, Tooltip } from '@chakra-ui/react'
-import {useDebounce} from "use-debounce"
 import { UserDataContext } from '../../../../context/userContext'
 import Loader from '../../../utility-components/Loaders/Loader'
 
@@ -29,7 +28,7 @@ const sortItemsOptions = [
 ];
 
 
-const Nfts = ({nftsCollectionFilter, setNftsCollectionFilter, searchCollectionText, userItems, setProfileImage, collections, loadingNfts, listingSettings, selectedSortOption, setSelectedSortOption, setSearchCollectionText}) => {
+const Nfts = ({loadingMoreNfts, fetchMoreItems, nftsContinuation, nftsCollectionFilter, setNftsCollectionFilter, searchCollectionText, userItems, setProfileImage, collections, loadingNfts, listingSettings, selectedSortOption, setSelectedSortOption, setSearchCollectionText}) => {
 
     const {cryptoPrices} = useContext(UserDataContext)
 
@@ -42,6 +41,8 @@ const Nfts = ({nftsCollectionFilter, setNftsCollectionFilter, searchCollectionTe
     const [bulkItems, setBulkItems] = useState([])
     
     const [showSortItemsOptions, setShowSortItemsOptions] = useState(false);
+
+    const observer = useRef(false)
 
 
 
@@ -72,6 +73,35 @@ const Nfts = ({nftsCollectionFilter, setNftsCollectionFilter, searchCollectionTe
         document.removeEventListener('click', handleClick);
       };
     }, [])
+
+
+    useEffect(()=>{
+
+      const options = {
+        root: null,
+        rootMargin: '0px',
+        threshold: 1.0
+      };
+  
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && nftsContinuation.current) {
+          // alert("hello")
+          fetchMoreItems()
+        }
+      }, options);
+  
+      const target = document.querySelector('.single-item-container.last-token');
+      if (target) {
+        observer.current.observe(target);
+      }
+  
+  
+      return () => {
+        if (observer.current) {
+          observer.current.disconnect();
+        }
+      }
+    }, [userItems])
 
 
     useEffect(()=>{
@@ -248,6 +278,8 @@ const Nfts = ({nftsCollectionFilter, setNftsCollectionFilter, searchCollectionTe
           const collectionImage = item?.token?.collection?.imageUrl
           const collectionName = item?.token?.collection?.name
           const floor_price = item?.token?.collection?.floorAskPrice
+
+          const isLast = index === userItems.length - 1
     
           async function updateUserImage(){
     
@@ -267,7 +299,7 @@ const Nfts = ({nftsCollectionFilter, setNftsCollectionFilter, searchCollectionTe
           const id = contractAddress + tokenId
 
           return(
-              <div className='single-item-container' key={id} onMouseOver={()=> activateList(index)} onMouseOut={()=> deactivateList(index)}>
+              <div className= {`single-item-container ${isLast && "last-token"}`} key={id} onMouseOver={()=> activateList(index)} onMouseOut={()=> deactivateList(index)}>
                   <div className='profile-item-listing'>
                     {item.seaport_sell_orders ? Math.round((item.seaport_sell_orders[0].current_price / 1000000000000000000 * 10000)) / 10000 : <></>}
                   </div>
@@ -410,12 +442,14 @@ const Nfts = ({nftsCollectionFilter, setNftsCollectionFilter, searchCollectionTe
 
       {
         loadingNfts ? 
-        <div className='profile-skeleton-container'>
-            <SkeletonTheme baseColor="#202020" highlightColor="#444" height={"327px"} borderRadius={"10px"}>
-              <p>
-                  <Skeleton count={14} wrapper={Box}/>
-              </p>
-            </SkeletonTheme>
+        <div className='profile-items-container'>
+          <div className='profile-skeleton-container'>
+              <SkeletonTheme baseColor="#202020" highlightColor="#444" height={"327px"} borderRadius={"10px"}>
+                <p>
+                    <Skeleton count={14} wrapper={Box}/>
+                </p>
+              </SkeletonTheme>
+          </div>
         </div>
         :
         <div className='profile-items-container'>
@@ -450,6 +484,21 @@ const Nfts = ({nftsCollectionFilter, setNftsCollectionFilter, searchCollectionTe
             :
             <div className="profile-items">
               {itemMapping}
+
+              {
+                loadingMoreNfts &&
+
+                [...Array(18)].map(i => {
+                  return(
+                    <SkeletonTheme baseColor="#202020" highlightColor="#444" height={"327px"} borderRadius={"10px"}>
+                    <p>
+                        <Skeleton count={1} wrapper={Box}/>
+                    </p>
+                  </SkeletonTheme>
+                  )
+                })
+
+              }
             </div>
             }
 
