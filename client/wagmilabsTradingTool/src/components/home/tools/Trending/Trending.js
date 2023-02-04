@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import baseUrl from "../../../../variables/baseUrl"
 import "./trending.css"
-import question from "../../../../assets/question.png"
 import times from "./times"
 
 import Highcharts from "highcharts"
@@ -66,20 +65,30 @@ const Trending = ({tool, timeFrame, setTimeFrame, resetTime}) => {
   }, [])
 
   async function getTrending(loading){
-    if(!loading) loading = false
-    setLoading(loading)
 
-    let data = await fetch(`${baseUrl}/trending/${timeRef.current}`, {
-      headers: {
-        "x-auth-token": localStorage.jsonwebtoken
-      }
-    })
-    data = (await data.json()).data
-    setTimeout(()=>{
-      setLoading(false)
-    }, 300)
+    try{
+      if(!loading) loading = false
+      setLoading(loading)
+  
+      let data = await fetch(`${baseUrl}/trending/${timeRef.current}`, {
+        headers: {
+          "x-auth-token": localStorage.jsonwebtoken
+        }
+      })
+      data = await data.json()
 
-    sortData(data)
+      const {trendingCollections} = data
+
+      setTimeout(()=>{
+        setLoading(false)
+      }, 300)
+  
+      sortData(trendingCollections)
+    }
+    catch(e){
+      sortData([])
+      console.log(e)
+    }
   }
 
 
@@ -216,16 +225,6 @@ const Trending = ({tool, timeFrame, setTimeFrame, resetTime}) => {
           <td className="trending-sales filtered">
             <div className='trending-sales-pending'>
               <p>{sales}</p>
-
-              {/* { currentPendingTxs !== 0 ?
-                  <div className='pending'>
-                    <span class="iconfont global-loading"></span>
-                    <span class="quantity">{currentPendingTxs}</span>
-                  </div>
-                  :
-                  <div className='pending'>
-                  </div>
-              } */}
             </div>
           </td>
           <td>
@@ -286,7 +285,6 @@ const Trending = ({tool, timeFrame, setTimeFrame, resetTime}) => {
         <thead className='trending-details'>
           <tr>
             <th>
-              {/* <div className='refresh'><i className="fa-solid fa-rotate reloadIcon" onClick={getTrending}></i></div> */}
               <p>Collection</p>
             </th>
             <th>

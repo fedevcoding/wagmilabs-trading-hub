@@ -5,8 +5,6 @@ import baseUrl from '../../../../variables/baseUrl'
 
 import notFound from "../../../../assets/notFound.svg"
 
-import Highcharts from "highcharts"
-import HighchartsReact from "highcharts-react-official"
 import { roundPrice } from '../../../../utils/formats/formats'
 
 import moment from "moment"
@@ -67,22 +65,30 @@ const Minting = ({tool, timeFrame, setTimeFrame, resetTime}) => {
 
 
   async function getMinting(loading){
-    if(!loading) loading = false
-    setLoading(loading)
 
-    let data = await fetch(`${baseUrl}/minting/${timeRef.current}`, {
-      headers: {
-        "x-auth-token": localStorage.jsonwebtoken
-      }
-    })
-    data = (await data.json()).data
-    setTimeout(()=>{
-      setLoading(false)
-    }, 300)
+    try{
+      if(!loading) loading = false
+      setLoading(loading)
+  
+      let data = await fetch(`${baseUrl}/minting/${timeRef.current}`, {
+        headers: {
+          "x-auth-token": localStorage.jsonwebtoken
+        }
+      })
+      data = await data.json()
 
-    console.log(data)
-    // setStats(data)
-    sortData(data)
+      const {mintingCollections} = data
+
+      setTimeout(()=>{
+        setLoading(false)
+      }, 300)
+  
+      sortData(mintingCollections)
+    }
+    catch(e){
+      console.log(e)
+      sortData([])
+    }
   }
 
 

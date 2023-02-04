@@ -74,6 +74,7 @@ const Login = ({setConnected}) => {
                     setLoadingSign(false)
                 }
                 catch(e){
+                    setLoadingSign(false)
                     setMessage("Something went wrong, please retry.")
                 }
             }

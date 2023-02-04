@@ -57,12 +57,15 @@ const Owned = ({setTimeFrame, tool, timeFrame, resetTime}) => {
               }
           })
           data = await data.json()
+
+          const {ownedCollections} = data
           
           setTimeout(()=> setLoading(false), 500)
-          sortData(data)
+          sortData(ownedCollections)
       }
       catch(err){
           console.error(err)
+          sortData([])
       }
 
     }

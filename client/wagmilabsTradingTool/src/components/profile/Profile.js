@@ -1,12 +1,9 @@
 import React, { useContext, useEffect, useState, useRef } from 'react'
-import { useNavigate } from 'react-router-dom'
 import "./profile.css"
 import baseUrl from "../../variables/baseUrl"
-import rippleEffect from '../../utils/functions/rippleEffect'
 import Nfts from './sections/nfts/Nfts'
 import Activity from './sections/activity/Activity'
 import { Portal } from "react-portal"
-import ClipboardJS from "clipboard"
 import { formatAddress } from '../../utils/formats/formats'
 import { useAccount, useEnsName, useSigner } from 'wagmi'
 
@@ -106,10 +103,7 @@ const Profile = () => {
 
       const { tokens, continuation } = data
 
-      console.log(tokens)
       nftsContinuation.current = continuation
-
-
       setUserItems(prev => [...prev, ...tokens])
       setLoadingMoreNfts(false)
     }
@@ -156,13 +150,15 @@ const Profile = () => {
       const {ok, data} = stats || {}
       
       if(ok){
-        const { num_txs, num_assets_owned, num_collections_owned, total_gain, nftsValue, walletVolume, mint_count, sold_count, bought_count, sold_value } = data
+        const { num_txs, num_assets_owned, num_collections_owned, total_gain, nftsValue, walletVolume, mint_count, sold_count, bought_count, sold_value } = data || {}
     
         setPnl({ nfts: num_assets_owned, collections: num_collections_owned, totalTxs: num_txs, nftsValue, realizedPnl: total_gain, walletVolume, mintCount: mint_count, soldCount: sold_count, boughtCount: bought_count, soldValue: sold_value })
       }
       setLoadingData(false)
     }
     catch(e){
+      setLoadingData(false)
+      setPnl({ nfts: 0, collections: 0, totalTxs: 0, nftsValue: 0, realizedPnl: 0, walletVolume: 0, mintCount: 0, soldCount: 0, boughtCount: 0, soldValue: 0 })
       console.log(e)
     }
   }
@@ -196,7 +192,8 @@ const Profile = () => {
         body: JSON.stringify(bodyObj)
       })
       response = await response.json()
-      if (response.updated) {
+      
+      if (response?.updated) {
         setListingSettings(bodyObj)
       }
     }

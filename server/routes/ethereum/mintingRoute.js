@@ -8,20 +8,14 @@ const mintingRoute = express()
 mintingRoute.get('/:time', checkAuth, (req, res) => {
 
     async function getData(){
-            const userTime = parseInt(req.params.time)
+
+        try{
+            const {time} = req.params || {}
+            const userTime = parseInt(time)
 
             const minTime = new Date().getTime() - userTime
-            const currentTime = new Date().getTime()
 
-            const differenceTime = currentTime - minTime
-
-            const range1 = differenceTime / 5 * 1
-            const range2 = differenceTime / 5 * 2
-            const range3 = differenceTime / 5 * 3
-            const range4 = differenceTime / 5 * 4
-            const range5 = differenceTime / 5 * 5
-        
-            let data = await Minting.aggregate([
+            let mintingCollections = await Minting.aggregate([
                 {
                     $unwind:"$mints"
                 },
@@ -67,7 +61,11 @@ mintingRoute.get('/:time', checkAuth, (req, res) => {
                 }
             ])
 
-            res.status(200).json({data})
+            res.status(200).json({mintingCollections})
+        }
+        catch(e){
+            res.status(500).json({error: e})
+        }
     }
     getData()
 

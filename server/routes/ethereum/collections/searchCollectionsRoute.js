@@ -1,28 +1,32 @@
 const express = require("express")
 const checkAuth = require("../../../middleware/checkAuth")
+const { execReservoirApi } = require("../../../services/externalAPI/reservoirApi")
 
 const searchCollectionsRoute = express()
 
 searchCollectionsRoute.get('/:query/:type', checkAuth, (req, res) => {
     const {query, type} = req.params
 
+    if(!query || !type) return res.status(400).json({status: "error", ok: false, message: "Missing query or type"})
+
     async function getListings(){
 
-        let collections;
-
-        if(type === "name"){
-            collections = await fetch(`https://api.reservoir.tools/search/collections/v1?name=${query}&limit=6`)
-            collections = (await collections.json()).collections
-            collections = collections.filter(collection => collection.collectionId !== "0x495f947276749ce646f68ac8c248420045cb7b5e")
+        try{
+            let url
+    
+            if(type === "name") url = `https://api.reservoir.tools/search/collections/v1?name=${query}&limit=5`
+            else if(type === "contract") url = `https://api.reservoir.tools/collections/v5?id=${query}&includeTopBid=false&includeAttributes=false&includeOwnerCount=false&normalizeRoyalties=false&useNonFlaggedFloorAsk=false&sortBy=allTimeVolume&limit=1`
+    
+            const data = await execReservoirApi(url)
+            const {collections} = data
+    
+            res.status(200).json({collections, status: "success", ok: true})
         }
-        else if(type === "contract"){
-            collections = await fetch(`https://api.reservoir.tools/collections/v5?id=${query}&includeTopBid=false&includeAttributes=false&includeOwnerCount=false&normalizeRoyalties=false&useNonFlaggedFloorAsk=false&sortBy=allTimeVolume&limit=1`)
-            collections = (await collections.json()).collections
-            collections[0].collectionId = query
-
+        catch(e){
+            console.log(e)
+            res.status(400).json({error: e, status: "error", ok: false})
         }
 
-        res.status(200).json({collections, status: "success", ok: true})
     }
     getListings()
 })

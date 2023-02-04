@@ -8,16 +8,20 @@ const rankingRoute = express()
 rankingRoute.get('/:time', checkAuth, (req, res) => {
 
     async function getData(){
-            const userTime = parseInt(req.params.time)
-            let time = new Date().getTime() - userTime
+        try{
+            const {time} = req.params || {}
+            const userTime = parseInt(time)
+
+
+            const rightTime = new Date().getTime() - userTime
         
-            let data = await Ranking.aggregate([
+            const rankingCollections = await Ranking.aggregate([
                 {
                     $unwind:"$sales"
                 },
                 {
                     $match:{
-                        "sales.saleTime":{$gt: time},
+                        "sales.saleTime":{$gt: rightTime},
                         "sales.value":{$gt:0}
                     }
                 },
@@ -55,7 +59,12 @@ rankingRoute.get('/:time', checkAuth, (req, res) => {
                 }
             ])
 
-            res.status(200).json({data})
+            res.status(200).json({rankingCollections})
+        }
+        catch(e){
+            console.log(e)
+            res.status(500).json({error: e})
+        }
     }
     getData()
 

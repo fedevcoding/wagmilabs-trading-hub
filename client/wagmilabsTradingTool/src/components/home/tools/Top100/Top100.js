@@ -65,21 +65,30 @@ const Top100 = ({tool, timeFrame, setTimeFrame, resetTime}) => {
   }, [])
   
   async function getTop(loading){
-    if(!loading) loading = false
-    setLoading(loading)
 
-    let data = await fetch(`${baseUrl}/ranking/${timeRef.current}`, {
-      headers: {
-        "x-auth-token": localStorage.jsonwebtoken
-      }
-    })
-    data = (await data.json()).data
-    console.log(data)
-    setTimeout(()=>{
-        setLoading(false)
-    }, 300)
+    try{
+      if(!loading) loading = false
+      setLoading(loading)
+  
+      let data = await fetch(`${baseUrl}/ranking/${timeRef.current}`, {
+        headers: {
+          "x-auth-token": localStorage.jsonwebtoken
+        }
+      })
+      data = await data.json()
 
-    sortData(data)
+      const {rankingCollections} = data
+
+      setTimeout(()=>{
+          setLoading(false)
+      }, 300)
+  
+      sortData(rankingCollections)
+    }
+    catch(e){
+      console.log(e)
+      sortData([])
+    }
   }
 
 

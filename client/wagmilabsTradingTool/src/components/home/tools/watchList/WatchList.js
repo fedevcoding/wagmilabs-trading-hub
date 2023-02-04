@@ -1,7 +1,6 @@
 import React, {useState, useEffect, useMemo} from 'react'
 import baseUrl from "../../../../variables/baseUrl"
 import "./watchlist.css"
-import question from "../../../../assets/question.png"
 
 import notFound from "../../../../assets/notFound.svg"
 
@@ -31,10 +30,10 @@ const WatchList = ({tool, timeFrame, setTimeFrame, resetTime}) => {
 
     useEffect(()=>{
         if(loading){
-        document.querySelector(".reloadIcon").classList.add("rotatingReloader")
+            document.querySelector(".reloadIcon").classList.add("rotatingReloader")
         }
         else{
-        document.querySelector(".reloadIcon").classList.remove("rotatingReloader")
+            document.querySelector(".reloadIcon").classList.remove("rotatingReloader")
         }
     }, [loading])
 
@@ -62,13 +61,16 @@ const WatchList = ({tool, timeFrame, setTimeFrame, resetTime}) => {
                 }
             })
             collectionData = await collectionData.json()
-            console.log(collectionData)
+            
+            const {watchListCollections} = collectionData
 
-            sortData(collectionData)
+            sortData(watchListCollections)
             setLoading(false)
         }
         catch(err){
             console.error(err)
+            sortData([])
+            setLoading(false)
         }
     }
 
