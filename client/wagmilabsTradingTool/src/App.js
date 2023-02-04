@@ -55,6 +55,7 @@ import io from "socket.io-client"
 import {UserDataContext} from "./context/userContext"
 import {SocketContext} from "./context/SocketContext"
 import Redirect from "./components/redirect/Redirect";
+import Legals from "./components/Legal/Legals";
 
 
   // for wagmi
@@ -227,6 +228,8 @@ function App() {
                         <Route exact path='/profile' element={<><Header /><Profile /><Footer /></>}/>
                         
                         <Route exact path='/profile/watchlist' element={<><Header /><WatchList /><Footer /></>}/>
+
+                        <Route exact path='/legal' element={<Legals />}/>
 
                         <Route path="*" element={<Redirect />}/>
 

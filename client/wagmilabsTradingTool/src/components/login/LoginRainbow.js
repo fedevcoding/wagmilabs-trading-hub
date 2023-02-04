@@ -23,7 +23,7 @@ const message = `Welcome to Wagmi Labs!
 Please sign this message to log in.
 This won't cost you any ETH!
 
-By signing, you accept WagmiLabs' Terms of Service, which you can find here: https://wagmilabs.tools
+By signing, you accept Wagmi Labs' Terms of Service, which you can find here: https://app.wagmilabs.tools/legal
 
 Your authentication status will reset after 24 hours.
 
@@ -118,7 +118,7 @@ const Login = ({setConnected}) => {
                         <p className='check-text'>{messageText}</p>
                         <div className='sign-in-terms-container'>
                             <Checkbox colorScheme={"blue"} borderColor="black" className='accept-terms' onChange={e => changeAccept(e)}>
-                                I accept the <a className='terms-and-conditions-link' href="" target={"_blank"}>terms and conditions.</a>
+                                I have read and accept the <a href="/legal" target={"_blank"} className="legal-terms-link">legal terms</a>
                             </Checkbox>
                         </div>
                         {walletConnected && <Button className={`sign-message-button ${acceptTerms && "active"}`} onClick={callSignMessage}>{loadingSign ? <Loader width={"25px"} height={"25px"} /> : "Sign message"}</Button>}
@@ -140,12 +140,12 @@ const Login = ({setConnected}) => {
                     <div className='login-general-links-line'></div>
                 </div>
                 
-                <a className="legal-btn" href='/legal.html' target={"_blank"}>
+                <a className="legal-btn" href='/legal' target={"_blank"}>
                     <img className='legal-img' alt="" src={instructionsLogo}/>
                     <div>Legal</div>
                 </a>
 
-                <a className="instructions-btn" href='https://docs.wagmilabs.tools/profitcalc/' target={"_blank"}>
+                <a className="instructions-btn" href='https://docs.wagmilabs.tools/tradinghub/' target={"_blank"}>
                     <img className='instructions-img' alt="" src={instructionsLogo}/>
                     <div>instructions</div>
                 </a>
