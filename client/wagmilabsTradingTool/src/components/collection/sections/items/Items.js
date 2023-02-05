@@ -35,7 +35,7 @@ import BuyNowModal from "../../../utility-components/BuyNowModal";
 import removeFromCart from "../../../../utils/database-functions/removeFromCart";
 
 
-const Items = ({ loadingMoreItems, tokensContinuation, address, items, itemFilters, setItemFilters, collectionInfo, loadingItems, searchText, setSearchText, debounceSearch, options, selectedItem, setSelectedItem, fetchMoreTokens}) => {
+const Items = ({ loadingMoreItems, tokensContinuation, address, items, itemFilters, setItemFilters, collectionInfo, loadingItems, searchText, setSearchText, debounceSearch, options, selectedItem, setSelectedItem, fetchMoreTokens }) => {
 
   const { setUserCartItems, userCartItems, gasSettings } = useContext(UserDataContext);
   const firstRender = useFirstRender();
@@ -55,7 +55,7 @@ const Items = ({ loadingMoreItems, tokensContinuation, address, items, itemFilte
   })
 
 
-  useEffect(()=>{
+  useEffect(() => {
 
     const options = {
       root: null,
@@ -83,8 +83,8 @@ const Items = ({ loadingMoreItems, tokensContinuation, address, items, itemFilte
   }, [items])
 
 
-  useEffect(()=>{
-    if(firstRender) return
+  useEffect(() => {
+    if (firstRender) return
     changeSorting("tokenId", debounceSearch)
   }, [debounceSearch])
 
@@ -93,7 +93,7 @@ const Items = ({ loadingMoreItems, tokensContinuation, address, items, itemFilte
   const conditionallyBuynowProps = {
 
   }
-  if((itemFilters.priceFilter.min || itemFilters.priceFilter.max)){
+  if ((itemFilters.priceFilter.min || itemFilters.priceFilter.max)) {
     conditionallyBuynowProps.isChecked = true
     conditionallyBuynowProps.isDisabled = true
   }
@@ -105,22 +105,22 @@ const Items = ({ loadingMoreItems, tokensContinuation, address, items, itemFilte
         setItemFilters((prev) => ({ ...prev, sortBy: value }));
         break;
       case "buynow":
-        if(value) setItemFilters((prev) => ({ ...prev, buyNowChecked: true}));
-        else setItemFilters((prev) => ({ ...prev, buyNowChecked: false}));
+        if (value) setItemFilters((prev) => ({ ...prev, buyNowChecked: true }));
+        else setItemFilters((prev) => ({ ...prev, buyNowChecked: false }));
         break;
       case "tokenId":
-        setItemFilters(prev => ({...prev, tokenId: value}))
+        setItemFilters(prev => ({ ...prev, tokenId: value }))
     }
   }
 
-  function changeAttributeFilter(checked, attributeKey, attributeValue){
-    if(checked){
+  function changeAttributeFilter(checked, attributeKey, attributeValue) {
+    if (checked) {
       setItemFilters((prev) => ({
         ...prev,
-        attributeFilter: [...prev.attributeFilter, {attributeKey, attributeValue}],
+        attributeFilter: [...prev.attributeFilter, { attributeKey, attributeValue }],
       }));
     }
-    else{
+    else {
       let filteredAttributes = itemFilters.attributeFilter.filter(attr => attr.attributeValue !== attributeValue)
       setItemFilters((prev) => ({
         ...prev,
@@ -137,7 +137,7 @@ const Items = ({ loadingMoreItems, tokensContinuation, address, items, itemFilte
     const max = priceOptions[1].value ? priceOptions[1].value : undefined;
     const min = priceOptions[0].value ? priceOptions[0].value : undefined;
 
-    if (!_.isEqual({ ...itemFilters },{...itemFilters, priceFilter: { min, max }}) ){
+    if (!_.isEqual({ ...itemFilters }, { ...itemFilters, priceFilter: { min, max } })) {
       setItemFilters((prev) => ({
         ...prev,
         priceFilter: { min, max },
@@ -145,7 +145,7 @@ const Items = ({ loadingMoreItems, tokensContinuation, address, items, itemFilte
     }
   }
 
-  function animateAddToCart(index, image){
+  function animateAddToCart(index, image) {
     const item = document.querySelectorAll(".collection-single-item-container")[index]
     const cart = document.querySelector(".header-cart-item")
 
@@ -165,22 +165,22 @@ const Items = ({ loadingMoreItems, tokensContinuation, address, items, itemFilte
     imageTag.style.borderRadius = "10px"
     imageTag.style.transition = "all 250ms linear"
 
-    
+
     item.appendChild(imageTag)
 
-    setTimeout(()=>{
+    setTimeout(() => {
       imageTag.style.top = cartY + "px"
       imageTag.style.right = cartX + "px"
       imageTag.style.height = "30px"
 
-      setTimeout(()=>{
+      setTimeout(() => {
         imageTag.remove()
       }, 240)
     }, 10)
   }
 
 
-  function openBuyModal(name, image, tokenId, price, marketplace, contract, collectionName){
+  function openBuyModal(name, image, tokenId, price, marketplace, contract, collectionName) {
     document.body.style.overflow = "hidden"
     setBuyNowModalData({
       name,
@@ -194,8 +194,8 @@ const Items = ({ loadingMoreItems, tokensContinuation, address, items, itemFilte
     setShowBuyNowModal(true)
   }
 
-  function closeBuynowModal(e){
-    if(e.target !== e.currentTarget) return
+  function closeBuynowModal(e) {
+    if (e.target !== e.currentTarget) return
     document.body.style.overflow = "unset"
     setShowBuyNowModal(false)
   }
@@ -243,139 +243,139 @@ const Items = ({ loadingMoreItems, tokensContinuation, address, items, itemFilte
 
 
 
-  async function removeItemFromCart(tokenId, contractAddress){
+  async function removeItemFromCart(tokenId, contractAddress) {
     const filteredItems = userCartItems.filter(item => item.contractAddress + item.tokenId !== contractAddress + tokenId)
 
     await removeFromCart(tokenId, contractAddress)
-    
+
     setUserCartItems(filteredItems)
   }
 
-  const itemsMapping = useMemo(() => 
-      items && items.map((item, index) => {
+  const itemsMapping = useMemo(() =>
+    items && items.map((item, index) => {
 
-        
-        const { tokenId, name, image, rarityRank, isFlagged } = item?.token;
-        const isInCart = userCartItems.some(item => item.tokenId == tokenId)
 
-        const collectionName = item?.token?.collection?.name
-        const collectionImage = item?.token?.collection?.image;
+      const { tokenId, name, image, rarityRank, isFlagged } = item?.token;
+      const isInCart = userCartItems.some(item => item.tokenId == tokenId)
 
-        const value = item?.market?.floorAsk?.price?.amount?.decimal;
-        const marketplace = item?.market?.floorAsk?.source?.name;
-        const marketplaceIcon = item?.market?.floorAsk?.source?.icon;
-        const marketplaceUrl = item?.market?.floorAsk?.source?.url;
+      const collectionName = item?.token?.collection?.name
+      const collectionImage = item?.token?.collection?.image;
 
-        let isListed = false;
-        if (value) isListed = true;
+      const value = item?.market?.floorAsk?.price?.amount?.decimal;
+      const marketplace = item?.market?.floorAsk?.source?.name;
+      const marketplaceIcon = item?.market?.floorAsk?.source?.icon;
+      const marketplaceUrl = item?.market?.floorAsk?.source?.url;
 
-        const marketplaceImg = getMarketplaceImage(marketplace) || marketplaceIcon;
+      let isListed = false;
+      if (value) isListed = true;
 
-        const isLast = index === items.length - 1
+      const marketplaceImg = getMarketplaceImage(marketplace) || marketplaceIcon;
 
-        return (
-          <div className={`collection-single-item-container ${isLast && "last-token"}`} key={index}>
-            <div className={`collection-item-details-container ${isInCart && "item-cart-selected"}`}>
-              <div className="collection-item-image-hover-overflow">
-                <img
-                  src={image || collectionImage}
-                  alt=""
-                  className="collection-single-item-image"
-                />
+      const isLast = index === items.length - 1
 
-                {isListed && 
+      return (
+        <div className={`collection-single-item-container ${isLast && "last-token"}`} key={index}>
+          <div className={`collection-item-details-container ${isInCart && "item-cart-selected"}`}>
+            <div className="collection-item-image-hover-overflow">
+              <img
+                src={image || collectionImage}
+                alt=""
+                className="collection-single-item-image"
+              />
+
+              {isListed &&
 
                 <>
-                    <a href={marketplaceUrl} target="_blank">
-                      <img
-                        src={marketplaceImg}
-                        className="collection-item-marketplace-image"
-                      ></img>
-                    </a>
+                  <a href={marketplaceUrl} target="_blank">
+                    <img
+                      src={marketplaceImg}
+                      className="collection-item-marketplace-image"
+                    ></img>
+                  </a>
 
-                    {
-                      isFlagged && 
-                      <img src={flaggedImg} className="collection-items-flagged-img"/>
-                    }
+                  {
+                    isFlagged &&
+                    <img src={flaggedImg} className="collection-items-flagged-img" />
+                  }
                 </>
-                }
+              }
 
-                {
-                  rarityRank && 
-                  <div className="collection-item-rarity-box">
-                    <p># {rarityRank}</p>
-                  </div>
-                }
-
-                {
-                  isInCart &&
-                  <div className="collection-item-selected-cart-check">
-                    <i className="fa-solid fa-check"></i>
-                  </div>
-                }
-              </div>
-
-              <div className="collection-items-item-stats">
-                <div>
-                  <p className="collection-item-single-collection-name">
-                    {collectionInfo?.name}
-                  </p>
-                  <div className="collection-item-single-item-name-price">
-                    <p className="collection-item-single-item-name">
-                      {name || tokenId}
-                    </p>
-                    {isListed && (
-                      <div className="collection-item-single-item-price">
-                        <i className="fa-brands fa-ethereum" />
-                        <p>{roundPrice(value)}</p>
-                      </div>
-                    )}
-                  </div>
+              {
+                rarityRank &&
+                <div className="collection-item-rarity-box">
+                  <p># {rarityRank}</p>
                 </div>
-                <hr></hr>
+              }
 
-                <div className="collection-item-buy-container">
-                  {/* {rarityRank} */}
+              {
+                isInCart &&
+                <div className="collection-item-selected-cart-check">
+                  <i className="fa-solid fa-check"></i>
+                </div>
+              }
+            </div>
+
+            <div className="collection-items-item-stats">
+              <div>
+                <p className="collection-item-single-collection-name">
+                  {collectionInfo?.name}
+                </p>
+                <div className="collection-item-single-item-name-price">
+                  <p className="collection-item-single-item-name">
+                    {name || tokenId}
+                  </p>
                   {isListed && (
-                    <>
-                      <div onClick={() =>
-                            openBuyModal(name, image, tokenId, value, marketplace, address, collectionName)
-                          }>
-                        <i className="fa-regular fa-bolt"></i>
-                        <p
-                          className="item-buy-not-visible"
-                        >
-                          Buy now
-                        </p>
-                      </div>
-
-                      <div onClick={() => isInCart ? removeItemFromCart(tokenId, address) : addItemToCart( name, tokenId, value, image, marketplace, collectionName, index)}>
-                        <i className="fa-light fa-cart-shopping item-buy-not-visible"></i>
-                        <p className="item-buy-not-visible">
-                          {isInCart ? "Remove" : "Add"}
-                        </p>
-                      </div>
-                    </>
+                    <div className="collection-item-single-item-price">
+                      <i className="fa-brands fa-ethereum" />
+                      <p>{roundPrice(value)}</p>
+                    </div>
                   )}
                 </div>
               </div>
+              <hr></hr>
+
+              <div className="collection-item-buy-container">
+                {/* {rarityRank} */}
+                {isListed && (
+                  <>
+                    <div onClick={() =>
+                      openBuyModal(name, image, tokenId, value, marketplace, address, collectionName)
+                    }>
+                      <i className="fa-regular fa-bolt"></i>
+                      <p
+                        className="item-buy-not-visible"
+                      >
+                        Buy now
+                      </p>
+                    </div>
+
+                    <div onClick={() => isInCart ? removeItemFromCart(tokenId, address) : addItemToCart(name, tokenId, value, image, marketplace, collectionName, index)}>
+                      <i className="fa-light fa-cart-shopping item-buy-not-visible"></i>
+                      <p className="item-buy-not-visible">
+                        {isInCart ? "Remove" : "Add"}
+                      </p>
+                    </div>
+                  </>
+                )}
+              </div>
             </div>
           </div>
-        );
-      }),
+        </div>
+      );
+    }),
     [items, userCartItems]
   );
 
   return (
     <>
       {
-        <BuyNowModal buyNowModalData={buyNowModalData} showBuyNowModal={showBuyNowModal} buyNow={buyNow} closeBuynowModal={closeBuynowModal}/>
+        <BuyNowModal buyNowModalData={buyNowModalData} showBuyNowModal={showBuyNowModal} buyNow={buyNow} closeBuynowModal={closeBuynowModal} />
       }
       <hr className="collection-item-hr"></hr>
 
       <div className="collection-item-section">
         <div className="collection-item-filters-container">
-          
+
           <div className="collection-item-filter-section1">
             <div className="collection-item-filter-buynow">
               <p>BUY NOW</p>
@@ -423,19 +423,19 @@ const Items = ({ loadingMoreItems, tokensContinuation, address, items, itemFilte
                 Opensea
               </Checkbox>
               <br />
-              <Checkbox defaultChecked={true} isDisabled  size={"sm"} className="collection-item-marketplace-filter">
+              <Checkbox defaultChecked={true} isDisabled size={"sm"} className="collection-item-marketplace-filter">
                 X2Y2
               </Checkbox>
               <br />
-              <Checkbox defaultChecked={true} isDisabled  size={"sm"} className="collection-item-marketplace-filter">
+              <Checkbox defaultChecked={true} isDisabled size={"sm"} className="collection-item-marketplace-filter">
                 LooksRare
               </Checkbox>
               <br />
-              <Checkbox defaultChecked={true} isDisabled  size={"sm"} className="collection-item-marketplace-filter">
+              <Checkbox defaultChecked={true} isDisabled size={"sm"} className="collection-item-marketplace-filter">
                 Sudoswap
               </Checkbox>
               <br />
-              <Checkbox defaultChecked={true} isDisabled  size={"sm"} className="collection-item-marketplace-filter">
+              <Checkbox defaultChecked={true} isDisabled size={"sm"} className="collection-item-marketplace-filter">
                 Alienswap
               </Checkbox>
             </div>
@@ -482,19 +482,19 @@ const Items = ({ loadingMoreItems, tokensContinuation, address, items, itemFilte
                             const attributeValue = innerItem.value
 
                             return (
-                                <>
-                                  <Checkbox
-                                    defaultChecked={itemFilters?.attributeFilter?.filter(item => item.attributeKey === attributeName && item.attributeValue === attributeValue).length > 0 ? true : false}
-                                    size={"sm"}
-                                    className="collection-item-marketplace-filter"
-                                    key={crypto.randomUUID()}
-                                    value={attributeValue}
-                                    onChange={(e) => changeAttributeFilter(e.target.checked, attributeName, attributeValue)}
-                                  >
-                                    {attributeValue}
-                                  </Checkbox>
-                                  <br />
-                                </>
+                              <>
+                                <Checkbox
+                                  defaultChecked={itemFilters?.attributeFilter?.filter(item => item.attributeKey === attributeName && item.attributeValue === attributeValue).length > 0 ? true : false}
+                                  size={"sm"}
+                                  className="collection-item-marketplace-filter"
+                                  key={crypto.randomUUID()}
+                                  value={attributeValue}
+                                  onChange={(e) => changeAttributeFilter(e.target.checked, attributeName, attributeValue)}
+                                >
+                                  {attributeValue}
+                                </Checkbox>
+                                <br />
+                              </>
                             );
                           })
                         }
@@ -513,20 +513,20 @@ const Items = ({ loadingMoreItems, tokensContinuation, address, items, itemFilte
         <div className="collection-item-tokens-container">
           <div className="collection-item-token-sorts">
             <HStack gap="20px">
-              <ItemSortSelect options={options} changeSorting={changeSorting} selectedItem={selectedItem} setSelectedItem={setSelectedItem}/>
+              <ItemSortSelect options={options} changeSorting={changeSorting} selectedItem={selectedItem} setSelectedItem={setSelectedItem} />
               <InputGroup>
                 <i className="fa-regular fa-magnifying-glass collection-search-bar-lens"></i>
                 <Input
                   placeholder="Search by token ID"
                   value={searchText}
                   className="collection-items-search-bar"
-                  onChange={({target}) => setSearchText(target.value)} 
+                  onChange={({ target }) => setSearchText(target.value)}
                 ></Input>
               </InputGroup>
             </HStack>
           </div>
 
-          {loadingItems ? 
+          {loadingItems ?
             <div className="collection-skeleton-container">
               <SkeletonTheme
                 baseColor="#202020"
@@ -542,25 +542,25 @@ const Items = ({ loadingMoreItems, tokensContinuation, address, items, itemFilte
             :
             <>
               <div className="collection-items">{itemsMapping}
-              {
-                loadingMoreItems &&
-                <>
                 {
-                  [...Array(18)].map(item => {
-                    return (
-                      <SkeletonTheme
-                        baseColor="#202020"
-                        highlightColor="#444"
-                        height={"301px"}
-                        borderRadius={"10px"}
-                      >
-                          <Skeleton count={1} wrapper={SkeletonWrapper} />
-                      </SkeletonTheme>
-                    )
-                  })
+                  loadingMoreItems &&
+                  <>
+                    {
+                      [...Array(18)].map(item => {
+                        return (
+                          <SkeletonTheme
+                            baseColor="#202020"
+                            highlightColor="#444"
+                            height={"301px"}
+                            borderRadius={"10px"}
+                          >
+                            <Skeleton count={1} wrapper={SkeletonWrapper} />
+                          </SkeletonTheme>
+                        )
+                      })
+                    }
+                  </>
                 }
-                </>
-              }
               </div>
             </>
 
@@ -596,10 +596,10 @@ const ItemSortSelect = ({ options, changeSorting, selectedItem, setSelectedItem 
   const toggleSelector = (e) => {
     const container = document.querySelector(".item-sort-select-container");
     const path = e.composedPath()
-    if (!active && !path.includes(container)){
+    if (!active && !path.includes(container)) {
       setActive(false)
     }
-    else{
+    else {
       setActive((prev) => !prev);
     }
   };

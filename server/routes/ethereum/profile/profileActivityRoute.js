@@ -1,7 +1,7 @@
 const express = require("express")
 const checkAuth = require("../../../middleware/checkAuth")
 const { execTranseposeAPI } = require("../../../services/externalAPI/transpose")
-
+const MODULE_API_KEY = process.env.MODULE_API_KEY
 
 const profileActivityRoute = express()
 
@@ -120,8 +120,8 @@ const contractQuery = (contractAddress) => {
 }
 
 const dateQuery = (startDate, endDate) => {
-    if(startDate) startDate = new Date(parseInt(startDate)).toISOString()
-    if(endDate) endDate = new Date(parseInt(endDate)).toISOString()
+    if (startDate) startDate = new Date(parseInt(startDate)).toISOString()
+    if (endDate) endDate = new Date(parseInt(endDate)).toISOString()
 
     if (startDate && endDate) {
         return `AND (timestamp >= '${startDate}' AND timestamp <= '${endDate}')`
@@ -136,11 +136,11 @@ const dateQuery = (startDate, endDate) => {
 
 
 
-profileActivityRoute.get("/", checkAuth, async (req, res)=> {
+profileActivityRoute.get("/", checkAuth, async (req, res) => {
 
-    try{
-        const userAddress = req.userDetails.address
-        let {includeMint, includeBurn, includeSend, includeReceive, includeBuy, includeSale, includeList, fromAddress, toAddress, minPrice, maxPrice, marketplace, tokenId, contractAddress, startDate, endDate, offset1, offset2, offset3} = req.query || {}
+    try {
+        const { address: userAddress } = req.userDetails
+        let { includeMint, includeBurn, includeSend, includeReceive, includeBuy, includeSale, includeList, fromAddress, toAddress, minPrice, maxPrice, marketplace, tokenId, contractAddress, startDate, endDate, offset1, offset2, offset3 } = req.query || {}
 
         includeMint = toBool(includeMint)
         includeBurn = toBool(includeBurn)
@@ -153,7 +153,7 @@ profileActivityRoute.get("/", checkAuth, async (req, res)=> {
         const listingsLimit = 20
         let onChainLimit = 25
 
-        if((includeMint || includeBurn || includeSend || includeReceive) && (includeBuy || includeSale || includeList)){
+        if ((includeMint || includeBurn || includeSend || includeReceive) && (includeBuy || includeSale)) {
             onChainLimit = 20
         }
 
@@ -233,130 +233,151 @@ profileActivityRoute.get("/", checkAuth, async (req, res)=> {
             FROM sales s
             WHERE s.transaction_hash = sales.transaction_hash) AS tx_count
         `
+        const onChainActivity = (includeBurn || includeBuy || includeMint || includeReceive || includeSale || includeSend) ? await execTranseposeAPI(SQL) : []
 
-        const onChainActivity = await execTranseposeAPI(SQL)
-        const listingsData = await getListingData(includeList, fromAddress, toAddress, userAddress, minPrice, maxPrice, marketplace, tokenId, contractAddress, startDate, endDate, listingsLimit, offset3)
-
+        const { listingsData, hasMoreListings } = await getListingData(includeList, fromAddress, toAddress, userAddress, minPrice, maxPrice, marketplace, tokenId, contractAddress, startDate, endDate, listingsLimit, offset3)
         const rawActivity = [...onChainActivity, ...listingsData].sort((a, b) => (new Date(b.createdAt ? b.createdAt : b.createdat).getTime()) - (new Date(a.createdAt ? a.createdAt : a.createdat).getTime()))
-        
-        let hasMore = true
-        if(onChainActivity.length <= 20) hasMore = false
+
+        let hasMoreActivity = false
+        if (onChainActivity.length > 20 || hasMoreListings) hasMoreActivity = true
 
         const activity = rawActivity.splice(0, 20)
 
         const newOffset1 = parseInt(offset1) + activity.filter(a => a.type === 'sale' || a.type === 'buy').length
         const newOffset2 = parseInt(offset2) + activity.filter(a => a.type === 'mint' || a.type === 'burn' || a.type === 'send' || a.type === 'receive').length
-        const newOffset3 = parseInt(offset3) + listingsData.length
+        const newOffset3 = parseInt(offset3) + listingsData?.length
 
-        await addTokenData(activity)
+        if (includeBurn || includeBuy || includeMint || includeReceive || includeSale || includeSend) await addTokenData(activity)
 
 
-
-        res.json({ok: true, activity, newOffset1, newOffset2, newOffset3, hasMore})
+        res.status(200).json({ ok: true, activity, newOffset1, newOffset2, newOffset3, hasMoreActivity })
     }
-    catch(e){
+    catch (e) {
         console.log(e)
-        res.status(400).json({ok: false})
+        res.status(400).json({ ok: false })
     }
 })
 
 
 
-async function getListingData(includeList, fromAddress, toAddress, userAddress, minPrice, maxPrice, marketplace, tokenId, contractAddress, startDate, endDate, listingsLimit, offset3){
-    let listingsData = []
+async function getListingData(includeList, fromAddress, toAddress, userAddress, minPrice, maxPrice, marketplace, tokenId, contractAddress, startDate, endDate, listingsLimit, offset3) {
 
-    if((includeList && !toAddress) && (!marketplace || marketplace === "opensea" || marketplace === "looksrare" || marketplace === "x2y2")){
-        if(!(fromAddress && fromAddress !== userAddress)){
-            const minWeiPrice = minPrice && (minPrice * 1000000000000000000).toString()
-            const maxWeiPrice = maxPrice && (maxPrice * 1000000000000000000).toString()
+    try {
+        let listingsData = []
+        let hasMoreListings = false
 
-            const getMinMaxFilter = () => {
-                if(minWeiPrice && maxWeiPrice){
-                    return `&minPrice=${minWeiPrice}&maxPrice=${maxWeiPrice}`
-                } else if(minWeiPrice && !maxWeiPrice){
-                    return `&minPrice=${minWeiPrice}`
-                } else if(maxWeiPrice && !minWeiPrice){
-                    return `&maxPrice=${maxWeiPrice}`
-                } else {
-                    return ``
+        if ((includeList && !toAddress) && (!marketplace || marketplace === "opensea" || marketplace === "looksrare" || marketplace === "x2y2")) {
+            if (!(fromAddress && fromAddress !== userAddress)) {
+                const minWeiPrice = minPrice && (minPrice * 1000000000000000000).toString()
+                const maxWeiPrice = maxPrice && (maxPrice * 1000000000000000000).toString()
+
+                const getMinMaxFilter = () => {
+                    if (minWeiPrice && maxWeiPrice) {
+                        return `&minPrice=${minWeiPrice}&maxPrice=${maxWeiPrice}`
+                    } else if (minWeiPrice && !maxWeiPrice) {
+                        return `&minPrice=${minWeiPrice}`
+                    } else if (maxWeiPrice && !minWeiPrice) {
+                        return `&maxPrice=${maxWeiPrice}`
+                    } else {
+                        return ``
+                    }
                 }
-            }
-            const getMarketplaceFilter = () => {
-                return marketplace ? `&marketplace=${marketplace}` : ``
-            }
-            const getTokenIdFilter = () => {
-                return tokenId ? `&tokenId=${tokenId}` : ``
-            }
-            const getContractFilter = () => {
-                return contractAddress ? `&contractAddress=${contractAddress}` : ``
-            }
-            const getDateFilter = () => {
-                if(startDate) startDate = startDate / 1000
-                if(endDate) endDate = endDate / 1000
-                if(startDate && endDate){
-                    return `&listedAfter=${startDate}&listedBefore=${endDate}`
-                } else if(startDate && !endDate){
-                    return `&listedAfter=${startDate}`
-                } else if(endDate && !startDate){
-                    return `&listedAfter=1580489577000&listedBefore=${endDate}`
-                } else {
-                    return `&listedAfter=1580489577000`
+                const getMarketplaceFilter = () => {
+                    return marketplace ? `&marketplace=${marketplace}` : ``
                 }
-            }
-
-            const minMaxFilter = getMinMaxFilter()
-            const marketplaceFilter = getMarketplaceFilter()
-            const tokenIdFilter = getTokenIdFilter()
-            const contractFilter = getContractFilter()
-            const dateFilter = getDateFilter()
-
-            const listingsApiData = await fetch(`https://api.modulenft.xyz/api/v2/eth/nft/listings?active=true${dateFilter}&count=${listingsLimit}&offset=${offset3}&sortDirection=timeDesc&seller=${userAddress}&withMetadata=false${minMaxFilter}${marketplaceFilter}${tokenIdFilter}${contractFilter}`, {
-                headers: {
-                    "X-API-KEY": "2183af1a-3d8e-4f24-b8a0-47fba900a366"
+                const getTokenIdFilter = () => {
+                    return tokenId ? `&tokenId=${tokenId}` : ``
                 }
-            })
-            const listingDataResult = await listingsApiData.json()
-            listingsData = listingDataResult?.data ? listingDataResult.data : []
+                const getContractFilter = () => {
+                    return contractAddress ? `&contractAddress=${contractAddress}` : ``
+                }
+                const getDateFilter = () => {
+                    if (startDate) startDate = startDate / 1000
+                    if (endDate) endDate = endDate / 1000
+                    if (startDate && endDate) {
+                        return `&listedAfter=${startDate}&listedBefore=${endDate}`
+                    } else if (startDate && !endDate) {
+                        return `&listedAfter=${startDate}`
+                    } else if (endDate && !startDate) {
+                        return `&listedAfter=1580489577000&listedBefore=${endDate}`
+                    } else {
+                        return `&listedAfter=1580489577000`
+                    }
+                }
 
-            listingsData?.forEach(item => {
-                item["type"] = "list"
-                item["from_address"] = userAddress
-                item["price"] = item.price / 1000000000000000000
-                item["token_id"] = item.tokenId
-                item["tokenData"] = {token: {name: item?.tokenName || item?.metadata?.name, image: item?.metadata?.image, collection: {name: item?.collection}}}
-            })
+                const minMaxFilter = getMinMaxFilter()
+                const marketplaceFilter = getMarketplaceFilter()
+                const tokenIdFilter = getTokenIdFilter()
+                const contractFilter = getContractFilter()
+                const dateFilter = getDateFilter()
+
+                const listingsApiData = await fetch(`https://api.modulenft.xyz/api/v2/eth/nft/listings?active=true${dateFilter}&count=${listingsLimit + 1}&offset=${offset3}&sortDirection=timeDesc&seller=${userAddress}&withMetadata=false${minMaxFilter}${marketplaceFilter}${tokenIdFilter}${contractFilter}`, {
+                    headers: {
+                        "X-API-KEY": MODULE_API_KEY
+                    }
+                })
+                const listingDataResult = await listingsApiData.json()
+
+
+                listingsData = listingDataResult?.data ? listingDataResult.data : []
+
+                if (listingsData.length > listingsLimit) hasMoreListings = true
+                else hasMoreListings = false
+
+                listingsData = listingsData.slice(0, listingsLimit)
+
+                listingsData?.forEach(item => {
+                    item["type"] = "list"
+                    item["from_address"] = userAddress
+                    item["price"] = item.price / 1000000000000000000
+                    item["token_id"] = item.tokenId
+                    item["tokenData"] = { token: { name: item?.tokenName || item?.metadata?.name, image: item?.metadata?.image, collection: { name: item?.collection } } }
+                })
+            }
         }
+
+        return { listingsData, hasMoreListings }
+
+    }
+    catch (e) {
+        console.log(e)
+        return []
     }
 
-    return listingsData
 }
 
 
-async function addTokenData(activity){
-    let urlData = ""
-    activity.forEach(item => {
-        if(item.type === "list") return
-        const {token_id, contract_address} = item
-        const tokenId = BigInt(token_id).toString()
-        const urlType = `&tokens=${contract_address}:${tokenId}`
-        urlData = urlData + urlType
-    })
+async function addTokenData(activity) {
 
-    const reservoirApiData = await fetch(`https://api.reservoir.tools/tokens/v5?limit=20&includeAttributes=false${urlData}`, {
-        headers: {
-            "x-api-key": process.env.RESERVOIR_API_KEY
-        }
-    })
-    const reservoirData = (await reservoirApiData.json())?.tokens
+    try {
+        let urlData = ""
+        activity.forEach(item => {
+            if (item.type === "list") return
+            const { token_id, contract_address } = item
+            const tokenId = BigInt(token_id).toString()
+            const urlType = `&tokens=${contract_address}:${tokenId}`
+            urlData = urlData + urlType
+        })
+
+        const reservoirApiData = await fetch(`https://api.reservoir.tools/tokens/v5?limit=20&includeAttributes=false${urlData}`, {
+            headers: {
+                "x-api-key": process.env.RESERVOIR_API_KEY
+            }
+        })
+        const reservoirData = (await reservoirApiData.json())?.tokens
 
 
-    activity.forEach(item => {
-        const {token_id, contract_address, type} = item
-        if(type === "list") return
-        const tokenData = reservoirData?.find(token => token.token.contract.toLowerCase() === contract_address.toLowerCase() && token.token.tokenId == token_id)
-        item["tokenData"] = tokenData
-        item["createdAt"] = item.createdat
-    })
+        activity.forEach(item => {
+            const { token_id, contract_address, type } = item
+            if (type === "list") return
+            const tokenData = reservoirData?.find(token => token.token.contract.toLowerCase() === contract_address.toLowerCase() && token.token.tokenId == token_id)
+            item["tokenData"] = tokenData
+            item["createdAt"] = item.createdat
+        })
+    }
+    catch (e) {
+        console.log(e)
+    }
 }
 
 

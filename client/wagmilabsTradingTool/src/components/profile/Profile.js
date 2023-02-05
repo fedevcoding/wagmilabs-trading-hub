@@ -8,7 +8,7 @@ import { formatAddress } from '../../utils/formats/formats'
 import { useAccount, useEnsName, useSigner } from 'wagmi'
 
 import { useDebounce } from 'use-debounce'
-import {RadioGroup, Stack, Radio, Select, HStack, Button, Input, NumberInput, NumberInputField, Tooltip} from "@chakra-ui/react"
+import { RadioGroup, Stack, Radio, Select, HStack, Button, Input, NumberInput, NumberInputField, Tooltip } from "@chakra-ui/react"
 
 import { UserDataContext } from '../../context/userContext'
 
@@ -39,7 +39,7 @@ const Profile = () => {
   const nftsContinuation = useRef()
 
 
-  
+
   const [openListingSettings, setOpenListingSettings] = useState(false)
   const [stageListingSettings, setStageListingSettings] = useState(listingSettings)
 
@@ -51,22 +51,22 @@ const Profile = () => {
   const [debounceCollectionSearch] = useDebounce(searchCollectionText, 400)
 
 
-  const [copyState, setCopyState] = useState({ens: "Copy", address: "Copy"})
+  const [copyState, setCopyState] = useState({ ens: "Copy", address: "Copy" })
 
 
   useEffect(() => {
     fetchUserData()
   }, [])
 
-  useEffect(()=>{
+  useEffect(() => {
     fetchUserCollections(debounceCollectionSearch, 0, 20)
   }, [debounceCollectionSearch])
 
-  useEffect(()=>{
+  useEffect(() => {
     fetchUserItems()
   }, [selectedSortOption, nftsCollectionFilter])
 
-  async function fetchUserCollections(query, offset, limit){
+  async function fetchUserCollections(query, offset, limit) {
     try {
 
       let data = await fetch(`${baseUrl}/profileCollections?search=${query}&offset=${offset}&limit=${limit}`, {
@@ -138,7 +138,7 @@ const Profile = () => {
 
   async function fetchUserData() {
 
-    try{
+    try {
       setLoadingData(true)
       const res = await fetch(`${baseUrl}/profileStats/${address}`, {
         headers: {
@@ -147,16 +147,16 @@ const Profile = () => {
       })
       const stats = await res.json()
 
-      const {ok, data} = stats || {}
-      
-      if(ok){
+      const { ok, data } = stats || {}
+
+      if (ok) {
         const { num_txs, num_assets_owned, num_collections_owned, total_gain, nftsValue, walletVolume, mint_count, sold_count, bought_count, sold_value } = data || {}
-    
+
         setPnl({ nfts: num_assets_owned, collections: num_collections_owned, totalTxs: num_txs, nftsValue, realizedPnl: total_gain, walletVolume, mintCount: mint_count, soldCount: sold_count, boughtCount: bought_count, soldValue: sold_value })
       }
       setLoadingData(false)
     }
-    catch(e){
+    catch (e) {
       setLoadingData(false)
       setPnl({ nfts: 0, collections: 0, totalTxs: 0, nftsValue: 0, realizedPnl: 0, walletVolume: 0, mintCount: 0, soldCount: 0, boughtCount: 0, soldValue: 0 })
       console.log(e)
@@ -192,7 +192,7 @@ const Profile = () => {
         body: JSON.stringify(bodyObj)
       })
       response = await response.json()
-      
+
       if (response?.updated) {
         setListingSettings(bodyObj)
       }
@@ -206,50 +206,50 @@ const Profile = () => {
   }
 
 
-  function modifyStageListing(type, value){
+  function modifyStageListing(type, value) {
 
-    switch(type){
+    switch (type) {
       case "priceType":
-        setStageListingSettings(old => ({...old, price: {...old.price, type: value}}))
+        setStageListingSettings(old => ({ ...old, price: { ...old.price, type: value } }))
         break;
       case "profitType":
-        setStageListingSettings(old => ({...old, price: {...old.price, profitType: value}}));
+        setStageListingSettings(old => ({ ...old, price: { ...old.price, profitType: value } }));
         break;
       case "profitValue":
-        setStageListingSettings(old => ({...old, price: {...old.price, profitValue: value}}));
+        setStageListingSettings(old => ({ ...old, price: { ...old.price, profitValue: value } }));
         break;
       case "months":
-        setStageListingSettings(old => ({...old, time: {...old.time, months: value}}))
+        setStageListingSettings(old => ({ ...old, time: { ...old.time, months: value } }))
         break;
       case "days":
-        setStageListingSettings(old => ({...old, time: {...old.time, days: value}}))
+        setStageListingSettings(old => ({ ...old, time: { ...old.time, days: value } }))
         break;
       case "hours":
-        setStageListingSettings(old => ({...old, time: {...old.time, hours: value}}))
+        setStageListingSettings(old => ({ ...old, time: { ...old.time, hours: value } }))
         break;
       case "minutes":
-        setStageListingSettings(old => ({...old, time: {...old.time, minutes: value}}))
+        setStageListingSettings(old => ({ ...old, time: { ...old.time, minutes: value } }))
         break;
       case "marketplace":
-        setStageListingSettings(old => ({...old, marketplace: value}))
+        setStageListingSettings(old => ({ ...old, marketplace: value }))
         break;
     }
   }
 
 
 
-  useEffect(()=>{
+  useEffect(() => {
     !openListingSettings && listingSettings && setStageListingSettings(listingSettings)
   }, [openListingSettings, listingSettings])
 
 
 
-  function copyData (type, data){
+  function copyData(type, data) {
     copy(data)
 
-    setCopyState(old => ({...old, [type]: "Copied!"}))
+    setCopyState(old => ({ ...old, [type]: "Copied!" }))
     setTimeout(() => {
-      setCopyState(old => ({...old, [type]: "Copy"}))
+      setCopyState(old => ({ ...old, [type]: "Copy" }))
     }, 1000)
   }
 
@@ -264,8 +264,8 @@ const Profile = () => {
             {
               listingSettings ?
                 <>
-                  <button onClick={() => toggleListingSettings(false)}  className="smart-listings-close-btn"><i className="fa-solid fa-xmark"></i></button>
-                  
+                  <button onClick={() => toggleListingSettings(false)} className="smart-listings-close-btn"><i className="fa-solid fa-xmark"></i></button>
+
                   <div className='nft-listing-settings-modal-container'>
                     <div className='listing-settings-title'>
                       <p>Smart listing settings</p>
@@ -282,19 +282,19 @@ const Profile = () => {
                         </RadioGroup>
                       </div>
 
-                        {
+                      {
                         stageListingSettings.price.type === "profit" &&
                         <div className='listing-settings-profit-amount'>
                           <label htmlFor="profit-radio-button">Profit amount</label>
                           <div className='listing-settings-profit-values'>
                             <Stack direction={"row"} alignItems="center">
 
-                                <NumberInput value={stageListingSettings?.price?.profitValue}>
-                              <HStack>
-                                  <NumberInputField className='listing-settings-value' placeholder='Amount' onChange={(e) => modifyStageListing("profitValue", e.target.value)}/>
-                              </HStack>
-                                </NumberInput>
-                              
+                              <NumberInput value={stageListingSettings?.price?.profitValue}>
+                                <HStack>
+                                  <NumberInputField className='listing-settings-value' placeholder='Amount' onChange={(e) => modifyStageListing("profitValue", e.target.value)} />
+                                </HStack>
+                              </NumberInput>
+
                               <Select name="" id="" className='listing-settings-currency-type' value={stageListingSettings?.price?.profitType} onChange={(e) => modifyStageListing("profitType", e.target.value)}>
                                 <option value="%">%</option>
                                 <option value="eth">Eth</option>
@@ -303,7 +303,7 @@ const Profile = () => {
                             </Stack>
                           </div>
                         </div>
-                        }
+                      }
                     </div>
 
                     <div className='listing-settings-time'>
@@ -482,20 +482,20 @@ const Profile = () => {
             <img className='profilePfp' src={profileImage} alt="" />
             <div className='profile-ens-address'>
 
-              {userEns && 
-              <Tooltip closeOnClick={false} hasArrow label={copyState.ens} fontSize='xs' bg="black" color={"white"} placement='top' borderRadius={"7px"}>
-                <span onClick={() => copyData("ens", userEns)}>{userEns}</span>
-              </Tooltip>
+              {userEns &&
+                <Tooltip closeOnClick={false} hasArrow label={copyState.ens} fontSize='xs' bg="black" color={"white"} placement='top' borderRadius={"7px"}>
+                  <span onClick={() => copyData("ens", userEns)}>{userEns}</span>
+                </Tooltip>
               }
 
-                <span>{userAddress && userEns && "/"}</span>
+              <span>{userAddress && userEns && "/"}</span>
 
-              {userAddress && 
-              <Tooltip closeOnClick={false} hasArrow label={copyState.address} fontSize='xs' bg="black" color={"white"} placement='top' borderRadius={"7px"}>
-                <span onClick={() => copyData("address", userAddress)} className='profile-address-copy'>{formatAddress(userAddress)}</span>
-              </Tooltip>
+              {userAddress &&
+                <Tooltip closeOnClick={false} hasArrow label={copyState.address} fontSize='xs' bg="black" color={"white"} placement='top' borderRadius={"7px"}>
+                  <span onClick={() => copyData("address", userAddress)} className='profile-address-copy'>{formatAddress(userAddress)}</span>
+                </Tooltip>
               }
-              
+
 
             </div>
 
@@ -539,12 +539,12 @@ const Profile = () => {
 
               <p>Sold value
                 <div className='nft-pnl-profit'>
-                  {loadingData ? 
-                  <Spinner /> : 
-                  <>
-                    {pnl?.soldValue || 0}
-                    <span className='eth-char-logo'>Ξ</span>
-                  </>
+                  {loadingData ?
+                    <Spinner /> :
+                    <>
+                      {pnl?.soldValue || 0}
+                      <span className='eth-char-logo'>Ξ</span>
+                    </>
                   }
                 </div>
               </p>
@@ -555,14 +555,14 @@ const Profile = () => {
                 <div className='nft-pnl-profit'>
                   {
                     loadingData ?
-                    <Spinner />
-                    :
-                    (
-                      <span className={"nft-pnl-profit"}>
-                        {(Math.round(pnl.nftsValue * 1000) / 1000) || 0}
-                        <span className='eth-char-logo'>Ξ</span>
-                      </span>
-                    )
+                      <Spinner />
+                      :
+                      (
+                        <span className={"nft-pnl-profit"}>
+                          {(Math.round(pnl.nftsValue * 1000) / 1000) || 0}
+                          <span className='eth-char-logo'>Ξ</span>
+                        </span>
+                      )
                   }
                 </div>
               </p>

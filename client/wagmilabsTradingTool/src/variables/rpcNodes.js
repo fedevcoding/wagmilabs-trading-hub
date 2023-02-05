@@ -1,5 +1,7 @@
-const ETHEREUM_NETWORK = "https://mainnet.infura.io/v3/1997ee05c99b4373bf5ba7b5d3e467d7"
-const SIGNER_PRIVATE_KEY = "1997ee05c99b4373bf5ba7b5d3e467d7"
+const ETHEREUM_NETWORK = "https://mainnet.infura.io/v3/dda569d93eea4600b0d570916f66424f"
+const SIGNER_PRIVATE_KEY = "dda569d93eea4600b0d570916f66424f"
+
+
 const RESERVOIR_API_KEY = "82445212-0dac-53ef-9dcd-08082754b727"
 
 module.exports = {

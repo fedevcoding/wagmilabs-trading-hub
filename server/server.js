@@ -1,4 +1,8 @@
-module.exports = {newSale, newListing, newPendingSnipe}
+
+const CLIENT_URL = "http://localhost:3000"
+
+
+module.exports = { newSale, newListing, newPendingSnipe, CLIENT_URL }
 
 
 // routes imports
@@ -27,6 +31,19 @@ const userBalancesRoute = require("./routes/ethereum/profile/userBalancesRoute.j
 const profileStatsRoute = require("./routes/ethereum/profile/profileStatsRoute.js")
 const volumesRoute = require("./routes/ethereum/volumesRoute.js")
 const feedRoute = require("./routes/ethereum/feedRoute.js")
+const saleBotRoute = require("./routes/ethereum/bots/saleBotRoute.js")
+const profileCollectionsRoute = require("./routes/ethereum/profile/profileCollectionsRoute.js")
+const collectionItemsRoute = require("./routes/ethereum/collections/collectionItemsRoute.js")
+const watchlistCollectionsRoute = require("./routes/ethereum/watchlistCollectionsRoute.js")
+const ownedCollectionsRoute = require("./routes/ethereum/ownedCollectionsRoute.js")
+const userDetailsRoute = require("./routes/ethereum/profile/userDetailsRoute.js")
+const activityChartRoute = require("./routes/ethereum/charts/activityChartRoute.js")
+const collectionActivityRoute = require("./routes/ethereum/collections/collectionActivityRoute.js")
+const tokenLisrPriceRoute = require("./routes/ethereum/profile/tokenLisrPriceRoute.js")
+const profileActivityRoute = require("./routes/ethereum/profile/profileActivityRoute.js")
+const profileTradedCollectionsRoute = require("./routes/ethereum/profile/profileTradedCollectionsRoute.js")
+const collectionListingsRoute = require("./routes/ethereum/collections/collectionListingsRoute.js")
+const collectionSalesRoute = require("./routes/ethereum/collections/collectionSalesRoute.js")
 //
 
 
@@ -34,7 +51,6 @@ const feedRoute = require("./routes/ethereum/feedRoute.js")
 // port
 const port = process.env.PORT || 5001
 //
-
 
 
 
@@ -55,7 +71,8 @@ const getCoinsGasData = require("./websockets/coinsGasData.js")
 const app = express()
 app.use(express.json({ limit: "500mb" }))
 app.use(express.urlencoded({ limit: "500mb", extended: true }))
-app.use(cors({ credentials: true, origin: "http://localhost:3000"}))
+app.use(cors({ credentials: true, origin: CLIENT_URL }))
+
 app.use(cookieParser())
 //
 
@@ -67,21 +84,12 @@ app.use(cookieParser())
 
 const http = require("http")
 const server = new http.createServer(app)
-const { Server } = require("socket.io");
-const saleBotRoute = require("./routes/ethereum/bots/saleBotRoute.js")
-const profileCollectionsRoute = require("./routes/ethereum/profile/profileCollectionsRoute.js")
-const collectionItemsRoute = require("./routes/ethereum/collections/collectionItemsRoute.js")
-const watchlistCollectionsRoute = require("./routes/ethereum/watchlistCollectionsRoute.js")
-const ownedCollectionsRoute = require("./routes/ethereum/ownedCollectionsRoute.js")
-const userDetailsRoute = require("./routes/ethereum/profile/userDetailsRoute.js")
-const activityChartRoute = require("./routes/ethereum/charts/activityChartRoute.js")
-const collectionActivityRoute = require("./routes/ethereum/collections/collectionActivityRoute.js")
-const tokenLisrPriceRoute = require("./routes/ethereum/profile/tokenLisrPriceRoute.js")
-const profileActivityRoute = require("./routes/ethereum/profile/profileActivityRoute.js")
-const profileTradedCollectionsRoute = require("./routes/ethereum/profile/profileTradedCollectionsRoute.js")
-const collectionListingsRoute = require("./routes/ethereum/collections/collectionListingsRoute.js")
-const collectionSalesRoute = require("./routes/ethereum/collections/collectionSalesRoute.js")
-const io = new Server(server);
+const socketIO = require("socket.io")
+const io = socketIO(server, {
+    cors: {
+        origin: CLIENT_URL,
+    }
+});
 
 app.set('socketio', io);
 
@@ -91,7 +99,7 @@ let ethData;
 io.on('connection', (socket) => {
     socket.emit("ethData", ethData)
 
-    setInterval(async ()=>{
+    setInterval(async () => {
         let currentEthData = await getCoinsGasData()
         ethData = currentEthData
         socket.emit("ethData", currentEthData)
@@ -135,38 +143,38 @@ io.on('connection', (socket) => {
 });
 
 
-function newListing(listingData){
+function newListing(listingData) {
 
-    try{
+    try {
         const contractAddress = listingData?.contractAddress?.toLowerCase()
         const channel = `listings${contractAddress}`
         io.sockets.to(channel).emit('listing', listingData);
     }
-    catch(e){
+    catch (e) {
         console.log(e)
     }
 }
 
-function newSale(saleData){
-    try{
-        const {tokenAddress} = saleData
+function newSale(saleData) {
+    try {
+        const { tokenAddress } = saleData
         const contractAddress = tokenAddress.toLowerCase()
         const channel = `sales${contractAddress}`
         io.sockets.to(channel).emit('sale', saleData);
     }
-    catch(e){
+    catch (e) {
         console.log(e)
     }
 }
 
-function newPendingSnipe(accountAddress, id){
+function newPendingSnipe(accountAddress, id) {
     accountAddress = accountAddress.toLowerCase()
     console.log(id)
 
-    try{
+    try {
         io.sockets.to(accountAddress).emit('newPendingSnipe', id);
     }
-    catch(e){
+    catch (e) {
         console.log(e)
     }
 }

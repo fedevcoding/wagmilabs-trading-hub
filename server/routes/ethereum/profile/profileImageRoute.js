@@ -4,15 +4,26 @@ const checkAuth = require("../../../middleware/checkAuth")
 
 const profileImageRoute = express()
 
-profileImageRoute.post("/", checkAuth, async (req, res)=> {
-    const {image_url} = req.body
+profileImageRoute.post("/", checkAuth, async (req, res) => {
 
-    const address = req.userDetails.address
-    const signature = req.userDetails.signature
+    try {
+        const { address, signature } = req.userDetails
 
-    const user = await User.findOne({address, signature})
-    await user.updateOne({profileImage: image_url})
-    res.json({imageUrl: image_url})
+        const { image_url } = req?.body
+
+        if (!image_url) return res.status(400).json({ error: "Image url is required" })
+
+        const user = await User.findOne({ address, signature })
+
+        if (!user) return res.status(400).json({ error: "User not found" })
+
+        await user.updateOne({ profileImage: image_url })
+        res.status(200).json({ imageUrl: image_url })
+    }
+    catch (e) {
+        res.status(500).json({ error: e })
+        console.log(e)
+    }
 })
 
 
