@@ -10,6 +10,7 @@ const Legals = () => {
         <a href="/eula.html" target="_blank"><button class="button">EULA</button></a>
         <a href="/disclaimer.html" target="_blank"><button class="button">Disclaimers</button></a>
         <a href="/cookiepolicy.html" target="_blank"><button class="button">Cookie Policy</button></a>
+        <a href="/acceptableuse.html" target="_blank"><button class="button">Acceptable Use  Policy</button></a>
     </div>
   )
 }
