@@ -7,7 +7,22 @@
     font-size: 18px;
 }
 
-#page-token-detail #item-activity h2 {
+#page-token-detail #item-activity .space-between {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#page-token-detail #item-activity .chakra-select__wrapper {
+    width: 120px;
+}
+
+#page-token-detail #item-activity .chakra-select__wrapper select {
+    color: var(--light-gray);
+    border-radius: 5px;
+}
+
+#page-token-detail #item-activity .item-activity-title {
     margin: 0 -1rem 1rem -1rem;
     padding: 0 1rem 1rem 1rem;
     border-bottom: 1px solid var(--light-gray);

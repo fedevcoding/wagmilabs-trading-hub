@@ -11,3 +11,14 @@ export function getEvent(type) {
   }
   return type.charAt(0).toUpperCase() + type.slice(1);
 }
+
+export function getActivityOptions() {
+  return {
+    sale: "Sale",
+    ask: "List",
+    mint: "Minted",
+    bid: "Offer",
+    bid_cancel: "Offer canceled",
+    ask_cancel: "List canceled",
+  };
+}

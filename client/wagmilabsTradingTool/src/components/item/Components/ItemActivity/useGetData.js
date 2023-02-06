@@ -1,7 +1,7 @@
 import React from "react";
 import baseUrl from "../../../../variables/baseUrl";
 
-export function useGetData(address, id) {
+export function useGetData(address, id, type) {
   const [activities, setActivities] = React.useState(null);
   const [isLoading, setLoading] = React.useState(false);
 
@@ -9,7 +9,9 @@ export function useGetData(address, id) {
     (async () => {
       setLoading(true);
       let apiData = await fetch(
-        `${baseUrl}/collection/${address}/token/${id}/activities`,
+        `${baseUrl}/collection/${address}/token/${id}/activities${
+          type ? `?types=${type}` : ""
+        }`,
         {
           headers: {
             "x-auth-token": localStorage.jsonwebtoken,
@@ -22,7 +24,7 @@ export function useGetData(address, id) {
       setActivities(apiData);
       setLoading(false);
     })();
-  }, [address, id]);
+  }, [address, id, type]);
 
   return [activities, isLoading];
 }

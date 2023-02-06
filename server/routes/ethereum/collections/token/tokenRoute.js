@@ -42,12 +42,23 @@ tokenRoute.get(
   checkAuth,
   async (req, res) => {
     const { address, id } = req.params;
+    let { types } = req.query;
     let tokenActivities = {};
+
+    if (
+      !["sale", "ask", "mint", "bid", "bid_cancel", "ask_cancel"].includes(
+        types
+      )
+    ) {
+      types = null;
+    }
 
     try {
       tokenActivities = await (
         await fetch(
-          `https://api.reservoir.tools/tokens/${address}%3A${id}/activity/v4`,
+          `https://api.reservoir.tools/tokens/${address}%3A${id}/activity/v4${
+            types ? `?types=${types}` : ""
+          }`,
           {
             headers: {
               accept: "*/*",
