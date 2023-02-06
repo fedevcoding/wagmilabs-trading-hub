@@ -53,18 +53,18 @@ export const BarChart = ({
         },
         ...(tooltipSuffix
           ? {
-              tooltip: {
-                valueSuffix: tooltipSuffix,
-                formatter: function () {
-                  const dollarValue = (values?.secondValue || [])[
-                    this.point.index
-                  ];
-                  return dollarValue
-                    ? this.y + ` ${tooltipSuffix}<br>$` + dollarValue
-                    : this.y + tooltipSuffix;
-                },
+            tooltip: {
+              valueSuffix: tooltipSuffix,
+              formatter: function () {
+                const dollarValue = (values?.secondValue || [])[
+                  this.point.index
+                ];
+                return dollarValue
+                  ? this.y + ` ${tooltipSuffix}<br>$` + dollarValue
+                  : this.y + tooltipSuffix;
               },
-            }
+            },
+          }
           : {}),
         legend: {
           enabled: false,
@@ -82,6 +82,7 @@ export const BarChart = ({
           {
             name: title,
             data: values.values,
+            borderRadius: 3
           },
         ],
       }}

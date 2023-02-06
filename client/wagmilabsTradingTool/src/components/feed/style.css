@@ -33,15 +33,19 @@
         margin: 1rem 0;
     }
 
-    #page-feed .cards > a {
+    #page-feed .cards>a {
         display: block;
         width: 100%;
         box-sizing: border-box;
         margin: 0;
     }
 
-    #page-feed .card + .card {
+    #page-feed .card+.card {
         margin-top: 2rem;
     }
 }
-  
+
+
+.feed-summary {
+    font-size: 14px;
+}

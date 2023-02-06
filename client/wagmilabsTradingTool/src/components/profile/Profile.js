@@ -13,6 +13,7 @@ import { RadioGroup, Stack, Radio, Select, HStack, Button, Input, NumberInput, N
 import { UserDataContext } from '../../context/userContext'
 
 import copy from "copy-to-clipboard"
+import setPageTitle from '../../utils/functions/setPageTitle'
 
 const sortItemsOptions = [
   { value: 'desc', label: 'Newest' },
@@ -55,6 +56,7 @@ const Profile = () => {
 
 
   useEffect(() => {
+    setPageTitle("Profile | Wagmi Labs")
     fetchUserData()
   }, [])
 
@@ -297,8 +299,8 @@ const Profile = () => {
 
                               <Select name="" id="" className='listing-settings-currency-type' value={stageListingSettings?.price?.profitType} onChange={(e) => modifyStageListing("profitType", e.target.value)}>
                                 <option value="%">%</option>
-                                <option value="eth">Eth</option>
-                                <option value="usd">Usd</option>
+                                <option value="eth">ETH</option>
+                                <option value="usd">USD</option>
                               </Select>
                             </Stack>
                           </div>
@@ -501,7 +503,7 @@ const Profile = () => {
 
             <div className='profile-details-container'>
               <div className='single-profile-detail'>
-                <div>Nft's</div>
+                <div>NFTs</div>
                 <p>{loadingData ? <Spinner /> : pnl?.nfts || 0}</p>
               </div>
 
@@ -511,7 +513,7 @@ const Profile = () => {
               </div>
 
               <div className='single-profile-detail'>
-                <div>Nft transactions</div>
+                <div>NFT transactions</div>
                 <p>{loadingData ? <Spinner /> : pnl?.totalTxs || 0}</p>
               </div>
             </div>
@@ -551,7 +553,7 @@ const Profile = () => {
             </div>
 
             <div className='avg-pnl'>
-              <p>Nfts avg. value
+              <p>NFTs avg. value
                 <div className='nft-pnl-profit'>
                   {
                     loadingData ?
@@ -566,7 +568,7 @@ const Profile = () => {
                   }
                 </div>
               </p>
-              <p>Realized Pnl
+              <p>Realized P&L
                 <div>
                   {
                     loadingData ?
@@ -610,7 +612,7 @@ const Profile = () => {
           <div className='profile-watchList-settings'>
             <div className='profile-settings'>
               <a className='profile-calcs-button' href='https://profitcalc.wagmilabs.tools/' target={"_blank"}>Calcs<i className="fa-solid fa-calculator"></i></a>
-              <div className='profile-settings-button' onClick={() => toggleListingSettings(true)}>Listing settings<i className="fa-solid fa-gear"></i></div>
+              <div className='profile-settings-button' onClick={() => toggleListingSettings(true)}>Smart list settings<i className="fa-solid fa-gear"></i></div>
             </div>
           </div>
         </div>

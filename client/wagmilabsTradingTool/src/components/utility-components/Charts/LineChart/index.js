@@ -16,7 +16,8 @@ export const LineChart = ({
 }) => {
   const options = {
     chart: {
-      type: "line",
+      type: "spline",
+      borderRadius: 15
     },
     title: {
       text: title,
@@ -48,20 +49,20 @@ export const LineChart = ({
     },
     ...(tooltipSuffix
       ? {
-          tooltip: {
-            formatter: function () {
-              return (
-                this.key +
-                `<br>` +
-                this.series.name +
-                " " +
-                yAxisText +
-                ": " +
-                this.y
-              );
-            },
+        tooltip: {
+          formatter: function () {
+            return (
+              this.key +
+              `<br>` +
+              this.series.name +
+              " " +
+              yAxisText +
+              ": " +
+              this.y
+            );
           },
-        }
+        },
+      }
       : {}),
     legend: {
       enabled: false,

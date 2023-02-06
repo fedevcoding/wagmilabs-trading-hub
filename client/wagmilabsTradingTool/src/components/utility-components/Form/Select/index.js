@@ -13,10 +13,10 @@ export const Select = React.memo(props => {
         backgroundColor: isDisabled
           ? undefined
           : isSelected
-          ? "#1E1F25"
-          : isFocused
-          ? "#1E1F25"
-          : "black",
+            ? "#1E1F25"
+            : isFocused
+              ? "#1E1F25"
+              : "black",
         color: isDisabled ? "#ccc" : isSelected ? "white" : data.color,
         cursor: isDisabled ? "not-allowed" : "default",
       };

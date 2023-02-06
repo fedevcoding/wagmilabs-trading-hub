@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect } from "react";
+import setPageTitle from "../../utils/functions/setPageTitle";
 import { PageWrapper, Tabs } from "../utility-components";
 import { Overview } from "./Components";
 import { Markets } from "./Components/Markets";
@@ -7,6 +8,10 @@ import { useGetTab } from "./Components/useGetTab";
 import "./style.css";
 
 const Volumes = React.memo(() => {
+
+  useEffect(() => {
+    setPageTitle("Volumes | Wagmi Labs")
+  }, [])
   const marketplaces = ["OpenSea", "Blur", "X2Y2", "LooksRare", "SudoSwap"];
   const tabs = ["Overview", ...marketplaces];
   const [tab, setTab] = useGetTab(marketplaces);

@@ -56,11 +56,19 @@ const Footer = () => {
             </div>
 
             <div className='footer-links'>
-                <a>
+                <a href='/legal' target={"_blank"}>
+                    <i className="fa-solid fa-scale-unbalanced"></i>
+                </a>
+
+                <a href='' target={"_blank"}>
+                    <i className="fa-regular fa-circle-info"></i>
+                </a>
+
+                <a href='https://discord.gg/wagmilabs' target={"_blank"}>
                     <i className="fa-brands fa-discord"></i>
                 </a>
 
-                <a>
+                <a href='https://twitter.com/wagmi_labs' target={"_blank"}>
                     <i className="fa-brands fa-twitter"></i>
                 </a>
             </div>

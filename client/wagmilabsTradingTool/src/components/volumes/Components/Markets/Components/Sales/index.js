@@ -39,7 +39,7 @@ export const Sales = React.memo(({ sales, period, marketplace }) => {
       ) : (
         <BarChart
           title="Sales"
-          subTitle="The number of sales in the marketplace over the selected time range."
+          subTitle="number of sales in set marketplace over the selected time range."
           yAxisText="Sales"
           values={values}
         />

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { LoadingSpinner, PageWrapper, Pagination } from "../utility-components";
 import { useGetNews } from "./useGetNews";
 
@@ -6,6 +6,7 @@ import PoweredBy from "../../assets/poweredbyluckytrader-light.png";
 
 import "./style.css";
 import { Card } from "./Components";
+import setPageTitle from "../../utils/functions/setPageTitle";
 
 const Feed = React.memo(() => {
   const [currentPage, setCurrentPage] = React.useState(1);
@@ -14,6 +15,9 @@ const Feed = React.memo(() => {
     isLoading,
   } = useGetNews(currentPage);
 
+  useEffect(() => {
+    setPageTitle("Feed | Wagmi Labs")
+  }, [])
   return (
     <PageWrapper page="feed">
       <h1>NFT news</h1>

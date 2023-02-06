@@ -24,7 +24,7 @@ import { UserDataContext } from '../../../../context/userContext'
 const saleHashes = []
 const listingHashes = []
 
-const LiveView = ({ address, collectionImage }) => {
+const LiveView = ({ address, collectionName }) => {
 
     const toast = useToast()
 
@@ -255,7 +255,7 @@ const LiveView = ({ address, collectionImage }) => {
                     <p>{roundPrice(readableValue)} ETH</p>
                     <div className='live-view-listing-marketplace-container'>
                         <img src={marketplaceImg} className="live-view-listing-marketplace"></img>
-                        <Button colorScheme={"blue"} className='live-view-buy' onClick={() => openBuyModal(name, image, tokenId, readableValue, marketplace, address, "chyngos")}>Buy</Button>
+                        <Button colorScheme={"blue"} className='live-view-buy' onClick={() => openBuyModal(name, image, tokenId, readableValue, marketplace, address, collectionName)}>Buy</Button>
                     </div>
                 </div>
             </div>

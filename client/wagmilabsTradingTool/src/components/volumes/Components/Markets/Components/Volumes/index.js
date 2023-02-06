@@ -45,7 +45,7 @@ export const Volumes = React.memo(({ volumes, period, marketplace }) => {
       ) : (
         <BarChart
           title="Volumes"
-          subTitle="The volume of exchanges in dollars and ETHs in the selected range is shown."
+          subTitle="exchange volume in dollars and ETH in the selected time range."
           tooltipSuffix=" ETH"
           yAxisText="Quantity"
           values={values}

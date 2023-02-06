@@ -19,6 +19,7 @@ import {
   Input,
   InputGroup,
   useToast,
+  Tooltip,
 } from "@chakra-ui/react";
 
 import { UserDataContext } from "../../../../context/userContext";
@@ -339,7 +340,9 @@ const Items = ({ loadingMoreItems, tokensContinuation, address, items, itemFilte
 
                   {
                     isFlagged &&
-                    <img src={flaggedImg} className="collection-items-flagged-img" />
+                    <Tooltip closeOnClick={false} hasArrow label={"Not currently tradable on OpenSea."} fontSize='xs' bg="black" color={"white"} border="1px solid white" placement='top' borderRadius={"7px"}>
+                      <img src={flaggedImg} className="collection-items-flagged-img" />
+                    </Tooltip>
                   }
                 </>
               }

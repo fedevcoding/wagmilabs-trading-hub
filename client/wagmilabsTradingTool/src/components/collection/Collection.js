@@ -597,7 +597,7 @@ const Collection = () => {
                     return <Items loadingMoreItems={loadingMoreItems} fetchMoreTokens={fetchMoreTokens} tokensContinuation={tokensContinuation} address={address} items={items} setItems={setItems} itemFilters={itemFilters} setItemFilters={setItemFilters} loadingItems={loadingItems} setLoadingItems={setLoadingItems} buyNowChecked={buyNowChecked} setBuyNowChecked={setBuyNowChecked} collectionInfo={collectionInfo} searchText={searchText} setSearchText={setSearchText} debounceSearch={debounceSearch} selectedItem={selectedItem} setSelectedItem={setSelectedItem} options={options} />
                 }
                 else if (section === "liveview") {
-                    return <LiveView address={address} items={items} setItems={setItems} itemFilters={itemFilters} setItemFilters={setItemFilters} loadingItems={loadingItems} setLoadingItems={setLoadingItems} buyNowChecked={buyNowChecked} setBuyNowChecked={setBuyNowChecked} collectionInfo={collectionInfo} collectionImage={collectionInfo?.image} />
+                    return <LiveView address={address} items={items} setItems={setItems} itemFilters={itemFilters} setItemFilters={setItemFilters} loadingItems={loadingItems} setLoadingItems={setLoadingItems} buyNowChecked={buyNowChecked} setBuyNowChecked={setBuyNowChecked} collectionInfo={collectionInfo} collectionImage={collectionInfo?.image} collectionName={collectionInfo?.name} />
                 }
                 else if (section === "activity") {
                     return <Activity address={address} />

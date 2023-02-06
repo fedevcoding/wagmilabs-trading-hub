@@ -392,7 +392,7 @@ const Nfts = ({ loadingMoreNfts, fetchMoreItems, nftsContinuation, nftsCollectio
             <div className='profile-item-name-stats'>
               <p className='single-item-name'>{name || tokenId}</p>
               {/* <p className='single-item-collection-name'>{collectionName}</p> */}
-              <p className='single-item-rarity'>Floor price: {floor_price && roundPrice(floor_price)}</p>
+              <p className='single-item-rarity'>Floor price: {floor_price && roundPrice(floor_price)} ETH</p>
             </div>
             <hr></hr>
             {/* getListingInfo(tokenId, contractAddress, floor_price) */}

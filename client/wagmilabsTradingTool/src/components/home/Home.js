@@ -8,6 +8,7 @@ import "./home.css"
 import WatchList from './tools/watchList/WatchList'
 import Owned from './tools/owned/Owned'
 import LivePulsing from '../utility-components/LivePulsing'
+import setPageTitle from '../../utils/functions/setPageTitle'
 
 const Home = () => {
 
@@ -80,14 +81,19 @@ const Home = () => {
 const Tool = ({ tool, timeFrame, setTimeFrame, resetTime }) => {
   switch (tool) {
     case "trending":
+      setPageTitle("Trending | Wagmi Labs")
       return <Trending timeFrame={timeFrame} tool={tool} setTimeFrame={setTimeFrame} resetTime={resetTime} />
     case "minting":
+      setPageTitle("Minting | Wagmi Labs")
       return <Minting timeFrame={timeFrame} tool={tool} setTimeFrame={setTimeFrame} resetTime={resetTime} />
     case "ranking":
+      setPageTitle("Ranking | Wagmi Labs")
       return <Top100 timeFrame={timeFrame} tool={tool} setTimeFrame={setTimeFrame} resetTime={resetTime} />
     case "owned":
+      setPageTitle("Owned | Wagmi Labs")
       return <Owned timeFrame={timeFrame} tool={tool} setTimeFrame={setTimeFrame} resetTime={resetTime} />
     case "watchlist":
+      setPageTitle("Watchlist | Wagmi Labs")
       return <WatchList timeFrame={timeFrame} tool={tool} setTimeFrame={setTimeFrame} resetTime={resetTime} />
   }
 }

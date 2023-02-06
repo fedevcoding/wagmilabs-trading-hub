@@ -8,10 +8,13 @@
     margin: 1rem;
     cursor: pointer;
     position: relative;
+
+    transition: all 200ms;
 }
 
 #page-feed .card:hover {
-    box-shadow: 0 0 1rem 0 #aaa;
+    transform: scale(1.02);
+    box-shadow: 0 0 20px 5px #000000;
 }
 
 #page-feed .card .info {
@@ -46,7 +49,7 @@
     font-size: 12px;
 }
 
-#page-feed .card .tag + .tag {
+#page-feed .card .tag+.tag {
     margin-left: 0.5rem;
 }
 
@@ -60,7 +63,8 @@
     #page-feed .card .row {
         display: block;
     }
-    #page-feed .card .col + .col {
+
+    #page-feed .card .col+.col {
         margin-left: 0;
     }
 
