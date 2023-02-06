@@ -10,8 +10,6 @@ const Item = React.memo(() => {
   const { address, id } = useParams();
   const [details, isLoading] = useGetData(address, id);
 
-  console.log(details);
-
   return (
     <PageWrapper page="token-detail">
       {(details && !isLoading && (

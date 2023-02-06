@@ -1,11 +1,8 @@
 import React from "react";
-import { useAccount } from "wagmi";
 import { Col, Row } from "../../../utility-components";
 import { MakeOffer } from "..";
 
-export const BestOfferBox = React.memo(({ details, address }) => {
-  const { address: accountAddress } = useAccount();
-  const isOwner = details ? accountAddress === details?.token?.owner : false;
+export const BestOfferBox = React.memo(({ details, address, isOwner }) => {
   const market = Object.values(details.market)[0];
   const topBid = details?.market?.topBid;
   const tokenId = details?.token?.tokenId || "";

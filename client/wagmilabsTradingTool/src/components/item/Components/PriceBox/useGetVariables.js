@@ -1,8 +1,4 @@
-import { useAccount } from "wagmi";
-
 export const useGetVariables = details => {
-  const { address: accountAddress } = useAccount();
-  const isOwner = details ? accountAddress === details?.token?.owner : false;
   const market = Object.values(details.market)[0];
 
   const name = details?.token?.name || "";
@@ -19,7 +15,6 @@ export const useGetVariables = details => {
     image,
     marketplace,
     collectionName,
-    isOwner,
     market,
   };
 };

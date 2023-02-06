@@ -1,11 +1,20 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { BestOfferBox, BestOfferTable, ItemActivity, PriceBox } from "..";
+import { useAccount } from "wagmi";
+import {
+  BestOfferBox,
+  BestOfferTable,
+  ItemActivity,
+  ListItem,
+  PriceBox,
+} from "..";
 
 import "./style.css";
 
 export const InfoCol = React.memo(({ details, address, id }) => {
   const navigate = useNavigate();
+  const { address: accountAddress } = useAccount();
+  const isOwner = details ? accountAddress === details?.token?.owner : false;
 
   return (
     <div className="item-name-container">
@@ -24,8 +33,13 @@ export const InfoCol = React.memo(({ details, address, id }) => {
         </div>
       </div>
 
-      <PriceBox details={details} address={address} />
-      <BestOfferBox details={details} address={address} />
+      {true ? ( // to change isOwner
+        <ListItem details={details} address={address} id={id} />
+      ) : (
+        <PriceBox details={details} address={address} />
+      )}
+
+      <BestOfferBox details={details} address={address} isOwner={isOwner} />
       <BestOfferTable details={details} />
 
       <ItemActivity

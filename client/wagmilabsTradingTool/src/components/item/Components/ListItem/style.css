@@ -1,0 +1,48 @@
+#page-token-detail .list-item {
+    margin-top: 2rem;
+    padding: 1rem;
+    border-radius: 10px;
+    border: 1px solid var(--light-gray);
+    background-color: var(--secondary-color);
+}
+
+#page-token-detail .list-item .list-row {
+    margin: 1rem 0;
+    display: flex;
+    align-items: center;
+}
+
+#page-token-detail .list-item h2 {
+    margin-bottom: 1rem;
+}
+
+#page-token-detail .list-item input {
+    box-sizing: border-box;
+    color: white;
+}
+
+#page-token-detail .list-item .price-method {
+    width: 220px;
+}
+
+#page-token-detail .list-item .point {
+    font-size: 50px;
+    line-height: 30px;
+    width: 40px;
+}
+
+#page-token-detail .list-item .btn {
+    margin-left: 1rem;
+    padding: 0.5rem;
+    background-color: black;
+    border: 1px solid var(--light-gray);
+    border-radius: 10px;
+    cursor: pointer;
+    text-align: center;
+    max-width: 500px;
+    min-width: 100px;
+}
+
+#page-token-detail .list-item .btn:hover {
+
+}
