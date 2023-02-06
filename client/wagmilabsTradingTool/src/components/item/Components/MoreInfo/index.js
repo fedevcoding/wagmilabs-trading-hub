@@ -30,6 +30,10 @@ export const MoreInfo = React.memo(({ details, address }) => {
           <span className="title">Chain: </span>
           Ethereum
         </div>
+        <div>
+          <span className="title">Owner: </span>
+          {formatContractAddress(details.token.owner)}
+        </div>
         {(details?.token?.lastFlagUpdate && (
           <div>
             <span className="title">Last Update: </span>

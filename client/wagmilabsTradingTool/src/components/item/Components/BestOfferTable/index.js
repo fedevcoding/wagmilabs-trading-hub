@@ -1,6 +1,6 @@
-import { Tooltip } from "@chakra-ui/react";
-import moment from "moment";
 import React from "react";
+import moment from "moment";
+import { Tooltip } from "@chakra-ui/react";
 import { useAccount } from "wagmi";
 import { formatContractAddress } from "../../../../utils/formats/formats";
 

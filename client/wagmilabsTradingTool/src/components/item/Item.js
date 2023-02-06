@@ -17,7 +17,7 @@ const Item = React.memo(() => {
       {(details && !isLoading && (
         <div className="nft-container">
           <ImageCol details={details} address={address} />
-          <InfoCol details={details} address={address} />
+          <InfoCol details={details} address={address} id={id} />
         </div>
       )) || <LoadingSpinner />}
     </PageWrapper>

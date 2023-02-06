@@ -3,6 +3,7 @@
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
     border: 1px solid var(--light-gray);
+    background-color: var(--secondary-color);
     margin-top: 2rem;
     font-size: 18px;
 }
@@ -16,6 +17,7 @@
     padding: 1rem;
     border-radius: 10px;
     border: 1px solid var(--light-gray);
+    background-color: var(--secondary-color);
     font-size: 18px;
 }
 
@@ -45,7 +47,7 @@
 
 #page-token-detail .actions .btn {
     padding: 1rem;
-    background-color: var(--secondary-color);
+    background-color: black;
     border: 1px solid var(--light-gray);
     border-radius: 10px;
     cursor: pointer;
@@ -88,5 +90,5 @@
 }
 
 #page-token-detail .actions .btn:hover {
-    filter: brightness(120%);
+    filter: invert(8%);
 }

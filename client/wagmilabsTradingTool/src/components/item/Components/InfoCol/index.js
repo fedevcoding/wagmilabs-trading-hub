@@ -1,10 +1,10 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { BestOfferBox, BestOfferTable, PriceBox } from "..";
+import { BestOfferBox, BestOfferTable, ItemActivity, PriceBox } from "..";
 
 import "./style.css";
 
-export const InfoCol = React.memo(({ details, address }) => {
+export const InfoCol = React.memo(({ details, address, id }) => {
   const navigate = useNavigate();
 
   return (
@@ -27,6 +27,14 @@ export const InfoCol = React.memo(({ details, address }) => {
       <PriceBox details={details} address={address} />
       <BestOfferBox details={details} address={address} />
       <BestOfferTable details={details} />
+
+      <ItemActivity
+        address={address}
+        id={id}
+        currency={
+          Object.values(details.market)[0]?.price?.currency?.symbol || "ETH"
+        }
+      />
     </div>
   );
 });
