@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom';
 import "./item.css"
 import fullStar from "../../assets/full-star.png"
@@ -14,16 +14,15 @@ const Item = () => {
   const [itemData, setItemData] = useState(null)
   const [isWatchList, setIsWatchList] = useState()
 
-  useEffect(()=>{
-        getWatchListCollections("nft", `${params.address}/${params.id}`, setIsWatchList)
+  useEffect(() => {
+    getWatchListCollections("nft", `${params.address}/${params.id}`, setIsWatchList)
   }, [])
 
-  useEffect(()=>{
-    async function getNftInfo(){
+  useEffect(() => {
+    async function getNftInfo() {
       let data = await fetch(`https://api.opensea.io/api/v1/asset/${params.address}/${params.id}/?include_orders=false`)
       data = await data.json()
 
-      console.log(data)
       setItemData([data])
     }
     getNftInfo()
@@ -38,7 +37,7 @@ const Item = () => {
           const collectionImage = item?.collection?.image_url
           const name = item?.name
           const collectionName = item?.collection?.name
-          return(
+          return (
             <div className='item-container'>
               <div className='item-image-container'>
                 <img className='item-image' src={image_url} alt="" />
@@ -48,7 +47,7 @@ const Item = () => {
                     <img onClick={isWatchList ? () => removeFromWatchList("nft", `${params.address}/${params.id}`, setIsWatchList) : () => addToWatchList("nft", `${params.address}/${params.id}`, setIsWatchList)} className='starWatchlist' src={isWatchList ? fullStar : emptyStar} alt="" />
                   </div>
 
-                  <div className='item-collection-info' onClick={()=> navigate(`/collection/${params.address}`)}>
+                  <div className='item-collection-info' onClick={() => navigate(`/collection/${params.address}`)}>
                     <img className='item-collection-image' src={collectionImage} />
                     <div className='item-collection-name'>{collectionName}</div>
                   </div>

@@ -18,10 +18,7 @@ const updateListingSettingsRoute = require("./routes/ethereum/updateListingSetti
 const updateWatchListRoute = require("./routes/ethereum/updateWatchListRoute.js")
 const removeRefreshTokenRoute = require("./routes/ethereum/removeRefreshTokenRoute.js")
 const getWatchListRoute = require("./routes/ethereum/getWatchListRoute.js")
-const watchListRoute = require("./routes/ethereum/watchListRoute.js")
-const listingSettingsRoute = require("./routes/ethereum/profile/listingSettingsRoute.js")
 const profileItemsRoute = require("./routes/ethereum/profile/profileItemsRoute")
-const breakEvenRoute = require("./routes/ethereum/profile/breakEvenRoute")
 const collectionInfoRoute = require("./routes/ethereum/collections/collectionInfoRoute.js")
 const updateUserCartRoute = require("./routes/ethereum/profile/updateUserCartRoute.js")
 const emptyCartRoute = require("./routes/ethereum/profile/emptyCartRoute.js")
@@ -100,9 +97,14 @@ io.on('connection', (socket) => {
     socket.emit("ethData", ethData)
 
     setInterval(async () => {
-        let currentEthData = await getCoinsGasData()
-        ethData = currentEthData
-        socket.emit("ethData", currentEthData)
+        try {
+            let currentEthData = await getCoinsGasData()
+            ethData = currentEthData
+            socket.emit("ethData", currentEthData)
+        }
+        catch (e) {
+            console.log(e)
+        }
     }, 10000)
 
     socket.on("joinSales", collectionAddress => {
@@ -180,8 +182,6 @@ function newPendingSnipe(accountAddress, id) {
 }
 
 
-//
-
 
 
 // http routes
@@ -211,10 +211,7 @@ app.use("/api/v1/wagmilabs/searchCollection", searchCollectionsRoute)
 app.use("/api/v1/wagmilabs/collectionInfo", collectionInfoRoute)
 app.use("/api/v1/wagmilabs/profileItems", profileItemsRoute)
 app.use("/api/v1/wagmilabs/profileCollections", profileCollectionsRoute)
-app.use("/api/v1/wagmilabs/breakEven", breakEvenRoute)
-app.use("/api/v1/wagmilabs/listingSettings", listingSettingsRoute)
 app.use("/api/v1/wagmilabs/getWatchList", getWatchListRoute)
-app.use("/api/v1/wagmilabs/watchList", watchListRoute)
 app.use("/api/v1/wagmilabs/trending", trendingRoute)
 app.use("/api/v1/wagmilabs/minting", mintingRoute)
 app.use("/api/v1/wagmilabs/ranking", rankingRoute)

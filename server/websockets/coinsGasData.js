@@ -1,14 +1,14 @@
 const getCoinsGasData = async () => {
 
-    try{
+    try {
         const options = {
-            headers: {Authorization: '517ae0f1-4beb-42a9-bc42-0175bfb7412e'},
+            headers: { Authorization: '517ae0f1-4beb-42a9-bc42-0175bfb7412e' },
         };
-        
+
         let data = await fetch('https://api.blocknative.com/gasprices/blockprices?confidenceLevels=50&confidenceLevels=80&confidenceLevels=90&confidenceLevels=70&confidenceLevels=99', options)
         data = await data.json()
-        
-        
+
+
         let ethPrice = await fetch("https://api.coinbase.com/v2/prices/ETH-USD/spot")
         let usdcPrice = await fetch("https://api.coinbase.com/v2/prices/USDC-USD/spot")
         let usdtPrice = await fetch("https://api.coinbase.com/v2/prices/USDT-USD/spot")
@@ -25,16 +25,15 @@ const getCoinsGasData = async () => {
             "fastGas": fastGas,
             "standardGas": standardGas,
         }
-    
+
         data["ethPrice"] = ethPrice
-        data["currencyPrices"] = {ethPrice, usdcPrice, usdtPrice}
+        data["currencyPrices"] = { ethPrice, usdcPrice, usdtPrice }
         data["gasMapping"] = gasMapping
-    
+
         return data
     }
-    catch(e){
+    catch (e) {
         console.log(e.message)
-        // console.log("coin error")
     }
 }
 

@@ -15,8 +15,6 @@ updateListingSettingsRoute.post("/", checkAuth, async (req, res) => {
 
         const { address, signature } = req.userDetails
 
-        console.log(marketplace, months, days, hours, minutes, type, profitType, profitValue)
-
         if (!marketplace || !type || !profitType || !profitValue) return res.json({ updated: false, error: "Missing data" })
 
 

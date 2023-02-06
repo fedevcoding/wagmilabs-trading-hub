@@ -18,6 +18,7 @@ import {
   Divider,
   Input,
   InputGroup,
+  useToast,
 } from "@chakra-ui/react";
 
 import { UserDataContext } from "../../../../context/userContext";
@@ -41,6 +42,7 @@ const Items = ({ loadingMoreItems, tokensContinuation, address, items, itemFilte
   const firstRender = useFirstRender();
 
   const observer = useRef(null);
+  const toast = useToast()
 
 
   const [showBuyNowModal, setShowBuyNowModal] = useState(false)
@@ -194,62 +196,104 @@ const Items = ({ loadingMoreItems, tokensContinuation, address, items, itemFilte
     setShowBuyNowModal(true)
   }
 
-  function closeBuynowModal(e) {
-    if (e.target !== e.currentTarget) return
+  function closeBuynowModal(e, force) {
+    if (!force) if (e.target !== e.currentTarget) return
     document.body.style.overflow = "unset"
     setShowBuyNowModal(false)
   }
 
-  async function addItemToCart(name, tokenId, price, image, marketplace, collectionName, index) {
-    let pushStatus = await addToCart({
-      name,
-      collectionName,
-      tokenId,
-      price,
-      image,
-      marketplace,
-      contractAddress: address,
-    });
-    if (pushStatus === "success") {
 
-      animateAddToCart(index, image)
-      setUserCartItems((prevItems) => [
-        ...prevItems,
-        { name, tokenId, price, image, marketplace, collectionName, contractAddress: address },
-      ]);
+
+  async function addItemToCart(name, tokenId, price, image, marketplace, collectionName, index) {
+    try {
+      const { pushStatus, filteredItems } = await addToCart({
+        name,
+        collectionName,
+        tokenId,
+        price,
+        image,
+        marketplace,
+        contractAddress: address,
+      });
+      if (pushStatus === "success") {
+        animateAddToCart(index, image)
+        setUserCartItems(filteredItems);
+      }
+      else {
+        throw new Error("error")
+      }
+    }
+    catch (e) {
+      toast({
+        title: "Error",
+        description: "Something went wrong",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      })
+    }
+  }
+
+  async function removeItemFromCart(tokenId, contractAddress) {
+
+    try {
+      const { pushStatus, filteredItems } = await removeFromCart(tokenId, contractAddress)
+      if (pushStatus === "success") {
+        setUserCartItems(filteredItems);
+      }
+      else {
+        throw new Error("error")
+      }
+    }
+
+    catch (e) {
+      toast({
+        title: "Error",
+        description: "Something went wrong",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      })
     }
   }
 
   async function buyNow(contract, tokenId, value) {
-    const signer = await fetchSigner();
-    const maxFeePerGas = (gasSettings.maxFeePerGas * 1000000000).toString();
-    const maxPriorityFeePerGas = (
-      gasSettings.maxPriorityFeePerGas * 1000000000
-    ).toString();
+    try {
+      const signer = await fetchSigner();
+      const maxFeePerGas = (gasSettings.maxFeePerGas * 1000000000).toString();
+      const maxPriorityFeePerGas = (
+        gasSettings.maxPriorityFeePerGas * 1000000000
+      ).toString();
 
-    await getClient()?.actions.buyToken({
-      tokens: [{ tokenId, contract: contract }],
-      signer,
-      options: {
-        maxFeePerGas,
-        maxPriorityFeePerGas,
-      },
-      expectedPrice: value,
-      onProgress: (steps) => {
-        console.log(steps);
-      },
-    });
+      await getClient()?.actions.buyToken({
+        tokens: [{ tokenId, contract: contract }],
+        signer,
+        options: {
+          maxFeePerGas,
+          maxPriorityFeePerGas,
+        },
+        expectedPrice: value,
+        onProgress: (steps) => {
+        },
+      });
+    }
+    catch (e) {
+      setBuyNowModalData({})
+      closeBuynowModal(undefined, true)
+      toast({
+        title: "Error",
+        description: "Something went wrong, try checking order availability or wallet funds",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      })
+    }
   }
 
 
 
-  async function removeItemFromCart(tokenId, contractAddress) {
-    const filteredItems = userCartItems.filter(item => item.contractAddress + item.tokenId !== contractAddress + tokenId)
 
-    await removeFromCart(tokenId, contractAddress)
 
-    setUserCartItems(filteredItems)
-  }
 
   const itemsMapping = useMemo(() =>
     items && items.map((item, index) => {

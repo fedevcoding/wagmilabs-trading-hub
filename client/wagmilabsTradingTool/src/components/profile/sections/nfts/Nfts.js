@@ -67,7 +67,6 @@ const Nfts = ({ loadingMoreNfts, fetchMoreItems, nftsContinuation, nftsCollectio
       }
 
       const classLists = Array.from(event.target.classList)
-      console.log(classLists)
       if (!classLists.includes(el2)) {
         closeAllOptions()
       }
@@ -254,7 +253,6 @@ const Nfts = ({ loadingMoreNfts, fetchMoreItems, nftsContinuation, nftsCollectio
         }],
         signer,
         onProgress: (steps) => {
-          console.log(steps)
         },
       })
       setConfirmingList(false)
@@ -342,8 +340,6 @@ const Nfts = ({ loadingMoreNfts, fetchMoreItems, nftsContinuation, nftsCollectio
     const collectionImage = item?.token?.collection?.imageUrl
     const collectionName = item?.token?.collection?.name
     const floor_price = item?.token?.collection?.floorAskPrice
-
-    if (tokenId == 5161) console.log(item)
 
     const isLast = index === userItems.length - 1
 
@@ -686,8 +682,6 @@ function getListingExpirationDate(listingSettings) {
   if (!listingSettings) return
   const { months, days, hours, minutes } = listingSettings?.time
 
-
-  console.log(months, days, hours, minutes)
 
   const now = new Date()
   const listingExpiration = new Date(

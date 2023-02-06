@@ -1,8 +1,7 @@
 import React, { useCallback, useContext, useMemo } from 'react'
-import { Portal } from "react-portal"
 import notFound from "../../assets/notFound.svg"
 import "./cartModal.css"
-import { Button } from "@chakra-ui/react"
+import { Button, useToast } from "@chakra-ui/react"
 import { useNavigate } from 'react-router-dom'
 import { UserDataContext } from '../../context/userContext'
 import emptyCart from '../../utils/database-functions/emptyCart'
@@ -16,8 +15,8 @@ import removeFromCart from '../../utils/database-functions/removeFromCart'
 
 const CartModal = ({ modalOpen, closeCartModal }) => {
 
-
-    const { userCartItems, setUserCartItems, ethData } = useContext(UserDataContext)
+    const toast = useToast()
+    const { userCartItems, setUserCartItems, ethData, gasSettings } = useContext(UserDataContext)
     const navigate = useNavigate()
 
 
@@ -27,33 +26,79 @@ const CartModal = ({ modalOpen, closeCartModal }) => {
     }
 
     async function clearCart() {
-        let status = await emptyCart()
-        if (status === "success") setUserCartItems([])
+        try {
+            let status = await emptyCart()
+            if (status === "success") setUserCartItems([])
+            else throw new Error("error")
+        }
+        catch (e) {
+            toast({
+                title: "Error",
+                description: "Something went wrong, try again later",
+                status: "error",
+                duration: 3000,
+                isClosable: true,
+            })
+        }
     }
 
     async function removeTokenFromCart(contractAddress, tokenId) {
-        const filteredItems = userCartItems.filter(item => item.contractAddress + item.tokenId !== contractAddress + tokenId)
+        try {
+            const { pushStatus, filteredItems } = await removeFromCart(tokenId, contractAddress)
 
-        await removeFromCart(tokenId, contractAddress)
+            if (pushStatus !== "success") throw new Error("error")
 
-        setUserCartItems(filteredItems)
+            setUserCartItems(filteredItems)
+        }
+        catch (e) {
+            toast({
+                title: "Error",
+                description: "Something went wrong, try again later",
+                status: "error",
+                duration: 3000,
+                isClosable: true,
+            })
+        }
     }
 
-    const batchBuyItems = async () => {
-        const signer = await fetchSigner()
+    async function batchBuyItems() {
+        try {
+            const signer = await fetchSigner()
+            const maxFeePerGas = (gasSettings.maxFeePerGas * 1000000000).toString();
+            const maxPriorityFeePerGas = (
+                gasSettings.maxPriorityFeePerGas * 1000000000
+            ).toString();
 
-        const tokens = userCartItems.map(item => {
-            const { tokenId, contractAddress } = item
-            return { tokenId, contract: contractAddress }
-        })
+            const tokens = userCartItems.map(item => {
+                const { tokenId, contractAddress } = item
+                return { tokenId, contract: contractAddress }
+            })
 
-        getClient()?.actions.buyToken({
-            tokens,
-            signer,
-            onProgress: (steps) => {
-                console.log(steps)
-            }
-        })
+            let res = await getClient()?.actions.buyToken({
+                tokens,
+                signer,
+                expectedPrice: totalPrice,
+                options: {
+                    maxFeePerGas,
+                    maxPriorityFeePerGas,
+                },
+                onProgress: (steps) => {
+                    // console.log(steps)
+                },
+            })
+
+            if (res.response.data.statusCode == 400) throw new Error("error")
+        }
+        catch (e) {
+
+            toast({
+                title: "Error",
+                description: "Something went wrong, try checking orders availability or wallet balance",
+                status: "error",
+                duration: 3000,
+                isClosable: true,
+            })
+        }
     }
 
 
@@ -66,13 +111,13 @@ const CartModal = ({ modalOpen, closeCartModal }) => {
         return (
             <div className='user-cart-single-item'>
                 <img src={image} className="user-cart-item-image" />
-                <div className='user-cart-item-details-container'>
-                    <p className='user-cart-item-name'>{name}</p>
-                    <p className='user-cart-collection-name'>{collectionName}</p>
+                <div className='user-cart-item-details-container wrap-text'>
+                    <p className='user-cart-item-name wrap-text'>{name}</p>
+                    <p className='user-cart-collection-name wrap-text'>{collectionName}</p>
                 </div>
                 <div className='user-cart-item-price-container'>
 
-                    <p className='user-cart-item-price'>
+                    <p className='user-cart-item-price big-text'>
                         {roundPrice(price)} ETH
                     </p>
 

@@ -5,50 +5,33 @@ const checkAuth = require("../../middleware/checkAuth")
 
 const updateWatchListRoute = express()
 
-updateWatchListRoute.post('/', checkAuth, async (req, res) => {
+updateWatchListRoute.get('/', checkAuth, async (req, res) => {
 
-    const {type, collectionAddress, method} = req.body
+    try {
+        const { collectionAddress, method } = req.query
 
-    const address = req.userDetails.address
-    const signature = req.userDetails.signature
+        const { address, signature } = req.userDetails
 
+        if (!collectionAddress || !method) throw new Error("collection aaddress or method not provided")
 
-    try{
-        const user = await User.findOne({address, signature})
-        if(method === "add"){
-            if(type === "collection"){
-                user.watchList.collectionWatchList.push(collectionAddress.toLowerCase())
-                await user.save()
-            }
-            else if(type === "nft"){
-                user.watchList.nftWatchList.push(collectionAddress.toLowerCase())
-                await user.save()
-            }
-            else if(type === "address"){
-                user.watchList.addressWatchList.push(collectionAddress.toLowerCase())
-                await user.save()
-            }
-            res.status(200).json({message: `${type} added to watchlist`, status: "ok"})
+        const user = await User.findOne({ address, signature })
+
+        if (!user) throw new Error("User not found")
+
+        if (method === "add") {
+            user.watchList.collectionWatchList.push(collectionAddress.toLowerCase())
+            await user.save()
+            res.status(200).json({ message: `collection added to watchlist`, status: "ok" })
         }
-        else if(method === "remove"){
-            if(type === "collection"){
-                user.watchList.collectionWatchList.pull(collectionAddress)
-                await user.save()
-            }
-            else if(type === "nft"){
-                user.watchList.nftWatchList.pull(collectionAddress)
-                await user.save()
-            }
-            else if(type === "address"){
-                user.watchList.addressWatchList.pull(collectionAddress)
-                await user.save()
-            }
-            res.status(200).json({message: `${type} removed from watchlist`, status: "ok"})
+        else if (method === "remove") {
+            user.watchList.collectionWatchList.pull(collectionAddress.toLowerCase())
+            await user.save()
+            res.status(200).json({ message: `collection removed from watchlist`, status: "ok" })
         }
     }
-    catch(err){
-        console.log(err)
-        res.status(400).json({message: "failed to add watchlist", status: "error"})
+    catch (e) {
+        console.log(e)
+        res.status(400).json({ error: e, status: "error" })
     }
 
 })

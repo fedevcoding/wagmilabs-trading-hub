@@ -1,19 +1,13 @@
-import { Button } from '@chakra-ui/react'
+import { Button, useToast } from '@chakra-ui/react'
 import React, { useContext, useEffect, useMemo, useState } from 'react'
 import { roundPrice } from '../../../../utils/formats/formats'
 
-import moment from "moment"
-
 import "./liveview.css"
 
-// websocket
-
-import websocket from 'websocket';
 
 // images
 
 import etherscan from "../../../../assets/etherscan.svg"
-import opensea from "../../../../assets/opensea.svg"
 import getMarketplaceImage from '../../../../utils/marketplaceImageMapping'
 import { SocketContext } from '../../../../context/SocketContext'
 
@@ -30,7 +24,17 @@ import { UserDataContext } from '../../../../context/userContext'
 const saleHashes = []
 const listingHashes = []
 
-const LiveView = ({address, collectionImage}) => {
+const LiveView = ({ address, collectionImage }) => {
+
+    const toast = useToast()
+
+    const socket = useContext(SocketContext)
+    const { gasSettings } = useContext(UserDataContext);
+
+
+    const [listings, setListings] = useState([])
+    const [sales, setSales] = useState([])
+    const [refreshDate, setRefreshDate] = useState()
 
     const [showBuyNowModal, setShowBuyNowModal] = useState(false)
     const [buyNowModalData, setBuyNowModalData] = useState({
@@ -43,7 +47,10 @@ const LiveView = ({address, collectionImage}) => {
         collectionName: ""
     })
 
-    function openBuyModal(name, image, tokenId, price, marketplace, contract, collectionName){
+
+
+
+    function openBuyModal(name, image, tokenId, price, marketplace, contract, collectionName) {
         document.body.style.overflow = "hidden"
         setBuyNowModalData({
             name,
@@ -56,23 +63,17 @@ const LiveView = ({address, collectionImage}) => {
         })
         setShowBuyNowModal(true)
     }
-    
-    function closeBuynowModal(e){
-        if(e.target !== e.currentTarget) return
+
+    function closeBuynowModal(e, force) {
+        if (!force) if (e.target !== e.currentTarget) return
         document.body.style.overflow = "unset"
         setShowBuyNowModal(false)
     }
 
 
-    const socket = useContext(SocketContext)
-    const { gasSettings } = useContext(UserDataContext);
 
 
-    const [listings, setListings] = useState([])
-    const [sales, setSales] = useState([])
-    const [refreshDate, setRefreshDate] = useState()
-
-    useEffect(()=>{
+    useEffect(() => {
         fetchListings()
         fetchSales()
 
@@ -83,8 +84,8 @@ const LiveView = ({address, collectionImage}) => {
 
         socket.on("sale", saleData => {
 
-            const {tokenId, tokenAddress, timestamp, marketplace, hash, value} = saleData
-            const {name, image} = saleData?.tokenInfo
+            const { tokenId, tokenAddress, timestamp, marketplace, hash, value } = saleData
+            const { name, image } = saleData?.tokenInfo
 
             const dataObj = {
                 liveSale: true,
@@ -102,7 +103,7 @@ const LiveView = ({address, collectionImage}) => {
                     }
                 }
             }
-            if(tokenAddress.toLowerCase() === address.toLowerCase()){
+            if (tokenAddress.toLowerCase() === address.toLowerCase()) {
                 setSales(oldSales => [dataObj, ...oldSales])
             }
         })
@@ -110,8 +111,8 @@ const LiveView = ({address, collectionImage}) => {
 
         socket.on("listing", listingData => {
 
-            const {contractAddress, tokenId, price, image, name, timestamp} = listingData
-            const {marketplace} = listingData
+            const { contractAddress, tokenId, price, image, name, timestamp } = listingData
+            const { marketplace } = listingData
 
             const dataObj = {
                 liveListing: true,
@@ -135,7 +136,7 @@ const LiveView = ({address, collectionImage}) => {
                 }
             }
 
-            if(contractAddress.toLowerCase() === address.toLowerCase()){
+            if (contractAddress.toLowerCase() === address.toLowerCase()) {
                 setListings(oldListings => [dataObj, ...oldListings])
             }
         })
@@ -150,76 +151,100 @@ const LiveView = ({address, collectionImage}) => {
     }, [])
 
 
-    async function fetchListings(){
-        const listingsData = await fetch(`${baseUrl}/collectionListings/${address}`, {
-            headers: {
-                "x-auth-token": localStorage.jsonwebtoken
-            }
-        })
-        const listingsApi = await listingsData.json()
+    async function fetchListings() {
+        try {
+            const listingsData = await fetch(`${baseUrl}/collectionListings/${address}`, {
+                headers: {
+                    "x-auth-token": localStorage.jsonwebtoken
+                }
+            })
+            if (!listingsData.ok) throw new Error("error fetching listings data")
+            const listingsApi = await listingsData.json()
 
-        const {orders, continuation} = listingsApi
+            const { orders, continuation } = listingsApi
 
-        console.log(orders)
-        setListings(orders)
+            setListings(orders)
+        }
+        catch (e) {
+            console.log(e)
+            setListings([])
+        }
     }
 
-    async function fetchSales(){
-        const salesData = await fetch(`${baseUrl}/collectionSales/${address}`, {
-            headers: {
-                "x-auth-token": localStorage.jsonwebtoken
-            }
-        })
-        const salesApi = await salesData.json()
+    async function fetchSales() {
 
-        const {activities, continuation} = salesApi
+        try {
+            const salesData = await fetch(`${baseUrl}/collectionSales/${address}`, {
+                headers: {
+                    "x-auth-token": localStorage.jsonwebtoken
+                }
+            })
 
-        console.log(activities)
+            if (!salesData.ok) throw new Error("error fetching sales data")
 
-        setSales(activities)
+            const salesApi = await salesData.json()
+
+            const { activities, continuation } = salesApi
+
+            setSales(activities)
+        }
+        catch (e) {
+            console.log(e)
+            setSales([])
+        }
     }
 
-
-    
     async function buyNow(contract, tokenId, value) {
-        const signer = await fetchSigner();
-        const maxFeePerGas = (gasSettings.maxFeePerGas * 1000000000).toString();
-        const maxPriorityFeePerGas = (
-        gasSettings.maxPriorityFeePerGas * 1000000000
-        ).toString();
+        try {
+            const signer = await fetchSigner();
+            const maxFeePerGas = (gasSettings.maxFeePerGas * 1000000000).toString();
+            const maxPriorityFeePerGas = (
+                gasSettings.maxPriorityFeePerGas * 1000000000
+            ).toString();
 
-        await getClient()?.actions.buyToken({
-        tokens: [{ tokenId, contract: contract }],
-        signer,
-        options: {
-            maxFeePerGas,
-            maxPriorityFeePerGas,
-        },
-        expectedPrice: value,
-        onProgress: (steps) => {
-            console.log(steps);
-        },
-        });
+            await getClient()?.actions.buyToken({
+                tokens: [{ tokenId, contract: contract }],
+                signer,
+                options: {
+                    maxFeePerGas,
+                    maxPriorityFeePerGas,
+                },
+                expectedPrice: value,
+                onProgress: (steps) => {
+                },
+            });
+        }
+        catch (e) {
+            setBuyNowModalData({})
+            closeBuynowModal(undefined, true)
+            toast({
+                title: "Error",
+                description: "Something went wrong, try checking order availability or wallet funds",
+                status: "error",
+                duration: 3000,
+                isClosable: true,
+            })
+        }
     }
 
 
-    const listingsMapping = useMemo(()=> listings.map(listing => {
-        
-        const {name, image, tokenId} = listing?.criteria?.data?.token || {}
+    const listingsMapping = useMemo(() => listings.map(listing => {
+
+        const { name, image, tokenId } = listing?.criteria?.data?.token || {}
         const readableValue = listing?.price?.amount?.decimal
         const marketplace = listing?.source?.name
         const listingTime = new Date(listing?.createdAt).getTime()
         const formatListingTime = formatTime(listingTime)
-        
+
 
         const marketplaceImg = getMarketplaceImage(marketplace)
 
         const id = crypto.randomUUID()
 
-        return(
+        return (
             <div className='live-view-single-listing-item' key={id}>
                 <div className='live-view-listing-container'>
-                    <img src={image} className="live-view-listing-image"/>
+                    <img src={image} className="live-view-listing-image" />
                     <div>
                         <p>{name || tokenId}</p>
                         <p className='live-view-listing-time'>{formatListingTime}</p>
@@ -237,69 +262,69 @@ const LiveView = ({address, collectionImage}) => {
         )
     }), [listings, refreshDate])
 
-    const salesMapping = useMemo(()=> sales.map(sale => {
-            const {price, liveSale, timestamp, txHash, } = sale
-            const {tokenName, tokenImage, tokenId} = sale?.token
-            const {collectionImage, collectionName} = sale?.collection || {}
-            const {name: marketplaceName} = sale?.order?.source
+    const salesMapping = useMemo(() => sales.map(sale => {
+        const { price, liveSale, timestamp, txHash, } = sale
+        const { tokenName, tokenImage, tokenId } = sale?.token
+        // const { collectionImage, collectionName } = sale?.collection || {}
+        const { name: marketplaceName } = sale?.order?.source
 
-            
-            const marketplaceImage = getMarketplaceImage(marketplaceName)
-            
-            const time = formatTime(timestamp * 1000)
 
-            const randomUUID = crypto.randomUUID()
-            return(
-                <div key={randomUUID} className={`live-view-single-sale-item ${liveSale ? saleHashes.includes(txHash) ? "" : "animate" : ""}`}>
-                    <div className='live-view-sale-container'>
-                        <img src={tokenImage} className="live-view-sale-image"/>
-                        <div>
-                            <p>{tokenName}</p>
-                            <p className='live-view-sale-time'>{time}</p>
-                        </div>
+        const marketplaceImage = getMarketplaceImage(marketplaceName)
+
+        const time = formatTime(timestamp * 1000)
+
+        const randomUUID = crypto.randomUUID()
+        return (
+            <div key={randomUUID} className={`live-view-single-sale-item ${liveSale ? saleHashes.includes(txHash) ? "" : "animate" : ""}`}>
+                <div className='live-view-sale-container'>
+                    <img src={tokenImage} className="live-view-sale-image" />
+                    <div>
+                        <p>{tokenName}</p>
+                        <p className='live-view-sale-time'>{time}</p>
                     </div>
-    
-                    <div className='flex-col-left'>
-                        <p>{roundPrice(price)} ETH</p>
-                        <div className='live-view-sales-logos'>
-                            <img src={marketplaceImage}/>
-                            <a href={`https://etherscan.io/tx/${txHash}`} target="_blank"><img src={etherscan}/></a>
-                        </div>
-                    </div>
-                    {(() => {!saleHashes.includes(txHash) && liveSale && saleHashes.push(txHash)})()}
                 </div>
-            )
+
+                <div className='flex-col-left'>
+                    <p>{roundPrice(price)} ETH</p>
+                    <div className='live-view-sales-logos'>
+                        <img src={marketplaceImage} />
+                        <a href={`https://etherscan.io/tx/${txHash}`} target="_blank"><img src={etherscan} /></a>
+                    </div>
+                </div>
+                {(() => { !saleHashes.includes(txHash) && liveSale && saleHashes.push(txHash) })()}
+            </div>
+        )
     }), [sales, refreshDate])
 
-  return (
-    
-    <div className='live-view-container'>
-        {
-        <BuyNowModal buyNowModalData={buyNowModalData} showBuyNowModal={showBuyNowModal} buyNow={buyNow} closeBuynowModal={closeBuynowModal}/>
-        }
-        <section className='live-view-section'>
-            <div className='live-view-listings-container'>
-                <p className='live-view-listing-text'>Listings</p>
+    return (
 
-                <div className='live-view-listing-items'>
-                    {
-                        listingsMapping
-                    }
+        <div className='live-view-container'>
+            {
+                <BuyNowModal buyNowModalData={buyNowModalData} showBuyNowModal={showBuyNowModal} buyNow={buyNow} closeBuynowModal={closeBuynowModal} />
+            }
+            <section className='live-view-section'>
+                <div className='live-view-listings-container'>
+                    <p className='live-view-listing-text'>Listings</p>
+
+                    <div className='live-view-listing-items'>
+                        {
+                            listingsMapping
+                        }
+                    </div>
                 </div>
-            </div>
 
-            <div className='live-view-sales-container'>
-                <p className='live-view-sale-text'>Sales</p>
+                <div className='live-view-sales-container'>
+                    <p className='live-view-sale-text'>Sales</p>
 
-                <div className='live-view-sale-items'>
-                    {
-                        salesMapping
-                    }
+                    <div className='live-view-sale-items'>
+                        {
+                            salesMapping
+                        }
+                    </div>
                 </div>
-            </div>
-        </section>
-    </div>
-  )
+            </section>
+        </div>
+    )
 }
 
 export default LiveView

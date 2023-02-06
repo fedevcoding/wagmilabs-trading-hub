@@ -13,7 +13,6 @@ import Pnl from "./components/pnl/Pnl"
 import Login from "./components/login/LoginRainbow"
 import Profile from "./components/profile/Profile"
 import Item from "./components/item/Item"
-import WatchList from "./components/watchlist/WatchList";
 import Checking from "./components/checking/Checking";
 import CheckingHeader from "./components/header/CheckingHeader";
 import CheckWalletDisconnect from "./components/CheckWalletDisconnect";
@@ -37,9 +36,6 @@ import { SIGNER_PRIVATE_KEY, RESERVOIR_API_KEY } from "./variables/rpcNodes"
 
 import { createClient } from "@reservoir0x/reservoir-kit-client"
 
-
-// toastify style
-import 'react-toastify/dist/ReactToastify.css';
 
 // react router
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
@@ -230,8 +226,6 @@ function App() {
                     <Route exact path='/profitandloss' element={<><Header /><Pnl /><Footer /></>} />
 
                     <Route exact path='/profile' element={<><Header /><Profile /><Footer /></>} />
-
-                    <Route exact path='/profile/watchlist' element={<><Header /><WatchList /><Footer /></>} />
 
                     <Route exact path='/legal' element={<Legals />} />
 

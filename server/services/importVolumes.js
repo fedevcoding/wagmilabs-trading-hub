@@ -68,8 +68,6 @@ dates = Object.values(dates);
 
       const result = await execTranseposeAPI(sql);
 
-      console.log("result", result);
-
       for (const obj of result) {
         await Marketplaces.create(obj);
       }

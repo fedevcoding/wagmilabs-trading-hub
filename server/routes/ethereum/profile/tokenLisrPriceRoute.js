@@ -4,6 +4,7 @@ const { execTranseposeAPI } = require("../../../services/externalAPI/transpose")
 
 const tokenLisrPriceRoute = express()
 
+const GOMU_API_KEY = process.env.GOMU_API_KEY
 
 const royaltieMapping = {
     "opensea": 2.5,
@@ -78,7 +79,7 @@ tokenLisrPriceRoute.get("/", checkAuth, async (req, res) => {
             const defaultCreatorFee = 0
             const royaltiesDataApi = await fetch(`https://api.gomu.co/rest/overview/contract?contractAddress=${contractAddress}&skipTraits=true`, {
                 headers: {
-                    "gomu-api-key": "wO563s12FAkjYXoyqkrZ4rl03Rg9FZ7T"
+                    "gomu-api-key": GOMU_API_KEY
                 }
             })
 

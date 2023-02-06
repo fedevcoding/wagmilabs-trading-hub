@@ -1,22 +1,20 @@
 const baseUrl = require("../../variables/baseUrl")
 
 
-async function updateSnipeTasks(type, taskInfo){
-    try{
+async function updateSnipeTasks(type, taskInfo) {
+    try {
         let response = await fetch(`${baseUrl}/salesBot`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
                 "x-auth-token": localStorage.jsonwebtoken
             },
-            body: JSON.stringify({taskInfo, type})
+            body: JSON.stringify({ taskInfo, type })
         })
-        
-        response = await response.json()
 
-        console.log(response)
+        response = await response.json()
     }
-    catch(e){
+    catch (e) {
         console.log(e)
     }
 }

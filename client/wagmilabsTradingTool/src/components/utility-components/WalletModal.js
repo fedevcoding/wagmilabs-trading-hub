@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useMemo, useState } from 'react'
 import "./walletModal.css"
 
 import { UserDataContext } from '../../context/userContext'
-import { useAccount, useSigner } from 'wagmi'
+import { useAccount } from 'wagmi'
 import { formatAddress, getFiatPrice, roundPrice } from '../../utils/formats/formats'
 
 import ethereumImage from "../../assets/eth.svg"
@@ -82,8 +82,8 @@ const WalletModal = ({ walletModalOpen, closeWalletModal }) => {
 
 
   async function getProvider() {
-    const currentProvider = await connector.getProvider()
-    setProvider(currentProvider)
+    const currentProvider = await connector?.getProvider()
+    currentProvider ? setProvider(currentProvider) : setProvider(null)
   }
 
   const closeSwapModal = (e) => {
@@ -207,7 +207,6 @@ const WalletModal = ({ walletModalOpen, closeWalletModal }) => {
             </div>
 
             <Button colorScheme={"teal"} className="wallet-modal-add-funds-button" height="50px" display={"block"} onClick={openSwapModal}>Swap tokens</Button>
-            {/* <Button colorScheme={"teal"} className="wallet-modal-add-funds-button" height="50px" display={"block"} onClick={() => getUserBalances(address, setUserBalances)}>refresh</Button> */}
           </div>
         </div>
       }

@@ -1,9 +1,7 @@
 import React, { useState, useEffect, useRef, useContext } from 'react'
-//import Search from "./Search.js"
 import EthereumSearch from "../search/EthereumSearch.js"
-// import SearchSolana from "../search/SearchSolana.js"
 import "./header.css"
-import {useNavigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import logoImage from "../../assets/logo.png"
 import baseUrl from "../../variables/baseUrl"
@@ -24,14 +22,10 @@ import { useAccount } from 'wagmi';
 
 const Header = () => {
 
-  
-  const {setEns, setProfileImage, setListingSettings, profileImage, setUserCartItems, setUserBalances, setGasSettings, setConnected, connected, setSnipingTasks} = useContext(UserDataContext)
-  
-  const {address} = useAccount()
 
+  const { setEns, setProfileImage, setListingSettings, profileImage, setUserCartItems, setUserBalances, setGasSettings, setConnected, connected, setSnipingTasks } = useContext(UserDataContext)
 
-
-  // const navigate = useNavigate()
+  const { address } = useAccount()
   const navigate = useNavigate()
 
   const [modalOpen, setModalOpen] = useState(false)
@@ -39,181 +33,232 @@ const Header = () => {
 
 
   // profile options hover
-  useEffect(()=>{
+  useEffect(() => {
     const profileOptionsContainer = document.querySelector(".pfp-options-container")
     const profileOptions = document.querySelector(".profile-options")
 
     let hovered;
 
-    profileOptionsContainer.addEventListener("mouseover", () => {
+    function profileMouseOver() {
       hovered = true
       profileOptions.classList.add("visible")
       profileOptions.classList.remove("invisible")
-    })
-
-    profileOptionsContainer.addEventListener("mouseout", () => {
+    }
+    function profileMouseOut() {
       hovered = false
-      setTimeout(()=> {
-        if(!hovered){
+      setTimeout(() => {
+        if (!hovered) {
           profileOptions.classList.remove("visible")
           profileOptions.classList.add("invisible")
         }
       }, 200)
-    })
+    }
+    function profileClick() {
+      profileOptions.classList.remove("visible")
+      profileOptions.classList.add("invisible")
+    }
 
-    profileOptionsContainer.addEventListener("click", () => {
-        profileOptions.classList.remove("visible")
-        profileOptions.classList.add("invisible")
-    })
+
+    profileOptionsContainer.addEventListener("mouseover", profileMouseOver)
+
+    profileOptionsContainer.addEventListener("mouseout", profileMouseOut)
+
+    profileOptionsContainer.addEventListener("click", profileClick)
+
+
+    return () => {
+      profileOptionsContainer.removeEventListener("mouseover", profileMouseOver)
+      profileOptionsContainer.removeEventListener("mouseout", profileMouseOut)
+      profileOptionsContainer.removeEventListener("click", profileClick)
+    }
   }, [])
 
   // calendars dropdown hover
-  useEffect(()=>{
-      const calendarOptionContainer = document.querySelector(".calendars-button")
-      const profileOptions = document.querySelector(".calendars-options-dropdown")
-  
-      let hovered;
-  
-      calendarOptionContainer.addEventListener("mouseover", () => {
-          hovered = true
-          profileOptions.classList.remove("invisible")
-      })
-  
-      calendarOptionContainer.addEventListener("mouseout", () => {
-        hovered = false
-        setTimeout(()=> {
-          if(!hovered){
-            profileOptions.classList.add("invisible")
-          }
-        }, 300)
-      })
-  
-      calendarOptionContainer.addEventListener("click", () => {
+  useEffect(() => {
+    const calendarOptionContainer = document.querySelector(".calendars-button")
+    const profileOptions = document.querySelector(".calendars-options-dropdown")
+
+    let hovered;
+
+
+    function calendarsMouseOver() {
+      hovered = true
+      profileOptions.classList.remove("invisible")
+    }
+
+    function calendarsMouseOut() {
+      hovered = false
+      setTimeout(() => {
+        if (!hovered) {
           profileOptions.classList.add("invisible")
-      })
-  }, []) 
+        }
+      }, 300)
+    }
+
+    function calendarsClick() {
+      profileOptions.classList.add("invisible")
+    }
+
+    calendarOptionContainer.addEventListener("mouseover", calendarsMouseOver)
+
+    calendarOptionContainer.addEventListener("mouseout", calendarsMouseOut)
+
+    calendarOptionContainer.addEventListener("click", calendarsClick)
+
+    return () => {
+      calendarOptionContainer.removeEventListener("mouseover", calendarsMouseOver)
+      calendarOptionContainer.removeEventListener("mouseout", calendarsMouseOut)
+      calendarOptionContainer.removeEventListener("click", calendarsClick)
+    }
+  }, [])
 
   // bot dropdown hover
-  useEffect(()=>{
+  useEffect(() => {
     const calendarOptionContainer = document.querySelector(".bots-button")
     const profileOptions = document.querySelector(".bots-options-dropdown")
 
     let hovered;
 
     calendarOptionContainer.addEventListener("mouseover", () => {
-        hovered = true
-        profileOptions.classList.remove("invisible")
+      hovered = true
+      profileOptions.classList.remove("invisible")
     })
 
     calendarOptionContainer.addEventListener("mouseout", () => {
       hovered = false
-      setTimeout(()=> {
-        if(!hovered){
+      setTimeout(() => {
+        if (!hovered) {
           profileOptions.classList.add("invisible")
         }
       }, 300)
     })
 
     calendarOptionContainer.addEventListener("click", () => {
-        profileOptions.classList.add("invisible")
+      profileOptions.classList.add("invisible")
     })
-  }, []) 
-
+  }, [])
 
   // pnl dropdown hover
-  useEffect(()=>{
-      const pnlOptionContainer = document.querySelector(".pnl-button")
-      const profileOptions = document.querySelector(".pnl-options-dropdown")
-  
-      let hovered;
-  
-      pnlOptionContainer.addEventListener("mouseover", () => {
-          hovered = true
-          profileOptions.classList.remove("invisible")
-      })
-  
-      pnlOptionContainer.addEventListener("mouseout", () => {
-        hovered = false
-        setTimeout(()=> {
-          if(!hovered){
-            profileOptions.classList.add("invisible")
-          }
-        }, 300)
-      })
-  
-      pnlOptionContainer.addEventListener("click", () => {
+  useEffect(() => {
+    const pnlOptionContainer = document.querySelector(".pnl-button")
+    const profileOptions = document.querySelector(".pnl-options-dropdown")
+
+    let hovered;
+
+    function pnlMouseOver() {
+      hovered = true
+      profileOptions.classList.remove("invisible")
+    }
+
+    function pnlMouseOut() {
+      hovered = false
+      setTimeout(() => {
+        if (!hovered) {
           profileOptions.classList.add("invisible")
-      })
-  }, []) 
+        }
+      }, 300)
+    }
+
+    function pnlClick() {
+      profileOptions.classList.add("invisible")
+    }
+
+
+    pnlOptionContainer.addEventListener("mouseover", pnlMouseOver)
+
+    pnlOptionContainer.addEventListener("mouseout", pnlMouseOut)
+
+    pnlOptionContainer.addEventListener("click", pnlClick)
+
+    return () => {
+      pnlOptionContainer.removeEventListener("mouseover", pnlMouseOver)
+      pnlOptionContainer.removeEventListener("mouseout", pnlMouseOut)
+      pnlOptionContainer.removeEventListener("click", pnlClick)
+    }
+
+  }, [])
 
 
   // get user infos
-  useEffect(()=>{
+  useEffect(() => {
     fetchUserData()
     getEnsName(address)
     getUserBalances(address, setUserBalances)
   }, [])
 
-  async function getEnsName(address){
-    const ensName = await fetchEnsName({
-      address: address,
-    })
-    setEns(ensName)
+  async function getEnsName(address) {
+    try {
+      const ensName = await fetchEnsName({
+        address: address,
+      })
+      setEns(ensName)
+    }
+    catch (e) {
+      console.log(e)
+    }
   }
 
-  async function fetchUserData(){
-    let userData = await fetch(`${baseUrl}/userDetails`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "x-auth-token": localStorage.jsonwebtoken
-      },
-      body: JSON.stringify({address: localStorage.userAddress})
-    })
-    userData = (await userData.json()).user
+  async function fetchUserData() {
+    try {
+      const res = await fetch(`${baseUrl}/userDetails`, {
+        headers: {
+          "x-auth-token": localStorage.jsonwebtoken
+        },
+      })
 
-    setGasSettings(userData.gasSettings)
-    setProfileImage(userData.profileImage)
-    setListingSettings(userData.listSettings)
-    setUserCartItems(userData.shoppingCart)
-    setSnipingTasks(userData.bots.snipingBotTasks)
+      if (!res.ok) throw new Error("error")
+
+      const userData = await res.json()
+
+      const { gasSettings, profileImage, listSettings, shoppingCart, bots } = userData || {}
+      const { snipingBotTasks } = bots || {}
+
+      setGasSettings(gasSettings)
+      setProfileImage(profileImage)
+      setListingSettings(listSettings)
+      setUserCartItems(shoppingCart)
+      setSnipingTasks(snipingBotTasks)
+    }
+    catch (e) {
+      console.log(e)
+    }
   }
 
-  function openWalletModal(){
+  function openWalletModal() {
     setWalletModalOpen(true)
     document.body.classList.add("overflow-hidden")
   }
-  function closeWalletModal(e){
-    if(e.target !== e.currentTarget) return
+  function closeWalletModal(e) {
+    if (e.target !== e.currentTarget) return
 
     const modal = document.querySelector(".wallet-modal-container")
     modal.classList.remove("visible")
 
-    setTimeout(()=>{
+    setTimeout(() => {
       setWalletModalOpen(false)
       document.body.classList.remove("overflow-hidden")
     }, 350)
   }
 
 
-  function openCartModal(){
-      setModalOpen(true)
-      document.body.classList.add("overflow-hidden")
+  function openCartModal() {
+    setModalOpen(true)
+    document.body.classList.add("overflow-hidden")
   }
-  function closeCartModal(e){
-      if(e.target !== e.currentTarget) return
-      const el = document.querySelector(".cart-modal")
-      el.style.animation = "width 250ms linear"
-      el.classList.remove("active-cart-modal")
-      setTimeout(()=>{
-        setModalOpen(false)
-        document.body.classList.remove("overflow-hidden")
-      }, 250)
+  function closeCartModal(e) {
+    if (e.target !== e.currentTarget) return
+    const el = document.querySelector(".cart-modal")
+    el.style.animation = "width 250ms linear"
+    el.classList.remove("active-cart-modal")
+    setTimeout(() => {
+      setModalOpen(false)
+      document.body.classList.remove("overflow-hidden")
+    }, 250)
   }
-    
-  useEffect(()=>{
-    if(modalOpen){
-      setTimeout(()=>{
+
+  useEffect(() => {
+    if (modalOpen) {
+      setTimeout(() => {
         const el = document.querySelector(".cart-modal")
         el.classList.add("active-cart-modal")
       }, 1)
@@ -225,88 +270,88 @@ const Header = () => {
 
   return (
     <>
-    <RefreshToken connected={connected} setConnected={setConnected}/>
-    <header className='search-header'>
-      <img src={logoImage} onClick={() => navigate("/")} className="logo-image" alt="" />
+      <RefreshToken connected={connected} setConnected={setConnected} />
+      <header className='search-header'>
+        <img src={logoImage} onClick={() => navigate("/")} className="logo-image" alt="" />
 
-      <EthereumSearch />
+        <EthereumSearch />
 
-      <div className='header-links-container'>
-        <a>
-          <div className='bots-button header-links'>
-            <span>Bots</span>
-            
-            <div className='bots-options-dropdown invisible'>
-              <div onClick={() => navigate("/bots/sniper")}>Sniper bot</div>
-              <div onClick={() => navigate("/bots/contractMinter")}>Contract minter</div>
-              <div onClick={() => navigate("/bots/notifications")}>Notifications</div>
-            </div>
-        </div>
-        </a>
-        <a onClick={() => navigate("/volumes")}>
-          <div className={`${isVolumesPage ? "active" : ""} volumes-button header-links`}>
-            Volumes
-          </div>
-        </a>
-        <a>
-          <div className='pnl-button header-links'>
-            <span>P&L</span>
-            
-            <div className='pnl-options-dropdown invisible'>
-              <div onClick={() => navigate("/pnl/all")}>All</div>
-              <div onClick={() => navigate("/pnl/taxes")}>Taxes</div>
-            </div>
-          </div>
-        </a>
-        <a onClick={() => navigate("/feed")}><div className='feed-button header-links'>Feed</div></a>
-        <a>
-          <div className='calendars-button header-links'>
-            <span>Calendars</span>
-            
-            <div className='calendars-options-dropdown invisible'>
-              <div onClick={() => navigate("/calendars/drops")}>NFT drops</div>
-              <div onClick={() => navigate("/calendars/spaces")}>Twitter spaces</div>
-              <div onClick={() => navigate("/calendars/raffles")}>Raffle/allowlist</div>
-              <div onClick={() => navigate("/calendars/events")}>IRL events</div>
-            </div>
-          </div>
-        </a>
-      </div>
-      
-      <div style={{display: "flex", width: "180px", justifyContent: "space-between", alignItems: "center"}}>
-        <div className='pfp-options-container'>
-          <img src={profileImage} alt="" className='pfp' onClick={() => navigate("/profile")}/>
-          <div className='profile-options invisible'>
-            <div onClick={() => navigate("/profile")} className="pfp-icon-container">
-              <i className="fa-solid fa-circle-user"></i>
-              <p>Profile</p>
-            </div>
+        <div className='header-links-container'>
+          <a>
+            <div className='bots-button header-links'>
+              <span>Bots</span>
 
-            <div className="switch-account-option-container">
-              <i className="fa-solid fa-arrows-repeat"></i>
-              <p>Switch account</p>
+              <div className='bots-options-dropdown invisible'>
+                <div onClick={() => navigate("/bots/sniper")}>Sniper bot</div>
+                <div onClick={() => navigate("/bots/contractMinter")}>Contract minter</div>
+                <div onClick={() => navigate("/bots/notifications")}>Notifications</div>
+              </div>
             </div>
-
-            <div onClick={logOut} className="logout-container">
-              <i className="fa-solid fa-arrow-right-from-bracket"></i>
-              <p>Log Out</p>
+          </a>
+          <a onClick={() => navigate("/volumes")}>
+            <div className={`${isVolumesPage ? "active" : ""} volumes-button header-links`}>
+              Volumes
             </div>
-          </div>
+          </a>
+          <a>
+            <div className='pnl-button header-links'>
+              <span>P&L</span>
 
+              <div className='pnl-options-dropdown invisible'>
+                <div onClick={() => navigate("/pnl/all")}>All</div>
+                <div onClick={() => navigate("/pnl/taxes")}>Taxes</div>
+              </div>
+            </div>
+          </a>
+          <a onClick={() => navigate("/feed")}><div className='feed-button header-links'>Feed</div></a>
+          <a>
+            <div className='calendars-button header-links'>
+              <span>Calendars</span>
+
+              <div className='calendars-options-dropdown invisible'>
+                <div onClick={() => navigate("/calendars/drops")}>NFT drops</div>
+                <div onClick={() => navigate("/calendars/spaces")}>Twitter spaces</div>
+                <div onClick={() => navigate("/calendars/raffles")}>Raffle/allowlist</div>
+                <div onClick={() => navigate("/calendars/events")}>IRL events</div>
+              </div>
+            </div>
+          </a>
         </div>
 
-        <i className="fa-solid fa-wallet" style={{fontSize: "25px", cursor:"pointer"}} onClick={openWalletModal}></i>
+        <div style={{ display: "flex", width: "180px", justifyContent: "space-between", alignItems: "center" }}>
+          <div className='pfp-options-container'>
+            <img src={profileImage} alt="" className='pfp' onClick={() => navigate("/profile")} />
+            <div className='profile-options invisible'>
+              <div onClick={() => navigate("/profile")} className="pfp-icon-container">
+                <i className="fa-solid fa-circle-user"></i>
+                <p>Profile</p>
+              </div>
 
-        <i className="header-cart-item fa-solid fa-cart-shopping" style={{fontSize: "25px", cursor:"pointer"}} onClick={openCartModal}></i>
+              <div className="switch-account-option-container">
+                <i className="fa-solid fa-arrows-repeat"></i>
+                <p>Switch account</p>
+              </div>
+
+              <div onClick={logOut} className="logout-container">
+                <i className="fa-solid fa-arrow-right-from-bracket"></i>
+                <p>Log Out</p>
+              </div>
+            </div>
+
+          </div>
+
+          <i className="fa-solid fa-wallet" style={{ fontSize: "25px", cursor: "pointer" }} onClick={openWalletModal}></i>
+
+          <i className="header-cart-item fa-solid fa-cart-shopping" style={{ fontSize: "25px", cursor: "pointer" }} onClick={openCartModal}></i>
 
 
-        
-      </div>
-      <WalletModal walletModalOpen={walletModalOpen} openWalletModal={openWalletModal} closeWalletModal={closeWalletModal}/>
-      <CartModal modalOpen={modalOpen} openCartModal={openCartModal} closeCartModal={closeCartModal}/>
 
-    </header>
-    
+        </div>
+        <WalletModal walletModalOpen={walletModalOpen} openWalletModal={openWalletModal} closeWalletModal={closeWalletModal} />
+        <CartModal modalOpen={modalOpen} openCartModal={openCartModal} closeCartModal={closeCartModal} />
+
+      </header>
+
     </>
   )
 }

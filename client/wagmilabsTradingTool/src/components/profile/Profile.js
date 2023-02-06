@@ -12,7 +12,7 @@ import { RadioGroup, Stack, Radio, Select, HStack, Button, Input, NumberInput, N
 
 import { UserDataContext } from '../../context/userContext'
 
-import { copy } from 'clipboard'
+import copy from "copy-to-clipboard"
 
 const sortItemsOptions = [
   { value: 'desc', label: 'Newest' },

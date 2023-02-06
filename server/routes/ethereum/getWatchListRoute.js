@@ -4,35 +4,29 @@ const checkAuth = require("../../middleware/checkAuth")
 
 const getWatchListRoute = express()
 
-getWatchListRoute.post("/", checkAuth, async (req, res)=> {
-    const {address, signature} = req.userDetails
-    const {contract, type} = req.body
-    if(!address){
-        return res.status(400).json({message: "no address found"})
-    }
-    
-    const user = await User.findOne({address, signature})
-    
-    if(type === "collection"){
+getWatchListRoute.get("/", checkAuth, async (req, res) => {
+
+    try {
+        const { address, signature } = req.userDetails
+        const { collectionAddress } = req.query
+
+        const contract = collectionAddress.toLowerCase()
+
+        const user = await User.findOne({ address, signature })
+
+        if (!user) throw new Error("User not found")
+
         const watchListCollections = user.watchList.collectionWatchList
 
-        if(watchListCollections.includes(contract)){
-            res.status(200).json({includes: true})
+        if (watchListCollections.includes(contract)) {
+            res.status(200).json(true)
         }
-        else{
-            res.status(200).json({includes: false})
-        }   
+        else {
+            res.status(200).json(false)
+        }
     }
-    if(type === "nft"){
-        console.log("nft")
-        const watchListNfts = user.watchList.nftWatchList
-        
-        if(watchListNfts.includes(contract)){
-            res.status(200).json({includes: true})
-        }
-        else{
-            res.status(200).json({includes: false})
-        }   
+    catch (e) {
+        res.status(400).json({ error: e, status: "error" })
     }
 
 })
