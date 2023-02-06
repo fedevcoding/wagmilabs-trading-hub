@@ -26,7 +26,9 @@ export const ItemActivity = React.memo(({ address, id, currency }) => {
             >
               <option value="">Filter Type</option>
               {Object.keys(activityOptions).map(key => (
-                <option value={key}>{activityOptions[key]}</option>
+                <option value={key} key={key}>
+                  {activityOptions[key]}
+                </option>
               ))}
             </Select>
           </div>
