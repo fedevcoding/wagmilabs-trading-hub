@@ -33,7 +33,7 @@ export const InfoCol = React.memo(({ details, address, id }) => {
         </div>
       </div>
 
-      {true ? ( // to change isOwner
+      {isOwner ? (
         <ListItem details={details} address={address} id={id} />
       ) : (
         <PriceBox details={details} address={address} />
