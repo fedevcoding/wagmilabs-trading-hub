@@ -29,7 +29,7 @@ export const LeaderBoard = React.memo(
     return (
       <div className="leader-board">
         <div className="leader-board-header">
-          <h2>Leader board</h2>
+          <h2>Leaderboard</h2>
           <Tabs
             tabs={periods.map(p => p.value)}
             active={currentPeriod}
