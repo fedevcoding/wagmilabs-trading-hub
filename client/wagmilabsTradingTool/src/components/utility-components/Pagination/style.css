@@ -19,6 +19,8 @@
     background-color: var(--secondary-color);
     border-radius: 10px;
     margin: 0 0.5rem;
+
+    font-size: 17px;
 }
 
 .page-item.active .page-link {

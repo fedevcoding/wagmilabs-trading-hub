@@ -4,19 +4,25 @@ const checkAuth = require("../../../middleware/checkAuth")
 
 const updateGasSettingsRoute = express()
 
-updateGasSettingsRoute.post("/", checkAuth, async (req, res)=> {
-    const newGasSettings = req.body
+updateGasSettingsRoute.post("/", checkAuth, async (req, res) => {
 
-    const address = req.userDetails.address
-    const signature = req.userDetails.signature
+    try {
+        const newGasSettings = req.body
 
-    const user = await User.findOne({address, signature})
-    
-    user.gasSettings = newGasSettings
-    await user.save()
+        const { address, signature } = req.userDetails
 
-    console.log(newGasSettings)
-    res.json({newGasSettings, pushStatus: "success", success: true})
+        const user = await User.findOne({ address, signature })
+
+        if (!user) return res.status(404).json({ success: false })
+
+        user.gasSettings = newGasSettings
+        await user.save()
+
+        res.json({ success: true })
+    }
+    catch (e) {
+        res.status(500).json({ success: false })
+    }
 })
 
 

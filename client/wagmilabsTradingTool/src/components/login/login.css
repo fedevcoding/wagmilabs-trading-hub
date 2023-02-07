@@ -99,7 +99,7 @@
 }
 
 .instructions-btn{
-  position: absolute;
+  position: fixed;
   bottom: 20px;
   right: 30px;
   font-size: 20px;
@@ -253,7 +253,7 @@ a{
   position: fixed;
   bottom: 5%;
   left: 50%;
-  width: 20%;
+  width: 25%;
   transform: translate(-50%, 0);
 
   display: flex;
@@ -275,11 +275,12 @@ a{
 }
 .login-general-links-img{
   width: 35px;
+  cursor: pointer;
 }
 
 
 .legal-btn {
-  position: absolute;
+  position: fixed;
   bottom: 20px;
   font-size: 20px;
   font-family: "Poppins";
@@ -299,6 +300,10 @@ a{
 }
 
 
+
+.legal-terms-link{
+  text-decoration: underline;
+}
 
 
 

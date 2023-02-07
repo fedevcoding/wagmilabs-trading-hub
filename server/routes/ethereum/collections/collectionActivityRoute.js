@@ -1,34 +1,43 @@
 const express = require("express")
 const checkAuth = require("../../../middleware/checkAuth")
 
+const RESERVOIR_API_KEY = process.env.RESERVOIR_API_KEY
 
 const collectionActivityRoute = express()
 
 collectionActivityRoute.get('/:address', checkAuth, (req, res) => {
 
-    const {address} = req.params
-    const {types} = req.query
+
+    async function getData() {
 
 
-    const filters = getFiltersUrl(types)
-    console.log(filters)
+        try {
+            const { address } = req.params
+            const { types, continuation: requestContinuation } = req.query
 
+            if (!address) throw new Error("No address provided")
 
-    async function getData(){
-        try{
-            let url = `https://api.reservoir.tools/collections/activity/v5?collection=${address}${filters}`
+            const filters = getFiltersUrl(types)
+
+            const continuationFilter = requestContinuation ? `&continuation=${requestContinuation}` : ""
+
+            let url = `https://api.reservoir.tools/collections/activity/v5?collection=${address}${filters}${continuationFilter}`
 
             let data = await fetch(url, {
                 headers: {
-                    "x-api-key": '9a16bf8e-ec68-5d88-a7a5-a24044de3f38'
+                    "x-api-key": RESERVOIR_API_KEY
                 }
             })
-            data = (await data.json()).activities
+            if (!data.ok) throw new Error("Error fetching data")
+            data = await data.json()
 
-            res.json(data)
+            const { continuation, activities } = data
+
+            res.status(200).json({ continuation, activities })
         }
-        catch(err){
+        catch (err) {
             console.log(err)
+            res.status(500).json({ error: err })
         }
     }
     getData()
@@ -38,20 +47,26 @@ module.exports = collectionActivityRoute
 
 
 
-function getFiltersUrl(types){
-    const allTypes = "&types=sale&types=ask&types=bid&types=transfer"
-    let filters = ""
+function getFiltersUrl(types) {
 
-    if(!types || types === "undefined") types = allTypes
-    else{
-        types = types.split("-")
-    
-        types.forEach(type => {
-            filters += `&types=${type}`
-        })
+    try {
+        const allTypes = "&types=sale&types=ask&types=bid&types=transfer"
+        let filters = ""
+
+        if (!types || types === "undefined") types = allTypes
+        else {
+            types = types.split("-")
+
+            types.forEach(type => {
+                filters += `&types=${type}`
+            })
+        }
+
+        return filters
     }
-
-    return filters
+    catch (e) {
+        return ""
+    }
 }
 
 

@@ -1,23 +1,27 @@
 import baseUrl from "../../variables/baseUrl"
 
 
-async function addToCart({name, collectionName, tokenId, price, image, marketplace, contractAddress}){
-    
-    try{
+async function addToCart({ name, collectionName, tokenId, price, image, marketplace, contractAddress }) {
 
-        let pushStatus = await fetch(`${baseUrl}/updateUserCart`, {
+    try {
+
+        let res = await fetch(`${baseUrl}/updateUserCart`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
                 "x-auth-token": localStorage.jsonwebtoken
             },
-            body: JSON.stringify({name, collectionName, tokenId, price, image, contractAddress, marketplace, type: "add"})
+            body: JSON.stringify({ name, collectionName, tokenId, price, image, contractAddress, marketplace, type: "add" })
         })
-        pushStatus = (await pushStatus.json()).pushStatus
-        return pushStatus
+        if (!res.ok) throw new Error("error")
+        res = await res.json()
+
+        const { pushStatus, filteredItems } = res
+        return { pushStatus, filteredItems }
     }
-    catch(e) {
+    catch (e) {
         console.log(e)
+        return { pushStatus: "error" }
     }
 }
 

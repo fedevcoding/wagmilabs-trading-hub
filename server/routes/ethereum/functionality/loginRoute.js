@@ -11,51 +11,51 @@ const loginRoute = express()
 
 const JWT_PRIVATE_KEY = process.env.JWT_PRIVATE_KEY
 const JWT_REFRESH_PRIVATE_KEY = process.env.JWT_REFRESH_PRIVATE_KEY
-const REFRESH_JWT_DAYS = 100
-const ACCESS_JWT_SECONDS = 100
+const REFRESH_JWT_DAYS = 1
+const ACCESS_JWT_SECONDS = 200
 
 
-loginRoute.post("/", checkOwnership, async (req, res)=> {
+loginRoute.post("/", checkOwnership, async (req, res) => {
 
-    try{
+    try {
         const { address, signature } = req?.body || {}
-    
-    
-        if(!address || !signature){
-            res.status(403).json({authenticated: false, message: "Missing query fields."})
+
+
+        if (!address || !signature) {
+            res.status(403).json({ authenticated: false, message: "Missing query fields." })
         }
-        else{
+        else {
             const accessToken = JWT.sign({
                 address,
                 signature
             },
-            JWT_PRIVATE_KEY,
-            {
-                expiresIn: ACCESS_JWT_SECONDS
-            })
-        
+                JWT_PRIVATE_KEY,
+                {
+                    expiresIn: ACCESS_JWT_SECONDS
+                })
+
             const refreshToken = await JWT.sign({
                 address,
                 signature
-            }, 
-            JWT_REFRESH_PRIVATE_KEY, 
-            {
-                expiresIn: (60 * 60) * REFRESH_JWT_DAYS
-            })
-        
-            const user = await User.findOne({address, signature})
-            
-            if(user){
+            },
+                JWT_REFRESH_PRIVATE_KEY,
+                {
+                    expiresIn: (60 * 60 * 24) * REFRESH_JWT_DAYS
+                })
+
+            const user = await User.findOne({ address, signature })
+
+            if (user) {
                 res.status(200).cookie("refreshJWT", refreshToken, {
                     httpOnly: true,
                     secure: true,
                     sameSite: "none"
-                }).json({message: "User authenticated", token: accessToken, refreshToken, authenticated: true})
+                }).json({ message: "User authenticated", token: accessToken, refreshToken, authenticated: true })
             }
-        
-            else{
+
+            else {
                 const profileImage = await getProfileImage(address)
-    
+
                 User.create({
                     address,
                     signature,
@@ -88,13 +88,15 @@ loginRoute.post("/", checkOwnership, async (req, res)=> {
                 })
                 res.status(200).cookie("refreshJWT", refreshToken, {
                     httpOnly: true,
-                }).json({message: "User authenticated", token: accessToken, refreshToken, authenticated: true})
+                    secure: true,
+                    sameSite: "none"
+                }).json({ message: "User authenticated", token: accessToken, refreshToken, authenticated: true })
             }
         }
     }
 
-    catch(e){
-        res.status(400).json({authenticated: false, message: "Something went wrong while trying to login."})
+    catch (e) {
+        res.status(400).json({ authenticated: false, message: "Something went wrong while trying to login." })
     }
 
 
@@ -104,15 +106,15 @@ module.exports = loginRoute
 
 
 
-async function getProfileImage(address){
-    try{
+async function getProfileImage(address) {
+    try {
         pfp = await fetch(`https://api.opensea.io/api/v1/account/${address}`)
         pfp = await pfp.json()
         pfp = pfp?.data?.profile_img_url || fallbackPfp
 
         return pfp
     }
-    catch(err){
+    catch (err) {
         console.error(err)
     }
 }

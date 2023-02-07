@@ -7,6 +7,7 @@
   filter: blur(7px) brightness(20%);
   transition: height 1s;
 }
+
 .banner-image.expand {
   height: 420px;
 }
@@ -24,11 +25,12 @@
   height: 85px;
   position: absolute;
   top: 45px;
-  left: 15px;
+  left: 25px;
   border: 3px solid white;
   border-radius: 50%;
 }
-.collection-info-image-loader{
+
+.collection-info-image-loader {
   width: calc(100% - 3px);
   height: calc(100% - 3px);
 
@@ -45,12 +47,12 @@
 .collection-info-name {
   display: flex;
   align-items: center;
-  max-width: calc(50% - 325px - 130px);
+  max-width: calc(50% - 325px - 140px);
   font-size: 25px;
   font-family: inherit;
   position: absolute;
   top: 30px;
-  left: 130px;
+  left: 140px;
 }
 
 .collection-info-name div {
@@ -65,13 +67,13 @@
   right: 25px;
 }
 
-.collection-info-created-at{
+.collection-info-created-at {
   position: absolute;
   top: 80px;
   right: 25px;
 }
 
-.collection-info-erc-type{
+.collection-info-erc-type {
   position: absolute;
   top: 110px;
   right: 25px;
@@ -83,6 +85,7 @@
   cursor: pointer;
   padding: 0px 5px;
 }
+
 .links img:hover {
   filter: grayscale(0%);
 }
@@ -116,7 +119,7 @@
   border-radius: 20px;
   padding: 2px 7px;
   font-size: 12px;
-  left: 130px;
+  left: 140px;
   cursor: pointer;
 }
 
@@ -125,7 +128,7 @@
   align-items: center;
   position: absolute;
   top: 115px;
-  left: 130px;
+  left: 140px;
   background-color: orange;
   color: black;
   font-family: inherit;
@@ -135,15 +138,15 @@
 }
 
 
-.loading-texts{
+.loading-texts {
   position: absolute;
   top: 50px;
-  left: 130px;
+  left: 140px;
   width: 150px;
   z-index: 9;
 }
 
-.loading-texts .react-loading-skeleton{
+.loading-texts .react-loading-skeleton {
   border: 2px solid black;
 }
 
@@ -187,9 +190,11 @@
   align-items: center;
   margin-top: 5px;
 }
+
 .collection-info-box i {
   margin-left: 10px;
 }
+
 .collection-info-box p {
   margin-left: 10px;
   margin-right: 10px;
@@ -254,9 +259,11 @@
   align-items: center;
   margin-top: 5px;
 }
+
 .collection-info-box2 i {
   margin-left: 10px;
 }
+
 .collection-info-box2 p {
   margin: 0 10px;
 }
@@ -285,6 +292,7 @@
   transform: scaleX(0);
   transition: transform 0.2s linear;
 }
+
 .single-collection-section:hover:after,
 .single-collection-section.selected:after {
   transform: scaleX(1);
@@ -293,6 +301,7 @@
 .single-collection-section:hover {
   opacity: 1;
 }
+
 .single-collection-section.selected {
   opacity: 1;
 }
@@ -305,18 +314,19 @@
 
 
 
-.collectioninfo-fp-image{
+.collectioninfo-fp-image {
   width: 15px;
   height: 15px;
   cursor: pointer;
 }
-.collectioninfo-fp-image-link{
+
+.collectioninfo-fp-image-link {
   width: 15px;
   height: 15px;
 }
 
 
-.collection-address-copy-btn{
+.collection-address-copy-btn {
   position: absolute;
   top: 30px;
   background-color: grey;
@@ -328,11 +338,12 @@
   transition: all 250ms;
 }
 
-.collection-address-copy-btn.inactive{
+.collection-address-copy-btn.inactive {
   visibility: hidden;
   opacity: 0;
 }
-.collection-address-copy-btn.active{
+
+.collection-address-copy-btn.active {
   visibility: visible;
   opacity: 1;
 }

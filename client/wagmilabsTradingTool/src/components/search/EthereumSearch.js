@@ -2,7 +2,6 @@ import React, { useState, useEffect, useMemo, useRef} from 'react'
 import {useDebounce} from "use-debounce"
 import "./search.css"
 import verified from "../../assets/verified.png"
-import question from "../../assets/question.png"
 import baseUrl from "../../variables/baseUrl"
 
 import useFirstRender from "../../custom-hooks/useFirstRender"
@@ -57,23 +56,33 @@ const EthereumSearch = () => {
     }, [value])
     
     async function fetchCollections(type){
+        try{
+            setLoadingCollections(true)
+    
+            let collectionsApi = await fetch(`${baseUrl}/searchCollection/${value}/${type}`, {
+                headers: {
+                    "x-auth-token": localStorage.jsonwebtoken
+                }
+            })
+            collectionsApi = await collectionsApi.json()
 
-        setLoadingCollections(true)
+            const {collections: fetchedCollections} = collectionsApi || {}
+    
+    
+            setLoadingCollections(false)
+            setCollections(fetchedCollections)
+        }
+        catch(e){
+            console.log(e)
 
-        let collections = await fetch(`${baseUrl}/searchCollection/${value}/${type}`, {
-            headers: {
-                "x-auth-token": localStorage.jsonwebtoken
-            }
-        })
-        collections = (await collections.json()).collections
+            setLoadingCollections(false)
+            setCollections([])
+        }
 
-
-        setLoadingCollections(false)
-        setCollections(collections)
     }
 
 
-    const memoList = useMemo(()=> collections.map((collection, index) => {
+    const memoList = useMemo(()=> collections && collections.map((collection, index) => {
 
         const {image, collectionId, name, openseaVerificationStatus, isLocaleStorage} = collection
         const link = `/collection/${collectionId}`

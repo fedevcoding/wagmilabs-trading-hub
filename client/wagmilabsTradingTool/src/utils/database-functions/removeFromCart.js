@@ -1,21 +1,26 @@
 import baseUrl from "../../variables/baseUrl"
 
 
-async function removeFromCart(tokenId, contractAddress){
-    try{
-        let pushStatus = await fetch(`${baseUrl}/updateUserCart`, {
+async function removeFromCart(tokenId, contractAddress) {
+    try {
+        let res = await fetch(`${baseUrl}/updateUserCart`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
                 "x-auth-token": localStorage.jsonwebtoken
             },
-            body: JSON.stringify({tokenId, contractAddress, type: "remove"})
+            body: JSON.stringify({ tokenId, contractAddress, type: "remove" })
         })
-        pushStatus = (await pushStatus.json()).pushStatus
-        return pushStatus
+
+        if (!res.ok) throw new Error("error")
+
+        res = await res.json()
+        const { pushStatus, filteredItems } = res
+        return { pushStatus, filteredItems }
     }
-    catch(e) {
+    catch (e) {
         console.log(e)
+        return { pushStatus: "error" }
     }
 }
 

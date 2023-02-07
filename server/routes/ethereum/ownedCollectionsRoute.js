@@ -1,5 +1,6 @@
 const express = require("express")
 const checkAuth = require("../../middleware/checkAuth")
+const { execReservoirApi } = require("../../services/externalAPI/reservoirApi")
 
 
 const ownedCollectionsRoute = express()
@@ -10,14 +11,20 @@ ownedCollectionsRoute.get('/', checkAuth, (req, res) => {
 
     async function getData(){
 
-        let data = await fetch(`https://api.reservoir.tools/users/${address}/collections/v2?includeTopBid=true&includeLiquidCount=true&offset=0&limit=100`, {
-            headers: {
-                'x-api-key': '9a16bf8e-ec68-5d88-a7a5-a24044de3f38'
-            }
-        })
-        data = (await data.json()).collections
+        try{
+            
+            const url = `https://api.reservoir.tools/users/${address}/collections/v2?includeTopBid=true&includeLiquidCount=true&offset=0&limit=100`
+            const result = await execReservoirApi(url)
+            
+            const ownedCollections = result?.collections
 
-        res.json(data)
+            res.json({ownedCollections})
+
+        }
+        catch(e){
+            console.log(e)
+            res.status(500).json({error: e})
+        }
     }
     getData()
 

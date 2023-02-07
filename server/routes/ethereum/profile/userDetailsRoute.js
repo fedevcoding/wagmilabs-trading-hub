@@ -4,17 +4,18 @@ const checkAuth = require("../../../middleware/checkAuth")
 
 const userDetailsRoute = express()
 
-userDetailsRoute.post("/", checkAuth, async (req, res)=> {
+userDetailsRoute.get("/", checkAuth, async (req, res) => {
+    try {
+        const { address, signature } = req.userDetails
 
-    const address = req.userDetails.address
-    const signature = req.userDetails.signature
+        const user = await User.findOne({ address, signature })
 
-    const user = await User.findOne({address, signature})
-    if(user){
-        res.json({user})
+        if (!user) res.status(400).json({ message: "no user found" })
+
+        res.status(200).json(user)
     }
-    else{
-        res.status(400).json({message: "no user found"})
+    catch (e) {
+        res.status(400).json({ error: e })
     }
 
 })

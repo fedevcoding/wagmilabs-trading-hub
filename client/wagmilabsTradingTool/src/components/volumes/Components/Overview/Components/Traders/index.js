@@ -33,7 +33,7 @@ export const Traders = React.memo(({ traders, period, marketplaces }) => {
       ) : (
         <OrizontalBarChart
           title="Traders"
-          subTitle="The ranking of top marketplaces by the number of traders, buyers and sellers over the selected time range."
+          subTitle="Ranking of top marketplaces by the number of traders over the selected time range."
           yAxisText="Quantity"
           tooltipSuffix=" traders"
           values={t}

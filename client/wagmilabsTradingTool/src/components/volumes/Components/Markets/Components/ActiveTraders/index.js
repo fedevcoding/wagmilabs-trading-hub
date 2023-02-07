@@ -45,7 +45,7 @@ export const ActiveTraders = React.memo(
         ) : (
           <BarChart
             title="Active Traders"
-            subTitle="The number of Active Traders in the marketplace over the selected time range."
+            subTitle="number of active traders in set marketplace over the selected time range."
             yAxisText="Active Traders"
             values={values}
           />

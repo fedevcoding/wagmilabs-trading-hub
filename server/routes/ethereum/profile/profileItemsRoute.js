@@ -12,22 +12,28 @@ profileItemsRoute.get("/", checkAuth, async (req, res)=> {
 
     try{
         const userAddress = req.userDetails.address
-        const {sortDirection, collection} = req.query
+        const {sortDirection, collection, continuation} = req.query
 
-        console.log(collection)
+        const continuationFilter = continuation ? `&continuation=${continuation}` : ""
 
-
-        const filterCollectionQuery = collection && collection !== "undefined" ? `&collection=${collection}` : ""
-    
-        let items = await fetch(`https://api.reservoir.tools/users/${userAddress}/tokens/v6?normalizeRoyalties=false&sortDirection=${sortDirection}&limit=100&includeTopBid=false${filterCollectionQuery}`, {
-            headers: {
-            "accept": "*/*",
-            "x-api-key": RESERVOIR_API_KEY
-            }
-        })
-        items = (await items.json())?.tokens
+        async function getTokens(){
+            const filterCollectionQuery = collection && collection !== "undefined" ? `&collection=${collection}` : ""
         
-        res.status(200).json({items, ok: true})
+            let items = await fetch(`https://api.reservoir.tools/users/${userAddress}/tokens/v6?normalizeRoyalties=false&sortDirection=${sortDirection}&limit=50&includeTopBid=false${filterCollectionQuery}${continuationFilter}`, {
+                headers: {
+                "accept": "*/*",
+                "x-api-key": RESERVOIR_API_KEY
+                }
+            })
+            items = await items.json()
+    
+            const {tokens, continuation} = items
+            
+            res.status(200).json({tokens, continuation, ok: true})
+        }
+        getTokens()
+
+
     }
     catch(e){
         res.status(400).json({ok: false, userCollections})

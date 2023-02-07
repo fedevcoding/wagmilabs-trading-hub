@@ -1,4 +1,4 @@
-.info-container{
+.info-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -8,19 +8,19 @@
     font-family: inherit;
 }
 
-.tool-names{
+.tool-names {
     display: flex;
     cursor: pointer;
 }
 
-.tool-times{
+.tool-times {
     display: flex;
     background-color: #1E1F25;
     border-radius: 10px;
     cursor: pointer;
 }
 
-.tool-names > div{
+.tool-names>div {
     padding: 10px 30px;
     margin-right: 10px;
     transition: all 0.5s;
@@ -29,7 +29,7 @@
     position: relative;
 }
 
-.tool-names > div .circle{
+.tool-names>div .circle {
     position: absolute;
     background-color: rgb(194, 186, 186);
     width: 100px;
@@ -39,57 +39,65 @@
     animation: scale 0.5s linear;
 }
 
-.tool-names > div:hover{
-    background-color: #1E1F25;
-}
-.tool-names > div.active{
+.tool-names>div:hover {
     background-color: #1E1F25;
 }
 
-.tool-times div{
+.tool-names>div.active {
+    background-color: #1E1F25;
+}
+
+.tool-times div {
     padding: 10px 15px;
     transition: all 0.3s;
 }
-.tool-times div:nth-child(1):hover{
+
+.tool-times div:nth-child(1):hover {
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
     background-color: #171719;
 }
-.tool-times div:nth-last-child(1):hover{
+
+.tool-times div:nth-last-child(1):hover {
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
     background-color: #171719;
 }
-.tool-times div:hover{
+
+.tool-times div:hover {
     background-color: #171719;
 }
 
 
-.tool-times div:nth-child(1).active{
+.tool-times div:nth-child(1).active {
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
     background-color: #171719;
 }
-.tool-times div:nth-last-child(1).active{
+
+.tool-times div:nth-last-child(1).active {
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
     background-color: #171719;
 }
-.tool-times div.active{
+
+.tool-times div.active {
     background-color: #171719;
 }
 
 
 @keyframes scale {
     to {
-      transform: translate(-50%, -50%) scale(3);
-      opacity: 0;
+        transform: translate(-50%, -50%) scale(3);
+        opacity: 0;
     }
-  }
+}
 
 
 
-.home-trending-section, .home-minting-section, .home-ranking-section{
+.home-trending-section,
+.home-minting-section,
+.home-ranking-section {
     display: flex;
     align-items: center;
     justify-content: space-between;

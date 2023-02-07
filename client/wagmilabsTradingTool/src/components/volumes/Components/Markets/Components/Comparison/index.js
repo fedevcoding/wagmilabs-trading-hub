@@ -53,8 +53,8 @@ export const Comparison = React.memo(
           <LoadingSpinner />
         ) : (
           <LineChart
-            title="Sales volumes of ETH and WETH"
-            subTitle="The comparison between sales and offer in the marketplace over the selected time range."
+            title="eth / weth sales comparison"
+            subTitle="comparison between sales and offers in set marketplace over the selected time range."
             yAxisText="Sales"
             values={values}
             tooltipSuffix={true}

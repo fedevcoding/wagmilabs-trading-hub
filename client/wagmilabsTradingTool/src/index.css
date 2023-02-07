@@ -1,4 +1,4 @@
-:root{
+:root {
     --header-height: 72;
     --footer-height: 40;
     --grey-1: #0e0f0e;
@@ -9,60 +9,78 @@
 }
 
 
-*{
+* {
     margin: 0;
     font-family: "poppins";
 }
 
-button{
-	border: none;
-	padding: 0;
-	cursor: pointer;
+button {
+    border: none;
+    padding: 0;
+    cursor: pointer;
     letter-spacing: 1px;
 }
-body{
+
+body {
     background-color: #0E0F0E;
     font-family: "poppins";
 }
-body.overflow-hidden{
+
+body.overflow-hidden {
     overflow: hidden;
 }
-::-webkit-scrollbar{
+
+::-webkit-scrollbar {
     width: 0;
 }
-.eth-char-logo{
+
+.eth-char-logo {
     font-family: Arial, Helvetica, sans-serif;
     font-weight: 500;
 }
 
-.highcharts-credits{
+.highcharts-credits {
     display: none;
 }
 
 
 
-.flex-col-left{
+.flex-col-left {
     display: flex;
     flex-direction: column;
     align-items: flex-end;
 }
 
-.flex-15{
+.flex-15 {
     display: flex;
     align-items: center;
     gap: 15px;
 }
 
-.flex-normal{
+.flex-normal {
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
 
 
-.little-text{
+.little-text {
     font-size: 13px;
 }
-.low-opacity{
+
+.low-opacity {
     opacity: 0.8;
+}
+
+.wrap-text {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+
+.big-text {
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 1px;
 }

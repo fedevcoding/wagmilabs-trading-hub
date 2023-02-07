@@ -1,8 +1,7 @@
 import React, { useCallback, useContext, useMemo } from 'react'
-import {Portal} from "react-portal"
-
+import notFound from "../../assets/notFound.svg"
 import "./cartModal.css"
-import {Button} from "@chakra-ui/react"
+import { Button, useToast } from "@chakra-ui/react"
 import { useNavigate } from 'react-router-dom'
 import { UserDataContext } from '../../context/userContext'
 import emptyCart from '../../utils/database-functions/emptyCart'
@@ -14,65 +13,111 @@ import removeFromCart from '../../utils/database-functions/removeFromCart'
 
 
 
-const CartModal = ({modalOpen, closeCartModal}) => {
+const CartModal = ({ modalOpen, closeCartModal }) => {
 
-    
-    const {userCartItems, setUserCartItems, ethData} = useContext(UserDataContext)
+    const toast = useToast()
+    const { userCartItems, setUserCartItems, ethData, gasSettings } = useContext(UserDataContext)
     const navigate = useNavigate()
-    
 
-    function startExploring(e){
+
+    function startExploring(e) {
         closeCartModal(e)
         navigate('/')
     }
 
-    async function clearCart(){
-        let status = await emptyCart()
-        if(status === "success") setUserCartItems([])
+    async function clearCart() {
+        try {
+            let status = await emptyCart()
+            if (status === "success") setUserCartItems([])
+            else throw new Error("error")
+        }
+        catch (e) {
+            toast({
+                title: "Error",
+                description: "Something went wrong, try again later",
+                status: "error",
+                duration: 3000,
+                isClosable: true,
+            })
+        }
     }
 
-    async function removeTokenFromCart(contractAddress, tokenId){
-        const filteredItems = userCartItems.filter(item => item.contractAddress + item.tokenId !== contractAddress + tokenId)
+    async function removeTokenFromCart(contractAddress, tokenId) {
+        try {
+            const { pushStatus, filteredItems } = await removeFromCart(tokenId, contractAddress)
 
-        await removeFromCart(tokenId, contractAddress)
-        
-        setUserCartItems(filteredItems)
+            if (pushStatus !== "success") throw new Error("error")
+
+            setUserCartItems(filteredItems)
+        }
+        catch (e) {
+            toast({
+                title: "Error",
+                description: "Something went wrong, try again later",
+                status: "error",
+                duration: 3000,
+                isClosable: true,
+            })
+        }
     }
 
-    const batchBuyItems = async () => {
-        const signer = await fetchSigner()
+    async function batchBuyItems() {
+        try {
+            const signer = await fetchSigner()
+            const maxFeePerGas = (gasSettings.maxFeePerGas * 1000000000).toString();
+            const maxPriorityFeePerGas = (
+                gasSettings.maxPriorityFeePerGas * 1000000000
+            ).toString();
 
-        const tokens = userCartItems.map(item => {
-            const {tokenId, contractAddress} = item
-            return {tokenId, contract: contractAddress}
-        })
+            const tokens = userCartItems.map(item => {
+                const { tokenId, contractAddress } = item
+                return { tokenId, contract: contractAddress }
+            })
 
-        getClient()?.actions.buyToken({
-            tokens,
-            signer,
-            onProgress: (steps) => {
-                console.log(steps)
-            }
-        })
+            let res = await getClient()?.actions.buyToken({
+                tokens,
+                signer,
+                expectedPrice: totalPrice,
+                options: {
+                    maxFeePerGas,
+                    maxPriorityFeePerGas,
+                },
+                onProgress: (steps) => {
+                    // console.log(steps)
+                },
+            })
+
+            if (res.response.data.statusCode == 400) throw new Error("error")
+        }
+        catch (e) {
+
+            toast({
+                title: "Error",
+                description: "Something went wrong, try checking orders availability or wallet balance",
+                status: "error",
+                duration: 3000,
+                isClosable: true,
+            })
+        }
     }
 
 
     const totalPrice = useMemo(() => userCartItems.reduce((total, item) => item.price + total, 0), [userCartItems])
 
-    const userCartMapping = useMemo(()=> userCartItems.map((item)=> {
-        const {name, tokenId, contractAddress, image, price, marketplace, collectionName} = item
+    const userCartMapping = useMemo(() => userCartItems.map((item) => {
+        const { name, tokenId, contractAddress, image, price, marketplace, collectionName } = item
 
 
-        return(
+        return (
             <div className='user-cart-single-item'>
-                <img src={image} className="user-cart-item-image"/>
-                <div className='user-cart-item-details-container'>
-                    <p className='user-cart-item-name'>{name}</p>
-                    <p className='user-cart-collection-name'>{collectionName}</p>
+                <img src={image} className="user-cart-item-image" />
+                <div className='user-cart-item-details-container wrap-text'>
+                    <p className='user-cart-item-name wrap-text'>{name}</p>
+                    <p className='user-cart-collection-name wrap-text'>{collectionName}</p>
                 </div>
                 <div className='user-cart-item-price-container'>
 
-                    <p className='user-cart-item-price'>
+                    <p className='user-cart-item-price big-text'>
                         {roundPrice(price)} ETH
                     </p>
 
@@ -80,15 +125,15 @@ const CartModal = ({modalOpen, closeCartModal}) => {
                         <i className="fa-solid fa-trash-can"></i>
                     </p>
                 </div>
-                
+
             </div>
         )
     }), [userCartItems])
 
     return (
         <>
-            {   
-            modalOpen &&
+            {
+                modalOpen &&
                 <div className='cart-modal-overlay' onClick={e => closeCartModal(e)}>
                     <div className='cart-modal'>
                         <header className='cart-modal-header'>
@@ -111,7 +156,7 @@ const CartModal = ({modalOpen, closeCartModal}) => {
                                 </div>
 
                                 <div className='cart-total-buy-container'>
-                                    <hr className='cart-buy-now-hr'/>
+                                    <hr className='cart-buy-now-hr' />
 
                                     <div className='user-cart-total-price'>
                                         <div>
@@ -123,12 +168,13 @@ const CartModal = ({modalOpen, closeCartModal}) => {
                                             <p className='user-cart-price-currencies-usd'>${getFiatPrice(ethData.ethPrice, totalPrice)}</p>
                                         </div>
                                     </div>
-                                    
+
                                     <Button className='user-cart-buy-button' colorScheme={"blue"} onClick={batchBuyItems} height="50px">Complete purchase</Button>
                                 </div>
                             </div>
                             :
                             <div className='empty-cart-section'>
+                                <img src={notFound} className="cart-notfound-img"></img>
                                 <p>
                                     Your cart is empty.
                                 </p>

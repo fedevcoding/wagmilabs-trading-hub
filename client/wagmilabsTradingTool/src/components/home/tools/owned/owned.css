@@ -1,10 +1,4 @@
-.owned-image{
-    width: 50px;
-    height: 50px;
-    border-radius: 10px;
-}
-
-.owned-container{
+.owned-container {
     width: 100%;
 }
 
@@ -18,9 +12,9 @@
     padding: 20px 0;
     z-index: 1;
     color: white;
-} 
+}
 
-.owned-name{
+.owned-name {
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
@@ -28,62 +22,67 @@
     padding: 35px 0;
 }
 
-.owned-image{
+.owned-image {
     width: 50px;
     aspect-ratio: 1;
     border-radius: 10px;
 }
 
-.owned-floor-price{
+.owned-floor-price {
     display: flex;
     justify-content: center;
     align-items: center;
 }
-.owned-floor-price i{
+
+.owned-floor-price i {
     margin-right: 10px;
 }
 
-.owned-volume{
+.owned-volume {
     display: flex;
     justify-content: center;
     align-items: center;
 }
-.owned-volume i{
+
+.owned-volume i {
     margin-right: 10px;
 }
 
-.owned-market-cap{
+.owned-market-cap {
     display: flex;
     justify-content: center;
     align-items: center;
 }
-.owned-market-cap i{
+
+.owned-market-cap i {
     margin-right: 10px;
 }
 
-.owned-total-volume{
+.owned-total-volume {
     display: flex;
     justify-content: center;
     align-items: center;
 }
-.owned-total-volume i{
+
+.owned-total-volume i {
     margin-right: 10px;
 }
 
-.owned-details tr th div{
+.owned-details tr th div {
     display: flex;
     justify-content: center;
     align-items: center;
     cursor: pointer;
 }
 
-.owned-details tr th div p{
+.owned-details tr th div p {
     opacity: 0.5;
 }
-.owned-details tr th div i{
+
+.owned-details tr th div i {
     margin-left: 10px;
 }
 
-.owned-details{
+.owned-details {
     position: relative;
 }

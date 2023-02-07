@@ -1,18 +1,21 @@
 import baseUrl from "../../variables/baseUrl"
 
 
-async function emptyCart(){
-    try{
-        let status = await fetch(`${baseUrl}/emptyCart`, {
+async function emptyCart() {
+    try {
+        let res = await fetch(`${baseUrl}/emptyCart`, {
             headers: {
                 "x-auth-token": localStorage.jsonwebtoken
             }
         })
-        status = (await status.json()).status
+        if (!res.ok) throw new Error("error")
+        res = await res.json()
+        const { status } = res
         return status
     }
-    catch(e) {
+    catch (e) {
         console.log(e)
+        return "error"
     }
 }
 

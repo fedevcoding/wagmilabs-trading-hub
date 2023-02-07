@@ -4,21 +4,33 @@ const checkAuth = require("../../../middleware/checkAuth")
 
 const collectionInfoRoute = express()
 
+
+const RESERVOIR_API_KEY = process.env.RESERVOIR_API_KEY
+
 collectionInfoRoute.get('/:address', checkAuth, (req, res) => {
 
-    async function getData(){
-        try{
-            let data = await fetch(`https://api.reservoir.tools/collections/v5?id=${req.params.address}&includeTopBid=true&includeAttributes=false&includeOwnerCount=false&includeSalesCount=false&normalizeRoyalties=false`, {
+
+    async function getData() {
+        try {
+            const { address } = req.params
+            const dataApi = await fetch(`https://api.reservoir.tools/collections/v5?id=${address}&includeTopBid=true&includeAttributes=false&includeOwnerCount=false&includeSalesCount=false&normalizeRoyalties=false`, {
                 headers: {
-                    "x-api-key": '9a16bf8e-ec68-5d88-a7a5-a24044de3f38'
+                    "x-api-key": RESERVOIR_API_KEY
                 }
             })
-            data = (await data.json()).collections[0]
+            const data = (await dataApi.json())?.collections?.[0]
 
-            res.json(data)
+            if (!data) return res.status(200).json({ exists: false, error: "Collection not found" })
+
+            const attributesApi = await fetch(`https://api.reservoir.tools/collections/${address}/attributes/all/v2`)
+            const { attributes } = await attributesApi.json()
+
+            data["attributes"] = attributes
+            res.status(200).json({ data, exists: true })
         }
-        catch(err){
+        catch (err) {
             console.log(err)
+            res.status(500).json({ error: err })
         }
     }
     getData()

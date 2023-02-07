@@ -25,8 +25,8 @@ export const Card = React.memo(({ news }) => {
     >
       <Row>
         <Col className="info">
-          <h2>{headline}</h2>
-          <p>{summary}</p>
+          <h3>{headline}</h3>
+          <p className="feed-summary">{summary}</p>
           {(contract && (
             <div className="contract">
               Contract ({contract.chain}): <span>{contract.contract}</span>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import Trending from "./tools/Trending/Trending"
 import Minting from "./tools/Minting/Minting"
 import Top100 from "./tools/Top100/Top100"
@@ -8,15 +8,16 @@ import "./home.css"
 import WatchList from './tools/watchList/WatchList'
 import Owned from './tools/owned/Owned'
 import LivePulsing from '../utility-components/LivePulsing'
+import setPageTitle from '../../utils/functions/setPageTitle'
 
 const Home = () => {
 
 
   const [timeFrame, setTimeFrame] = useState("1H")
   const [tool, setTool] = useState("trending")
-  
 
-  function changeTime(e, time){
+
+  function changeTime(e, time) {
     const element = e.currentTarget
     document.querySelectorAll(".tool-times div").forEach(time => {
       time.classList.remove("active")
@@ -26,21 +27,21 @@ const Home = () => {
     setTimeFrame(time)
   }
 
-  function resetTime(time){
+  function resetTime(time) {
     document.querySelectorAll(".tool-times div").forEach(time => {
       time.classList.remove("active")
     })
     document.querySelector(`.${tool}-${time}`).classList.add("active")
   }
 
-  function changeTool(e){
-    
+  function changeTool(e) {
+
     const element = e.currentTarget
     rippleEffect(e)
 
     const currentTool = element.getAttribute("tool")
 
-    if(tool !== currentTool){
+    if (tool !== currentTool) {
       document.querySelectorAll(".tool-times div").forEach(time => {
         time.classList.remove("active")
       })
@@ -48,7 +49,7 @@ const Home = () => {
         time.classList.remove("active")
       })
       element.classList.add("active")
-  
+
       setTool(currentTool)
     }
   }
@@ -56,48 +57,53 @@ const Home = () => {
 
   return (
     <>
-    <section className='home-wrapper-section'>
-      <div className='info-container'>
-        <div className='tool-names'>
-          <div onClick={e => changeTool(e)} className='active home-trending-section' tool="trending">Trending <LivePulsing /></div>
-          <div onClick={e => changeTool(e)} className="home-minting-section" tool="minting">Minting <LivePulsing /></div>
-          <div onClick={e => changeTool(e)} className="home-ranking-section" tool="ranking">Ranking <LivePulsing /></div>
-          <div onClick={e => changeTool(e)} className="home-minting-section" tool="owned">Owned</div>
-          <div onClick={e => changeTool(e)} className="home-minting-section" tool="watchlist">WatchList</div>
+      <section className='home-wrapper-section'>
+        <div className='info-container'>
+          <div className='tool-names'>
+            <div onClick={e => changeTool(e)} className='active home-trending-section' tool="trending">Trending <LivePulsing /></div>
+            <div onClick={e => changeTool(e)} className="home-minting-section" tool="minting">Minting <LivePulsing /></div>
+            <div onClick={e => changeTool(e)} className="home-ranking-section" tool="ranking">Ranking <LivePulsing /></div>
+            <div onClick={e => changeTool(e)} className="home-minting-section" tool="owned">Owned</div>
+            <div onClick={e => changeTool(e)} className="home-minting-section" tool="watchlist">WatchList</div>
+          </div>
+          <div className='tool-times'>
+            <Times tool={tool} rippleEffect={rippleEffect} changeTime={changeTime} />
+          </div>
         </div>
-        <div className='tool-times'>
-          <Times tool={tool} rippleEffect={rippleEffect} changeTime={changeTime}/>
-        </div>
-      </div>
 
-      <Tool tool={tool} timeFrame={timeFrame} setTimeFrame={setTimeFrame} resetTime={resetTime}/>
+        <Tool tool={tool} timeFrame={timeFrame} setTimeFrame={setTimeFrame} resetTime={resetTime} />
 
-    </section>
+      </section>
     </>
   )
 }
 
-const Tool = ({tool, timeFrame, setTimeFrame, resetTime}) => {
-  switch(tool){
+const Tool = ({ tool, timeFrame, setTimeFrame, resetTime }) => {
+  switch (tool) {
     case "trending":
-      return <Trending timeFrame={timeFrame} tool={tool} setTimeFrame={setTimeFrame} resetTime={resetTime}/>
+      setPageTitle("Trending | Wagmi Labs")
+      return <Trending timeFrame={timeFrame} tool={tool} setTimeFrame={setTimeFrame} resetTime={resetTime} />
     case "minting":
-      return <Minting timeFrame={timeFrame} tool={tool} setTimeFrame={setTimeFrame} resetTime={resetTime}/>
+      setPageTitle("Minting | Wagmi Labs")
+      return <Minting timeFrame={timeFrame} tool={tool} setTimeFrame={setTimeFrame} resetTime={resetTime} />
     case "ranking":
-      return <Top100 timeFrame={timeFrame} tool={tool} setTimeFrame={setTimeFrame} resetTime={resetTime}/>
+      setPageTitle("Ranking | Wagmi Labs")
+      return <Top100 timeFrame={timeFrame} tool={tool} setTimeFrame={setTimeFrame} resetTime={resetTime} />
     case "owned":
-      return <Owned timeFrame={timeFrame} tool={tool} setTimeFrame={setTimeFrame} resetTime={resetTime}/>
+      setPageTitle("Owned | Wagmi Labs")
+      return <Owned timeFrame={timeFrame} tool={tool} setTimeFrame={setTimeFrame} resetTime={resetTime} />
     case "watchlist":
-      return <WatchList timeFrame={timeFrame} tool={tool} setTimeFrame={setTimeFrame} resetTime={resetTime}/>
+      setPageTitle("Watchlist | Wagmi Labs")
+      return <WatchList timeFrame={timeFrame} tool={tool} setTimeFrame={setTimeFrame} resetTime={resetTime} />
   }
 }
 
 
 
-const Times = ({tool, changeTime}) => {
-  switch(tool){
+const Times = ({ tool, changeTime }) => {
+  switch (tool) {
     case "trending":
-      return(
+      return (
         <>
           <div className="trending-1M" onClick={e => changeTime(e, "1M")}>1M</div>
           <div className='trending-5M' onClick={e => changeTime(e, "5M")}>5M</div>
@@ -111,7 +117,7 @@ const Times = ({tool, changeTime}) => {
         </>
       )
     case "minting":
-      return(
+      return (
         <>
           <div className="minting-1M" onClick={e => changeTime(e, "1M")}>1M</div>
           <div className="minting-2M" onClick={e => changeTime(e, "2M")}>2M</div>
@@ -124,7 +130,7 @@ const Times = ({tool, changeTime}) => {
         </>
       )
     case "ranking":
-      return(
+      return (
         <>
           <div className='ranking-1M' onClick={e => changeTime(e, "1M")}>1M</div>
           <div className='ranking-5M' onClick={e => changeTime(e, "5M")}>5M</div>
@@ -138,7 +144,7 @@ const Times = ({tool, changeTime}) => {
         </>
       )
     case "owned":
-      return(
+      return (
         <>
           <div className='owned-24H' onClick={e => changeTime(e, "24H")}>24H</div>
           <div className='owned-7D' onClick={e => changeTime(e, "7D")}>7D</div>
@@ -146,13 +152,13 @@ const Times = ({tool, changeTime}) => {
         </>
       )
     case "watchlist":
-        return(
-          <>
-            <div className='watchlist-24H' onClick={e => changeTime(e, "24H")}>24H</div>
-            <div className='watchlist-7D' onClick={e => changeTime(e, "7D")}>7D</div>
-            <div className='watchlist-30D' onClick={e => changeTime(e, "30D")}>30D</div>
-          </>
-        )
+      return (
+        <>
+          <div className='watchlist-24H' onClick={e => changeTime(e, "24H")}>24H</div>
+          <div className='watchlist-7D' onClick={e => changeTime(e, "7D")}>7D</div>
+          <div className='watchlist-30D' onClick={e => changeTime(e, "30D")}>30D</div>
+        </>
+      )
   }
 
 }

@@ -1,38 +1,45 @@
-import React, {useEffect} from 'react'
+import React, { useEffect } from 'react'
 import baseUrl from "../../variables/baseUrl"
 import animationBlack from "./animationblack.json"
 import Lottie from "react-lottie-player"
 import "./checking.css"
 
-const Checking = ({setConnected, setChecking}) => {
-    
-    
-  useEffect(()=>{
-    const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
+const Checking = ({ setConnected, setChecking }) => {
 
-    async function verify(){
+  const delay = ms => new Promise(resolve => setTimeout(resolve, ms))
 
-      try{
+  useEffect(() => {
+
+    async function verify() {
+
+      try {
         let res = await fetch(`${baseUrl}/refresh`, {
           credentials: "include"
         })
+
+        if (!res.ok) throw new Error("error")
+
         res = await res.json()
 
         await delay(1650)
-        if(!res.authenticated){
-            localStorage.removeItem("jsonwebtoken")
+        if (!res.authenticated) {
+          localStorage.removeItem("jsonwebtoken")
 
-            window.location.href = "/"
-            setConnected(false)
+          window.location.href = "/"
+          setConnected(false)
         }
-        else{
-            localStorage.setItem("jsonwebtoken", res.token)
+        else {
+          const { token } = res
 
-            setConnected(true)
-            setChecking(false)
+          if (!token) throw new Error("error")
+
+          localStorage.setItem("jsonwebtoken", token)
+
+          setConnected(true)
+          setChecking(false)
         }
       }
-      catch(e){
+      catch (e) {
         localStorage.removeItem("jsonwebtoken")
 
         window.location.href = "/"
@@ -45,12 +52,12 @@ const Checking = ({setConnected, setChecking}) => {
 
 
   return (
-    <div className='checking-text' style={{backgroundColor: "black"}}> 
-      <Lottie 
+    <div className='checking-text' style={{ backgroundColor: "black" }}>
+      <Lottie
         loop
         animationData={animationBlack}
         play
-        style={{ width: "25vw", margin: "auto"}}
+        style={{ width: "25vw", margin: "auto" }}
       />
     </div>
   )

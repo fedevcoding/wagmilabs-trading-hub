@@ -33,7 +33,7 @@ export const Volumes = React.memo(({ volumes, period, marketplaces }) => {
       ) : (
         <OrizontalBarChart
           title="Volumes"
-          subTitle="The ranking of top marketplaces by the volume over the selected time range."
+          subTitle="Ranking of top marketplaces by volume over the selected time range."
           yAxisText="Quantity"
           tooltipSuffix=" ETH"
           values={v}

@@ -1,8 +1,8 @@
 import "./loader.css"
 
-const Loader = ({width, height}) => {
-    return(
-        <div class="lazyloader" style={{width, height}}></div>
+const Loader = ({ width, height }) => {
+    return (
+        <div class="lazyloader" style={{ width, height }}></div>
     )
 }
 

@@ -1,75 +1,62 @@
-import React, {useEffect} from 'react'
-import { useAccount } from 'wagmi'
-// import { useDisconnect } from 'wagmi'
+import React from 'react'
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 
-import logOut from '../utils/functions/logout';
 
-const CheckWalletDisconnect = (props) => {
-    
-    const { isConnected } = useAccount()
-
-
-    useEffect(()=>{
-        if(!isConnected && props.connected){
-            logOut()
-        }
-    }, [isConnected])
-
+const CheckWalletDisconnect = () => {
 
     return (
 
-    <>
-    <ConnectButton.Custom>
-        {({
-            account,
-            chain,
-            // openAccountModal,
-            openChainModal,
-            // openConnectModal,
-            mounted,
-        }) => {
-        const ready = mounted
-        const connected =
-            ready &&
-            account &&
-            chain 
-            return (
-            <div
-                {...(!ready && {
-                'aria-hidden': true,
-                'style': {
-                    opacity: 0,
-                    pointerEvents: 'none',
-                    userSelect: 'none',
-                },
-                })}
-            >
-                {(() => {
-                if (!connected) {
-                    // logOut()
+        <>
+            <ConnectButton.Custom>
+                {({
+                    account,
+                    chain,
+                    // openAccountModal,
+                    openChainModal,
+                    openConnectModal,
+                    mounted,
+                }) => {
+                    const ready = mounted
+                    const connected =
+                        ready &&
+                        account &&
+                        chain
                     return (
-                      <></>
-                    );
-                }
+                        <div
+                            {...(!ready && {
+                                'aria-hidden': true,
+                                'style': {
+                                    opacity: 0,
+                                    pointerEvents: 'none',
+                                    userSelect: 'none',
+                                },
+                            })}
+                        >
+                            {(() => {
+                                if (!connected) {
+                                    openConnectModal()
+                                    return (
+                                        <></>
+                                    );
+                                }
 
-                if (chain.unsupported) {
-                    openChainModal()
-                    return (
-                      <></>
-                    );
-                }
+                                if (chain.unsupported) {
+                                    openChainModal()
+                                    return (
+                                        <></>
+                                    );
+                                }
 
-                return (
-                  <></>
-                );
-                })()}
-            </div>
-            );
-        }}
-    </ConnectButton.Custom>
-    </>
-  )
+                                return (
+                                    <></>
+                                );
+                            })()}
+                        </div>
+                    );
+                }}
+            </ConnectButton.Custom>
+        </>
+    )
 }
 
 export default CheckWalletDisconnect
