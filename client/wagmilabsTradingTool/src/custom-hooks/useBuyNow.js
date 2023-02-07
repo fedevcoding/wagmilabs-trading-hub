@@ -9,29 +9,34 @@ export const useBuyNow = callback => {
   const toast = useToast();
 
   async function buyNow(contract, tokenId, value) {
-    const signer = await fetchSigner();
+    try {
+      const signer = await fetchSigner();
 
-    getClient()?.actions.buyToken({
-      tokens: [{ tokenId, contract: contract }],
-      signer,
-      options,
-      expectedPrice: value,
-      onProgress: steps => {
-        console.log(steps);
-      },
-    }).catch((e) => {
+      await getClient()?.actions.buyToken({
+        tokens: [{ tokenId, contract: contract }],
+        signer,
+        options,
+        expectedPrice: value,
+        onProgress: steps => {
+          console.log(steps);
+        },
+      })
+    }
+    catch (e) {
       if (callback && typeof callback === "function") {
         callback();
       }
+      const error = e?.response?.data?.message || (String(e).includes("rejected") ? "Transaction rejected" :
+        "Something went wrong, try checking order availability or wallet funds")
+
       toast({
         title: "Error",
-        description:
-          "Something went wrong, try checking order availability or wallet funds",
+        description: error,
         status: "error",
         duration: 3000,
         isClosable: true,
       });
-    })
+    }
   }
 
   return { buyNow };
