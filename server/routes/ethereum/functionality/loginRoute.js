@@ -18,16 +18,15 @@ const ACCESS_JWT_SECONDS = 200
 loginRoute.post("/", checkOwnership, async (req, res) => {
 
     try {
-        const { address, signature } = req?.body || {}
+        const { address } = req?.body || {}
 
 
-        if (!address || !signature) {
+        if (!address) {
             res.status(403).json({ authenticated: false, message: "Missing query fields." })
         }
         else {
             const accessToken = JWT.sign({
                 address,
-                signature
             },
                 JWT_PRIVATE_KEY,
                 {
@@ -36,14 +35,13 @@ loginRoute.post("/", checkOwnership, async (req, res) => {
 
             const refreshToken = await JWT.sign({
                 address,
-                signature
             },
                 JWT_REFRESH_PRIVATE_KEY,
                 {
                     expiresIn: (60 * 60 * 24) * REFRESH_JWT_DAYS
                 })
 
-            const user = await User.findOne({ address, signature })
+            const user = await User.findOne({ address })
 
             if (user) {
                 res.status(200).cookie("refreshJWT", refreshToken, {
@@ -58,7 +56,6 @@ loginRoute.post("/", checkOwnership, async (req, res) => {
 
                 User.create({
                     address,
-                    signature,
                     profileImage,
                     listSettings: {
                         price: {

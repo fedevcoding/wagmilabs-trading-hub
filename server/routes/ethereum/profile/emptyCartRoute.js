@@ -7,9 +7,9 @@ const emptyCartRoute = express()
 emptyCartRoute.get("/", checkAuth, async (req, res) => {
 
     try {
-        const { address, signature } = req.userDetails
+        const { address } = req.userDetails
 
-        const user = await User.findOne({ address, signature })
+        const user = await User.findOne({ address })
 
         if (!user) return res.status(404).json({ status: "error" })
 

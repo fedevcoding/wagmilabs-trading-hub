@@ -6,10 +6,9 @@ const listingSettingsRoute = express()
 
 listingSettingsRoute.get("/", checkAuth, async (req, res) => {
 
-    const address = req.userDetails.address
-    const signature = req.userDetails.signature
+    const { address } = req.userDetails
 
-    const user = await User.findOne({ address, signature })
+    const user = await User.findOne({ address })
     const listSettings = user.listSettings
     res.json({ listSettings })
 })

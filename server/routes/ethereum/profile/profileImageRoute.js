@@ -7,13 +7,13 @@ const profileImageRoute = express()
 profileImageRoute.post("/", checkAuth, async (req, res) => {
 
     try {
-        const { address, signature } = req.userDetails
+        const { address } = req.userDetails
 
         const { image_url } = req?.body
 
         if (!image_url) return res.status(400).json({ error: "Image url is required" })
 
-        const user = await User.findOne({ address, signature })
+        const user = await User.findOne({ address })
 
         if (!user) return res.status(400).json({ error: "User not found" })
 

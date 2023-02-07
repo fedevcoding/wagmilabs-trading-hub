@@ -14,13 +14,12 @@ refreshRoute.get("/", async (req, res) => {
 
         const data = await JWT.verify(refreshToken, process.env.JWT_REFRESH_PRIVATE_KEY)
 
-        const { signature, address } = data
+        const { address } = data
 
-        if (!signature || !address) return res.status(400).json({ message: "Invalid authentication", authenticated: false })
+        if (!address) return res.status(400).json({ message: "Invalid authentication", authenticated: false })
 
         const newAccessToken = await JWT.sign({
             address,
-            signature
         }, process.env.JWT_PRIVATE_KEY, {
             expiresIn: 200
         })

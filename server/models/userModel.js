@@ -24,7 +24,7 @@ const cartSchema = new mongoose.Schema({
     price: {
         type: Number
     },
-    marketplace:{
+    marketplace: {
         type: String
     }
 })
@@ -70,11 +70,6 @@ const userSchema = mongoose.Schema({
         required: true,
         unique: true,
         immutable: true
-    },
-    signature: {
-        type: String,
-        required: true,
-        unique: true
     },
     profileImage: {
     },

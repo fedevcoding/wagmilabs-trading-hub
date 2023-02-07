@@ -6,9 +6,9 @@ const userDetailsRoute = express()
 
 userDetailsRoute.get("/", checkAuth, async (req, res) => {
     try {
-        const { address, signature } = req.userDetails
+        const { address } = req.userDetails
 
-        const user = await User.findOne({ address, signature })
+        const user = await User.findOne({ address })
 
         if (!user) res.status(400).json({ message: "no user found" })
 

@@ -9,9 +9,9 @@ updateGasSettingsRoute.post("/", checkAuth, async (req, res) => {
     try {
         const newGasSettings = req.body
 
-        const { address, signature } = req.userDetails
+        const { address } = req.userDetails
 
-        const user = await User.findOne({ address, signature })
+        const user = await User.findOne({ address })
 
         if (!user) return res.status(404).json({ success: false })
 

@@ -7,12 +7,12 @@ const getWatchListRoute = express()
 getWatchListRoute.get("/", checkAuth, async (req, res) => {
 
     try {
-        const { address, signature } = req.userDetails
+        const { address } = req.userDetails
         const { collectionAddress } = req.query
 
         const contract = collectionAddress.toLowerCase()
 
-        const user = await User.findOne({ address, signature })
+        const user = await User.findOne({ address })
 
         if (!user) throw new Error("User not found")
 

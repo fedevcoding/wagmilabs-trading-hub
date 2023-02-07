@@ -7,15 +7,11 @@ const watchlistCollectionsRoute = express()
 
 watchlistCollectionsRoute.get('/', checkAuth, (req, res) => {
 
-    const { address, signature } = req.userDetails || {}
-
-    if (!address || !signature) {
-        return res.status(400).json({ message: "no address found" })
-    }
+    const { address } = req.userDetails || {}
 
     async function getData() {
         try {
-            const user = await User.findOne({ address, signature })
+            const user = await User.findOne({ address })
 
             if (!user) return res.status(400).json({ message: "no user found" })
 

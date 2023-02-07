@@ -10,11 +10,11 @@ updateWatchListRoute.get('/', checkAuth, async (req, res) => {
     try {
         const { collectionAddress, method } = req.query
 
-        const { address, signature } = req.userDetails
+        const { address } = req.userDetails
 
         if (!collectionAddress || !method) throw new Error("collection aaddress or method not provided")
 
-        const user = await User.findOne({ address, signature })
+        const user = await User.findOne({ address })
 
         if (!user) throw new Error("User not found")
 

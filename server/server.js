@@ -80,18 +80,26 @@ app.set("socketio", io);
 
 let ethData;
 
-io.on("connection", (socket) => {
-  socket.emit("ethData", ethData);
+
+async function getTokenGasData(socket) {
+  try {
+    let currentEthData = await getCoinsGasData()
+    ethData = currentEthData
+    socket && socket.emit("ethData", currentEthData)
+  }
+  catch (e) {
+    console.log(e)
+  }
+}
+getTokenGasData()
+
+io.on('connection', (socket) => {
+  socket.emit("ethData", ethData)
+
 
   setInterval(async () => {
-    try {
-      let currentEthData = await getCoinsGasData();
-      ethData = currentEthData;
-      socket.emit("ethData", currentEthData);
-    } catch (e) {
-      console.log(e);
-    }
-  }, 10000);
+    await getTokenGasData(socket)
+  }, 10000)
 
   socket.on("joinSales", (collectionAddress) => {
     const channel = `sales${collectionAddress}`;

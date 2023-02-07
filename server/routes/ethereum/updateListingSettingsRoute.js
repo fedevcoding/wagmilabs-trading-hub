@@ -13,12 +13,12 @@ updateListingSettingsRoute.post("/", checkAuth, async (req, res) => {
         const { months, days, hours, minutes } = req.body.time || {}
         const { type, profitType, profitValue } = req.body.price || {}
 
-        const { address, signature } = req.userDetails
+        const { address } = req.userDetails
 
         if (!marketplace || !type || !profitType || !profitValue) return res.json({ updated: false, error: "Missing data" })
 
 
-        const user = await User.findOne({ address, signature })
+        const user = await User.findOne({ address })
 
         if (!user) return res.json({ updated: false, error: "User not found" })
 

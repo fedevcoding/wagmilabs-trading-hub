@@ -417,14 +417,14 @@ const Collection = () => {
                     </div>
 
                     <div className='links'>
-                        {<a href={`https://etherscan.io/address/${address}`} target={"_blank"}><img src={etherscan} alt="" /></a>}
-                        {collectionInfo.slug && <a href={`https://opensea.io/collection/${collectionInfo.slug}`} target={"_blank"}><img src={opensea} alt="" /></a>}
-                        {<a href={`https://x2y2.io/collection/${address}/items`} target={"_blank"}><img src={x2y2} alt="" /></a>}
-                        {<a href={`https://looksrare.org/collections/${address}?queryID=2d673d7e77b4e27a2680a6d16a740a74`} target={"_blank"}><img src={looksRare} alt="" /></a>}
-                        {<a href={`https://www.gem.xyz/collection/${address}/`} target={"_blank"}><img src={gem} alt="" /></a>}
-                        {collectionInfo.externalUrl && <a href={`${collectionInfo.externalUrl}`} target={"_blank"}><img src={www} alt="" /></a>}
-                        {collectionInfo.twitterUsername && <a href={`https://twitter.com/${collectionInfo.twitterUsername}`} target={"_blank"}><img src={twitter} alt="" /></a>}
-                        {collectionInfo.discordUrl && <a href={`${collectionInfo.discordUrl}`} target={"_blank"}><img src={discord} alt="" /></a>}
+                        {<a href={`https://etherscan.io/address/${address}`} target={"_blank"} rel="noreferrer"><img src={etherscan} alt="" /></a>}
+                        {collectionInfo.slug && <a href={`https://opensea.io/collection/${collectionInfo.slug}`} target={"_blank"} rel="noreferrer"><img src={opensea} alt="" /></a>}
+                        {<a href={`https://x2y2.io/collection/${address}/items`} target={"_blank"} rel="noreferrer"><img src={x2y2} alt="" /></a>}
+                        {<a href={`https://looksrare.org/collections/${address}?queryID=2d673d7e77b4e27a2680a6d16a740a74`} target={"_blank"} rel="noreferrer"><img src={looksRare} alt="" /></a>}
+                        {<a href={`https://www.gem.xyz/collection/${address}/`} target={"_blank"} rel="noreferrer"><img src={gem} alt="" /></a>}
+                        {collectionInfo.externalUrl && <a href={`${collectionInfo.externalUrl}`} target={"_blank"} rel="noreferrer"><img src={www} alt="" /></a>}
+                        {collectionInfo.twitterUsername && <a href={`https://twitter.com/${collectionInfo.twitterUsername}`} target={"_blank"} rel="noreferrer"><img src={twitter} alt="" /></a>}
+                        {collectionInfo.discordUrl && <a href={`${collectionInfo.discordUrl}`} target={"_blank"} rel="noreferrer"><img src={discord} alt="" /></a>}
                     </div>
 
                     {!loadingCollection &&
@@ -488,7 +488,7 @@ const Collection = () => {
                                 <Loader />
                                 :
                                 <div>
-                                    <p>{collectionInfo.oneDaySales && collectionInfo.oneDaySales || "- - -"}</p>
+                                    <p>{collectionInfo.oneDaySales || "- - -"}</p>
                                 </div>
                         }
                     </div>
@@ -502,7 +502,7 @@ const Collection = () => {
                                 :
                                 <div>
                                     <i className="fa-brands fa-ethereum"></i>
-                                    <p>{collectionInfo.volume && roundPrice(collectionInfo.volume["1day"]) || "- - -"}</p>
+                                    <p>{collectionInfo.volume ? roundPrice(collectionInfo.volume["1day"]) : "- - -"}</p>
                                 </div>
                         }
                     </div>
