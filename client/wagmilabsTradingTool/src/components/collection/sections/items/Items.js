@@ -35,7 +35,7 @@ import useFirstRender from "../../../../custom-hooks/useFirstRender";
 import flaggedImg from "../../../../assets/flagged.svg";
 import BuyNowModal from "../../../utility-components/BuyNowModal";
 import removeFromCart from "../../../../utils/database-functions/removeFromCart";
-import { useBuyNow } from "../../../../custom-hooks";
+import { useAddItemToCart, useBuyNow } from "../../../../custom-hooks";
 
 
 const Items = ({ loadingMoreItems, tokensContinuation, address, items, itemFilters, setItemFilters, collectionInfo, loadingItems, searchText, setSearchText, debounceSearch, options, selectedItem, setSelectedItem, fetchMoreTokens }) => {
@@ -205,36 +205,10 @@ const Items = ({ loadingMoreItems, tokensContinuation, address, items, itemFilte
   }
 
 
+  const { addItemToCart } = useAddItemToCart(address, (index, image) => {
+    animateAddToCart(index, image)
+  });
 
-  async function addItemToCart(name, tokenId, price, image, marketplace, collectionName, index) {
-    try {
-      const { pushStatus, filteredItems } = await addToCart({
-        name,
-        collectionName,
-        tokenId,
-        price,
-        image,
-        marketplace,
-        contractAddress: address,
-      });
-      if (pushStatus === "success") {
-        animateAddToCart(index, image)
-        setUserCartItems(filteredItems);
-      }
-      else {
-        throw new Error("error")
-      }
-    }
-    catch (e) {
-      toast({
-        title: "Error",
-        description: "Something went wrong",
-        status: "error",
-        duration: 3000,
-        isClosable: true,
-      })
-    }
-  }
 
   async function removeItemFromCart(tokenId, contractAddress) {
 

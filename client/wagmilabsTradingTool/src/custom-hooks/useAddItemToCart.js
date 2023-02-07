@@ -1,44 +1,58 @@
 import React from "react";
-import { NotificationManager } from "react-notifications";
+import { useToast } from "@chakra-ui/react";
 import { UserDataContext } from "../context/userContext";
 import addToCart from "../utils/database-functions/addToCart";
 
-export const useAddItemToCart = address => {
+export const useAddItemToCart = (address, callback) => {
   const { setUserCartItems } = React.useContext(UserDataContext);
+  const toast = useToast();
+  let addItemToCart = null;
 
-  async function addItemToCart(
-    name,
-    tokenId,
-    price,
-    image,
-    marketplace,
-    collectionName
-  ) {
-    let pushStatus = await addToCart({
+  try {
+    addItemToCart = async (
       name,
-      collectionName,
       tokenId,
       price,
       image,
       marketplace,
-      contractAddress: address,
-    });
+      collectionName,
+      index
+    ) => {
+      let { pushStatus, filteredItems } = await addToCart({
+        name,
+        collectionName,
+        tokenId,
+        price,
+        image,
+        marketplace,
+        contractAddress: address,
+      });
 
-    if (pushStatus === "success") {
-      setUserCartItems(prevItems => [
-        ...prevItems,
-        {
-          name,
-          tokenId,
-          price,
-          image,
-          marketplace,
-          collectionName,
-          contractAddress: address,
-        },
-      ]);
-      NotificationManager.success("Item successfully added");
-    }
+      if (pushStatus === "success") {
+        setUserCartItems(filteredItems);
+        if (callback && typeof callback === "function") {
+          callback(index, image);
+        } else {
+          toast({
+            title: "Success",
+            description: "Item successfully added",
+            status: "success",
+            duration: 3000,
+            isClosable: true,
+          });
+        }
+      } else {
+        throw new Error("error");
+      }
+    };
+  } catch (e) {
+    toast({
+      title: "Error",
+      description: "Something went wrong",
+      status: "error",
+      duration: 3000,
+      isClosable: true,
+    });
   }
 
   return { addItemToCart };

@@ -2,12 +2,13 @@ import { fetchSigner } from "@wagmi/core";
 import { getClient } from "@reservoir0x/reservoir-kit-client";
 import { useGetReservoirOptions } from ".";
 import { marketListingMapping } from "../utils/mappings";
-import { NotificationManager } from "react-notifications";
+import { useToast } from "@chakra-ui/react";
 
 export const usePlaceBid = marketplace => {
   const { options } = useGetReservoirOptions();
   const { orderbook, orderKind } =
     marketListingMapping[marketplace.toLowerCase()] || {};
+  const toast = useToast();
 
   async function placeBid(tokenAddress, price) {
     const signer = await fetchSigner();
@@ -32,7 +33,13 @@ export const usePlaceBid = marketplace => {
 
     setTimeout(function () {
       // insert this condition only if place bid successfully
-      NotificationManager.success("Item successfully added");
+      toast({
+        title: "Success",
+        description: "Bid successfully placed",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
     }, 500);
   }
 
