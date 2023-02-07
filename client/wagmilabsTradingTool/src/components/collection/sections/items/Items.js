@@ -35,6 +35,7 @@ import useFirstRender from "../../../../custom-hooks/useFirstRender";
 import flaggedImg from "../../../../assets/flagged.svg";
 import BuyNowModal from "../../../utility-components/BuyNowModal";
 import removeFromCart from "../../../../utils/database-functions/removeFromCart";
+import { useBuyNow } from "../../../../custom-hooks";
 
 
 const Items = ({ loadingMoreItems, tokensContinuation, address, items, itemFilters, setItemFilters, collectionInfo, loadingItems, searchText, setSearchText, debounceSearch, options, selectedItem, setSelectedItem, fetchMoreTokens }) => {
@@ -258,40 +259,11 @@ const Items = ({ loadingMoreItems, tokensContinuation, address, items, itemFilte
     }
   }
 
-  async function buyNow(contract, tokenId, value) {
-    try {
-      const signer = await fetchSigner();
-      const maxFeePerGas = (gasSettings.maxFeePerGas * 1000000000).toString();
-      const maxPriorityFeePerGas = (
-        gasSettings.maxPriorityFeePerGas * 1000000000
-      ).toString();
 
-      await getClient()?.actions.buyToken({
-        tokens: [{ tokenId, contract: contract }],
-        signer,
-        options: {
-          maxFeePerGas,
-          maxPriorityFeePerGas,
-        },
-        expectedPrice: value,
-        onProgress: (steps) => {
-        },
-      });
-    }
-    catch (e) {
-      setBuyNowModalData({})
-      closeBuynowModal(undefined, true)
-      toast({
-        title: "Error",
-        description: "Something went wrong, try checking order availability or wallet funds",
-        status: "error",
-        duration: 3000,
-        isClosable: true,
-      })
-    }
-  }
-
-
+  const { buyNow } = useBuyNow(() => {
+    setBuyNowModalData({});
+    closeBuynowModal(undefined, true);
+  });
 
 
 

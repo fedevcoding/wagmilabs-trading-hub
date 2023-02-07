@@ -20,6 +20,7 @@ import { getClient } from "@reservoir0x/reservoir-kit-client";
 
 import { fetchSigner } from "@wagmi/core";
 import { UserDataContext } from '../../../../context/userContext'
+import { useBuyNow } from '../../../../custom-hooks'
 
 const saleHashes = []
 const listingHashes = []
@@ -194,38 +195,10 @@ const LiveView = ({ address, collectionName }) => {
         }
     }
 
-    async function buyNow(contract, tokenId, value) {
-        try {
-            const signer = await fetchSigner();
-            const maxFeePerGas = (gasSettings.maxFeePerGas * 1000000000).toString();
-            const maxPriorityFeePerGas = (
-                gasSettings.maxPriorityFeePerGas * 1000000000
-            ).toString();
-
-            await getClient()?.actions.buyToken({
-                tokens: [{ tokenId, contract: contract }],
-                signer,
-                options: {
-                    maxFeePerGas,
-                    maxPriorityFeePerGas,
-                },
-                expectedPrice: value,
-                onProgress: (steps) => {
-                },
-            });
-        }
-        catch (e) {
-            setBuyNowModalData({})
-            closeBuynowModal(undefined, true)
-            toast({
-                title: "Error",
-                description: "Something went wrong, try checking order availability or wallet funds",
-                status: "error",
-                duration: 3000,
-                isClosable: true,
-            })
-        }
-    }
+    const { buyNow } = useBuyNow(() => {
+        setBuyNowModalData({})
+        closeBuynowModal(undefined, true)
+    });
 
 
     const listingsMapping = useMemo(() => listings.map(listing => {
