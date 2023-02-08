@@ -7,44 +7,44 @@ const rankingRoute = express()
 
 rankingRoute.get('/:time', checkAuth, (req, res) => {
 
-    async function getData(){
-        try{
-            const {time} = req.params || {}
+    async function getData() {
+        try {
+            const { time } = req.params || {}
             const userTime = parseInt(time)
 
 
             const rightTime = new Date().getTime() - userTime
-        
+
             const rankingCollections = await Ranking.aggregate([
                 {
-                    $unwind:"$sales"
+                    $unwind: "$sales"
                 },
                 {
-                    $match:{
-                        "sales.saleTime":{$gt: rightTime},
-                        "sales.value":{$gt:0}
+                    $match: {
+                        "sales.saleTime": { $gt: rightTime },
+                        "sales.value": { $gt: 0 }
                     }
                 },
                 {
-                    $group:{
-                        _id:"$_id",
-                        volume:{$sum:'$sales.value'},
+                    $group: {
+                        _id: "$_id",
+                        volume: { $sum: '$sales.value' },
                         firstDoc: { $first: "$$ROOT" },
-                        rightSales:{$sum:1}
+                        rightSales: { $sum: 1 }
                     }
                 },
                 {
                     $unset: "firstDoc.sales"
                 },
                 {
-                    $match: {"rightSales": {"$gt": 0}}
+                    $match: { "rightSales": { "$gt": 0 } }
                 },
                 {
                     $addFields: {
                         "firstDoc.volume": "$volume",
                         "firstDoc.rightSales": "$rightSales"
                     }
-                },                {
+                }, {
                     $replaceRoot: {
                         newRoot: "$firstDoc"
                     }
@@ -59,11 +59,11 @@ rankingRoute.get('/:time', checkAuth, (req, res) => {
                 }
             ])
 
-            res.status(200).json({rankingCollections})
+            res.status(200).json({ rankingCollections })
         }
-        catch(e){
+        catch (e) {
             console.log(e)
-            res.status(500).json({error: e})
+            res.status(500).json({ error: e })
         }
     }
     getData()

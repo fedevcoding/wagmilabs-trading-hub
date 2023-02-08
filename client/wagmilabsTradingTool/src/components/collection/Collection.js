@@ -27,7 +27,7 @@ import getWatchListCollections from "../../utils/database-functions/getWatchList
 import { getPercentage } from "../../utils/formats/utils";
 import { formatContractAddress, roundPrice } from "../../utils/formats/formats";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
-import LiveView from "./sections/liveView/LiveView";
+import LiveView from "./sections/liveView/index";
 import LivePulsing from "../utility-components/LivePulsing";
 
 // import verified from "../../images/verified-2.png"
