@@ -1,11 +1,9 @@
-import React from 'react'
+import React from "react";
 
-import "./livePulsing.css"
+import "./livePulsing.css";
 
 const LivePulsing = () => {
-  return (
-    <div className="blob"></div>
-  )
-}
+  return <div className="blob"></div>;
+};
 
-export default LivePulsing
+export default LivePulsing;

@@ -1,24 +1,25 @@
-import baseUrl from "../../variables/baseUrl"
+import baseUrl from "../../variables/baseUrl";
 
 async function addToWatchList(address) {
+  try {
+    let res = await fetch(
+      `${baseUrl}/updateWatchList?method=add&collectionAddress=${address}`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "x-auth-token": localStorage.jsonwebtoken,
+        },
+      }
+    );
 
-    try {
-        let res = await fetch(`${baseUrl}/updateWatchList?method=add&collectionAddress=${address}`, {
-            headers: {
-                "Content-Type": "application/json",
-                "x-auth-token": localStorage.jsonwebtoken
-            },
-        })
-
-        if (!res.ok) {
-            throw new Error("Error adding to watchlist")
-        }
-
-        return true
+    if (!res.ok) {
+      throw new Error("Error adding to watchlist");
     }
-    catch (e) {
-        return false
-    }
+
+    return true;
+  } catch (e) {
+    return false;
+  }
 }
 
-export default addToWatchList
+export default addToWatchList;

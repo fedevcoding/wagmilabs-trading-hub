@@ -62,7 +62,10 @@ export const LeaderBoard = React.memo(
                   </td>
                   <td>
                     {m.volumeEth}
-                    <span className="low-opacity little-text"> ({m.volume.toLocaleString("EN-us")}$)</span>
+                    <span className="low-opacity little-text">
+                      {" "}
+                      ({m.volume.toLocaleString("EN-us")}$)
+                    </span>
                   </td>
                   <td>{m.saleNum}</td>
                   <td>{m.traderNum}</td>

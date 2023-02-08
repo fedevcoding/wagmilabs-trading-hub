@@ -16,7 +16,7 @@ export const OrizontalBarChart = ({
   useMarketImg = false,
 }) => (
   <div className="bar-chart">
-    <HighchartsReact
+        <HighchartsReact
       className="chart"
       highcharts={Highcharts}
       options={{
@@ -100,5 +100,5 @@ export const OrizontalBarChart = ({
         ],
       }}
     />
-  </div>
+    </div>
 );

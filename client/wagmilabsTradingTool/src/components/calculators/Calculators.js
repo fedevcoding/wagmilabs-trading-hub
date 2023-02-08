@@ -1,9 +1,7 @@
-import React from 'react'
+import React from "react";
 
 const Calculators = () => {
-  return (
-    <div style={{color: "white"}}>Calculators</div>
-  )
-}
+  return <div style={{ color: "white" }}>Calculators</div>;
+};
 
-export default Calculators
+export default Calculators;

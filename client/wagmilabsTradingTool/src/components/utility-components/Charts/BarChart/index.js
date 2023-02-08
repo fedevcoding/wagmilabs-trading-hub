@@ -14,7 +14,7 @@ export const BarChart = ({
   tooltipSuffix = undefined,
 }) => (
   <div className="bar-chart">
-    <HighchartsReact
+        <HighchartsReact
       className="chart"
       highcharts={Highcharts}
       options={{
@@ -53,18 +53,18 @@ export const BarChart = ({
         },
         ...(tooltipSuffix
           ? {
-            tooltip: {
-              valueSuffix: tooltipSuffix,
-              formatter: function () {
-                const dollarValue = (values?.secondValue || [])[
-                  this.point.index
-                ];
-                return dollarValue
-                  ? this.y + ` ${tooltipSuffix}<br>$` + dollarValue
-                  : this.y + tooltipSuffix;
+              tooltip: {
+                valueSuffix: tooltipSuffix,
+                formatter: function () {
+                  const dollarValue = (values?.secondValue || [])[
+                    this.point.index
+                  ];
+                  return dollarValue
+                    ? this.y + ` ${tooltipSuffix}<br>$` + dollarValue
+                    : this.y + tooltipSuffix;
+                },
               },
-            },
-          }
+            }
           : {}),
         legend: {
           enabled: false,
@@ -82,10 +82,10 @@ export const BarChart = ({
           {
             name: title,
             data: values.values,
-            borderRadius: 3
+            borderRadius: 3,
           },
         ],
       }}
     />
-  </div>
+    </div>
 );

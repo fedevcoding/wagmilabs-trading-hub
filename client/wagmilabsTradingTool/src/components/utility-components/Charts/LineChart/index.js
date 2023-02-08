@@ -17,7 +17,7 @@ export const LineChart = ({
   const options = {
     chart: {
       type: "spline",
-      borderRadius: 15
+      borderRadius: 15,
     },
     title: {
       text: title,
@@ -49,20 +49,20 @@ export const LineChart = ({
     },
     ...(tooltipSuffix
       ? {
-        tooltip: {
-          formatter: function () {
-            return (
-              this.key +
-              `<br>` +
-              this.series.name +
-              " " +
-              yAxisText +
-              ": " +
-              this.y
-            );
+          tooltip: {
+            formatter: function () {
+              return (
+                this.key +
+                `<br>` +
+                this.series.name +
+                " " +
+                yAxisText +
+                ": " +
+                this.y
+              );
+            },
           },
-        },
-      }
+        }
       : {}),
     legend: {
       enabled: false,
@@ -81,6 +81,6 @@ export const LineChart = ({
   return (
     <div className="line-chart">
       <HighchartsReact highcharts={Highcharts} options={options} />
-    </div>
+      </div>
   );
 };

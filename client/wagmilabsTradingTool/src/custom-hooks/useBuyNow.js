@@ -20,14 +20,16 @@ export const useBuyNow = callback => {
         onProgress: steps => {
           console.log(steps);
         },
-      })
-    }
-    catch (e) {
+      });
+    } catch (e) {
       if (callback && typeof callback === "function") {
         callback();
       }
-      const error = e?.response?.data?.message || (String(e).includes("rejected") ? "Transaction rejected" :
-        "Something went wrong, try checking order availability or wallet funds")
+      const error =
+        e?.response?.data?.message ||
+        (String(e).includes("rejected")
+          ? "Transaction rejected"
+          : "Something went wrong, try checking order availability or wallet funds");
 
       toast({
         title: "Error",

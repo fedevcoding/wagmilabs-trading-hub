@@ -1,23 +1,23 @@
-function rippleEffect(e){
-    const button = e.currentTarget
+function rippleEffect(e) {
+  const button = e.currentTarget;
 
-    const x = e.clientX
-    const y = e.clientY
+  const x = e.clientX;
+  const y = e.clientY;
 
-    const buttonTop = e.target.offsetTop
-    const buttonLeft = e.target.offsetLeft
+  const buttonTop = e.target.offsetTop;
+  const buttonLeft = e.target.offsetLeft;
 
-    const xInside = x - buttonLeft
-    const yInside = y - buttonTop
+  const xInside = x - buttonLeft;
+  const yInside = y - buttonTop;
 
-    const circle = document.createElement('span')
-    circle.classList.add('circle')
-    circle.style.top = yInside + 'px'
-    circle.style.left = xInside + 'px'
+  const circle = document.createElement("span");
+  circle.classList.add("circle");
+  circle.style.top = yInside + "px";
+  circle.style.left = xInside + "px";
 
-    button.appendChild(circle)
+  button.appendChild(circle);
 
-    setTimeout(() => circle.remove(), 5500)
+  setTimeout(() => circle.remove(), 5500);
 }
 
-export default rippleEffect
+export default rippleEffect;

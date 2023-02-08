@@ -1,22 +1,21 @@
-const baseUrl = require("../../variables/baseUrl")
-
+const baseUrl = require("../../variables/baseUrl");
 
 async function updateSnipeTasks(type, taskInfo) {
-    try {
-        let response = await fetch(`${baseUrl}/salesBot`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "x-auth-token": localStorage.jsonwebtoken
-            },
-            body: JSON.stringify({ taskInfo, type })
-        })
+  try {
+    let response = await fetch(`${baseUrl}/salesBot`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-auth-token": localStorage.jsonwebtoken,
+      },
+      body: JSON.stringify({ taskInfo, type }),
+    });
 
-        response = await response.json()
-    }
-    catch (e) {
-        console.log(e)
-    }
+    // eslint-disable-next-line no-unused-vars
+    response = await response.json();
+  } catch (e) {
+    console.log(e);
+  }
 }
 
-export default updateSnipeTasks
+export default updateSnipeTasks;

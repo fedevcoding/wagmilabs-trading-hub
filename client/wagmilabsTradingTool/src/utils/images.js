@@ -1,4 +1,3 @@
-const placeholderImage = require('../assets/question.png');
+const placeholderImage = require("../assets/question.png");
 
-
-module.exports = { placeholderImage }
+module.exports = { placeholderImage };

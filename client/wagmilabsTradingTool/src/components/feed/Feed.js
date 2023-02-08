@@ -16,8 +16,8 @@ const Feed = React.memo(() => {
   } = useGetNews(currentPage);
 
   useEffect(() => {
-    setPageTitle("Feed | Wagmi Labs")
-  }, [])
+    setPageTitle("Feed | Wagmi Labs");
+  }, []);
   return (
     <PageWrapper page="feed">
       <h1>NFT news</h1>
