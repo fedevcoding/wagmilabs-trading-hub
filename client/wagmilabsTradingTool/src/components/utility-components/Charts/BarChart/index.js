@@ -26,9 +26,9 @@ export const BarChart = ({
     );
   }, []);
 
-  let step = 3;
-  if (chartWidth < 800) step = 4;
-  if (chartWidth < 700) step = 5;
+  let step = Math.ceil(values.labels.length / 10);
+  if (chartWidth < 800) step = Math.ceil(values.labels.length / 7.5);
+  if (chartWidth < 700) step = Math.ceil(values.labels.length / 6);
 
   return (
     <div className="bar-chart">
