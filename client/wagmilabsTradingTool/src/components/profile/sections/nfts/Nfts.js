@@ -22,6 +22,7 @@ import { Button, Tooltip, useToast } from "@chakra-ui/react";
 import { UserDataContext } from "../../../../context/userContext";
 import Loader from "../../../utility-components/Loaders/Loader";
 import getMarketplaceImage from "../../../../utils/marketplaceImageMapping";
+import { useNavigate } from "react-router-dom";
 
 const sortItemsOptions = [
   { value: "desc", label: "Newest" },
@@ -46,6 +47,8 @@ const Nfts = ({
 }) => {
   const { cryptoPrices } = useContext(UserDataContext);
   const toast = useToast();
+
+  const navigate = useNavigate();
 
   const [quickListData, setQuickListData] = useState({});
   const [showQuickListingModal, setShowQuickListingModal] = useState(false);
@@ -378,8 +381,9 @@ const Nfts = ({
                     selectBulk ? "single-item-image" : "single-item-image-scale"
                   }`}
                   onClick={e =>
-                    selectBulk &&
-                    changeBulkItems(contractAddress, tokenId, id, e)
+                    selectBulk
+                      ? changeBulkItems(contractAddress, tokenId, id, e)
+                      : navigate(`/item/${contractAddress}/${tokenId}`)
                   }
                 />
                 {rarityRank && (

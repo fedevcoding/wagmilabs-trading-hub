@@ -33,6 +33,7 @@ import flaggedImg from "../../../../assets/flagged.svg";
 import BuyNowModal from "../../../utility-components/BuyNowModal";
 import removeFromCart from "../../../../utils/database-functions/removeFromCart";
 import { useAddItemToCart, useBuyNow } from "../../../../custom-hooks";
+import { useNavigate } from "react-router-dom";
 
 const Items = ({
   loadingMoreItems,
@@ -56,6 +57,8 @@ const Items = ({
 
   const observer = useRef(null);
   const toast = useToast();
+
+  const navigate = useNavigate();
 
   const [showBuyNowModal, setShowBuyNowModal] = useState(false);
   const [buyNowModalData, setBuyNowModalData] = useState({
@@ -302,6 +305,7 @@ const Items = ({
                   src={image || collectionImage}
                   alt=""
                   className="collection-single-item-image"
+                  onClick={() => navigate(`/item/${address}/${tokenId}`)}
                 />
 
                 {isListed && (
