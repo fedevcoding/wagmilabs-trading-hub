@@ -9,7 +9,7 @@
     font-size: 25px;
 }
 
-#page-token-detail .item-collection-name {
+#page-token-detail img + .item-collection-name {
     vertical-align: middle;
     margin-left: 10px;
 }
@@ -22,7 +22,7 @@
 
 #page-token-detail .item-collection-info {
     margin-top: 15px;
-    display: flex;
+    display: inline-flex;
     align-items: center;
     cursor: pointer;
 }
