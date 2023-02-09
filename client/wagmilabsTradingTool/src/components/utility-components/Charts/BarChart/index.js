@@ -63,9 +63,14 @@ export const BarChart = ({
                   const dollarValue = (values?.secondValue || [])[
                     this.point.index
                   ];
-                  return dollarValue
-                    ? this.y + ` ${tooltipSuffix}<br>$` + dollarValue
-                    : this.y + tooltipSuffix;
+                  const label = (values?.labels || [])[this.point.index];
+                  return (
+                    label +
+                    "<br><br>" +
+                    (dollarValue
+                      ? this.y + ` ${tooltipSuffix}<br>$` + dollarValue
+                      : this.y + tooltipSuffix)
+                  );
                 },
               },
             }
