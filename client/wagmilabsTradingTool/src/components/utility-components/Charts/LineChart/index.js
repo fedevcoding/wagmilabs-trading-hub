@@ -37,6 +37,10 @@ export const LineChart = ({
       title: {
         text: null,
       },
+      labels: {
+        rotation: 0,
+        step: 3,
+      },
     },
     yAxis: {
       min: 0,
@@ -81,6 +85,6 @@ export const LineChart = ({
   return (
     <div className="line-chart">
       <HighchartsReact highcharts={Highcharts} options={options} />
-      </div>
+    </div>
   );
 };

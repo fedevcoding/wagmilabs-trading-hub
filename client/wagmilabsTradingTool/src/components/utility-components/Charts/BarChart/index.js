@@ -14,7 +14,7 @@ export const BarChart = ({
   tooltipSuffix = undefined,
 }) => (
   <div className="bar-chart">
-        <HighchartsReact
+    <HighchartsReact
       className="chart"
       highcharts={Highcharts}
       options={{
@@ -40,6 +40,10 @@ export const BarChart = ({
           categories: values.labels,
           title: {
             text: null,
+          },
+          labels: {
+            rotation: 0,
+            step: 3,
           },
         },
         yAxis: {
@@ -87,5 +91,5 @@ export const BarChart = ({
         ],
       }}
     />
-    </div>
+  </div>
 );
