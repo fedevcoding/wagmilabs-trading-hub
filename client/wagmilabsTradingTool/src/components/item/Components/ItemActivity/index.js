@@ -34,7 +34,11 @@ export const ItemActivity = React.memo(({ address, id, currency }) => {
           </div>
           {(type && !(activities?.activities || []).length && (
             <h3>No activities for this filter</h3>
-          )) || <ActivityTable activities={activities} currency={currency} />}
+          )) || (
+            <div className="activity-table-container">
+              <ActivityTable activities={activities} currency={currency} />
+            </div>
+          )}
         </>
       )) || <LoadingSpinner />}
     </div>

@@ -45,3 +45,22 @@
 #page-token-detail #item-activity tr td {
     padding: 5px 0;
 }
+
+#page-token-detail .activity-table-container {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+#page-token-detail .activity-table-container::-webkit-scrollbar{
+    width: 7px;
+}
+#page-token-detail .activity-table-container::-webkit-scrollbar-track {
+    background: transparent;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+
+}
+#page-token-detail .activity-table-container::-webkit-scrollbar-thumb {
+    background: black;
+    border-radius: 10px;
+}
