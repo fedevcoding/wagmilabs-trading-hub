@@ -39,7 +39,7 @@ export const LineChart = ({
       },
       labels: {
         rotation: 0,
-        step: 3,
+        step: Math.ceil(values.labels.length / 10),
       },
     },
     yAxis: {
