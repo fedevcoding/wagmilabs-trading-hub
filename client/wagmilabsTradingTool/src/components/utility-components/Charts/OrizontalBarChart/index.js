@@ -15,14 +15,14 @@ export const OrizontalBarChart = ({
   tooltipSuffix = undefined,
   useMarketImg = false,
 }) => (
-  <div className="bar-chart">
-        <HighchartsReact
+  <div className="orizontal-bar-chart">
+    <HighchartsReact
       className="chart"
       highcharts={Highcharts}
       options={{
         chart: {
           type: "bar",
-          marginLeft: 100,
+          marginLeft: 80,
           marginRight: 30,
         },
         title: {
@@ -48,10 +48,7 @@ export const OrizontalBarChart = ({
                     const marketplace = e.value;
                     const marketplaceImg = getMarketplaceImage(marketplace);
                     return `
-                <div class="market-img">
-                  <img src="${marketplaceImg}" width="17px" />
-                  ${marketplace}
-                </div>
+                <div class="market-img"><img src="${marketplaceImg}" width="17px" />${marketplace.trim()}</div>
               `;
                   },
                 },
@@ -100,5 +97,5 @@ export const OrizontalBarChart = ({
         ],
       }}
     />
-    </div>
+  </div>
 );
