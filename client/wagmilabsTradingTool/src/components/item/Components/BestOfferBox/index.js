@@ -10,7 +10,7 @@ export const BestOfferBox = React.memo(({ details, address, isOwner }) => {
 
   return (
     <>
-      {(!isOwner && !market.id && topBid && (
+      {(!isOwner && !market.id && topBid?.id && (
         <div className="price-box">
           <p className="current-price">Best offer</p>
           <div className="price">
