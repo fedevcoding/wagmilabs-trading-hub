@@ -5,7 +5,7 @@ import "./style.css";
 export const Attributes = React.memo(({ attributes }) => {
   const [visible, setVisible] = React.useState(false);
 
-  return (
+  return attributes.length ? (
     <>
       <div className="dropdown-btn" onClick={() => setVisible(!visible)}>
         Properties
@@ -22,5 +22,7 @@ export const Attributes = React.memo(({ attributes }) => {
         ))}
       </div>
     </>
+  ) : (
+    <></>
   );
 });
