@@ -14,6 +14,22 @@ export const LineChart = ({
   yAxisText = "",
   tooltipSuffix = null,
 }) => {
+  const [chartWidth, serChartWidth] = React.useState(920);
+
+  React.useEffect(() => {
+    serChartWidth(
+      parseInt(
+        document
+          .getElementsByClassName("highcharts-container")[0]
+          .style.width.replace("px", "")
+      )
+    );
+  }, []);
+
+  let step = 3;
+  if (chartWidth < 800) step = 4;
+  if (chartWidth < 700) step = 5;
+
   const options = {
     chart: {
       type: "spline",
@@ -39,7 +55,7 @@ export const LineChart = ({
       },
       labels: {
         rotation: 0,
-        step: Math.ceil(values.labels.length / 10),
+        step,
       },
     },
     yAxis: {
