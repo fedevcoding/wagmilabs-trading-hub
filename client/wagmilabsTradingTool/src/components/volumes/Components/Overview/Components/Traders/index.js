@@ -27,6 +27,7 @@ export const Traders = React.memo(({ traders, period, marketplaces }) => {
         value={periods.find(p => p.value === currentPeriod)}
         className="select-period"
         onChange={value => setPeriod(value.value)}
+        isSearchable={false}
       />
       {isLoading ? (
         <LoadingSpinner />

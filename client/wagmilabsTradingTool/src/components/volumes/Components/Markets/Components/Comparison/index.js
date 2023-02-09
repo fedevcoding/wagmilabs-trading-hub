@@ -48,6 +48,7 @@ export const Comparison = React.memo(
           value={periods.find(p => p.value === currentPeriod)}
           className="select-period"
           onChange={value => setPeriod(value.value)}
+          isSearchable={false}
         />
         {isLoading ? (
           <LoadingSpinner />
