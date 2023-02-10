@@ -19,6 +19,9 @@ export const InfoCol = React.memo(({ details, address, id }) => {
     : false;
   const collectionImage = details.token?.collection?.image;
 
+  const currency =
+    Object.values(details.market)[0]?.price?.currency?.symbol || "ETH";
+
   return (
     <div className="item-name-container">
       <div className="space-between">
@@ -42,7 +45,12 @@ export const InfoCol = React.memo(({ details, address, id }) => {
           </div>
         </div>
         {isOwner ? (
-          <ListItem details={details} address={address} id={id} />
+          <ListItem
+            details={details}
+            address={address}
+            id={id}
+            currency={currency}
+          />
         ) : (
           ""
         )}
@@ -53,13 +61,7 @@ export const InfoCol = React.memo(({ details, address, id }) => {
       <BestOfferBox details={details} address={address} isOwner={isOwner} />
       <BestOfferTable details={details} />
 
-      <ItemActivity
-        address={address}
-        id={id}
-        currency={
-          Object.values(details.market)[0]?.price?.currency?.symbol || "ETH"
-        }
-      />
+      <ItemActivity address={address} id={id} currency={currency} />
     </div>
   );
 });

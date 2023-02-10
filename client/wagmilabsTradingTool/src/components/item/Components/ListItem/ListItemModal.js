@@ -21,6 +21,7 @@ export const ListItemModal = React.memo(
     details: {
       token: { name },
     },
+    currency,
     isOpen,
     setIsOpen,
     address,
@@ -56,7 +57,7 @@ export const ListItemModal = React.memo(
             </p>
             <NumberInput>
               <NumberInputField
-                placeholder="Insert ETH amount"
+                placeholder={`Insert ${currency} amount`}
                 onChange={e => setEthAmountPrice(e.target.value)}
               />
             </NumberInput>

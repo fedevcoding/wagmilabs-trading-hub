@@ -3,7 +3,7 @@ import { ListItemModal } from "./ListItemModal";
 
 import "./style.scss";
 
-export const ListItem = React.memo(({ details, address, id }) => {
+export const ListItem = React.memo(({ details, address, id, currency }) => {
   const [isOpen, setIsOpen] = React.useState(false);
 
   return (
@@ -17,6 +17,7 @@ export const ListItem = React.memo(({ details, address, id }) => {
         setIsOpen={setIsOpen}
         address={address}
         id={id}
+        currency={currency}
       />
     </>
   );
