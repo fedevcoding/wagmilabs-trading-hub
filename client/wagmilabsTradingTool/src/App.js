@@ -33,6 +33,7 @@ import {
   WagmiConfig,
   createClient as createWagmiClient,
 } from "wagmi";
+import { createClient } from "@reservoir0x/reservoir-kit-client";
 import { infuraProvider } from "wagmi/providers/infura";
 import { publicProvider } from "wagmi/providers/public";
 import {
@@ -71,6 +72,11 @@ const wagmiClient = createWagmiClient({
   autoConnect: true,
   connectors,
   provider,
+});
+createClient({
+  apiBase: "https://api.reservoir.tools",
+  apiKey: RESERVOIR_API_KEY,
+  source: "http://localhost:3000",
 });
 
 // for reservoir
