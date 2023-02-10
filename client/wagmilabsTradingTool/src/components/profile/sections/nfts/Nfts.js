@@ -14,15 +14,17 @@ import "./nfts.css";
 
 import notFound from "../../../../assets/notFound.svg";
 
-import { getClient } from "@reservoir0x/reservoir-kit-client";
-import { roundPrice, roundPrice2 } from "../../../../utils/formats/formats";
-import { marketListingMapping } from "../../../../utils/mappings";
-import { fetchSigner } from "@wagmi/core";
+import {
+  getListingExpirationDate,
+  roundPrice,
+  roundPrice2,
+} from "../../../../utils/formats/formats";
 import { Button, Tooltip, useToast } from "@chakra-ui/react";
 import { UserDataContext } from "../../../../context/userContext";
 import Loader from "../../../utility-components/Loaders/Loader";
 import getMarketplaceImage from "../../../../utils/marketplaceImageMapping";
 import { useNavigate } from "react-router-dom";
+import { useListNft } from "../../../../custom-hooks";
 
 const sortItemsOptions = [
   { value: "desc", label: "Newest" },
@@ -243,58 +245,10 @@ const Nfts = ({
     setQuickListData({});
   }
 
-  async function listNft(setConfirmingList) {
-    try {
-      setConfirmingList(true);
 
-      const { contractAddress, tokenId, listingPrice } = quickListData;
-
-      const signer = await fetchSigner();
-      const marketplace = listingSettings.marketplace;
-      const expirationTime = (
-        getListingExpirationDate(listingSettings).getTime() / 1000
-      ).toString();
-      const orderbook = marketListingMapping[marketplace].orderbook;
-      const orderKind = marketListingMapping[marketplace].orderKind;
-
-      const weiPrice = (listingPrice * 1000000000000000000).toString();
-
-      await getClient()?.actions.listToken({
-        listings: [
-          {
-            token: `${contractAddress}:${tokenId}`,
-            weiPrice,
-            orderbook,
-            orderKind,
-            expirationTime,
-          },
-        ],
-        signer,
-        onProgress: steps => { },
-      });
-      setConfirmingList(false);
-      closeSmartListingModal();
-
-      toast({
-        title: "NFT listed.",
-        description: "Your NFT has been succesfully listed!",
-        status: "success",
-        duration: 2000,
-        isClosable: true,
-      });
-    } catch (e) {
-      setConfirmingList(false);
-      closeSmartListingModal();
-      toast({
-        title: "Error listing NFT.",
-        description:
-          "There has been an error while trying to list your NFT, try again later.",
-        status: "error",
-        duration: 3000,
-        isClosable: true,
-      });
-    }
-  }
+  const { listNft } = useListNft(quickListData, () => {
+    closeSmartListingModal();
+  });
 
   async function updateUserImage(image) {
     try {
@@ -791,19 +745,3 @@ const SmartListModal = ({
   );
 };
 export default Nfts;
-
-function getListingExpirationDate(listingSettings) {
-  if (!listingSettings) return;
-  const { months, days, hours, minutes } = listingSettings?.time;
-
-  const now = new Date();
-  const listingExpiration = new Date(
-    now.getFullYear(),
-    now.getMonth() + parseInt(months),
-    now.getDate() + parseInt(days),
-    now.getHours() + parseInt(hours),
-    now.getMinutes() + parseInt(minutes)
-  );
-
-  return listingExpiration;
-}

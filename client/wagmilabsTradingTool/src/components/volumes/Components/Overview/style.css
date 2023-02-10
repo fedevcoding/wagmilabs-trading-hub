@@ -17,15 +17,6 @@
     text-transform: uppercase;
 }
 
-.chart-box .select-period > [id^="react-select"], .leader-board .select-period > [id^="react-select"] {
-    background-color: black;
-}
-
-.chart-box .select-period > div[class$="-control"], .leader-board .select-period > div[class$="-control"] {
-    box-shadow: none;
-    border-color: #ccc;
-}
-
 .overview .leader-board {
     background-color: var(--secondary-color);
     border-radius: 10px;

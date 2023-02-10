@@ -94,6 +94,22 @@ const formatTime = date => {
   return interval + " " + intervalType + " ago";
 };
 
+function getListingExpirationDate(listingSettings) {
+  if (!listingSettings) return;
+  const { months, days, hours, minutes } = listingSettings?.time;
+
+  const now = new Date();
+  const listingExpiration = new Date(
+    now.getFullYear(),
+    now.getMonth() + parseInt(months),
+    now.getDate() + parseInt(days),
+    now.getHours() + parseInt(hours),
+    now.getMinutes() + parseInt(minutes)
+  );
+
+  return listingExpiration;
+}
+
 module.exports = {
   formatAddress,
   formatContractAddress,
@@ -105,4 +121,5 @@ module.exports = {
   getFiatPrice,
   formatIpfs,
   formatTime,
+  getListingExpirationDate,
 };

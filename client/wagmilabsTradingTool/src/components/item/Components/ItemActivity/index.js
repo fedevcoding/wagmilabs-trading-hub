@@ -1,15 +1,19 @@
 import React from "react";
-import { Select } from "@chakra-ui/react";
 import { LoadingSpinner } from "../../../utility-components";
 import { getActivityOptions } from "./functions";
+import { Select } from "../../../utility-components";
 
-import "./style.css";
+import "./style.scss";
 import { useGetData } from "./useGetData";
 import { ActivityTable } from "./ActivityTable";
 
 export const ItemActivity = React.memo(({ address, id, currency }) => {
-  const [type, setType] = React.useState("");
-  const [activities, isLoading] = useGetData(address, id, type);
+  const [types, setTypes] = React.useState([]);
+  const [activities, isLoading] = useGetData(
+    address,
+    id,
+    types.map(t => t.value).join(",")
+  );
   const activityOptions = getActivityOptions();
 
   return (
@@ -20,19 +24,17 @@ export const ItemActivity = React.memo(({ address, id, currency }) => {
             <h2>Item Activity</h2>
             <Select
               id="filer-activity-type"
-              onChange={e => setType(e.target.value)}
-              value={type}
-              size="sm"
-            >
-              <option value="">Filter Type</option>
-              {Object.keys(activityOptions).map(key => (
-                <option value={key} key={key}>
-                  {activityOptions[key]}
-                </option>
-              ))}
-            </Select>
+              onChange={t => setTypes(t)}
+              label="Choose an item"
+              value={types}
+              options={Object.keys(activityOptions).map(a => ({
+                value: a,
+                label: activityOptions[a],
+              }))}
+              isMulti
+            />
           </div>
-          {(type && !(activities?.activities || []).length && (
+          {(types.length && !(activities?.activities || []).length && (
             <h3>No activities for this filter</h3>
           )) || (
             <div className="activity-table-container">

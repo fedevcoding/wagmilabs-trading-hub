@@ -1,0 +1,68 @@
+#page-token-detail {
+  #item-activity {
+    margin-top: 2rem;
+    padding: 1rem;
+    border-radius: 10px;
+    border: 1px solid var(--light-gray);
+    background-color: var(--secondary-color);
+    font-size: 18px;
+
+    .react-select {
+        width: 300px;
+    }
+
+    .chakra-select__wrapper {
+      width: 120px;
+      
+      select {
+        color: var(--light-gray);
+        border-radius: 5px;
+      }
+    }
+
+    .item-activity-title {
+      margin: 0 -1rem 1rem -1rem;
+      padding: 0 1rem 1rem 1rem;
+      border-bottom: 1px solid var(--light-gray);
+    }
+
+    table {
+      width: 100%;
+
+      th {
+        text-align: left;
+        font-weight: bold;
+        border-bottom: 1px solid #333;
+        padding-bottom: 5px;
+      }
+
+      tr:first-child td {
+        padding-top: 10px;
+      }
+
+      tr td {
+        padding: 5px 0;
+      }
+    }
+  }
+
+  .activity-table-container {
+    max-height: 400px;
+    overflow-y: auto;
+
+    &::-webkit-scrollbar {
+      width: 7px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: transparent;
+      border-top-right-radius: 5px;
+      border-bottom-right-radius: 5px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: black;
+      border-radius: 10px;
+    }
+  }
+}

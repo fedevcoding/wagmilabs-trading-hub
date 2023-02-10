@@ -1,0 +1,14 @@
+.react-select {
+    > [id^="react-select"] {
+        background-color: black;
+    }
+
+    > div[class$="-control"] {
+        box-shadow: none;
+        border-color: #ccc;
+    }
+
+    div[class$="-MenuList"] > div[class$="-option"] {
+        color: white;
+    }
+}

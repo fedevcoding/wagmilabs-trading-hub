@@ -1,7 +1,7 @@
 import "./loader.css";
 
 const Loader = ({ width, height }) => {
-  return <div class="lazyloader" style={{ width, height }}></div>;
+  return <div className="lazyloader" style={{ width, height }}></div>;
 };
 
 export default Loader;
