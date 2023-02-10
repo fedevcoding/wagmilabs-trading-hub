@@ -1,6 +1,8 @@
 import React from "react";
 import ReactSelect from "react-select";
 
+import "./style.scss";
+
 export const Select = React.memo(props => {
   const colourStyles = {
     control: styles => ({
@@ -26,5 +28,11 @@ export const Select = React.memo(props => {
     singleValue: styles => ({ ...styles, color: "white" }),
   };
 
-  return <ReactSelect styles={colourStyles} {...props} />;
+  return (
+    <ReactSelect
+      styles={colourStyles}
+      {...props}
+      className={`react-select ${props?.className || ""}`}
+    />
+  );
 });

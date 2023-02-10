@@ -1,0 +1,10 @@
+.react-select {
+    > [id^="react-select"] {
+        background-color: black;
+    }
+
+    > div[class$="-control"] {
+        box-shadow: none;
+        border-color: #ccc;
+    }
+}
