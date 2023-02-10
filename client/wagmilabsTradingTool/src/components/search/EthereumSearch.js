@@ -123,7 +123,7 @@ const EthereumSearch = () => {
               <p className="searchbar-collection-address">{collectionId}</p>
               {isLocaleStorage && (
                 <i
-                  class="fa-solid fa-xmark searchbar-collection-remove"
+                  className="fa-solid fa-xmark searchbar-collection-remove"
                   onClick={e => removeFromLocalStorage(e, collectionId)}
                 ></i>
               )}

@@ -11,7 +11,13 @@ export const ListItem = React.memo(({ details, address, id }) => {
       <div className="btn btn-list" onClick={() => setIsOpen(true)}>
         Sell
       </div>
-      <ListItemModal details={details} isOpen={isOpen} setIsOpen={setIsOpen} />
+      <ListItemModal
+        details={details}
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        address={address}
+        id={id}
+      />
     </>
   );
 });

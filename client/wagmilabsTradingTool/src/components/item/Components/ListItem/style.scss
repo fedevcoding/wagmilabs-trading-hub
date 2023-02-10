@@ -1,4 +1,5 @@
-#page-token-detail, .chakra-portal {
+#page-token-detail,
+.chakra-portal {
     .btn-list {
         margin-left: 1rem;
         padding: 0.5rem;
@@ -10,5 +11,46 @@
         max-width: 500px;
         min-width: 100px;
         color: white;
+
+        &:hover {
+            background-color: black;
+        }
     }
-} 
+
+    .chakra-modal__content {
+        background-color: var(--secondary-color);
+        color: white;
+
+        input {
+            box-sizing: border-box;
+            color: white;
+            background-color: var(--light-dark);
+
+            &::-webkit-input-placeholder {
+                color: #ccc;
+            }
+            &:-moz-placeholder {
+                color: #ccc;
+            }
+            &::-moz-placeholder {
+                color: #ccc;
+            }
+            &:-ms-input-placeholder {
+                color: #ccc;
+            }
+
+            &:focus {
+                border: 2px solid white;
+                box-shadow: none;
+            }
+        }
+
+        p.label {
+            margin-bottom: 5px;
+        }
+
+        .chakra-modal__close-btn svg path {
+            fill: white;
+        }
+    }
+}
