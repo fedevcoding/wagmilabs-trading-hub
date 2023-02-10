@@ -4,31 +4,36 @@ const ListingsSchema = mongoose.Schema({
     contractAddress: {
         type: String,
         required: true,
+        unique: true
     },
-    tokenId: {
-        type: Number,
-        required: true,
+    listings: {
+        type: Array,
+        tokenId: {
+            type: Number,
+            required: true,
+        },
+        orderHash: {
+            type: String,
+            required: true,
+        },
+        timestamp: {
+            type: Number,
+            required: true,
+        },
+        marketplace: {
+            type: String,
+        },
+        value: {
+            type: Number,
+        },
+        name: {
+            type: String,
+        },
+        image: {
+            type: String,
+        }
+
     },
-    orderHash: {
-        type: String,
-        required: true,
-    },
-    timestamp: {
-        type: Number,
-        required: true,
-    },
-    marketplace: {
-        type: String,
-    },
-    value: {
-        type: Number,
-    },
-    name: {
-        type: String,
-    },
-    image: {
-        type: String,
-    }
 
 
 }, {

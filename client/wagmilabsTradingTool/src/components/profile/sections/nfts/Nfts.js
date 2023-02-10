@@ -153,19 +153,19 @@ const Nfts = ({
   const activateList = index => {
     document
       .querySelectorAll(".profile-list-nft")
-      [index].classList.remove("inactive");
+    [index].classList.remove("inactive");
     document
       .querySelectorAll(".profile-list-nft")
-      [index].classList.add("active");
+    [index].classList.add("active");
   };
 
   const deactivateList = index => {
     document
       .querySelectorAll(".profile-list-nft")
-      [index].classList.remove("active");
+    [index].classList.remove("active");
     document
       .querySelectorAll(".profile-list-nft")
-      [index].classList.add("inactive");
+    [index].classList.add("inactive");
   };
 
   const toggleOptions = index => {
@@ -270,7 +270,7 @@ const Nfts = ({
           },
         ],
         signer,
-        onProgress: steps => {},
+        onProgress: steps => { },
       });
       setConfirmingList(false);
       closeSmartListingModal();
@@ -367,19 +367,17 @@ const Nfts = ({
             onMouseOut={() => deactivateList(index)}
           >
             <div
-              className={`${
-                selectBulk
+              className={`${selectBulk
                   ? "profile-items-details-container-bulk"
                   : "profile-items-details-container"
-              }`}
+                }`}
             >
               <div className="image-hover-overflow">
                 <img
                   src={image}
                   alt=""
-                  className={`profile-single-item-image ${
-                    selectBulk ? "single-item-image" : "single-item-image-scale"
-                  }`}
+                  className={`profile-single-item-image ${selectBulk ? "single-item-image" : "single-item-image-scale"
+                    }`}
                   onClick={e =>
                     selectBulk
                       ? changeBulkItems(contractAddress, tokenId, id, e)
@@ -488,9 +486,8 @@ const Nfts = ({
             <div className="profile-sort-items-option">
               {selectedSortOption.label}
               <i
-                className={`fa-solid fa-caret-down profile-collection-sort-arrow ${
-                  showSortItemsOptions && "selected"
-                }`}
+                className={`fa-solid fa-caret-down profile-collection-sort-arrow ${showSortItemsOptions && "selected"
+                  }`}
               ></i>
             </div>
 
@@ -542,9 +539,8 @@ const Nfts = ({
 
                     return (
                       <div
-                        className={`single-collection-dropdown ${
-                          address === nftsCollectionFilter && "selected"
-                        }`}
+                        className={`single-collection-dropdown ${address === nftsCollectionFilter && "selected"
+                          }`}
                         key={index}
                         active="false"
                         onClick={e => handleFilterCollection(address, e)}

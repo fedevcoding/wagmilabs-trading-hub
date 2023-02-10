@@ -365,9 +365,8 @@ const Activity = () => {
           <>
             <tr
               key={key}
-              className={`profile-activity-single-container ${
-                isLast && "last-token"
-              }`}
+              className={`profile-activity-single-container ${isLast && "last-token"
+                }`}
             >
               <td className="profile-activity-single-type">
                 <div className="profile-activity-marketplace-container">
@@ -436,18 +435,16 @@ const Activity = () => {
             <div className="profile-activity-filters-categories">
               <div
                 onClick={() => changeActivityCategory("sale")}
-                className={`${
-                  activityCategory.includes("sale") ? "active" : ""
-                }`}
+                className={`${activityCategory.includes("sale") ? "active" : ""
+                  }`}
               >
                 <i className="fa-light fa-bag-shopping"></i>
                 Sales
               </div>
               <div
                 onClick={() => changeActivityCategory("list")}
-                className={`${
-                  activityCategory.includes("list") ? "active" : ""
-                }`}
+                className={`${activityCategory.includes("list") ? "active" : ""
+                  }`}
               >
                 <i className="fa-light fa-tag"></i>
                 Listings
@@ -456,18 +453,16 @@ const Activity = () => {
             <div className="profile-activity-filters-categories">
               <div
                 onClick={() => changeActivityCategory("mint")}
-                className={`${
-                  activityCategory.includes("mint") ? "active" : ""
-                }`}
+                className={`${activityCategory.includes("mint") ? "active" : ""
+                  }`}
               >
                 <i className="fa-solid fa-sparkles"></i>
                 Mints
               </div>
               <div
                 onClick={() => changeActivityCategory("send")}
-                className={`${
-                  activityCategory.includes("send") ? "active" : ""
-                }`}
+                className={`${activityCategory.includes("send") ? "active" : ""
+                  }`}
               >
                 <i className="fa-regular fa-plane-departure"></i>
                 Send
@@ -476,18 +471,16 @@ const Activity = () => {
             <div className="profile-activity-filters-categories">
               <div
                 onClick={() => changeActivityCategory("receive")}
-                className={`${
-                  activityCategory.includes("receive") ? "active" : ""
-                }`}
+                className={`${activityCategory.includes("receive") ? "active" : ""
+                  }`}
               >
                 <i className="fa-light fa-truck"></i>
                 Receive
               </div>
               <div
                 onClick={() => changeActivityCategory("burn")}
-                className={`${
-                  activityCategory.includes("burn") ? "active" : ""
-                }`}
+                className={`${activityCategory.includes("burn") ? "active" : ""
+                  }`}
               >
                 <i className="fa-solid fa-fire"></i>
                 Burn
@@ -496,9 +489,8 @@ const Activity = () => {
             <div className="profile-activity-filters-categories">
               <div
                 onClick={() => changeActivityCategory("buy")}
-                className={`${
-                  activityCategory.includes("buy") ? "active" : ""
-                }`}
+                className={`${activityCategory.includes("buy") ? "active" : ""
+                  }`}
               >
                 <i className="fa-light fa-truck"></i>
                 Buy
@@ -523,7 +515,7 @@ const Activity = () => {
           </div>
 
           <div className="profile-activity-filter-section">
-            <p>ADDDRESSES</p>
+            <p>ADDRESSES</p>
 
             <HStack>
               <Input
