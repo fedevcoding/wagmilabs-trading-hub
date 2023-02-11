@@ -4,7 +4,7 @@ import { UserDataContext } from "../context/userContext";
 import addToCart from "../utils/database-functions/addToCart";
 
 export const useAddItemToCart = (address, callback) => {
-  const { setUserCartItems } = React.useContext(UserDataContext);
+  const { setUserCartItems, userCartItems } = React.useContext(UserDataContext);
   const toast = useToast();
   let addItemToCart = null;
 
@@ -18,6 +18,23 @@ export const useAddItemToCart = (address, callback) => {
       collectionName,
       index
     ) => {
+      if (
+        userCartItems.find(
+          i =>
+            i.contractAddress === address &&
+            i.tokenId.toString() === tokenId.toString()
+        )
+      ) {
+        toast({
+          title: "Error",
+          description: "This NFT it's already in the cart!",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+        return 0;
+      }
+
       let { pushStatus, filteredItems } = await addToCart({
         name,
         collectionName,

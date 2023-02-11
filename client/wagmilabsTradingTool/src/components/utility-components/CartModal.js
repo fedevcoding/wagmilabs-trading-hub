@@ -110,7 +110,10 @@ const CartModal = ({ modalOpen, closeCartModal }) => {
           item;
 
         return (
-          <div className="user-cart-single-item">
+          <div
+            className="user-cart-single-item"
+            key={contractAddress + tokenId}
+          >
             <img src={image} className="user-cart-item-image" alt="" />
             <div className="user-cart-item-details-container wrap-text">
               <p className="user-cart-item-name wrap-text">{name}</p>
