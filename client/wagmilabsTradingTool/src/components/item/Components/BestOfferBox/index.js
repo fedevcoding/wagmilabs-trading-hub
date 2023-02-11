@@ -1,6 +1,7 @@
 import React from "react";
 import { Col, Row } from "../../../utility-components";
 import { MakeOffer } from "..";
+import { useAcceptOffer } from "../../../../custom-hooks";
 
 export const BestOfferBox = React.memo(({ details, address, isOwner }) => {
   const market = Object.values(details.market)[0];
@@ -8,9 +9,11 @@ export const BestOfferBox = React.memo(({ details, address, isOwner }) => {
   const tokenId = details?.token?.tokenId || "";
   const marketplace = market?.source?.name || "";
 
+  const { acceptOffer } = useAcceptOffer();
+
   return (
     <>
-      {(!isOwner && !market.id && topBid?.id && (
+      {(!market.id && topBid?.id && (
         <div className="price-box">
           <p className="current-price">Best offer</p>
           <div className="price">
@@ -24,11 +27,21 @@ export const BestOfferBox = React.memo(({ details, address, isOwner }) => {
           </div>
           <Row className="actions">
             <Col>
-              <MakeOffer
-                address={address}
-                tokenId={tokenId}
-                marketplace={marketplace}
-              />
+              {isOwner ? (
+                <div
+                  className="btn"
+                  onClick={() => acceptOffer(address, tokenId)}
+                >
+                  <i className="fa fa-check" />
+                  Accept offer
+                </div>
+              ) : (
+                <MakeOffer
+                  address={address}
+                  tokenId={tokenId}
+                  marketplace={marketplace}
+                />
+              )}
             </Col>
           </Row>
         </div>
