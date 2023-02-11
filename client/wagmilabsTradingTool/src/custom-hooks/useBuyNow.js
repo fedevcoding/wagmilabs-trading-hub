@@ -21,6 +21,14 @@ export const useBuyNow = callback => {
           console.log(steps);
         },
       });
+
+      toast({
+        title: "Success",
+        description: "NFT successfully bought",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
     } catch (e) {
       if (callback && typeof callback === "function") {
         callback();
