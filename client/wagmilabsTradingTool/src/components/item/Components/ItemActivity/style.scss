@@ -7,13 +7,9 @@
     background-color: var(--secondary-color);
     font-size: 18px;
 
-    .react-select {
-        width: 300px;
-    }
-
     .chakra-select__wrapper {
       width: 120px;
-      
+
       select {
         color: var(--light-gray);
         border-radius: 5px;
@@ -24,6 +20,15 @@
       margin: 0 -1rem 1rem -1rem;
       padding: 0 1rem 1rem 1rem;
       border-bottom: 1px solid var(--light-gray);
+
+      h2 {
+        white-space: nowrap;
+        margin-right: 2rem;
+      }
+
+      .react-select {
+        width: 100%;
+      }
     }
 
     table {
