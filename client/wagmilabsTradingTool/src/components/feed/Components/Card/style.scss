@@ -1,0 +1,67 @@
+#page-feed {
+  .card {
+    background-color: var(--secondary-color);
+    border-radius: 10px;
+    padding: 1rem;
+    margin-bottom: 2rem;
+    padding: 1rem;
+    width: calc(50% - 4rem);
+    margin: 1rem;
+    cursor: pointer;
+    position: relative;
+    transition: all 200ms;
+    &:hover {
+      transform: scale(1.02);
+      box-shadow: 0 0 20px 5px #222;
+    }
+    .info {
+      padding-right: 1rem;
+      margin-bottom: 2.5rem;
+      .date {
+        position: absolute;
+        bottom: 1rem;
+        left: 1rem;
+      }
+    }
+    p {
+      margin-top: 1rem;
+    }
+    img {
+      width: 100%;
+      border-radius: 10px;
+    }
+    .tags {
+      margin-top: 0.5rem;
+    }
+    .tag {
+      background-color: black;
+      padding: 0.2rem 0.5rem;
+      border-radius: 0.3rem;
+      display: inline-block;
+      font-size: 12px;
+    }
+    .tag + .tag {
+      margin-left: 0.5rem;
+    }
+    .contract {
+      color: var(--light-gray);
+      font-size: 12px;
+      margin-top: 0.5rem;
+    }
+  }
+
+  @media (max-width: 800px) {
+    .card {
+      .row {
+        display: block;
+      }
+      .col + .col {
+        margin-left: 0;
+      }
+      padding-bottom: 2.5rem;
+      .info {
+        margin-bottom: 1rem;
+      }
+    }
+  }
+}

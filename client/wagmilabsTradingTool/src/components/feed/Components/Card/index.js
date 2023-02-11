@@ -2,7 +2,7 @@ import React from "react";
 import { Col, Row } from "../../../utility-components";
 import moment from "moment";
 
-import "./style.css";
+import "./style.scss";
 
 export const Card = React.memo(({ news }) => {
   const {

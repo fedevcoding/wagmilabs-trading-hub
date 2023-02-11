@@ -5,7 +5,7 @@ import { Overview } from "./Components";
 import { Markets } from "./Components/Markets";
 import { useGetTab } from "./Components/useGetTab";
 
-import "./style.css";
+import "./style.scss";
 
 const Volumes = React.memo(() => {
   useEffect(() => {

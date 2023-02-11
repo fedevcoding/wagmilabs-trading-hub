@@ -4,7 +4,7 @@ import { useGetNews } from "./useGetNews";
 
 import PoweredBy from "../../assets/poweredbyluckytrader-light.png";
 
-import "./style.css";
+import "./style.scss";
 import { Card } from "./Components";
 import setPageTitle from "../../utils/functions/setPageTitle";
 

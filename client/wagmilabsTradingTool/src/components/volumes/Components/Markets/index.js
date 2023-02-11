@@ -2,7 +2,7 @@ import React from "react";
 import { Col, LoadingSpinner, Row } from "../../../utility-components";
 import { ActiveTraders, Comparison, Sales, Volumes } from "./Components";
 
-import "./style.css";
+import "./style.scss";
 import { useGetData } from "./useGetData";
 
 export const Markets = React.memo(({ marketplace }) => {

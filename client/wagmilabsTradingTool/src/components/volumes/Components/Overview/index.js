@@ -3,7 +3,7 @@ import { Col, LoadingSpinner, Row } from "../../../utility-components";
 import { Volumes, Traders, LeaderBoard } from "./Components";
 import { useGetData } from "./useGetData";
 
-import "./style.css";
+import "./style.scss";
 
 export const Overview = React.memo(({ marketplaces }) => {
   const defaultPeriod = "24h";

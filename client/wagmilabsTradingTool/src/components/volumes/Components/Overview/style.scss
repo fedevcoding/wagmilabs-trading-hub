@@ -1,0 +1,74 @@
+#page-volumes {
+  .chart-box {
+    background-color: var(--secondary-color);
+    border-radius: 10px;
+    min-height: 400px;
+    position: relative;
+    .select-period {
+      position: absolute;
+      right: 10px;
+      top: 10px;
+      width: 90px;
+      z-index: 1;
+      text-transform: uppercase;
+    }
+  }
+  .leader-board {
+    position: relative;
+    .select-period {
+      position: absolute;
+      right: 10px;
+      top: 10px;
+      width: 90px;
+      z-index: 1;
+      text-transform: uppercase;
+    }
+  }
+  .overview {
+    .leader-board {
+      background-color: var(--secondary-color);
+      border-radius: 10px;
+      padding: 1rem;
+      margin-bottom: 3rem;
+      .tabs {
+        border: 1px solid var(--light-dark);
+        padding: 3px;
+        border-radius: 6px;
+        margin-bottom: 0;
+        .btn {
+          padding: 8px 0;
+          font-size: 12px;
+          width: 34px;
+          text-align: center;
+          &:last-child {
+            margin-right: 0;
+          }
+        }
+      }
+    }
+    .leader-board-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+    }
+    table {
+      width: 100%;
+      .market-name {
+        img {
+          margin-right: 0.7rem;
+          width: 22px;
+          vertical-align: text-bottom;
+        }
+      }
+    }
+    th {
+      text-align: left;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #666;
+    }
+    td {
+      padding: 0.7rem 0;
+    }
+  }
+}
