@@ -1,18 +1,18 @@
 import React, { useState, useEffect, useContext } from "react";
-import EthereumSearch from "../search/EthereumSearch.js";
+import EthereumSearch from "../search/EthereumSearch";
 import "./header.css";
 import { useNavigate } from "react-router-dom";
 
 import logoImage from "../../assets/logo.png";
 import baseUrl from "../../variables/baseUrl";
-import RefreshToken from "../RefreshToken.js";
-import logOut from "../../utils/functions/logout.js";
-import CartModal from "../utility-components/CartModal.js";
+import RefreshToken from "../RefreshToken";
+import logOut from "../../utils/functions/logout";
+import CartModal from "../utility-components/CartModal";
 
 import { UserDataContext } from "../../context/userContext";
-import WalletModal from "../utility-components/WalletModal.js";
+import WalletModal from "../utility-components/WalletModal";
 
-import getUserBalances from "../../utils/database-functions/getUserBalances.js";
+import getUserBalances from "../../utils/database-functions/getUserBalances";
 
 import { fetchEnsName } from "@wagmi/core";
 import { useAccount } from "wagmi";

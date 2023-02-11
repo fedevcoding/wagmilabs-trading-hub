@@ -1,3 +1,4 @@
+import React from "react";
 import "./style.css";
 
 export const Tabs = ({ tabs, setTab, active, updateUrl = false }) => (

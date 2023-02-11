@@ -11,7 +11,7 @@ import {
 import "./activity.css";
 import moment from "moment";
 import getMarketplaceImage from "../../../../utils/marketplaceImageMapping.js";
-import { Tabs } from "../../../utility-components/index.js";
+import { Tabs } from "../../../utility-components/index";
 
 const periods = ["24h", "7d", "30d", "3M", "1y", "all"].map(p => ({
   value: p,

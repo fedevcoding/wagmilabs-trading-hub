@@ -1,44 +1,38 @@
 import { useEffect, useState } from "react";
-import { getFromServer } from "../../../../utils/functions/serverCalls.js"
+import { getFromServer } from "@Utils/functions/serverCalls";
 
 export function useGetData(address) {
+  const [totalListings, setTotalListings] = useState([]);
+  const [totalSales, setTotalSales] = useState([]);
+  const [listings, setListings] = useState([]);
+  const [sales, setSales] = useState([]);
+  const [isLoading, setLoading] = useState(false);
 
-    const [totalListings, setTotalListings] = useState([]);
-    const [totalSales, setTotalSales] = useState([]);
-    const [listings, setListings] = useState([]);
-    const [sales, setSales] = useState([]);
-    const [isLoading, setLoading] = useState(false);
+  useEffect(() => {
+    async function getData() {
+      setLoading(true);
 
-    useEffect(() => {
-        async function getData() {
+      const salesUrl = `/collectionSales/${address}`;
+      // const listingsUrl = `/collectionListings/${address}`
 
-            setLoading(true);
+      const { totalSales } = await getFromServer(salesUrl);
+      console.time("start");
+      const sales = [...totalSales].reverse().splice(0, 50);
+      console.timeEnd("start");
 
-            const salesUrl = `/collectionSales/${address}`
-            // const listingsUrl = `/collectionListings/${address}`
+      // const {totalListings} = await getFromServer(listingsUrl)
+      // const listings = [...totalListings].splice(0, 50)
 
+      setTotalSales(totalSales);
+      setSales(sales);
 
-            const { totalSales } = await getFromServer(salesUrl)
-            console.time("start")
-            const sales = [...totalSales].reverse().splice(0, 50)
-            console.timeEnd("start")
+      setTotalListings([]);
+      setListings([]);
 
+      setLoading(false);
+    }
+    getData();
+  }, [address]);
 
-            // const {totalListings} = await getFromServer(listingsUrl)
-            // const listings = [...totalListings].splice(0, 50)
-
-            setTotalSales(totalSales)
-            setSales(sales)
-
-            setTotalListings([])
-            setListings([])
-
-            setLoading(false);
-        }
-        getData()
-    }, [address]);
-
-
-
-    return { isLoading, totalListings, totalSales, listings, sales };
+  return { isLoading, totalListings, totalSales, listings, sales };
 }

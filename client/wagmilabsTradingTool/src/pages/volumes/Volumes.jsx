@@ -1,8 +1,7 @@
 import React, { useEffect } from "react";
-import setPageTitle from "../../utils/functions/setPageTitle";
-import { PageWrapper, Tabs } from "../utility-components";
-import { Overview } from "./Components";
-import { Markets } from "./Components/Markets";
+import setPageTitle from "@Utils/functions/setPageTitle";
+import { PageWrapper, Tabs } from "@Components";
+import { Overview, Markets } from "./Components";
 import { useGetTab } from "./Components/useGetTab";
 
 import "./style.scss";

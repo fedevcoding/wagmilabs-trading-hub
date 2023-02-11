@@ -25,18 +25,22 @@ module.exports = function override(config) {
     }),
   ]);
 
+  config.module.rules.push({
+    test: /\.(js|jsx)$/,
+    exclude: /node_modules/,
+    use: {
+      loader: "babel-loader",
+      options: {
+        presets: ["@babel/preset-env", "@babel/preset-react"],
+      },
+    },
+  });
+
   // exclude the problematic file
   config.module.rules.forEach(rule => {
-    //if (rule.test && rule.test.toString().includes(".ts")) {
-    //rule.exclude = path.resolve(__dirname, "node_modules/**/*.ts");
-    // rule.exclude = path.resolve(__dirname, "**/*.ts");
-    // }
-
-    config.module.rules.forEach(rule => {
-      if (rule.loader && rule.loader.includes("source-map-loader")) {
-        rule.exclude = path.resolve(__dirname, "node_modules");
-      }
-    });
+    if (rule.loader && rule.loader.includes("source-map-loader")) {
+      rule.exclude = path.resolve(__dirname, "node_modules");
+    }
   });
   return config;
 };
