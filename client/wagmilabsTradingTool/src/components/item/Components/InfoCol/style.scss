@@ -1,28 +1,25 @@
-
-#page-token-detail .item-name-container {
+#page-token-detail {
+  .item-name-container {
     padding-left: 30px;
     min-width: 60%;
     width: calc(100% - 500px);
-}
-
-#page-token-detail .item-name{
+  }
+  .item-name {
     font-size: 25px;
-}
-
-#page-token-detail img + .item-collection-name {
+  }
+  img + .item-collection-name {
     vertical-align: middle;
     margin-left: 10px;
-}
-
-#page-token-detail .item-collection-image {
+  }
+  .item-collection-image {
     width: 30px;
     height: 30px;
     border-radius: 50%;
-}
-
-#page-token-detail .item-collection-info {
+  }
+  .item-collection-info {
     margin-top: 15px;
     display: inline-flex;
     align-items: center;
     cursor: pointer;
+  }
 }

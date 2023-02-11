@@ -6,7 +6,7 @@ import { MakeOffer } from "..";
 import { CurrentPrice } from "./CurrentPrice";
 import { SaleEnds } from "./SaleEnds";
 
-import "./style.css";
+import "./style.scss";
 
 export const PriceBox = React.memo(({ details, address }) => {
   const { addItemToCart, buyNow } = useGetItemFunctions(address);

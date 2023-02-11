@@ -1,0 +1,18 @@
+#page-token-detail {
+  margin-top: 2rem;
+  padding-bottom: 3rem;
+
+  .loading {
+    margin: 0 auto;
+  }
+
+  .spinner {
+    margin: 5rem 0;
+    width: 100px;
+    height: 100px;
+  }
+
+  .nft-container {
+    display: flex;
+  }
+}

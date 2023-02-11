@@ -4,7 +4,7 @@ import { Tooltip } from "@chakra-ui/react";
 import { useAccount } from "wagmi";
 import { formatContractAddress } from "../../../../utils/formats/formats";
 
-import "./style.css";
+import "./style.scss";
 
 export const BestOfferTable = React.memo(({ details }) => {
   const { address: accountAddress } = useAccount();

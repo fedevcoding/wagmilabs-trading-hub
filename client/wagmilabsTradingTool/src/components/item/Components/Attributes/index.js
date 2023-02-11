@@ -1,6 +1,6 @@
 import React from "react";
 
-import "./style.css";
+import "./style.scss";
 
 export const Attributes = React.memo(({ attributes }) => {
   const [visible, setVisible] = React.useState(false);

@@ -3,7 +3,7 @@ import { formatContractAddress } from "../../../../utils/formats/formats";
 import moment from "moment";
 import { Attributes } from "..";
 
-import "./style.css";
+import "./style.scss";
 
 export const MoreInfo = React.memo(({ details, address }) => {
   const [visible, setVisible] = React.useState(

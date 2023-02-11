@@ -1,0 +1,29 @@
+#page-token-detail {
+  .attributes {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 -0.5rem;
+    box-sizing: border-box;
+
+    .attribute {
+      background-color: black;
+      box-sizing: border-box;
+      padding: 0.7rem;
+      border-radius: 10px;
+      border: 1px solid #666;
+      width: calc(50% - 1rem);
+      margin: 0.5rem;
+      text-align: center;
+
+      .key {
+        font-size: 12px;
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+      }
+
+      .value {
+        font-size: 14px;
+      }
+    }
+  }
+}

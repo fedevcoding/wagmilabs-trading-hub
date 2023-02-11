@@ -9,7 +9,7 @@ import {
   PriceBox,
 } from "..";
 
-import "./style.css";
+import "./style.scss";
 
 export const InfoCol = React.memo(({ details, address, id }) => {
   const navigate = useNavigate();

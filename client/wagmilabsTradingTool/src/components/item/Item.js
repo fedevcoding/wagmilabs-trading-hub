@@ -4,7 +4,7 @@ import { LoadingSpinner, PageWrapper } from "../utility-components";
 import { useGetData } from "./useGetData";
 import { ImageCol, InfoCol } from "./Components";
 
-import "./style.css";
+import "./style.scss";
 
 const Item = React.memo(() => {
   const { address, id } = useParams();
