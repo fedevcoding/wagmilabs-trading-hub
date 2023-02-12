@@ -18,21 +18,19 @@ import {
   Divider,
   Input,
   InputGroup,
-  useToast,
   Tooltip,
 } from "@chakra-ui/react";
 
-import { UserDataContext } from "../../../../context/userContext";
-import { roundPrice } from "../../../../utils/formats/formats";
+import { UserDataContext } from "@Context/userContext";
+import { roundPrice } from "@Utils/formats/formats";
 
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
-import getMarketplaceImage from "../../../../utils/marketplaceImageMapping";
-import useFirstRender from "../../../../custom-hooks/useFirstRender";
+import getMarketplaceImage from "@Utils/marketplaceImageMapping";
+import useFirstRender from "@Hooks/useFirstRender";
 
-import flaggedImg from "../../../../assets/flagged.svg";
-import BuyNowModal from "../../../utility-components/BuyNowModal";
-import removeFromCart from "../../../../utils/database-functions/removeFromCart";
-import { useAddItemToCart, useBuyNow } from "../../../../custom-hooks";
+import flaggedImg from "@Assets/flagged.svg";
+import BuyNowModal from "@Components/BuyNowModal";
+import { useAddItemToCart, useBuyNow, useRemoveItemFromCart } from "@Hooks";
 import { useNavigate } from "react-router-dom";
 
 const Items = ({
@@ -52,11 +50,10 @@ const Items = ({
   setSelectedItem,
   fetchMoreTokens,
 }) => {
-  const { setUserCartItems, userCartItems } = useContext(UserDataContext);
+  const { userCartItems } = useContext(UserDataContext);
   const firstRender = useFirstRender();
 
   const observer = useRef(null);
-  const toast = useToast();
 
   const navigate = useNavigate();
 
@@ -238,27 +235,7 @@ const Items = ({
     animateAddToCart(index, image);
   });
 
-  async function removeItemFromCart(tokenId, contractAddress) {
-    try {
-      const { pushStatus, filteredItems } = await removeFromCart(
-        tokenId,
-        contractAddress
-      );
-      if (pushStatus === "success") {
-        setUserCartItems(filteredItems);
-      } else {
-        throw new Error("error");
-      }
-    } catch (e) {
-      toast({
-        title: "Error",
-        description: "Something went wrong",
-        status: "error",
-        duration: 3000,
-        isClosable: true,
-      });
-    }
-  }
+  const { removeItemFromCart } = useRemoveItemFromCart();
 
   const { buyNow } = useBuyNow(() => {
     setBuyNowModalData({});

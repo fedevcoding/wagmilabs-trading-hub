@@ -1,7 +1,7 @@
 import React from "react";
 import { useToast } from "@chakra-ui/react";
-import { UserDataContext } from "../context/userContext";
-import addToCart from "../utils/database-functions/addToCart";
+import { UserDataContext } from "@Context/userContext";
+import addToCart from "@Utils/database-functions/addToCart";
 
 export const useAddItemToCart = (address, callback) => {
   const { setUserCartItems, userCartItems } = React.useContext(UserDataContext);

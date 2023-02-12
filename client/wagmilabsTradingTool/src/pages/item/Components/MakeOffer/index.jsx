@@ -15,7 +15,7 @@ export const MakeOffer = React.memo(({ address, tokenId, marketplace }) => {
       </div>
       <NumberInput>
         <NumberInputField
-          placeholder="Insert ETH amount"
+          placeholder="Value"
           onChange={e => setPrice(e.target.value)}
         />
       </NumberInput>

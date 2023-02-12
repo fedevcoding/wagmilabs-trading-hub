@@ -6,3 +6,5 @@ export { usePlaceBid } from "./usePlaceBid";
 export { useGetReservoirOptions } from "./useGetReservoirOptions";
 export { useListNft } from "./useListNft";
 export { useAcceptOffer } from "./useAcceptOffer";
+export { useHasItem } from "./useHasItem";
+export { useRemoveItemFromCart } from "./useRemoveItemFromCart";

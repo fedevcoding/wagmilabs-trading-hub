@@ -7,11 +7,11 @@ import { CurrentPrice } from "./CurrentPrice";
 import { SaleEnds } from "./SaleEnds";
 
 import "./style.scss";
+import { AddOrRemoveToCart } from "./AddOrRemoveToCart";
 
 export const PriceBox = React.memo(({ details, address }) => {
-  const { addItemToCart, buyNow } = useGetItemFunctions(address);
-  const { name, tokenId, value, image, marketplace, collectionName, market } =
-    useGetVariables(details);
+  const { buyNow } = useGetItemFunctions(address);
+  const { tokenId, value, marketplace, market } = useGetVariables(details);
 
   return (
     <>
@@ -21,22 +21,7 @@ export const PriceBox = React.memo(({ details, address }) => {
           <CurrentPrice market={market} />
           <Row className="actions">
             <Col>
-              <div
-                className="btn"
-                onClick={() =>
-                  addItemToCart(
-                    name,
-                    tokenId,
-                    value,
-                    image,
-                    marketplace,
-                    collectionName
-                  )
-                }
-              >
-                <i className="fa fa-cart-shopping" />
-                Add to cart
-              </div>
+              <AddOrRemoveToCart details={details} address={address} />
             </Col>
             <Col>
               <MakeOffer
