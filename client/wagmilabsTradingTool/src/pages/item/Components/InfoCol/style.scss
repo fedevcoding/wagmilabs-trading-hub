@@ -1,0 +1,25 @@
+#page-token-detail {
+  .item-name-container {
+    padding-left: 30px;
+    min-width: 60%;
+    width: calc(100% - 500px);
+  }
+  .item-name {
+    font-size: 25px;
+  }
+  img + .item-collection-name {
+    vertical-align: middle;
+    margin-left: 10px;
+  }
+  .item-collection-image {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+  }
+  .item-collection-info {
+    margin-top: 15px;
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+  }
+}

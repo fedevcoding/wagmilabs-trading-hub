@@ -11,28 +11,37 @@ export const usePlaceBid = marketplace => {
   const toast = useToast();
 
   async function placeBid(tokenAddress, price) {
-    const signer = await fetchSigner();
+    if (price <= 0) {
+      toast({
+        title: "Error Place Bid NFT.",
+        description: "Please, insert a valid price",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+      return 0;
+    }
 
+    const signer = await fetchSigner();
     const weiPrice = (price * 10 ** 18).toString();
 
-    getClient()?.actions.placeBid({
-      bids: [
-        {
-          weiPrice,
-          orderbook,
-          orderKind,
-          token: tokenAddress,
+    try {
+      await getClient()?.actions.placeBid({
+        bids: [
+          {
+            weiPrice,
+            orderbook,
+            orderKind,
+            token: tokenAddress,
+          },
+        ],
+        signer,
+        options,
+        onProgress: steps => {
+          console.log(steps);
         },
-      ],
-      signer,
-      options,
-      onProgress: steps => {
-        console.log(steps);
-      },
-    });
+      });
 
-    setTimeout(function () {
-      // insert this condition only if place bid successfully
       toast({
         title: "Success",
         description: "Bid successfully placed",
@@ -40,7 +49,17 @@ export const usePlaceBid = marketplace => {
         duration: 3000,
         isClosable: true,
       });
-    }, 500);
+    } catch (e) {
+      const error = e?.response?.data?.message || "Something went wrong";
+
+      toast({
+        title: "Error",
+        description: error,
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
   }
 
   return { placeBid };

@@ -15,6 +15,17 @@ export const useListNft = (
   const toast = useToast();
 
   async function listNft(setConfirmingList, days) {
+    if (listingPrice <= 0) {
+      toast({
+        title: "Error listing NFT.",
+        description: "Please, insert a valid price",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+      return 0;
+    }
+
     try {
       setConfirmingList(true);
 

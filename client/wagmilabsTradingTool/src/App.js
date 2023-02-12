@@ -1,21 +1,21 @@
 // react
-import { useState, useEffect, useRef, useMemo } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 
 // components
-import Header from "./components/header/Header";
-import Home from "./components/home/Home";
-import Collection from "./components/collection/Collection";
-import Calculators from "./components/calculators/Calculators";
-import Volumes from "./components/volumes/Volumes";
-import Feed from "./components/feed/Feed";
-import Pnl from "./components/pnl/Pnl";
-import Login from "./components/login/LoginRainbow";
-import Profile from "./components/profile/Profile";
-import Item from "./components/item/Item";
-import Checking from "./components/checking/Checking";
-import CheckingHeader from "./components/header/CheckingHeader";
-import CheckWalletDisconnect from "./components/CheckWalletDisconnect";
-import Footer from "./components/footer/Footer";
+import Header from "./pages/header/Header";
+import Home from "./pages/home/Home";
+import Collection from "./pages/collection/Collection";
+import Calculators from "./pages/calculators/Calculators";
+import Volumes from "./pages/volumes/Volumes";
+import Feed from "./pages/feed/Feed";
+import Pnl from "./pages/pnl/Pnl";
+import Login from "./pages/login/LoginRainbow";
+import Profile from "./pages/profile/Profile";
+import Item from "./pages/item/Item";
+import Checking from "./pages/checking/Checking";
+import CheckingHeader from "./pages/header/CheckingHeader";
+import CheckWalletDisconnect from "./pages/CheckWalletDisconnect";
+import Footer from "./pages/footer/Footer";
 
 // libraries
 
@@ -45,7 +45,7 @@ import { SIGNER_PRIVATE_KEY, RESERVOIR_API_KEY } from "./variables/rpcNodes";
 
 // react router
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import SniperBot from "./components/bots/sniper/SniperBot";
+import SniperBot from "./pages/bots/sniper/SniperBot";
 
 // socket io
 import io from "socket.io-client";
@@ -54,8 +54,8 @@ import io from "socket.io-client";
 
 import { UserDataContext } from "./context/userContext";
 import { SocketContext } from "./context/SocketContext";
-import Redirect from "./components/redirect/Redirect";
-import Legals from "./components/Legal/Legals";
+import Redirect from "./pages/redirect/Redirect";
+import Legals from "./pages/Legal/Legals";
 import serverUrl from "./variables/serverUrl";
 
 // for wagmi
