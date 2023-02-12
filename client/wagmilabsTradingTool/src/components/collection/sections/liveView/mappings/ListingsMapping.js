@@ -2,17 +2,22 @@ import React, { memo } from 'react'
 import { formatTime, roundPrice } from '../../../../../utils/formats/formats';
 import etherscan from "../../../../../assets/etherscan.svg";
 import getMarketplaceImage from '../../../../../utils/marketplaceImageMapping';
+import { Button } from '@chakra-ui/react';
+import { useBuyNow } from '../../../../../custom-hooks';
 
-const SalesMapping = memo(({ sales }) => {
+const ListingMapping = memo(({ listings, contractAddress }) => {
+
+    const { buyNow } = useBuyNow();
+
     return (
         <>
             {
-                sales.map((sale, index) => {
-                    const { value, transactionHash, timestamp, name, image, marketplace } = sale || {};
+                listings.map((listing, index) => {
+                    const { image, marketplace, timestamp, tokenId, name, value } = listing || {};
 
                     const marketplaceImage = getMarketplaceImage(marketplace);
 
-                    const time = formatTime(timestamp);
+                    const time = formatTime(timestamp * 1000);
 
                     const randomUUID = crypto.randomUUID();
                     return (
@@ -32,13 +37,7 @@ const SalesMapping = memo(({ sales }) => {
                                 <p>{roundPrice(value)} ETH</p>
                                 <div className="sales-logos">
                                     <img src={marketplaceImage} alt="" />
-                                    <a
-                                        href={`https://etherscan.io/tx/${transactionHash}`}
-                                        target="_blank"
-                                        rel="noreferrer"
-                                    >
-                                        <img src={etherscan} alt="" />
-                                    </a>
+                                    <Button colorScheme={"blue"} onClick={() => buyNow(contractAddress, tokenId, value)} className="buy-now-btn">Buy</Button>
                                 </div>
                             </div>
                         </div>
@@ -49,4 +48,4 @@ const SalesMapping = memo(({ sales }) => {
     )
 })
 
-export default SalesMapping
+export default ListingMapping

@@ -259,9 +259,9 @@ const Top100 = ({ tool, timeFrame, setTimeFrame, resetTime }) => {
             <td className="top100-chart-volume">
               <div className="volume-chart">
                 {volumeStats &&
-                volumeStats["1day"] &&
-                volumeStats["7day"] &&
-                volumeStats["30day"] ? (
+                  volumeStats["1day"] &&
+                  volumeStats["7day"] &&
+                  volumeStats["30day"] ? (
                   <HighchartsReact
                     highcharts={Highcharts}
                     options={{
