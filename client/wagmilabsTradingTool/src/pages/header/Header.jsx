@@ -224,9 +224,10 @@ const Header = () => {
 
       const { gasSettings, profileImage, listSettings, shoppingCart, bots } =
         userData || {};
+
       const { snipingBotTasks } = bots || {};
 
-      setGasSettings(gasSettings);
+      setGasSettings({ ...gasSettings, maxFeePerGas: 0 });
       setProfileImage(profileImage);
       setListingSettings(listSettings);
       setUserCartItems(shoppingCart);
@@ -309,9 +310,8 @@ const Header = () => {
           </div>
           <div onClick={() => navigate("/volumes")}>
             <div
-              className={`${
-                isVolumesPage ? "active" : ""
-              } volumes-button header-links`}
+              className={`${isVolumesPage ? "active" : ""
+                } volumes-button header-links`}
             >
               Volumes
             </div>

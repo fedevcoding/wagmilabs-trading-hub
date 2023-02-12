@@ -1,12 +1,11 @@
-
-.profile-activity-section{
+.profile-activity-section {
     /* height: 100vh; */
 
     background-color: var(--grey-1);
     display: flex;
 }
 
-.profile-activity-table-container{
+.profile-activity-table-container {
     width: 100%;
     display: flex;
     justify-content: center;
@@ -15,21 +14,21 @@
 }
 
 
-.profile-activity-table{
+.profile-activity-table {
     /* background-color: grey; */
     border-collapse: collapse;
     width: 95%;
 }
 
-.profile-activity-table thead{
+.profile-activity-table thead {
     border-bottom: 2px solid grey;
 }
 
-.profile-activity-table thead th{
+.profile-activity-table thead th {
     padding: 0 0 15px 0;
 }
 
-.profile-activity-hr{
+.profile-activity-hr {
     border: none;
     height: 1px;
     color: #333;
@@ -37,19 +36,19 @@
 }
 
 
-.profile-activity-single-container{
+.profile-activity-single-container {
     cursor: pointer;
     transition: background-color 200ms;
 }
 
 
-.profile-activity-single-container:hover{
+.profile-activity-single-container:hover {
     background-color: #1d1d22;
     border-radius: 10px;
 }
 
 
-.profile-activity-filters-container{
+.profile-activity-filters-container {
     width: 20vw;
     height: calc(100vh - (var(--header-height) * 1px + var(--footer-height) * 1px));
     overflow-y: scroll;
@@ -60,7 +59,7 @@
     color: white;
 }
 
-.profile-activity-filters-categories{
+.profile-activity-filters-categories {
     margin-top: 10px;
     display: flex;
     gap: 10px;
@@ -69,7 +68,7 @@
 
 }
 
-.profile-activity-filters-categories div{
+.profile-activity-filters-categories div {
     /* background-color: grey; */
     border: 1px solid grey;
     width: 40%;
@@ -81,23 +80,24 @@
 }
 
 
-.profile-activity-filters-categories i{
+.profile-activity-filters-categories i {
     margin-right: 10px;
 }
 
-.profile-activity-filters-categories div:hover, .profile-activity-filters-categories div.active{
+.profile-activity-filters-categories div:hover,
+.profile-activity-filters-categories div.active {
     background-color: white;
     color: black;
 }
 
-.profile-activity-container{
+.profile-activity-container {
     margin-top: 30px;
     width: 80vw;
     color: white;
 }
 
 
-.profile-activity-single-token{
+.profile-activity-single-token {
     display: flex;
     align-items: center;
     justify-content: left;
@@ -106,7 +106,7 @@
 }
 
 
-.profile-activity-single-image{
+.profile-activity-single-image {
     width: 40px;
     height: 40px;
     border-radius: 10px;
@@ -116,25 +116,39 @@
 
 
 
-.profile-activity-single-price, .profile-activity-single-type, .profile-activity-single-from, .profile-activity-single-to, .profile-activity-single-time{
+.profile-activity-single-price,
+.profile-activity-single-type,
+.profile-activity-single-from,
+.profile-activity-single-to,
+.profile-activity-single-time {
     text-align: center;
 }
 
-.profile-activity-single-type{
+.profile-activity-single-time .activity {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+
+    color: #3a8cdf;
+}
+
+.profile-activity-single-type {
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
 
 }
-.profile-activity-single-time{
+
+.profile-activity-single-time {
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
 }
 
-.profile-activity-tr-item{
+.profile-activity-tr-item {
     text-align: left;
 }
 
-.profile-activity-single-hr hr{
+.profile-activity-single-hr hr {
     border: none;
     height: 1px;
     color: #333;
@@ -142,40 +156,42 @@
 }
 
 
-.profile-activity-marketplace-container{
+.profile-activity-marketplace-container {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 10px;
 }
 
-.profile-activity-marketplace-image{
+.profile-activity-marketplace-image {
     width: 25px;
     height: 25px;
 }
 
 
 
-.profile-activity-filter-section{
+.profile-activity-filter-section {
     padding-top: 20px;
 }
 
 
-.profile-activity-filter-section input, .profile-activity-filter-section select{
+.profile-activity-filter-section input,
+.profile-activity-filter-section select {
     color: white;
 }
-.profile-activity-filter-section option{
+
+.profile-activity-filter-section option {
     color: black;
 }
 
 
-.profile-activity-filter-section:last-child{
+.profile-activity-filter-section:last-child {
     padding-bottom: 20px;
 }
 
 
 
-.profile-activity-date-picker{
+.profile-activity-date-picker {
     color: white !important;
     border: none;
     border-radius: 8px;
@@ -187,6 +203,6 @@
     padding: 3px 10px;
 }
 
-.profile-activity-date-picker:focus{
+.profile-activity-date-picker:focus {
     outline: none;
 }

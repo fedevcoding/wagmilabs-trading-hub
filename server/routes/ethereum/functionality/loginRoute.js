@@ -75,8 +75,7 @@ loginRoute.post("/", checkOwnership, async (req, res) => {
                     gasSettings: {
                         label: "Fast",
                         value: "fast",
-                        maxPriorityFeePerGas: 0,
-                        maxFeePerGas: 0,
+                        maxPriorityFeePerGas: 1.5,
                         custom: {
                             maxPriorityFeePerGas: 0,
                             maxFeePerGas: 0,

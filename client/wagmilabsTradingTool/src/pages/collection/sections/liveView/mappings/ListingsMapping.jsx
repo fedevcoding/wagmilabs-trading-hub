@@ -1,6 +1,5 @@
 import React, { memo } from 'react'
 import { formatTime, roundPrice } from '../../../../../utils/formats/formats';
-import etherscan from "../../../../../assets/etherscan.svg";
 import getMarketplaceImage from '../../../../../utils/marketplaceImageMapping';
 import { Button } from '@chakra-ui/react';
 import { useBuyNow } from '../../../../../custom-hooks';

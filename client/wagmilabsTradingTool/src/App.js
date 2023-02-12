@@ -141,7 +141,6 @@ function App() {
 
   // socket io connection
   useEffect(() => {
-    socket.on("connect", () => console.log("socket.io connected")); // only 1 connection established
     socket.on("ethData", data => {
       const { gasMapping, currencyPrices } = data;
       switch (activeGasRef.current) {
@@ -172,9 +171,13 @@ function App() {
       setCryptoPrices(currencyPrices);
       setEthData(data);
     });
-
     return () => socket.off("disconnect");
   }, []);
+
+
+  useEffect(() => {
+    gasSettings.value && socket.emit("getEthData")
+  }, [gasSettings.value])
 
   // set gas setting ref when it changes
   useEffect(() => {

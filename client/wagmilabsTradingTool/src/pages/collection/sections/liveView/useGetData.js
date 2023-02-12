@@ -39,7 +39,9 @@ export function useGetData(address) {
 
       socket.on("listing", (listingData) => {
 
-        const { contractAddress, tokenId, price, image, name, timestamp, marketplace } = listingData
+        const {
+          // contractAddress, 
+          tokenId, price, image, name, timestamp, marketplace } = listingData
 
         const dataObj = { tokenId, value: price, image, name, timestamp, marketplace }
 
@@ -53,7 +55,9 @@ export function useGetData(address) {
 
       socket.on("sale", (saleData) => {
 
-        const { tokenId, tokenAddress, timestamp, marketplace, hash, value } = saleData
+        const { tokenId,
+          // tokenAddress,
+          timestamp, marketplace, hash, value } = saleData
         const { name, image } = saleData?.tokenInfo
 
         const dataObj = {
@@ -72,7 +76,7 @@ export function useGetData(address) {
       socket.emit("leaveSales", lowerCasedAddress)
     }
 
-  }, [address]);
+  }, [address, socket]);
 
 
   useEffect(() => {

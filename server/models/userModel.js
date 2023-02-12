@@ -133,9 +133,6 @@ const userSchema = mongoose.Schema({
         maxPriorityFeePerGas: {
             type: Number
         },
-        maxFeePerGas: {
-            type: Number
-        },
         custom: {
             maxPriorityFeePerGas: {
                 type: Number

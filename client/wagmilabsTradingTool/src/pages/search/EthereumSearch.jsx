@@ -82,11 +82,14 @@ const EthereumSearch = () => {
       collections.map((collection, index) => {
         const {
           image,
-          collectionId,
           name,
           openseaVerificationStatus,
           isLocaleStorage,
         } = collection;
+
+        const collectionId = collection.collectionId || collection.id;
+
+
         const link = `/collection/${collectionId}`;
 
         return (

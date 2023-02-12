@@ -58,31 +58,39 @@ export const LineChart = ({
         step,
       },
     },
-    yAxis: {
-      min: 0,
+    yAxis: [{
       title: {
         text: yAxisText,
       },
       labels: {
         overflow: "justify",
-      },
+      }
     },
+    {
+      title: {
+        text: "Offers",
+      },
+      labels: {
+        overflow: "justify",
+      },
+      opposite: true
+    }],
     ...(tooltipSuffix
       ? {
-          tooltip: {
-            formatter: function () {
-              return (
-                this.key +
-                `<br>` +
-                this.series.name +
-                " " +
-                yAxisText +
-                ": " +
-                this.y
-              );
-            },
+        tooltip: {
+          formatter: function () {
+            return (
+              this.key +
+              `<br>` +
+              this.series.name +
+              " " +
+              yAxisText +
+              ": " +
+              this.y
+            );
           },
-        }
+        },
+      }
       : {}),
     legend: {
       enabled: false,

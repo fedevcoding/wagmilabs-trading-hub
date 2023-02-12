@@ -78,28 +78,31 @@ const io = socketIO(server, {
 
 app.set("socketio", io);
 
+
+
 let ethData;
-
-
-async function getTokenGasData(socket) {
+async function updateGasData() {
   try {
     let currentEthData = await getCoinsGasData()
     ethData = currentEthData
-    socket && socket.emit("ethData", currentEthData)
   }
   catch (e) {
     console.log(e)
   }
 }
-getTokenGasData()
+updateGasData()
+setInterval(async () => {
+  await updateGasData()
+}, 10000)
+
+
 
 io.on('connection', (socket) => {
-  socket.emit("ethData", ethData)
 
+  socket.on("getEthData", () => {
+    socket.emit("ethData", ethData)
+  })
 
-  setInterval(async () => {
-    await getTokenGasData(socket)
-  }, 10000)
 
   socket.on("joinSales", (collectionAddress) => {
     const channel = `sales${collectionAddress}`;
@@ -188,10 +191,7 @@ app.use("/api/v1/wagmilabs/activityChart", activityChartRoute);
 app.use("/api/v1/wagmilabs/collectionActivity", collectionActivityRoute);
 app.use("/api/v1/wagmilabs/tokenListPrice", tokenLisrPriceRoute);
 app.use("/api/v1/wagmilabs/profileActivity", profileActivityRoute);
-app.use(
-  "/api/v1/wagmilabs/profileTradedCollections",
-  profileTradedCollectionsRoute
-);
+app.use("/api/v1/wagmilabs/profileTradedCollections", profileTradedCollectionsRoute);
 app.use("/api/v1/wagmilabs/collectionListings", collectionListingsRoute);
 app.use("/api/v1/wagmilabs/collectionSales", collectionSalesRoute);
 

@@ -6,17 +6,17 @@ require("dotenv").config()
 const verifyRoute = express()
 
 verifyRoute.post("/", async (req, res) => {
-    const {token} = req.body
+    const { token } = req.body
 
-    if(!token){
-        return res.status(400).json({message: "No token found", authenticated: false, verified: false})
+    if (!token) {
+        return res.status(400).json({ message: "No token found", authenticated: false, verified: false })
     }
 
-    try{
+    try {
         await JWT.verify(token, process.env.JWT_PRIVATE_KEY)
-        res.status(200).json({verified: true})
-    } catch(err){
-        res.status(400).json({verified: false})
+        res.status(200).json({ verified: true })
+    } catch (err) {
+        res.status(400).json({ verified: false })
     }
 })
 

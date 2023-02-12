@@ -28,10 +28,12 @@ export const Comparison = React.memo(
         {
           name: "ETH",
           data: v.map(s => s.count_eth_sales),
+          yAxis: 0
         },
         {
           name: "WETH",
           data: v.map(s => s.count_weth_sales),
+          yAxis: 1
         },
       ],
     };

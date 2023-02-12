@@ -343,7 +343,10 @@ const Activity = () => {
           createdAt,
           to_address,
           token_id,
+          transaction_hash
         } = item || {};
+
+        const contractAddress = item?.contractAddress || item.contract_address;
         let { name: tokenName, image: tokenImage } =
           item?.tokenData?.token || {};
         const { name: collectionName } =
@@ -353,7 +356,6 @@ const Activity = () => {
 
         const activityType = activityTypeMapping[type];
 
-        // const marketplaceName = item?.order?.source?.name
         const marketplaceImage = getMarketplaceImage(marketplace);
 
         const key = crypto.randomUUID();
@@ -383,19 +385,22 @@ const Activity = () => {
                 </div>
               </td>
 
-              <td className="profile-activity-single-token">
-                <img
-                  src={tokenImage || nftNotFound}
-                  alt=""
-                  className="profile-activity-single-image"
-                />
-                <div className="wrap-text">
-                  <p className="wrap-text">{tokenName || token_id}</p>
-                  <p className="low-opacity little-text wrap-text">
-                    {collectionName}
-                  </p>
-                </div>
-              </td>
+              <a href={`/item/${contractAddress}/${token_id}`}>
+                <td className="profile-activity-single-token">
+
+                  <img
+                    src={tokenImage || nftNotFound}
+                    alt=""
+                    className="profile-activity-single-image"
+                  />
+                  <div className="wrap-text">
+                    <p className="wrap-text">{tokenName || token_id}</p>
+                    <p className="low-opacity little-text wrap-text">
+                      {collectionName}
+                    </p>
+                  </div>
+                </td>
+              </a>
               <td className="profile-activity-single-price">
                 {price ? roundPrice2(price) : 0} ETH
               </td>
@@ -408,7 +413,12 @@ const Activity = () => {
                 {to_address ? formatAddress2(to_address, userAdress) : "- - -"}
               </td>
               <td className="profile-activity-single-time">
-                {moment(createdAt).fromNow()}
+                <a href={`${type !== "list" ? `https://etherscan.io/tx/${transaction_hash}` : ""}`} target="_blank" rel="noreferrer">
+                  <div className={`${type !== "list" && "activity"}`}>
+                    {moment(createdAt).fromNow()}
+                    {type !== "list" && <i className="fa-sharp fa-solid fa-up-right-from-square"></i>}
+                  </div>
+                </a>
               </td>
             </tr>
 
@@ -417,6 +427,7 @@ const Activity = () => {
                 <hr></hr>
               </td>
             </tr>
+
           </>
         );
       }),
