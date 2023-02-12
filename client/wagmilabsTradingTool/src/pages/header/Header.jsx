@@ -7,7 +7,7 @@ import logoImage from "../../assets/logo.png";
 import baseUrl from "../../variables/baseUrl";
 import RefreshToken from "../RefreshToken";
 import logOut from "../../utils/functions/logout";
-import CartModal from "../utility-components/CartModal";
+import { CartModal } from "@Components";
 
 import { UserDataContext } from "../../context/userContext";
 import WalletModal from "../utility-components/WalletModal";
@@ -310,8 +310,9 @@ const Header = () => {
           </div>
           <div onClick={() => navigate("/volumes")}>
             <div
-              className={`${isVolumesPage ? "active" : ""
-                } volumes-button header-links`}
+              className={`${
+                isVolumesPage ? "active" : ""
+              } volumes-button header-links`}
             >
               Volumes
             </div>

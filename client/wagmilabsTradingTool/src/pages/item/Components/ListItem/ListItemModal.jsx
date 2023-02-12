@@ -12,9 +12,8 @@ import {
   NumberInput,
   NumberInputField,
 } from "@chakra-ui/react";
-import { Select } from "../../../utility-components";
-import { useListNft } from "../../../../custom-hooks";
-import Loader from "../../../utility-components/Loaders/Loader";
+import { useListNft } from "@Hooks";
+import { Loader, Select } from "@Components";
 
 export const ListItemModal = React.memo(
   ({

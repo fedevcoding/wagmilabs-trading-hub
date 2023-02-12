@@ -1,17 +1,17 @@
 import React, { useContext, useMemo } from "react";
-import notFound from "../../assets/notFound.svg";
-import "./cartModal.css";
+import notFound from "@Assets/notFound.svg";
+import "./style.css";
 import { Button, useToast } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
-import { UserDataContext } from "../../context/userContext";
-import emptyCart from "../../utils/database-functions/emptyCart";
-import { getFiatPrice, roundPrice } from "../../utils/formats/formats";
+import { UserDataContext } from "@Context/userContext";
+import emptyCart from "@Utils/database-functions/emptyCart";
+import { getFiatPrice, roundPrice } from "@Utils/formats/formats";
 
 import { fetchSigner } from "@wagmi/core";
 import { getClient } from "@reservoir0x/reservoir-kit-client";
-import removeFromCart from "../../utils/database-functions/removeFromCart";
+import removeFromCart from "@Utils/database-functions/removeFromCart";
 
-const CartModal = ({ modalOpen, closeCartModal }) => {
+export const CartModal = ({ modalOpen, closeCartModal }) => {
   const toast = useToast();
   const { userCartItems, setUserCartItems, ethData, gasSettings } =
     useContext(UserDataContext);
@@ -218,5 +218,3 @@ const CartModal = ({ modalOpen, closeCartModal }) => {
     </>
   );
 };
-
-export default CartModal;

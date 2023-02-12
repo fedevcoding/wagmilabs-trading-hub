@@ -1,13 +1,13 @@
 import React, { useState, useContext } from "react";
 
-import "./buyNowModal.css";
-import getMarketplaceImage from "../../utils/marketplaceImageMapping";
+import "./style.css";
+import getMarketplaceImage from "@Utils/marketplaceImageMapping";
 import { Button } from "@chakra-ui/react";
-import Loader from "./Loaders/Loader";
-import { getFiatPrice } from "../../utils/formats/formats";
-import { UserDataContext } from "../../context/userContext";
+import { Loader } from "@Components";
+import { getFiatPrice } from "@Utils/formats/formats";
+import { UserDataContext } from "@Context/userContext";
 
-const BuyNowModal = ({
+export const BuyNowModal = ({
   showBuyNowModal,
   buyNowModalData,
   buyNow,
@@ -99,5 +99,3 @@ const BuyNowModal = ({
     </>
   );
 };
-
-export default BuyNowModal;

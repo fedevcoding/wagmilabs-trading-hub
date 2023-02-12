@@ -13,7 +13,7 @@ import { Button, Checkbox } from "@chakra-ui/react";
 import wwwImg from "../../assets/www.svg";
 import twitterImg from "../../assets/twitter2.svg";
 import discordImg from "../../assets/discord2.svg";
-import Loader from "../utility-components/Loaders/Loader";
+import { Loader } from "@Components";
 
 const message = `Welcome to Wagmi Labs!
 

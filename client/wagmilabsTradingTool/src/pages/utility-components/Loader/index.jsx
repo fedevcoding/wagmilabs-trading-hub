@@ -1,8 +1,6 @@
 import React from "react";
-import "./loader.css";
+import "./style.css";
 
-const Loader = ({ width, height }) => {
+export const Loader = ({ width, height }) => {
   return <div className="lazyloader" style={{ width, height }}></div>;
 };
-
-export default Loader;

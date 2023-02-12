@@ -29,7 +29,7 @@ import getMarketplaceImage from "@Utils/marketplaceImageMapping";
 import useFirstRender from "@Hooks/useFirstRender";
 
 import flaggedImg from "@Assets/flagged.svg";
-import BuyNowModal from "@Components/BuyNowModal";
+import { BuyNowModal } from "@Components";
 import { useAddItemToCart, useBuyNow, useRemoveItemFromCart } from "@Hooks";
 import { useNavigate } from "react-router-dom";
 

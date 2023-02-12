@@ -1,12 +1,12 @@
-import { Button, HStack, Input, useToast } from "@chakra-ui/react";
 import React, { useContext, useEffect, useRef, useState } from "react";
+import { Button, HStack, Input, useToast } from "@chakra-ui/react";
 
-import { UserDataContext } from "../../context/userContext";
-import updateGasSettings from "../../utils/database-functions/updateGasSettings";
+import { UserDataContext } from "@Context/userContext";
+import updateGasSettings from "@Utils/database-functions/updateGasSettings";
 
-import "./gasModal.css";
+import "./style.css";
 
-const GasModal = ({ setGasModalOpen, gasModalOpen }) => {
+export const GasModal = ({ setGasModalOpen, gasModalOpen }) => {
   const toast = useToast();
 
   const gasModalOpenRef = useRef(gasModalOpen);
@@ -242,5 +242,3 @@ const GasModal = ({ setGasModalOpen, gasModalOpen }) => {
     </>
   );
 };
-
-export default GasModal;
