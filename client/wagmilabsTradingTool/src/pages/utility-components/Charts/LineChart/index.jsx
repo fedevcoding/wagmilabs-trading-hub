@@ -3,7 +3,7 @@ import HighchartsReact from "highcharts-react-official";
 import Highcharts from "highcharts";
 import DarkUnica from "highcharts/themes/dark-unica";
 
-import "./style.css";
+import "./style.scss";
 
 DarkUnica(Highcharts);
 
@@ -58,39 +58,41 @@ export const LineChart = ({
         step,
       },
     },
-    yAxis: [{
-      title: {
-        text: yAxisText,
+    yAxis: [
+      {
+        title: {
+          text: yAxisText,
+        },
+        labels: {
+          overflow: "justify",
+        },
       },
-      labels: {
-        overflow: "justify",
-      }
-    },
-    {
-      title: {
-        text: "Offers",
+      {
+        title: {
+          text: "Offers",
+        },
+        labels: {
+          overflow: "justify",
+        },
+        opposite: true,
       },
-      labels: {
-        overflow: "justify",
-      },
-      opposite: true
-    }],
+    ],
     ...(tooltipSuffix
       ? {
-        tooltip: {
-          formatter: function () {
-            return (
-              this.key +
-              `<br>` +
-              this.series.name +
-              " " +
-              yAxisText +
-              ": " +
-              this.y
-            );
+          tooltip: {
+            formatter: function () {
+              return (
+                this.key +
+                `<br>` +
+                this.series.name +
+                " " +
+                yAxisText +
+                ": " +
+                this.y
+              );
+            },
           },
-        },
-      }
+        }
       : {}),
     legend: {
       enabled: false,

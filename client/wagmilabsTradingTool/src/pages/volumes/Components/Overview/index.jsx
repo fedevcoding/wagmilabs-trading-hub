@@ -1,5 +1,5 @@
 import React from "react";
-import { Col, LoadingSpinner, Row } from "../../../utility-components";
+import { Col, LoadingSpinner, Row } from "@Components";
 import { Volumes, Traders, LeaderBoard } from "./Components";
 import { useGetData } from "./useGetData";
 

@@ -1,0 +1,21 @@
+.bar-chart {
+  border-radius: 10px;
+  overflow: hidden;
+
+  svg rect.highcharts-background {
+    fill: var(--grey-1);
+  }
+
+  .market-img {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+    margin-top: -8px;
+
+    img {
+      margin-bottom: 3px;
+    }
+  }
+}
