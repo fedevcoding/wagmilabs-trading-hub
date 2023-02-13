@@ -28,7 +28,7 @@ import { getPercentage } from "../../utils/formats/utils";
 import { formatContractAddress, roundPrice } from "../../utils/formats/formats";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import LiveView from "./sections/liveView/index";
-import LivePulsing from "../utility-components/LivePulsing";
+import { LivePulsing } from "@Components";
 
 // import verified from "../../images/verified-2.png"
 // import notVerified from "../../images/not-verified.png"

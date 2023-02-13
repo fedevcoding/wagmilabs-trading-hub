@@ -1,0 +1,32 @@
+.new-task-modal-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  backdrop-filter: blur(2px);
+  background-color: #11111166;
+  z-index: 100000;
+
+  .new-task-modal-wrapper {
+    padding: 0 30px;
+    width: 30%;
+    height: 70%;
+    border-radius: 15px;
+    background-color: #1e1e1e;
+    box-shadow: #000000e3 0px 0px 19px 5px;
+    position: absolute;
+    top: 50%;
+    right: 50%;
+    transform: translate(50%, -50%);
+
+    .new-task-modal-header {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      padding: 20px 0;
+      font-size: 20px;
+    }
+  }
+}

@@ -3,16 +3,15 @@ import EthereumSearch from "../search/EthereumSearch";
 import "./header.css";
 import { useNavigate } from "react-router-dom";
 
-import logoImage from "../../assets/logo.png";
-import baseUrl from "../../variables/baseUrl";
+import logoImage from "@Assets/logo.png";
+import baseUrl from "@Variables/baseUrl";
 import RefreshToken from "../RefreshToken";
-import logOut from "../../utils/functions/logout";
-import { CartModal } from "@Components";
+import logOut from "@Utils/functions/logout";
+import { CartModal, WalletModal } from "@Components";
 
-import { UserDataContext } from "../../context/userContext";
-import WalletModal from "../utility-components/WalletModal";
+import { UserDataContext } from "@Context/userContext";
 
-import getUserBalances from "../../utils/database-functions/getUserBalances";
+import getUserBalances from "@Utils/database-functions/getUserBalances";
 
 import { fetchEnsName } from "@wagmi/core";
 import { useAccount } from "wagmi";

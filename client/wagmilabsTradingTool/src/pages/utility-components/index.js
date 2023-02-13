@@ -11,3 +11,6 @@ export { Pagination } from "./Pagination";
 export { BuyNowModal } from "./BuyNowModal";
 export { CartModal } from "./CartModal";
 export { GasModal } from "./GasModal";
+export { LivePulsing } from "./LivePulsing";
+export { NewTaskModal } from "./NewTaskModal";
+export { WalletModal } from "./WalletModal";

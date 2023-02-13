@@ -1,6 +1,5 @@
 import React, { useContext, useState } from "react";
-import { GasModal } from "@Components";
-import LivePulsing from "@Components/LivePulsing";
+import { GasModal, LivePulsing } from "@Components";
 import "./Footer.css";
 
 import { UserDataContext } from "../../context/userContext";

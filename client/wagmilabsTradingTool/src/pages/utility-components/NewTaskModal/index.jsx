@@ -1,3 +1,4 @@
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import {
   Button,
   HStack,
@@ -9,15 +10,14 @@ import {
   Select,
   Stack,
 } from "@chakra-ui/react";
-import React, { useContext, useEffect, useMemo, useState } from "react";
 
-import "./newTaskModal.css";
+import "./style.scss";
 
-import { UserDataContext } from "../../context/userContext";
+import { UserDataContext } from "@Context/userContext";
 import { useAccount } from "wagmi";
-import updateSnipeTasks from "../../utils/database-functions/updateSnipeTasks";
+import updateSnipeTasks from "@Utils/database-functions/updateSnipeTasks";
 
-const NewTaskModal = ({
+export const NewTaskModal = ({
   openNewTask,
   closeTaskModal,
   setSnipingTasks,
@@ -238,5 +238,3 @@ const WalletMappings = ({ updateTaskInfo }) => {
     </>
   );
 };
-
-export default NewTaskModal;

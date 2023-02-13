@@ -1,29 +1,29 @@
 import React, { useContext, useEffect, useState } from "react";
 
-import "./walletModal.css";
+import "./style.scss";
 
-import { UserDataContext } from "../../context/userContext";
+import { UserDataContext } from "@Context/userContext";
 import { useAccount } from "wagmi";
 import {
   formatAddress,
   getFiatPrice,
   roundPrice,
-} from "../../utils/formats/formats";
+} from "@Utils/formats/formats";
 
-import ethereumImage from "../../assets/eth.svg";
-import usdcImage from "../../assets/usdc.svg";
-import usdtImage from "../../assets/usdt.svg";
-import wrappedEthereumImage from "../../assets/weth.svg";
+import ethereumImage from "@Assets/eth.svg";
+import usdcImage from "@Assets/usdc.svg";
+import usdtImage from "@Assets/usdt.svg";
+import wrappedEthereumImage from "@Assets/weth.svg";
 
-import logOut from "../../utils/functions/logout";
+import logOut from "@Utils/functions/logout";
 import { Button, Tooltip } from "@chakra-ui/react";
-import LivePulsing from "./LivePulsing";
+import { LivePulsing } from "@Components";
 
 // uniswap widget
 import copy from "copy-to-clipboard";
 import { SwapWidget } from "@uniswap/widgets";
 import "@uniswap/widgets/fonts.css";
-import { ETHEREUM_NETWORK } from "../../variables/rpcNodes";
+import { ETHEREUM_NETWORK } from "@Variables/rpcNodes";
 
 const jsonRpcUrlMap = {
   1: [ETHEREUM_NETWORK],
@@ -44,7 +44,7 @@ const theme = {
   borderRadius: 0.8,
 };
 
-const WalletModal = ({ walletModalOpen, closeWalletModal }) => {
+export const WalletModal = ({ walletModalOpen, closeWalletModal }) => {
   const [provider, setProvider] = useState();
   const [swapModal, setSwapModal] = useState(false);
 
@@ -272,5 +272,3 @@ const WalletModal = ({ walletModalOpen, closeWalletModal }) => {
     </>
   );
 };
-
-export default WalletModal;

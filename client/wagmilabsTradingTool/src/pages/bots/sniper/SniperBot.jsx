@@ -4,11 +4,11 @@ import "./sniperbot.css";
 
 import { Button } from "@chakra-ui/react";
 
-import { UserDataContext } from "../../../context/userContext";
-import NewTaskModal from "../../utility-components/NewTaskModal";
-import { formatAddress } from "../../../utils/formats/formats";
-import updateSnipeTasks from "../../../utils/database-functions/updateSnipeTasks";
-import { SocketContext } from "../../../context/SocketContext";
+import { UserDataContext } from "@Context/userContext";
+import { NewTaskModal } from "@Components";
+import { formatAddress } from "@Utils/formats/formats";
+import updateSnipeTasks from "@Utils/database-functions/updateSnipeTasks";
+import { SocketContext } from "@Context/SocketContext";
 import { useAccount } from "wagmi";
 
 const SniperBot = () => {

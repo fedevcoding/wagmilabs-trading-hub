@@ -7,7 +7,8 @@ import rippleEffect from "../../utils/functions/rippleEffect";
 import "./home.css";
 import WatchList from "./tools/watchList/WatchList";
 import Owned from "./tools/owned/Owned";
-import LivePulsing from "../utility-components/LivePulsing";
+import { LivePulsing } from "@Components";
+
 import setPageTitle from "../../utils/functions/setPageTitle";
 
 const Home = () => {
