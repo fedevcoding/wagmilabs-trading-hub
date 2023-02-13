@@ -1,6 +1,6 @@
 import React from "react";
 import { useParams } from "react-router-dom";
-import { LoadingSpinner, PageWrapper } from "../utility-components";
+import { LoadingSpinner, PageWrapper } from "@Components";
 import { useGetData } from "./useGetData";
 import { ImageCol, InfoCol } from "./Components";
 

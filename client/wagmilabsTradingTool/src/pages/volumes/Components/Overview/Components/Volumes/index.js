@@ -1,9 +1,5 @@
 import React from "react";
-import {
-  OrizontalBarChart,
-  LoadingSpinner,
-  Select,
-} from "../../../../../utility-components";
+import { OrizontalBarChart, LoadingSpinner, Select } from "@Components";
 import { useGetVolumes } from "./useGetVolumes";
 
 export const Volumes = React.memo(({ volumes, period, marketplaces }) => {

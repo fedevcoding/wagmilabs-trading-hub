@@ -1,5 +1,5 @@
 import React from "react";
-import { Col, Row } from "../../../utility-components";
+import { Col, Row } from "@Components";
 import moment from "moment";
 
 import "./style.scss";

@@ -1,10 +1,6 @@
 import moment from "moment";
 import React from "react";
-import {
-  BarChart,
-  LoadingSpinner,
-  Select,
-} from "../../../../../utility-components";
+import { BarChart, LoadingSpinner, Select } from "@Components";
 import { useGetSales } from "./useGetSales";
 
 export const Sales = React.memo(({ sales, period, marketplace }) => {

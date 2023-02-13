@@ -1,5 +1,5 @@
 import React from "react";
-import { Col, Row } from "../../../utility-components";
+import { Col, Row } from "@Components";
 import { MakeOffer } from "..";
 import { useAcceptOffer } from "../../../../custom-hooks";
 

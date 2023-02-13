@@ -1,6 +1,6 @@
 import React from "react";
 import { useGetItemFunctions } from "../../../../custom-hooks";
-import { Col, Row } from "../../../utility-components";
+import { Col, Row } from "@Components";
 import { useGetVariables } from "./useGetVariables";
 import { MakeOffer } from "..";
 import { CurrentPrice } from "./CurrentPrice";

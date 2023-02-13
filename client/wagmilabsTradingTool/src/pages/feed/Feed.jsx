@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { LoadingSpinner, PageWrapper, Pagination } from "../utility-components";
+import { LoadingSpinner, PageWrapper, Pagination } from "@Components";
 import { useGetNews } from "./useGetNews";
 
 import PoweredBy from "../../assets/poweredbyluckytrader-light.png";

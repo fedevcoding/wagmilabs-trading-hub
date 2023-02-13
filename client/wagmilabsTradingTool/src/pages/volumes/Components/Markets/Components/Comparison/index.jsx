@@ -1,10 +1,6 @@
 import React from "react";
 import moment from "moment";
-import {
-  LineChart,
-  LoadingSpinner,
-  Select,
-} from "../../../../../utility-components";
+import { LineChart, LoadingSpinner, Select } from "@Components";
 import { useGetComparisonData } from "./useGetComparisonData";
 
 export const Comparison = React.memo(
@@ -28,12 +24,12 @@ export const Comparison = React.memo(
         {
           name: "ETH",
           data: v.map(s => s.count_eth_sales),
-          yAxis: 0
+          yAxis: 0,
         },
         {
           name: "WETH",
           data: v.map(s => s.count_weth_sales),
-          yAxis: 1
+          yAxis: 1,
         },
       ],
     };

@@ -1,5 +1,5 @@
 import React from "react";
-import { Col, LoadingSpinner, Row } from "../../../utility-components";
+import { Col, LoadingSpinner, Row } from "@Components";
 import { ActiveTraders, Comparison, Sales, Volumes } from "./Components";
 
 import "./style.scss";

@@ -1,6 +1,6 @@
 import React from "react";
 import getMarketplaceImage from "../../../../../../utils/marketplaceImageMapping";
-import { LoadingSpinner, Tabs } from "../../../../../utility-components";
+import { LoadingSpinner, Tabs } from "@Components";
 import { useGetLeaderBoard } from "./useGetLeaderBoard";
 
 export const LeaderBoard = React.memo(

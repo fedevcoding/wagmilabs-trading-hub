@@ -11,7 +11,7 @@
         "alias": {
           "@": "./src",
           "@Pages": "./src/pages",
-          "@Components": "./src/pages/utility-components",
+          "@Components": "./src/components",
           "@Utils": "./src/utils",
           "@Variables": "./src/variables",
           "@Hooks": "./src/custom-hooks",

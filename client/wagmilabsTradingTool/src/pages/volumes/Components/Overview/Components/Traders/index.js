@@ -1,9 +1,5 @@
 import React from "react";
-import {
-  OrizontalBarChart,
-  LoadingSpinner,
-  Select,
-} from "../../../../../utility-components";
+import { OrizontalBarChart, LoadingSpinner, Select } from "@Components";
 import { useGetTraders } from "./useGetTraders";
 
 export const Traders = React.memo(({ traders, period, marketplaces }) => {

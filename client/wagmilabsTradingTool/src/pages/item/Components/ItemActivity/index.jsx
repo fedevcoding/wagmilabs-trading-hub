@@ -1,7 +1,7 @@
 import React from "react";
-import { LoadingSpinner } from "../../../utility-components";
+import { LoadingSpinner } from "@Components";
 import { getActivityOptions } from "./functions";
-import { Select } from "../../../utility-components";
+import { Select } from "@Components";
 
 import "./style.scss";
 import { useGetData } from "./useGetData";
