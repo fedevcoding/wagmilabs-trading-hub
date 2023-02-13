@@ -247,7 +247,9 @@ const Items = ({
       items &&
       items.map((item, index) => {
         const { tokenId, name, image, rarityRank, isFlagged } = item?.token;
-        const isInCart = userCartItems.some(item => item.tokenId === tokenId);
+        const isInCart = userCartItems.some(
+          item => item.tokenId.toString() === tokenId.toString()
+        );
 
         const collectionName = item?.token?.collection?.name;
         const collectionImage = item?.token?.collection?.image;
