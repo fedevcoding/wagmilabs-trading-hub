@@ -1,3 +1,7 @@
+.chakra-modal__content-container {
+  backdrop-filter: blur(2px);
+}
+
 .chakra-modal__content {
   background-color: var(--secondary-color) !important;
   color: white !important;
