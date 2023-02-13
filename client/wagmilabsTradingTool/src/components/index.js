@@ -1,5 +1,6 @@
 export * from "./Form";
 export * from "./Charts";
+export * from "./Modals";
 
 export { Loader } from "./Loader";
 export { Tabs } from "./Tabs";

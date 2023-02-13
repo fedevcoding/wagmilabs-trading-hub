@@ -8,3 +8,4 @@ export { BestOfferTable } from "./BestOfferTable";
 export { MakeOffer } from "./MakeOffer";
 export { ItemActivity } from "./ItemActivity";
 export { ListItem } from "./ListItem";
+export { TransferItem } from "./TransferItem";

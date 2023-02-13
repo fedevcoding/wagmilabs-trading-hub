@@ -1,7 +1,5 @@
 import React from "react";
-import { ListItemModal } from "./ListItemModal";
-
-import "./style.scss";
+import { ListItemModal } from "@Components";
 
 export const ListItem = React.memo(({ details, address, id, currency }) => {
   const [isOpen, setIsOpen] = React.useState(false);

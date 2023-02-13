@@ -7,6 +7,7 @@ import {
   ItemActivity,
   ListItem,
   PriceBox,
+  TransferItem,
 } from "..";
 
 import "./style.scss";
@@ -45,12 +46,20 @@ export const InfoCol = React.memo(({ details, address, id }) => {
           </div>
         </div>
         {isOwner ? (
-          <ListItem
-            details={details}
-            address={address}
-            id={id}
-            currency={currency}
-          />
+          <div className="owner-buttons">
+            <TransferItem
+              details={details}
+              address={address}
+              id={id}
+              currency={currency}
+            />
+            <ListItem
+              details={details}
+              address={address}
+              id={id}
+              currency={currency}
+            />
+          </div>
         ) : (
           ""
         )}

@@ -1,0 +1,13 @@
+@import "../style";
+
+.transfer-item-modal {
+  .warning-msg {
+    margin-top: 1rem;
+    font-size: 13px;
+    color: var(--light-gray);
+
+    i {
+      margin-right: 0.5rem;
+    }
+  }
+}

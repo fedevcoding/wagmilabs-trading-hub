@@ -1,0 +1,1 @@
+export { isValidEthAddress } from "./isValidEthAddress";

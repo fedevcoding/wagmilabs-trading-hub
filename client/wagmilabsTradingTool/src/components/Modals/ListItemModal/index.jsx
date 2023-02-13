@@ -15,6 +15,8 @@ import {
 import { useListNft } from "@Hooks";
 import { Loader, Select } from "@Components";
 
+import "./style.scss";
+
 export const ListItemModal = React.memo(
   ({
     details: {
@@ -45,7 +47,7 @@ export const ListItemModal = React.memo(
     return (
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent className="list-item-modal">
           <ModalHeader>
             Sell item <b>{name}</b>
           </ModalHeader>
@@ -75,7 +77,7 @@ export const ListItemModal = React.memo(
           </ModalBody>
           <ModalFooter>
             <Button
-              className="btn-list"
+              className="btn-confirm"
               mr={3}
               onClick={() => {
                 if (!confirmingList) listNft(setConfirmingList, days.value);
