@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useMemo, useState, useRef } from "react";
-import baseUrl from "../../../../variables/baseUrl";
+import baseUrl from "@Variables/baseUrl";
 import { Portal } from "react-portal";
 
-import notFoundNft from "../../../../assets/question.png";
+import notFoundNft from "@Assets/question.png";
 
 // import { useAccount } from 'wagmi'
 
@@ -12,19 +12,19 @@ import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import "./nfts.css";
 
-import notFound from "../../../../assets/notFound.svg";
+import notFound from "@Assets/notFound.svg";
 
 import {
   getListingExpirationDate,
   roundPrice,
   roundPrice2,
-} from "../../../../utils/formats/formats";
+} from "@Utils/formats/formats";
 import { Button, Tooltip, useToast } from "@chakra-ui/react";
-import { UserDataContext } from "../../../../context/userContext";
+import { UserDataContext } from "@Context/userContext";
 import { Loader } from "@Components";
-import getMarketplaceImage from "../../../../utils/marketplaceImageMapping";
+import getMarketplaceImage from "@Utils/marketplaceImageMapping";
 import { useNavigate } from "react-router-dom";
-import { useListNft } from "../../../../custom-hooks";
+import { useListNft } from "@Hooks";
 
 const sortItemsOptions = [
   { value: "desc", label: "Newest" },

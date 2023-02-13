@@ -1,17 +1,17 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import baseUrl from "../../../../variables/baseUrl";
+import baseUrl from "@Variables/baseUrl";
 import "./trending.css";
 import times from "./times";
 
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
-import useFirstRender from "../../../../custom-hooks/useFirstRender";
+import { useFirstRender } from "@Hooks";
 import moment from "moment";
 
-import notFound from "../../../../assets/notFound.svg";
+import notFound from "@Assets/notFound.svg";
 
 import { LazyLoadImage } from "react-lazy-load-image-component";
-import { placeholderImage } from "../../../../utils/images";
+import { placeholderImage } from "@Utils/images";
 
 const defaultTimeFrame = "1H";
 

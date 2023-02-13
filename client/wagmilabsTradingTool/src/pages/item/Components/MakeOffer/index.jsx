@@ -1,6 +1,6 @@
 import React from "react";
 import { NumberInput, NumberInputField } from "@chakra-ui/react";
-import { usePlaceBid } from "../../../../custom-hooks";
+import { usePlaceBid } from "@Hooks";
 
 export const MakeOffer = React.memo(({ address, tokenId, marketplace }) => {
   const [insertOffer, setInsertOffer] = React.useState(false);

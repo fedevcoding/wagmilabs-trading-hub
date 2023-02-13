@@ -1,15 +1,15 @@
 import React, { useEffect, useState, useMemo, useRef } from "react";
 import "./minting.css";
 import times from "./times";
-import baseUrl from "../../../../variables/baseUrl";
+import baseUrl from "@Variables/baseUrl";
 
-import notFound from "../../../../assets/notFound.svg";
+import notFound from "@Assets/notFound.svg";
 
-import { roundPrice } from "../../../../utils/formats/formats";
+import { roundPrice } from "@Utils/formats/formats";
 
 import moment from "moment";
-import useFirstRender from "../../../../custom-hooks/useFirstRender";
-import { placeholderImage } from "../../../../utils/images";
+import { useFirstRender } from "@Hooks";
+import { placeholderImage } from "@Utils/images";
 
 import { LazyLoadImage } from "react-lazy-load-image-component";
 

@@ -26,7 +26,6 @@ import { roundPrice } from "@Utils/formats/formats";
 
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import getMarketplaceImage from "@Utils/marketplaceImageMapping";
-import useFirstRender from "@Hooks/useFirstRender";
 
 import flaggedImg from "@Assets/flagged.svg";
 import { BuyNowModal } from "@Components";
@@ -35,6 +34,7 @@ import {
   useBuyNow,
   useGetBuyNowModalFunctions,
   useRemoveItemFromCart,
+  useFirstRender,
 } from "@Hooks";
 import { useNavigate } from "react-router-dom";
 

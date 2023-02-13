@@ -1,7 +1,7 @@
 import React from "react";
 import { Col, Row } from "@Components";
 import { MakeOffer } from "..";
-import { useAcceptOffer } from "../../../../custom-hooks";
+import { useAcceptOffer } from "@Hooks";
 
 export const BestOfferBox = React.memo(({ details, address, isOwner }) => {
   const market = Object.values(details.market)[0];

@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState, useRef } from "react";
-import baseUrl from "../../../../variables/baseUrl";
+import baseUrl from "@Variables/baseUrl";
 import { times } from "./times";
 
 import "./top100.css";
@@ -7,11 +7,11 @@ import "./top100.css";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 
-import notFound from "../../../../assets/notFound.svg";
+import notFound from "@Assets/notFound.svg";
 
-import useFirstRender from "../../../../custom-hooks/useFirstRender";
+import { useFirstRender } from "@Hooks";
 import moment from "moment";
-import { placeholderImage } from "../../../../utils/images";
+import { placeholderImage } from "@Utils/images";
 
 import { LazyLoadImage } from "react-lazy-load-image-component";
 
@@ -259,9 +259,9 @@ const Top100 = ({ tool, timeFrame, setTimeFrame, resetTime }) => {
             <td className="top100-chart-volume">
               <div className="volume-chart">
                 {volumeStats &&
-                  volumeStats["1day"] &&
-                  volumeStats["7day"] &&
-                  volumeStats["30day"] ? (
+                volumeStats["1day"] &&
+                volumeStats["7day"] &&
+                volumeStats["30day"] ? (
                   <HighchartsReact
                     highcharts={Highcharts}
                     options={{

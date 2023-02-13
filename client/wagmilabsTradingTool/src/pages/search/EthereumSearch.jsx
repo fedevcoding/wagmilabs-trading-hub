@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { useDebounce } from "use-debounce";
 import "./search.css";
-import verified from "../../assets/verified.png";
-import baseUrl from "../../variables/baseUrl";
+import verified from "@Assets/verified.png";
+import baseUrl from "@Variables/baseUrl";
 
-import useFirstRender from "../../custom-hooks/useFirstRender";
+import { useFirstRender } from "@Hooks";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
-import { placeholderImage } from "../../utils/images";
+import { placeholderImage } from "@Utils/images";
 
 import { LazyLoadImage } from "react-lazy-load-image-component";
 
@@ -80,15 +80,10 @@ const EthereumSearch = () => {
     () =>
       collections &&
       collections.map((collection, index) => {
-        const {
-          image,
-          name,
-          openseaVerificationStatus,
-          isLocaleStorage,
-        } = collection;
+        const { image, name, openseaVerificationStatus, isLocaleStorage } =
+          collection;
 
         const collectionId = collection.collectionId || collection.id;
-
 
         const link = `/collection/${collectionId}`;
 

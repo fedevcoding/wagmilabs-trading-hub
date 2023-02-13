@@ -1,6 +1,6 @@
 import { useRef, useEffect } from "react";
 
-function useFirstRender() {
+export const useFirstRender = () => {
   const firstRender = useRef(true);
 
   useEffect(() => {
@@ -8,6 +8,4 @@ function useFirstRender() {
   }, []);
 
   return firstRender.current;
-}
-
-export default useFirstRender;
+};
