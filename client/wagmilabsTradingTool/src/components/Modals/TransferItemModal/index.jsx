@@ -29,7 +29,8 @@ export const TransferItemModal = React.memo(
     const [address, setAddress] = React.useState(null);
     const [isValidAddress, setIsValidAddress] = React.useState(false);
 
-    const transferNft = () => true;
+    const transferNft = (fromAddress, tokenId, address, setConfirmingList) =>
+      true;
 
     return (
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
