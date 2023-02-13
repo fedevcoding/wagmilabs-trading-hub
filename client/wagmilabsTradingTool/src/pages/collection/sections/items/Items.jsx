@@ -30,7 +30,12 @@ import useFirstRender from "@Hooks/useFirstRender";
 
 import flaggedImg from "@Assets/flagged.svg";
 import { BuyNowModal } from "@Components";
-import { useAddItemToCart, useBuyNow, useRemoveItemFromCart } from "@Hooks";
+import {
+  useAddItemToCart,
+  useBuyNow,
+  useGetBuyNowModalFunctions,
+  useRemoveItemFromCart,
+} from "@Hooks";
 import { useNavigate } from "react-router-dom";
 
 const Items = ({
@@ -57,16 +62,13 @@ const Items = ({
 
   const navigate = useNavigate();
 
-  const [showBuyNowModal, setShowBuyNowModal] = useState(false);
-  const [buyNowModalData, setBuyNowModalData] = useState({
-    name: "",
-    image: "",
-    tokenId: "",
-    price: "",
-    marketplace: "",
-    contract: "",
-    collectionName: "",
-  });
+  const {
+    buyNowModalData,
+    showBuyNowModal,
+    openBuyModal,
+    closeBuynowModal,
+    setBuyNowModalData,
+  } = useGetBuyNowModalFunctions();
 
   useEffect(() => {
     const options = {
@@ -201,34 +203,6 @@ const Items = ({
         imageTag.remove();
       }, 240);
     }, 10);
-  }
-
-  function openBuyModal(
-    name,
-    image,
-    tokenId,
-    price,
-    marketplace,
-    contract,
-    collectionName
-  ) {
-    document.body.style.overflow = "hidden";
-    setBuyNowModalData({
-      name,
-      image,
-      tokenId,
-      price,
-      marketplace,
-      contract,
-      collectionName,
-    });
-    setShowBuyNowModal(true);
-  }
-
-  function closeBuynowModal(e, force) {
-    if (!force) if (e.target !== e.currentTarget) return;
-    document.body.style.overflow = "unset";
-    setShowBuyNowModal(false);
   }
 
   const { addItemToCart } = useAddItemToCart(address, (index, image) => {

@@ -1,5 +1,4 @@
 import React from "react";
-import { useGetItemFunctions } from "../../../../custom-hooks";
 import { Col, Row } from "@Components";
 import { useGetVariables } from "./useGetVariables";
 import { MakeOffer } from "..";
@@ -8,9 +7,9 @@ import { SaleEnds } from "./SaleEnds";
 
 import "./style.scss";
 import { AddOrRemoveToCart } from "./AddOrRemoveToCart";
+import { BuyNow } from "./BuyNow";
 
 export const PriceBox = React.memo(({ details, address }) => {
-  const { buyNow } = useGetItemFunctions(address);
   const { tokenId, value, marketplace, market } = useGetVariables(details);
 
   return (
@@ -31,13 +30,12 @@ export const PriceBox = React.memo(({ details, address }) => {
               />
             </Col>
             <Col>
-              <div
-                className="btn"
-                onClick={() => buyNow(address, tokenId, value)}
-              >
-                <i className="fa fa-bolt" />
-                Buy now
-              </div>
+              <BuyNow
+                details={details}
+                address={address}
+                tokenId={tokenId}
+                value={value}
+              />
             </Col>
           </Row>
         </div>

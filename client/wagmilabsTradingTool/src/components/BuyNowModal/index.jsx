@@ -42,7 +42,7 @@ export const BuyNowModal = ({
               <i
                 className="fa-regular fa-xmark"
                 onClick={e => closeBuynowModal(e)}
-              ></i>
+              />
             </header>
 
             <div className="buynow-modal-body">
@@ -77,7 +77,10 @@ export const BuyNowModal = ({
               <Button
                 colorScheme={"blue"}
                 className="buynow-modal-button"
-                onClick={buyNowHandler}
+                onClick={async e => {
+                  await buyNowHandler();
+                  closeBuynowModal(e, true);
+                }}
               >
                 {!buying ? (
                   <div className="buynow-modal-marketplace">
@@ -89,7 +92,7 @@ export const BuyNowModal = ({
                     <p>Buy now</p>
                   </div>
                 ) : (
-                  <Loader width="20px" height={"20px"} />
+                  <Loader width="20px" height="20px" />
                 )}
               </Button>
             </div>
