@@ -12,6 +12,7 @@ import {
 } from "@chakra-ui/react";
 import { Loader } from "@Components";
 import { isValidEthAddress } from "@Utils";
+import { useTransferItem } from "@Hooks";
 
 import "./style.scss";
 
@@ -20,7 +21,7 @@ export const TransferItemModal = React.memo(
     details: {
       token: { name },
     },
-    address: fromAddress,
+    address: contractAddress,
     isOpen,
     setIsOpen,
     id: tokenId,
@@ -29,8 +30,12 @@ export const TransferItemModal = React.memo(
     const [address, setAddress] = React.useState(null);
     const [isValidAddress, setIsValidAddress] = React.useState(false);
 
-    const transferNft = (fromAddress, tokenId, address, setConfirmingList) =>
-      true;
+    const { transferNft } = useTransferItem();
+
+    const transfer = (contractAddress, tokenId, toAddress, setConfirmingList) => {
+      transferNft(contractAddress, tokenId, toAddress);
+    }
+
 
     return (
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
@@ -63,7 +68,7 @@ export const TransferItemModal = React.memo(
               mr={3}
               onClick={() => {
                 if (!confirmingList)
-                  transferNft(fromAddress, tokenId, address, setConfirmingList);
+                  transfer(contractAddress, tokenId, address, setConfirmingList);
               }}
               isDisabled={!isValidAddress}
             >

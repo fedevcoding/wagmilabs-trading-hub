@@ -99,6 +99,9 @@ setInterval(async () => {
 
 io.on('connection', (socket) => {
 
+  setInterval(() => {
+    socket.emit("ethData", ethData)
+  }, 10000)
   socket.on("getEthData", () => {
     socket.emit("ethData", ethData)
   })

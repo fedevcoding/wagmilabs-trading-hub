@@ -7,43 +7,43 @@ const mintingRoute = express()
 
 mintingRoute.get('/:time', checkAuth, (req, res) => {
 
-    async function getData(){
+    async function getData() {
 
-        try{
-            const {time} = req.params || {}
+        try {
+            const { time } = req.params || {}
             const userTime = parseInt(time)
 
             const minTime = new Date().getTime() - userTime
 
             let mintingCollections = await Minting.aggregate([
                 {
-                    $unwind:"$mints"
+                    $unwind: "$mints"
                 },
                 {
-                    $match:{
-                        "mints.mintTime": {$gt: minTime},
+                    $match: {
+                        "mints.mintTime": { $gt: minTime },
                     }
                 },
                 {
-                    $group:{
-                        _id:"$_id",
-                        uniqueMinters: {$addToSet: '$mints.minterAddress'},
-                        volume: {$sum:'$mints.value'},
+                    $group: {
+                        _id: "$_id",
+                        uniqueMinters: { $addToSet: '$mints.minterAddress' },
+                        volume: { $sum: '$mints.value' },
                         firstDoc: { $first: "$$ROOT" },
-                        rightMints: {$sum: '$mints.amount'}
+                        rightMints: { $sum: '$mints.amount' }
                     },
                 },
                 {
                     $unset: "firstDoc.mints"
                 },
                 {
-                    $match: {"rightMints": {"$gt": 0}}
+                    $match: { "rightMints": { "$gt": 0 } }
                 },
                 {
                     $addFields: {
                         "firstDoc.volume": "$volume",
                         "firstDoc.rightMints": "$rightMints",
-                        "firstDoc.uniqueMinters": {$size: "$uniqueMinters"},
+                        "firstDoc.uniqueMinters": { $size: "$uniqueMinters" },
                     }
                 },
                 {
@@ -61,10 +61,10 @@ mintingRoute.get('/:time', checkAuth, (req, res) => {
                 }
             ])
 
-            res.status(200).json({mintingCollections})
+            res.status(200).json({ mintingCollections })
         }
-        catch(e){
-            res.status(500).json({error: e})
+        catch (e) {
+            res.status(500).json({ error: e })
         }
     }
     getData()

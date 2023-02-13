@@ -14,7 +14,11 @@ collectionListingsRoute.get('/:address', (req, res) => {
             const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000) / 1000;
 
             console.time("start")
-            const totalListings = (await Listings.findOne({ contractAddress: address.toLowerCase() }))?.listings || []
+            const lowerCased = address.toLowerCase()
+
+            const totalListings = (await Listings.findOne({ contractAddress: lowerCased }, { listings: { $slice: -10 } })).listings
+
+            console.log(totalListings.length)
             console.timeEnd("start")
             res.status(200).json({ totalListings: totalListings, status: "success", ok: true })
         }

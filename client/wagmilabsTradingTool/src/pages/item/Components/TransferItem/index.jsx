@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { TransferItemModal } from "@Components";
 
 export const TransferItem = React.memo(({ details, address, id, currency }) => {
   const [isOpen, setIsOpen] = React.useState(false);
+
 
   return (
     <>
