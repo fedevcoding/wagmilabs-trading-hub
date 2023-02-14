@@ -32,10 +32,16 @@ export const TransferItemModal = React.memo(
 
     const { transferNft } = useTransferItem();
 
-    const transfer = (contractAddress, tokenId, toAddress, setConfirmingList) => {
-      transferNft(contractAddress, tokenId, toAddress);
-    }
-
+    const transfer = async (
+      contractAddress,
+      tokenId,
+      toAddress,
+      setConfirmingList
+    ) => {
+      setConfirmingList(true);
+      await transferNft(contractAddress, tokenId, toAddress);
+      setConfirmingList(false);
+    };
 
     return (
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
@@ -68,7 +74,12 @@ export const TransferItemModal = React.memo(
               mr={3}
               onClick={() => {
                 if (!confirmingList)
-                  transfer(contractAddress, tokenId, address, setConfirmingList);
+                  transfer(
+                    contractAddress,
+                    tokenId,
+                    address,
+                    setConfirmingList
+                  );
               }}
               isDisabled={!isValidAddress}
             >
