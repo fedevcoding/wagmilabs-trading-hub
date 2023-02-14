@@ -3,7 +3,16 @@ import React from "react";
 export const CurrentPrice = React.memo(({ market }) => {
   return (
     <>
-      <p className="current-price">Current price</p>
+      <p className="current-price">
+        {(market?.quantityRemaining && (
+          <>
+            <small>{`Quantity remaining: ${market.quantityRemaining}`}</small>
+            <br />
+          </>
+        )) ||
+          ""}
+        Current price
+      </p>
       <div className="price">
         {market.price.amount.decimal} {market.price.currency.symbol}
         <small>
