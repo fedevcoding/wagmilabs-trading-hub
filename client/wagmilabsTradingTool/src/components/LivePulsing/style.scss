@@ -1,27 +1,41 @@
+$active: #2cb702;
+$active2: rgba(44, 183, 2, 0.8);
+
+
+$inactive: #8f951e;
+$inactive2: transparent;
+
 .blob {
-  background: rgb(44, 183, 2);
+  background: $active;
   border-radius: 50%;
   height: 10px;
   width: 10px;
 
-  box-shadow: 0 0 0 0 rgb(44, 183, 2);
+  box-shadow: 0 0 0 0 $active;
   transform: scale(1);
   animation: pulse 1200ms infinite;
+}
+
+
+.blob.not-active {
+  background: $inactive;
+  box-shadow: 0 0 0 0 $inactive2;
+  animation: none;
 }
 
 @keyframes pulse {
   0% {
     transform: scale(0.9);
-    box-shadow: 0 0 0 0 rgba(44, 183, 2, 0.8);
+    box-shadow: 0 0 0 0 $active2;
   }
 
   70% {
     transform: scale(1);
-    box-shadow: 0 0 0 8px rgba(44, 183, 2, 0);
+    box-shadow: 0 0 0 8px transparent;
   }
 
   100% {
     transform: scale(0.9);
-    box-shadow: 0 0 0 0 rgba(60, 255, 0, 0);
+    box-shadow: 0 0 0 0 transparent;
   }
 }

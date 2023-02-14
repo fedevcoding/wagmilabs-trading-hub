@@ -139,9 +139,8 @@ const Items = ({
         ],
       }));
     } else {
-      let filteredAttributes = itemFilters.attributeFilter.filter(
-        attr => attr.attributeValue !== attributeValue
-      );
+      console.log(itemFilters.attributeFilter)
+      let filteredAttributes = itemFilters.attributeFilter.filter(attr => attr.attributeValue !== attributeValue && attr.attributeKey !== attributeKey);
       setItemFilters(prev => ({
         ...prev,
         attributeFilter: filteredAttributes,

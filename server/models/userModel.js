@@ -147,7 +147,7 @@ const userSchema = mongoose.Schema({
 })
 
 
-cartSchema.index({ "tokenId": 1, "contractAddress": 1 }, { unique: true })
+// cartSchema.index({ "tokenId": 1, "contractAddress": 1 }, { unique: true })
 
 
 

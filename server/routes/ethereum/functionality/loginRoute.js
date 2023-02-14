@@ -44,6 +44,8 @@ loginRoute.post("/", checkOwnership, async (req, res) => {
             const user = await User.findOne({ address })
 
             if (user) {
+
+                console.log(user)
                 res.status(200).cookie("refreshJWT", refreshToken, {
                     httpOnly: true,
                     secure: true,

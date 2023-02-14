@@ -39,7 +39,7 @@ import getMarketplaceImage from "../../utils/marketplaceImageMapping";
 
 import copy from "copy-to-clipboard";
 import { useDebounce } from "use-debounce";
-import { Badge, useToast } from "@chakra-ui/react";
+import { Badge, Button, useToast } from "@chakra-ui/react";
 import setPageTitle from "../../utils/functions/setPageTitle";
 import { SocketContext } from "src/context/SocketContext";
 
@@ -92,6 +92,8 @@ const Collection = () => {
   const [debounceSearch] = useDebounce(searchText, 400);
   const [selectedItem, setSelectedItem] = useState(options[0]);
 
+  const [liveItems, setLiveItems] = useState(true)
+
 
   useEffect(() => {
     if (address) {
@@ -116,6 +118,13 @@ const Collection = () => {
       })
 
 
+      socket.on("sale", saleData => {
+        const { tokenId } = saleData
+
+        addNewSale(tokenId)
+      })
+
+
       return () => {
         socket.emit("leaveListings", address)
         socket.emit("leaveSales", address)
@@ -126,7 +135,21 @@ const Collection = () => {
 
   function addNewListing(dataObj) {
 
-
+    if (
+      (itemFilters.tokenId !== undefined
+      && itemFilters.tokenId !== "")
+      || itemFilters.attributeFilter.length >= 0 
+      || (itemFilters.sortBy !== "p-lth"  && itemFilters.sortBy !== "p-htl")
+      ){
+        console.log(itemFilters.tokenId !== undefined)
+        console.log(itemFilters.attributeFilter.length > 0)
+        console.log(itemFilters.sortBy !== "p-lth")
+        console.log(itemFilters.sortBy !== "p-htl")
+        
+        // alert("new listing but filters are on")
+        return
+      }
+    
     const { tokenId, value, image, name, timestamp, marketplace } = dataObj
 
     const newListing = {
@@ -153,17 +176,55 @@ const Collection = () => {
       }
 
     }
-
     const oldItems = itemRef.current
 
-    // let i = 0
-    // while (oldItems.length > 0 && value < oldItems[0].market.floorAsk.price.amount.decimal) {
-    // i++
-    // }
+    for(let i = 0; i < oldItems.length; i++) {
+      if(oldItems[i]?.token?.tokenId === tokenId) {
+        oldItems.splice(i, 1)
+      }
+    }
 
-    const newItems = [newListing, ...oldItems].sort((a, b) => (a.market.floorAsk.price.amount.decimal - b.market.floorAsk.price.amount.decimal))
+    if(itemFilters.sortBy === "p-lth") {
+
+      if(value > oldItems[oldItems.length - 1]?.market?.floorAsk?.price?.amount?.decimal) return
+
+      const newItems = [newListing, ...oldItems].sort((a, b) => {
+        return a?.market?.floorAsk?.price?.amount?.decimal - b?.market?.floorAsk?.price?.amount?.decimal
+      })
+
+      setItems(newItems)
+    }
+    else if(itemFilters.sortBy === "p-htl") {
+      if(value < oldItems[oldItems.length - 1]?.market?.floorAsk?.price?.amount?.decimal) return
+
+      const newItems = [newListing, ...oldItems].sort((a, b) => {
+        return b?.market?.floorAsk?.price?.amount?.decimal - a?.market?.floorAsk?.price?.amount?.decimal
+      })
+
+      setItems(newItems)
+    }
+  }
+
+  function addNewSale(tokenId) {
+    const oldItems = itemRef.current
+    tokenId = tokenId?.toString()
+    const newItems = oldItems.filter(item => item.token.tokenId !== tokenId)
     setItems(newItems)
   }
+
+  useEffect(()=>{
+    if (
+      (itemFilters.tokenId !== undefined
+      && itemFilters.tokenId !== "")
+      || itemFilters.attributeFilter.length >= 0 
+      || (itemFilters.sortBy !== "p-lth"  && itemFilters.sortBy !== "p-htl")
+      ){
+        setLiveItems(false) 
+      }
+      else if(!liveItems){
+        setLiveItems(true)
+      }
+  }, [itemFilters])
 
   useEffect(() => {
     itemRef.current = items
@@ -415,6 +476,8 @@ const Collection = () => {
           style={{ backgroundImage: `url(${collectionInfo.banner})` }}
         ></div>
         <hr style={{ border: "1.5px solid grey", backgroundColor: "grey" }} />
+
+        <Button onClick={() => addNewListing()}></Button>
 
         <div className="infos">
           {loadingCollection ? (
@@ -756,10 +819,11 @@ const Collection = () => {
       <div className="collection-sections">
         <div
           section="items"
-          className="selected single-collection-section"
+          className="selected single-collection-section flex-15"
           onClick={e => changeCollectionSection(e)}
         >
-          Items
+          <p>Items</p>
+          <LivePulsing notActive={!liveItems}/>
         </div>
         <div
           section="liveview"

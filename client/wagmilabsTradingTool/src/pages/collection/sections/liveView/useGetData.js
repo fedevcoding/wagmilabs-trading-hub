@@ -22,15 +22,10 @@ export function useGetData(address) {
       const salesUrl = `/collectionSales/${address}`
       const listingsUrl = `/collectionListings/${address}`
 
-      console.time("getting data from server")
-
-      // const { totalSales } = await getFromServer(salesUrl)
-      // const { totalListings } = await getFromServer(listingsUrl)
       const [{ totalSales }, { totalListings }] = await Promise.all([
         getFromServer(salesUrl),
         getFromServer(listingsUrl)
       ])
-      console.timeEnd("getting data from server")
 
 
       setTotalSales(totalSales)
