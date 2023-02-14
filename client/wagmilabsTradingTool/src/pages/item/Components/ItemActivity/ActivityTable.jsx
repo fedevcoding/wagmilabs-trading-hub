@@ -6,11 +6,16 @@ import { getEvent } from "./functions";
 import moment from "moment";
 
 export const ActivityTable = React.memo(({ activities, currency }) => {
+  const hasAmount = (activities?.activities || []).length
+    ? !!activities?.activities[0].amount
+    : false;
+
   return (
     <table>
       <thead>
         <tr>
           <th>Event</th>
+          {hasAmount ? <th>Amount</th> : <></>}
           <th>Price</th>
           <th>From</th>
           <th>To</th>
@@ -25,6 +30,7 @@ export const ActivityTable = React.memo(({ activities, currency }) => {
               .join()}
           >
             <td>{getEvent(a.type)}</td>
+            {hasAmount ? <td>{a.amount}</td> : <></>}
             <td>
               {(a.price && (
                 <>
