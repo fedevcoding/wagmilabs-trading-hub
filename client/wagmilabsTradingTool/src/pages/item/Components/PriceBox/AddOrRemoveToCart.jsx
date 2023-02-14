@@ -11,7 +11,7 @@ export const AddOrRemoveToCart = React.memo(({ details, address }) => {
 
   return hasItem ? (
     <div className="btn" onClick={() => removeItemFromCart(tokenId, address)}>
-      <i className="fa fa-minus" />
+      <i className="fa fa-cart-minus" />
       Remove from cart
     </div>
   ) : (

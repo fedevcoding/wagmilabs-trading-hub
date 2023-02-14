@@ -10,10 +10,7 @@ export const ListingTable = React.memo(({ listings, address, details }) => {
   const { name, tokenId, image, marketplace, collectionName } =
     useGetVariables(details);
   const { addItemToCart } = useAddItemToCart(address);
-
-  const hasAmount = (listings || []).length
-    ? listings[0]?.quantityRemaining
-    : false;
+  const hasAmount = details.token.kind === "erc1155";
 
   return (
     <table>
