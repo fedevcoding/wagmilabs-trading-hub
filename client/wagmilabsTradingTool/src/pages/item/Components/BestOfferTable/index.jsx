@@ -2,8 +2,7 @@ import React from "react";
 import moment from "moment";
 import { Tooltip } from "@chakra-ui/react";
 import { useAccount } from "wagmi";
-import { formatContractAddress } from "../../../../utils/formats/formats";
-import { useListings } from "@reservoir0x/reservoir-kit-ui";
+import { formatContractAddress } from "@Utils/formats/formats";
 
 import "./style.scss";
 
@@ -11,12 +10,6 @@ export const BestOfferTable = React.memo(({ details }) => {
   const { address: accountAddress } = useAccount();
   const isOwner = details ? accountAddress === details?.token?.owner : false;
   const topBid = details?.market?.topBid;
-
-  const { data: listings } = useListings({
-    token: ["0xe70659b717112ac4e14284d0db2f5d5703df8e43:2"],
-  });
-
-  console.log(listings);
 
   return (
     <>

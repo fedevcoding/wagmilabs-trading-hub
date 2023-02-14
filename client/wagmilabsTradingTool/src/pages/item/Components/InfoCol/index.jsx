@@ -5,6 +5,7 @@ import {
   BestOfferBox,
   BestOfferTable,
   ItemActivity,
+  Listings,
   ListItem,
   PriceBox,
   TransferItem,
@@ -66,6 +67,12 @@ export const InfoCol = React.memo(({ details, address, id }) => {
       </div>
 
       {isOwner ? "" : <PriceBox details={details} address={address} />}
+
+      {details?.token?.kind === "erc1155" ? (
+        <Listings details={details} address={address} id={id} />
+      ) : (
+        ""
+      )}
 
       <BestOfferBox details={details} address={address} isOwner={isOwner} />
       <BestOfferTable details={details} />
