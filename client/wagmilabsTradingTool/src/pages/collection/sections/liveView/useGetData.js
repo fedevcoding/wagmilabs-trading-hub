@@ -22,10 +22,16 @@ export function useGetData(address) {
       const salesUrl = `/collectionSales/${address}`
       const listingsUrl = `/collectionListings/${address}`
 
+      console.time("getting data from server")
 
-      const { totalSales } = await getFromServer(salesUrl)
+      // const { totalSales } = await getFromServer(salesUrl)
+      // const { totalListings } = await getFromServer(listingsUrl)
+      const [{ totalSales }, { totalListings }] = await Promise.all([
+        getFromServer(salesUrl),
+        getFromServer(listingsUrl)
+      ])
+      console.timeEnd("getting data from server")
 
-      const { totalListings } = await getFromServer(listingsUrl)
 
       setTotalSales(totalSales)
 
@@ -35,8 +41,6 @@ export function useGetData(address) {
     }
 
     async function listenToListings() {
-      socket.emit("joinListings", lowerCasedAddress)
-
       socket.on("listing", (listingData) => {
 
         const {
@@ -50,9 +54,6 @@ export function useGetData(address) {
     }
 
     async function listenToSales() {
-
-      socket.emit("joinSales", lowerCasedAddress)
-
       socket.on("sale", (saleData) => {
 
         const { tokenId,
@@ -70,11 +71,6 @@ export function useGetData(address) {
     getData()
     listenToListings()
     listenToSales()
-
-    return () => {
-      socket.emit("leaveListings", lowerCasedAddress)
-      socket.emit("leaveSales", lowerCasedAddress)
-    }
 
   }, [address, socket]);
 

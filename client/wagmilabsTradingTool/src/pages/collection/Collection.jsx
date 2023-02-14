@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useContext } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import questionImage from "../../assets/question.png";
 
@@ -41,6 +41,7 @@ import copy from "copy-to-clipboard";
 import { useDebounce } from "use-debounce";
 import { Badge, useToast } from "@chakra-ui/react";
 import setPageTitle from "../../utils/functions/setPageTitle";
+import { SocketContext } from "src/context/SocketContext";
 
 // Item.js
 const options = [
@@ -56,6 +57,7 @@ const Collection = () => {
   const toast = useToast();
   const navigate = useNavigate();
 
+  const socket = useContext(SocketContext)
   const { address } = useParams();
 
   const [collectionInfo, setCollectionInfo] = useState({});
@@ -64,6 +66,8 @@ const Collection = () => {
   const [section, setSection] = useState("items");
   const [loadingCollection, setLoadingCollection] = useState(true);
   const [copyState, setCopyState] = useState({ hovered: false, value: "Copy" });
+
+
 
   // items.js states
   const [itemFilters, setItemFilters] = useState({
@@ -83,9 +87,11 @@ const Collection = () => {
 
   const [buyNowChecked, setBuyNowChecked] = useState(false);
   const [items, setItems] = useState([]);
+  const itemRef = useRef(items)
   const [searchText, setSearchText] = useState("");
   const [debounceSearch] = useDebounce(searchText, 400);
   const [selectedItem, setSelectedItem] = useState(options[0]);
+
 
   useEffect(() => {
     if (address) {
@@ -95,11 +101,74 @@ const Collection = () => {
         checkIfWatchlist();
         getInfo();
       }
+
+      socket.emit("joinListings", address)
+      socket.emit("joinSales", address)
+
+
+      socket.on("listing", listingData => {
+
+        const { tokenId, price, image, name, timestamp, marketplace } = listingData
+
+        const dataObj = { tokenId, value: price, image, name, timestamp, marketplace }
+
+        addNewListing(dataObj)
+      })
+
+
+      return () => {
+        socket.emit("leaveListings", address)
+        socket.emit("leaveSales", address)
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [address]);
 
-  //Items.js
+  function addNewListing(dataObj) {
+
+
+    const { tokenId, value, image, name, timestamp, marketplace } = dataObj
+
+    const newListing = {
+      token: {
+        tokenId,
+        name,
+        image,
+        rarityRank: 0,
+        isFlagged: false,
+      },
+      market: {
+        floorAsk: {
+          price: {
+            amount: {
+              decimal: value,
+            },
+          },
+          source: {
+            name: marketplace,
+            icon: "",
+            url: "",
+          },
+        },
+      }
+
+    }
+
+    const oldItems = itemRef.current
+
+    // let i = 0
+    // while (oldItems.length > 0 && value < oldItems[0].market.floorAsk.price.amount.decimal) {
+    // i++
+    // }
+
+    const newItems = [newListing, ...oldItems].sort((a, b) => (a.market.floorAsk.price.amount.decimal - b.market.floorAsk.price.amount.decimal))
+    setItems(newItems)
+  }
+
+  useEffect(() => {
+    itemRef.current = items
+  }, [items])
+
   useEffect(() => {
     address && fetchTokens();
     // eslint-disable-next-line react-hooks/exhaustive-deps

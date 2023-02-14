@@ -55,6 +55,7 @@ const Items = ({
   setSelectedItem,
   fetchMoreTokens,
 }) => {
+
   const { userCartItems } = useContext(UserDataContext);
   const firstRender = useFirstRender();
 
@@ -69,6 +70,7 @@ const Items = ({
     closeBuynowModal,
     setBuyNowModalData,
   } = useGetBuyNowModalFunctions();
+
 
   useEffect(() => {
     const options = {
