@@ -7,7 +7,7 @@ import moment from "moment";
 import { useGetVariables } from "../PriceBox/useGetVariables";
 
 export const ListingTable = React.memo(({ listings, address, details }) => {
-  const { name, tokenId, value, image, marketplace, collectionName } =
+  const { name, tokenId, image, marketplace, collectionName } =
     useGetVariables(details);
   const { addItemToCart } = useAddItemToCart(address);
 
@@ -65,7 +65,7 @@ export const ListingTable = React.memo(({ listings, address, details }) => {
                 addItemToCart(
                   name,
                   tokenId,
-                  value,
+                  a.price.amount.native,
                   image,
                   marketplace,
                   collectionName
