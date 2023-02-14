@@ -9,7 +9,7 @@ export const useAcceptOffer = () => {
     try {
       const signer = await fetchSigner();
 
-      await getClient()?.actions.buyToken({
+      await getClient()?.actions.acceptOffer({
         token: {
           tokenId,
           contract,

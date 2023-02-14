@@ -28,7 +28,7 @@ import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import getMarketplaceImage from "@Utils/marketplaceImageMapping";
 
 import flaggedImg from "@Assets/flagged.svg";
-import { BuyNowModal } from "@Components";
+import { BuyNowModal, Row } from "@Components";
 import {
   useAddItemToCart,
   useBuyNow,
@@ -243,15 +243,13 @@ const Items = ({
 
         return (
           <div
-            className={`collection-single-item-container ${
-              isLast && "last-token"
-            }`}
+            className={`collection-single-item-container ${isLast && "last-token"
+              }`}
             key={index}
           >
             <div
-              className={`collection-item-details-container ${
-                isInCart && "item-cart-selected"
-              }`}
+              className={`collection-item-details-container ${isInCart && "item-cart-selected"
+                }`}
             >
               <div className="collection-item-image-hover-overflow">
                 <img
@@ -351,14 +349,14 @@ const Items = ({
                           isInCart
                             ? removeItemFromCart(tokenId, address)
                             : addItemToCart(
-                                name,
-                                tokenId,
-                                value,
-                                image,
-                                marketplace,
-                                collectionName,
-                                index
-                              )
+                              name,
+                              tokenId,
+                              value,
+                              image,
+                              marketplace,
+                              collectionName,
+                              index
+                            )
                         }
                       >
                         <i className="fa-light fa-cart-shopping item-buy-not-visible"></i>
@@ -499,6 +497,7 @@ const Items = ({
                   collectionInfo?.attributes?.map((item, index) => {
                     const attributeName = item.key;
 
+                    const length = item?.values?.length;
                     return (
                       <AccordionItem>
                         <AccordionButton
@@ -516,6 +515,8 @@ const Items = ({
                             <i className="fa-solid fa-filters"></i>
                             <p>{attributeName}</p>
                           </Box>
+
+                          <span className="mr-10 little-text low-opacity">{length}</span>
                           <AccordionIcon />
                         </AccordionButton>
 
@@ -523,34 +524,37 @@ const Items = ({
                           {item?.values &&
                             item.values.map(innerItem => {
                               const attributeValue = innerItem.value;
+                              const { count } = innerItem;
 
                               return (
                                 <>
-                                  <Checkbox
-                                    defaultChecked={
-                                      itemFilters?.attributeFilter?.filter(
-                                        item =>
-                                          item.attributeKey === attributeName &&
-                                          item.attributeValue === attributeValue
-                                      ).length > 0
-                                        ? true
-                                        : false
-                                    }
-                                    size={"sm"}
-                                    className="collection-item-marketplace-filter"
-                                    key={crypto.randomUUID()}
-                                    value={attributeValue}
-                                    onChange={e =>
-                                      changeAttributeFilter(
-                                        e.target.checked,
-                                        attributeName,
-                                        attributeValue
-                                      )
-                                    }
-                                  >
-                                    {attributeValue}
-                                  </Checkbox>
-                                  <br />
+                                  <Row>
+                                    <Checkbox
+                                      defaultChecked={
+                                        itemFilters?.attributeFilter?.filter(
+                                          item =>
+                                            item.attributeKey === attributeName &&
+                                            item.attributeValue === attributeValue
+                                        ).length > 0
+                                          ? true
+                                          : false
+                                      }
+                                      size={"sm"}
+                                      className="collection-item-marketplace-filter"
+                                      key={crypto.randomUUID()}
+                                      value={attributeValue}
+                                      onChange={e =>
+                                        changeAttributeFilter(
+                                          e.target.checked,
+                                          attributeName,
+                                          attributeValue
+                                        )
+                                      }
+                                    >
+                                      {attributeValue}
+                                    </Checkbox>
+                                    <span className="little-text low-opacity">{count}</span>
+                                  </Row>
                                 </>
                               );
                             })}

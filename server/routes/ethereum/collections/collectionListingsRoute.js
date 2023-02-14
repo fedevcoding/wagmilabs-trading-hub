@@ -16,7 +16,7 @@ collectionListingsRoute.get('/:address', (req, res) => {
             console.time("start")
             const lowerCased = address.toLowerCase()
 
-            const totalListings = (await Listings.findOne({ contractAddress: lowerCased }, { listings: { $slice: -10 } })).listings
+            const totalListings = (await Listings.findOne({ contractAddress: lowerCased }, { listings: { $slice: -2000 } })).listings
 
             console.log(totalListings.length)
             console.timeEnd("start")

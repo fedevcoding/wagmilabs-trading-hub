@@ -85,3 +85,9 @@ body.overflow-hidden {
     justify-content: space-between;
     align-items: center;
 }
+
+
+
+.mr-10 {
+    margin-right: 10px;
+}
