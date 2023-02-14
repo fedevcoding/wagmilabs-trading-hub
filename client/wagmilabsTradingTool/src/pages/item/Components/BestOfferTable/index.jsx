@@ -3,6 +3,7 @@ import moment from "moment";
 import { Tooltip } from "@chakra-ui/react";
 import { useAccount } from "wagmi";
 import { formatContractAddress } from "@Utils/formats/formats";
+import getMarketplaceImage from "@Utils/marketplaceImageMapping";
 
 import "./style.scss";
 
@@ -10,12 +11,16 @@ export const BestOfferTable = React.memo(({ details }) => {
   const { address: accountAddress } = useAccount();
   const isOwner = details ? accountAddress === details?.token?.owner : false;
   const topBid = details?.market?.topBid;
+  const marketplace = topBid?.source?.name || "";
 
   return (
     <>
       {(!isOwner && topBid.id && (
         <div className="best-offer">
-          <p>Best offer</p>
+          <p>
+            Best offer
+            <small>{` (${marketplace})`}</small>
+          </p>
           <table>
             <thead>
               <tr>

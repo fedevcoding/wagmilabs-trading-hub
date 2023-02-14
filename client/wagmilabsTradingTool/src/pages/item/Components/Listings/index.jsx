@@ -6,7 +6,7 @@ import { ListingTable } from "./ListingTable";
 import "./style.scss";
 
 export const Listings = React.memo(({ address, id, details }) => {
-  const { data: listings } = useListings({
+  const { data: listings, isFetchingPage } = useListings({
     token: [`${address}:${id}`],
     sortBy: "price",
     limit: 20,
@@ -14,20 +14,27 @@ export const Listings = React.memo(({ address, id, details }) => {
 
   return (
     <div id="item-listings">
-      {((listings || []).length && (
-        <>
-          <div className="space-between item-listing-title">
-            <h2>Listings</h2>
+      <div className="space-between item-listing-title">
+        <h2>Listings</h2>
+      </div>
+      <div className="listing-table-container">
+        {isFetchingPage ? (
+          <div id="item-listings">
+            <LoadingSpinner />
           </div>
-          <div className="listing-table-container">
-            <ListingTable
-              listings={listings}
-              address={address}
-              details={details}
-            />
-          </div>
-        </>
-      )) || <LoadingSpinner />}
+        ) : (
+          <>
+            {((listings || []).length && (
+              <ListingTable
+                listings={listings}
+                address={address}
+                details={details}
+              />
+            )) ||
+              "No listings found!"}
+          </>
+        )}
+      </div>
     </div>
   );
 });
