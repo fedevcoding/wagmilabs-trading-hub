@@ -1,2 +1,7 @@
 export { TransferItemModal } from "./TransferItemModal";
 export { ListItemModal } from "./ListItemModal";
+export { BuyNowModal } from "./BuyNowModal";
+export { CartModal } from "./CartModal";
+export { GasModal } from "./GasModal";
+export { NewTaskModal } from "./NewTaskModal";
+export { WalletModal } from "./WalletModal";
