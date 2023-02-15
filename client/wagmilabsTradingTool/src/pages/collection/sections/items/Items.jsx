@@ -177,12 +177,10 @@ const Items = ({
     ];
     const cart = document.querySelector(".header-cart-item");
 
-    const cartX =
-      -1 * (window.screenX - cart.getBoundingClientRect().x) -
-      cart.getBoundingClientRect().width;
+    const cartX = cart.getBoundingClientRect().left;
     const cartY = cart.getBoundingClientRect().y;
 
-    const itemX = window.screenX - item.getBoundingClientRect().x;
+    const itemX = item.getBoundingClientRect().left;
     const itemY = item.getBoundingClientRect().y;
 
     const imageTag = document.createElement("img");
@@ -190,21 +188,22 @@ const Items = ({
     imageTag.style.height = "200px";
     imageTag.style.position = "fixed";
     imageTag.style.top = itemY + "px";
-    imageTag.style.right = itemX + "px";
+    imageTag.style.left = itemX + "px";
+    imageTag.style.right = "auto";
     imageTag.style.zIndex = "1000";
     imageTag.style.borderRadius = "10px";
-    imageTag.style.transition = "all 250ms linear";
+    imageTag.style.transition = "all 400ms linear";
 
     item.appendChild(imageTag);
 
     setTimeout(() => {
       imageTag.style.top = cartY + "px";
-      imageTag.style.right = cartX + "px";
+      imageTag.style.left = cartX + "px";
       imageTag.style.height = "30px";
 
       setTimeout(() => {
         imageTag.remove();
-      }, 240);
+      }, 400);
     }, 10);
   }
 
