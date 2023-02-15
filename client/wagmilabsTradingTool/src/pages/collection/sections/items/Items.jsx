@@ -139,12 +139,21 @@ const Items = ({
         ],
       }));
     } else {
+
       console.log(itemFilters.attributeFilter)
-      let filteredAttributes = itemFilters.attributeFilter.filter(attr => attr.attributeValue !== attributeValue && attr.attributeKey !== attributeKey);
-      setItemFilters(prev => ({
-        ...prev,
-        attributeFilter: filteredAttributes,
-      }));
+      console.log(attributeKey)
+      console.log(attributeValue)
+
+      setItemFilters(prev => {
+        const filteredAttributes = prev.attributeFilter.filter(attr => {
+          if(attr.attributeKey === attributeKey && attr.attributeValue === attributeValue) return
+          return attr
+        });
+        return {
+          ...prev,
+          attributeFilter: [...filteredAttributes],
+        };
+      })
     }
   }
 
@@ -175,12 +184,10 @@ const Items = ({
     ];
     const cart = document.querySelector(".header-cart-item");
 
-    const cartX =
-      -1 * (window.screenX - cart.getBoundingClientRect().x) -
-      cart.getBoundingClientRect().width;
+    const cartX = -1 * (window.screen.availWidth - cart.getBoundingClientRect().x) - cart.getBoundingClientRect().width;
     const cartY = cart.getBoundingClientRect().y;
 
-    const itemX = window.screenX - item.getBoundingClientRect().x;
+    const itemX = window.screen.availWidth - item.getBoundingClientRect().x;
     const itemY = item.getBoundingClientRect().y;
 
     const imageTag = document.createElement("img");

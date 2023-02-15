@@ -109,25 +109,21 @@ const Collection = () => {
 
 
       socket.on("listing", listingData => {
-
         const { tokenId, price, image, name, timestamp, marketplace } = listingData
-
         const dataObj = { tokenId, value: price, image, name, timestamp, marketplace }
-
         addNewListing(dataObj)
       })
 
 
       socket.on("sale", saleData => {
         const { tokenId } = saleData
-
         addNewSale(tokenId)
       })
 
 
       return () => {
-        socket.emit("leaveListings", address)
-        socket.emit("leaveSales", address)
+        socket.emit("leaveListings", address.toLowerCase())
+        socket.emit("leaveSales", address.toLowerCase())
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -135,22 +131,13 @@ const Collection = () => {
 
   function addNewListing(dataObj) {
 
-    if (
-      (itemFilters.tokenId !== undefined
-      && itemFilters.tokenId !== "")
-      || itemFilters.attributeFilter.length >= 0 
-      || (itemFilters.sortBy !== "p-lth"  && itemFilters.sortBy !== "p-htl")
-      ){
-        console.log(itemFilters.tokenId !== undefined)
-        console.log(itemFilters.attributeFilter.length > 0)
-        console.log(itemFilters.sortBy !== "p-lth")
-        console.log(itemFilters.sortBy !== "p-htl")
-        
-        // alert("new listing but filters are on")
-        return
-      }
-    
+    if ((itemFilters.tokenId !== undefined && itemFilters.tokenId !== "") || itemFilters.attributeFilter.length > 0 || (itemFilters.sortBy !== "p-lth"  && itemFilters.sortBy !== "p-htl")){
+      return
+    }
+
     const { tokenId, value, image, name, timestamp, marketplace } = dataObj
+
+    if(itemFilters.priceFilter.min > value || itemFilters.priceFilter.max < value) return
 
     const newListing = {
       token: {
@@ -213,17 +200,12 @@ const Collection = () => {
   }
 
   useEffect(()=>{
-    if (
-      (itemFilters.tokenId !== undefined
-      && itemFilters.tokenId !== "")
-      || itemFilters.attributeFilter.length >= 0 
-      || (itemFilters.sortBy !== "p-lth"  && itemFilters.sortBy !== "p-htl")
-      ){
+    if ((itemFilters.tokenId !== undefined && itemFilters.tokenId !== "") || itemFilters.attributeFilter.length > 0 || (itemFilters.sortBy !== "p-lth"  && itemFilters.sortBy !== "p-htl")){
         setLiveItems(false) 
-      }
-      else if(!liveItems){
-        setLiveItems(true)
-      }
+    }
+    else if(!liveItems){
+      setLiveItems(true)
+    }
   }, [itemFilters])
 
   useEffect(() => {
@@ -476,8 +458,6 @@ const Collection = () => {
           style={{ backgroundImage: `url(${collectionInfo.banner})` }}
         ></div>
         <hr style={{ border: "1.5px solid grey", backgroundColor: "grey" }} />
-
-        <Button onClick={() => addNewListing()}></Button>
 
         <div className="infos">
           {loadingCollection ? (
