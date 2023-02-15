@@ -137,16 +137,20 @@ const Items = ({
         ],
       }));
     } else {
-      console.log(itemFilters.attributeFilter);
-      let filteredAttributes = itemFilters.attributeFilter.filter(
-        attr =>
-          attr.attributeValue !== attributeValue &&
-          attr.attributeKey !== attributeKey
-      );
-      setItemFilters(prev => ({
-        ...prev,
-        attributeFilter: filteredAttributes,
-      }));
+      setItemFilters(prev => {
+        const filteredAttributes = prev.attributeFilter.filter(attr => {
+          if (
+            attr.attributeKey === attributeKey &&
+            attr.attributeValue === attributeValue
+          )
+            return;
+          return attr;
+        });
+        return {
+          ...prev,
+          attributeFilter: [...filteredAttributes],
+        };
+      });
     }
   }
 
