@@ -1,7 +1,7 @@
+import { useContext } from "react";
 import { fetchSigner } from "@wagmi/core";
 import { getClient } from "@reservoir0x/reservoir-kit-client";
 import { useToast } from "@chakra-ui/react";
-import { useContext } from "react";
 import { UserDataContext } from "../context/userContext";
 import { getListingExpirationDate } from "../utils/formats/formats";
 import { marketListingMapping } from "../utils/mappings";
@@ -14,7 +14,11 @@ export const useListNft = (
 
   const toast = useToast();
 
-  async function listNft(setConfirmingList, days, marketplaceName = null) {
+  async function listNft(
+    setConfirmingList,
+    expirationTime = null,
+    marketplaceName = null
+  ) {
     if (listingPrice <= 0) {
       toast({
         title: "Error listing NFT.",
@@ -32,15 +36,7 @@ export const useListNft = (
       const signer = await fetchSigner();
       const marketplace = marketplaceName || listingSettings.marketplace;
 
-      let expirationTime;
-
-      if (days) {
-        const currentTimestamp = new Date().getTime();
-        expirationTime = (
-          parseInt(currentTimestamp / 1000) +
-          days * 24 * 60 * 60
-        ).toString();
-      } else {
+      if (!expirationTime) {
         expirationTime = (
           getListingExpirationDate(listingSettings).getTime() / 1000
         ).toString();

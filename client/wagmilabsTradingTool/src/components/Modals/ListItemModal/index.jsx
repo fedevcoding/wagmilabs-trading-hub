@@ -1,5 +1,5 @@
 import React from "react";
-import { getDays, getMarketplaces } from "./functions";
+import { getMarketplaces } from "./functions";
 import {
   Modal,
   ModalOverlay,
@@ -14,6 +14,8 @@ import {
 } from "@chakra-ui/react";
 import { useListNft } from "@Hooks";
 import { Loader, Select } from "@Components";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 import "./style.scss";
 
@@ -30,9 +32,8 @@ export const ListItemModal = React.memo(
   }) => {
     const [confirmingList, setConfirmingList] = React.useState(false);
     const [ethAmountPrice, setEthAmountPrice] = React.useState(null);
-    const listDays = getDays();
     const marketplaces = getMarketplaces();
-    const [days, setDays] = React.useState(listDays[0]);
+    const [date, setDate] = React.useState(null);
     const [marketplace, setMarketplace] = React.useState(marketplaces[0]);
 
     const { listNft } = useListNft(
@@ -77,14 +78,18 @@ export const ListItemModal = React.memo(
             />
             <br />
             <p className="label">
-              <b>Set days</b>
+              <b>Set expiration date</b>
             </p>
-            <Select
-              id="set-day"
-              onChange={r => setDays(r)}
-              label="Set days"
-              value={days}
-              options={listDays}
+
+            <DatePicker
+              minDate={new Date().getTime()}
+              onChange={v => {
+                setDate(v);
+              }}
+              selected={date}
+              isClearable={true}
+              placeholderText="Select expiration date"
+              className="date-picker"
             />
           </ModalBody>
           <ModalFooter>
@@ -93,7 +98,11 @@ export const ListItemModal = React.memo(
               mr={3}
               onClick={() => {
                 if (!confirmingList)
-                  listNft(setConfirmingList, days.value, marketplace.value);
+                  listNft(
+                    setConfirmingList,
+                    parseInt(new Date(date).getTime() / 1000).toString(),
+                    marketplace.value
+                  );
               }}
             >
               {confirmingList ? (
