@@ -105,12 +105,7 @@ const Collection = () => {
       socket.emit("joinSales", address);
 
       socket.on("listing", listingData => {
-
-        const { tokenId, price, image, name, timestamp, marketplace } = listingData
-
-        const dataObj = { tokenId, value: price, image, name, timestamp, marketplace }
-
-        addNewListing(dataObj)
+        addNewListing(listingData)
       })
 
 
@@ -128,29 +123,32 @@ const Collection = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [address]);
 
-  function addNewListing(dataObj) {
+  function addNewListing(listingData) {
+
+    const { tokenId, price, image, name, timestamp, marketplace, rarity, rarityRank, orderHash, isFlagged } = listingData
 
     if ((itemFilters.tokenId !== undefined && itemFilters.tokenId !== "") || itemFilters.attributeFilter.length > 0 || (itemFilters.sortBy !== "p-lth"  && itemFilters.sortBy !== "p-htl")){
       return
     }
 
-    const { tokenId, value, image, name, timestamp, marketplace } = dataObj
-
-    if(itemFilters.priceFilter.min > value || itemFilters.priceFilter.max < value) return
+    if(itemFilters.priceFilter.min > price || itemFilters.priceFilter.max < price) return
 
     const newListing = {
       token: {
+        isLive: true,
         tokenId,
         name,
         image,
-        rarityRank: 0,
-        isFlagged: false,
+        isFlagged,
+        rarity,
+        rarityRank
       },
       market: {
         floorAsk: {
+          id: orderHash,
           price: {
             amount: {
-              decimal: value,
+              decimal: price,
             },
           },
           source: {
@@ -158,6 +156,7 @@ const Collection = () => {
             icon: "",
             url: "",
           },
+          validFrom: timestamp
         },
       },
     };
@@ -171,7 +170,7 @@ const Collection = () => {
 
     if (itemFilters.sortBy === "p-lth") {
       if (
-        value >
+        price >
         oldItems[oldItems.length - 1]?.market?.floorAsk?.price?.amount?.decimal
       )
         return;
@@ -186,7 +185,7 @@ const Collection = () => {
       setItems(newItems);
     } else if (itemFilters.sortBy === "p-htl") {
       if (
-        value <
+        price <
         oldItems[oldItems.length - 1]?.market?.floorAsk?.price?.amount?.decimal
       )
         return;

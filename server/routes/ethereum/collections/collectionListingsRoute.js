@@ -11,16 +11,16 @@ collectionListingsRoute.get('/:address', (req, res) => {
             const { address } = req.params
 
             if (!address) return res.status(400).json({ status: "error", ok: false, message: "Address is required" })
-            const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000) / 1000;
+            // const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000) / 1000;
 
             console.time("start")
             const lowerCased = address.toLowerCase()
 
-            const totalListings = (await Listings.findOne({ contractAddress: lowerCased }, { listings: { $slice: -2000 } })).listings
+            const totalListings = (await Listings.findOne({ contractAddress: lowerCased }, { listings: { $slice: -2000 } }))?.listings
 
             console.log(totalListings.length)
             console.timeEnd("start")
-            res.status(200).json({ totalListings: totalListings, status: "success", ok: true })
+            res.status(200).json({ totalListings, status: "success", ok: true })
         }
         catch (e) {
             console.log(e)

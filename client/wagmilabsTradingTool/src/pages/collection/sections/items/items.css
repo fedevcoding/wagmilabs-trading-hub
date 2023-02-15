@@ -388,3 +388,22 @@
 .item-cart-selected{
     border: 2px solid #3A99F8;
 }
+
+
+
+
+.live-token-animation{
+    animation: live-token-animation 400ms;
+}
+
+@keyframes live-token-animation {
+    0%{
+        transform: scale(1);
+    }
+    50%{
+        transform: scale(1.1);
+    }
+    100%{
+        transform: scale(1);
+    }
+}

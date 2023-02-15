@@ -13,7 +13,13 @@ collectionSalesRoute.get('/:address', checkAuth, (req, res) => {
             if (!address) return res.status(400).json({ status: "error", ok: false, message: "Address is required" })
             // const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000) / 1000;
 
-            const totalSales = (await Sales.findOne({ contractAddress: address }, { sales: { $slice: -2000 } }))?.sales || []
+            const lowerCasedAddress = address.toLowerCase()
+
+            console.time("startSales")
+            const totalSales = (await Sales.findOne({ contractAddress: lowerCasedAddress }, { sales: { $slice: -2000 } }))?.sales || []
+            console.timeEnd("startSales")
+            console.log("sales", totalSales.length)
+
 
             res.status(200).json({ totalSales, status: "success", ok: true })
         }

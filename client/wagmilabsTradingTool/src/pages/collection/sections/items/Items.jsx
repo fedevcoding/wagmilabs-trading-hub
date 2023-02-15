@@ -226,7 +226,7 @@ const Items = ({
     () =>
       items &&
       items.map((item, index) => {
-        const { tokenId, name, image, rarityRank, isFlagged } = item?.token;
+        const { tokenId, name, image, rarityRank, isFlagged, isLive } = item?.token;
         const isInCart = userCartItems.some(
           item => item.tokenId.toString() === tokenId.toString()
         );
@@ -239,20 +239,20 @@ const Items = ({
         const marketplaceIcon = item?.market?.floorAsk?.source?.icon;
         const marketplaceUrl = item?.market?.floorAsk?.source?.url;
 
+        const orderHash = item?.market?.floorAsk?.id
+
         let isListed = false;
         if (value) isListed = true;
 
-        const marketplaceImg =
-          getMarketplaceImage(marketplace) || marketplaceIcon;
+        const marketplaceImg = getMarketplaceImage(marketplace) || marketplaceIcon;
 
+        
         const isLast = index === items.length - 1;
 
         return (
           <div
-            className={`collection-single-item-container ${
-              isLast && "last-token"
-            }`}
-            key={index}
+            className={`collection-single-item-container ${isLast && "last-token"} ${isLive && "live-token-animation"}`}
+            key={orderHash}
           >
             <div
               className={`collection-item-details-container ${
@@ -385,7 +385,7 @@ const Items = ({
         );
       }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [items, userCartItems]
+    [items, userCartItems, collectionInfo]
   );
 
   return (
