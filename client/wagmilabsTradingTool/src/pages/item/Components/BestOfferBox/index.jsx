@@ -1,8 +1,8 @@
 import React from "react";
 import { Col, Row } from "@Components";
 import { MakeOffer } from "..";
-import { useAcceptOffer } from "@Hooks";
 import getMarketplaceImage from "src/utils/marketplaceImageMapping";
+import { AcceptOffer } from "./AcceptOffer";
 
 export const BestOfferBox = React.memo(({ details, address, isOwner }) => {
   const market = Object.values(details.market)[0];
@@ -10,8 +10,6 @@ export const BestOfferBox = React.memo(({ details, address, isOwner }) => {
   const tokenId = details?.token?.tokenId || "";
   const marketplace = topBid?.source?.name || "";
   const marketplaceImage = getMarketplaceImage(marketplace);
-
-  const { acceptOffer } = useAcceptOffer();
 
   return (
     <>
@@ -39,13 +37,7 @@ export const BestOfferBox = React.memo(({ details, address, isOwner }) => {
           <Row className="actions">
             <Col>
               {isOwner ? (
-                <div
-                  className="btn"
-                  onClick={() => acceptOffer(address, tokenId)}
-                >
-                  <i className="fa fa-check" />
-                  Accept offer
-                </div>
+                <AcceptOffer details={details} tokenId={tokenId} />
               ) : (
                 <MakeOffer
                   address={address}
