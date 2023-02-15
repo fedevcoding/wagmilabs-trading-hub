@@ -20,7 +20,7 @@ import twitter from "../../assets/twitter.png";
 import looksRare from "../../assets/looksRare.png";
 import discord from "../../assets/discord.png";
 import gem from "../../assets/gem.png";
-import baseUrl from "../../variables/baseUrl";
+import { baseUrl } from "@Variables";
 import removeFromWatchList from "../../utils/database-functions/removeFromWatchList";
 import addToWatchList from "../../utils/database-functions/addToWatchList";
 import getWatchListCollections from "../../utils/database-functions/getWatchList";
@@ -57,7 +57,7 @@ const Collection = () => {
   const toast = useToast();
   const navigate = useNavigate();
 
-  const socket = useContext(SocketContext)
+  const socket = useContext(SocketContext);
   const { address } = useParams();
 
   const [collectionInfo, setCollectionInfo] = useState({});
@@ -66,8 +66,6 @@ const Collection = () => {
   const [section, setSection] = useState("items");
   const [loadingCollection, setLoadingCollection] = useState(true);
   const [copyState, setCopyState] = useState({ hovered: false, value: "Copy" });
-
-
 
   // items.js states
   const [itemFilters, setItemFilters] = useState({
@@ -87,13 +85,12 @@ const Collection = () => {
 
   const [buyNowChecked, setBuyNowChecked] = useState(false);
   const [items, setItems] = useState([]);
-  const itemRef = useRef(items)
+  const itemRef = useRef(items);
   const [searchText, setSearchText] = useState("");
   const [debounceSearch] = useDebounce(searchText, 400);
   const [selectedItem, setSelectedItem] = useState(options[0]);
 
-  const [liveItems, setLiveItems] = useState(true)
-
+  const [liveItems, setLiveItems] = useState(true);
 
   useEffect(() => {
     if (address) {
@@ -104,22 +101,24 @@ const Collection = () => {
         getInfo();
       }
 
-      socket.emit("joinListings", address)
-      socket.emit("joinSales", address)
-
+      socket.emit("joinListings", address);
+      socket.emit("joinSales", address);
 
       socket.on("listing", listingData => {
+
         const { tokenId, price, image, name, timestamp, marketplace } = listingData
+
         const dataObj = { tokenId, value: price, image, name, timestamp, marketplace }
+
         addNewListing(dataObj)
       })
 
 
       socket.on("sale", saleData => {
         const { tokenId } = saleData
+
         addNewSale(tokenId)
       })
-
 
       return () => {
         socket.emit("leaveListings", address.toLowerCase())
@@ -160,44 +159,56 @@ const Collection = () => {
             url: "",
           },
         },
+      },
+    };
+    const oldItems = itemRef.current;
+
+    for (let i = 0; i < oldItems.length; i++) {
+      if (oldItems[i]?.token?.tokenId === tokenId) {
+        oldItems.splice(i, 1);
       }
-
-    }
-    const oldItems = itemRef.current
-
-    for(let i = 0; i < oldItems.length; i++) {
-      if(oldItems[i]?.token?.tokenId === tokenId) {
-        oldItems.splice(i, 1)
-      }
     }
 
-    if(itemFilters.sortBy === "p-lth") {
-
-      if(value > oldItems[oldItems.length - 1]?.market?.floorAsk?.price?.amount?.decimal) return
+    if (itemFilters.sortBy === "p-lth") {
+      if (
+        value >
+        oldItems[oldItems.length - 1]?.market?.floorAsk?.price?.amount?.decimal
+      )
+        return;
 
       const newItems = [newListing, ...oldItems].sort((a, b) => {
-        return a?.market?.floorAsk?.price?.amount?.decimal - b?.market?.floorAsk?.price?.amount?.decimal
-      })
+        return (
+          a?.market?.floorAsk?.price?.amount?.decimal -
+          b?.market?.floorAsk?.price?.amount?.decimal
+        );
+      });
 
-      setItems(newItems)
-    }
-    else if(itemFilters.sortBy === "p-htl") {
-      if(value < oldItems[oldItems.length - 1]?.market?.floorAsk?.price?.amount?.decimal) return
+      setItems(newItems);
+    } else if (itemFilters.sortBy === "p-htl") {
+      if (
+        value <
+        oldItems[oldItems.length - 1]?.market?.floorAsk?.price?.amount?.decimal
+      )
+        return;
 
       const newItems = [newListing, ...oldItems].sort((a, b) => {
-        return b?.market?.floorAsk?.price?.amount?.decimal - a?.market?.floorAsk?.price?.amount?.decimal
-      })
+        return (
+          b?.market?.floorAsk?.price?.amount?.decimal -
+          a?.market?.floorAsk?.price?.amount?.decimal
+        );
+      });
 
-      setItems(newItems)
+      setItems(newItems);
     }
   }
 
   function addNewSale(tokenId) {
-    const oldItems = itemRef.current
-    tokenId = tokenId?.toString()
-    const newItems = oldItems.filter(item => item.token.tokenId !== tokenId)
-    setItems(newItems)
+    const oldItems = itemRef.current;
+    tokenId = tokenId?.toString();
+    const newItems = oldItems.filter(item => item.token.tokenId !== tokenId);
+    setItems(newItems);
   }
+
 
   useEffect(()=>{
     if ((itemFilters.tokenId !== undefined && itemFilters.tokenId !== "") || itemFilters.attributeFilter.length > 0 || (itemFilters.sortBy !== "p-lth"  && itemFilters.sortBy !== "p-htl")){
@@ -209,8 +220,8 @@ const Collection = () => {
   }, [itemFilters])
 
   useEffect(() => {
-    itemRef.current = items
-  }, [items])
+    itemRef.current = items;
+  }, [items]);
 
   useEffect(() => {
     address && fetchTokens();
@@ -803,7 +814,7 @@ const Collection = () => {
           onClick={e => changeCollectionSection(e)}
         >
           <p>Items</p>
-          <LivePulsing notActive={!liveItems}/>
+          <LivePulsing notActive={!liveItems} />
         </div>
         <div
           section="liveview"

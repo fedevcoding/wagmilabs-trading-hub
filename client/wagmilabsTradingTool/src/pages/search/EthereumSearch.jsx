@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import { useDebounce } from "use-debounce";
 import "./search.css";
 import verified from "@Assets/verified.png";
-import baseUrl from "@Variables/baseUrl";
+import { baseUrl } from "@Variables";
 
 import { useFirstRender } from "@Hooks";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";

@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import baseUrl from "@Variables/baseUrl";
+import { baseUrl } from "@Variables";
 import "./trending.css";
 import times from "./times";
 

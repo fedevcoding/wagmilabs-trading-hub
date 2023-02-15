@@ -4,7 +4,7 @@ import wagmiLogo from "../../assets/logo.png";
 import SignMessage from "./SignMessage";
 import instructionsLogo from "../../assets/instructions.png";
 
-import baseUrl from "../../variables/baseUrl";
+import { baseUrl } from "@Variables";
 
 import "@rainbow-me/rainbowkit/styles.css";
 import { useAccount, useSignMessage } from "wagmi";

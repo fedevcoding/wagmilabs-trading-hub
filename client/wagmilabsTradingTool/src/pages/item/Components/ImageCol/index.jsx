@@ -1,5 +1,5 @@
 import React from "react";
-import notFound from "@Assets/notFound.svg";
+import { default as notFound } from "@Assets/question.png";
 import { MoreInfo } from "../MoreInfo";
 
 import "./style.scss";

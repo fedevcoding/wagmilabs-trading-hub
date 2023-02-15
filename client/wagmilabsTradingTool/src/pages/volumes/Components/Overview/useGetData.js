@@ -1,6 +1,6 @@
 import React from "react";
 import { getTraderSortedValues, getVolumesSortedValues } from "./functions";
-import baseUrl from "../../../../variables/baseUrl";
+import { baseUrl } from "@Variables";
 
 export const useGetData = (marketplaces, period) => {
   const [data, setData] = React.useState({});

@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import baseUrl from "../../variables/baseUrl";
+import { baseUrl } from "@Variables";
 import animationBlack from "./animationblack.json";
 import Lottie from "react-lottie-player";
 import "./checking.css";

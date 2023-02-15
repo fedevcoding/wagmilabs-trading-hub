@@ -1,23 +1,19 @@
-import baseUrl from "../../variables/baseUrl"
-
+import { baseUrl } from "@Variables";
 
 async function getFromServer(url) {
-    const apiData = await fetch(`${baseUrl}${url}`, {
-        method: "GET",
-        headers: {
-            "Content-Type": "application/json",
-            "x-auth-token": localStorage.jsonwebtoken,
-        },
-    })
+  const apiData = await fetch(`${baseUrl}${url}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      "x-auth-token": localStorage.jsonwebtoken,
+    },
+  });
 
-    if (!apiData.ok) throw new Error("error fetching data")
+  if (!apiData.ok) throw new Error("error fetching data");
 
-    const data = await apiData.json()
+  const data = await apiData.json();
 
-    return data
+  return data;
 }
 
-
-
-
-export { getFromServer }
+export { getFromServer };

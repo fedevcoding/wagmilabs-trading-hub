@@ -1,4 +1,4 @@
-const baseUrl = require("../../variables/baseUrl");
+import { baseUrl } from "@Variables";
 
 async function updateSnipeTasks(type, taskInfo) {
   try {

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import baseUrl from "../../variables/baseUrl";
+import { baseUrl } from "@Variables";
 import "./pnl.css";
 
 const Pnl = () => {

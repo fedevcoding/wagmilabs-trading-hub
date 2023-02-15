@@ -1,5 +1,5 @@
 import React from "react";
-import baseUrl from "../../variables/baseUrl";
+import { baseUrl } from "@Variables";
 
 export function useGetNews(page) {
   const [news, setNews] = React.useState({});

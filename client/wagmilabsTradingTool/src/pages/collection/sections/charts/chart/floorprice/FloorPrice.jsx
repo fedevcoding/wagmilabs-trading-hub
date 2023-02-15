@@ -3,7 +3,7 @@ import { Chart, registerables } from "chart.js";
 import { useParams } from "react-router-dom";
 import "../charts.css";
 import times from "../times";
-import baseUrl from "@Variables/baseUrl";
+import { baseUrl } from "@Variables";
 
 const FloorPrice = () => {
   const params = useParams();

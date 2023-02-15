@@ -1,4 +1,4 @@
-import baseUrl from "../../variables/baseUrl";
+import { baseUrl } from "@Variables";
 
 async function emptyCart() {
   try {

@@ -1,4 +1,4 @@
-import baseUrl from "../../variables/baseUrl";
+import { baseUrl } from "@Variables";
 import { fetchBalance } from "@wagmi/core";
 
 async function getUserBalances(address, setUserBalances) {

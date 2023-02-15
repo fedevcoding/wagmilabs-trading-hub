@@ -1,28 +1,16 @@
-export const getDays = () => {
+export const getMarketplaces = () => {
   return [
     {
-      value: 1,
-      label: "1 day",
+      value: "opensea",
+      label: "Opensea",
     },
     {
-      value: 3,
-      label: "3 days",
+      value: "x2y2",
+      label: "X2Y2",
     },
     {
-      value: 7,
-      label: "7 days",
-    },
-    {
-      value: 30,
-      label: "1 month",
-    },
-    {
-      value: 91,
-      label: "3 months",
-    },
-    {
-      value: 182,
-      label: "6 months",
+      value: "looksrare",
+      label: "LooksRare",
     },
   ];
 };

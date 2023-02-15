@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState, useRef } from "react";
-import baseUrl from "../../../../variables/baseUrl.js";
+import { baseUrl } from "@Variables";
 
 import HighchartsReact from "highcharts-react-official";
 import Highcharts from "highcharts";

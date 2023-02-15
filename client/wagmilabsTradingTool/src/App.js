@@ -41,7 +41,7 @@ import {
   RainbowKitProvider,
   darkTheme,
 } from "@rainbow-me/rainbowkit";
-import { SIGNER_PRIVATE_KEY, RESERVOIR_API_KEY } from "./variables/rpcNodes";
+import { SIGNER_PRIVATE_KEY, RESERVOIR_API_KEY } from "@Variables";
 
 // react router
 import { BrowserRouter, Route, Routes } from "react-router-dom";
@@ -56,7 +56,7 @@ import { UserDataContext } from "./context/userContext";
 import { SocketContext } from "./context/SocketContext";
 import Redirect from "./pages/redirect/Redirect";
 import Legals from "./pages/Legal/Legals";
-import serverUrl from "./variables/serverUrl";
+import { serverUrl } from "@Variables";
 
 // for wagmi
 
@@ -174,10 +174,9 @@ function App() {
     return () => socket.off("disconnect");
   }, []);
 
-
   useEffect(() => {
-    gasSettings.value && socket.emit("getEthData")
-  }, [gasSettings.value])
+    gasSettings.value && socket.emit("getEthData");
+  }, [gasSettings.value]);
 
   // set gas setting ref when it changes
   useEffect(() => {

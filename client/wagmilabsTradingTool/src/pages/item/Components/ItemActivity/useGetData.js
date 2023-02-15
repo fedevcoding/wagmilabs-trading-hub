@@ -1,5 +1,5 @@
 import React from "react";
-import baseUrl from "../../../../variables/baseUrl";
+import { baseUrl } from "@Variables";
 
 export function useGetData(address, id, type) {
   const [activities, setActivities] = React.useState(null);

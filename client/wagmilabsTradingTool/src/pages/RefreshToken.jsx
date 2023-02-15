@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import baseUrl from "../variables/baseUrl";
+import { baseUrl } from "@Variables";
 import { useNavigate } from "react-router-dom";
 
 const RefreshToken = ({ connected, setConnected }) => {
