@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useMemo, useRef } from "react";
 import "./minting.css";
 import times from "./times";
-import baseUrl from "@Variables/baseUrl";
+import { baseUrl } from "@Variables";
 
 import notFound from "@Assets/notFound.svg";
 

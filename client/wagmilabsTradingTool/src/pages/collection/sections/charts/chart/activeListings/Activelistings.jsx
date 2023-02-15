@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Chart, registerables } from "chart.js";
 import { useParams } from "react-router-dom";
 import times from "../times";
-import baseUrl from "../../../../../../variables/baseUrl";
+import { baseUrl } from "@Variables";
 
 const Activelistings = () => {
   const params = useParams();

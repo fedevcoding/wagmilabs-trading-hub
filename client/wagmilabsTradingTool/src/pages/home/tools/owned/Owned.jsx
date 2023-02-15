@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
-import baseUrl from "../../../../variables/baseUrl";
+import { baseUrl } from "@Variables";
 import "./owned.css";
 import times from "./times";
 

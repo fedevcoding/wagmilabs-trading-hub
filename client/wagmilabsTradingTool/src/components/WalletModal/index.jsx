@@ -23,7 +23,7 @@ import { LivePulsing } from "@Components";
 import copy from "copy-to-clipboard";
 import { SwapWidget } from "@uniswap/widgets";
 import "@uniswap/widgets/fonts.css";
-import { ETHEREUM_NETWORK } from "@Variables/rpcNodes";
+import { ETHEREUM_NETWORK } from "@Variables";
 
 const jsonRpcUrlMap = {
   1: [ETHEREUM_NETWORK],

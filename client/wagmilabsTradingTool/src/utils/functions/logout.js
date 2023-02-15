@@ -1,4 +1,4 @@
-import baseUrl from "../../variables/baseUrl";
+import { baseUrl } from "@Variables";
 import { disconnect } from "@wagmi/core";
 
 async function logOut() {

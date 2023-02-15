@@ -1,6 +1,6 @@
 import React from "react";
 import wagmiLogo from "../../assets/logo.png";
-import baseUrl from "../../variables/baseUrl";
+import { baseUrl } from "@Variables";
 
 const CheckingHeader = () => {
   async function logOut() {

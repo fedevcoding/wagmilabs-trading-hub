@@ -4,7 +4,7 @@ import "./header.css";
 import { useNavigate } from "react-router-dom";
 
 import logoImage from "@Assets/logo.png";
-import baseUrl from "@Variables/baseUrl";
+import { baseUrl } from "@Variables";
 import RefreshToken from "../RefreshToken";
 import logOut from "@Utils/functions/logout";
 import { CartModal, WalletModal } from "@Components";

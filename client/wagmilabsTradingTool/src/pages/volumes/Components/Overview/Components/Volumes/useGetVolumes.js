@@ -1,6 +1,6 @@
 import React from "react";
 import { getVolumesSortedValues } from "../../functions";
-import baseUrl from "../../../../../../variables/baseUrl";
+import { baseUrl } from "@Variables";
 
 export const useGetVolumes = (volumes, period, currentPeriod, marketplaces) => {
   const [data, setData] = React.useState(volumes);

@@ -1,5 +1,5 @@
 import React from "react";
-import baseUrl from "../../../../../../variables/baseUrl";
+import { baseUrl } from "@Variables";
 
 export const useGetLeaderBoard = (
   leaderBoard,

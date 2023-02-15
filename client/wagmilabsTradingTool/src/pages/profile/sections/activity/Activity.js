@@ -6,7 +6,7 @@ import {
   roundPrice2,
   formatIpfs,
 } from "../../../../utils/formats/formats";
-import baseUrl from "../../../../variables/baseUrl";
+import { baseUrl } from "@Variables";
 import getMarketplaceImage from "../../../../utils/marketplaceImageMapping";
 import moment from "moment";
 import { useAccount } from "wagmi";
@@ -343,7 +343,7 @@ const Activity = () => {
           createdAt,
           to_address,
           token_id,
-          transaction_hash
+          transaction_hash,
         } = item || {};
 
         const contractAddress = item?.contractAddress || item.contract_address;
@@ -367,8 +367,9 @@ const Activity = () => {
           <>
             <tr
               key={key}
-              className={`profile-activity-single-container ${isLast && "last-token"
-                }`}
+              className={`profile-activity-single-container ${
+                isLast && "last-token"
+              }`}
             >
               <td className="profile-activity-single-type">
                 <div className="profile-activity-marketplace-container">
@@ -387,7 +388,6 @@ const Activity = () => {
 
               <a href={`/item/${contractAddress}/${token_id}`}>
                 <td className="profile-activity-single-token">
-
                   <img
                     src={tokenImage || nftNotFound}
                     alt=""
@@ -413,10 +413,20 @@ const Activity = () => {
                 {to_address ? formatAddress2(to_address, userAdress) : "- - -"}
               </td>
               <td className="profile-activity-single-time">
-                <a href={`${type !== "list" ? `https://etherscan.io/tx/${transaction_hash}` : ""}`} target="_blank" rel="noreferrer">
+                <a
+                  href={`${
+                    type !== "list"
+                      ? `https://etherscan.io/tx/${transaction_hash}`
+                      : ""
+                  }`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
                   <div className={`${type !== "list" && "activity"}`}>
                     {moment(createdAt).fromNow()}
-                    {type !== "list" && <i className="fa-sharp fa-solid fa-up-right-from-square"></i>}
+                    {type !== "list" && (
+                      <i className="fa-sharp fa-solid fa-up-right-from-square"></i>
+                    )}
                   </div>
                 </a>
               </td>
@@ -427,7 +437,6 @@ const Activity = () => {
                 <hr></hr>
               </td>
             </tr>
-
           </>
         );
       }),
@@ -446,16 +455,18 @@ const Activity = () => {
             <div className="profile-activity-filters-categories">
               <div
                 onClick={() => changeActivityCategory("sale")}
-                className={`${activityCategory.includes("sale") ? "active" : ""
-                  }`}
+                className={`${
+                  activityCategory.includes("sale") ? "active" : ""
+                }`}
               >
                 <i className="fa-light fa-bag-shopping"></i>
                 Sales
               </div>
               <div
                 onClick={() => changeActivityCategory("list")}
-                className={`${activityCategory.includes("list") ? "active" : ""
-                  }`}
+                className={`${
+                  activityCategory.includes("list") ? "active" : ""
+                }`}
               >
                 <i className="fa-light fa-tag"></i>
                 Listings
@@ -464,16 +475,18 @@ const Activity = () => {
             <div className="profile-activity-filters-categories">
               <div
                 onClick={() => changeActivityCategory("mint")}
-                className={`${activityCategory.includes("mint") ? "active" : ""
-                  }`}
+                className={`${
+                  activityCategory.includes("mint") ? "active" : ""
+                }`}
               >
                 <i className="fa-solid fa-sparkles"></i>
                 Mints
               </div>
               <div
                 onClick={() => changeActivityCategory("send")}
-                className={`${activityCategory.includes("send") ? "active" : ""
-                  }`}
+                className={`${
+                  activityCategory.includes("send") ? "active" : ""
+                }`}
               >
                 <i className="fa-regular fa-plane-departure"></i>
                 Send
@@ -482,16 +495,18 @@ const Activity = () => {
             <div className="profile-activity-filters-categories">
               <div
                 onClick={() => changeActivityCategory("receive")}
-                className={`${activityCategory.includes("receive") ? "active" : ""
-                  }`}
+                className={`${
+                  activityCategory.includes("receive") ? "active" : ""
+                }`}
               >
                 <i className="fa-light fa-truck"></i>
                 Receive
               </div>
               <div
                 onClick={() => changeActivityCategory("burn")}
-                className={`${activityCategory.includes("burn") ? "active" : ""
-                  }`}
+                className={`${
+                  activityCategory.includes("burn") ? "active" : ""
+                }`}
               >
                 <i className="fa-solid fa-fire"></i>
                 Burn
@@ -500,8 +515,9 @@ const Activity = () => {
             <div className="profile-activity-filters-categories">
               <div
                 onClick={() => changeActivityCategory("buy")}
-                className={`${activityCategory.includes("buy") ? "active" : ""
-                  }`}
+                className={`${
+                  activityCategory.includes("buy") ? "active" : ""
+                }`}
               >
                 <i className="fa-light fa-truck"></i>
                 Buy

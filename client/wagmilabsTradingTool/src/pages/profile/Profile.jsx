@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState, useRef } from "react";
 import "./profile.css";
-import baseUrl from "../../variables/baseUrl";
+import { baseUrl } from "@Variables";
 import Nfts from "./sections/nfts/Nfts";
 import Activity from "./sections/activity/Activity";
 import { Portal } from "react-portal";
