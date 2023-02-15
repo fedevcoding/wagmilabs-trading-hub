@@ -143,7 +143,7 @@ const Items = ({
             attr.attributeKey === attributeKey &&
             attr.attributeValue === attributeValue
           )
-            return;
+          return false;
           return attr;
         });
         return {
@@ -348,7 +348,7 @@ const Items = ({
                             value,
                             marketplace,
                             address,
-                            collectionName
+                            collectionName || collectionInfo?.name,
                           )
                         }
                       >
@@ -366,7 +366,7 @@ const Items = ({
                                 value,
                                 image,
                                 marketplace,
-                                collectionName,
+                                collectionName || collectionInfo?.name,
                                 index
                               )
                         }

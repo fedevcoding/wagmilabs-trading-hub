@@ -13,8 +13,6 @@ export function useGetData(address) {
   const [isLoading, setLoading] = useState(false);
 
   useEffect(() => {
-    const lowerCasedAddress = address.toLowerCase()
-
     async function getData() {
 
       setLoading(true);

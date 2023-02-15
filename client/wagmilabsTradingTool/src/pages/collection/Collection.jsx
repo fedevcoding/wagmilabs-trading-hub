@@ -39,7 +39,7 @@ import getMarketplaceImage from "../../utils/marketplaceImageMapping";
 
 import copy from "copy-to-clipboard";
 import { useDebounce } from "use-debounce";
-import { Badge, Button, useToast } from "@chakra-ui/react";
+import { Badge, useToast } from "@chakra-ui/react";
 import setPageTitle from "../../utils/functions/setPageTitle";
 import { SocketContext } from "src/context/SocketContext";
 
@@ -216,7 +216,7 @@ const Collection = () => {
     else if(!liveItems){
       setLiveItems(true)
     }
-  }, [itemFilters])
+  }, [itemFilters, liveItems])
 
   useEffect(() => {
     itemRef.current = items;

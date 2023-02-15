@@ -3,7 +3,7 @@ import moment from "moment";
 import { Tooltip } from "@chakra-ui/react";
 import { useAccount } from "wagmi";
 import { formatContractAddress } from "@Utils/formats/formats";
-import getMarketplaceImage from "@Utils/marketplaceImageMapping";
+// import getMarketplaceImage from "@Utils/marketplaceImageMapping";
 
 import "./style.scss";
 
