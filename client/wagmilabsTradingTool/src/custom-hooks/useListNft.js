@@ -14,7 +14,7 @@ export const useListNft = (
 
   const toast = useToast();
 
-  async function listNft(setConfirmingList, days) {
+  async function listNft(setConfirmingList, days, marketplaceName = null) {
     if (listingPrice <= 0) {
       toast({
         title: "Error listing NFT.",
@@ -30,7 +30,7 @@ export const useListNft = (
       setConfirmingList(true);
 
       const signer = await fetchSigner();
-      const marketplace = listingSettings.marketplace;
+      const marketplace = marketplaceName || listingSettings.marketplace;
 
       let expirationTime;
 

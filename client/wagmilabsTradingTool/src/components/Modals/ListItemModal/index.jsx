@@ -1,5 +1,5 @@
 import React from "react";
-import { getDays } from "./functions";
+import { getDays, getMarketplaces } from "./functions";
 import {
   Modal,
   ModalOverlay,
@@ -31,7 +31,9 @@ export const ListItemModal = React.memo(
     const [confirmingList, setConfirmingList] = React.useState(false);
     const [ethAmountPrice, setEthAmountPrice] = React.useState(null);
     const listDays = getDays();
+    const marketplaces = getMarketplaces();
     const [days, setDays] = React.useState(listDays[0]);
+    const [marketplace, setMarketplace] = React.useState(marketplaces[0]);
 
     const { listNft } = useListNft(
       {
@@ -63,6 +65,16 @@ export const ListItemModal = React.memo(
               />
             </NumberInput>
             <br />
+            <p className="label">
+              <b>Marketplace</b>
+            </p>
+            <Select
+              id="set-day"
+              onChange={m => setMarketplace(m)}
+              label="Set Marketplace"
+              value={marketplace}
+              options={marketplaces}
+            />
             <br />
             <p className="label">
               <b>Set days</b>
@@ -80,7 +92,8 @@ export const ListItemModal = React.memo(
               className="btn-confirm"
               mr={3}
               onClick={() => {
-                if (!confirmingList) listNft(setConfirmingList, days.value);
+                if (!confirmingList)
+                  listNft(setConfirmingList, days.value, marketplace.value);
               }}
             >
               {confirmingList ? (
