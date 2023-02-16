@@ -1,22 +1,27 @@
 import React from "react";
 import { ListItemModal } from "@Components";
 
-export const ListItem = React.memo(({ details, address, id, currency }) => {
-  const [isOpen, setIsOpen] = React.useState(false);
+export const ListItem = React.memo(
+  ({ details, address, id, currency, lastListing }) => {
+    const [isOpen, setIsOpen] = React.useState(false);
 
-  return (
-    <>
-      <div className="btn btn-list" onClick={() => setIsOpen(true)}>
-        Sell
-      </div>
-      <ListItemModal
-        details={details}
-        isOpen={isOpen}
-        setIsOpen={setIsOpen}
-        address={address}
-        id={id}
-        currency={currency}
-      />
-    </>
-  );
-});
+    console.log("lastListing", lastListing);
+
+    return (
+      <>
+        <div className="btn btn-list" onClick={() => setIsOpen(true)}>
+          {lastListing ? "New Listing" : "Sell"}
+        </div>
+        <ListItemModal
+          id={id}
+          isOpen={isOpen}
+          address={address}
+          details={details}
+          currency={currency}
+          setIsOpen={setIsOpen}
+          lastListing={lastListing}
+        />
+      </>
+    );
+  }
+);
