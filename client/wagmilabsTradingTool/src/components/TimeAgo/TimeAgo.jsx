@@ -14,7 +14,7 @@ export const TimeAgo = ({timestamp, intervalMs, isUnix}) => {
         }, intervalMs);
 
         return () => clearInterval(intervalId);
-    }, [timestamp]);
+    }, [rightTimestamp, intervalMs]);
 
     return (
         <p>{timeAgo}</p>

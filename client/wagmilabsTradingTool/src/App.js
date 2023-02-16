@@ -44,7 +44,7 @@ import {
 import { SIGNER_PRIVATE_KEY, RESERVOIR_API_KEY } from "@Variables";
 
 // react router
-import { BrowserRouter, Route, Routes, useParams } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import SniperBot from "./pages/bots/sniper/SniperBot";
 
 // socket io
