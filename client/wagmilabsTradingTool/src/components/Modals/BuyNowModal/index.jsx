@@ -5,7 +5,7 @@ import getMarketplaceImage from "@Utils/marketplaceImageMapping";
 import { Button } from "@chakra-ui/react";
 import { Loader } from "@Components";
 import { getFiatPrice } from "@Utils/formats/formats";
-import { UserDataContext } from "@Context/userContext";
+import { UserDataContext } from "@Context";
 
 export const BuyNowModal = ({
   showBuyNowModal,

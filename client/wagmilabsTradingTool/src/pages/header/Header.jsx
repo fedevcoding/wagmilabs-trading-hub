@@ -9,7 +9,7 @@ import RefreshToken from "../RefreshToken";
 import logOut from "@Utils/functions/logout";
 import { CartModal, WalletModal } from "@Components";
 
-import { UserDataContext } from "@Context/userContext";
+import { UserDataContext } from "@Context";
 
 import getUserBalances from "@Utils/database-functions/getUserBalances";
 

@@ -20,7 +20,7 @@ import {
   roundPrice2,
 } from "@Utils/formats/formats";
 import { Button, Tooltip, useToast } from "@chakra-ui/react";
-import { UserDataContext } from "@Context/userContext";
+import { UserDataContext } from "@Context";
 import { Loader } from "@Components";
 import getMarketplaceImage from "@Utils/marketplaceImageMapping";
 import { useNavigate } from "react-router-dom";
