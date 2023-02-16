@@ -13,3 +13,4 @@ export { useTransferItem } from "./useTransferItem";
 export {useRefreshMetadata} from "./useRefreshMetadata";
 export { useCancelListing } from "./useCancelListing";
 export {useRefreshSecond} from "./useRefreshSecond";
+export {useConnected} from "./useConnected"

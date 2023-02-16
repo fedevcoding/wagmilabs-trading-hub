@@ -16,11 +16,9 @@ const RefreshToken = ({ connected, setConnected }) => {
 
       if (result.authenticated) {
         localStorage.setItem("jsonwebtoken", result.token);
-        localStorage.setItem("loggedIn", true);
       } else {
         navigate("/");
         localStorage.removeItem("jsonwebtoken");
-        localStorage.removeItem("loggedIn");
         setConnected(false);
       }
     } catch (e) {
@@ -29,6 +27,7 @@ const RefreshToken = ({ connected, setConnected }) => {
   }
 
   useEffect(() => {
+    refreshToken()
     const intervalId = setInterval(refreshToken, 20000);
 
     return () => {

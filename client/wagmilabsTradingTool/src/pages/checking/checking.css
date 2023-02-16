@@ -2,6 +2,6 @@
     display: table-cell;
     text-align: center;
     width: 100vw;
-    height: calc(100vh - 84px);
+    height: 100vh;
     vertical-align: middle;
 }

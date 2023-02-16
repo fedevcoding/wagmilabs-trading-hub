@@ -38,7 +38,7 @@ profileStatsRoute.get("/:address", checkAuth, async (req, res) => {
             })
             data2 = (await data2.json())?.data
 
-            const { mint_count, sold_count, bought_count, sold_value } = data2
+            const { mint_count, sold_count, bought_count, sold_value } = data2 || {}
 
 
 
@@ -48,6 +48,7 @@ profileStatsRoute.get("/:address", checkAuth, async (req, res) => {
             res.status(200).json({ ok: true, data: returnData })
         }
         catch (e) {
+            console.log(e)
             res.status(400).json({ message: "There was a problem fetching the data", ok: false, error: e })
         }
     }

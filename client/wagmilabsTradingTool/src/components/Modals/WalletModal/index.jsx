@@ -24,6 +24,7 @@ import copy from "copy-to-clipboard";
 import { SwapWidget } from "@uniswap/widgets";
 import "@uniswap/widgets/fonts.css";
 import { ETHEREUM_NETWORK } from "@Variables";
+import { useConnected } from "@Hooks";
 
 const jsonRpcUrlMap = {
   1: [ETHEREUM_NETWORK],
@@ -45,6 +46,9 @@ const theme = {
 };
 
 export const WalletModal = ({ walletModalOpen, closeWalletModal }) => {
+
+  const {connected, setConnected} = useConnected()
+
   const [provider, setProvider] = useState();
   const [swapModal, setSwapModal] = useState(false);
 
@@ -152,7 +156,7 @@ export const WalletModal = ({ walletModalOpen, closeWalletModal }) => {
                 </div>
               </div>
 
-              <div className="wallet-modal-logout-container" onClick={logOut}>
+              <div className="wallet-modal-logout-container" onClick={() => logOut(connected)}>
                 <p>Log out</p>
                 <i className="fa-solid fa-right-from-bracket"></i>
               </div>

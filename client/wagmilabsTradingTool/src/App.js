@@ -1,5 +1,6 @@
 // react
 import React, { useState, useEffect, useRef, useMemo } from "react";
+import { jwtExpired } from "./utils/functions";
 
 // components
 import Header from "./pages/header/Header";
@@ -13,7 +14,6 @@ import Login from "./pages/login/LoginRainbow";
 import Profile from "./pages/profile/Profile";
 import Item from "./pages/item/Item";
 import Checking from "./pages/checking/Checking";
-import CheckingHeader from "./pages/header/CheckingHeader";
 import CheckWalletDisconnect from "./pages/CheckWalletDisconnect";
 import Footer from "./pages/footer/Footer";
 
@@ -44,7 +44,7 @@ import {
 import { SIGNER_PRIVATE_KEY, RESERVOIR_API_KEY } from "@Variables";
 
 // react router
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, useParams } from "react-router-dom";
 import SniperBot from "./pages/bots/sniper/SniperBot";
 
 // socket io
@@ -52,8 +52,12 @@ import io from "socket.io-client";
 
 // context
 
-import { UserDataContext, SocketContext } from "@Context";
+import { UserDataContext, SocketContext, ConnectedContext } from "@Context";
 import Redirect from "./pages/redirect/Redirect";
+
+
+
+
 import Legals from "./pages/Legal/Legals";
 import { serverUrl } from "@Variables";
 
@@ -89,6 +93,11 @@ const theme = reservoirDarkTheme({
 // for socket io
 const socket = io(serverUrl);
 
+
+
+
+
+
 function App() {
   // states
   const [userBalances, setUserBalances] = useState({
@@ -98,7 +107,8 @@ function App() {
     usdt: 0,
   });
   const [snipingTasks, setSnipingTasks] = useState([]);
-  const [connected, setConnected] = useState(false);
+  const [loading, setLoading] = useState(true)
+  const [connected, setConnected] = useState(true);
   const [ethData, setEthData] = useState({});
   const [profileImage, setProfileImage] = useState("");
   const [checking, setChecking] = useState(false);
@@ -114,29 +124,42 @@ function App() {
   const activeGasRef = useRef(gasSettings.value);
   const currentSnipingTasks = useRef(snipingTasks);
 
-  // set tasks ref when they change
-  useEffect(() => {
-    currentSnipingTasks.current = snipingTasks;
-  }, [snipingTasks]);
-
   // set checking in base of tokens
   useEffect(() => {
-    if (localStorage.jsonwebtoken) {
-      setChecking(true);
+
+    async function verify(){
+
+      const {pathname} = window.location
+      const {jsonwebtoken} = localStorage;
+
+      if (jsonwebtoken && pathname !== "/") {
+        const valid = await jwtExpired(jsonwebtoken);
+        if (valid) setConnected(true)
+        else setChecking(true);
+      }
+      else if(jsonwebtoken){
+        setChecking(true)
+      }
+      else{
+        if(pathname !== "/") window.location.href = "/"
+        setConnected(false)
+      }
+      setLoading(false)
     }
+    verify()
+
   }, []);
 
   // set colors based on states
   useEffect(() => {
-    if (checking) {
-      document.body.style.background = "black";
-    } else if (!connected) {
-      document.body.style.background =
-        "linear-gradient(to right, #3494E6, #EC6EAD)";
+    if (!connected) {
+      document.body.style.background = "linear-gradient(to right, #3494E6, #EC6EAD)";
     } else {
       document.body.style.background = "#0E0F0E";
     }
   }, [connected, checking]);
+
+
 
   // socket io connection
   useEffect(() => {
@@ -184,6 +207,11 @@ function App() {
     }
   }, [gasSettings]);
 
+  // set tasks ref when they change
+  useEffect(() => {
+    currentSnipingTasks.current = snipingTasks;
+  }, [snipingTasks]);
+
   // context values
   const providerValues = useMemo(
     () => ({
@@ -229,6 +257,12 @@ function App() {
     ]
   );
 
+  const connectedContextValues = useMemo(
+    () => ({
+      connected,
+      setConnected,
+    }), [connected, setConnected])
+
   return (
     <ChakraProvider resetCSS={false}>
       <SocketContext.Provider value={socket}>
@@ -246,140 +280,161 @@ function App() {
                 coolMode
                 theme={darkTheme({ overlayBlur: "small" })}
               >
-                {connected && <CheckWalletDisconnect />}
-                <BrowserRouter>
-                  <Routes>
-                    <Route
-                      exact
-                      path="/"
-                      element={
-                        connected ? (
-                          <>
-                            <Header
-                              setConnected={setConnected}
-                              profileImage={profileImage}
-                              setProfileImage={setProfileImage}
-                              connected={connected}
-                            />
-                            <Home />
-                            <Footer />
-                          </>
-                        ) : checking ? (
-                          <>
-                            <CheckingHeader />
-                            <Checking
-                              setConnected={setConnected}
-                              setChecking={setChecking}
-                            />
-                          </>
-                        ) : (
-                          <Login
-                            setConnected={setConnected}
-                            connected={connected}
-                          />
-                        )
-                      }
+
+                {
+
+                  !loading &&
+                  (
+                    checking ?
+                    <Checking setConnected={setConnected} setChecking={setChecking}/>
+
+                    :
+
+                    !connected ?
+
+                    <Login
+                      setConnected={setConnected}
+                      connected={connected}
                     />
 
-                    <Route
-                      exact
-                      path="/collection/:address"
-                      element={
-                        <>
-                          <Header /> <Collection /> <Footer />{" "}
-                        </>
-                      }
-                    />
+                    :
 
-                    <Route
-                      exact
-                      path="/item/:address/:id"
-                      element={
-                        <>
-                          <Header />
-                          <Item />
-                          <Footer />
-                        </>
-                      }
-                    />
+                    <>
+                    <CheckWalletDisconnect />
+                    <ConnectedContext.Provider value={connectedContextValues}>
+                      <BrowserRouter>
+                      <Routes>
+                        <Route
+                          exact
+                          path="/"
+                          element={
+                            connected && (
+                              <>
+                                <Header
+                                  setConnected={setConnected}
+                                  profileImage={profileImage}
+                                  setProfileImage={setProfileImage}
+                                  connected={connected}
+                                />
+                                <Home />
+                                <Footer />
+                              </>
+                            )
+                          }
+                        />
 
-                    <Route
-                      exact
-                      path="/bots/sniper"
-                      element={
-                        <>
-                          <Header />
-                          <SniperBot />
-                          <Footer />
-                        </>
-                      }
-                    />
+                        <Route
+                          exact
+                          path="/collection/:address"
+                          element={
+                              <>
+                                <Header /> <Collection /> <Footer />{" "}
+                              </>
+                          }
+                        />
 
-                    <Route
-                      exact
-                      path="/calculators"
-                      element={
-                        <>
-                          <Header />
-                          <Calculators />
-                          <Footer />
-                        </>
-                      }
-                    />
+                        <Route
+                          exact
+                          path="/item/:address/:id"
+                          element={
+                            <>
+                              <Header />
+                              <Item />
+                              <Footer />
+                            </>
+                          }
+                        />
 
-                    <Route
-                      exact
-                      path="/volumes"
-                      element={
-                        <>
-                          <Header />
-                          <Volumes />
-                          <Footer />
-                        </>
-                      }
-                    />
+                        <Route
+                          exact
+                          path="/bots/sniper"
+                          element={
+                            <>
+                              <Header />
+                              <SniperBot />
+                              <Footer />
+                            </>
+                          }
+                        />
 
-                    <Route
-                      exact
-                      path="/feed"
-                      element={
-                        <>
-                          <Header />
-                          <Feed />
-                          <Footer />
-                        </>
-                      }
-                    />
+                        <Route
+                          exact
+                          path="/calculators"
+                          element={
+                            <>
+                              <Header />
+                              <Calculators />
+                              <Footer />
+                            </>
+                          }
+                        />
 
-                    <Route
-                      exact
-                      path="/profitandloss"
-                      element={
-                        <>
-                          <Header />
-                          <Pnl />
-                          <Footer />
-                        </>
-                      }
-                    />
+                        <Route
+                          exact
+                          path="/volumes"
+                          element={
+                            <>
+                              <Header />
+                              <Volumes />
+                              <Footer />
+                            </>
+                          }
+                        />
 
-                    <Route
-                      exact
-                      path="/profile"
-                      element={
-                        <>
-                          <Header />
-                          <Profile />
-                          <Footer />
-                        </>
-                      }
-                    />
+                        <Route
+                          exact
+                          path="/feed"
+                          element={
+                            <>
+                              <Header />
+                              <Feed />
+                              <Footer />
+                            </>
+                          }
+                        />
 
-                    <Route exact path="/legal" element={<Legals />} />
+                        <Route
+                          exact
+                          path="/profitandloss"
+                          element={
+                            <>
+                              <Header />
+                              <Pnl />
+                              <Footer />
+                            </>
+                          }
+                        />
 
-                    <Route path="*" element={<Redirect />} />
-                  </Routes>
-                </BrowserRouter>
+                        <Route
+                          exact
+                          path="/profile"
+                          element={
+                            <>
+                              <Header />
+                              <Profile />
+                              <Footer />
+                            </>
+                          }
+                        />
+
+                        <Route exact path="/legal" element={<Legals />} />
+
+                        <Route path="*" element={<Redirect />} />
+
+                        
+                      </Routes>
+                      </BrowserRouter>
+                    </ConnectedContext.Provider>
+                    </>
+                  )
+
+                }
+
+
+
+
+
+
               </RainbowKitProvider>
             </WagmiConfig>
           </ReservoirKitProvider>

@@ -17,6 +17,7 @@ import { fetchEnsName } from "@wagmi/core";
 import { useAccount } from "wagmi";
 
 const Header = () => {
+
   const {
     setEns,
     setProfileImage,
@@ -380,7 +381,7 @@ const Header = () => {
                 <p>Switch account</p>
               </div>
 
-              <div onClick={logOut} className="logout-container">
+              <div onClick={() => logOut(connected, setConnected, () => navigate("/"))} className="logout-container">
                 <i className="fa-solid fa-arrow-right-from-bracket"></i>
                 <p>Log Out</p>
               </div>

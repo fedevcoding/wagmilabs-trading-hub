@@ -51,7 +51,7 @@ const Checking = ({ setConnected, setChecking }) => {
         loop
         animationData={animationBlack}
         play
-        style={{ width: "25vw", margin: "auto" }}
+        style={{ width: "20vw", margin: "auto" }}
       />
     </div>
   );

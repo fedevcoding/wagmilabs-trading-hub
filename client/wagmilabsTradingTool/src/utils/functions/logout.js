@@ -1,22 +1,26 @@
 import { baseUrl } from "@Variables";
-import { disconnect } from "@wagmi/core";
 
-async function logOut() {
-  console.log("logging out");
-  let result = await fetch(`${baseUrl}/removeRefreshToken`, {
-    headers: {
-      "Content-Type": "application/json",
-      "x-auth-token": localStorage.jsonwebtoken,
-    },
-    credentials: "include",
-  });
-  result = await result.json();
-  if (result.ok) {
-    await disconnect();
-    localStorage.removeItem("jsonwebtoken");
-    localStorage.removeItem("loggedIn");
-    // navigate("/")
-    window.location.href = "/";
+async function logOut(connected, setConnected, callback) {
+
+  console.log(connected)
+
+  try{
+    let result = await fetch(`${baseUrl}/removeRefreshToken`, {
+      headers: {
+        "Content-Type": "application/json",
+        "x-auth-token": localStorage.jsonwebtoken,
+      },
+      credentials: "include",
+    });
+    result = await result.json();
+    if (result.ok) {
+      setConnected(false)
+      document.body.style.background = "linear-gradient(to right, #3494E6, #EC6EAD)";
+      localStorage.removeItem("jsonwebtoken");
+    }
+  }
+  catch(e){
+
   }
 }
 
