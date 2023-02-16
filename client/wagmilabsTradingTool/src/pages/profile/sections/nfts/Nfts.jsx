@@ -4,8 +4,6 @@ import { Portal } from "react-portal";
 
 import notFoundNft from "@Assets/question.png";
 
-// import { useAccount } from 'wagmi'
-
 import moment from "moment";
 
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
@@ -21,7 +19,7 @@ import {
 } from "@Utils/formats/formats";
 import { Button, Tooltip, useToast } from "@chakra-ui/react";
 import { UserDataContext } from "@Context";
-import { Loader } from "@Components";
+import { Loader, TransferItemModal } from "@Components";
 import getMarketplaceImage from "@Utils/marketplaceImageMapping";
 import { useNavigate } from "react-router-dom";
 import { useListNft } from "@Hooks";
@@ -47,6 +45,7 @@ const Nfts = ({
   setSelectedSortOption,
   setSearchCollectionText,
 }) => {
+  const [isOpenTransferModal, setIsOpenTransferModal] = React.useState(false);
   const { cryptoPrices } = useContext(UserDataContext);
   const toast = useToast();
 
@@ -313,112 +312,128 @@ const Nfts = ({
         const id = contractAddress + tokenId;
 
         return (
-          <div
-            className={`single-item-container ${isLast && "last-token"}`}
-            key={id}
-            onMouseOver={() => activateList(index)}
-            onMouseOut={() => deactivateList(index)}
-          >
+          <>
             <div
-              className={`${
-                selectBulk
-                  ? "profile-items-details-container-bulk"
-                  : "profile-items-details-container"
-              }`}
+              className={`single-item-container ${isLast && "last-token"}`}
+              key={id}
+              onMouseOver={() => activateList(index)}
+              onMouseOut={() => deactivateList(index)}
             >
-              <div className="image-hover-overflow">
-                <img
-                  src={image}
-                  alt=""
-                  className={`profile-single-item-image ${
-                    selectBulk ? "single-item-image" : "single-item-image-scale"
-                  }`}
-                  onClick={e =>
-                    selectBulk
-                      ? changeBulkItems(contractAddress, tokenId, id, e)
-                      : navigate(`/item/${contractAddress}/${tokenId}`)
-                  }
-                />
-                {rarityRank && (
-                  <div className="profile-items-rarity-box">
-                    <p># {rarityRank}</p>
-                  </div>
-                )}
-
-                {marketplace && (
-                  <div className="profile-items-listing-box">
-                    <img src={marketplaceImage} alt="" />
-                    <p>{roundPrice2(price)}</p>
-                  </div>
-                )}
-              </div>
-
               <div
-                className="option-button"
-                onClick={() => toggleOptions(index)}
+                className={`${
+                  selectBulk
+                    ? "profile-items-details-container-bulk"
+                    : "profile-items-details-container"
+                }`}
               >
-                <i className="fa-regular fa-ellipsis item-option-button"></i>
-
-                <div className="single-nft-options invisible">
-                  <div onClick={() => updateUserImage(image)}>
-                    <i className="fa-solid fa-image"></i>
-                    <p>Set as PFP</p>
-                  </div>
-                  <div>
-                    <i className="fa-solid fa-arrow-up"></i>
-                    <p>Transfer</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* <img src={optionButton} className="option-button" onMouseOver={(e)=> uploadInfo(e)} onMouseOut={e=> removeInfo(e)} onClick={updateUserImage}/> */}
-              <a
-                href={`/collection/${contractAddress}`}
-                rel="noreferrer"
-                target="_blank"
-              >
-                <Tooltip
-                  hasArrow
-                  label={collectionName}
-                  fontSize="xs"
-                  bg="black"
-                  color={"white"}
-                  placement="top"
-                  borderRadius={"7px"}
-                >
+                <div className="image-hover-overflow">
                   <img
-                    src={collectionImage}
+                    src={image}
                     alt=""
-                    className="profile-item-collection-image"
+                    className={`profile-single-item-image ${
+                      selectBulk
+                        ? "single-item-image"
+                        : "single-item-image-scale"
+                    }`}
+                    onClick={e =>
+                      selectBulk
+                        ? changeBulkItems(contractAddress, tokenId, id, e)
+                        : navigate(`/item/${contractAddress}/${tokenId}`)
+                    }
                   />
-                </Tooltip>
-              </a>
-              <div className="profile-item-stats">
-                <div className="profile-item-name-stats">
-                  <p className="single-item-name">{name || tokenId}</p>
-                  {/* <p className='single-item-collection-name'>{collectionName}</p> */}
-                  <p className="single-item-rarity">
-                    Floor price: {floor_price && roundPrice(floor_price)} ETH
-                  </p>
+                  {rarityRank && (
+                    <div className="profile-items-rarity-box">
+                      <p># {rarityRank}</p>
+                    </div>
+                  )}
+
+                  {marketplace && (
+                    <div className="profile-items-listing-box">
+                      <img src={marketplaceImage} alt="" />
+                      <p>{roundPrice2(price)}</p>
+                    </div>
+                  )}
                 </div>
-                <hr></hr>
-                {/* getListingInfo(tokenId, contractAddress, floor_price) */}
+
                 <div
-                  className="profile-list-nft inactive"
-                  onClick={() =>
-                    openSmartListingModal(tokenId, contractAddress, floor_price)
-                  }
+                  className="option-button"
+                  onClick={() => toggleOptions(index)}
                 >
-                  <i className="fa-solid fa-tag"></i>
-                  <span>Smart list</span>
+                  <i className="fa-regular fa-ellipsis item-option-button"></i>
+
+                  <div className="single-nft-options invisible">
+                    <div onClick={() => updateUserImage(image)}>
+                      <i className="fa-solid fa-image"></i>
+                      <p>Set as PFP</p>
+                    </div>
+                    <div onClick={() => setIsOpenTransferModal(true)}>
+                      <i className="fa-solid fa-arrow-up"></i>
+                      <p>Transfer</p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* <img src={optionButton} className="option-button" onMouseOver={(e)=> uploadInfo(e)} onMouseOut={e=> removeInfo(e)} onClick={updateUserImage}/> */}
+                <a
+                  href={`/collection/${contractAddress}`}
+                  rel="noreferrer"
+                  target="_blank"
+                >
+                  <Tooltip
+                    hasArrow
+                    label={collectionName}
+                    fontSize="xs"
+                    bg="black"
+                    color={"white"}
+                    placement="top"
+                    borderRadius={"7px"}
+                  >
+                    <img
+                      src={collectionImage}
+                      alt=""
+                      className="profile-item-collection-image"
+                    />
+                  </Tooltip>
+                </a>
+                <div className="profile-item-stats">
+                  <div className="profile-item-name-stats">
+                    <p className="single-item-name">{name || tokenId}</p>
+                    {/* <p className='single-item-collection-name'>{collectionName}</p> */}
+                    <p className="single-item-rarity">
+                      Floor price: {floor_price && roundPrice(floor_price)} ETH
+                    </p>
+                  </div>
+                  <hr></hr>
+                  {/* getListingInfo(tokenId, contractAddress, floor_price) */}
+                  <div
+                    className="profile-list-nft inactive"
+                    onClick={() =>
+                      openSmartListingModal(
+                        tokenId,
+                        contractAddress,
+                        floor_price
+                      )
+                    }
+                  >
+                    <i className="fa-solid fa-tag"></i>
+                    <span>Smart list</span>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+            <TransferItemModal
+              details={item}
+              isOpen={isOpenTransferModal}
+              setIsOpen={setIsOpenTransferModal}
+              address={contractAddress}
+              id={tokenId}
+              currency={"ETH"}
+            />
+          </>
         );
       }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [userItems, bulkItems, selectBulk]
+    [userItems, bulkItems, selectBulk, isOpenTransferModal]
   );
 
   return (

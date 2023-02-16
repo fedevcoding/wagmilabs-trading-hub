@@ -5,8 +5,6 @@ export const ListItem = React.memo(
   ({ details, address, id, currency, lastListing }) => {
     const [isOpen, setIsOpen] = React.useState(false);
 
-    console.log("lastListing", lastListing);
-
     return (
       <>
         <div className="btn btn-list" onClick={() => setIsOpen(true)}>

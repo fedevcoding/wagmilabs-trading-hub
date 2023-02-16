@@ -60,9 +60,18 @@ export const InfoCol = React.memo(({ details, address, id }) => {
         )}
       </div>
 
-      {isOwner ? "" : <PriceBox details={details} address={address} />}
+      {isOwner ? (
+        ""
+      ) : (
+        <PriceBox details={details} address={address} currency={currency} />
+      )}
 
-      <BestOfferBox details={details} address={address} isOwner={isOwner} />
+      <BestOfferBox
+        details={details}
+        address={address}
+        isOwner={isOwner}
+        currency={currency}
+      />
       <Listings
         details={details}
         address={address}

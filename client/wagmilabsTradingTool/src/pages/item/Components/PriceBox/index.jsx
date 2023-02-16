@@ -9,7 +9,7 @@ import "./style.scss";
 import { AddOrRemoveToCart } from "./AddOrRemoveToCart";
 import { BuyNow } from "./BuyNow";
 
-export const PriceBox = React.memo(({ details, address }) => {
+export const PriceBox = React.memo(({ details, address, currency }) => {
   const { tokenId, value, marketplace, market } = useGetVariables(details);
 
   return (
@@ -27,6 +27,8 @@ export const PriceBox = React.memo(({ details, address }) => {
                 address={address}
                 tokenId={tokenId}
                 marketplace={marketplace}
+                details={details}
+                currency={currency}
               />
             </Col>
             <Col>
