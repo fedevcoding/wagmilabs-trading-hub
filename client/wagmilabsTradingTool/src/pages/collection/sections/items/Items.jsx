@@ -35,6 +35,7 @@ import {
   useGetBuyNowModalFunctions,
   useRemoveItemFromCart,
   useFirstRender,
+  useRefreshMetadata,
 } from "@Hooks";
 import { useNavigate } from "react-router-dom";
 
@@ -55,9 +56,12 @@ const Items = ({
   setSelectedItem,
   fetchMoreTokens,
 }) => {
+
+  const {refreshMetadata} = useRefreshMetadata((state) => setRefreshingMetadata(state))
   const { userCartItems } = useContext(UserDataContext);
   const firstRender = useFirstRender();
 
+  const [refreshingMetadata, setRefreshingMetadata] = useState(false);
   const observer = useRef(null);
 
   const navigate = useNavigate();
@@ -388,6 +392,8 @@ const Items = ({
     [items, userCartItems, collectionInfo]
   );
 
+
+
   return (
     <>
       {
@@ -607,6 +613,10 @@ const Items = ({
                   onChange={({ target }) => setSearchText(target.value)}
                 ></Input>
               </InputGroup>
+                
+              <Tooltip label="Refresh Metadata" placement="top">
+                <i className={`fa-solid fa-arrows-rotate refresh-collection-metadata ${refreshingMetadata && "rotating"}`} onClick={() => refreshMetadata(address)}></i>
+              </Tooltip>
             </HStack>
           </div>
 

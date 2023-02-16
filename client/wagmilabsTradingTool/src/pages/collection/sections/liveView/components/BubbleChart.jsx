@@ -3,11 +3,11 @@ import HighchartsReact from 'highcharts-react-official'
 import HighCharts from 'highcharts'
 
 
-const BubbleChart = memo(({ totalListings, totalSales }) => {
+const BubbleChart = memo(({ totalListings, totalSales, floorPrice }) => {
 
 
-    const listingData = totalListings?.map(listing => listing.value <= 0.2 && [listing.timestamp * 1000, listing.value])
-    const salesData = totalSales?.map(sale => sale.value <= 0.4 && [sale.timestamp, sale.value])
+    const listingData = totalListings?.map(listing => listing.value <= floorPrice + 0.05 && [listing.timestamp * 1000, listing.value])
+    const salesData = totalSales?.map(sale => sale.value <= floorPrice + 0.1 && [sale.timestamp, sale.value])
 
 
     // salesData.forEach(list => {

@@ -70,6 +70,7 @@ app.use(cookieParser());
 const http = require("http");
 const server = new http.createServer(app);
 const socketIO = require("socket.io");
+const refreshCollectionRoute = require("./routes/ethereum/collections/resfreshColelctionROuter.js");
 const io = socketIO(server, {
   cors: {
     origin: CLIENT_URL,
@@ -214,6 +215,7 @@ app.use("/api/v1/wagmilabs/feed", feedRoute);
 app.use("/api/v1/wagmilabs/collectionItems", collectionItemsRoute);
 app.use("/api/v1/wagmilabs/watchlistCollections", watchlistCollectionsRoute);
 app.use("/api/v1/wagmilabs/ownedCollections", ownedCollectionsRoute);
+app.use("/api/v1/wagmilabs/refreshCollection", refreshCollectionRoute);
 
 
 // bots routes

@@ -7,7 +7,7 @@ import SalesMapping from "./mappings/SalesMapping";
 import ListingMapping from "./mappings/ListingsMapping";
 import BubbleChart from "./components/BubbleChart";
 
-const LiveView = memo(({ address }) => {
+const LiveView = memo(({ address, floorPrice }) => {
   const { sales, listings, totalListings, totalSales } = useGetData(address);
 
   return (
@@ -23,7 +23,7 @@ const LiveView = memo(({ address }) => {
       </div>
 
       <div>
-        <BubbleChart totalListings={totalListings} totalSales={totalSales} />
+        <BubbleChart totalListings={totalListings} totalSales={totalSales} floorPrice={floorPrice}/>
       </div>
     </PageWrapper>
   );

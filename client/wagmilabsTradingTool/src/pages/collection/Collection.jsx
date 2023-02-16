@@ -875,17 +875,10 @@ const Collection = () => {
           return (
             <LiveView
               address={address}
-              items={items}
-              setItems={setItems}
-              itemFilters={itemFilters}
-              setItemFilters={setItemFilters}
-              loadingItems={loadingItems}
-              setLoadingItems={setLoadingItems}
-              buyNowChecked={buyNowChecked}
-              setBuyNowChecked={setBuyNowChecked}
               collectionInfo={collectionInfo}
               collectionImage={collectionInfo?.image}
               collectionName={collectionInfo?.name}
+              floorPrice={collectionInfo.floorAsk?.price?.amount?.decimal}
             />
           );
         } else if (section === "activity") {

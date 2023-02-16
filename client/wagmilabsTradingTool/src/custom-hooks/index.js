@@ -10,3 +10,4 @@ export { useHasItem } from "./useHasItem";
 export { useRemoveItemFromCart } from "./useRemoveItemFromCart";
 export { useGetBuyNowModalFunctions } from "./useGetBuyNowModalFunctions";
 export { useTransferItem } from "./useTransferItem";
+export {useRefreshMetadata} from "./useRefreshMetadata";

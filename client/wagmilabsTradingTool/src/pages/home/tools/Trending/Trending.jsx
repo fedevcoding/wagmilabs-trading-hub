@@ -73,10 +73,6 @@ const Trending = ({ tool, timeFrame, setTimeFrame, resetTime }) => {
 
       const { trendingCollections } = data;
 
-      setTimeout(() => {
-        setLoading(false);
-      }, 300);
-
       sortData(trendingCollections);
     } catch (e) {
       sortData([]);
@@ -127,6 +123,8 @@ const Trending = ({ tool, timeFrame, setTimeFrame, resetTime }) => {
       default:
         break;
     }
+
+    setLoading(false);
   }
 
   function changeSort(e, sortName) {
