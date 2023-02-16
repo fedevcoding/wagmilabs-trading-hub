@@ -40,6 +40,14 @@
 
       tr td {
         padding: 5px 0;
+
+        .btn-cancel {
+          font-size: 12px;
+          border-radius: 5px;
+          background-color: black;
+          border: 1px solid white;
+          line-height: 30px;
+        }
       }
     }
   }

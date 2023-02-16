@@ -70,7 +70,7 @@ export const TableRow = React.memo(({ listing, address, details }) => {
           borderRadius="7px"
         >
           {isMyListing ? (
-            <i className="fa fa-cancel" />
+            <div className="btn btn-cancel">Cancel</div>
           ) : (
             <i className="fa fa-cart-shopping" />
           )}
