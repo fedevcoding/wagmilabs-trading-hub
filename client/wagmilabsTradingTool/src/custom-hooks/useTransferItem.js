@@ -48,13 +48,12 @@ export const useTransferItem = () => {
 
       toast({
         title: "Success",
-        description: 1,
+        description: "NFT successfully transferred",
         status: "success",
         duration: 3000,
         isClosable: true,
       });
     } catch (e) {
-      console.log(e);
       const error = e?.response?.data?.message || "Something went wrong";
 
       toast({

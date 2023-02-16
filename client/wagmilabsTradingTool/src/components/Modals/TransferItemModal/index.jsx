@@ -26,6 +26,7 @@ export const TransferItemModal = React.memo(
     setIsOpen,
     id: tokenId,
   }) => {
+    console.log(contractAddress)
     const [confirmingList, setConfirmingList] = React.useState(false);
     const [address, setAddress] = React.useState(null);
     const [isValidAddress, setIsValidAddress] = React.useState(false);

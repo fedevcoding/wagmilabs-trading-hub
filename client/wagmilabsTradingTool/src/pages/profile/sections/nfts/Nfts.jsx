@@ -45,7 +45,15 @@ const Nfts = ({
   setSelectedSortOption,
   setSearchCollectionText,
 }) => {
-  const [isOpenTransferModal, setIsOpenTransferModal] = React.useState(false);
+  const [isOpenTransferModal, setIsOpenTransferModal] = useState(false);
+  const [TransferModalDetails, setTransferModalDetails] = useState(null);
+
+
+  useEffect(() => {
+    if(TransferModalDetails) setIsOpenTransferModal(true)
+    else setIsOpenTransferModal(false)
+  }, [TransferModalDetails])
+  
   const { cryptoPrices } = useContext(UserDataContext);
   const toast = useToast();
 
@@ -366,14 +374,20 @@ const Nfts = ({
                       <i className="fa-solid fa-image"></i>
                       <p>Set as PFP</p>
                     </div>
-                    <div onClick={() => setIsOpenTransferModal(true)}>
+                    <div onClick={() => {
+                      setTransferModalDetails({
+                        details: item,
+                        id: tokenId,
+                        address: contractAddress,
+                        currency: "ETH",
+                      })
+                    }}>
                       <i className="fa-solid fa-arrow-up"></i>
                       <p>Transfer</p>
                     </div>
                   </div>
                 </div>
 
-                {/* <img src={optionButton} className="option-button" onMouseOver={(e)=> uploadInfo(e)} onMouseOut={e=> removeInfo(e)} onClick={updateUserImage}/> */}
                 <a
                   href={`/collection/${contractAddress}`}
                   rel="noreferrer"
@@ -421,14 +435,6 @@ const Nfts = ({
                 </div>
               </div>
             </div>
-            <TransferItemModal
-              details={item}
-              isOpen={isOpenTransferModal}
-              setIsOpen={setIsOpenTransferModal}
-              address={contractAddress}
-              id={tokenId}
-              currency={"ETH"}
-            />
           </>
         );
       }),
@@ -438,6 +444,20 @@ const Nfts = ({
 
   return (
     <>
+     {
+      isOpenTransferModal && (
+        <TransferItemModal
+          details={TransferModalDetails?.details}
+          id={TransferModalDetails?.id}
+          address={TransferModalDetails?.address}
+          currency={TransferModalDetails?.currency}
+          
+          isOpen={true}
+          setIsOpen={setIsOpenTransferModal}
+        />
+        )
+      }
+
       {showQuickListingModal && (
         <SmartListModal
           quickListData={quickListData}
