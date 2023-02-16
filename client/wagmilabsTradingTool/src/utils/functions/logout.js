@@ -1,8 +1,6 @@
 import { baseUrl } from "@Variables";
 
-async function logOut(connected, setConnected, callback) {
-
-  console.log(connected)
+async function logOut(setConnected) {
 
   try{
     let result = await fetch(`${baseUrl}/removeRefreshToken`, {

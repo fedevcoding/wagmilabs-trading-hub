@@ -47,7 +47,7 @@ const theme = {
 
 export const WalletModal = ({ walletModalOpen, closeWalletModal }) => {
 
-  const {connected, setConnected} = useConnected()
+  const {setConnected} = useConnected()
 
   const [provider, setProvider] = useState();
   const [swapModal, setSwapModal] = useState(false);
@@ -156,7 +156,7 @@ export const WalletModal = ({ walletModalOpen, closeWalletModal }) => {
                 </div>
               </div>
 
-              <div className="wallet-modal-logout-container" onClick={() => logOut(connected)}>
+              <div className="wallet-modal-logout-container" onClick={() => logOut(setConnected)}>
                 <p>Log out</p>
                 <i className="fa-solid fa-right-from-bracket"></i>
               </div>
