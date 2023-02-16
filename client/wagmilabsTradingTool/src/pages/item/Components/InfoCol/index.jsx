@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import {
   BestOfferBox,
   BestOfferTable,
-  ItemActivity,
   Listings,
   ListItem,
   PriceBox,
@@ -71,7 +70,6 @@ export const InfoCol = React.memo(({ details, address, id }) => {
         isFetching={isFetchingListings}
       />
       <BestOfferTable details={details} />
-      <ItemActivity address={address} id={id} currency={currency} />
     </div>
   );
 });

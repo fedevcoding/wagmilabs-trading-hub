@@ -2,7 +2,7 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import { LoadingSpinner, PageWrapper } from "@Components";
 import { useGetData } from "./useGetData";
-import { ImageCol, InfoCol } from "./Components";
+import { ImageCol, InfoCol, ItemActivity } from "./Components";
 
 import "./style.scss";
 
@@ -13,10 +13,13 @@ const Item = React.memo(() => {
   return (
     <PageWrapper page="token-detail">
       {(details && !isLoading && (
-        <div className="nft-container">
-          <ImageCol details={details} address={address} />
-          <InfoCol details={details} address={address} id={id} />
-        </div>
+        <>
+          <div className="nft-container">
+            <ImageCol details={details} address={address} />
+            <InfoCol details={details} address={address} id={id} />
+          </div>
+          <ItemActivity address={address} id={id} market={details?.market} />
+        </>
       )) || <LoadingSpinner />}
     </PageWrapper>
   );
