@@ -3,7 +3,7 @@ import notFound from "@Assets/notFound.svg";
 import "./style.css";
 import { Button, useToast } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
-import { UserDataContext } from "@Context/userContext";
+import { UserDataContext } from "@Context";
 import emptyCart from "@Utils/database-functions/emptyCart";
 import { getFiatPrice, roundPrice } from "@Utils/formats/formats";
 

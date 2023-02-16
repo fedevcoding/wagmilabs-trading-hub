@@ -13,7 +13,7 @@ import {
   NumberInputField,
 } from "@chakra-ui/react";
 import { useListNft } from "@Hooks";
-import { Loader, Select } from "@Components";
+import { Loader, OrderInfo, Select } from "@Components";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -21,14 +21,15 @@ import "./style.scss";
 
 export const ListItemModal = React.memo(
   ({
+    id,
+    isOpen,
+    address,
+    currency,
+    setIsOpen,
+    lastListing,
     details: {
       token: { name },
     },
-    currency,
-    isOpen,
-    setIsOpen,
-    address,
-    id,
   }) => {
     const [confirmingList, setConfirmingList] = React.useState(false);
     const [ethAmountPrice, setEthAmountPrice] = React.useState(null);
@@ -56,8 +57,16 @@ export const ListItemModal = React.memo(
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
+            {(lastListing && (
+              <div className="last-listing-info">
+                <h2>Last listing info</h2>
+                <OrderInfo order={lastListing} />
+                <hr />
+              </div>
+            )) ||
+              ""}
             <p className="label">
-              <b>Set price</b>
+              <b>{lastListing ? "Set new price" : "Set price"}</b>
             </p>
             <NumberInput>
               <NumberInputField

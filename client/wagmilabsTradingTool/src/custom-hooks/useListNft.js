@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { fetchSigner } from "@wagmi/core";
 import { getClient } from "@reservoir0x/reservoir-kit-client";
 import { useToast } from "@chakra-ui/react";
-import { UserDataContext } from "../context/userContext";
+import { UserDataContext } from "@Context";
 import { getListingExpirationDate } from "../utils/formats/formats";
 import { marketListingMapping } from "../utils/mappings";
 

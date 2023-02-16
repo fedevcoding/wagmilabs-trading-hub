@@ -52,8 +52,7 @@ import io from "socket.io-client";
 
 // context
 
-import { UserDataContext } from "./context/userContext";
-import { SocketContext } from "./context/SocketContext";
+import { UserDataContext, SocketContext } from "@Context";
 import Redirect from "./pages/redirect/Redirect";
 import Legals from "./pages/Legal/Legals";
 import { serverUrl } from "@Variables";

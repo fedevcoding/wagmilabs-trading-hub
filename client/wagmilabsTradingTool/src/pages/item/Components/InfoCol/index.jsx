@@ -1,10 +1,8 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { useAccount } from "wagmi";
 import {
   BestOfferBox,
   BestOfferTable,
-  ItemActivity,
   Listings,
   ListItem,
   PriceBox,
@@ -12,17 +10,12 @@ import {
 } from "..";
 
 import "./style.scss";
+import { useGetData } from "./useGetData";
 
 export const InfoCol = React.memo(({ details, address, id }) => {
   const navigate = useNavigate();
-  const { address: accountAddress } = useAccount();
-  const isOwner = details
-    ? accountAddress?.toLowerCase() === details?.token?.owner?.toLowerCase()
-    : false;
-  const collectionImage = details.token?.collection?.image;
-
-  const currency =
-    Object.values(details.market)[0]?.price?.currency?.symbol || "ETH";
+  const { collectionImage, currency, isOwner, listings, isFetchingListings } =
+    useGetData(details, address, id);
 
   return (
     <div className="item-name-container">
@@ -59,6 +52,7 @@ export const InfoCol = React.memo(({ details, address, id }) => {
               address={address}
               id={id}
               currency={currency}
+              lastListing={listings.length ? listings[0] : null}
             />
           </div>
         ) : (
@@ -69,9 +63,13 @@ export const InfoCol = React.memo(({ details, address, id }) => {
       {isOwner ? "" : <PriceBox details={details} address={address} />}
 
       <BestOfferBox details={details} address={address} isOwner={isOwner} />
-      <Listings details={details} address={address} id={id} />
+      <Listings
+        details={details}
+        address={address}
+        listings={listings}
+        isFetching={isFetchingListings}
+      />
       <BestOfferTable details={details} />
-      <ItemActivity address={address} id={id} currency={currency} />
     </div>
   );
 });

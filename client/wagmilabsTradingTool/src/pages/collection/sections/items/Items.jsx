@@ -21,7 +21,7 @@ import {
   Tooltip,
 } from "@chakra-ui/react";
 
-import { UserDataContext } from "@Context/userContext";
+import { UserDataContext } from "@Context";
 import { roundPrice } from "@Utils/formats/formats";
 
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
@@ -147,7 +147,7 @@ const Items = ({
             attr.attributeKey === attributeKey &&
             attr.attributeValue === attributeValue
           )
-          return false;
+            return false;
           return attr;
         });
         return {
@@ -230,7 +230,8 @@ const Items = ({
     () =>
       items &&
       items.map((item, index) => {
-        const { tokenId, name, image, rarityRank, isFlagged, isLive } = item?.token;
+        const { tokenId, name, image, rarityRank, isFlagged, isLive } =
+          item?.token;
         const isInCart = userCartItems.some(
           item => item.tokenId.toString() === tokenId.toString()
         );
@@ -243,19 +244,21 @@ const Items = ({
         const marketplaceIcon = item?.market?.floorAsk?.source?.icon;
         const marketplaceUrl = item?.market?.floorAsk?.source?.url;
 
-        const orderHash = item?.market?.floorAsk?.id
+        const orderHash = item?.market?.floorAsk?.id;
 
         let isListed = false;
         if (value) isListed = true;
 
-        const marketplaceImg = getMarketplaceImage(marketplace) || marketplaceIcon;
+        const marketplaceImg =
+          getMarketplaceImage(marketplace) || marketplaceIcon;
 
-        
         const isLast = index === items.length - 1;
 
         return (
           <div
-            className={`collection-single-item-container ${isLast && "last-token"} ${isLive && "live-token-animation"}`}
+            className={`collection-single-item-container ${
+              isLast && "last-token"
+            } ${isLive && "live-token-animation"}`}
             key={orderHash}
           >
             <div
@@ -352,7 +355,7 @@ const Items = ({
                             value,
                             marketplace,
                             address,
-                            collectionName || collectionInfo?.name,
+                            collectionName || collectionInfo?.name
                           )
                         }
                       >

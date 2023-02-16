@@ -10,8 +10,7 @@ import {
   Button,
 } from "@chakra-ui/react";
 import { useAcceptOffer } from "@Hooks";
-import { Loader } from "@Components";
-import moment from "moment";
+import { Loader, OrderInfo } from "@Components";
 
 import "./style.scss";
 
@@ -38,35 +37,7 @@ export const AcceptOfferModal = React.memo(
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <p className="label">
-              <b>Market:</b> {bid.source.name}
-            </p>
-            <p className="label">
-              <b>Maker:</b> <small>{bid.maker}</small>
-            </p>
-            <p className="label">
-              <b>Valid until:</b>{" "}
-              {`${moment(bid.validUntil * 1000)
-                .utc()
-                .format("MMM DD, YYYY HH:mm")} GMT`}
-            </p>
-            <p className="label">
-              <b>Price:</b>
-              {" " + bid.price.amount.native + " " + bid.price.currency.symbol}
-              {` (${bid.price.amount.usd.toLocaleString("EN-us", {
-                maximumFractionDigits: 2,
-              })}$)`}
-            </p>
-            <p className="label">
-              <b>Net price:</b>
-              {" " +
-                bid.price.netAmount.native +
-                " " +
-                bid.price.currency.symbol}
-              {` (${bid.price.netAmount.usd.toLocaleString("EN-us", {
-                maximumFractionDigits: 2,
-              })}$)`}
-            </p>
+            <OrderInfo order={bid} />
           </ModalBody>
           <ModalFooter>
             <Button

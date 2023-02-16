@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 
 import "./style.scss";
 
-import { UserDataContext } from "@Context/userContext";
+import { UserDataContext } from "@Context";
 import { useAccount } from "wagmi";
 import {
   formatAddress,

@@ -6,7 +6,7 @@ import "./style.scss";
 import { useGetData } from "./useGetData";
 import { ActivityTable } from "./ActivityTable";
 
-export const ItemActivity = React.memo(({ address, id, currency }) => {
+export const ItemActivity = React.memo(({ address, id, market }) => {
   const [types, setTypes] = React.useState([]);
   const [activities, isLoading] = useGetData(
     address,
@@ -14,6 +14,7 @@ export const ItemActivity = React.memo(({ address, id, currency }) => {
     types.map(t => t.value).join(",")
   );
   const activityOptions = getActivityOptions();
+  const currency = Object.values(market)[0]?.price?.currency?.symbol || "ETH";
 
   return (
     <div id="item-activity">

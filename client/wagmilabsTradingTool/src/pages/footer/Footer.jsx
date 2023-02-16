@@ -2,7 +2,7 @@ import React, { useContext, useState } from "react";
 import { GasModal, LivePulsing } from "@Components";
 import "./Footer.css";
 
-import { UserDataContext } from "../../context/userContext";
+import { UserDataContext } from "@Context";
 
 const Footer = () => {
   const { gasSettings, ethData } = useContext(UserDataContext);

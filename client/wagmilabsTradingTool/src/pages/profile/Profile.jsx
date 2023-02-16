@@ -20,7 +20,7 @@ import {
   Tooltip,
 } from "@chakra-ui/react";
 
-import { UserDataContext } from "../../context/userContext";
+import { UserDataContext } from "@Context";
 
 import copy from "copy-to-clipboard";
 import setPageTitle from "../../utils/functions/setPageTitle";

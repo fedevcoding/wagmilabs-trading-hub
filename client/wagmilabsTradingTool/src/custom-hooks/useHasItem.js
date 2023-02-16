@@ -1,5 +1,5 @@
 import React from "react";
-import { UserDataContext } from "@Context/userContext";
+import { UserDataContext } from "@Context";
 
 export const useHasItem = (address, tokenId) => {
   const { userCartItems } = React.useContext(UserDataContext);
