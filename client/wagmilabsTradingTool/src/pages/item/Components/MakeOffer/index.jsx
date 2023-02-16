@@ -1,36 +1,26 @@
 import React from "react";
-import { NumberInput, NumberInputField } from "@chakra-ui/react";
-import { usePlaceBid } from "@Hooks";
+import { MakeOfferModal } from "@Components";
 
-export const MakeOffer = React.memo(({ address, tokenId, marketplace }) => {
-  const [insertOffer, setInsertOffer] = React.useState(false);
-  const [price, setPrice] = React.useState(0);
+export const MakeOffer = React.memo(
+  ({ address, tokenId, marketplace, details, currency }) => {
+    const [isOpen, setIsOpen] = React.useState(false);
 
-  const { placeBid } = usePlaceBid(marketplace);
-
-  return insertOffer ? (
-    <div className="btn insert-bid">
-      <div className="back" onClick={() => setInsertOffer(!insertOffer)}>
-        <i className="fa fa-arrow-left" />
-      </div>
-      <NumberInput>
-        <NumberInputField
-          placeholder="Value"
-          onChange={e => setPrice(e.target.value)}
+    return (
+      <>
+        <div className="btn" onClick={() => setIsOpen(true)}>
+          <i className="fa fa-tag" />
+          Make offer
+        </div>
+        <MakeOfferModal
+          isOpen={isOpen}
+          address={address}
+          details={details}
+          tokenId={tokenId}
+          currency={currency}
+          setIsOpen={setIsOpen}
+          marketplace={marketplace}
         />
-      </NumberInput>
-      <div
-        className="make-offer"
-        onClick={() => placeBid(`${address}:${tokenId}`, price)}
-      >
-        <i className="fa fa-tag" />
-        Confirm
-      </div>
-    </div>
-  ) : (
-    <div className="btn" onClick={() => setInsertOffer(!insertOffer)}>
-      <i className="fa fa-tag" />
-      Make offer
-    </div>
-  );
-});
+      </>
+    );
+  }
+);

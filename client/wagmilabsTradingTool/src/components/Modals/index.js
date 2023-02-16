@@ -6,3 +6,4 @@ export { GasModal } from "./GasModal";
 export { NewTaskModal } from "./NewTaskModal";
 export { WalletModal } from "./WalletModal";
 export { AcceptOfferModal } from "./AcceptOfferModal";
+export { MakeOfferModal } from "./MakeOfferModal";
