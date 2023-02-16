@@ -1,37 +1,44 @@
 import React, { memo } from 'react'
-import { formatTime, roundPrice } from '../../../../../utils/formats/formats';
+import { roundPrice } from '../../../../../utils/formats/formats';
 import etherscan from "../../../../../assets/etherscan.svg";
 import getMarketplaceImage from '../../../../../utils/marketplaceImageMapping';
+import {TimeAgo} from "@Components";
 
-const SalesMapping = memo(({ sales }) => {
+
+const SalesMapping = memo(({ sales, address }) => {
+
     return (
         <>
-            {
+            {   
                 sales.map((sale, index) => {
-                    const { value, transactionHash, timestamp, name, image, marketplace } = sale || {};
+                    const { value, transactionHash, timestamp, name, image, marketplace, tokenId } = sale || {};
 
                     const marketplaceImage = getMarketplaceImage(marketplace);
 
-                    const time = formatTime(timestamp);
-
+                    const itemLink = `https://opensea.io/assets/${address}/${tokenId}`
                     const randomUUID = crypto.randomUUID();
                     return (
-                        <div
+                        <a
                             key={randomUUID}
                             className={`single-item-row`}
+                            href={`/item/${address}/${tokenId}`}
                         >
-                            <div className="token-info-container">
+                            <div className="token-info-container wrap-text">
                                 <img src={image} className="item-image" alt="" />
-                                <div>
-                                    <p>{name}</p>
-                                    <p className="live-view-sale-time low-opacity little-text">{time}</p>
+                                <div className='wrap-text'>
+                                    <p className='wrap-text'>{name}</p>
+                                    <p className="live-view-sale-time low-opacity little-text">
+                                        <TimeAgo timestamp={timestamp} isUnix={false} intervalMs={1000}/>
+                                    </p>
                                 </div>
                             </div>
 
                             <div className="flex-col-left">
                                 <p>{roundPrice(value)} ETH</p>
                                 <div className="sales-logos">
-                                    <img src={marketplaceImage} alt="" />
+                                    <a href={itemLink}>
+                                        <img src={marketplaceImage} alt="" />
+                                    </a>
                                     <a
                                         href={`https://etherscan.io/tx/${transactionHash}`}
                                         target="_blank"
@@ -41,7 +48,7 @@ const SalesMapping = memo(({ sales }) => {
                                     </a>
                                 </div>
                             </div>
-                        </div>
+                        </a>
                     );
                 })
             }

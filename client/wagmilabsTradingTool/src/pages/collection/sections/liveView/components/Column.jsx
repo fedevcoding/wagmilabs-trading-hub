@@ -1,12 +1,13 @@
 import React from 'react'
 import ColumnHeader from './ColumnHeader.jsx'
 
-const Column = ({ children, type }) => {
-  return (
-    <div className='column'>
-      <ColumnHeader type={type} />
+const Column = ({ children, type, columnHovered, changeHover }) => {
 
-      <div className='items'>
+  return (
+    <div className='column' onMouseEnter={() => changeHover(type, true)} onMouseLeave={() => changeHover(type, false)}>
+      <ColumnHeader type={type} columnHovered={columnHovered}/>
+
+      <div className={"items"}>
         {children}
       </div>
     </div>

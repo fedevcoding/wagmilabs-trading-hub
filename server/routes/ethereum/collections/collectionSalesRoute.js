@@ -11,7 +11,6 @@ collectionSalesRoute.get('/:address', checkAuth, (req, res) => {
             const { address } = req.params
 
             if (!address) return res.status(400).json({ status: "error", ok: false, message: "Address is required" })
-            // const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000) / 1000;
 
             const lowerCasedAddress = address.toLowerCase()
 

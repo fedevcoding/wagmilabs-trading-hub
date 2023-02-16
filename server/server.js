@@ -70,7 +70,7 @@ app.use(cookieParser());
 const http = require("http");
 const server = new http.createServer(app);
 const socketIO = require("socket.io");
-const refreshCollectionRoute = require("./routes/ethereum/collections/resfreshColelctionROuter.js");
+const refreshCollectionRoute = require("./routes/ethereum/collections/resfreshColelctionRoute.js");
 const io = socketIO(server, {
   cors: {
     origin: CLIENT_URL,

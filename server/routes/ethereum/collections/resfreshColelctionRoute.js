@@ -4,7 +4,7 @@ const checkAuth = require("../../../middleware/checkAuth")
 const refreshCollectionRoute = express()
 
 
-const RESERVOIR_API_KEY = process.env.RESERVOIR_API_KEY
+const RESERVOIR_API_KEY = process.env.RESERVOIR_API
 refreshCollectionRoute.get('/:address', checkAuth, (req, res) => {
 
     async function refreshMetadata() {

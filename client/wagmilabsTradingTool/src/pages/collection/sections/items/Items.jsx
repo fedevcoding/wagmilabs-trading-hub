@@ -519,6 +519,9 @@ const Items = ({
                     const attributeName = item.key;
 
                     const length = item?.values?.length;
+
+                    const sortedItems = item?.values?.sort((b, a) => a?.count - b?.count);
+
                     return (
                       <AccordionItem>
                         <AccordionButton
@@ -544,14 +547,13 @@ const Items = ({
                         </AccordionButton>
 
                         <AccordionPanel pb={4}>
-                          {item?.values &&
-                            item.values.map(innerItem => {
+                          {sortedItems && sortedItems.map(innerItem => {
                               const attributeValue = innerItem.value;
                               const { count } = innerItem;
 
                               return (
                                 <>
-                                  <Row>
+                                  <Row className="collection-item-property-row wrap-text">
                                     <Checkbox
                                       defaultChecked={
                                         itemFilters?.attributeFilter?.filter(
@@ -565,7 +567,7 @@ const Items = ({
                                           : false
                                       }
                                       size={"sm"}
-                                      className="collection-item-marketplace-filter"
+                                      className="collection-item-marketplace-filter wrap-text"
                                       key={crypto.randomUUID()}
                                       value={attributeValue}
                                       onChange={e =>
@@ -586,7 +588,7 @@ const Items = ({
                               );
                             })}
 
-                          <Divider />
+                          <Divider marginTop={"15px"}/>
                         </AccordionPanel>
                       </AccordionItem>
                     );
@@ -618,7 +620,7 @@ const Items = ({
               </InputGroup>
                 
               <Tooltip label="Refresh Metadata" placement="top">
-                <i className={`fa-solid fa-arrows-rotate refresh-collection-metadata ${refreshingMetadata && "rotating"}`} onClick={() => refreshMetadata(address)}></i>
+                <i className={`fa-solid fa-arrows-rotate refresh-collection-metadata ${refreshingMetadata && "rotating"}`} onClick={() => !refreshingMetadata && refreshMetadata(address)}></i>
               </Tooltip>
             </HStack>
           </div>

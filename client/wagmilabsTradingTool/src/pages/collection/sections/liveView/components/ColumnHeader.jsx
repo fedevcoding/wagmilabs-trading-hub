@@ -1,9 +1,13 @@
+import { LivePulsing } from '@Components'
 import React from 'react'
 
-const ColumnHeader = ({ type }) => {
+const ColumnHeader = ({ type, columnHovered }) => {
     return (
         <div className='column-header'>
-            <p className='title'>{type === "listings" ? "Listings" : "Sales"}</p>
+            <div className='title'>
+                <p>{type === "listings" ? "Listings" : "Sales"}</p>
+                <LivePulsing notActive={columnHovered[type]}/>
+            </div>
         </div>
     )
 }

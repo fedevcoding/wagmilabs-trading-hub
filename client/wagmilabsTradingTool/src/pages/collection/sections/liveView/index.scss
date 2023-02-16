@@ -12,11 +12,23 @@ $main-color: white;
 	.column {
 		background-color: #201f1e;
 		border-radius: 10px;
+		cursor: pointer;
+
+		.column-header{
+			.title{
+				display: flex;
+				align-items: center;
+				gap: 20px;
+			}
+		}
 
 		.items {
 			height: 80vh;
 			overflow: scroll;
 			width: 25vw;
+		}
+		.items.hovered{
+			border: 2px solid red;
 		}
 
 		.item-image {

@@ -1,15 +1,40 @@
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState, useContext, useRef } from "react";
 import { getFromServer } from "@Utils/functions/serverCalls.js";
 import { SocketContext } from "@Context";
 
-export function useGetData(address) {
+export function useGetData(address, columnHovered) {
   const socket = useContext(SocketContext);
+
+  const [hoveredListings, setHoveredListings] = useState([]);
+  const [hoveredSales, setHoveredSales] = useState([]);
 
   const [totalListings, setTotalListings] = useState([]);
   const [totalSales, setTotalSales] = useState([]);
   const [listings, setListings] = useState([]);
   const [sales, setSales] = useState([]);
   const [isLoading, setLoading] = useState(false);
+  const columnHoveredRef = useRef(columnHovered)
+
+  useEffect(()=>{
+    columnHoveredRef.current = columnHovered
+    if(!columnHovered.listings && hoveredListings.length > 0){
+      setTotalListings(oldListings => [...oldListings, ...hoveredListings]);
+    }
+
+    if(!columnHovered.sales && hoveredSales.length > 0){
+      setTotalSales(oldSales => [...oldSales, ...hoveredSales]);
+    }
+  }, [columnHovered])
+
+  useEffect(()=>{
+    if(hoveredListings.length > 0){
+      setHoveredListings([]);
+    }
+
+    if(hoveredSales.length > 0){
+      setHoveredSales([]);
+    }
+  }, [totalListings, totalSales])
 
   useEffect(() => {
     async function getData() {
@@ -29,6 +54,8 @@ export function useGetData(address) {
 
       setLoading(false);
     }
+    getData();
+
 
     async function listenToListings() {
       socket.on("listing", listingData => {
@@ -51,7 +78,8 @@ export function useGetData(address) {
           marketplace,
         };
 
-        setTotalListings(oldListings => [...oldListings, dataObj]);
+        
+        !columnHoveredRef.current.listings ? setTotalListings(oldListings => [...oldListings, dataObj]) : setHoveredListings(oldListings => [...oldListings, dataObj]);
       });
     }
 
@@ -77,13 +105,14 @@ export function useGetData(address) {
           marketplace,
         };
 
-        setTotalSales(oldSales => [...oldSales, dataObj]);
+        !columnHoveredRef.current.sales ? setTotalSales(oldSales => [...oldSales, dataObj]) : setHoveredSales(oldSales => [...oldSales, dataObj]);
       });
     }
-    getData();
     listenToListings();
-    listenToSales();
+    listenToSales()
   }, [address, socket]);
+
+
 
   useEffect(() => {
     setListings([...totalListings]?.reverse()?.splice(0, 50));

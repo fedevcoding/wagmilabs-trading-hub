@@ -1,31 +1,32 @@
 import React, { memo } from "react";
-import { formatTime, roundPrice } from "../../../../../utils/formats/formats";
+import { roundPrice } from "../../../../../utils/formats/formats";
 import getMarketplaceImage from "../../../../../utils/marketplaceImageMapping";
 import { Button } from "@chakra-ui/react";
 import { useBuyNow } from "@Hooks";
+import {TimeAgo} from "@Components";
 
 const ListingMapping = memo(({ listings, contractAddress }) => {
   const { buyNow } = useBuyNow();
-
+  
   return (
     <>
       {listings.map((listing, index) => {
+
+
         const { image, marketplace, timestamp, tokenId, name, value } =
           listing || {};
 
         const marketplaceImage = getMarketplaceImage(marketplace);
 
-        const time = formatTime(timestamp * 1000);
-
         const randomUUID = crypto.randomUUID();
         return (
           <div key={randomUUID} className={`single-item-row`}>
-            <div className="token-info-container">
+            <div className="token-info-container wrap-text">
               <img src={image} className="item-image" alt="" />
-              <div>
-                <p>{name}</p>
+              <div className="wrap-text">
+                <p className="wrap-text">{name}</p>
                 <p className="live-view-sale-time low-opacity little-text">
-                  {time}
+                  <TimeAgo timestamp={timestamp} isUnix={true} intervalMs={1000}/>
                 </p>
               </div>
             </div>

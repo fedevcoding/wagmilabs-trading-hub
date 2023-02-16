@@ -4,7 +4,7 @@ const Listings = require("../../../models/ListingsModel")
 
 const collectionListingsRoute = express()
 
-collectionListingsRoute.get('/:address', (req, res) => {
+collectionListingsRoute.get('/:address', checkAuth, (req, res) => {
 
     async function getListings() {
         try {

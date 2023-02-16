@@ -11,3 +11,4 @@ export { LoadingSpinner } from "./LoadingSpinner";
 export { Pagination } from "./Pagination";
 export { LivePulsing } from "./LivePulsing";
 export { OrderInfo } from "./OrderInfo";
+export {TimeAgo} from "./TimeAgo"
