@@ -20,7 +20,7 @@ export const Banner = React.memo(() => {
     >
       <Row>
         <Col className="info">
-          <h3 className="heading">Wagmi Labs launching NFT pass mint to access Trading Hub</h3>
+          <h3>{headline}</h3>
           <p className="feed-summary">{summary}</p>
 
 
