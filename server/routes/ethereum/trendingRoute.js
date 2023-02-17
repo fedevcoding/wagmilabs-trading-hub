@@ -58,7 +58,7 @@ trendingRoute.get('/:time', checkAuth, (req, res) => {
                 }
             ])
 
-            res.status(200).json({trendingCollections})
+            res.status(200).json({trendingCollections, time})
         }
         catch(e){
             res.status(500).json({error: e})

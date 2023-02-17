@@ -59,7 +59,7 @@ rankingRoute.get('/:time', checkAuth, (req, res) => {
                 }
             ])
 
-            res.status(200).json({ rankingCollections })
+            res.status(200).json({ rankingCollections, time })
         }
         catch (e) {
             console.log(e)

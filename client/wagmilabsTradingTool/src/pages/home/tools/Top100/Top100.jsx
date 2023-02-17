@@ -21,7 +21,7 @@ const Top100 = ({ tool, timeFrame, setTimeFrame, resetTime }) => {
   const firstRender = useFirstRender();
 
   const [stats, setStats] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const time = times[timeFrame];
   const timeRef = useRef(time);
@@ -72,13 +72,9 @@ const Top100 = ({ tool, timeFrame, setTimeFrame, resetTime }) => {
       });
       data = await data.json();
 
-      const { rankingCollections } = data;
+      const { rankingCollections, time } = data;
 
-      setTimeout(() => {
-        setLoading(false);
-      }, 300);
-
-      sortData(rankingCollections);
+      if(time === timeRef.current) sortData(rankingCollections)
     } catch (e) {
       console.log(e);
       sortData([]);
@@ -128,6 +124,8 @@ const Top100 = ({ tool, timeFrame, setTimeFrame, resetTime }) => {
       default:
         break;
     }
+
+    data && setLoading(false);
   }
 
   function changeSort(e, sortName) {

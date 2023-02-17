@@ -61,7 +61,7 @@ mintingRoute.get('/:time', checkAuth, (req, res) => {
                 }
             ])
 
-            res.status(200).json({ mintingCollections })
+            res.status(200).json({ mintingCollections, time })
         }
         catch (e) {
             res.status(500).json({ error: e })

@@ -19,7 +19,7 @@ const Minting = ({ tool, timeFrame, setTimeFrame, resetTime }) => {
   const firstRender = useFirstRender();
 
   const [stats, setStats] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const time = times[timeFrame];
   const timeRef = useRef(time);
@@ -71,13 +71,10 @@ const Minting = ({ tool, timeFrame, setTimeFrame, resetTime }) => {
       });
       data = await data.json();
 
-      const { mintingCollections } = data;
+      const { mintingCollections, time } = data;
 
-      setTimeout(() => {
-        setLoading(false);
-      }, 300);
+      if (timeRef.current === time) sortData(mintingCollections);
 
-      sortData(mintingCollections);
     } catch (e) {
       console.log(e);
       sortData([]);
@@ -143,6 +140,8 @@ const Minting = ({ tool, timeFrame, setTimeFrame, resetTime }) => {
       default:
         break;
     }
+
+    data && setLoading(false);
   }
 
   function changeSort(e, sortName) {

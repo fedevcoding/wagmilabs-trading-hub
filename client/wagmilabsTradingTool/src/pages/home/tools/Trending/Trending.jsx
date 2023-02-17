@@ -19,7 +19,7 @@ const Trending = ({ tool, timeFrame, setTimeFrame, resetTime }) => {
   const firstRender = useFirstRender();
 
   const [stats, setStats] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const time = times[timeFrame];
   const timeRef = useRef(time);
@@ -71,9 +71,10 @@ const Trending = ({ tool, timeFrame, setTimeFrame, resetTime }) => {
       });
       data = await data.json();
 
-      const { trendingCollections } = data;
+      const { trendingCollections, time } = data;
 
-      sortData(trendingCollections);
+      if(time === timeRef.current) sortData(trendingCollections);
+      
     } catch (e) {
       sortData([]);
       console.log(e);
@@ -124,7 +125,7 @@ const Trending = ({ tool, timeFrame, setTimeFrame, resetTime }) => {
         break;
     }
 
-    setLoading(false);
+    data && setLoading(false);
   }
 
   function changeSort(e, sortName) {
