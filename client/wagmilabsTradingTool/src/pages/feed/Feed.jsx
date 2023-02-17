@@ -7,6 +7,8 @@ import PoweredBy from "../../assets/poweredbyluckytrader-light.png";
 import "./style.scss";
 import { Card } from "./Components";
 import setPageTitle from "../../utils/functions/setPageTitle";
+import { Banner } from "./Components/Banner";
+import { generateRandomRangeInt } from "src/utils/formats/utils";
 
 const Feed = React.memo(() => {
   const [currentPage, setCurrentPage] = React.useState(1);
@@ -18,14 +20,20 @@ const Feed = React.memo(() => {
   useEffect(() => {
     setPageTitle("Feed | Wagmi Labs");
   }, []);
+
+  let bannerPos = generateRandomRangeInt(0, 3);
+  
   return (
     <PageWrapper page="feed">
       <h1>NFT news</h1>
       {(news && !isLoading && (
         <>
           <div className="cards">
-            {news.map(n => (
+            {news.map((n, index) => (
+              <>
+              {index === bannerPos && <Banner />}
               <Card key={n.link} news={n} />
+              </>
             ))}
           </div>
           <Pagination
