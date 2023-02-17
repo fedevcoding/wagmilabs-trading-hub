@@ -35,6 +35,8 @@
 
 
 .collection-activity-single-container{
+    display: table-row;
+    vertical-align: inherit;
     cursor: pointer;
     transition: background-color 200ms;
 }
@@ -195,4 +197,13 @@
 
 .collection-activity-table tbody .loading{
     padding-bottom: 60px;
+}
+
+
+.collection-activity-time.link{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: #3a8cdf;
 }

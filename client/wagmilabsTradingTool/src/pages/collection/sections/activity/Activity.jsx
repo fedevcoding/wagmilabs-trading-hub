@@ -187,8 +187,8 @@ const Activity = ({ address }) => {
   const collectionActivityMapping = useMemo(
     () =>
       collectionActivity.map((item, index) => {
-        const { type, fromAddress, toAddress, price, timestamp } = item;
-        const { tokenName, tokenImage } = item.token;
+        const { type, fromAddress, toAddress, price, timestamp, txHash } = item ?? {};
+        const { tokenName, tokenImage, tokenId } = item.token;
         const { collectionName, collectionImage } = item.collection;
 
         const activityType = activityTypeMapping[type];
@@ -199,7 +199,8 @@ const Activity = ({ address }) => {
         const key = crypto.randomUUID();
         return (
           <>
-            <tr
+            <a
+              href={`/item/${address}/${tokenId}`}
               key={key}
               className={`collection-activity-single-container ${
                 isLast && "last-token"
@@ -243,9 +244,15 @@ const Activity = ({ address }) => {
                 {toAddress ? formatAddress3(toAddress) : "- - -"}
               </td>
               <td className="collection-activity-single-time">
-                {moment(timestamp * 1000).fromNow()}
+                <a className={`collection-activity-time ${type !== "ask" && "link"}`} href={`https://etherscan.io/tx/${txHash}`} target="_blank" rel="noreferrer">
+                  <p>{moment(timestamp * 1000).fromNow()}</p>
+                  {
+                    type !== "ask" &&
+                    <i className="fa-sharp fa-solid fa-up-right-from-square"></i>
+                  }
+                </a>
               </td>
-            </tr>
+            </a>
 
             <tr className="collection-activity-single-hr">
               <td colSpan={6}>
@@ -255,7 +262,7 @@ const Activity = ({ address }) => {
           </>
         );
       }),
-    [collectionActivity]
+    [collectionActivity, address]
   );
 
   return (

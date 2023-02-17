@@ -38,7 +38,7 @@ export const BestOfferBox = React.memo(
             <Row className="actions">
               <Col>
                 {isOwner ? (
-                  <AcceptOffer details={details} tokenId={tokenId} />
+                  <AcceptOffer details={details} tokenId={tokenId} address={address} />
                 ) : (
                   <MakeOffer
                     address={address}
