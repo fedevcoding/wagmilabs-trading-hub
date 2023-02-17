@@ -27,14 +27,9 @@ export function useGetData(address, columnHovered) {
   }, [columnHovered, hoveredListings, hoveredSales])
 
   useEffect(()=>{
-    if(hoveredListings.length > 0){
-      setHoveredListings([]);
-    }
-
-    if(hoveredSales.length > 0){
-      setHoveredSales([]);
-    }
-  }, [totalListings, totalSales, hoveredListings.length, hoveredSales.length])
+    setHoveredListings(prev => prev.length > 0 ? [] : prev);
+    setHoveredSales(prev => prev.length > 0 ? [] : prev);
+  }, [totalListings, totalSales])
 
   useEffect(() => {
     async function getData() {
