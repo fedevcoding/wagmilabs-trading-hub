@@ -150,5 +150,10 @@
     position: fixed;
     left: 50%;
     transform: translate(-50%, 0);
+
+    .swap-tokens-widget{
+      box-shadow: none;
+      border-color: transparent;
+    }
   }
 }

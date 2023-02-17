@@ -132,19 +132,26 @@ function App() {
       const {pathname} = window.location
       const {jsonwebtoken} = localStorage;
 
-      if (jsonwebtoken && pathname !== "/") {
-        const valid = await jwtExpired(jsonwebtoken);
-        if (valid) setConnected(true)
-        else setChecking(true);
-      }
-      else if(jsonwebtoken){
-        setChecking(true)
+      if(pathname === "/legal"){
+        setChecking(false)
+        setLoading(false)
       }
       else{
-        if(pathname !== "/") window.location.href = "/"
-        setConnected(false)
+        if (jsonwebtoken && pathname !== "/") {
+          const valid = await jwtExpired(jsonwebtoken);
+          if (valid) setConnected(true)
+          else setChecking(true);
+        }
+        else if(jsonwebtoken){
+          setChecking(true)
+        }
+        else{
+          if(pathname !== "/") window.location.href = "/"
+          setConnected(false)
+        }
+        setLoading(false)
       }
-      setLoading(false)
+
     }
     verify()
 
@@ -284,6 +291,7 @@ function App() {
                 {
 
                   !loading &&
+                  
                   (
                     checking ?
                     <Checking setConnected={setConnected} setChecking={setChecking}/>
@@ -292,10 +300,23 @@ function App() {
 
                     !connected ?
 
-                    <Login
-                      setConnected={setConnected}
-                      connected={connected}
-                    />
+                    <>
+
+                      <BrowserRouter>
+                      <Routes>
+
+                        <Route exact path="/" element={
+                          
+                          <Login
+                            setConnected={setConnected}
+                            connected={connected}
+                          />
+                        } />
+                        <Route exact path="/legal" element={<Legals />} />
+
+                      </Routes>
+                      </BrowserRouter>
+                    </>
 
                     :
 

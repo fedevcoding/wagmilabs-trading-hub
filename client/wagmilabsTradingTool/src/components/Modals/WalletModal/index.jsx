@@ -25,6 +25,7 @@ import { SwapWidget } from "@uniswap/widgets";
 import "@uniswap/widgets/fonts.css";
 import { ETHEREUM_NETWORK } from "@Variables";
 import { useConnected } from "@Hooks";
+import { ethers } from "ethers";
 
 const jsonRpcUrlMap = {
   1: [ETHEREUM_NETWORK],
@@ -33,16 +34,16 @@ const jsonRpcUrlMap = {
 console.warn = function () {};
 
 const theme = {
-  primary: "#1F4A05",
-  secondary: "#5F7D52",
-  interactive: "#CBD6BA",
-  container: "#D9ECD9",
-  module: "#E9F7DF",
-  accent: "#8E8B78",
-  outline: "#CADDC2",
-  dialog: "#FFF",
+  primary: '#FFF',
+  secondary: '#A9A9A9',
+  interactive: '#000',
+  container: '#4E4E5A',
+  module: '#222633',
+  accent: '#71FF98',
+  outline: '#CC1',
+  dialog: '#000',
   fontFamily: "Poppins",
-  borderRadius: 0.8,
+  borderRadius: {large: 8},
 };
 
 export const WalletModal = ({ walletModalOpen, closeWalletModal }) => {
@@ -62,6 +63,11 @@ export const WalletModal = ({ walletModalOpen, closeWalletModal }) => {
     getProvider();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+
+  useEffect(()=>{
+    console.log("provider", provider)
+  }, [provider])
 
   useEffect(() => {
     if (walletModalOpen) {
@@ -84,7 +90,9 @@ export const WalletModal = ({ walletModalOpen, closeWalletModal }) => {
 
   async function getProvider() {
     const currentProvider = await connector?.getProvider();
-    currentProvider ? setProvider(currentProvider) : setProvider(null);
+
+    const proivder = new ethers.providers.Web3Provider(currentProvider)
+    setProvider(proivder)
   }
 
   const closeSwapModal = e => {
@@ -110,10 +118,12 @@ export const WalletModal = ({ walletModalOpen, closeWalletModal }) => {
     <>
       {walletModalOpen && (
         <div onClick={closeWalletModal} className="wallet-modal-overlay">
+
           {swapModal && (
             <div className="wallet-swap-overlay" onClick={closeSwapModal}>
               <div className="wallet-swap-container" onClick={closeSwapModal}>
                 <SwapWidget
+                  className="swap-tokens-widget"
                   width={"550px"}
                   theme={theme}
                   provider={provider}
@@ -122,6 +132,7 @@ export const WalletModal = ({ walletModalOpen, closeWalletModal }) => {
               </div>
             </div>
           )}
+
           <div className="wallet-modal-container">
             <header className="wallet-modal-header">
               <div className="wallet-modal-address-container">
