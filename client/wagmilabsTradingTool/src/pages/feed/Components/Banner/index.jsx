@@ -3,6 +3,7 @@ import { Col, Row } from "@Components";
 import FeedBanner from "../../../../assets/feed-banner.jpeg";
 
 import "./style.scss";
+import { Button } from "@chakra-ui/react";
 
 export const Banner = React.memo(() => {
   const headline = "Wagmi Labs launching NFT pass mint to access Trading Hub";
@@ -21,12 +22,16 @@ export const Banner = React.memo(() => {
         <Col className="info">
           <h3 className="heading">Wagmi Labs launching NFT pass mint to access Trading Hub</h3>
           <p className="feed-summary">{summary}</p>
+
+
+          <div className="feed-banner-btn-container">
+            <Button colorScheme={"white"}>
+              Get Whitelisted!
+            </Button>
+          </div>
         </Col>
         <Col>
           <img alt={summary} src={FeedBanner} />
-          <div className="feed-banner-btn">
-            Get Whitelisted!
-          </div>
         </Col>
       </Row>
     </a>

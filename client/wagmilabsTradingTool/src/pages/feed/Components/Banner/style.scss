@@ -1,21 +1,19 @@
 #page-feed {
   .card {
-    .feed-banner-btn {
-      background-color: white;
-      padding: 0.2rem 0.5rem;
-      border-radius: 0.3rem;
-      display: inline-block;
-      font-size: 16px;
-      color:#222;
-      margin-top: 4rem;
-    }
-  }
+    .feed-banner-btn-container {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
 
-  @media (max-width: 800px) {
-    .card {
-      .feed-banner-btn {
-        margin-top: 1rem;
+      button{
+        margin-top: 3rem;
+        color: black;
+        width: 240px;
+        height: 50px;
+        font-size: 18px;
       }
     }
   }
+
 }
