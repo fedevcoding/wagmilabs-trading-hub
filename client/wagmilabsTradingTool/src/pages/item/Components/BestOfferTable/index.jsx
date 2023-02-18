@@ -4,7 +4,7 @@ import { Tooltip } from "@chakra-ui/react";
 import { useAccount } from "wagmi";
 import { formatContractAddress } from "@Utils/formats/formats";
 import notFound from "@Assets/notFound.svg";
-// import getMarketplaceImage from "@Utils/marketplaceImageMapping";
+import getMarketplaceImage from "@Utils/marketplaceImageMapping";
 
 import "./style.scss";
 
@@ -20,7 +20,12 @@ export const BestOfferTable = React.memo(({ details }) => {
         <div className="best-offer">
           <p>
             Best offer
-            <small>{` (${marketplace})`}</small>
+            <img
+              alt={marketplace}
+              src={getMarketplaceImage(marketplace.toLowerCase())}
+              width={25}
+              className="market-img"
+            />
           </p>
           <table>
             <thead>
