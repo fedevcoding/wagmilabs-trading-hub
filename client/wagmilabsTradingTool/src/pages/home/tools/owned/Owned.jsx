@@ -3,7 +3,7 @@ import { baseUrl } from "@Variables";
 import "./owned.css";
 import times from "./times";
 
-import notFound from "../../../../assets/notFound.svg";
+import { notFound } from "@Assets";
 import { placeholderImage } from "../../../../utils/images";
 
 import { LazyLoadImage } from "react-lazy-load-image-component";

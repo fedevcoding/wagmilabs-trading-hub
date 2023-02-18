@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 
-import notFound from "../../assets/notFound.svg";
+import { notFound } from "@Assets";
 import { Button } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import "./redirect.css";

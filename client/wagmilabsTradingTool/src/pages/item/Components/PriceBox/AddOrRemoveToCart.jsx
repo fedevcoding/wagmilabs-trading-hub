@@ -5,12 +5,23 @@ import { useGetVariables } from "./useGetVariables";
 export const AddOrRemoveToCart = React.memo(({ details, address }) => {
   const { addItemToCart } = useGetItemFunctions(address);
   const { removeItemFromCart } = useRemoveItemFromCart();
-  const { name, tokenId, value, image, marketplace, collectionName } =
-    useGetVariables(details);
-  const hasItem = useHasItem(address, tokenId);
+  const {
+    name,
+    tokenId,
+    value,
+    image,
+    marketplace,
+    collectionName,
+    listingId,
+  } = useGetVariables(details);
+
+  const hasItem = useHasItem(listingId);
 
   return hasItem ? (
-    <div className="btn" onClick={() => removeItemFromCart(tokenId, address)}>
+    <div
+      className="btn"
+      onClick={() => removeItemFromCart(tokenId, address, listingId)}
+    >
       <i className="fa fa-cart-minus" />
       Remove from cart
     </div>
@@ -18,7 +29,16 @@ export const AddOrRemoveToCart = React.memo(({ details, address }) => {
     <div
       className="btn"
       onClick={() =>
-        addItemToCart(name, tokenId, value, image, marketplace, collectionName)
+        addItemToCart(
+          name,
+          tokenId,
+          value,
+          image,
+          marketplace,
+          collectionName,
+          undefined,
+          listingId
+        )
       }
     >
       <i className="fa fa-cart-shopping" />

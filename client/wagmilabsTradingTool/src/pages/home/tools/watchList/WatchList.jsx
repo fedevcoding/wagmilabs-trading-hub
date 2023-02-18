@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import { baseUrl } from "@Variables";
 import "./watchlist.css";
 
-import notFound from "../../../../assets/notFound.svg";
+import { notFound } from "@Assets";
 
 import times from "./times";
 

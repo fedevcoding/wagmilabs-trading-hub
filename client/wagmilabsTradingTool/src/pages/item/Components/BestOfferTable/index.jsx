@@ -3,7 +3,7 @@ import moment from "moment";
 import { Tooltip } from "@chakra-ui/react";
 import { useAccount } from "wagmi";
 import { formatContractAddress } from "@Utils/formats/formats";
-import notFound from "@Assets/notFound.svg";
+import { notFound } from "@Assets";
 import getMarketplaceImage from "@Utils/marketplaceImageMapping";
 
 import "./style.scss";
@@ -75,6 +75,8 @@ export const BestOfferTable = React.memo(({ details }) => {
           <p>Best offer</p>
           <div className="text-center">
             <img src={notFound} alt="best offer" width={100} />
+            <br />
+            <div>There are no offers for this asset</div>
           </div>
         </div>
       )}

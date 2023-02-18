@@ -261,7 +261,8 @@ const Items = ({
 
         return (
           <>
-          {(index === bannerPos1 || index === bannerPos2) && <ItemBanner />}
+          {(index === bannerPos1) && <ItemBanner primary />}
+          {(index === bannerPos2) && <ItemBanner />}
           <div
             className={`collection-single-item-container ${
               isLast && "last-token"

@@ -1,49 +1,71 @@
-const express = require("express")
-const User = require("../../../models/userModel.js")
-const checkAuth = require("../../../middleware/checkAuth")
+const express = require("express");
+const User = require("../../../models/userModel.js");
+const checkAuth = require("../../../middleware/checkAuth");
 
-const updateUserCartRoute = express()
+const updateUserCartRoute = express();
 
 updateUserCartRoute.post("/", checkAuth, async (req, res) => {
+  try {
+    const { type } = req.body;
+    const { address } = req.userDetails;
 
-    try {
-        const { type } = req.body
-        const { address } = req.userDetails
+    const user = await User.findOne({ address });
 
-        const user = await User.findOne({ address })
+    if (!user) return res.status(404).json({ pushStatus: "error" });
 
-        if (!user) return res.status(404).json({ pushStatus: "error" })
+    if (type === "add") {
+      const {
+        name,
+        tokenId,
+        price,
+        image,
+        contractAddress,
+        marketplace,
+        collectionName,
+        listingId,
+      } = req.body;
 
-        if (type === "add") {
-            const { name, tokenId, price, image, contractAddress, marketplace, collectionName } = req.body
+      const filteredItems = [
+        ...user.shoppingCart,
+        {
+          name,
+          tokenId,
+          price,
+          image,
+          contractAddress,
+          collectionName,
+          marketplace,
+          listingId,
+        },
+      ];
 
-            const filteredItems = [...user.shoppingCart, { name, tokenId, price, image, contractAddress, collectionName, marketplace }]
+      user.shoppingCart = filteredItems;
+      await user.save();
 
-            user.shoppingCart = filteredItems
-            await user.save()
+      res.json({ filteredItems, pushStatus: "success" });
+    } else if (type === "remove") {
+      const { contractAddress, tokenId, listingId } = req.body;
 
-            res.json({ filteredItems, pushStatus: "success" })
+      let filteredItems;
+      if (listingId) {
+        filteredItems = user.shoppingCart.filter(
+          (item) => item.listingId?.toLowerCase() !== listingId?.toLowerCase()
+        );
+      } else {
+        filteredItems = user.shoppingCart.filter(
+          (item) =>
+            item.contractAddress + item.tokenId !== contractAddress + tokenId
+        );
+      }
 
-        }
-        else if (type === "remove") {
+      user.shoppingCart = filteredItems;
+      await user.save();
 
-            const { contractAddress, tokenId } = req.body
-
-            const filteredItems = user.shoppingCart.filter(item => item.contractAddress + item.tokenId !== contractAddress + tokenId)
-
-            user.shoppingCart = filteredItems
-            await user.save()
-
-            res.json({ pushStatus: "success", filteredItems })
-        }
-
+      res.json({ pushStatus: "success", filteredItems });
     }
-    catch (e) {
-        res.status(500).json({ pushStatus: "error" })
-    }
+  } catch (e) {
+    res.status(500).json({ pushStatus: "error" });
+  }
+});
 
-
-})
-
-
-module.exports = updateUserCartRoute
+module.exports = updateUserCartRoute;

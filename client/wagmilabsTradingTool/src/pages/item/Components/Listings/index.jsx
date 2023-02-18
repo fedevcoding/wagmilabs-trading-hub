@@ -1,6 +1,7 @@
 import React from "react";
 import { LoadingSpinner } from "@Components";
 import { ListingTable } from "./ListingTable";
+import { notFound } from "@Assets";
 
 import "./style.scss";
 
@@ -24,8 +25,13 @@ export const Listings = React.memo(
                   address={address}
                   details={details}
                 />
-              )) ||
-                "No listings found!"}
+              )) || (
+                <div className="text-center">
+                  <img src={notFound} alt="best offer" width={100} />
+                  <br />
+                  <div>There are no listings for this asset</div>
+                </div>
+              )}
             </>
           )}
         </div>

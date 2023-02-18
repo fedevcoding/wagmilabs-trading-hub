@@ -10,7 +10,7 @@ import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import "./nfts.css";
 
-import notFound from "@Assets/notFound.svg";
+import { notFound } from "@Assets";
 
 import {
   getListingExpirationDate,
@@ -47,7 +47,6 @@ const Nfts = ({
 }) => {
   const [isOpenTransferModal, setIsOpenTransferModal] = useState(false);
   const [TransferModalDetails, setTransferModalDetails] = useState(null);
-
 
   useEffect(() => {
     if (TransferModalDetails) setIsOpenTransferModal(true)
@@ -372,14 +371,16 @@ const Nfts = ({
                       <i className="fa-solid fa-image"></i>
                       <p>Set as PFP</p>
                     </div>
-                    <div onClick={() => {
-                      setTransferModalDetails({
-                        details: item,
-                        id: tokenId,
-                        address: contractAddress,
-                        currency: "ETH",
-                      })
-                    }}>
+                    <div
+                      onClick={() => {
+                        setTransferModalDetails({
+                          details: item,
+                          id: tokenId,
+                          address: contractAddress,
+                          currency: "ETH",
+                        });
+                      }}
+                    >
                       <i className="fa-solid fa-arrow-up"></i>
                       <p>Transfer</p>
                     </div>

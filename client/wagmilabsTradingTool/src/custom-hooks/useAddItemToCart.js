@@ -16,13 +16,16 @@ export const useAddItemToCart = (address, callback) => {
       image,
       marketplace,
       collectionName,
-      index
+      index,
+      listingId
     ) => {
       if (
         userCartItems.find(
           i =>
             i.contractAddress === address &&
-            i.tokenId.toString() === tokenId.toString()
+            i.tokenId.toString() === tokenId.toString() &&
+            ((!i.listingId && !listingId) ||
+              i.listingId.toLowerCase() === listingId.toLowerCase())
         )
       ) {
         toast({
@@ -43,6 +46,7 @@ export const useAddItemToCart = (address, callback) => {
         image,
         marketplace,
         contractAddress: address,
+        listingId,
       });
 
       if (pushStatus === "success") {

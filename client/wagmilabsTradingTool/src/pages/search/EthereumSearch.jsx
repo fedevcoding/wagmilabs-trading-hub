@@ -9,6 +9,7 @@ import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import { placeholderImage } from "@Utils/images";
 
 import { LazyLoadImage } from "react-lazy-load-image-component";
+import { BannerSearch } from "./BannerSearch";
 
 const EthereumSearch = () => {
   const firstRender = useFirstRender();
@@ -88,6 +89,7 @@ const EthereumSearch = () => {
         const link = `/collection/${collectionId}`;
 
         return (
+          <>
           <a
             className="container-div"
             href={link}
@@ -127,6 +129,8 @@ const EthereumSearch = () => {
               )}
             </div>
           </a>
+          {index === collections.length-1 && <BannerSearch />}
+          </>
         );
       }),
     [collections]

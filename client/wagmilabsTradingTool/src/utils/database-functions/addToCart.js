@@ -8,6 +8,7 @@ async function addToCart({
   image,
   marketplace,
   contractAddress,
+  listingId,
 }) {
   try {
     let res = await fetch(`${baseUrl}/updateUserCart`, {
@@ -25,6 +26,7 @@ async function addToCart({
         contractAddress,
         marketplace,
         type: "add",
+        listingId,
       }),
     });
     if (!res.ok) throw new Error("error");

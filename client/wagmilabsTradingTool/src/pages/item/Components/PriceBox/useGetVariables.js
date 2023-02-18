@@ -7,6 +7,7 @@ export const useGetVariables = details => {
   const image = details?.token?.image || "";
   const marketplace = market?.source?.name || "";
   const collectionName = details?.token?.collection?.name || "";
+  const listingId = market?.id;
 
   return {
     name,
@@ -16,5 +17,6 @@ export const useGetVariables = details => {
     marketplace,
     collectionName,
     market,
+    listingId,
   };
 };

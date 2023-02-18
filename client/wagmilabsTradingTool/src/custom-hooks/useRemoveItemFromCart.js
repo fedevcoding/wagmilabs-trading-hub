@@ -9,10 +9,11 @@ export const useRemoveItemFromCart = address => {
   let removeItemFromCart = null;
 
   try {
-    removeItemFromCart = async (tokenId, contractAddress) => {
+    removeItemFromCart = async (tokenId, contractAddress, listingId) => {
       const { pushStatus, filteredItems } = await removeFromCart(
         tokenId,
-        contractAddress
+        contractAddress,
+        listingId
       );
       if (pushStatus === "success") {
         setUserCartItems(filteredItems);
