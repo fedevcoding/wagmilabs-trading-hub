@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
 
-import notFound from "../../assets/notFound.svg";
+import notFound from "@Assets/notFound.svg";
 import { Button } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import "./redirect.css";
-import setPageTitle from "../../utils/functions/setPageTitle";
+import { setPageTitle } from "@Utils";
 
 const Redirect = () => {
   const navigate = useNavigate();

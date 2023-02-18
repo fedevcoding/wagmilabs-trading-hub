@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import setPageTitle from "@Utils/functions/setPageTitle";
+import { setPageTitle } from "@Utils";
 import { PageWrapper, Tabs } from "@Components";
 import { Overview, Markets } from "./Components";
 import { useGetTab } from "./Components/useGetTab";

@@ -1,5 +1,5 @@
 import React from "react";
-import getMarketplaceImage from "../../../../../../utils/marketplaceImageMapping";
+import { getMarketplaceImage } from "@Utils";
 import { LoadingSpinner, Tabs } from "@Components";
 import { useGetLeaderBoard } from "./useGetLeaderBoard";
 

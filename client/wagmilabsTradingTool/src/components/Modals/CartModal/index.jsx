@@ -4,12 +4,10 @@ import "./style.css";
 import { Button, useToast } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { UserDataContext } from "@Context";
-import emptyCart from "@Utils/database-functions/emptyCart";
-import { getFiatPrice, roundPrice } from "@Utils/formats/formats";
+import { emptyCart, getFiatPrice, roundPrice, removeFromCart } from "@Utils";
 
 import { fetchSigner } from "@wagmi/core";
 import { getClient } from "@reservoir0x/reservoir-kit-client";
-import removeFromCart from "@Utils/database-functions/removeFromCart";
 
 export const CartModal = ({ modalOpen, closeCartModal }) => {
   const toast = useToast();

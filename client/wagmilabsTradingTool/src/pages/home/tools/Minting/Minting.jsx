@@ -5,11 +5,10 @@ import { baseUrl } from "@Variables";
 
 import notFound from "@Assets/notFound.svg";
 
-import { roundPrice } from "@Utils/formats/formats";
+import { roundPrice, placeholderImage } from "@Utils";
 
 import moment from "moment";
 import { useFirstRender } from "@Hooks";
-import { placeholderImage } from "@Utils/images";
 
 import { LazyLoadImage } from "react-lazy-load-image-component";
 
@@ -74,7 +73,6 @@ const Minting = ({ tool, timeFrame, setTimeFrame, resetTime }) => {
       const { mintingCollections, time } = data;
 
       if (timeRef.current === time) sortData(mintingCollections);
-
     } catch (e) {
       console.log(e);
       sortData([]);

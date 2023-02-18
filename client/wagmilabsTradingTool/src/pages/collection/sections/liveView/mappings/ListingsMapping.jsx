@@ -1,18 +1,15 @@
 import React, { memo } from "react";
-import { roundPrice } from "../../../../../utils/formats/formats";
-import getMarketplaceImage from "../../../../../utils/marketplaceImageMapping";
+import { roundPrice, getMarketplaceImage } from "@Utils";
 import { Button } from "@chakra-ui/react";
 import { useBuyNow } from "@Hooks";
-import {TimeAgo} from "@Components";
+import { TimeAgo } from "@Components";
 
 const ListingMapping = memo(({ listings, contractAddress }) => {
   const { buyNow } = useBuyNow();
-  
+
   return (
     <>
       {listings.map((listing, index) => {
-
-
         const { image, marketplace, timestamp, tokenId, name, value } =
           listing || {};
 
@@ -26,7 +23,11 @@ const ListingMapping = memo(({ listings, contractAddress }) => {
               <div className="wrap-text">
                 <p className="wrap-text">{name}</p>
                 <p className="live-view-sale-time low-opacity little-text">
-                  <TimeAgo timestamp={timestamp} isUnix={true} intervalMs={1000}/>
+                  <TimeAgo
+                    timestamp={timestamp}
+                    isUnix={true}
+                    intervalMs={1000}
+                  />
                 </p>
               </div>
             </div>

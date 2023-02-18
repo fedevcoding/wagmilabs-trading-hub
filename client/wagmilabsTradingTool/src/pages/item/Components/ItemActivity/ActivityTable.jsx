@@ -1,6 +1,6 @@
 import React from "react";
 import { Tooltip } from "@chakra-ui/react";
-import { formatContractAddress } from "../../../../utils/formats/formats";
+import { formatContractAddress } from "@Utils";
 import { getEvent } from "./functions";
 
 import moment from "moment";

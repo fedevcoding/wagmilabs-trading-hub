@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { Button, HStack, Input, useToast } from "@chakra-ui/react";
 
 import { UserDataContext } from "@Context";
-import updateGasSettings from "@Utils/database-functions/updateGasSettings";
+import { updateGasSettings } from "@Utils";
 
 import "./style.css";
 

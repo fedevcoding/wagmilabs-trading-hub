@@ -15,7 +15,7 @@ import "./style.scss";
 
 import { UserDataContext } from "@Context";
 import { useAccount } from "wagmi";
-import updateSnipeTasks from "@Utils/database-functions/updateSnipeTasks";
+import { updateSnipeTasks } from "@Utils";
 
 export const NewTaskModal = ({
   openNewTask,

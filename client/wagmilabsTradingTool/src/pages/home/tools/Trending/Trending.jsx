@@ -11,7 +11,7 @@ import moment from "moment";
 import notFound from "@Assets/notFound.svg";
 
 import { LazyLoadImage } from "react-lazy-load-image-component";
-import { placeholderImage } from "@Utils/images";
+import { placeholderImage } from "@Utils";
 
 const defaultTimeFrame = "1H";
 
@@ -73,8 +73,7 @@ const Trending = ({ tool, timeFrame, setTimeFrame, resetTime }) => {
 
       const { trendingCollections, time } = data;
 
-      if(time === timeRef.current) sortData(trendingCollections);
-      
+      if (time === timeRef.current) sortData(trendingCollections);
     } catch (e) {
       sortData([]);
       console.log(e);

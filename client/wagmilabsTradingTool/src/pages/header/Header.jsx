@@ -6,18 +6,15 @@ import { useNavigate } from "react-router-dom";
 import logoImage from "@Assets/logoBeta.png";
 import { baseUrl } from "@Variables";
 import RefreshToken from "../RefreshToken";
-import logOut from "@Utils/functions/logout";
+import { logOut, getUserBalances } from "@Utils";
 import { CartModal, WalletModal } from "@Components";
 
 import { UserDataContext } from "@Context";
-
-import getUserBalances from "@Utils/database-functions/getUserBalances";
 
 import { fetchEnsName } from "@wagmi/core";
 import { useAccount } from "wagmi";
 
 const Header = () => {
-
   const {
     setEns,
     setProfileImage,
@@ -381,7 +378,10 @@ const Header = () => {
                 <p>Switch account</p>
               </div>
 
-              <div onClick={() => logOut(setConnected)} className="logout-container">
+              <div
+                onClick={() => logOut(setConnected)}
+                className="logout-container"
+              >
                 <i className="fa-solid fa-arrow-right-from-bracket"></i>
                 <p>Log Out</p>
               </div>

@@ -16,11 +16,11 @@ import {
   getListingExpirationDate,
   roundPrice,
   roundPrice2,
-} from "@Utils/formats/formats";
+  getMarketplaceImage,
+} from "@Utils";
 import { Button, Tooltip, useToast } from "@chakra-ui/react";
 import { UserDataContext } from "@Context";
 import { Loader, TransferItemModal } from "@Components";
-import getMarketplaceImage from "@Utils/marketplaceImageMapping";
 import { useNavigate } from "react-router-dom";
 import { useListNft } from "@Hooks";
 
@@ -48,12 +48,11 @@ const Nfts = ({
   const [isOpenTransferModal, setIsOpenTransferModal] = useState(false);
   const [TransferModalDetails, setTransferModalDetails] = useState(null);
 
-
   useEffect(() => {
-    if(TransferModalDetails) setIsOpenTransferModal(true)
-    else setIsOpenTransferModal(false)
-  }, [TransferModalDetails])
-  
+    if (TransferModalDetails) setIsOpenTransferModal(true);
+    else setIsOpenTransferModal(false);
+  }, [TransferModalDetails]);
+
   const { cryptoPrices } = useContext(UserDataContext);
   const toast = useToast();
 
@@ -374,14 +373,16 @@ const Nfts = ({
                       <i className="fa-solid fa-image"></i>
                       <p>Set as PFP</p>
                     </div>
-                    <div onClick={() => {
-                      setTransferModalDetails({
-                        details: item,
-                        id: tokenId,
-                        address: contractAddress,
-                        currency: "ETH",
-                      })
-                    }}>
+                    <div
+                      onClick={() => {
+                        setTransferModalDetails({
+                          details: item,
+                          id: tokenId,
+                          address: contractAddress,
+                          currency: "ETH",
+                        });
+                      }}
+                    >
                       <i className="fa-solid fa-arrow-up"></i>
                       <p>Transfer</p>
                     </div>
@@ -444,19 +445,16 @@ const Nfts = ({
 
   return (
     <>
-     {
-      isOpenTransferModal && (
+      {isOpenTransferModal && (
         <TransferItemModal
           details={TransferModalDetails?.details}
           id={TransferModalDetails?.id}
           address={TransferModalDetails?.address}
           currency={TransferModalDetails?.currency}
-          
           isOpen={true}
           setIsOpen={setIsOpenTransferModal}
         />
-        )
-      }
+      )}
 
       {showQuickListingModal && (
         <SmartListModal

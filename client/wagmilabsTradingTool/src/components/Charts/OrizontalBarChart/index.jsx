@@ -2,7 +2,7 @@ import React from "react";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import DarkUnica from "highcharts/themes/dark-unica";
-import getMarketplaceImage from "@Utils/marketplaceImageMapping";
+import { getMarketplaceImage } from "@Utils";
 
 import "./style.scss";
 
