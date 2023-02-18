@@ -23,9 +23,10 @@ import {
 } from "@chakra-ui/react";
 
 import { UserDataContext } from "@Context";
-import { roundPrice, getMarketplaceImage } from "@Utils";
+import { roundPrice } from "@Utils/formats/formats";
 
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
+import getMarketplaceImage from "@Utils/marketplaceImageMapping";
 
 import flaggedImg from "@Assets/flagged.svg";
 import { BuyNowModal, Row } from "@Components";
@@ -57,9 +58,8 @@ const Items = ({
   setSelectedItem,
   fetchMoreTokens,
 }) => {
-  const { refreshMetadata } = useRefreshMetadata(state =>
-    setRefreshingMetadata(state)
-  );
+
+  const {refreshMetadata} = useRefreshMetadata((state) => setRefreshingMetadata(state))
   const { userCartItems } = useContext(UserDataContext);
   const firstRender = useFirstRender();
 
@@ -403,6 +403,8 @@ const Items = ({
     [items, userCartItems, collectionInfo]
   );
 
+
+
   return (
     <>
       {
@@ -526,9 +528,7 @@ const Items = ({
 
                     const length = item?.values?.length;
 
-                    const sortedItems = item?.values?.sort(
-                      (b, a) => a?.count - b?.count
-                    );
+                    const sortedItems = item?.values?.sort((b, a) => a?.count - b?.count);
 
                     return (
                       <AccordionItem>
@@ -555,8 +555,7 @@ const Items = ({
                         </AccordionButton>
 
                         <AccordionPanel pb={4}>
-                          {sortedItems &&
-                            sortedItems.map(innerItem => {
+                          {sortedItems && sortedItems.map(innerItem => {
                               const attributeValue = innerItem.value;
                               const { count } = innerItem;
 
@@ -597,7 +596,7 @@ const Items = ({
                               );
                             })}
 
-                          <Divider marginTop={"15px"} />
+                          <Divider marginTop={"15px"}/>
                         </AccordionPanel>
                       </AccordionItem>
                     );
@@ -627,16 +626,9 @@ const Items = ({
                   onChange={({ target }) => setSearchText(target.value)}
                 ></Input>
               </InputGroup>
-
+                
               <Tooltip label="Refresh Metadata" placement="top">
-                <i
-                  className={`fa-solid fa-arrows-rotate refresh-collection-metadata ${
-                    refreshingMetadata && "rotating"
-                  }`}
-                  onClick={() =>
-                    !refreshingMetadata && refreshMetadata(address)
-                  }
-                ></i>
+                <i className={`fa-solid fa-arrows-rotate refresh-collection-metadata ${refreshingMetadata && "rotating"}`} onClick={() => !refreshingMetadata && refreshMetadata(address)}></i>
               </Tooltip>
             </HStack>
           </div>

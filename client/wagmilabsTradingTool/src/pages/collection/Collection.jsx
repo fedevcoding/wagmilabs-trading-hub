@@ -21,17 +21,11 @@ import looksRare from "../../assets/looksRare.png";
 import discord from "../../assets/discord.png";
 import gem from "../../assets/gem.png";
 import { baseUrl } from "@Variables";
-import {
-  removeFromWatchList,
-  addToWatchList,
-  getWatchListCollections,
-  getPercentage,
-  formatContractAddress,
-  roundPrice,
-  formatTime,
-  getMarketplaceImage,
-  setPageTitle,
-} from "@Utils";
+import removeFromWatchList from "../../utils/database-functions/removeFromWatchList";
+import addToWatchList from "../../utils/database-functions/addToWatchList";
+import getWatchListCollections from "../../utils/database-functions/getWatchList";
+import { getPercentage } from "../../utils/formats/utils";
+import { formatContractAddress, roundPrice } from "../../utils/formats/formats";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import LiveView from "./sections/liveView/index";
 import { LivePulsing } from "@Components";
@@ -39,9 +33,14 @@ import { LivePulsing } from "@Components";
 // import verified from "../../images/verified-2.png"
 // import notVerified from "../../images/not-verified.png"
 
+// utils
+import { formatTime } from "../../utils/formats/formats";
+import getMarketplaceImage from "../../utils/marketplaceImageMapping";
+
 import copy from "copy-to-clipboard";
 import { useDebounce } from "use-debounce";
 import { Badge, useToast } from "@chakra-ui/react";
+import setPageTitle from "../../utils/functions/setPageTitle";
 import { SocketContext } from "src/context/SocketContext";
 
 // Item.js
@@ -106,50 +105,33 @@ const Collection = () => {
       socket.emit("joinSales", address);
 
       socket.on("listing", listingData => {
-        addNewListing(listingData);
-      });
+        addNewListing(listingData)
+      })
+
 
       socket.on("sale", saleData => {
-        const { tokenId } = saleData;
+        const { tokenId } = saleData
 
-        addNewSale(tokenId);
-      });
+        addNewSale(tokenId)
+      })
 
       return () => {
-        socket.emit("leaveListings", address.toLowerCase());
-        socket.emit("leaveSales", address.toLowerCase());
-      };
+        socket.emit("leaveListings", address.toLowerCase())
+        socket.emit("leaveSales", address.toLowerCase())
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [address]);
 
   function addNewListing(listingData) {
-    const {
-      tokenId,
-      price,
-      image,
-      name,
-      timestamp,
-      marketplace,
-      rarity,
-      rarityRank,
-      orderHash,
-      isFlagged,
-    } = listingData;
 
-    if (
-      (itemFilters.tokenId !== undefined && itemFilters.tokenId !== "") ||
-      itemFilters.attributeFilter.length > 0 ||
-      (itemFilters.sortBy !== "p-lth" && itemFilters.sortBy !== "p-htl")
-    ) {
-      return;
+    const { tokenId, price, image, name, timestamp, marketplace, rarity, rarityRank, orderHash, isFlagged } = listingData
+
+    if ((itemFilters.tokenId !== undefined && itemFilters.tokenId !== "") || itemFilters.attributeFilter.length > 0 || (itemFilters.sortBy !== "p-lth"  && itemFilters.sortBy !== "p-htl")){
+      return
     }
 
-    if (
-      itemFilters.priceFilter.min > price ||
-      itemFilters.priceFilter.max < price
-    )
-      return;
+    if(itemFilters.priceFilter.min > price || itemFilters.priceFilter.max < price) return
 
     const newListing = {
       token: {
@@ -159,7 +141,7 @@ const Collection = () => {
         image,
         isFlagged,
         rarity,
-        rarityRank,
+        rarityRank
       },
       market: {
         floorAsk: {
@@ -174,7 +156,7 @@ const Collection = () => {
             icon: "",
             url: "",
           },
-          validFrom: timestamp,
+          validFrom: timestamp
         },
       },
     };
@@ -226,17 +208,15 @@ const Collection = () => {
     setItems(newItems);
   }
 
-  useEffect(() => {
-    if (
-      (itemFilters.tokenId !== undefined && itemFilters.tokenId !== "") ||
-      itemFilters.attributeFilter.length > 0 ||
-      (itemFilters.sortBy !== "p-lth" && itemFilters.sortBy !== "p-htl")
-    ) {
-      setLiveItems(false);
-    } else if (!liveItems) {
-      setLiveItems(true);
+
+  useEffect(()=>{
+    if ((itemFilters.tokenId !== undefined && itemFilters.tokenId !== "") || itemFilters.attributeFilter.length > 0 || (itemFilters.sortBy !== "p-lth"  && itemFilters.sortBy !== "p-htl")){
+        setLiveItems(false) 
     }
-  }, [itemFilters, liveItems]);
+    else if(!liveItems){
+      setLiveItems(true)
+    }
+  }, [itemFilters, liveItems])
 
   useEffect(() => {
     itemRef.current = items;

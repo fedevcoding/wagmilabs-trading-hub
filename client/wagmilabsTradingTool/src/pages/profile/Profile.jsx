@@ -4,7 +4,7 @@ import { baseUrl } from "@Variables";
 import Nfts from "./sections/nfts/Nfts";
 import Activity from "./sections/activity/Activity";
 import { Portal } from "react-portal";
-import { formatAddress } from "@Utils";
+import { formatAddress } from "../../utils/formats/formats";
 import { useAccount, useEnsName } from "wagmi";
 
 import { useDebounce } from "use-debounce";
@@ -23,7 +23,7 @@ import {
 import { UserDataContext } from "@Context";
 
 import copy from "copy-to-clipboard";
-import { setPageTitle } from "@Utils";
+import setPageTitle from "../../utils/functions/setPageTitle";
 
 const sortItemsOptions = [
   { value: "desc", label: "Newest" },

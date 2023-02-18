@@ -1,6 +1,6 @@
 import React from "react";
 import { Tooltip } from "@chakra-ui/react";
-import { formatContractAddress } from "@Utils";
+import { formatContractAddress } from "@Utils/formats/formats";
 import { useAddItemToCart, useCancelListing } from "@Hooks";
 import { useGetVariables } from "../PriceBox/useGetVariables";
 import moment from "moment";

@@ -6,7 +6,7 @@ import { baseUrl } from "@Variables";
 
 import { useFirstRender } from "@Hooks";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
-import { placeholderImage } from "@Utils";
+import { placeholderImage } from "@Utils/images";
 
 import { LazyLoadImage } from "react-lazy-load-image-component";
 

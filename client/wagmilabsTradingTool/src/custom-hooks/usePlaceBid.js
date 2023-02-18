@@ -1,7 +1,7 @@
 import { fetchSigner } from "@wagmi/core";
 import { getClient } from "@reservoir0x/reservoir-kit-client";
 import { useGetReservoirOptions } from ".";
-import { marketListingMapping } from "@Utils";
+import { marketListingMapping } from "@Utils/mappings";
 import { useToast } from "@chakra-ui/react";
 
 export const usePlaceBid = marketplace => {

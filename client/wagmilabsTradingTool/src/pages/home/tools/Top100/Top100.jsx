@@ -11,7 +11,7 @@ import notFound from "@Assets/notFound.svg";
 
 import { useFirstRender } from "@Hooks";
 import moment from "moment";
-import { placeholderImage } from "@Utils";
+import { placeholderImage } from "@Utils/images";
 
 import { LazyLoadImage } from "react-lazy-load-image-component";
 
@@ -74,7 +74,7 @@ const Top100 = ({ tool, timeFrame, setTimeFrame, resetTime }) => {
 
       const { rankingCollections, time } = data;
 
-      if (time === timeRef.current) sortData(rankingCollections);
+      if(time === timeRef.current) sortData(rankingCollections)
     } catch (e) {
       console.log(e);
       sortData([]);

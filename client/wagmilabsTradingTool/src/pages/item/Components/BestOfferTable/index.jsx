@@ -2,9 +2,9 @@ import React from "react";
 import moment from "moment";
 import { Tooltip } from "@chakra-ui/react";
 import { useAccount } from "wagmi";
-import { formatContractAddress } from "@Utils";
+import { formatContractAddress } from "@Utils/formats/formats";
 import notFound from "@Assets/notFound.svg";
-// import getMarketplaceImage from "@Utils";
+// import getMarketplaceImage from "@Utils/marketplaceImageMapping";
 
 import "./style.scss";
 

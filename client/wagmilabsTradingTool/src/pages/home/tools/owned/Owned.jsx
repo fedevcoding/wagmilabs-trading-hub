@@ -4,7 +4,7 @@ import "./owned.css";
 import times from "./times";
 
 import notFound from "../../../../assets/notFound.svg";
-import { placeholderImage } from "@Utils";
+import { placeholderImage } from "../../../../utils/images";
 
 import { LazyLoadImage } from "react-lazy-load-image-component";
 

@@ -6,7 +6,8 @@ import { Button } from "@chakra-ui/react";
 
 import { UserDataContext } from "@Context";
 import { NewTaskModal } from "@Components";
-import { formatAddress, updateSnipeTasks } from "@Utils";
+import { formatAddress } from "@Utils/formats/formats";
+import updateSnipeTasks from "@Utils/database-functions/updateSnipeTasks";
 import { SocketContext } from "@Context";
 import { useAccount } from "wagmi";
 

@@ -4,13 +4,18 @@ import "./style.scss";
 
 import { UserDataContext } from "@Context";
 import { useAccount } from "wagmi";
-import { formatAddress, getFiatPrice, roundPrice, logOut } from "@Utils";
+import {
+  formatAddress,
+  getFiatPrice,
+  roundPrice,
+} from "@Utils/formats/formats";
 
 import ethereumImage from "@Assets/eth.svg";
 import usdcImage from "@Assets/usdc.svg";
 import usdtImage from "@Assets/usdt.svg";
 import wrappedEthereumImage from "@Assets/weth.svg";
 
+import logOut from "@Utils/functions/logout";
 import { Button, Tooltip } from "@chakra-ui/react";
 import { LivePulsing } from "@Components";
 
@@ -29,20 +34,21 @@ const jsonRpcUrlMap = {
 console.warn = function () {};
 
 const theme = {
-  primary: "#FFF",
-  secondary: "#A9A9A9",
-  interactive: "#000",
-  container: "#4E4E5A",
-  module: "#222633",
-  accent: "#71FF98",
-  outline: "#CC1",
-  dialog: "#000",
+  primary: '#FFF',
+  secondary: '#A9A9A9',
+  interactive: '#000',
+  container: '#4E4E5A',
+  module: '#222633',
+  accent: '#71FF98',
+  outline: '#CC1',
+  dialog: '#000',
   fontFamily: "Poppins",
-  borderRadius: { large: 8 },
+  borderRadius: {large: 8},
 };
 
 export const WalletModal = ({ walletModalOpen, closeWalletModal }) => {
-  const { setConnected } = useConnected();
+
+  const {setConnected} = useConnected()
 
   const [provider, setProvider] = useState();
   const [swapModal, setSwapModal] = useState(false);
@@ -58,9 +64,10 @@ export const WalletModal = ({ walletModalOpen, closeWalletModal }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => {
-    console.log("provider", provider);
-  }, [provider]);
+
+  useEffect(()=>{
+    console.log("provider", provider)
+  }, [provider])
 
   useEffect(() => {
     if (walletModalOpen) {
@@ -84,8 +91,8 @@ export const WalletModal = ({ walletModalOpen, closeWalletModal }) => {
   async function getProvider() {
     const currentProvider = await connector?.getProvider();
 
-    const proivder = new ethers.providers.Web3Provider(currentProvider);
-    setProvider(proivder);
+    const proivder = new ethers.providers.Web3Provider(currentProvider)
+    setProvider(proivder)
   }
 
   const closeSwapModal = e => {
@@ -111,6 +118,7 @@ export const WalletModal = ({ walletModalOpen, closeWalletModal }) => {
     <>
       {walletModalOpen && (
         <div onClick={closeWalletModal} className="wallet-modal-overlay">
+
           {swapModal && (
             <div className="wallet-swap-overlay" onClick={closeSwapModal}>
               <div className="wallet-swap-container" onClick={closeSwapModal}>
@@ -159,10 +167,7 @@ export const WalletModal = ({ walletModalOpen, closeWalletModal }) => {
                 </div>
               </div>
 
-              <div
-                className="wallet-modal-logout-container"
-                onClick={() => logOut(setConnected)}
-              >
+              <div className="wallet-modal-logout-container" onClick={() => logOut(setConnected)}>
                 <p>Log out</p>
                 <i className="fa-solid fa-right-from-bracket"></i>
               </div>

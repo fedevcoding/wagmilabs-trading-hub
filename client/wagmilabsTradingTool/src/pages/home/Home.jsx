@@ -2,12 +2,14 @@ import React, { useState } from "react";
 import Trending from "./tools/Trending/Trending";
 import Minting from "./tools/Minting/Minting";
 import Top100 from "./tools/Top100/Top100";
-import { rippleEffect, setPageTitle } from "@Utils";
+import rippleEffect from "../../utils/functions/rippleEffect";
 
 import "./home.css";
 import WatchList from "./tools/watchList/WatchList";
 import Owned from "./tools/owned/Owned";
 import { LivePulsing } from "@Components";
+
+import setPageTitle from "../../utils/functions/setPageTitle";
 
 const Home = () => {
   const [timeFrame, setTimeFrame] = useState("1H");
