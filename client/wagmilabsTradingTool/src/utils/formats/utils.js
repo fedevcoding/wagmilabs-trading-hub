@@ -2,8 +2,12 @@ function getPercentage(num1, num2) {
   return Math.round((num1 / num2) * 100);
 }
 
-function generateRandomRangeInt(min, max) {
-  return Math.floor(Math.random() * (max - min + 1) + min);
+function generateRandomRangeInt(min, max, excluded) {
+  let random =  Math.floor(Math.random() * (max - min + 1) + min);
+  if (excluded && excluded === random) {
+    return generateRandomRangeInt(min, max, excluded);
+  }
+  return random;
 }
 
 module.exports = {

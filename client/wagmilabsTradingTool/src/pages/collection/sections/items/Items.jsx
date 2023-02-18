@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useContext, useMemo, useRef } from "react";
+import { generateRandomRangeInt } from "../../../../utils/formats/utils";
 import "./items.css";
 
 import _ from "lodash";
@@ -37,6 +38,7 @@ import {
   useRefreshMetadata,
 } from "@Hooks";
 import { useNavigate } from "react-router-dom";
+import { ItemBanner } from "../banners/ItemBanner";
 
 const Items = ({
   loadingMoreItems,
@@ -226,6 +228,9 @@ const Items = ({
     closeBuynowModal(undefined, true);
   });
 
+  const bannerPos1 = generateRandomRangeInt(0,items.length-1);
+  const bannerPos2 = generateRandomRangeInt(0,items.length-1, bannerPos1);
+
   const itemsMapping = useMemo(
     () =>
       items &&
@@ -255,6 +260,8 @@ const Items = ({
         const isLast = index === items.length - 1;
 
         return (
+          <>
+          {(index === bannerPos1 || index === bannerPos2) && <ItemBanner />}
           <div
             className={`collection-single-item-container ${
               isLast && "last-token"
@@ -389,6 +396,7 @@ const Items = ({
               </div>
             </div>
           </div>
+          </>
         );
       }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
