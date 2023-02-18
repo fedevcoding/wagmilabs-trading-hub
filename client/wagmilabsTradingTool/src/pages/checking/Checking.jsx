@@ -18,7 +18,7 @@ const Checking = ({ setConnected, setChecking }) => {
 
         res = await res.json();
 
-        await delay(1650);
+        // await delay(1650);
         if (!res.authenticated) {
           localStorage.removeItem("jsonwebtoken");
 
@@ -41,7 +41,7 @@ const Checking = ({ setConnected, setChecking }) => {
         setConnected(false);
       }
     }
-    setTimeout(verify, 2000);
+    setTimeout(verify, 0);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

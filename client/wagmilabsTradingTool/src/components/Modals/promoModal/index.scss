@@ -1,0 +1,39 @@
+.promo-modal {
+    height: 35vh;
+    max-width: unset !important;
+    width: 30vw !important;
+    border-radius: 14px !important;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around !important;
+
+    .close-btn {
+        position: absolute;
+        top: 25px;
+        right: 25px;
+        cursor: pointer;
+    }
+
+    .modal-body {
+        display: flex;
+        align-items: center;
+
+        letter-spacing: 1.2px;
+
+        .title {
+            font-size: 30px;
+        }
+
+        .body {
+            font-size: 20px;
+        }
+
+        .button {
+            font-size: 18px;
+            padding: 23px 18px;
+            border-radius: 13px;
+        }
+    }
+}
