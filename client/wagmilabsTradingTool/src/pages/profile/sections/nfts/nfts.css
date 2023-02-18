@@ -557,6 +557,10 @@
     justify-content: center;
 }
 
+.profile-user-no-items img {
+    width: 200px;
+}
+
 
 .smart-list-close-modal {
     background-color: transparent;
