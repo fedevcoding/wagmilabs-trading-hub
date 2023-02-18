@@ -1,6 +1,6 @@
 import { baseUrl } from "@Variables";
 
-async function removeFromCart(tokenId, contractAddress) {
+async function removeFromCart(tokenId, contractAddress, listingId) {
   try {
     let res = await fetch(`${baseUrl}/updateUserCart`, {
       method: "POST",
@@ -8,7 +8,12 @@ async function removeFromCart(tokenId, contractAddress) {
         "Content-Type": "application/json",
         "x-auth-token": localStorage.jsonwebtoken,
       },
-      body: JSON.stringify({ tokenId, contractAddress, type: "remove" }),
+      body: JSON.stringify({
+        tokenId,
+        contractAddress,
+        listingId,
+        type: "remove",
+      }),
     });
 
     if (!res.ok) throw new Error("error");

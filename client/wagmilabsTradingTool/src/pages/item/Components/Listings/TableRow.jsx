@@ -59,7 +59,7 @@ export const TableRow = React.memo(({ listing, address, details }) => {
           isMyListing
             ? cancelListing()
             : inCart
-            ? removeItemFromCart(tokenId, address)
+            ? removeItemFromCart(tokenId, address, listing.id)
             : addItemToCart(
                 name,
                 tokenId,

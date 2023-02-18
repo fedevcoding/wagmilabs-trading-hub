@@ -44,12 +44,19 @@ updateUserCartRoute.post("/", checkAuth, async (req, res) => {
 
       res.json({ filteredItems, pushStatus: "success" });
     } else if (type === "remove") {
-      const { contractAddress, tokenId } = req.body;
+      const { contractAddress, tokenId, listingId } = req.body;
 
-      const filteredItems = user.shoppingCart.filter(
-        (item) =>
-          item.contractAddress + item.tokenId !== contractAddress + tokenId
-      );
+      let filteredItems;
+      if (listingId) {
+        filteredItems = user.shoppingCart.filter(
+          (item) => item.listingId?.toLowerCase() !== listingId?.toLowerCase()
+        );
+      } else {
+        filteredItems = user.shoppingCart.filter(
+          (item) =>
+            item.contractAddress + item.tokenId !== contractAddress + tokenId
+        );
+      }
 
       user.shoppingCart = filteredItems;
       await user.save();
