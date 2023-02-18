@@ -3,7 +3,7 @@ import EthereumSearch from "../search/EthereumSearch";
 import "./header.css";
 import { useNavigate } from "react-router-dom";
 
-import logoImage from "@Assets/logo.png";
+import logoImage from "@Assets/logoBeta.png";
 import { baseUrl } from "@Variables";
 import RefreshToken from "../RefreshToken";
 import logOut from "@Utils/functions/logout";
