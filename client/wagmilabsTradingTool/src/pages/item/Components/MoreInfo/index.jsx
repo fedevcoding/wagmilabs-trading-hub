@@ -6,9 +6,7 @@ import { Attributes } from "..";
 import "./style.scss";
 
 export const MoreInfo = React.memo(({ details, address }) => {
-  const [visible, setVisible] = React.useState(
-    details.token.attributes.length === 0
-  );
+  const [visible, setVisible] = React.useState(false);
   return (
     <div className="more-info">
       <div className="dropdown-btn" onClick={() => setVisible(!visible)}>
