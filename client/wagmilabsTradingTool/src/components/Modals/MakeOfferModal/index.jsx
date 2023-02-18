@@ -13,6 +13,7 @@ import {
 } from "@chakra-ui/react";
 import { usePlaceBid } from "@Hooks";
 import { Loader } from "@Components";
+import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 import "./style.scss";
@@ -35,6 +36,7 @@ export const MakeOfferModal = React.memo(
     const [price, setPrice] = React.useState(null);
     const { placeBid } = usePlaceBid(marketplace);
     const { userBalances } = useContext(UserDataContext);
+    const [date, setDate] = React.useState(null);
 
     return (
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
@@ -70,6 +72,21 @@ export const MakeOfferModal = React.memo(
                 onChange={e => setPrice(e.target.value)}
               />
             </NumberInput>
+            <br />
+            <p className="label">
+              <b>Set expiration date</b>
+            </p>
+
+            <DatePicker
+              minDate={new Date().getTime()}
+              onChange={v => {
+                setDate(v);
+              }}
+              selected={date}
+              isClearable={true}
+              placeholderText="Select expiration date"
+              className="date-picker"
+            />
           </ModalBody>
           <ModalFooter>
             <Button
@@ -77,7 +94,7 @@ export const MakeOfferModal = React.memo(
               mr={3}
               onClick={async () => {
                 setConfirmingList(true);
-                await placeBid(`${address}:${tokenId}`, price);
+                await placeBid(`${address}:${tokenId}`, price, date);
                 setConfirmingList(false);
               }}
             >

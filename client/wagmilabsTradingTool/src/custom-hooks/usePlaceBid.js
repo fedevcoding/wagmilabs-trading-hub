@@ -1,7 +1,7 @@
 import { fetchSigner } from "@wagmi/core";
 import { getClient } from "@reservoir0x/reservoir-kit-client";
 import { useGetReservoirOptions } from ".";
-import { marketListingMapping } from "../utils/mappings";
+import { marketListingMapping } from "@Utils/mappings";
 import { useToast } from "@chakra-ui/react";
 
 export const usePlaceBid = marketplace => {
@@ -10,11 +10,22 @@ export const usePlaceBid = marketplace => {
     marketListingMapping[marketplace.toLowerCase()] || {};
   const toast = useToast();
 
-  async function placeBid(tokenAddress, price) {
+  async function placeBid(tokenAddress, price, date) {
     if (price <= 0) {
       toast({
         title: "Error Place Bid NFT.",
         description: "Please, insert a valid price",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+      return 0;
+    }
+
+    if (!date) {
+      toast({
+        title: "Error Place Bid NFT.",
+        description: "Please, insert a valid expiration date",
         status: "error",
         duration: 3000,
         isClosable: true,
@@ -33,6 +44,9 @@ export const usePlaceBid = marketplace => {
             orderbook,
             orderKind,
             token: tokenAddress,
+            expirationTime: parseInt(
+              new Date(date).getTime() / 1000
+            ).toString(),
           },
         ],
         signer,

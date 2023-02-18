@@ -5,28 +5,6 @@
     margin-bottom: 5px;
   }
 
-  .react-datepicker__input-container {
-    .date-picker {
-      width: 100% !important;
-      color: white !important;
-      border: none;
-      border-radius: 5px;
-      width: calc(100% - 20px);
-      cursor: pointer;
-      height: 36px;
-      background-color: var(--light-dark);
-      border: 1px solid #e2e8f0;
-      padding: 3px 10px;
-
-      &:focus {
-        outline: none;
-      }
-    }
-    .react-datepicker__close-icon::after {
-      background-color: #555;
-    }
-  }
-
   .last-listing-info {
     margin-bottom: 1rem;
     hr {
