@@ -1,12 +1,10 @@
 import React from "react";
 import { UserDataContext } from "@Context";
 
-export const useHasItem = (address, tokenId) => {
+export const useHasItem = listingId => {
   const { userCartItems } = React.useContext(UserDataContext);
 
   return userCartItems.find(
-    i =>
-      i.contractAddress === address &&
-      i.tokenId.toString() === tokenId.toString()
+    i => i.listingId.toLowerCase() === listingId.toLowerCase()
   );
 };
