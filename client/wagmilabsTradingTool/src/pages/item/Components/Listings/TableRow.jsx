@@ -21,7 +21,7 @@ export const TableRow = React.memo(({ listing, address, details }) => {
   const { address: myAddress } = useAccount();
   const isMyListing = listing.maker.toLowerCase() === myAddress.toLowerCase();
   const { userCartItems } = React.useContext(UserDataContext);
-  const listingIdIntoCart = userCartItems.map(i => i.listingId.toLowerCase());
+  const listingIdIntoCart = userCartItems.map(i => i.listingId?.toLowerCase());
   const inCart = listingIdIntoCart.includes(listing.id);
 
   return (

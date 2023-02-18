@@ -5,6 +5,6 @@ export const useHasItem = listingId => {
   const { userCartItems } = React.useContext(UserDataContext);
 
   return userCartItems.find(
-    i => i.listingId.toLowerCase() === listingId.toLowerCase()
+    i => i.listingId?.toLowerCase() === listingId?.toLowerCase()
   );
 };
