@@ -1,93 +1,95 @@
 :root {
-    --header-height: 72;
-    --footer-height: 40;
-    --grey-1: #0e0f0e;
-    --light-dark: #1e1f25;
-    --text-color: white;
-    --light-gray: #ccc;
-    --secondary-color: #2e2e30;
+  --header-height: 72;
+  --footer-height: 40;
+  --grey-1: #0e0f0e;
+  --light-dark: #1e1f25;
+  --text-color: white;
+  --light-gray: #ccc;
+  --secondary-color: #2e2e30;
 }
 
 * {
-    margin: 0;
-    font-family: "poppins";
+  margin: 0;
+  font-family: "poppins";
 }
 
 button {
-    border: none;
-    padding: 0;
-    cursor: pointer;
-    letter-spacing: 1px;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  letter-spacing: 1px;
 }
 
 body {
-    background-color: #0e0f0e;
-    font-family: "poppins";
+  background-color: #0e0f0e;
+  font-family: "poppins";
 }
 
 body.overflow-hidden {
-    overflow: hidden;
+  overflow: hidden;
 }
 
 ::-webkit-scrollbar {
-    width: 0;
+  width: 0;
 }
 
 .eth-char-logo {
-    font-family: Arial, Helvetica, sans-serif;
-    font-weight: 500;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: 500;
 }
 
 .highcharts-credits {
-    display: none;
+  display: none;
 }
 
 .flex-col-left {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
 }
 
 .flex-15 {
-    display: flex;
-    align-items: center;
-    gap: 15px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
 }
 
 .flex-normal {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .little-text {
-    font-size: 13px;
+  font-size: 13px;
 }
 
 .low-opacity {
-    opacity: 0.8;
+  opacity: 0.8;
 }
 
 .wrap-text {
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 .big-text {
-    font-size: 14px;
-    font-weight: 600;
-    letter-spacing: 1px;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 1px;
 }
 
 .space-between {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-
+.text-center {
+  text-align: center;
+}
 
 .mr-10 {
-    margin-right: 10px;
+  margin-right: 10px;
 }

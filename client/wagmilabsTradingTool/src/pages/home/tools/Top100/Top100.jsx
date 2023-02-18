@@ -7,7 +7,7 @@ import "./top100.css";
 import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 
-import notFound from "@Assets/notFound.svg";
+import { notFound } from "@Assets";
 
 import { useFirstRender } from "@Hooks";
 import moment from "moment";
@@ -74,7 +74,7 @@ const Top100 = ({ tool, timeFrame, setTimeFrame, resetTime }) => {
 
       const { rankingCollections, time } = data;
 
-      if(time === timeRef.current) sortData(rankingCollections)
+      if (time === timeRef.current) sortData(rankingCollections);
     } catch (e) {
       console.log(e);
       sortData([]);

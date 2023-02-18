@@ -1,5 +1,5 @@
 import React, { useContext, useMemo } from "react";
-import notFound from "@Assets/notFound.svg";
+import { notFound } from "@Assets";
 import "./style.css";
 import { Button, useToast } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";

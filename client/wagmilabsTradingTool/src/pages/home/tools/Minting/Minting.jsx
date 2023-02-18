@@ -3,7 +3,7 @@ import "./minting.css";
 import times from "./times";
 import { baseUrl } from "@Variables";
 
-import notFound from "@Assets/notFound.svg";
+import { notFound } from "@Assets";
 
 import { roundPrice } from "@Utils/formats/formats";
 
@@ -74,7 +74,6 @@ const Minting = ({ tool, timeFrame, setTimeFrame, resetTime }) => {
       const { mintingCollections, time } = data;
 
       if (timeRef.current === time) sortData(mintingCollections);
-
     } catch (e) {
       console.log(e);
       sortData([]);
