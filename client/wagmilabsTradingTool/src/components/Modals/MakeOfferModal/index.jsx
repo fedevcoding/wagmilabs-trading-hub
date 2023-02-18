@@ -48,7 +48,8 @@ export const MakeOfferModal = React.memo(
           <ModalCloseButton />
           <ModalBody>
             <p>
-              Balance: {parseFloat(userBalances[currency] || 0)} {currency}
+              Balance ETH: {parseFloat(userBalances.eth || 0)} <br />
+              Balance WETH: {parseFloat(userBalances.weth || 0)} <br />
             </p>
             <br />
             {topBid?.id && (
