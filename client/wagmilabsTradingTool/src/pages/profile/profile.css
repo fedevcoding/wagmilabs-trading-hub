@@ -336,3 +336,50 @@
 #listing-settings-minutes {
     border-radius: 8px;
 }
+
+
+
+.profile-promo-container {
+    width: 100%;
+    height: 150px;
+    border-radius: 10px;
+    background-color: #d9d9d9;
+    color: black;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+
+.profile-promo-header {
+    font-size: 30px;
+}
+
+.profile-promo-body {
+    font-size: 18px;
+}
+
+.profile-promo-button {
+    background-color: #393737 !important;
+    color: white;
+
+    width: 280px;
+
+}
+
+.profile-promo-button:hover {
+    background-color: #242323 !important;
+}
+
+.profile-promo-close-btn {
+    position: absolute;
+    font-size: 20px;
+    font-weight: 600 !important;
+    top: 20px;
+    right: 45px;
+    cursor: pointer;
+
+
+}

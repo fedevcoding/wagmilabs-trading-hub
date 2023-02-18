@@ -63,6 +63,8 @@ const Profile = () => {
   const [searchCollectionText, setSearchCollectionText] = useState("");
   const [debounceCollectionSearch] = useDebounce(searchCollectionText, 400);
 
+  const [showPromoBanner, setShowPromoBanner] = useState(true)
+
   const [copyState, setCopyState] = useState({ ens: "Copy", address: "Copy" });
 
   useEffect(() => {
@@ -790,7 +792,21 @@ const Profile = () => {
               </div>
             </div>
           </div>
+
         </div>
+        {
+          showPromoBanner &&
+
+          <div className="profile-promo-container">
+            <i className="fa-solid fa-x profile-promo-close-btn" onClick={() => setShowPromoBanner(false)}></i>
+
+            <h3 className="profile-promo-header">FREE beta is ending soon...!</h3>
+            <h4 className="profile-promo-body">Get whitelisted to mint the NFT pass for yearly access!</h4>
+            <a href="https://www.premint.xyz/WAGMI-Labs/" target={"_blank"} rel="noreferrer">
+              <Button colorScheme={"gray"} className="profile-promo-button" onClick={() => setShowPromoBanner(false)}>Get Whitelisted</Button>
+            </a>
+          </div>
+        }
 
         {(() => {
           if (section === "nft") {
