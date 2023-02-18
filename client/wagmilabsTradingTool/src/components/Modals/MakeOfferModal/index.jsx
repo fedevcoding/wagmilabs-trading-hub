@@ -37,6 +37,7 @@ export const MakeOfferModal = React.memo(
     const { placeBid } = usePlaceBid(marketplace);
     const { userBalances } = useContext(UserDataContext);
     const [date, setDate] = React.useState(null);
+    const notEnoughBalance = price > parseFloat(userBalances[currency] || 0);
 
     return (
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
@@ -88,6 +89,11 @@ export const MakeOfferModal = React.memo(
               placeholderText="Select expiration date"
               className="date-picker"
             />
+            {price && notEnoughBalance && (
+              <p className="balance-now-enough">
+                {currency} balance is not enough
+              </p>
+            )}
           </ModalBody>
           <ModalFooter>
             <Button
@@ -98,6 +104,9 @@ export const MakeOfferModal = React.memo(
                 await placeBid(`${address}:${tokenId}`, price, date);
                 setConfirmingList(false);
               }}
+              isDisabled={
+                !price || parseFloat(price) <= 0 || !date || notEnoughBalance
+              }
             >
               {confirmingList ? (
                 <Loader width={"20px"} height={"20px"} />
