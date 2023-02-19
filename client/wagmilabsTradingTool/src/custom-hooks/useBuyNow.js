@@ -10,6 +10,8 @@ export const useBuyNow = callback => {
 
   async function buyNow(contract, tokenId, value) {
     try {
+
+      console.log(options)
       const signer = await fetchSigner();
 
       await getClient()?.actions.buyToken({
