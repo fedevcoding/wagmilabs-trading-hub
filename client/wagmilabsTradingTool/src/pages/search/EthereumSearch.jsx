@@ -90,46 +90,46 @@ const EthereumSearch = () => {
 
         return (
           <>
-          <a
-            className="container-div"
-            href={link}
-            target="_blank"
-            key={index}
-            onClick={e =>
-              addToLocalStorage(
-                e,
-                image,
-                collectionId,
-                name,
-                openseaVerificationStatus
-              )
-            }
-            rel="noreferrer"
-          >
-            <LazyLoadImage
-              visibleByDefault={true}
-              src={image}
-              className="collection-image"
-              effect="blur"
-              placeholderSrc={placeholderImage}
-            />
-            <div className="searchbar-collection-infos">
-              <div className="name-verified-container">
-                <p className="searchbar-collection-name">{name || "-------"}</p>
-                {openseaVerificationStatus === "verified" && (
-                  <img className="verified" src={verified} alt="" />
+            <a
+              className="container-div"
+              href={link}
+              target="_blank"
+              key={index}
+              onClick={e =>
+                addToLocalStorage(
+                  e,
+                  image,
+                  collectionId,
+                  name,
+                  openseaVerificationStatus
+                )
+              }
+              rel="noreferrer"
+            >
+              <LazyLoadImage
+                visibleByDefault={true}
+                src={image}
+                className="collection-image"
+                effect="blur"
+                placeholderSrc={placeholderImage}
+              />
+              <div className="searchbar-collection-infos">
+                <div className="name-verified-container">
+                  <p className="searchbar-collection-name">{name || "-------"}</p>
+                  {openseaVerificationStatus === "verified" && (
+                    <img className="verified" src={verified} alt="" />
+                  )}
+                </div>
+                <p className="searchbar-collection-address">{collectionId}</p>
+                {isLocaleStorage && (
+                  <i
+                    className="fa-solid fa-xmark searchbar-collection-remove"
+                    onClick={e => removeFromLocalStorage(e, collectionId)}
+                  ></i>
                 )}
               </div>
-              <p className="searchbar-collection-address">{collectionId}</p>
-              {isLocaleStorage && (
-                <i
-                  className="fa-solid fa-xmark searchbar-collection-remove"
-                  onClick={e => removeFromLocalStorage(e, collectionId)}
-                ></i>
-              )}
-            </div>
-          </a>
-          {index === collections.length-1 && <BannerSearch />}
+            </a>
+            {index === collections.length - 1 && <BannerSearch />}
           </>
         );
       }),

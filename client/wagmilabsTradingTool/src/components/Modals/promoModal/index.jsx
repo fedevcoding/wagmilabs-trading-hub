@@ -1,11 +1,10 @@
-import { Button, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text } from "@chakra-ui/react";
+import { Button, Modal, ModalBody, ModalContent, ModalOverlay } from "@chakra-ui/react";
 import React from "react";
 import "./index.scss"
 
 export const PromoModal = React.memo(({
     isOpen,
     onClose,
-    onOpen
 }) => {
 
     function addClicked() {
@@ -16,7 +15,7 @@ export const PromoModal = React.memo(({
     return (
         <Modal isOpen={isOpen} onClose={onClose} isCentered>
             <ModalOverlay
-                backdropFilter='blur(10px)'
+                backdropFilter='blur(5px)'
             />
             <ModalContent className="promo-modal">
 
@@ -26,7 +25,7 @@ export const PromoModal = React.memo(({
                 </ModalBody>
 
                 <ModalBody className="modal-body">
-                    <h3 className="body">Show us some love 💖😊</h3>
+                    <h3 className="body">Show us some love ❤️😊</h3>
                 </ModalBody>
 
                 <ModalBody className="modal-body">

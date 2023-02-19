@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useContext, useMemo, useRef } from "react";
-import { generateRandomRangeInt } from "../../../../utils/formats/utils";
 import "./items.css";
 
 import _ from "lodash";
@@ -39,7 +38,6 @@ import {
   useRefreshMetadata,
 } from "@Hooks";
 import { useNavigate } from "react-router-dom";
-import { ItemBanner } from "../banners/ItemBanner";
 
 const Items = ({
   loadingMoreItems,
@@ -59,7 +57,7 @@ const Items = ({
   fetchMoreTokens,
 }) => {
 
-  const {refreshMetadata} = useRefreshMetadata((state) => setRefreshingMetadata(state))
+  const { refreshMetadata } = useRefreshMetadata((state) => setRefreshingMetadata(state))
   const { userCartItems } = useContext(UserDataContext);
   const firstRender = useFirstRender();
 
@@ -228,9 +226,6 @@ const Items = ({
     closeBuynowModal(undefined, true);
   });
 
-  const bannerPos1 = generateRandomRangeInt(0,items.length-1);
-  const bannerPos2 = generateRandomRangeInt(0,items.length-1, bannerPos1);
-
   const itemsMapping = useMemo(
     () =>
       items &&
@@ -261,121 +256,117 @@ const Items = ({
 
         return (
           <>
-          {(index === bannerPos1) && <ItemBanner primary />}
-          {(index === bannerPos2) && <ItemBanner />}
-          <div
-            className={`collection-single-item-container ${
-              isLast && "last-token"
-            } ${isLive && "live-token-animation"}`}
-            key={orderHash}
-          >
             <div
-              className={`collection-item-details-container ${
-                isInCart && "item-cart-selected"
-              }`}
+              className={`collection-single-item-container ${isLast && "last-token"
+                } ${isLive && "live-token-animation"}`}
+              key={orderHash}
             >
-              <div className="collection-item-image-hover-overflow">
-                <img
-                  src={image || collectionImage}
-                  alt=""
-                  className="collection-single-item-image"
-                  onClick={() => navigate(`/item/${address}/${tokenId}`)}
-                  onError={({ currentTarget }) => {
-                    currentTarget.onerror = null; // prevents looping
-                    currentTarget.src = collectionImage;
-                  }}
-                />
+              <div
+                className={`collection-item-details-container ${isInCart && "item-cart-selected"
+                  }`}
+              >
+                <div className="collection-item-image-hover-overflow">
+                  <img
+                    src={image || collectionImage}
+                    alt=""
+                    className="collection-single-item-image"
+                    onClick={() => navigate(`/item/${address}/${tokenId}`)}
+                    onError={({ currentTarget }) => {
+                      currentTarget.onerror = null; // prevents looping
+                      currentTarget.src = collectionImage;
+                    }}
+                  />
 
-                {isListed && (
-                  <>
-                    <a href={marketplaceUrl} target="_blank" rel="noreferrer">
-                      <img
-                        src={marketplaceImg}
-                        className="collection-item-marketplace-image"
-                        alt=""
-                      />
-                    </a>
-
-                    {isFlagged && (
-                      <Tooltip
-                        closeOnClick={false}
-                        hasArrow
-                        label={"Not currently tradable on OpenSea."}
-                        fontSize="xs"
-                        bg="black"
-                        color={"white"}
-                        border="1px solid white"
-                        placement="top"
-                        borderRadius={"7px"}
-                      >
-                        <img
-                          src={flaggedImg}
-                          className="collection-items-flagged-img"
-                          alt=""
-                        />
-                      </Tooltip>
-                    )}
-                  </>
-                )}
-
-                {rarityRank && (
-                  <div className="collection-item-rarity-box">
-                    <p># {rarityRank}</p>
-                  </div>
-                )}
-
-                {isInCart && (
-                  <div className="collection-item-selected-cart-check">
-                    <i className="fa-solid fa-check"></i>
-                  </div>
-                )}
-              </div>
-
-              <div className="collection-items-item-stats">
-                <div>
-                  <p className="collection-item-single-collection-name">
-                    {collectionInfo?.name}
-                  </p>
-                  <div className="collection-item-single-item-name-price">
-                    <p className="collection-item-single-item-name">
-                      {name || tokenId}
-                    </p>
-                    {isListed && (
-                      <div className="collection-item-single-item-price">
-                        <i className="fa-brands fa-ethereum" />
-                        <p>{roundPrice(value)}</p>
-                      </div>
-                    )}
-                  </div>
-                </div>
-                <hr></hr>
-
-                <div className="collection-item-buy-container">
-                  {/* {rarityRank} */}
                   {isListed && (
                     <>
-                      <div
-                        onClick={() =>
-                          openBuyModal(
-                            name,
-                            image,
-                            tokenId,
-                            value,
-                            marketplace,
-                            address,
-                            collectionName || collectionInfo?.name
-                          )
-                        }
-                      >
-                        <i className="fa-regular fa-bolt"></i>
-                        <p className="item-buy-not-visible">Buy now</p>
-                      </div>
+                      <a href={marketplaceUrl} target="_blank" rel="noreferrer">
+                        <img
+                          src={marketplaceImg}
+                          className="collection-item-marketplace-image"
+                          alt=""
+                        />
+                      </a>
 
-                      <div
-                        onClick={() =>
-                          isInCart
-                            ? removeItemFromCart(tokenId, address)
-                            : addItemToCart(
+                      {isFlagged && (
+                        <Tooltip
+                          closeOnClick={false}
+                          hasArrow
+                          label={"Not currently tradable on OpenSea."}
+                          fontSize="xs"
+                          bg="black"
+                          color={"white"}
+                          border="1px solid white"
+                          placement="top"
+                          borderRadius={"7px"}
+                        >
+                          <img
+                            src={flaggedImg}
+                            className="collection-items-flagged-img"
+                            alt=""
+                          />
+                        </Tooltip>
+                      )}
+                    </>
+                  )}
+
+                  {rarityRank && (
+                    <div className="collection-item-rarity-box">
+                      <p># {rarityRank}</p>
+                    </div>
+                  )}
+
+                  {isInCart && (
+                    <div className="collection-item-selected-cart-check">
+                      <i className="fa-solid fa-check"></i>
+                    </div>
+                  )}
+                </div>
+
+                <div className="collection-items-item-stats">
+                  <div>
+                    <p className="collection-item-single-collection-name">
+                      {collectionInfo?.name}
+                    </p>
+                    <div className="collection-item-single-item-name-price">
+                      <p className="collection-item-single-item-name">
+                        {name || tokenId}
+                      </p>
+                      {isListed && (
+                        <div className="collection-item-single-item-price">
+                          <i className="fa-brands fa-ethereum" />
+                          <p>{roundPrice(value)}</p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                  <hr></hr>
+
+                  <div className="collection-item-buy-container">
+                    {/* {rarityRank} */}
+                    {isListed && (
+                      <>
+                        <div
+                          onClick={() =>
+                            openBuyModal(
+                              name,
+                              image,
+                              tokenId,
+                              value,
+                              marketplace,
+                              address,
+                              collectionName || collectionInfo?.name
+                            )
+                          }
+                        >
+                          <i className="fa-regular fa-bolt"></i>
+                          <p className="item-buy-not-visible">Buy now</p>
+                        </div>
+
+                        <div
+                          onClick={() =>
+                            isInCart
+                              ? removeItemFromCart(tokenId, address)
+                              : addItemToCart(
                                 name,
                                 tokenId,
                                 value,
@@ -384,19 +375,19 @@ const Items = ({
                                 collectionName || collectionInfo?.name,
                                 index
                               )
-                        }
-                      >
-                        <i className="fa-light fa-cart-shopping item-buy-not-visible"></i>
-                        <p className="item-buy-not-visible">
-                          {isInCart ? "Remove" : "Add"}
-                        </p>
-                      </div>
-                    </>
-                  )}
+                          }
+                        >
+                          <i className="fa-light fa-cart-shopping item-buy-not-visible"></i>
+                          <p className="item-buy-not-visible">
+                            {isInCart ? "Remove" : "Add"}
+                          </p>
+                        </div>
+                      </>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
           </>
         );
       }),
@@ -557,47 +548,47 @@ const Items = ({
 
                         <AccordionPanel pb={4}>
                           {sortedItems && sortedItems.map(innerItem => {
-                              const attributeValue = innerItem.value;
-                              const { count } = innerItem;
+                            const attributeValue = innerItem.value;
+                            const { count } = innerItem;
 
-                              return (
-                                <>
-                                  <Row className="collection-item-property-row wrap-text">
-                                    <Checkbox
-                                      defaultChecked={
-                                        itemFilters?.attributeFilter?.filter(
-                                          item =>
-                                            item.attributeKey ===
-                                              attributeName &&
-                                            item.attributeValue ===
-                                              attributeValue
-                                        ).length > 0
-                                          ? true
-                                          : false
-                                      }
-                                      size={"sm"}
-                                      className="collection-item-marketplace-filter wrap-text"
-                                      key={crypto.randomUUID()}
-                                      value={attributeValue}
-                                      onChange={e =>
-                                        changeAttributeFilter(
-                                          e.target.checked,
-                                          attributeName,
+                            return (
+                              <>
+                                <Row className="collection-item-property-row wrap-text">
+                                  <Checkbox
+                                    defaultChecked={
+                                      itemFilters?.attributeFilter?.filter(
+                                        item =>
+                                          item.attributeKey ===
+                                          attributeName &&
+                                          item.attributeValue ===
                                           attributeValue
-                                        )
-                                      }
-                                    >
-                                      {attributeValue}
-                                    </Checkbox>
-                                    <span className="little-text low-opacity">
-                                      {count}
-                                    </span>
-                                  </Row>
-                                </>
-                              );
-                            })}
+                                      ).length > 0
+                                        ? true
+                                        : false
+                                    }
+                                    size={"sm"}
+                                    className="collection-item-marketplace-filter wrap-text"
+                                    key={crypto.randomUUID()}
+                                    value={attributeValue}
+                                    onChange={e =>
+                                      changeAttributeFilter(
+                                        e.target.checked,
+                                        attributeName,
+                                        attributeValue
+                                      )
+                                    }
+                                  >
+                                    {attributeValue}
+                                  </Checkbox>
+                                  <span className="little-text low-opacity">
+                                    {count}
+                                  </span>
+                                </Row>
+                              </>
+                            );
+                          })}
 
-                          <Divider marginTop={"15px"}/>
+                          <Divider marginTop={"15px"} />
                         </AccordionPanel>
                       </AccordionItem>
                     );
@@ -627,7 +618,7 @@ const Items = ({
                   onChange={({ target }) => setSearchText(target.value)}
                 ></Input>
               </InputGroup>
-                
+
               <Tooltip label="Refresh Metadata" placement="top">
                 <i className={`fa-solid fa-arrows-rotate refresh-collection-metadata ${refreshingMetadata && "rotating"}`} onClick={() => !refreshingMetadata && refreshMetadata(address)}></i>
               </Tooltip>

@@ -2,14 +2,14 @@ import React, { memo } from 'react'
 import { roundPrice } from '../../../../../utils/formats/formats';
 import etherscan from "../../../../../assets/etherscan.svg";
 import getMarketplaceImage from '../../../../../utils/marketplaceImageMapping';
-import {TimeAgo} from "@Components";
+import { TimeAgo } from "@Components";
 
 
 const SalesMapping = memo(({ sales, address }) => {
 
     return (
         <>
-            {   
+            {
                 sales.map((sale, index) => {
                     const { value, transactionHash, timestamp, name, image, marketplace, tokenId } = sale || {};
 
@@ -28,7 +28,7 @@ const SalesMapping = memo(({ sales, address }) => {
                                 <div className='wrap-text'>
                                     <p className='wrap-text'>{name}</p>
                                     <p className="live-view-sale-time low-opacity little-text">
-                                        <TimeAgo timestamp={timestamp} isUnix={false} intervalMs={1000}/>
+                                        <TimeAgo timestamp={timestamp} isUnix={false} intervalMs={1000} />
                                     </p>
                                 </div>
                             </div>

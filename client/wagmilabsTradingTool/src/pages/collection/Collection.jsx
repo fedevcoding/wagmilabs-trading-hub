@@ -127,11 +127,11 @@ const Collection = () => {
 
     const { tokenId, price, image, name, timestamp, marketplace, rarity, rarityRank, orderHash, isFlagged } = listingData
 
-    if ((itemFilters.tokenId !== undefined && itemFilters.tokenId !== "") || itemFilters.attributeFilter.length > 0 || (itemFilters.sortBy !== "p-lth"  && itemFilters.sortBy !== "p-htl")){
+    if ((itemFilters.tokenId !== undefined && itemFilters.tokenId !== "") || itemFilters.attributeFilter.length > 0 || (itemFilters.sortBy !== "p-lth" && itemFilters.sortBy !== "p-htl")) {
       return
     }
 
-    if(itemFilters.priceFilter.min > price || itemFilters.priceFilter.max < price) return
+    if (itemFilters.priceFilter.min > price || itemFilters.priceFilter.max < price) return
 
     const newListing = {
       token: {
@@ -209,11 +209,11 @@ const Collection = () => {
   }
 
 
-  useEffect(()=>{
-    if ((itemFilters.tokenId !== undefined && itemFilters.tokenId !== "") || itemFilters.attributeFilter.length > 0 || (itemFilters.sortBy !== "p-lth"  && itemFilters.sortBy !== "p-htl")){
-        setLiveItems(false) 
+  useEffect(() => {
+    if ((itemFilters.tokenId !== undefined && itemFilters.tokenId !== "") || itemFilters.attributeFilter.length > 0 || (itemFilters.sortBy !== "p-lth" && itemFilters.sortBy !== "p-htl")) {
+      setLiveItems(false)
     }
-    else if(!liveItems){
+    else if (!liveItems) {
       setLiveItems(true)
     }
   }, [itemFilters, liveItems])

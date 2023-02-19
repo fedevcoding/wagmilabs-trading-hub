@@ -773,6 +773,17 @@ const Profile = () => {
             </div>
             <div className="single-profile-section">Stats</div>
           </div>
+          {
+            showPromoBanner &&
+
+            <a className="profile-promo-container" href="https://www.premint.xyz/WAGMI-Labs/" target={"_blank"} rel="noreferrer" onClick={() => setShowPromoBanner(false)}>
+              <i className="fa-solid fa-x profile-promo-close-btn"></i>
+
+              <h3 className="profile-promo-header">FREE beta is ending soon..!</h3>
+              <h4 className="profile-promo-body">Get whitelisted to mint the NFT pass for yearly access!</h4>
+              <Button colorScheme={"gray"} className="profile-promo-button">Get Whitelisted</Button>
+            </a>
+          }
 
           <div className="profile-watchList-settings">
             <div className="profile-settings">
@@ -794,19 +805,6 @@ const Profile = () => {
           </div>
 
         </div>
-        {
-          showPromoBanner &&
-
-          <div className="profile-promo-container">
-            <i className="fa-solid fa-x profile-promo-close-btn" onClick={() => setShowPromoBanner(false)}></i>
-
-            <h3 className="profile-promo-header">FREE beta is ending soon...!</h3>
-            <h4 className="profile-promo-body">Get whitelisted to mint the NFT pass for yearly access!</h4>
-            <a href="https://www.premint.xyz/WAGMI-Labs/" target={"_blank"} rel="noreferrer">
-              <Button colorScheme={"gray"} className="profile-promo-button" onClick={() => setShowPromoBanner(false)}>Get Whitelisted</Button>
-            </a>
-          </div>
-        }
 
         {(() => {
           if (section === "nft") {

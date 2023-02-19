@@ -1,4 +1,4 @@
-.item-banner-container{
+.item-banner-container {
     cursor: pointer;
     background-color: #d9d9d9;
     border-radius: 10px;
@@ -7,24 +7,27 @@
     height: 100%
 }
 
-.item-banner-btn{
+.item-banner-btn {
     background-color: #474646;
     margin-top: 30px;
+    width: 80%;
+    border-radius: 12px !important;
 }
 
-.item-banner-title{
+.item-banner-title {
     font-size: 30px;
     font-weight: bold;
-    padding-bottom: 40px;
-    padding-top: 10px;
+    padding-bottom: 30px;
+    padding-top: 40px;
 }
 
-.item-banner-subtitle{
-    font-size: 17px;
+.item-banner-subtitle {
+    padding: 0 12%;
+    font-size: 19px;
 }
 
 @media (max-width: 590px) {
-    .item-banner-container{
+    .item-banner-container {
         height: 447px;
         padding-top: 80px;
     }

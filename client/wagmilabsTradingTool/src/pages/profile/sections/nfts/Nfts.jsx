@@ -23,6 +23,8 @@ import { Loader, TransferItemModal } from "@Components";
 import getMarketplaceImage from "@Utils/marketplaceImageMapping";
 import { useNavigate } from "react-router-dom";
 import { useListNft } from "@Hooks";
+import { generateRandomRangeInt } from "src/utils/formats/utils";
+import { ItemBanner } from "src/pages/collection/sections/banners/ItemBanner";
 
 const sortItemsOptions = [
   { value: "desc", label: "Newest" },
@@ -65,6 +67,8 @@ const Nfts = ({
   const [bulkItems, setBulkItems] = useState([]);
 
   const [showSortItemsOptions, setShowSortItemsOptions] = useState(false);
+
+  const [randomPositionPromo] = useState({ 0: generateRandomRangeInt(0, 3), 1: generateRandomRangeInt(4, 6) })
 
   const observer = useRef(false);
 
@@ -434,6 +438,23 @@ const Nfts = ({
                 </div>
               </div>
             </div>
+
+            {index === randomPositionPromo[0] &&
+              <div
+                className={`single-item-container ${isLast && "last-token"}`}
+              >
+                <ItemBanner primary></ItemBanner>
+              </div>
+            }
+
+            {
+              index === randomPositionPromo[1] &&
+              <div
+                className={`single-item-container ${isLast && "last-token"}`}
+              >
+                <ItemBanner></ItemBanner>
+              </div>
+            }
           </>
         );
       }),
