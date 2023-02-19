@@ -1,9 +1,14 @@
 const express = require("express");
 require("dotenv").config();
 const checkAuth = require("../../../middleware/checkAuth.js");
-const { last24h } = require("../../../services/activity/groupData/24h.js");
-const { last30d } = require("../../../services/activity/groupData/30d.js");
-const { last7d } = require("../../../services/activity/groupData/7d.js");
+const {
+  last24h,
+  last30d,
+  last7d,
+  last3m,
+  last1y,
+  allTime,
+} = require("../../../services/activity/groupData");
 
 const activityChartRoute = express();
 
@@ -20,6 +25,15 @@ activityChartRoute.get("/:contractAddress", checkAuth, async (req, res) => {
   }
   if (period === "30d") {
     data = await last30d(contractAddress);
+  }
+  if (period === "3M") {
+    data = await last3m(contractAddress);
+  }
+  if (period === "1y") {
+    data = await last1y(contractAddress);
+  }
+  if (period === "all") {
+    data = await allTime(contractAddress);
   }
 
   data = data.sort((a, b) => a.day.localeCompare(b.day));

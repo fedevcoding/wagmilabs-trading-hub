@@ -1,18 +1,19 @@
 const { execTranseposeAPI } = require("../../externalAPI/transpose");
 
-const last30d = async (contractAddress) => {
+const last3m = async (contractAddress) => {
   const days = {};
 
-  // creare un oggetto con le date degli ultimi 30 giorni
-  for (let i = 0; i < 29; i++) {
+  // creare un oggetto con le date degli ultimi 90 giorni
+  for (let i = 0; i < 12; i++) {
     const day = new Date();
-    day.setDate(day.getDate() - i);
+    day.setDate(day.getDate() - i * 7);
     day.setHours(0);
     day.setMinutes(0);
     day.setSeconds(0);
     day.setMilliseconds(0);
+    const week = parseInt(day.getTime() / (7 * 24 * 3600 * 1000)).toString();
     const dateString = day.toISOString();
-    days[dateString.split("T")[0]] = {
+    days[week] = {
       averageprice: 0.00001,
       sales: 0,
       volume: 0.00001,
@@ -26,14 +27,16 @@ const last30d = async (contractAddress) => {
     WHERE contract_address = '${contractAddress}'
     GROUP BY day
     ORDER BY day DESC
-    LIMIT 30`;
+    LIMIT 90`;
 
   const salesData = await execTranseposeAPI(query);
 
   // aggiornare l'oggetto delle ore mancanti con i dati delle vendite
   salesData.forEach((data) => {
-    const day = new Date(data.day).toISOString();
-    days[day.split("T")[0]] = {
+    const date = new Date(data.day);
+    const week = parseInt(date.getTime() / (7 * 24 * 3600 * 1000)).toString();
+    const day = date.toISOString();
+    days[week] = {
       averageprice: data.averageprice,
       sales: data.sales,
       volume: data.volume,
@@ -45,5 +48,5 @@ const last30d = async (contractAddress) => {
 };
 
 module.exports = {
-  last30d,
+  last3m,
 };
