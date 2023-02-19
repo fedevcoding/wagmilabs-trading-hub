@@ -1,32 +1,19 @@
 import React, { useEffect, useMemo, useState, useRef } from "react";
-import { baseUrl } from "@Variables";
-
-import HighchartsReact from "highcharts-react-official";
-import Highcharts from "highcharts";
-import {
-  formatAddress3,
-  roundPrice2,
-} from "../../../../utils/formats/formats.js";
-
-import "./activity.css";
-import moment from "moment";
-import getMarketplaceImage from "../../../../utils/marketplaceImageMapping.js";
+import { formatAddress3, roundPrice2 } from "@Utils/formats/formats.js";
+import getMarketplaceImage from "@Utils/marketplaceImageMapping.js";
 import { Tabs } from "@Components";
+import { ActivityChart, ActivityIcon } from "./Components";
+import {
+  activityTypeMapping,
+  changeActivityFilter,
+  getActivityData,
+  getChartData,
+  getMoreActivity,
+  periods,
+} from "./functions";
+import moment from "moment";
 
-const periods = ["24h", "7d", "30d", "3M", "1y", "all"].map(p => ({
-  value: p,
-  label: p,
-}));
-
-const activityTypeMapping = {
-  ask: "List",
-  sale: "Sale",
-  transfer: "Transfer",
-  mint: "Mint",
-  bid: "Offer",
-  bid_cancel: "Offer Cancel",
-  ask_cancel: "List Cancel",
-};
+import "./style.scss";
 
 const Activity = ({ address }) => {
   const [loadingMoreActivity, setLoadingMoreActivity] = useState(false);
@@ -54,7 +41,14 @@ const Activity = ({ address }) => {
 
     observer.current = new IntersectionObserver(entries => {
       if (entries[0].isIntersecting && activityContinuation.current) {
-        getMoreActivity();
+        getMoreActivity(
+          address,
+          setLoadingMoreActivity,
+          collectuonActivityFilter,
+          activityContinuation,
+          setCollectionActivity,
+          setCollectionActivityLoading
+        );
       }
     }, options);
 
@@ -74,120 +68,26 @@ const Activity = ({ address }) => {
   }, [collectionActivity]);
 
   useEffect(() => {
-    getChartData();
+    getChartData(address, setLoadingChart, setActivityChartData);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chartPeriod]);
 
   useEffect(() => {
-    getActivityData();
+    getActivityData(
+      address,
+      setCollectionActivityLoading,
+      collectuonActivityFilter,
+      activityContinuation,
+      setCollectionActivity
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [collectuonActivityFilter]);
-
-  async function getChartData() {
-    setLoadingChart(true);
-
-    let data = await fetch(`${baseUrl}/activityChart/${address}`, {
-      headers: {
-        "x-auth-token": localStorage.jsonwebtoken,
-      },
-    });
-
-    data = await data.json();
-
-    const averagePrices = data
-      .map(item => roundPrice2(item.averageprice))
-      .reverse();
-    const volumes = data.map(item => roundPrice2(item.volume)).reverse();
-    const days = data
-      .map(item => moment(item.day).format("DD/MM/YYYY"))
-      .reverse();
-    const sales = data.map(item => item.sales).reverse();
-
-    setActivityChartData({
-      averagePrices: averagePrices,
-      volumes: volumes,
-      sales,
-      days,
-    });
-    setLoadingChart(false);
-  }
-
-  async function getActivityData() {
-    try {
-      setCollectionActivityLoading(true);
-
-      const filters = collectuonActivityFilter.join("-");
-
-      let data = await fetch(
-        `${baseUrl}/collectionActivity/${address}?types=${filters}`,
-        {
-          headers: {
-            "x-auth-token": localStorage.jsonwebtoken,
-          },
-        }
-      );
-      if (!data.ok) throw new Error("Error getting activity data");
-      data = await data.json();
-
-      const { continuation, activities } = data;
-
-      activityContinuation.current = continuation;
-
-      setCollectionActivity(activities);
-      setCollectionActivityLoading(false);
-    } catch (e) {
-      console.log(e);
-      activityContinuation.current = null;
-      setCollectionActivity([]);
-      setCollectionActivityLoading(false);
-    }
-  }
-  async function getMoreActivity() {
-    try {
-      setLoadingMoreActivity(true);
-
-      const filters = collectuonActivityFilter.join("-");
-      const continuationFilter = activityContinuation.current
-        ? `&continuation=${activityContinuation.current}`
-        : "";
-
-      let data = await fetch(
-        `${baseUrl}/collectionActivity/${address}?types=${filters}${continuationFilter}`,
-        {
-          headers: {
-            "x-auth-token": localStorage.jsonwebtoken,
-          },
-        }
-      );
-      if (!data.ok) throw new Error("Error getting activity data");
-      data = await data.json();
-
-      const { continuation, activities } = data;
-
-      activityContinuation.current = continuation;
-
-      setCollectionActivity(prev => [...prev, ...activities]);
-      setCollectionActivityLoading(false);
-    } catch (e) {
-      console.log(e);
-      activityContinuation.current = null;
-      setCollectionActivityLoading(false);
-    }
-  }
-
-  function changeActivityFilter(type) {
-    if (collectuonActivityFilter.includes(type)) {
-      const newFilter = collectuonActivityFilter.filter(item => item !== type);
-      setCollectionActivityFilter(newFilter);
-    } else {
-      setCollectionActivityFilter([...collectuonActivityFilter, type]);
-    }
-  }
 
   const collectionActivityMapping = useMemo(
     () =>
       collectionActivity.map((item, index) => {
-        const { type, fromAddress, toAddress, price, timestamp, txHash } = item ?? {};
+        const { type, fromAddress, toAddress, price, timestamp, txHash } =
+          item ?? {};
         const { tokenName, tokenImage, tokenId } = item.token;
         const { collectionName, collectionImage } = item.collection;
 
@@ -198,7 +98,7 @@ const Activity = ({ address }) => {
         const isLast = index === collectionActivity.length - 1;
         const key = crypto.randomUUID();
         return (
-          <>
+          <React.Fragment key={JSON.stringify(item)}>
             <a
               href={`/item/${address}/${tokenId}`}
               key={key}
@@ -244,12 +144,18 @@ const Activity = ({ address }) => {
                 {toAddress ? formatAddress3(toAddress) : "- - -"}
               </td>
               <td className="collection-activity-single-time">
-                <a className={`collection-activity-time ${type !== "ask" && "link"}`} href={`https://etherscan.io/tx/${txHash}`} target="_blank" rel="noreferrer">
+                <a
+                  className={`collection-activity-time ${
+                    type !== "ask" && "link"
+                  }`}
+                  href={`https://etherscan.io/tx/${txHash}`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
                   <p>{moment(timestamp * 1000).fromNow()}</p>
-                  {
-                    type !== "ask" &&
+                  {type !== "ask" && (
                     <i className="fa-sharp fa-solid fa-up-right-from-square"></i>
-                  }
+                  )}
                 </a>
               </td>
             </a>
@@ -259,7 +165,7 @@ const Activity = ({ address }) => {
                 <hr></hr>
               </td>
             </tr>
-          </>
+          </React.Fragment>
         );
       }),
     [collectionActivity, address]
@@ -274,7 +180,13 @@ const Activity = ({ address }) => {
 
           <div className="collection-activity-filters-categories">
             <div
-              onClick={() => changeActivityFilter("sale")}
+              onClick={() =>
+                changeActivityFilter(
+                  "sale",
+                  collectuonActivityFilter,
+                  setCollectionActivityFilter
+                )
+              }
               className={`${
                 collectuonActivityFilter.includes("sale") ? "active" : ""
               }`}
@@ -283,7 +195,13 @@ const Activity = ({ address }) => {
               Sales
             </div>
             <div
-              onClick={() => changeActivityFilter("ask")}
+              onClick={() =>
+                changeActivityFilter(
+                  "ask",
+                  collectuonActivityFilter,
+                  setCollectionActivityFilter
+                )
+              }
               className={`${
                 collectuonActivityFilter.includes("ask") ? "active" : ""
               }`}
@@ -294,7 +212,13 @@ const Activity = ({ address }) => {
           </div>
           <div className="collection-activity-filters-categories">
             <div
-              onClick={() => changeActivityFilter("bid")}
+              onClick={() =>
+                changeActivityFilter(
+                  "bid",
+                  collectuonActivityFilter,
+                  setCollectionActivityFilter
+                )
+              }
               className={`${
                 collectuonActivityFilter.includes("bid") ? "active" : ""
               }`}
@@ -303,7 +227,13 @@ const Activity = ({ address }) => {
               Offers
             </div>
             <div
-              onClick={() => changeActivityFilter("transfer")}
+              onClick={() =>
+                changeActivityFilter(
+                  "transfer",
+                  collectuonActivityFilter,
+                  setCollectionActivityFilter
+                )
+              }
               className={`${
                 collectuonActivityFilter.includes("transfer") ? "active" : ""
               }`}
@@ -413,91 +343,3 @@ const Activity = ({ address }) => {
 };
 
 export default Activity;
-
-const ActivityChart = ({ activityChartData }) => {
-  return (
-    <div className="activity-chart-wrapper">
-      <HighchartsReact
-        className="activity-chart"
-        highcharts={Highcharts}
-        options={{
-          series: [
-            {
-              type: "column",
-              name: "Volume",
-              data: activityChartData?.volumes,
-              yAxis: 1,
-            },
-            {
-              type: "spline",
-              name: "Average price",
-              data: activityChartData?.averagePrices,
-            },
-          ],
-          xAxis: {
-            categories: activityChartData?.days,
-          },
-          yAxis: [
-            {
-              title: {
-                text: "Avg. price",
-              },
-              resize: {
-                enabled: true,
-              },
-            },
-            {
-              title: {
-                text: "ETH volume",
-              },
-              opposite: true,
-            },
-          ],
-          legend: {},
-          title: {
-            text: "",
-          },
-          chart: {
-            type: "spline",
-            backgroundColor: "transparent",
-            borderRadius: 10,
-          },
-          tooltip: {
-            shared: true,
-
-            // formatter: function () {
-            //   return this.points.reduce(function (s, point) {
-            //     return s + '<br/>' + point.series.name + ': ' + point.y + 'm';
-            //   }, '<b>' + this.x + '</b>');
-            // },
-
-            // followPointer: true,
-            hideDelay: 200,
-            outside: false,
-          },
-        }}
-      />
-    </div>
-  );
-};
-
-const ActivityIcon = ({ type }) => {
-  return (
-    <>
-      {(() => {
-        switch (type) {
-          case "sale":
-            return <i className="fa-light fa-bag-shopping"></i>;
-          case "ask":
-            return <i className="fa-light fa-tag"></i>;
-          case "bid":
-            return <i className="fa-light fa-megaphone"></i>;
-          case "transfer":
-            return <i className="fa-light fa-truck"></i>;
-          default:
-            return <i className="fa-solid fa-question"></i>;
-        }
-      })()}
-    </>
-  );
-};
