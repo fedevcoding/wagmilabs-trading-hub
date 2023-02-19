@@ -1,17 +1,17 @@
-import React, { useEffect, useMemo, useState, useRef } from "react";
-import { formatAddress3, roundPrice2 } from "@Utils/formats/formats.js";
-import getMarketplaceImage from "@Utils/marketplaceImageMapping.js";
+import React, { useEffect, useState, useRef } from "react";
 import { Tabs } from "@Components";
-import { ActivityChart, ActivityIcon } from "./Components";
 import {
-  activityTypeMapping,
+  ActivityChart,
+  CollectionActivityMapping,
+  LoadingMoreActivity,
+} from "./Components";
+import {
   changeActivityFilter,
   getActivityData,
   getChartData,
   getMoreActivity,
   periods,
 } from "./functions";
-import moment from "moment";
 
 import "./style.scss";
 
@@ -82,94 +82,6 @@ const Activity = ({ address }) => {
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [collectuonActivityFilter]);
-
-  const collectionActivityMapping = useMemo(
-    () =>
-      collectionActivity.map((item, index) => {
-        const { type, fromAddress, toAddress, price, timestamp, txHash } =
-          item ?? {};
-        const { tokenName, tokenImage, tokenId } = item.token;
-        const { collectionName, collectionImage } = item.collection;
-
-        const activityType = activityTypeMapping[type];
-
-        const marketplaceName = item?.order?.source?.name;
-        const marketplaceImage = getMarketplaceImage(marketplaceName);
-        const isLast = index === collectionActivity.length - 1;
-        const key = crypto.randomUUID();
-        return (
-          <React.Fragment key={JSON.stringify(item)}>
-            <a
-              href={`/item/${address}/${tokenId}`}
-              key={key}
-              className={`collection-activity-single-container ${
-                isLast && "last-token"
-              }`}
-            >
-              <td className="collection-activity-single-type">
-                <div className="collection-activity-marketplace-container">
-                  {marketplaceImage ? (
-                    <img
-                      src={marketplaceImage}
-                      className="collection-activity-marketplace-image"
-                      alt=""
-                    />
-                  ) : (
-                    <ActivityIcon type={type} />
-                  )}
-                  {activityType}
-                </div>
-              </td>
-
-              <td className="collection-activity-single-token">
-                <img
-                  src={tokenImage || collectionImage}
-                  alt=""
-                  className="collection-activity-single-image"
-                />
-                <div className="wrap-text">
-                  <p className="wrap-text">{tokenName || collectionName}</p>
-                  <p className="low-opacity little-text wrap-text">
-                    {collectionName}
-                  </p>
-                </div>
-              </td>
-              <td className="collection-activity-single-price">
-                {price ? roundPrice2(price) : 0} ETH
-              </td>
-              <td className="collection-activity-single-from">
-                {fromAddress ? formatAddress3(fromAddress) : "- - -"}
-              </td>
-              <td className="collection-activity-single-to">
-                {toAddress ? formatAddress3(toAddress) : "- - -"}
-              </td>
-              <td className="collection-activity-single-time">
-                <a
-                  className={`collection-activity-time ${
-                    type !== "ask" && "link"
-                  }`}
-                  href={`https://etherscan.io/tx/${txHash}`}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  <p>{moment(timestamp * 1000).fromNow()}</p>
-                  {type !== "ask" && (
-                    <i className="fa-sharp fa-solid fa-up-right-from-square"></i>
-                  )}
-                </a>
-              </td>
-            </a>
-
-            <tr className="collection-activity-single-hr">
-              <td colSpan={6}>
-                <hr></hr>
-              </td>
-            </tr>
-          </React.Fragment>
-        );
-      }),
-    [collectionActivity, address]
-  );
 
   return (
     <>
@@ -279,60 +191,15 @@ const Activity = ({ address }) => {
 
               <tbody>
                 {collectionActivityLoading ? (
-                  <tr>
-                    <td colSpan={6}>
-                      <div className="loading">
-                        Loading activity{" "}
-                        <svg
-                          className="spinner"
-                          width="65px"
-                          height="65px"
-                          viewBox="0 0 66 66"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <circle
-                            className="path"
-                            fill="none"
-                            strokeWidth="6"
-                            strokeLinecap="round"
-                            cx="33"
-                            cy="33"
-                            r="30"
-                          ></circle>
-                        </svg>{" "}
-                      </div>
-                    </td>
-                  </tr>
+                  <LoadingMoreActivity />
                 ) : (
-                  collectionActivityMapping
+                  <CollectionActivityMapping
+                    collectionActivity={collectionActivity}
+                    address={address}
+                  />
                 )}
 
-                {loadingMoreActivity && (
-                  <tr>
-                    <td colSpan={6}>
-                      <div className="loading">
-                        Loading activity{" "}
-                        <svg
-                          className="spinner"
-                          width="65px"
-                          height="65px"
-                          viewBox="0 0 66 66"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <circle
-                            className="path"
-                            fill="none"
-                            strokeWidth="6"
-                            strokeLinecap="round"
-                            cx="33"
-                            cy="33"
-                            r="30"
-                          ></circle>
-                        </svg>{" "}
-                      </div>
-                    </td>
-                  </tr>
-                )}
+                {loadingMoreActivity && <LoadingMoreActivity />}
               </tbody>
             </table>
           </div>
