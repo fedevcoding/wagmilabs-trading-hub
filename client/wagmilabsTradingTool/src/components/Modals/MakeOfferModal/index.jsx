@@ -24,7 +24,6 @@ export const MakeOfferModal = React.memo(
     isOpen,
     address,
     tokenId,
-    currency,
     setIsOpen,
     marketplace,
     details: {
@@ -32,6 +31,7 @@ export const MakeOfferModal = React.memo(
       market: { topBid },
     },
   }) => {
+    const [currency] = React.useState("weth")
     const [confirmingList, setConfirmingList] = React.useState(false);
     const [price, setPrice] = React.useState(null);
     const { placeBid } = usePlaceBid(marketplace);
@@ -70,7 +70,7 @@ export const MakeOfferModal = React.memo(
             </p>
             <NumberInput>
               <NumberInputField
-                placeholder={`Insert ${currency} amount`}
+                placeholder={`Insert ${currency.toUpperCase()} amount`}
                 onChange={e => setPrice(e.target.value)}
               />
             </NumberInput>
@@ -91,7 +91,7 @@ export const MakeOfferModal = React.memo(
             />
             {price && notEnoughBalance && (
               <p className="balance-now-enough">
-                {currency} balance is not enough
+                {currency.toUpperCase()} balance is not enough
               </p>
             )}
           </ModalBody>
