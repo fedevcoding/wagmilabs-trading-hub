@@ -1,0 +1,42 @@
+.day-container {
+  display: flex;
+  border: 1px solid white;
+  flex: 1;
+  min-width: 75px;
+  height: 98px;
+  background-color: #616161;
+  justify-content: center;
+  border-radius: 10px;
+  margin: 5px;
+}
+
+.not-curr-day {
+  background-color: #414141;
+}
+
+.calendar-left-inner-container {
+  display: flex;
+  flex:3;
+  border: 1px solid white;
+  border-radius: 10px;
+  flex-direction: column;
+}
+
+.calendar-right-inner-container {
+  display: flex;
+  flex: 1;
+  border: 1px solid white;
+  border-radius: 10px;
+  justify-content: center;
+}
+.calendar-header {
+  display: flex;
+  flex: 1;
+  min-width: 75px;
+  justify-content: center;
+}
+
+.calendar-row {
+  display: flex;
+  flex: 1;
+}
