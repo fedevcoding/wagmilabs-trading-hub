@@ -1,6 +1,6 @@
 const express = require("express")
 const checkAuth = require("../../../middleware/checkAuth")
-
+const Stats = require("../../../models/StatsModel")
 
 const collectionInfoRoute = express()
 
@@ -9,9 +9,16 @@ const RESERVOIR_API_KEY = process.env.RESERVOIR_API_KEY
 
 collectionInfoRoute.get('/:address', checkAuth, (req, res) => {
 
+    const { address: userAddress } = req.userDetails || {}
+
 
     async function getData() {
         try {
+
+            if (userAddress) {
+                await Stats.create({ type: "collectionInfo", timestamp: Date.now(), address: req.params.address })
+            }
+
             const { address } = req.params
             const dataApi = await fetch(`https://api.reservoir.tools/collections/v5?id=${address}&includeTopBid=true&includeAttributes=false&includeOwnerCount=false&includeSalesCount=false&normalizeRoyalties=false`, {
                 headers: {

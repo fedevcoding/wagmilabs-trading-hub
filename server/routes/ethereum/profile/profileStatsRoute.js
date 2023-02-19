@@ -1,6 +1,8 @@
 const express = require("express")
 const checkAuth = require("../../../middleware/checkAuth")
 
+const Stats = require("../../../models/StatsModel")
+
 
 const UPSHOT_API_KEY = process.env.UPSHOT_API_KEY
 const NFTSCAN_API_KEY = process.env.NFTSCAN_API_KEY
@@ -11,12 +13,14 @@ const profileStatsRoute = express()
 
 profileStatsRoute.get("/:address", checkAuth, async (req, res) => {
 
-    const { address } = req.params
+    const { address } = req.params || {}
 
     if (!address) {
         res.status(400).json({ message: "There was a problem fetching the data", ok: false })
     }
     else {
+
+        await Stats.create({ type: "profileStats", timestamp: Date.now(), address })
 
         try {
             let data = await fetch(`https://api.upshot.xyz/v2/wallets/${address}/stats`, {

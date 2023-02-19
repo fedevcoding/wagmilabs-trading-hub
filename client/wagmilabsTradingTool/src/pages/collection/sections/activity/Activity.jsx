@@ -6,7 +6,7 @@ import { changeActivityFilter, periods } from "./functions";
 import "./style.scss";
 import { useGetData } from "./useGetData";
 
-const Activity = ({ address }) => {
+const Activity = React.memo(({ address }) => {
   const {
     chartPeriod,
     activityChartData,
@@ -55,6 +55,6 @@ const Activity = ({ address }) => {
       </div>
     </>
   );
-};
+});
 
 export default Activity;

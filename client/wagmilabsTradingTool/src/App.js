@@ -1,6 +1,6 @@
 // react
 import React, { useState, useEffect, useRef, useMemo } from "react";
-import { jwtExpired } from "./utils/functions";
+import { jwtExpired, pushToServer } from "./utils/functions";
 
 // components
 import Header from "./pages/header/Header";
@@ -126,6 +126,16 @@ function App() {
 
   // set checking in base of tokens
   useEffect(() => {
+
+    async function view() {
+      try {
+        await pushToServer("/stats", { type: "view", timestamp: Date.now() })
+      }
+      catch (e) {
+        console.log(e)
+      }
+    }
+    view()
 
     async function verify() {
 

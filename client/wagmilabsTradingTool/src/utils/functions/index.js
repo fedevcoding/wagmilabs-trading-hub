@@ -1,3 +1,3 @@
 export { isValidEthAddress } from "./isValidEthAddress";
-export { getFromServer} from "./serverCalls";
+export { getFromServer, pushToServer } from "./serverCalls";
 export { jwtExpired } from "./jwtExpired";

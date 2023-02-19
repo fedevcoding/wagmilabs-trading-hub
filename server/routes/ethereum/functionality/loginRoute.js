@@ -3,6 +3,7 @@ require("dotenv").config();
 const JWT = require("jsonwebtoken");
 const checkOwnership = require("../../../middleware/checkOwnership.js");
 const User = require("../../../models/userModel.js");
+const Stats = require("../../../models/StatsModel.js");
 const fallbackPfp = require("../../../images/userPfp.svg");
 
 const loginRoute = express();
@@ -21,6 +22,9 @@ loginRoute.post("/", checkOwnership, async (req, res) => {
         .status(403)
         .json({ authenticated: false, message: "Missing query fields." });
     } else {
+
+      await Stats.create({ type: "login", timestamp: Date.now(), address });
+
       const accessToken = JWT.sign(
         {
           address,
