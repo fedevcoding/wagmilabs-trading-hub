@@ -5,7 +5,7 @@ const last24h = async (contractAddress) => {
 
   // creare un oggetto con le ore delle ultime 24 ore
   const start = new Date();
-  start.setHours(start.getHours() - 24);
+  start.setHours(start.getHours() - 23);
   start.setMinutes(0);
   start.setSeconds(0);
   start.setMilliseconds(0);
@@ -42,7 +42,7 @@ const last24h = async (contractAddress) => {
     };
   });
 
-  return hours;
+  return Object.values(hours);
 };
 
 module.exports = {
