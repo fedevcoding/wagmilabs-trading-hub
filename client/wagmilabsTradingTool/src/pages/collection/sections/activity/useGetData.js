@@ -54,7 +54,7 @@ export const useGetData = address => {
   }, [collectionActivity]);
 
   useEffect(() => {
-    getChartData(address, setLoadingChart, setActivityChartData);
+    getChartData(address, chartPeriod, setLoadingChart, setActivityChartData);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chartPeriod]);
 

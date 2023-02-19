@@ -18,12 +18,6 @@ const Activity = React.memo(({ address }) => {
     setCollectionActivityFilter,
   } = useGetData(address);
 
-  console.log(
-    collectionActivity,
-    loadingMoreActivity,
-    collectionActivityLoading
-  );
-
   return (
     <>
       <hr className="collection-activity-hr" />
