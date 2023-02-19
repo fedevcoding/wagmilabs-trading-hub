@@ -19,27 +19,36 @@ export const activityTypeMapping = {
 
 export const getChartData = async (
   address,
+  chartPeriod,
   setLoadingChart,
   setActivityChartData
 ) => {
   setLoadingChart(true);
 
-  let data = await fetch(`${baseUrl}/activityChart/${address}`, {
-    headers: {
-      "x-auth-token": localStorage.jsonwebtoken,
-    },
-  });
+  let data = await fetch(
+    `${baseUrl}/activityChart/${address}?chart-period=${chartPeriod}`,
+    {
+      headers: {
+        "x-auth-token": localStorage.jsonwebtoken,
+      },
+    }
+  );
 
   data = await data.json();
 
-  const averagePrices = data
-    .map(item => roundPrice2(item.averageprice))
-    .reverse();
-  const volumes = data.map(item => roundPrice2(item.volume)).reverse();
-  const days = data
-    .map(item => moment(item.day).format("DD/MM/YYYY"))
-    .reverse();
-  const sales = data.map(item => item.sales).reverse();
+  console.log("getChartData", data);
+
+  const averagePrices = data.map(item => roundPrice2(item.averageprice));
+  const volumes = data.map(item => roundPrice2(item.volume));
+
+  let days;
+  if (chartPeriod === "24h") {
+    days = data.map(item => moment(item.day).format("DD/MM hh:mm"));
+  } else {
+    days = data.map(item => moment(item.day).format("DD/MM/YYYY"));
+  }
+
+  const sales = data.map(item => item.sales);
 
   setActivityChartData({
     averagePrices: averagePrices,
