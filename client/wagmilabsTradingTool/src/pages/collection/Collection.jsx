@@ -6,8 +6,6 @@ import Items from "./sections/items/Items";
 import Activity from "./sections/activity/Activity";
 import Charts from "./sections/charts/Charts";
 import Leaderboard from "./sections/leaderboard/Leaderboard";
-import fullStar from "../../assets/full-star.png";
-import emptyStar from "../../assets/empty-star.png";
 
 // import { useMoralisWeb3Api } from "react-moralis";
 import "./collection.css";
@@ -496,12 +494,15 @@ const Collection = () => {
               />
               <div className="collection-info-name">
                 <div>{collectionInfo.name || "---"}</div>
-                <img
-                  onClick={handleChangeWatchlist}
-                  className="starWatchlist"
-                  src={isWatchList ? fullStar : emptyStar}
-                  alt=""
-                />
+
+                <span onClick={handleChangeWatchlist}>
+                  {
+                    isWatchList ?
+                      <i class="fa-solid fa-star starWatchlist full"></i>
+                      :
+                      <i class="fa-light fa-star starWatchlist"></i>
+                  }
+                </span>
               </div>
               <div
                 className="collection-address-copy"

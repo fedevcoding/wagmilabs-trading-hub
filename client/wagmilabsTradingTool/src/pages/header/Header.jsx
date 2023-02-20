@@ -310,9 +310,8 @@ const Header = () => {
           </div>
           <div onClick={() => navigate("/volumes")}>
             <div
-              className={`${
-                isVolumesPage ? "active" : ""
-              } volumes-button header-links`}
+              className={`${isVolumesPage ? "active" : ""
+                } volumes-button header-links`}
             >
               Volumes
             </div>
@@ -389,14 +388,14 @@ const Header = () => {
           </div>
 
           <i
-            className="fa-solid fa-wallet"
-            style={{ fontSize: "25px", cursor: "pointer" }}
+            className="fa-solid fa-wallet low-opacity"
+            style={{ fontSize: "25px", cursor: "pointer", color: "white" }}
             onClick={openWalletModal}
           ></i>
 
           <i
-            className="header-cart-item fa-solid fa-cart-shopping"
-            style={{ fontSize: "25px", cursor: "pointer" }}
+            className="header-cart-item fa-solid fa-cart-shopping low-opacity"
+            style={{ fontSize: "25px", cursor: "pointer", color: "white" }}
             onClick={openCartModal}
           ></i>
         </div>

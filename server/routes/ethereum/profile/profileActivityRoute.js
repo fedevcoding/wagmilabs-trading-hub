@@ -140,7 +140,7 @@ profileActivityRoute.get("/", checkAuth, async (req, res) => {
 
     try {
         const { address: userAddress } = req.userDetails
-        let { includeMint, includeBurn, includeSend, includeReceive, includeBuy, includeSale, includeList, fromAddress, toAddress, minPrice, maxPrice, marketplace, tokenId, contractAddress, startDate, endDate, offset1, offset2, offset3 } = req.query || {}
+        let { includeMint, includeBurn, includeSend, includeReceive, includeBuy, includeSale, includeList, fromAddress: oldFrom, toAddress: oldTo, minPrice, maxPrice, marketplace, tokenId, contractAddress, startDate, endDate, offset1, offset2, offset3 } = req.query || {}
 
         includeMint = toBool(includeMint)
         includeBurn = toBool(includeBurn)
@@ -149,6 +149,11 @@ profileActivityRoute.get("/", checkAuth, async (req, res) => {
         includeBuy = toBool(includeBuy)
         includeSale = toBool(includeSale)
         includeList = toBool(includeList)
+
+
+        const fromAddress = oldTo
+        const toAddress = oldFrom
+
 
         const listingsLimit = 20
         let onChainLimit = 25
