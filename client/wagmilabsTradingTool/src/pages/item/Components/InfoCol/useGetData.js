@@ -1,12 +1,14 @@
-import { useListings } from "@reservoir0x/reservoir-kit-ui";
+import { useListings, useUserTokens } from "@reservoir0x/reservoir-kit-ui";
 import { useAccount } from "wagmi";
 
 export function useGetData(details, address, id) {
   const { address: accountAddress } = useAccount();
-  const isOwner = details
-    ? accountAddress?.toLowerCase() === details?.token?.owner?.toLowerCase()
-    : false;
   const collectionImage = details.token?.collection?.image;
+  const isErc721 = details.token?.kind === "erc721";
+  const { data: tokens } = useUserTokens(accountAddress);
+  const isOwner = tokens
+    .map(t => t.token.contract + ":" + t.token.tokenId)
+    .includes(`${address}:${id}`);
 
   const currency =
     Object.values(details.market)[0]?.price?.currency?.symbol || "ETH";
@@ -17,5 +19,12 @@ export function useGetData(details, address, id) {
     limit: 20,
   });
 
-  return { collectionImage, currency, isOwner, listings, isFetchingListings };
+  return {
+    collectionImage,
+    currency,
+    isOwner,
+    listings,
+    isFetchingListings,
+    isErc721,
+  };
 }
