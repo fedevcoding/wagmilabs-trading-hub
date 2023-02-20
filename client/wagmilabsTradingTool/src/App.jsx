@@ -60,6 +60,7 @@ import Redirect from "./pages/redirect/Redirect";
 
 import Legals from "./pages/Legal/Legals";
 import { serverUrl } from "@Variables";
+import { Calendar } from "./pages/calendar/Calendar";
 
 // for wagmi
 
@@ -407,6 +408,18 @@ function App() {
                                     <>
                                       <Header />
                                       <Volumes />
+                                      <Footer />
+                                    </>
+                                  }
+                                />
+
+                                <Route
+                                  exact
+                                  path="/calendars/:section"
+                                  element={
+                                    <>
+                                      <Header />
+                                      <Calendar />
                                       <Footer />
                                     </>
                                   }

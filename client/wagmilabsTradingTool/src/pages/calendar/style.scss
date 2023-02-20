@@ -22,6 +22,14 @@
   flex-direction: column;
 }
 
+.calendar-month-switch-container {
+  justify-content: center;
+}
+
+.calendar-month-switch {
+  padding: 2px 10px 0px 10px;
+}
+
 .calendar-right-inner-container {
   display: flex;
   flex: 1;
