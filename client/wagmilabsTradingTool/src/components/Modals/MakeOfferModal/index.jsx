@@ -50,9 +50,10 @@ export const MakeOfferModal = React.memo(
           <ModalCloseButton />
           <ModalBody>
             <p>
-              Balance ETH: {roundPrice(parseFloat(userBalances.eth || 0))}
+              Balance ETH: {roundPrice(parseFloat(userBalances.eth || 0)) || 0}
               <br />
-              Balance WETH: {roundPrice(parseFloat(userBalances.weth || 0))}
+              Balance WETH:{" "}
+              {roundPrice(parseFloat(userBalances.weth || 0)) || 0}
               <br />
             </p>
             <br />
