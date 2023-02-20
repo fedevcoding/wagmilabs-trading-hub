@@ -1,25 +1,28 @@
 import React, { useEffect, useState, useRef, useContext } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import questionImage from "@Assets/question.png";
+
+import {
+  placeholderImage,
+  fullStar,
+  emptyStar,
+  etherscan,
+  opensea,
+  x2y2,
+  www,
+  twitter,
+  looksRare,
+  discord,
+  gem,
+} from "@Assets";
 
 import Items from "./sections/items/Items";
 import Activity from "./sections/activity/Activity";
 import Charts from "./sections/charts/Charts";
 import Leaderboard from "./sections/leaderboard/Leaderboard";
-import fullStar from "@Assets/full-star.png";
-import emptyStar from "@Assets/empty-star.png";
 
 // import { useMoralisWeb3Api } from "react-moralis";
 import "./collection.css";
 
-import etherscan from "@Assets/etherscan.png";
-import opensea from "@Assets/opensea.png";
-import x2y2 from "@Assets/x2y2.png";
-import www from "@Assets/www.png";
-import twitter from "@Assets/twitter.png";
-import looksRare from "@Assets/looksRare.png";
-import discord from "@Assets/discord.png";
-import gem from "@Assets/gem.png";
 import { baseUrl } from "@Variables";
 import removeFromWatchList from "@Utils/database-functions/removeFromWatchList";
 import addToWatchList from "@Utils/database-functions/addToWatchList";
@@ -510,7 +513,7 @@ const Collection = () => {
             <>
               <img
                 className="collection-info-image"
-                src={collectionInfo.image || questionImage}
+                src={collectionInfo.image || placeholderImage}
                 alt=""
               />
               <div className="collection-info-name">

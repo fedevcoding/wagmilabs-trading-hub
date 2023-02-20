@@ -2,15 +2,13 @@ import React, { useContext, useEffect, useMemo, useState, useRef } from "react";
 import { baseUrl } from "@Variables";
 import { Portal } from "react-portal";
 
-import notFoundNft from "@Assets/question.png";
-
 import moment from "moment";
 
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import "./nfts.css";
 
-import { notFound } from "@Assets";
+import { notFound, placeholderImage } from "@Assets";
 
 import {
   getListingExpirationDate,
@@ -303,7 +301,7 @@ const Nfts = ({
   const itemMapping = useMemo(
     () =>
       userItems?.map((item, index) => {
-        let image = item?.token?.image || notFoundNft;
+        let image = item?.token?.image || placeholderImage;
         let name = item?.token?.name;
 
         const marketplace = item?.ownership?.floorAsk?.source?.name;
