@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState, useRef } from "react";
 import "./activity.css";
-import nftNotFound from "../../../../assets/question.png";
+import nftNotFound from "@Assets/question.png";
 import {
   formatAddress2,
   roundPrice2,

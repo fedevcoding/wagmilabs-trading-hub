@@ -1,25 +1,25 @@
 import React, { useEffect, useState, useRef, useContext } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import questionImage from "../../assets/question.png";
+import questionImage from "@Assets/question.png";
 
 import Items from "./sections/items/Items";
 import Activity from "./sections/activity/Activity";
 import Charts from "./sections/charts/Charts";
 import Leaderboard from "./sections/leaderboard/Leaderboard";
-import fullStar from "../../assets/full-star.png";
-import emptyStar from "../../assets/empty-star.png";
+import fullStar from "@Assets/full-star.png";
+import emptyStar from "@Assets/empty-star.png";
 
 // import { useMoralisWeb3Api } from "react-moralis";
 import "./collection.css";
 
-import etherscan from "../../assets/etherscan.png";
-import opensea from "../../assets/opensea.png";
-import x2y2 from "../../assets/x2y2.png";
-import www from "../../assets/www.png";
-import twitter from "../../assets/twitter.png";
-import looksRare from "../../assets/looksRare.png";
-import discord from "../../assets/discord.png";
-import gem from "../../assets/gem.png";
+import etherscan from "@Assets/etherscan.png";
+import opensea from "@Assets/opensea.png";
+import x2y2 from "@Assets/x2y2.png";
+import www from "@Assets/www.png";
+import twitter from "@Assets/twitter.png";
+import looksRare from "@Assets/looksRare.png";
+import discord from "@Assets/discord.png";
+import gem from "@Assets/gem.png";
 import { baseUrl } from "@Variables";
 import removeFromWatchList from "@Utils/database-functions/removeFromWatchList";
 import addToWatchList from "@Utils/database-functions/addToWatchList";

@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { LoadingSpinner, PageWrapper, Pagination } from "@Components";
 import { useGetNews } from "./useGetNews";
 
-import PoweredBy from "../../assets/poweredbyluckytrader-light.png";
+import PoweredBy from "@Assets/poweredbyluckytrader-light.png";
 
 import "./style.scss";
 import { Card } from "./Components";

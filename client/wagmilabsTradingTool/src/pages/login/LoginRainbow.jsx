@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import "./login.css";
-import wagmiLogo from "../../assets/logo.png";
+import wagmiLogo from "@Assets/logo.png";
 import SignMessage from "./SignMessage";
-import instructionsLogo from "../../assets/instructions.png";
+import instructionsLogo from "@Assets/instructions.png";
 
 import { baseUrl } from "@Variables";
 
@@ -10,9 +10,9 @@ import "@rainbow-me/rainbowkit/styles.css";
 import { useAccount, useSignMessage } from "wagmi";
 import { Button, Checkbox } from "@chakra-ui/react";
 
-import wwwImg from "../../assets/www.svg";
-import twitterImg from "../../assets/twitter2.svg";
-import discordImg from "../../assets/discord2.svg";
+import wwwImg from "@Assets/www.svg";
+import twitterImg from "@Assets/twitter2.svg";
+import discordImg from "@Assets/discord2.svg";
 import { Loader } from "@Components";
 
 const message = `Welcome to Wagmi Labs!

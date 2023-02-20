@@ -1,6 +1,6 @@
 import React, { memo } from "react";
 import { roundPrice } from "@Utils/formats/formats";
-import etherscan from "../../../../../assets/etherscan.svg";
+import etherscan from "@Assets/etherscan.svg";
 import getMarketplaceImage from "@Utils/marketplaceImageMapping";
 import { TimeAgo } from "@Components";
 
