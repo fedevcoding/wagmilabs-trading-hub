@@ -47,6 +47,17 @@
 
       tr td {
         padding: 5px 0;
+
+        .market-img {
+          margin-left: 0.5rem;
+          vertical-align: sub;
+        }
+
+        &.td-date i {
+          margin-left: 0.5rem;
+          color: #3a8cdf;
+          cursor: pointer;
+        }
       }
     }
   }
