@@ -1,6 +1,5 @@
 .day-container {
   display: flex;
-  border: 1px solid white;
   flex: 1;
   min-width: 75px;
   height: 98px;
@@ -20,10 +19,12 @@
   border: 1px solid white;
   border-radius: 10px;
   flex-direction: column;
+  padding-bottom: 40px;
 }
 
 .calendar-month-switch-container {
   justify-content: center;
+  padding: 10px 0px 10px 0px;
 }
 
 .calendar-month-switch {
@@ -37,6 +38,15 @@
   border-radius: 10px;
   justify-content: center;
 }
+
+.selected-date-detail {
+  display: flex;
+  flex-direction: column;
+}
+
+.selected-date-title {
+  padding: 10px 0px 10px 0px;
+}
 .calendar-header {
   display: flex;
   flex: 1;
@@ -47,4 +57,15 @@
 .calendar-row {
   display: flex;
   flex: 1;
+}
+
+.today {
+  border: 3px solid rgb(69, 178, 21);
+  box-shadow: inset 0 0 8px rgba(69,178,21,0.8);
+  height: 92px;
+}
+
+.main-title {
+  justify-content: center;
+  padding-bottom: 15px;
 }

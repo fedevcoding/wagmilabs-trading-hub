@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Col, PageWrapper, Row } from '@Components';
-import { Spinner } from '@chakra-ui/react';
+import { Button, Spinner } from '@chakra-ui/react';
 import "./style.scss";
+import { AddEventModal } from 'src/components/Modals/AddEventModal';
+import { useDisclosure } from "@chakra-ui/react";
+import { useParams } from 'react-router-dom';
 
 const daysOfTheWeek = [
 	"Sunday",
@@ -13,6 +16,13 @@ const daysOfTheWeek = [
   "Saturday"
 ]
 
+const titles = {
+  drops: "Upcoming Drops",
+  spaces: "Twitter Spaces",
+  raffles: "Personal Calendar",
+  events: "IRL Events",
+}
+
 const chunkArrayInGroups = (arr, size) => {
   let myArray = [];
   for(let i = 0; i < arr.length; i += size) {
@@ -23,9 +33,12 @@ const chunkArrayInGroups = (arr, size) => {
 
 export const Calendar = () => {
   const today = new Date();
+  const {section} = useParams();
+  const mainTitle = titles[section];
   const [selectedDate, setSelectedDate] = useState(null);
   const [currentDate, setCurrentDate] = useState(today);
   const [isLoading, setIsLoading] = useState(false);
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const getDaysInMonth = (month, year) => {
     var date = new Date(year, month, 1);
@@ -35,7 +48,8 @@ export const Calendar = () => {
     var previousDays = [];
     var nextDays = [];
     while (date.getMonth() === month) {
-      days.push({date: new Date(date)});
+      const isSelected = date.getMonth()===currentDate.getMonth() && date.getFullYear() === currentDate.getFullYear() && date.getDate() === currentDate.getDate();
+      isSelected ? days.push({date: new Date(date), isSelected: true}) : days.push({date: new Date(date)});
       date.setDate(date.getDate() + 1);
     }
     while (previousDate.getMonth() === month - 1) {
@@ -64,7 +78,8 @@ export const Calendar = () => {
     return days;
   }
 
-  const daysInMonth = chunkArrayInGroups(getDaysInMonth(currentDate.getMonth(), currentDate.getFullYear()),7)
+  const [allDaysInMonth, setAllDaysInMonth] = useState(getDaysInMonth(currentDate.getMonth(), currentDate.getFullYear()));
+  const [daysInMonth, setDaysInMonth] = useState(chunkArrayInGroups(getDaysInMonth(currentDate.getMonth(), currentDate.getFullYear()),7))
 
   useEffect(()=>{
     if(isLoading){
@@ -83,11 +98,19 @@ export const Calendar = () => {
       nextDate.setMonth(currentDate.getMonth()+1)
     }
     setCurrentDate(nextDate)
+    setAllDaysInMonth(getDaysInMonth(nextDate.getMonth(), nextDate.getFullYear()));
+    setDaysInMonth(chunkArrayInGroups(getDaysInMonth(currentDate.getMonth(), currentDate.getFullYear()),7));
   }
 
-  const renderMonthSwith = () => (
+  const renderMainTitle = () => (
+    <Row className='main-title'>
+      <h2>{mainTitle}</h2>
+    </Row>
+  )
+
+  const renderMonthSwitch = () => (
     <Row className="calendar-month-switch-container">
-      <h3>{currentDate.toLocaleString('en-GB', { month: 'long' })}</h3>
+      <h3>{currentDate.toLocaleString('en-GB', { month: 'long' }) + " " + currentDate.getFullYear()}</h3>
       <h3 className="calendar-month-switch" onClick={()=>changeDate(true)}>&lt;</h3>
       <h3 className="calendar-month-switch" onClick={()=>changeDate()}>&gt;</h3>
     </Row>
@@ -102,25 +125,48 @@ export const Calendar = () => {
       ))}
     </Row>
   )
-  const renderRow = (days) => {
-    const test = (d) => {
+  const renderRow = (days, startIdx) => {
+    const showSelectedDate = (d, idx) => {
+      const allDaysInMonthCopy = [...allDaysInMonth];
+      const todayIndex = allDaysInMonthCopy.findIndex((el=>el.isSelected));
+      if(todayIndex !== -1) {
+        allDaysInMonthCopy[todayIndex].isSelected = false
+      }
+      allDaysInMonthCopy[idx].isSelected = true;
       setSelectedDate(
-        d.date.toLocaleDateString('en-GB', { month: 'long'})
-        +", "
-        + d.date.toLocaleDateString('en-GB', { weekday: 'long' })
-        +", "
-        + d.date.getDate()
-        +", "
-        +d.date.getFullYear()
-        )
+        {title: d.date.toLocaleDateString('en-GB', { month: 'long'})
+                +", "
+                + d.date.toLocaleDateString('en-GB', { weekday: 'long' })
+                +", "
+                + d.date.getDate()
+                +", "
+                +d.date.getFullYear()
+        }
+      )
+      setAllDaysInMonth(allDaysInMonthCopy);
     }
+
+   const dayClass = (d) => {
+    if(d.notCurrent) {
+      if(d.isSelected){
+        return "day-container not-curr-day today"
+      }
+      return "day-container not-curr-day"
+    } else {
+      if(d.isSelected){
+        return "day-container today"
+      }
+      return "day-container"
+    }
+   }
+
     return (
     <Row className="calendar-row">
-      {days?.map((d,index)=>(
+      {days?.map((d, index)=>(
         <div
           key={d.date.getDate().toString()}
-          className={d.notCurrent ? "day-container not-curr-day" : "day-container"}
-          onClick={()=>test(d)}
+          className={dayClass(d)}
+          onClick={()=>showSelectedDate(d, index+startIdx)}
         >
           <div>{d.date.getDate()}</div>
         </div>
@@ -130,28 +176,37 @@ export const Calendar = () => {
 
   const renderlist = (
     <>
-      {renderRow(daysInMonth[0])}
-      {renderRow(daysInMonth[1])}
-      {renderRow(daysInMonth[2])}
-      {renderRow(daysInMonth[3])}
-      {daysInMonth.length === 5 && renderRow(daysInMonth[4])}
-      {daysInMonth.length === 6 && renderRow(daysInMonth[5])}
+      {renderRow(daysInMonth[0], 0)}
+      {renderRow(daysInMonth[1], 7)}
+      {renderRow(daysInMonth[2], 14)}
+      {renderRow(daysInMonth[3], 21)}
+      {daysInMonth.length === 5 && renderRow(daysInMonth[4], 28)}
+      {daysInMonth.length === 6 && renderRow(daysInMonth[5], 35)}
     </>
   )
 
   return (
     <PageWrapper page="calendar">
-      <div className="calendar">
+      {renderMainTitle()}
+      <div>
         {isLoading && <Spinner />}
+        <AddEventModal isOpen={isOpen} onClose={onClose} onOpen={onOpen} />
         <Row>
           <Col className="calendar-left-inner-container">
-          {renderMonthSwith()}
+          {renderMonthSwitch()}
           {renderHeader()}
           {renderlist}
           </Col>
 
           <Col className="calendar-right-inner-container">
-          <div>{selectedDate}</div>
+          {selectedDate ? (
+          <div className="selected-date-detail">
+            <div className="selected-date-title">{selectedDate?.title}</div>
+            <Button colorScheme={"blue"} className="button" onClick={onOpen}>Add Event</Button>
+          </div>
+          ) : (
+            <div className='selected-date-title'>No day selected</div>
+          )}
           </Col>
         </Row>
       </div>
