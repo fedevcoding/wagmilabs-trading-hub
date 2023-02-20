@@ -23,6 +23,7 @@ const chunkArrayInGroups = (arr, size) => {
 
 export const Calendar = () => {
   const today = new Date();
+  const [selectedDate, setSelectedDate] = useState(null);
   const [currentDate, setCurrentDate] = useState(today);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -102,10 +103,25 @@ export const Calendar = () => {
     </Row>
   )
   const renderRow = (days) => {
+    const test = (d) => {
+      setSelectedDate(
+        d.date.toLocaleDateString('en-GB', { month: 'long'})
+        +", "
+        + d.date.toLocaleDateString('en-GB', { weekday: 'long' })
+        +", "
+        + d.date.getDate()
+        +", "
+        +d.date.getFullYear()
+        )
+    }
     return (
     <Row className="calendar-row">
-      {days?.map((d)=>(
-        <div key={d.date.getDate().toString()} className={d.notCurrent ? "day-container not-curr-day" : "day-container"}>
+      {days?.map((d,index)=>(
+        <div
+          key={d.date.getDate().toString()}
+          className={d.notCurrent ? "day-container not-curr-day" : "day-container"}
+          onClick={()=>test(d)}
+        >
           <div>{d.date.getDate()}</div>
         </div>
       ))}
@@ -135,7 +151,7 @@ export const Calendar = () => {
           </Col>
 
           <Col className="calendar-right-inner-container">
-          <div>Sunday, February 19, 2023</div>
+          <div>{selectedDate}</div>
           </Col>
         </Row>
       </div>
