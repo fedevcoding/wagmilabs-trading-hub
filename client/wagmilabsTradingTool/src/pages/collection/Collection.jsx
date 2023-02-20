@@ -1,6 +1,19 @@
 import React, { useEffect, useState, useRef, useContext } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import questionImage from "../../assets/question.png";
+
+import {
+  placeholderImage,
+  fullStar,
+  emptyStar,
+  etherscan,
+  opensea,
+  x2y2,
+  www,
+  twitter,
+  looksRare,
+  discord,
+  gem,
+} from "@Assets";
 
 import Items from "./sections/items/Items";
 import Activity from "./sections/activity/Activity";
@@ -10,20 +23,12 @@ import Leaderboard from "./sections/leaderboard/Leaderboard";
 // import { useMoralisWeb3Api } from "react-moralis";
 import "./collection.css";
 
-import etherscan from "../../assets/etherscan.png";
-import opensea from "../../assets/opensea.png";
-import x2y2 from "../../assets/x2y2.png";
-import www from "../../assets/www.png";
-import twitter from "../../assets/twitter.png";
-import looksRare from "../../assets/looksRare.png";
-import discord from "../../assets/discord.png";
-import gem from "../../assets/gem.png";
 import { baseUrl } from "@Variables";
-import removeFromWatchList from "../../utils/database-functions/removeFromWatchList";
-import addToWatchList from "../../utils/database-functions/addToWatchList";
-import getWatchListCollections from "../../utils/database-functions/getWatchList";
-import { getPercentage } from "../../utils/formats/utils";
-import { formatContractAddress, roundPrice } from "../../utils/formats/formats";
+import removeFromWatchList from "@Utils/database-functions/removeFromWatchList";
+import addToWatchList from "@Utils/database-functions/addToWatchList";
+import getWatchListCollections from "@Utils/database-functions/getWatchList";
+import { getPercentage } from "@Utils/formats/utils";
+import { formatContractAddress, roundPrice } from "@Utils/formats/formats";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import LiveView from "./sections/liveView/index";
 import { LivePulsing } from "@Components";
@@ -32,13 +37,13 @@ import { LivePulsing } from "@Components";
 // import notVerified from "../../images/not-verified.png"
 
 // utils
-import { formatTime } from "../../utils/formats/formats";
-import getMarketplaceImage from "../../utils/marketplaceImageMapping";
+import { formatTime } from "@Utils/formats/formats";
+import getMarketplaceImage from "@Utils/marketplaceImageMapping";
 
 import copy from "copy-to-clipboard";
 import { useDebounce } from "use-debounce";
 import { Badge, useToast } from "@chakra-ui/react";
-import setPageTitle from "../../utils/functions/setPageTitle";
+import setPageTitle from "@Utils/functions/setPageTitle";
 import { SocketContext } from "src/context/SocketContext";
 
 // Item.js
@@ -103,33 +108,50 @@ const Collection = () => {
       socket.emit("joinSales", address);
 
       socket.on("listing", listingData => {
-        addNewListing(listingData)
-      })
-
+        addNewListing(listingData);
+      });
 
       socket.on("sale", saleData => {
-        const { tokenId } = saleData
+        const { tokenId } = saleData;
 
-        addNewSale(tokenId)
-      })
+        addNewSale(tokenId);
+      });
 
       return () => {
-        socket.emit("leaveListings", address.toLowerCase())
-        socket.emit("leaveSales", address.toLowerCase())
-      }
+        socket.emit("leaveListings", address.toLowerCase());
+        socket.emit("leaveSales", address.toLowerCase());
+      };
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [address]);
 
   function addNewListing(listingData) {
+    const {
+      tokenId,
+      price,
+      image,
+      name,
+      timestamp,
+      marketplace,
+      rarity,
+      rarityRank,
+      orderHash,
+      isFlagged,
+    } = listingData;
 
-    const { tokenId, price, image, name, timestamp, marketplace, rarity, rarityRank, orderHash, isFlagged } = listingData
-
-    if ((itemFilters.tokenId !== undefined && itemFilters.tokenId !== "") || itemFilters.attributeFilter.length > 0 || (itemFilters.sortBy !== "p-lth" && itemFilters.sortBy !== "p-htl")) {
-      return
+    if (
+      (itemFilters.tokenId !== undefined && itemFilters.tokenId !== "") ||
+      itemFilters.attributeFilter.length > 0 ||
+      (itemFilters.sortBy !== "p-lth" && itemFilters.sortBy !== "p-htl")
+    ) {
+      return;
     }
 
-    if (itemFilters.priceFilter.min > price || itemFilters.priceFilter.max < price) return
+    if (
+      itemFilters.priceFilter.min > price ||
+      itemFilters.priceFilter.max < price
+    )
+      return;
 
     const newListing = {
       token: {
@@ -139,7 +161,7 @@ const Collection = () => {
         image,
         isFlagged,
         rarity,
-        rarityRank
+        rarityRank,
       },
       market: {
         floorAsk: {
@@ -154,7 +176,7 @@ const Collection = () => {
             icon: "",
             url: "",
           },
-          validFrom: timestamp
+          validFrom: timestamp,
         },
       },
     };
@@ -206,15 +228,17 @@ const Collection = () => {
     setItems(newItems);
   }
 
-
   useEffect(() => {
-    if ((itemFilters.tokenId !== undefined && itemFilters.tokenId !== "") || itemFilters.attributeFilter.length > 0 || (itemFilters.sortBy !== "p-lth" && itemFilters.sortBy !== "p-htl")) {
-      setLiveItems(false)
+    if (
+      (itemFilters.tokenId !== undefined && itemFilters.tokenId !== "") ||
+      itemFilters.attributeFilter.length > 0 ||
+      (itemFilters.sortBy !== "p-lth" && itemFilters.sortBy !== "p-htl")
+    ) {
+      setLiveItems(false);
+    } else if (!liveItems) {
+      setLiveItems(true);
     }
-    else if (!liveItems) {
-      setLiveItems(true)
-    }
-  }, [itemFilters, liveItems])
+  }, [itemFilters, liveItems]);
 
   useEffect(() => {
     itemRef.current = items;
@@ -489,7 +513,7 @@ const Collection = () => {
             <>
               <img
                 className="collection-info-image"
-                src={collectionInfo.image || questionImage}
+                src={collectionInfo.image || placeholderImage}
                 alt=""
               />
               <div className="collection-info-name">

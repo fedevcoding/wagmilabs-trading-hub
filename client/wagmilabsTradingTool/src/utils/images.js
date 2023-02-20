@@ -1,3 +1,3 @@
-const placeholderImage = require("../assets/question.png");
+const placeholderImage = require("@Assets/question.png");
 
 module.exports = { placeholderImage };

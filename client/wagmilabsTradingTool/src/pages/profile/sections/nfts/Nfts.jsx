@@ -2,15 +2,13 @@ import React, { useContext, useEffect, useMemo, useState, useRef } from "react";
 import { baseUrl } from "@Variables";
 import { Portal } from "react-portal";
 
-import notFoundNft from "@Assets/question.png";
-
 import moment from "moment";
 
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import "./nfts.css";
 
-import { notFound } from "@Assets";
+import { notFound, placeholderImage } from "@Assets";
 
 import {
   getListingExpirationDate,
@@ -23,7 +21,7 @@ import { Loader, TransferItemModal } from "@Components";
 import getMarketplaceImage from "@Utils/marketplaceImageMapping";
 import { useNavigate } from "react-router-dom";
 import { useListNft } from "@Hooks";
-import { generateRandomRangeInt } from "src/utils/formats/utils";
+import { generateRandomRangeInt } from "@Utils/formats/utils";
 import { ItemBanner } from "src/pages/collection/sections/banners/ItemBanner";
 
 const sortItemsOptions = [
@@ -51,9 +49,9 @@ const Nfts = ({
   const [TransferModalDetails, setTransferModalDetails] = useState(null);
 
   useEffect(() => {
-    if (TransferModalDetails) setIsOpenTransferModal(true)
-    else setIsOpenTransferModal(false)
-  }, [TransferModalDetails])
+    if (TransferModalDetails) setIsOpenTransferModal(true);
+    else setIsOpenTransferModal(false);
+  }, [TransferModalDetails]);
 
   const { cryptoPrices } = useContext(UserDataContext);
   const toast = useToast();
@@ -68,7 +66,10 @@ const Nfts = ({
 
   const [showSortItemsOptions, setShowSortItemsOptions] = useState(false);
 
-  const [randomPositionPromo] = useState({ 0: generateRandomRangeInt(0, 3), 1: generateRandomRangeInt(4, 6) })
+  const [randomPositionPromo] = useState({
+    0: generateRandomRangeInt(0, 3),
+    1: generateRandomRangeInt(4, 6),
+  });
 
   const observer = useRef(false);
 
@@ -165,19 +166,19 @@ const Nfts = ({
   const activateList = index => {
     document
       .querySelectorAll(".profile-list-nft")
-    [index].classList.remove("inactive");
+      [index].classList.remove("inactive");
     document
       .querySelectorAll(".profile-list-nft")
-    [index].classList.add("active");
+      [index].classList.add("active");
   };
 
   const deactivateList = index => {
     document
       .querySelectorAll(".profile-list-nft")
-    [index].classList.remove("active");
+      [index].classList.remove("active");
     document
       .querySelectorAll(".profile-list-nft")
-    [index].classList.add("inactive");
+      [index].classList.add("inactive");
   };
 
   const toggleOptions = index => {
@@ -300,7 +301,7 @@ const Nfts = ({
   const itemMapping = useMemo(
     () =>
       userItems?.map((item, index) => {
-        let image = item?.token?.image || notFoundNft;
+        let image = item?.token?.image || placeholderImage;
         let name = item?.token?.name;
 
         const marketplace = item?.ownership?.floorAsk?.source?.name;
@@ -331,19 +332,21 @@ const Nfts = ({
               onMouseOut={() => deactivateList(index)}
             >
               <div
-                className={`${selectBulk
-                  ? "profile-items-details-container-bulk"
-                  : "profile-items-details-container"
-                  }`}
+                className={`${
+                  selectBulk
+                    ? "profile-items-details-container-bulk"
+                    : "profile-items-details-container"
+                }`}
               >
                 <div className="image-hover-overflow">
                   <img
                     src={image}
                     alt=""
-                    className={`profile-single-item-image ${selectBulk
-                      ? "single-item-image"
-                      : "single-item-image-scale"
-                      }`}
+                    className={`profile-single-item-image ${
+                      selectBulk
+                        ? "single-item-image"
+                        : "single-item-image-scale"
+                    }`}
                     onClick={e =>
                       selectBulk
                         ? changeBulkItems(contractAddress, tokenId, id, e)
@@ -439,22 +442,21 @@ const Nfts = ({
               </div>
             </div>
 
-            {index === randomPositionPromo[0] &&
+            {index === randomPositionPromo[0] && (
               <div
                 className={`single-item-container ${isLast && "last-token"}`}
               >
                 <ItemBanner primary></ItemBanner>
               </div>
-            }
+            )}
 
-            {
-              index === randomPositionPromo[1] &&
+            {index === randomPositionPromo[1] && (
               <div
                 className={`single-item-container ${isLast && "last-token"}`}
               >
                 <ItemBanner></ItemBanner>
               </div>
-            }
+            )}
           </>
         );
       }),
@@ -464,19 +466,16 @@ const Nfts = ({
 
   return (
     <>
-      {
-        isOpenTransferModal && (
-          <TransferItemModal
-            details={TransferModalDetails?.details}
-            id={TransferModalDetails?.id}
-            address={TransferModalDetails?.address}
-            currency={TransferModalDetails?.currency}
-
-            isOpen={true}
-            setIsOpen={setIsOpenTransferModal}
-          />
-        )
-      }
+      {isOpenTransferModal && (
+        <TransferItemModal
+          details={TransferModalDetails?.details}
+          id={TransferModalDetails?.id}
+          address={TransferModalDetails?.address}
+          currency={TransferModalDetails?.currency}
+          isOpen={true}
+          setIsOpen={setIsOpenTransferModal}
+        />
+      )}
 
       {showQuickListingModal && (
         <SmartListModal
@@ -496,8 +495,9 @@ const Nfts = ({
             <div className="profile-sort-items-option">
               {selectedSortOption.label}
               <i
-                className={`fa-solid fa-caret-down profile-collection-sort-arrow ${showSortItemsOptions && "selected"
-                  }`}
+                className={`fa-solid fa-caret-down profile-collection-sort-arrow ${
+                  showSortItemsOptions && "selected"
+                }`}
               ></i>
             </div>
 
@@ -549,8 +549,9 @@ const Nfts = ({
 
                     return (
                       <div
-                        className={`single-collection-dropdown ${address === nftsCollectionFilter && "selected"
-                          }`}
+                        className={`single-collection-dropdown ${
+                          address === nftsCollectionFilter && "selected"
+                        }`}
                         key={index}
                         active="false"
                         onClick={e => handleFilterCollection(address, e)}

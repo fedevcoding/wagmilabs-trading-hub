@@ -4,7 +4,7 @@ import { notFound } from "@Assets";
 import { Button } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import "./redirect.css";
-import setPageTitle from "../../utils/functions/setPageTitle";
+import setPageTitle from "@Utils/functions/setPageTitle";
 
 const Redirect = () => {
   const navigate = useNavigate();

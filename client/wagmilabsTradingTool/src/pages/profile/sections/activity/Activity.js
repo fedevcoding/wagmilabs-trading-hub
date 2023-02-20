@@ -1,13 +1,13 @@
 import React, { useEffect, useMemo, useState, useRef } from "react";
 import "./activity.css";
-import nftNotFound from "../../../../assets/question.png";
+import { placeholderImage } from "@Assets";
 import {
   formatAddress2,
   roundPrice2,
   formatIpfs,
-} from "../../../../utils/formats/formats";
+} from "@Utils/formats/formats";
 import { baseUrl } from "@Variables";
-import getMarketplaceImage from "../../../../utils/marketplaceImageMapping";
+import getMarketplaceImage from "@Utils/marketplaceImageMapping";
 import moment from "moment";
 import { useAccount } from "wagmi";
 import {
@@ -388,7 +388,7 @@ const Activity = () => {
               <a href={`/item/${contractAddress}/${token_id}`}>
                 <td className="profile-activity-single-token">
                   <img
-                    src={tokenImage || nftNotFound}
+                    src={tokenImage || placeholderImage}
                     alt=""
                     className="profile-activity-single-image"
                   />
