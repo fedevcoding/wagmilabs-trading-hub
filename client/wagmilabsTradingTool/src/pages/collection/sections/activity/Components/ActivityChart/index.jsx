@@ -51,14 +51,16 @@ export const ActivityChart = React.memo(({ activityChartData }) => {
         },
         tooltip: {
           shared: true,
-
-          // formatter: function () {
-          //   return this.points.reduce(function (s, point) {
-          //     return s + '<br/>' + point.series.name + ': ' + point.y + 'm';
-          //   }, '<b>' + this.x + '</b>');
-          // },
-
-          // followPointer: true,
+          formatter: function () {
+            const index = this.points[0].point.index;
+            return (
+              this.points.reduce(function (s, point) {
+                return s + "<br/>" + point.series.name + ": " + point.y + "m";
+              }, "<b>" + this.x + "</b>") +
+              "<br/>Sales: " +
+              activityChartData.sales[index]
+            );
+          },
           hideDelay: 200,
           outside: false,
         },
