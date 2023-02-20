@@ -1,7 +1,7 @@
 import React from "react";
 import { Col, Row } from "@Components";
 import { MakeOffer } from "..";
-import getMarketplaceImage from "src/utils/marketplaceImageMapping";
+import getMarketplaceImage from "@Utils/marketplaceImageMapping";
 import { AcceptOffer } from "./AcceptOffer";
 
 export const BestOfferBox = React.memo(
@@ -38,7 +38,11 @@ export const BestOfferBox = React.memo(
             <Row className="actions">
               <Col>
                 {isOwner ? (
-                  <AcceptOffer details={details} tokenId={tokenId} address={address} />
+                  <AcceptOffer
+                    details={details}
+                    tokenId={tokenId}
+                    address={address}
+                  />
                 ) : (
                   <MakeOffer
                     address={address}

@@ -5,9 +5,9 @@ import {
   formatAddress2,
   roundPrice2,
   formatIpfs,
-} from "../../../../utils/formats/formats";
+} from "@Utils/formats/formats";
 import { baseUrl } from "@Variables";
-import getMarketplaceImage from "../../../../utils/marketplaceImageMapping";
+import getMarketplaceImage from "@Utils/marketplaceImageMapping";
 import moment from "moment";
 import { useAccount } from "wagmi";
 import {

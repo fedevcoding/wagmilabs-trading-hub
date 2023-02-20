@@ -4,7 +4,7 @@ import { formatContractAddress } from "@Utils/formats/formats";
 import { getEvent } from "./functions";
 
 import moment from "moment";
-import getMarketplaceImage from "src/utils/marketplaceImageMapping";
+import getMarketplaceImage from "@Utils/marketplaceImageMapping";
 
 export const ActivityTable = React.memo(({ activities, currency }) => {
   const hasAmount = (activities?.activities || []).length

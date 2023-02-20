@@ -2,14 +2,14 @@ import React, { useEffect, useState } from "react";
 import Trending from "./tools/Trending/Trending";
 import Minting from "./tools/Minting/Minting";
 import Top100 from "./tools/Top100/Top100";
-import rippleEffect from "../../utils/functions/rippleEffect";
+import rippleEffect from "@Utils/functions/rippleEffect";
 
 import "./home.css";
 import WatchList from "./tools/watchList/WatchList";
 import Owned from "./tools/owned/Owned";
 import { LivePulsing } from "@Components";
 
-import setPageTitle from "../../utils/functions/setPageTitle";
+import setPageTitle from "@Utils/functions/setPageTitle";
 import { PromoModal } from "@Components";
 import { useDisclosure } from "@chakra-ui/react";
 
@@ -17,7 +17,7 @@ const Home = () => {
   const [timeFrame, setTimeFrame] = useState("1H");
   const [tool, setTool] = useState("trending");
 
-  const { isOpen, onOpen, onClose } = useDisclosure()
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   function changeTime(e, time) {
     const element = e.currentTarget;
@@ -55,17 +55,15 @@ const Home = () => {
     }
   }
 
-
   useEffect(() => {
-    const visitedTimes = parseInt(localStorage.getItem("visited")) || 0
-    const newVisited = visitedTimes + 1
-    localStorage.setItem("visited", newVisited)
+    const visitedTimes = parseInt(localStorage.getItem("visited")) || 0;
+    const newVisited = visitedTimes + 1;
+    localStorage.setItem("visited", newVisited);
 
-    const clicked = localStorage.getItem("clickedPromoTwitter") || false
+    const clicked = localStorage.getItem("clickedPromoTwitter") || false;
 
-    if (!clicked && (newVisited === 2 || newVisited % 4 === 0)) onOpen()
-  }, [onOpen])
-
+    if (!clicked && (newVisited === 2 || newVisited % 4 === 0)) onOpen();
+  }, [onOpen]);
 
   return (
     <>

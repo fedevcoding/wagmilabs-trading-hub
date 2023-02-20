@@ -1,5 +1,5 @@
 import React from "react";
-import { formatContractAddress } from "../../../../utils/formats/formats";
+import { formatContractAddress } from "@Utils/formats/formats";
 import moment from "moment";
 import { Attributes } from "..";
 

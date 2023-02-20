@@ -6,9 +6,9 @@ import PoweredBy from "../../assets/poweredbyluckytrader-light.png";
 
 import "./style.scss";
 import { Card } from "./Components";
-import setPageTitle from "../../utils/functions/setPageTitle";
+import setPageTitle from "@Utils/functions/setPageTitle";
 import { Banner } from "./Components/Banner";
-import { generateRandomRangeInt } from "src/utils/formats/utils";
+import { generateRandomRangeInt } from "@Utils/formats/utils";
 
 const Feed = React.memo(() => {
   const [currentPage, setCurrentPage] = React.useState(1);
@@ -22,7 +22,7 @@ const Feed = React.memo(() => {
   }, []);
 
   let bannerPos = generateRandomRangeInt(0, 3);
-  
+
   return (
     <PageWrapper page="feed">
       <h1>NFT news</h1>
@@ -31,8 +31,8 @@ const Feed = React.memo(() => {
           <div className="cards">
             {news.map((n, index) => (
               <>
-              {index === bannerPos && <Banner />}
-              <Card key={n.link} news={n} />
+                {index === bannerPos && <Banner />}
+                <Card key={n.link} news={n} />
               </>
             ))}
           </div>

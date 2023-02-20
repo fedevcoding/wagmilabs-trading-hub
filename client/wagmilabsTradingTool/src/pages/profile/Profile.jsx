@@ -4,7 +4,7 @@ import { baseUrl } from "@Variables";
 import Nfts from "./sections/nfts/Nfts";
 import Activity from "./sections/activity/Activity";
 import { Portal } from "react-portal";
-import { formatAddress } from "../../utils/formats/formats";
+import { formatAddress } from "@Utils/formats/formats";
 import { useAccount, useEnsName } from "wagmi";
 
 import { useDebounce } from "use-debounce";
@@ -23,7 +23,7 @@ import {
 import { UserDataContext } from "@Context";
 
 import copy from "copy-to-clipboard";
-import setPageTitle from "../../utils/functions/setPageTitle";
+import setPageTitle from "@Utils/functions/setPageTitle";
 
 const sortItemsOptions = [
   { value: "desc", label: "Newest" },
@@ -63,7 +63,7 @@ const Profile = () => {
   const [searchCollectionText, setSearchCollectionText] = useState("");
   const [debounceCollectionSearch] = useDebounce(searchCollectionText, 400);
 
-  const [showPromoBanner, setShowPromoBanner] = useState(true)
+  const [showPromoBanner, setShowPromoBanner] = useState(true);
 
   const [copyState, setCopyState] = useState({ ens: "Copy", address: "Copy" });
 
@@ -773,17 +773,27 @@ const Profile = () => {
             </div>
             <div className="single-profile-section">Stats</div>
           </div>
-          {
-            showPromoBanner &&
-
-            <a className="profile-promo-container" href="https://www.premint.xyz/WAGMI-Labs/" target={"_blank"} rel="noreferrer" onClick={() => setShowPromoBanner(false)}>
+          {showPromoBanner && (
+            <a
+              className="profile-promo-container"
+              href="https://www.premint.xyz/WAGMI-Labs/"
+              target={"_blank"}
+              rel="noreferrer"
+              onClick={() => setShowPromoBanner(false)}
+            >
               <i className="fa-solid fa-x profile-promo-close-btn"></i>
 
-              <h3 className="profile-promo-header">FREE beta is ending soon..!</h3>
-              <h4 className="profile-promo-body">Get whitelisted to mint the NFT pass for yearly access!</h4>
-              <Button colorScheme={"gray"} className="profile-promo-button">Get Whitelisted</Button>
+              <h3 className="profile-promo-header">
+                FREE beta is ending soon..!
+              </h3>
+              <h4 className="profile-promo-body">
+                Get whitelisted to mint the NFT pass for yearly access!
+              </h4>
+              <Button colorScheme={"gray"} className="profile-promo-button">
+                Get Whitelisted
+              </Button>
             </a>
-          }
+          )}
 
           <div className="profile-watchList-settings">
             <div className="profile-settings">
@@ -803,7 +813,6 @@ const Profile = () => {
               </div>
             </div>
           </div>
-
         </div>
 
         {(() => {

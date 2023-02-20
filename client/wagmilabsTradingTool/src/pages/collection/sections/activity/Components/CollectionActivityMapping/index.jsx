@@ -2,7 +2,7 @@ import React from "react";
 import getMarketplaceImage from "@Utils/marketplaceImageMapping";
 import { activityTypeMapping } from "../../functions";
 import { ActivityIcon } from "..";
-import { formatAddress3, roundPrice2 } from "src/utils/formats/formats";
+import { formatAddress3, roundPrice2 } from "@Utils/formats/formats";
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
 

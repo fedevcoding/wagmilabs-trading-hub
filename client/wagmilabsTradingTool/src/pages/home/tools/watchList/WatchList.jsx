@@ -6,7 +6,7 @@ import { notFound } from "@Assets";
 
 import times from "./times";
 
-import { placeholderImage } from "../../../../utils/images";
+import { placeholderImage } from "@Utils/images";
 
 import { LazyLoadImage } from "react-lazy-load-image-component";
 
