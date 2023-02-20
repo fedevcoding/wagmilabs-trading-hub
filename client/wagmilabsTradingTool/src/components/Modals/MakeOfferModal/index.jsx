@@ -18,6 +18,7 @@ import "react-datepicker/dist/react-datepicker.css";
 
 import "./style.scss";
 import { UserDataContext } from "@Context";
+import { roundPrice } from "@Utils/formats/formats";
 
 export const MakeOfferModal = React.memo(
   ({
@@ -31,7 +32,7 @@ export const MakeOfferModal = React.memo(
       market: { topBid },
     },
   }) => {
-    const [currency] = React.useState("weth")
+    const [currency] = React.useState("weth");
     const [confirmingList, setConfirmingList] = React.useState(false);
     const [price, setPrice] = React.useState(null);
     const { placeBid } = usePlaceBid(marketplace);
@@ -49,8 +50,10 @@ export const MakeOfferModal = React.memo(
           <ModalCloseButton />
           <ModalBody>
             <p>
-              Balance ETH: {parseFloat(userBalances.eth || 0)} <br />
-              Balance WETH: {parseFloat(userBalances.weth || 0)} <br />
+              Balance ETH: {roundPrice(parseFloat(userBalances.eth || 0))}
+              <br />
+              Balance WETH: {roundPrice(parseFloat(userBalances.weth || 0))}
+              <br />
             </p>
             <br />
             {topBid?.id && (
