@@ -1,5 +1,5 @@
 import React from "react";
-import { Tabs } from "@Components";
+import { LoadingSpinner, Tabs } from "@Components";
 import { ActivityChart, ActivityFilters, ActivityTable } from "./Components";
 import { changeActivityFilter, periods } from "./functions";
 
@@ -9,6 +9,7 @@ import { useGetData } from "./useGetData";
 const Activity = React.memo(({ address }) => {
   const {
     chartPeriod,
+    loadingChart,
     activityChartData,
     collectionActivity,
     loadingMoreActivity,
@@ -36,7 +37,16 @@ const Activity = React.memo(({ address }) => {
                 setTab={value => setChartPeriod(value)}
               />
             </div>
-            <ActivityChart activityChartData={activityChartData} />
+            <div className="activity-chart-wrapper">
+              {loadingChart ? (
+                <LoadingSpinner />
+              ) : (
+                <ActivityChart
+                  activityChartData={activityChartData}
+                  loadingChart={loadingChart}
+                />
+              )}
+            </div>
           </div>
 
           <ActivityTable

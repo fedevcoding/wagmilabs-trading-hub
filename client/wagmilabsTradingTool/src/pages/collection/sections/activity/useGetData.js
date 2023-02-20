@@ -7,7 +7,7 @@ export const useGetData = address => {
   const observer = useRef(null);
 
   const [activityChartData, setActivityChartData] = useState({});
-  const [, setLoadingChart] = useState(true);
+  const [loadingChart, setLoadingChart] = useState(true);
   const [chartPeriod, setChartPeriod] = useState("24h");
 
   const [collectionActivity, setCollectionActivity] = useState([]);
@@ -70,6 +70,7 @@ export const useGetData = address => {
   }, [collectuonActivityFilter]);
 
   return {
+    loadingChart,
     collectuonActivityFilter,
     setCollectionActivityFilter,
     chartPeriod,
