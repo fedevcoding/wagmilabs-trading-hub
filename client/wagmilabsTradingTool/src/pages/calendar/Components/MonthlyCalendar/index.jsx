@@ -25,6 +25,136 @@ const chunkArrayInGroups = (arr, size) => {
   }
   return myArray;
 }
+const sampleDrops = [{
+  timestamp: '',
+  collectionName: 'Collection name 1',
+  links: {
+    link1: 'https://airdrops.io/fungiball/',
+    link2: 'https://airdrops.io/stradall/'
+  }
+},{
+  timestamp: '',
+  collectionName: 'Collection name 1',
+  links: {
+    link1: 'https://airdrops.io/fungiball/',
+    link2: 'https://airdrops.io/stradall/'
+  }
+},{
+  timestamp: '',
+  collectionName: 'Collection name 2',
+  links: {
+    link1: 'https://airdrops.io/fungiball/',
+    link2: 'https://airdrops.io/stradall/'
+  }
+},{
+  timestamp: '',
+  collectionName: 'Collection name 3',
+  links: {
+    link1: 'https://airdrops.io/fungiball/',
+    link2: 'https://airdrops.io/stradall/'
+  }
+},{
+  timestamp: '',
+  collectionName: 'Collection name 4',
+  links: {
+    link1: 'https://airdrops.io/fungiball/',
+    link2: 'https://airdrops.io/stradall/'
+  }
+},{
+  timestamp: '',
+  collectionName: 'Collection name 5',
+  links: {
+    link1: 'https://airdrops.io/fungiball/',
+    link2: 'https://airdrops.io/stradall/'
+  }
+}];
+const sampleEvents = [{
+  timestamp: '',
+  eventName: 'Event name 1',
+  links: {
+    link1: 'https://airdrops.io/fungiball/',
+    link2: 'https://airdrops.io/stradall/'
+  },
+  eventDescription: 'Event description 1',
+  eventLocation: 'Event location 1',
+},{
+  timestamp: '',
+  eventName: 'Event name 2',
+  links: {
+    link1: 'https://airdrops.io/fungiball/',
+    link2: 'https://airdrops.io/stradall/'
+  },
+  eventDescription: 'Event description 2',
+  eventLocation: 'Event location 2',
+},{
+  timestamp: '',
+  eventName: 'Event name 3',
+  links: {
+    link1: 'https://airdrops.io/fungiball/',
+    link2: 'https://airdrops.io/stradall/'
+  },
+  eventDescription: 'Event description 3',
+  eventLocation: 'Event location 3',
+},{
+  timestamp: '',
+  eventName: 'Event name 4',
+  links: {
+    link1: 'https://airdrops.io/fungiball/',
+    link2: 'https://airdrops.io/stradall/'
+  },
+  eventDescription: 'Event description 4',
+  eventLocation: 'Event location 4',
+},{
+  timestamp: '',
+  eventName: 'Event name 5',
+  links: {
+    link1: 'https://airdrops.io/fungiball/',
+    link2: 'https://airdrops.io/stradall/'
+  },
+  eventDescription: 'Event description 5',
+  eventLocation: 'Event location 5',
+}];
+const samplePersonal = [{
+  timestamp: '',
+  eventName: 'Personal name 1',
+  links: {
+    link1: 'https://airdrops.io/fungiball/',
+    link2: 'https://airdrops.io/stradall/'
+  },
+  eventDescription: 'Personal description 1',
+},{
+  timestamp: '',
+  eventName: 'Personal name 2',
+  links: {
+    link1: 'https://airdrops.io/fungiball/',
+    link2: 'https://airdrops.io/stradall/'
+  },
+  eventDescription: 'Personal description 2',
+},{
+  timestamp: '',
+  eventName: 'Personal name 3',
+  links: {
+    link1: 'https://airdrops.io/fungiball/',
+    link2: 'https://airdrops.io/stradall/'
+  },
+  eventDescription: 'Personal description 3',
+},{
+  timestamp: '',
+  eventName: 'Personal name 4',
+  links: {
+    link1: 'https://airdrops.io/fungiball/',
+    link2: 'https://airdrops.io/stradall/'
+  },
+  eventDescription: 'Personal description 4',
+},{
+  timestamp: '',
+  eventName: 'Personal name 5',
+  links: {
+    link1: 'https://airdrops.io/fungiball/',
+    link2: 'https://airdrops.io/stradall/'
+  },
+  eventDescription: 'Personal description 5',
+}];
 
 export const MonthlyCalendar = () => {
   const { address } = useAccount();

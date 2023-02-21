@@ -46,6 +46,53 @@ const genSampleEvent = (year, month,date,hours,minutes) => (
   new Date(year, month,date,hours,minutes)
 )
 
+const sampleSpaces = [{
+  timestamp: '',
+  spaceName: 'Space name 1',
+  links: {
+    link1: 'https://airdrops.io/fungiball/',
+    link2: 'https://airdrops.io/stradall/'
+  },
+  spaceDescription: 'Space description 1',
+  spaceHost: 'Host 1'
+},{
+  timestamp: '',
+  spaceName: 'Space name 2',
+  links: {
+    link1: 'https://airdrops.io/fungiball/',
+    link2: 'https://airdrops.io/stradall/'
+  },
+  spaceDescription: 'Space description 2',
+  spaceHost: 'Host 2'
+},{
+  timestamp: '',
+  spaceName: 'Space name 3',
+  links: {
+    link1: 'https://airdrops.io/fungiball/',
+    link2: 'https://airdrops.io/stradall/'
+  },
+  spaceDescription: 'Space description 3',
+  spaceHost: 'Host 3'
+},{
+  timestamp: '',
+  spaceName: 'Space name 4',
+  links: {
+    link1: 'https://airdrops.io/fungiball/',
+    link2: 'https://airdrops.io/stradall/'
+  },
+  spaceDescription: 'Space description 4',
+  spaceHost: 'Host 4'
+},{
+  timestamp: '',
+  spaceName: 'Space name 5',
+  links: {
+    link1: 'https://airdrops.io/fungiball/',
+    link2: 'https://airdrops.io/stradall/'
+  },
+  spaceDescription: 'Space description 5',
+  spaceHost: 'Host 5'
+}];
+
 const sampleEvents = [
   {date: genSampleEvent(2023, 2, 26,12,30),title: "Domenica1",day:0, hours: 12, minutes: 30},
   {date: genSampleEvent(2023, 2, 26,12,0),title: "Domenica2",day:0, hours: 6, minutes:0},
