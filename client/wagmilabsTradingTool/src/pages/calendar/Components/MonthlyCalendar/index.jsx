@@ -6,6 +6,7 @@ import { AddEventModal } from 'src/components/Modals/AddEventModal';
 import { useDisclosure } from "@chakra-ui/react";
 import { useParams } from 'react-router-dom';
 import { useAccount } from 'wagmi';
+import { AnimationOnScroll } from 'react-animation-on-scroll';
 
 const daysOfTheWeek = [
 	"Sunday",
@@ -153,17 +154,25 @@ export const MonthlyCalendar = () => {
    }
 
     return (
-    <Row className="calendar-row">
-      {days?.map((d, index)=>(
-        <div
-          key={d.date.getDate().toString()}
-          className={dayClass(d)}
-          onClick={()=>showSelectedDate(d, index+startIdx)}
-        >
-          <div>{d.date.getDate()}</div>
-        </div>
-      ))}
-    </Row>
+    <>
+    {!isLoading && 
+      (
+        <AnimationOnScroll animateIn="animate__fadeInLeftBig">
+        <Row className="calendar-row">
+          {days?.map((d, index)=>(
+            <div
+              key={d.date.getDate().toString()}
+              className={dayClass(d)}
+              onClick={()=>showSelectedDate(d, index+startIdx)}
+            >
+              <div>{d.date.getDate()}</div>
+            </div>
+          ))}
+        </Row>
+        </AnimationOnScroll>
+      )
+    }
+    </>
   )}
 
   const renderlist = (
@@ -179,7 +188,6 @@ export const MonthlyCalendar = () => {
 
   return (
       <div>
-        {isLoading && <Spinner />}
         <AddEventModal isOpen={isOpen} onClose={onClose} onOpen={onOpen} />
         <Row>
           <Col className="calendar-left-inner-container">
