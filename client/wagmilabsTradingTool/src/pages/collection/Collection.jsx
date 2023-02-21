@@ -3,8 +3,6 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import {
   placeholderImage,
-  fullStar,
-  emptyStar,
   etherscan,
   opensea,
   x2y2,
