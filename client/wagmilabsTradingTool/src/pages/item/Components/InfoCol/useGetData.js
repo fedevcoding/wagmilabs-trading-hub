@@ -10,6 +10,8 @@ export function useGetData(details, address, id) {
     .map(t => t.token.contract + ":" + t.token.tokenId)
     .includes(`${address}:${id}`);
 
+  const ownerBestListing = details?.market?.floorAsk?.maker === accountAddress;
+
   const currency =
     Object.values(details.market)[0]?.price?.currency?.symbol || "ETH";
 
@@ -26,5 +28,7 @@ export function useGetData(details, address, id) {
     listings,
     isFetchingListings,
     isErc721,
+    accountAddress,
+    ownerBestListing,
   };
 }

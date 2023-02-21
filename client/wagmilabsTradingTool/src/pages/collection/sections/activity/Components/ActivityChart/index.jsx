@@ -3,6 +3,23 @@ import HighchartsReact from "highcharts-react-official";
 import Highcharts from "highcharts";
 
 export const ActivityChart = React.memo(({ activityChartData }) => {
+  const [chartWidth, serChartWidth] = React.useState(1140);
+
+  React.useEffect(() => {
+    serChartWidth(
+      parseInt(
+        document
+          .getElementsByClassName("highcharts-container")[0]
+          .style.width.replace("px", "")
+      )
+    );
+  }, []);
+
+  let step = activityChartData?.days.length > 25 ? 3 : 2;
+  if (chartWidth < 1000) step = Math.ceil(activityChartData?.days.length / 10);
+  if (chartWidth < 800) step = Math.ceil(activityChartData?.days.length / 7.5);
+  if (chartWidth < 700) step = Math.ceil(activityChartData?.days.length / 6);
+
   return (
     <HighchartsReact
       className="activity-chart"
@@ -23,6 +40,10 @@ export const ActivityChart = React.memo(({ activityChartData }) => {
         ],
         xAxis: {
           categories: activityChartData?.days,
+          labels: {
+            rotation: 0,
+            step,
+          },
         },
         yAxis: [
           {
@@ -55,14 +76,23 @@ export const ActivityChart = React.memo(({ activityChartData }) => {
             const index = this.points[0].point.index;
             return (
               this.points.reduce(function (s, point) {
-                return s + "<br/>" + point.series.name + ": " + point.y + "m";
-              }, "<b>" + this.x + "</b>") +
-              "<br/>Sales: " +
-              activityChartData.sales[index]
+                return (
+                  s + "<br/>" + point.series.name + ": " + point.y + " ETH"
+                );
+              }, "<b>" +
+                this.x +
+                "</b>" +
+                "<br/>Sales: " +
+                activityChartData.sales[index]) + "<br/>"
             );
           },
           hideDelay: 200,
           outside: false,
+          crosshairs: {
+            color: "gray",
+            dashStyle: "solid",
+            width: 1,
+          },
         },
       }}
     />

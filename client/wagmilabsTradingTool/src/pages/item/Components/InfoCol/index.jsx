@@ -21,6 +21,7 @@ export const InfoCol = React.memo(({ details, address, id }) => {
     listings,
     isFetchingListings,
     isErc721,
+    ownerBestListing,
   } = useGetData(details, address, id);
 
   return (
@@ -66,11 +67,12 @@ export const InfoCol = React.memo(({ details, address, id }) => {
         )}
       </div>
 
-      {!isOwner || isErc721 ? (
-        <PriceBox details={details} address={address} currency={currency} />
-      ) : (
-        ""
-      )}
+      <PriceBox
+        details={details}
+        address={address}
+        currency={currency}
+        ownerBestListing={ownerBestListing}
+      />
 
       <BestOfferBox
         details={details}

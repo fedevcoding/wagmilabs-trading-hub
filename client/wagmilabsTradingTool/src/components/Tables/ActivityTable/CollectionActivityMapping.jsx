@@ -1,10 +1,10 @@
 import React from "react";
 import getMarketplaceImage from "@Utils/marketplaceImageMapping";
-import { activityTypeMapping } from "../../functions";
-import { ActivityIcon } from "..";
 import { formatAddress3, roundPrice2 } from "@Utils/formats/formats";
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
+import { activityTypeMapping } from "./functions";
+import { ActivityIcon } from "./ActivityIcon";
 
 export const CollectionActivityMapping = React.memo(
   ({ collectionActivity, address }) => {
@@ -24,7 +24,19 @@ export const CollectionActivityMapping = React.memo(
       return (
         <React.Fragment key={JSON.stringify(item)}>
           <tr
-            onClick={() => navigate(`/item/${address}/${tokenId}`)}
+            onClick={e => {
+              if (
+                !Array.from(e?.target?.classList || []).filter(element =>
+                  [
+                    "collection-activity-single-time",
+                    "time",
+                    "fa-sharp",
+                  ].includes(element)
+                ).length
+              ) {
+                navigate(`/item/${address}/${tokenId}`);
+              }
+            }}
             className={`collection-activity-single-container ${
               isLast ? "last-token" : ""
             }`}
@@ -75,7 +87,7 @@ export const CollectionActivityMapping = React.memo(
                 target="_blank"
                 rel="noreferrer"
               >
-                <p>{moment(timestamp * 1000).fromNow()}</p>
+                <p className="time">{moment(timestamp * 1000).fromNow()}</p>
                 {type !== "ask" && (
                   <i className="fa-sharp fa-solid fa-up-right-from-square"></i>
                 )}

@@ -1,5 +1,8 @@
 import React from "react";
-import { CollectionActivityMapping, LoadingMoreActivity } from "..";
+import { CollectionActivityMapping } from "./CollectionActivityMapping";
+import { LoadingMoreActivity } from "./LoadingMoreActivity";
+
+import "./style.scss";
 
 export const ActivityTable = ({
   collectionActivityLoading,

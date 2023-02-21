@@ -1,6 +1,6 @@
 import React from "react";
-import { LoadingSpinner, Tabs } from "@Components";
-import { ActivityChart, ActivityFilters, ActivityTable } from "./Components";
+import { LoadingSpinner, Tabs, ActivityTable } from "@Components";
+import { ActivityChart, ActivityFilters } from "./Components";
 import { changeActivityFilter, periods } from "./functions";
 
 import "./style.scss";
