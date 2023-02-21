@@ -522,9 +522,9 @@ const Collection = () => {
                 <span onClick={handleChangeWatchlist}>
                   {
                     isWatchList ?
-                      <i class="fa-solid fa-star starWatchlist full"></i>
+                      <i className="fa-solid fa-star starWatchlist full"></i>
                       :
-                      <i class="fa-light fa-star starWatchlist"></i>
+                      <i className="fa-light fa-star starWatchlist"></i>
                   }
                 </span>
               </div>

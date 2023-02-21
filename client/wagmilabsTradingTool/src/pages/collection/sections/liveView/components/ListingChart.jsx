@@ -3,33 +3,25 @@ import HighchartsReact from 'highcharts-react-official'
 import HighCharts from 'highcharts'
 
 
-const BubbleChart = memo(({ totalListings, totalSales, floorPrice }) => {
+const ListingChart = memo(({ listingChartObject }) => {
 
-
-    const listingData = totalListings?.map(listing => listing.value <= floorPrice + 0.05 && [listing.timestamp * 1000, listing.value])
-    const salesData = totalSales?.map(sale => sale.value <= floorPrice + 0.1 && [sale.timestamp, sale.value])
+    const keys = Object.keys(listingChartObject)
+    const values = Object.values(listingChartObject)
 
     const chartOptions = {
         series: [
             {
-                type: "scatter",
-                name: "Sales",
-                data: salesData,
-            },
-            {
-                type: "scatter",
-                name: "Listings",
-                data: listingData,
+                data: values,
             },
         ],
         title: {
             text: "",
         },
         xAxis: {
-            type: "datetime",
+            categories: keys,
         },
         chart: {
-            type: "spline",
+            type: "column",
             backgroundColor: "transparent",
             borderRadius: 10,
         },
@@ -50,4 +42,4 @@ const BubbleChart = memo(({ totalListings, totalSales, floorPrice }) => {
     )
 })
 
-export default BubbleChart
+export default ListingChart

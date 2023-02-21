@@ -15,20 +15,22 @@ export function useGetData(address, columnHovered) {
   const [isLoading, setLoading] = useState(false);
   const columnHoveredRef = useRef(columnHovered)
 
-  useEffect(()=>{
+  const [listingChartObject, setListingChartObject] = useState({});
+
+  useEffect(() => {
     columnHoveredRef.current = columnHovered
-    if(!columnHovered.listings && hoveredListings.length > 0){
+    if (!columnHovered.listings && hoveredListings.length > 0) {
       setTotalListings(oldListings => [...oldListings, ...hoveredListings]);
     }
 
-    if(!columnHovered.sales && hoveredSales.length > 0){
+    if (!columnHovered.sales && hoveredSales.length > 0) {
       setTotalSales(oldSales => [...oldSales, ...hoveredSales]);
     }
   }, [columnHovered, hoveredListings, hoveredSales])
 
-  useEffect(()=>{
-      setHoveredListings([]);
-      setHoveredSales([]);
+  useEffect(() => {
+    setHoveredListings([]);
+    setHoveredSales([]);
   }, [totalListings, totalSales])
 
   useEffect(() => {
@@ -49,7 +51,38 @@ export function useGetData(address, columnHovered) {
 
       setLoading(false);
     }
+    async function getReservoirListing() {
+      const url = `https://api.reservoir.tools/tokens/floor/v1?collection=${address}`
+
+      const api = await fetch(url)
+      const { tokens } = await api.json()
+
+      Object.keys(tokens).forEach(key => tokens[key] > 0.2 && delete tokens[key])
+      const offset = 0.01
+      const values = Object.values(tokens)
+      const min = Math.min(...values)
+      const max = Math.max(...values)
+      const obj = {}
+      for (let i = min; i < max; i += offset) {
+        let valueMin = Number(i).toFixed(2)
+        let valueMax = Number.parseFloat(i + offset).toFixed(2)
+        obj[`${valueMin}-${valueMax}`] = 0
+      }
+      values.forEach(value => {
+        Object.keys(obj).forEach(key => {
+          const values = key.split("-")
+          const min = values[0]
+          const max = values[1]
+
+          if (value > min && value <= max) obj[key] = obj[key] + 1
+        })
+      })
+
+      setListingChartObject(obj)
+
+    }
     getData();
+    getReservoirListing()
 
 
     async function listenToListings() {
@@ -73,7 +106,7 @@ export function useGetData(address, columnHovered) {
           marketplace,
         };
 
-        
+
         !columnHoveredRef.current.listings ? setTotalListings(oldListings => [...oldListings, dataObj]) : setHoveredListings(oldListings => [...oldListings, dataObj]);
       });
     }
@@ -117,5 +150,5 @@ export function useGetData(address, columnHovered) {
     setSales([...totalSales]?.reverse()?.splice(0, 50));
   }, [totalSales]);
 
-  return { isLoading, totalListings, totalSales, listings, sales };
+  return { isLoading, totalListings, totalSales, listings, sales, listingChartObject };
 }

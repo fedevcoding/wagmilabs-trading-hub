@@ -6,6 +6,7 @@ import Column from "./components/Column";
 import SalesMapping from "./mappings/SalesMapping";
 import ListingMapping from "./mappings/ListingsMapping";
 import BubbleChart from "./components/BubbleChart";
+import ListingChart from "./components/ListingChart";
 
 const LiveView = memo(({ address, floorPrice }) => {
 
@@ -14,7 +15,7 @@ const LiveView = memo(({ address, floorPrice }) => {
     sales: false,
   });
 
-  const { sales, listings, totalListings, totalSales } = useGetData(address, columnHovered);
+  const { sales, listings, totalListings, totalSales, listingChartObject } = useGetData(address, columnHovered);
 
 
   const changeHover = (type, hovered) => {
@@ -25,16 +26,17 @@ const LiveView = memo(({ address, floorPrice }) => {
     <PageWrapper page="collection-live-view">
       <div className="live-view-section">
         <Column type="listings" columnHovered={columnHovered} changeHover={changeHover}>
-          <ListingMapping listings={listings} contractAddress={address}/>
+          <ListingMapping listings={listings} contractAddress={address} />
         </Column>
 
         <Column type="sales" columnHovered={columnHovered} changeHover={changeHover}>
-          <SalesMapping sales={sales} address={address}/>
+          <SalesMapping sales={sales} address={address} />
         </Column>
       </div>
 
       <div>
-        <BubbleChart totalListings={totalListings} totalSales={totalSales} floorPrice={floorPrice}/>
+        <ListingChart listingChartObject={listingChartObject} />
+        <BubbleChart totalListings={totalListings} totalSales={totalSales} floorPrice={floorPrice} />
       </div>
     </PageWrapper>
   );
