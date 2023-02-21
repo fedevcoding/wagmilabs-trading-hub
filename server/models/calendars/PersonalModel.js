@@ -10,7 +10,7 @@ const PersonalSchema = mongoose.Schema({
     links: {
         type: Object
     },
-    eventDecription: {
+    eventDescription: {
         type: String
     },
     
