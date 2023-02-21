@@ -90,6 +90,10 @@ body.overflow-hidden {
   text-align: center;
 }
 
+.text-right {
+  text-align: right;
+}
+
 .mr-10 {
   margin-right: 10px;
 }
