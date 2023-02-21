@@ -1,0 +1,90 @@
+.collection-activity-table-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+
+  .collection-activity-table {
+    /* background-color: grey; */
+    border-collapse: collapse;
+    width: 95%;
+
+    thead {
+      border-bottom: 2px solid grey;
+
+      th {
+        padding: 0 0 15px 0;
+      }
+    }
+
+    tbody .loading {
+      padding-bottom: 60px;
+    }
+
+    .collection-activity-single-container {
+      display: table-row;
+      vertical-align: inherit;
+      cursor: pointer;
+      transition: background-color 200ms;
+
+      &:hover {
+        background-color: #1d1d22;
+        border-radius: 10px;
+      }
+
+      .collection-activity-marketplace-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+
+        .collection-activity-marketplace-image {
+          width: 25px;
+          height: 25px;
+        }
+      }
+    }
+
+    .collection-activity-single-token {
+      display: flex;
+      align-items: center;
+      justify-content: left;
+      gap: 15px;
+      padding: 15px 0;
+
+      .collection-activity-single-image {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+      }
+    }
+
+    .collection-activity-single-price,
+    .collection-activity-single-type,
+    .collection-activity-single-from,
+    .collection-activity-single-to,
+    .collection-activity-single-time {
+      text-align: center;
+    }
+
+    .collection-activity-single-type {
+      border-top-left-radius: 10px;
+      border-bottom-left-radius: 10px;
+    }
+    .collection-activity-single-time {
+      border-top-right-radius: 10px;
+      border-bottom-right-radius: 10px;
+    }
+
+    .collection-activity-tr-item {
+      text-align: left;
+    }
+
+    .collection-activity-time.link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      color: #3a8cdf;
+    }
+  }
+}

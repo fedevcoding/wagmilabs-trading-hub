@@ -1,10 +1,10 @@
 import React from "react";
 import getMarketplaceImage from "@Utils/marketplaceImageMapping";
-import { activityTypeMapping } from "../../functions";
-import { ActivityIcon } from "..";
 import { formatAddress3, roundPrice2 } from "@Utils/formats/formats";
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
+import { activityTypeMapping } from "./functions";
+import { ActivityIcon } from "./ActivityIcon";
 
 export const CollectionActivityMapping = React.memo(
   ({ collectionActivity, address }) => {
