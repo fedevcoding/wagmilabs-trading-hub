@@ -2,7 +2,7 @@ import { useEffect, useState, useContext, useRef } from "react";
 import { getFromServer } from "@Utils/functions/serverCalls.js";
 import { SocketContext } from "@Context";
 
-export function useGetData(address, columnHovered) {
+export function useGetData(address, columnHovered, floorPrice) {
   const socket = useContext(SocketContext);
 
   const [hoveredListings, setHoveredListings] = useState([]);
@@ -57,8 +57,26 @@ export function useGetData(address, columnHovered) {
       const api = await fetch(url)
       const { tokens } = await api.json()
 
-      Object.keys(tokens).forEach(key => tokens[key] > 0.2 && delete tokens[key])
-      const offset = 0.01
+      const floorPrice = 5.8
+
+      let offset = 0
+      if (floorPrice < 0.005) offset = 0.001
+      else if (floorPrice < 0.01) offset = 0.005
+      else if (floorPrice < 0.05) offset = 0.01
+      else if (floorPrice < 0.1) offset = 0.01
+      else if (floorPrice < 0.1) offset = 0.05
+      else if (floorPrice < 0.2) offset = 0.1
+      else if (floorPrice < 0.4) offset = 0.3
+      else if (floorPrice < 0.7) offset = 0.5
+      else if (floorPrice < 1) offset = 0.7
+      else if (floorPrice < 5) offset = 1.5
+      else if (floorPrice < 10) offset = 5
+      const columns = 25
+
+      const maxPrice = floorPrice + columns * offset
+
+
+      Object.keys(tokens).forEach(key => tokens[key] >= maxPrice && delete tokens[key])
       const values = Object.values(tokens)
       const min = Math.min(...values)
       const max = Math.max(...values)
