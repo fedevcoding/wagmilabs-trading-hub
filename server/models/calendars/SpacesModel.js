@@ -16,7 +16,7 @@ const SpacesSchema = mongoose.Schema({
     spaceHost: {
         type: String
     },
-    
+
 }, {
     timestamps: true
 })

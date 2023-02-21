@@ -1,6 +1,9 @@
 const mongoose = require("mongoose")
 
 const PersonalSchema = mongoose.Schema({
+    address: {
+        type: String
+    },
     timestamp: {
         type: Number
     },
@@ -13,7 +16,7 @@ const PersonalSchema = mongoose.Schema({
     eventDescription: {
         type: String
     },
-    
+
 }, {
     timestamps: true
 })

@@ -16,7 +16,7 @@ const DropsSchema = mongoose.Schema({
     supply: {
         type: Number
     },
-    
+
 }, {
     timestamps: true
 })
