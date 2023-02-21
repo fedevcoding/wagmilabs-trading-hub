@@ -88,6 +88,11 @@ export const ActivityChart = React.memo(({ activityChartData }) => {
           },
           hideDelay: 200,
           outside: false,
+          crosshairs: {
+            color: "gray",
+            dashStyle: "solid",
+            width: 1,
+          },
         },
       }}
     />
