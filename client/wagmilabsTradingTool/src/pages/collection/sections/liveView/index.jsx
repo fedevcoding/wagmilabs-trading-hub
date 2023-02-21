@@ -15,7 +15,7 @@ const LiveView = memo(({ address, floorPrice }) => {
     sales: false,
   });
 
-  const { sales, listings, totalListings, totalSales, listingChartObject } = useGetData(address, columnHovered);
+  const { sales, listings, totalListings, totalSales, listingChartObject } = useGetData(address, columnHovered, floorPrice);
 
 
   const changeHover = (type, hovered) => {

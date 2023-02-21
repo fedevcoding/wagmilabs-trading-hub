@@ -6,8 +6,8 @@ import HighCharts from 'highcharts'
 const BubbleChart = memo(({ totalListings, totalSales, floorPrice }) => {
 
 
-    const listingData = totalListings?.map(listing => listing.value <= floorPrice + 0.05 && [listing.timestamp * 1000, listing.value])
-    const salesData = totalSales?.map(sale => sale.value <= floorPrice + 0.1 && [sale.timestamp, sale.value])
+    const listingData = totalListings?.map(listing => listing.value <= floorPrice + 0.05 && [new Date(listing.timestamp * 1000), listing.value])
+    const salesData = totalSales?.map(sale => sale.value <= floorPrice + 0.1 && [new Date(sale.timestamp), sale.value])
 
     const chartOptions = {
         series: [

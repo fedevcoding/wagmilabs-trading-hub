@@ -46,6 +46,7 @@ export function useGetData(address, columnHovered, floorPrice) {
       ]);
 
       setTotalSales(totalSales);
+      console.log(totalSales)
 
       setTotalListings(totalListings);
 
@@ -56,8 +57,6 @@ export function useGetData(address, columnHovered, floorPrice) {
 
       const api = await fetch(url)
       const { tokens } = await api.json()
-
-      const floorPrice = 5.8
 
       let offset = 0
       if (floorPrice < 0.005) offset = 0.001
