@@ -3,6 +3,7 @@ import { PageWrapper, Row } from '@Components';
 import "./style.scss";
 import { useParams } from 'react-router-dom';
 import { MonthlyCalendar } from './Components/MonthlyCalendar';
+import { WeeklyCalendar } from './Components/WeeklyCalendar';
 
 const titles = {
   drops: "Upcoming Drops",
@@ -24,7 +25,11 @@ export const Calendar = () => {
   return (
     <PageWrapper page="calendar">
       {renderMainTitle()}
-      <MonthlyCalendar />
+      {section === "spaces" ? (
+        <WeeklyCalendar />
+      ):(
+        <MonthlyCalendar />
+      )}
     </PageWrapper>
   )
 }

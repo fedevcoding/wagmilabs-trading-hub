@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Col, PageWrapper, Row } from '@Components';
+import { Col, Row } from '@Components';
 import { Button, Spinner } from '@chakra-ui/react';
 import "./style.scss";
 import { AddEventModal } from 'src/components/Modals/AddEventModal';
@@ -17,13 +17,6 @@ const daysOfTheWeek = [
   "Saturday"
 ]
 
-const titles = {
-  drops: "Upcoming Drops",
-  spaces: "Twitter Spaces",
-  raffles: "Personal Calendar",
-  events: "IRL Events",
-}
-
 const chunkArrayInGroups = (arr, size) => {
   let myArray = [];
   for(let i = 0; i < arr.length; i += size) {
@@ -37,7 +30,6 @@ export const MonthlyCalendar = () => {
   const allowedAddresses = ["0x8d50Ca23bDdFCA6DB5AE6dE31ca0E6A17586E5B8","0xfe697C5527ab86DaA1e4c08286D2bE744a0E321E","0x7FAC7b0161143Acfd80257873FB9cDb3F316C10C"];
   const today = new Date();
   const {section} = useParams();
-  const mainTitle = titles[section];
   const [selectedDate, setSelectedDate] = useState(null);
   const [currentDate, setCurrentDate] = useState(today);
   const [isLoading, setIsLoading] = useState(false);
@@ -82,9 +74,9 @@ export const MonthlyCalendar = () => {
   }
 
 
-  const test = getDaysInMonth(currentDate.getMonth(), currentDate.getFullYear());
-  const [allDaysInMonth, setAllDaysInMonth] = useState(test);
-  const [daysInMonth, setDaysInMonth] = useState(chunkArrayInGroups(test,7))
+  const initDaysInMonth = getDaysInMonth(currentDate.getMonth(), currentDate.getFullYear());
+  const [allDaysInMonth, setAllDaysInMonth] = useState(initDaysInMonth);
+  const [daysInMonth, setDaysInMonth] = useState(chunkArrayInGroups(initDaysInMonth,7))
 
   useEffect(()=>{
     if(isLoading){
@@ -106,12 +98,6 @@ export const MonthlyCalendar = () => {
     setAllDaysInMonth(getDaysInMonth(nextDate.getMonth(), nextDate.getFullYear()));
     setDaysInMonth(chunkArrayInGroups(getDaysInMonth(nextDate.getMonth(), nextDate.getFullYear()),7));
   }
-
-  const renderMainTitle = () => (
-    <Row className='main-title'>
-      <h2>{mainTitle}</h2>
-    </Row>
-  )
 
   const renderMonthSwitch = () => (
     <Row className="calendar-month-switch-container">
@@ -148,13 +134,11 @@ export const MonthlyCalendar = () => {
               +d.date.getFullYear()
       }
     )
-    console.log('allDaysInMonthCopy',allDaysInMonthCopy)
     setAllDaysInMonth(allDaysInMonthCopy);
   }
 
   const renderRow = (days, startIdx) => {
    const dayClass = (d) => {
-    console.log('CHECK',d.isSelected, d.date)
     if(d.notCurrent) {
       if(d.isSelected){
         return "day-container not-curr-day today"
@@ -162,7 +146,6 @@ export const MonthlyCalendar = () => {
       return "day-container not-curr-day"
     } else {
       if(d.isSelected){
-        console.log('colorati',d)
         return "day-container today"
       }
       return "day-container"
@@ -210,7 +193,7 @@ export const MonthlyCalendar = () => {
           <div className="selected-date-detail">
             <div className="selected-date-title">{selectedDate?.title}</div>
             { allowedAddresses.includes(address) &&<Button colorScheme={"blue"} className="button btn-spacing" onClick={onOpen}>Add Event As Admin</Button>}
-            <Button colorScheme={"blue"} className="button" onClick={onOpen}>Add Event</Button>
+            { section === "raffles" && <Button colorScheme={"blue"} className="button" onClick={onOpen}>Add Event</Button>}
           </div>
           ) : (
             <div className='selected-date-title'>No day selected</div>
