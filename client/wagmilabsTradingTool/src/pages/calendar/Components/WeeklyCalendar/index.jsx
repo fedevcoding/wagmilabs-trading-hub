@@ -80,14 +80,14 @@ export const WeeklyCalendar = () => {
   const renderHeader = () => (
     <Row className="calendar-row">
       {daysOfTheWeak.map((d, dayIndex)=>(
-        <div className="calendar-header">
-          <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-            <div style={{marginBottom: '8px'}}>{d}</div>
+        <div className="weekday-calendar-column">
+          <div className="weekday-calendar-inner-column">
+            <div className="weekday-col-title">{d}</div>
             {hoursIntervals.map((h)=>(
-              <div style={{backgroundColor: usedHoursBlocks[dayIndex] && usedHoursBlocks[dayIndex].includes(h.idx) ? '#616161' : '#0E0F0E', height: '60px', borderRadius: '5px', width: '60px', textOverflow: 'ellipsis', overflow: 'hidden',whiteSpace: 'nowrap'}}>
+              <div className={usedHoursBlocks[dayIndex] && usedHoursBlocks[dayIndex].includes(h.idx) ? "active-hour-section" : "hour-section"}>
                 {getEventsInWeekday(dayIndex).map((event)=>(
                   <>
-                  {event.hours === h.idx && <div style={{width: '60px', textOverflow: 'ellipsis', overflow: 'hidden',whiteSpace: 'nowrap'}}>{event.title}</div>}
+                  {event.hours === h.idx && <div className="hour-event">{event.title}</div>}
                   </>
                 ))}
               </div>

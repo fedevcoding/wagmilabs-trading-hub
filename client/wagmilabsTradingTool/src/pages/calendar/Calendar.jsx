@@ -4,6 +4,7 @@ import "./style.scss";
 import { useParams } from 'react-router-dom';
 import { MonthlyCalendar } from './Components/MonthlyCalendar';
 import { WeeklyCalendar } from './Components/WeeklyCalendar';
+import { useGetData } from "./useGetData";
 
 const titles = {
   drops: "Upcoming Drops",
@@ -13,6 +14,8 @@ const titles = {
 }
 
 export const Calendar = () => {
+  const data = useGetData();
+  console.log('Calendar Data:', data)
   const {section} = useParams();
   const mainTitle = titles[section];
 
