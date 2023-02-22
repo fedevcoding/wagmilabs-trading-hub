@@ -46,7 +46,7 @@ const Login = ({ setConnected }) => {
     onSuccess(signature) {
       async function checkSignature() {
         try {
-          setMessage("Checking your assets...");
+          setMessage("Logging In...");
 
           const options = {
             method: "POST",
@@ -133,7 +133,7 @@ const Login = ({ setConnected }) => {
                   {loadingSign ? (
                     <Loader width={"25px"} height={"25px"} />
                   ) : (
-                    "Sign message"
+                    "Sign In  "
                   )}
                 </Button>
               )}
