@@ -8,16 +8,7 @@ import { useParams } from 'react-router-dom';
 import { useAccount } from 'wagmi';
 import { AnimationOnScroll } from 'react-animation-on-scroll';
 import moment from "moment";
-
-const daysOfTheWeek = [
-	"Sunday",
-	"Monday",
-	"Tuesday",
-	"Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday"
-]
+import { daysOfTheWeek, hoursIntervals } from '../../Calendar';
 
 const chunkArrayInGroups = (arr, size) => {
   let myArray = [];
@@ -28,7 +19,6 @@ const chunkArrayInGroups = (arr, size) => {
 }
 
 export const MonthlyCalendar = React.memo(({sectionData}) => {
-  console.log('sectionData',sectionData);
   const { address } = useAccount();
   const allowedAddresses = ["0x8d50Ca23bDdFCA6DB5AE6dE31ca0E6A17586E5B8","0xfe697C5527ab86DaA1e4c08286D2bE744a0E321E","0x7FAC7b0161143Acfd80257873FB9cDb3F316C10C"];
   const today = new Date();
@@ -36,6 +26,7 @@ export const MonthlyCalendar = React.memo(({sectionData}) => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [currentDate, setCurrentDate] = useState(today);
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedEvents, setSelectedEvents] = useState([]);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const getDaysInMonth = (month, year, changedDate) => {
@@ -46,7 +37,7 @@ export const MonthlyCalendar = React.memo(({sectionData}) => {
     var previousDays = [];
     var nextDays = [];
     while (date.getMonth() === month) {
-      const isSelected = date.getMonth()===currentDate.getMonth() && date.getFullYear() === currentDate.getFullYear() && date.getDate() === currentDate.getDate();
+      const isSelected = date.getMonth()===today.getMonth() && date.getFullYear() === today.getFullYear() && date.getDate() === today.getDate();
       isSelected ? days.push({date: new Date(date), isSelected: !changedDate}) : days.push({date: new Date(date)});
       date.setDate(date.getDate() + 1);
     }
@@ -79,7 +70,7 @@ export const MonthlyCalendar = React.memo(({sectionData}) => {
 
   const initDaysInMonth = getDaysInMonth(currentDate.getMonth(), currentDate.getFullYear());
   const [allDaysInMonth, setAllDaysInMonth] = useState(initDaysInMonth);
-  const [daysInMonth, setDaysInMonth] = useState(chunkArrayInGroups(initDaysInMonth,7))
+  const [chunkDaysInMonth, setChunkDaysInMonth] = useState(chunkArrayInGroups(initDaysInMonth,7))
 
   useEffect(()=>{
     if(isLoading){
@@ -89,18 +80,31 @@ export const MonthlyCalendar = React.memo(({sectionData}) => {
     }
   },[currentDate, isLoading])
 
+  useEffect(()=>{
+    if(selectedDate){
+      setSelectedEvents(
+      sectionData
+        .filter((event)=>(moment(event.timestamp).format('YYYY-MM-DD') === moment(selectedDate.date).format('YYYY-MM-DD')))
+        .map((el)=>({...el, hour: moment(el.timestamp).hours()}))
+        .sort(({hour:a}, {hour:b}) => a-b)
+      )
+    }
+  },[sectionData, selectedDate])
+
   const changeDate = (back) => {
     setIsLoading(true);
-    let nextDate = currentDate;
+    let nextDate = new Date(currentDate.getTime())
     if(back){
       nextDate.setMonth(currentDate.getMonth()-1)
     } else {
       nextDate.setMonth(currentDate.getMonth()+1)
     }
-    setCurrentDate(nextDate)
+    setCurrentDate(new Date(nextDate.getTime()))
     const isToday = moment(nextDate).format('YYYY-MM-DD') === moment(today).format('YYYY-MM-DD');
-    setAllDaysInMonth(getDaysInMonth(nextDate.getMonth(), nextDate.getFullYear(), !isToday));
-    setDaysInMonth(chunkArrayInGroups(getDaysInMonth(nextDate.getMonth(), nextDate.getFullYear(), !isToday),7));
+    const nextAllDaysInMonth = getDaysInMonth(nextDate.getMonth(), nextDate.getFullYear(), !isToday);
+    setAllDaysInMonth(nextAllDaysInMonth);
+    const nextDaysInMonth = chunkArrayInGroups(nextAllDaysInMonth,7);
+    setChunkDaysInMonth(nextDaysInMonth);
     if(!isToday){
       setSelectedDate(null)
     } else {
@@ -139,7 +143,7 @@ export const MonthlyCalendar = React.memo(({sectionData}) => {
 
   const showSelectedDate = (d, idx) => {
     const allDaysInMonthCopy = [...allDaysInMonth];
-    if(idx) {
+    if(idx>0) {
       const oldSelectedIdx = allDaysInMonthCopy.findIndex((el=>el.isSelected));
       if(oldSelectedIdx !== -1) {
         allDaysInMonthCopy[oldSelectedIdx].isSelected = false
@@ -156,7 +160,7 @@ export const MonthlyCalendar = React.memo(({sectionData}) => {
           date: d.date,
         }
       )
-    } else if(currentDate === today) {
+    } else if(currentDate === today && !idx) {
       setSelectedDate(
         {title: today.toLocaleDateString('en-GB', { month: 'long'})
                 +", "
@@ -172,8 +176,7 @@ export const MonthlyCalendar = React.memo(({sectionData}) => {
     setAllDaysInMonth(allDaysInMonthCopy);
   }
 
-  const renderRow = (days, startIdx) => {
-   const dayClass = (d) => {
+  const dayClass = (d) => {
     if(d.notCurrent) {
       if(d.isSelected){
         return "day-container not-curr-day today"
@@ -186,6 +189,8 @@ export const MonthlyCalendar = React.memo(({sectionData}) => {
       return "day-container"
     }
    }
+
+  const renderRow = (days, startIdx) => {
 
    const renderEventName = (event, date) => {
     if(moment(event.timestamp).format('YYYY-MM-DD') === moment(date).format('YYYY-MM-DD')){
@@ -218,34 +223,47 @@ export const MonthlyCalendar = React.memo(({sectionData}) => {
     </>
   )}
 
-  const renderlist = (
+  const renderlist = ()=>(
     <>
-      {renderRow(daysInMonth[0], 0)}
-      {renderRow(daysInMonth[1], 7)}
-      {renderRow(daysInMonth[2], 14)}
-      {renderRow(daysInMonth[3], 21)}
-      {daysInMonth.length === 5 && renderRow(daysInMonth[4], 28)}
-      {daysInMonth.length === 6 && renderRow(daysInMonth[5], 35)}
+      {renderRow(chunkDaysInMonth[0], 0)}
+      {renderRow(chunkDaysInMonth[1], 7)}
+      {renderRow(chunkDaysInMonth[2], 14)}
+      {renderRow(chunkDaysInMonth[3], 21)}
+      {chunkDaysInMonth.length === 5 && renderRow(chunkDaysInMonth[4], 28)}
+      {chunkDaysInMonth.length === 6 && renderRow(chunkDaysInMonth[5], 35)}
     </>
   )
 
-  if(currentDate === today) {
-    showSelectedDate();
+  useEffect(()=>{
+    if(moment(currentDate).format('YYYY-MM-DD') === moment(today).format('YYYY-MM-DD')) {
+      showSelectedDate();
+    }
+  },[])
+
+  const renderEventsInHour = (h) => {
+    const eventsInHour = selectedEvents.filter((event, eventIdx) => (event.hour === h.idx))
+    return (
+      <>
+      {eventsInHour.map((event)=>(
+        <div className="selected-event-in-day">{event?.eventName || event?.collectionName}</div>
+    ))}
+    </>
+    )
   }
 
-  const renderEventInfo = (event) => (
-      <div className="flex-centered-column" style={{paddingBottom: '10px'}}>
-        <div>{moment(event.timestamp).format('HH')+':00'}</div>
-        <div>{event?.collectionName || event?.eventName}</div>
-      </div>
-  )
-
-   const renderEventsInfo = (date) => {
-    const selectedSectionData = sectionData.filter((event)=>(moment(event.timestamp).format('YYYY-MM-DD') === moment(date).format('YYYY-MM-DD')))
-    return selectedSectionData.map((event)=> (
-      renderEventInfo(event)
+   const renderEventsInfo = () => (
+    hoursIntervals.map((h)=>(
+      <>
+      {selectedEvents.length >0 && (
+        <>
+        {h.idx === selectedEvents[0].hour && <div>{h.val}</div>}
+        {renderEventsInHour(h)}
+        {(h.idx === selectedEvents[selectedEvents.length-1].hour + 1) && <div>{h.val}</div>}
+        </>
+      )}
+      </>
     ))
-   }
+   )
 
   return (
       <div>
@@ -254,16 +272,16 @@ export const MonthlyCalendar = React.memo(({sectionData}) => {
           <Col className="calendar-left-inner-container">
           {renderMonthSwitch()}
           {renderHeader()}
-          {renderlist}
+          {renderlist()}
           </Col>
 
-          <Col className="calendar-right-inner-container">
+          <Col className="calendar-right-inner-container-m">
           {selectedDate ? (
           <div className="selected-date-detail">
             <div className="selected-date-title">{selectedDate?.title}</div>
-            {renderEventsInfo(selectedDate.date)}
-            { allowedAddresses.includes(address) &&<Button colorScheme={"blue"} className="button btn-spacing" onClick={onOpen}>Add Event As Admin</Button>}
             { section === "raffles" && <Button colorScheme={"blue"} className="button" onClick={onOpen}>Add Event</Button>}
+            { allowedAddresses.includes(address) &&<Button colorScheme={"blue"} className="button btn-spacing" onClick={onOpen}>Add Event As Admin</Button>}
+            {renderEventsInfo()}
           </div>
           ) : (
             <div className='selected-date-title'>No day selected</div>
