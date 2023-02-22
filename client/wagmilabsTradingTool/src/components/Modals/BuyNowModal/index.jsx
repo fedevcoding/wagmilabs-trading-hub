@@ -1,17 +1,18 @@
 import React, { useState, useContext } from "react";
-
-import "./style.css";
 import getMarketplaceImage from "@Utils/marketplaceImageMapping";
 import { Button } from "@chakra-ui/react";
 import { Loader } from "@Components";
 import { getFiatPrice } from "@Utils/formats/formats";
 import { UserDataContext } from "@Context";
 
+import "./style.scss";
+
 export const BuyNowModal = ({
   showBuyNowModal,
   buyNowModalData,
   buyNow,
   closeBuynowModal,
+  quantity = null,
 }) => {
   const [buying, setBuying] = useState(false);
   const { cryptoPrices } = useContext(UserDataContext);
@@ -59,7 +60,7 @@ export const BuyNowModal = ({
 
               <hr></hr>
 
-              <div className="buynow-modal-price">
+              <div className="space-between">
                 <p>Price:</p>
 
                 <div className="buy-now-modal-currency-container">
@@ -74,6 +75,48 @@ export const BuyNowModal = ({
                 </div>
               </div>
 
+              {(quantity && (
+                <>
+                  <div className="space-between">
+                    <p>Quantity:</p>
+
+                    <div className="buy-now-modal-currency-container">
+                      {quantity}
+                    </div>
+                  </div>
+
+                  <hr />
+
+                  <div className="space-between">
+                    <p>Total:</p>
+
+                    <div className="buy-now-modal-currency-container">
+                      <div className="buy-now-modal-ethereum-price">
+                        <i className="fa-brands fa-ethereum"></i>
+                        <p>
+                          {parseFloat(
+                            (
+                              buyNowModalData.price * parseInt(quantity)
+                            ).toFixed(12)
+                          )}
+                        </p>
+                      </div>
+                      <p className="low-opacity little-text">
+                        ${" "}
+                        {parseFloat(
+                          (
+                            getFiatPrice(
+                              buyNowModalData.price,
+                              cryptoPrices.ethPrice
+                            ) * parseInt(quantity)
+                          ).toFixed(12)
+                        )}
+                      </p>
+                    </div>
+                  </div>
+                </>
+              )) ||
+                ""}
               <Button
                 colorScheme={"blue"}
                 className="buynow-modal-button"

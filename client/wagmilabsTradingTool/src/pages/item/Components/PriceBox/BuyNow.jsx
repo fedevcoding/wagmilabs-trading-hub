@@ -19,6 +19,7 @@ export const BuyNow = React.memo(
           showBuyNowModal={showBuyNowModal}
           buyNow={buyNow}
           closeBuynowModal={closeBuynowModal}
+          quantity={quantity}
         />
         <div
           className="btn"
