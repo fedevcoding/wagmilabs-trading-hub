@@ -7,7 +7,7 @@ import "./style.scss";
 
 export const ItemActivity = React.memo(({ address, id }) => {
   const [types, setTypes] = React.useState([]);
-  const [activities, isLoading] = useGetData(
+  const { activities, isLoading, loadingMoreActivity } = useGetData(
     address,
     id,
     types.map(t => t.value).join(",")
@@ -38,7 +38,7 @@ export const ItemActivity = React.memo(({ address, id }) => {
             collectionActivityLoading={isLoading}
             collectionActivity={activities?.activities || []}
             address={address}
-            loadingMoreActivity={false}
+            loadingMoreActivity={loadingMoreActivity}
           />
         </div>
       )}
