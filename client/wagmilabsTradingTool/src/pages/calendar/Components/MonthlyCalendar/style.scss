@@ -1,12 +1,25 @@
 .day-container {
   display: flex;
   flex: 1;
-  min-width: 75px;
+  width: 75px;
   height: 98px;
   background-color: #616161;
-  justify-content: center;
+  justify-content: start;
+  align-items: center;
   border-radius: 10px;
   margin: 5px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  flex-direction: column;
+}
+
+.day-event-name {
+  width: 75px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  flex-direction: column;
 }
 
 .not-curr-day {
@@ -44,6 +57,7 @@
 .selected-date-detail {
   display: flex;
   flex-direction: column;
+  align-items: center;
 }
 
 .selected-date-title {
@@ -74,4 +88,10 @@
 .main-title {
   justify-content: center;
   padding-bottom: 15px;
+}
+
+.flex-centered-column {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
 }

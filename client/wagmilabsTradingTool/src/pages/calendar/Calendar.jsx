@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { PageWrapper, Row } from '@Components';
 import "./style.scss";
 import { useParams } from 'react-router-dom';
@@ -14,8 +14,8 @@ const titles = {
 }
 
 export const Calendar = () => {
+  const [sectionData, setSectionData] = useState([]);
   const data = useGetData();
-  console.log('Calendar Data:', data)
   const {section} = useParams();
   const mainTitle = titles[section];
 
@@ -24,14 +24,18 @@ export const Calendar = () => {
       <h2>{mainTitle}</h2>
     </Row>
   )
+  
+  useEffect(()=>{
+    setSectionData(section === 'raffles' ? data.personal : data[section]);
+  },[data, section])
 
   return (
     <PageWrapper page="calendar">
       {renderMainTitle()}
       {section === "spaces" ? (
-        <WeeklyCalendar />
+        <WeeklyCalendar sectionData={sectionData} />
       ):(
-        <MonthlyCalendar />
+        <MonthlyCalendar sectionData={sectionData} />
       )}
     </PageWrapper>
   )

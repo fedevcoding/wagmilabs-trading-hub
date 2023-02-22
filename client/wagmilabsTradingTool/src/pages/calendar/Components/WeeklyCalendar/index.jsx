@@ -46,53 +46,6 @@ const genSampleEvent = (year, month,date,hours,minutes) => (
   new Date(year, month,date,hours,minutes)
 )
 
-const sampleSpaces = [{
-  timestamp: '',
-  spaceName: 'Space name 1',
-  links: {
-    link1: 'https://airdrops.io/fungiball/',
-    link2: 'https://airdrops.io/stradall/'
-  },
-  spaceDescription: 'Space description 1',
-  spaceHost: 'Host 1'
-},{
-  timestamp: '',
-  spaceName: 'Space name 2',
-  links: {
-    link1: 'https://airdrops.io/fungiball/',
-    link2: 'https://airdrops.io/stradall/'
-  },
-  spaceDescription: 'Space description 2',
-  spaceHost: 'Host 2'
-},{
-  timestamp: '',
-  spaceName: 'Space name 3',
-  links: {
-    link1: 'https://airdrops.io/fungiball/',
-    link2: 'https://airdrops.io/stradall/'
-  },
-  spaceDescription: 'Space description 3',
-  spaceHost: 'Host 3'
-},{
-  timestamp: '',
-  spaceName: 'Space name 4',
-  links: {
-    link1: 'https://airdrops.io/fungiball/',
-    link2: 'https://airdrops.io/stradall/'
-  },
-  spaceDescription: 'Space description 4',
-  spaceHost: 'Host 4'
-},{
-  timestamp: '',
-  spaceName: 'Space name 5',
-  links: {
-    link1: 'https://airdrops.io/fungiball/',
-    link2: 'https://airdrops.io/stradall/'
-  },
-  spaceDescription: 'Space description 5',
-  spaceHost: 'Host 5'
-}];
-
 const sampleEvents = [
   {date: genSampleEvent(2023, 2, 26,12,30),title: "Domenica1",day:0, hours: 12, minutes: 30},
   {date: genSampleEvent(2023, 2, 26,12,0),title: "Domenica2",day:0, hours: 6, minutes:0},
@@ -108,7 +61,7 @@ const sampleEvents = [
   {date: genSampleEvent(2023, 2, 25,12,30), title: "Long text for a weekly event in Twitter spaces",day:6, hours: 12, minutes: 30},
 ]
 
-export const WeeklyCalendar = () => {
+export const WeeklyCalendar = ({sectionData}) => {
   const { address } = useAccount();
   const allowedAddresses = ["0x8d50Ca23bDdFCA6DB5AE6dE31ca0E6A17586E5B8","0xfe697C5527ab86DaA1e4c08286D2bE744a0E321E","0x7FAC7b0161143Acfd80257873FB9cDb3F316C10C"];
   const { isOpen, onOpen, onClose } = useDisclosure();

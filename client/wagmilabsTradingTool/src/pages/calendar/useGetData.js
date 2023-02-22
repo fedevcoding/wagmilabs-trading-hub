@@ -4,6 +4,10 @@ import { SocketContext } from "@Context";
 
 export function useGetData() {
   const socket = useContext(SocketContext);
+  const [drops, setDrops] = useState([]);
+  const [events, setEvents] = useState([]);
+  const [personal, setPersonal] = useState([]);
+  const [spaces, setSpaces] = useState([]);
   const [isLoading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -15,18 +19,21 @@ export function useGetData() {
       const personalUrl = `/personal`;
       const spacesUrl = `/spaces`;
 
-      const res = await Promise.all([
+      const [{drops}, {events}, {personal}, {spaces}] = await Promise.all([
         getFromServer(dropsUrl),
         getFromServer(eventsUrl),
         getFromServer(personalUrl),
         getFromServer(spacesUrl),
       ]);
-      console.log('GET DROPS RES: ', res)
+      
+      setDrops(drops);
+      setEvents(events);
+      setPersonal(personal);
+      setSpaces(spaces);
       setLoading(false);
     }
     getData();
   }, [socket]);
 
-  return { isLoading };
-  // return { isLoading };
+  return { isLoading, drops, events, personal, spaces };
 }
