@@ -10,10 +10,16 @@ $main-color: white;
 	height: 200vh;
 
 	.bubble-chart {
-		.bubble-chart-image {
-			width: 30px;
-			height: 30px;
+		margin-top: 35px;
+		background-color: #201f1e;
+		border-radius: 20px;
+		padding: 30px 20px 0 20px;
+
+		img {
+			width: 80px;
+			height: 80px;
 		}
+
 	}
 
 	.column {
@@ -63,7 +69,6 @@ $main-color: white;
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		max-width: 60%;
 	}
 
 	.single-item-row {

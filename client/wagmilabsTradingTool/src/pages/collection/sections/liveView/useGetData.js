@@ -5,6 +5,7 @@ import { SocketContext } from "@Context";
 export function useGetData(address, columnHovered, floorPrice) {
   const socket = useContext(SocketContext);
 
+
   const [hoveredListings, setHoveredListings] = useState([]);
   const [hoveredSales, setHoveredSales] = useState([]);
 
@@ -46,10 +47,7 @@ export function useGetData(address, columnHovered, floorPrice) {
       ]);
 
       setTotalSales(totalSales);
-      console.log(totalSales)
-
       setTotalListings(totalListings);
-
       setLoading(false);
     }
     async function getReservoirListing() {
@@ -155,7 +153,7 @@ export function useGetData(address, columnHovered, floorPrice) {
     }
     listenToListings();
     listenToSales()
-  }, [address, socket]);
+  }, [address, socket, floorPrice]);
 
 
 

@@ -15,7 +15,7 @@ const LiveView = memo(({ address, floorPrice }) => {
     sales: false,
   });
 
-  const { sales, listings, totalListings, totalSales, listingChartObject } = useGetData(address, columnHovered, floorPrice);
+  const { isLoading, sales, listings, totalListings, totalSales, listingChartObject } = useGetData(address, columnHovered, floorPrice);
 
 
   const changeHover = (type, hovered) => {
@@ -32,11 +32,15 @@ const LiveView = memo(({ address, floorPrice }) => {
         <Column type="sales" columnHovered={columnHovered} changeHover={changeHover}>
           <SalesMapping sales={sales} address={address} />
         </Column>
+
+        <ListingChart listingChartObject={listingChartObject} />
       </div>
 
       <div>
-        <ListingChart listingChartObject={listingChartObject} />
-        <BubbleChart totalListings={totalListings} totalSales={totalSales} floorPrice={floorPrice} />
+        {
+          !isLoading &&
+          <BubbleChart totalListings={totalListings} totalSales={totalSales} floorPrice={floorPrice} />
+        }
       </div>
     </PageWrapper>
   );
