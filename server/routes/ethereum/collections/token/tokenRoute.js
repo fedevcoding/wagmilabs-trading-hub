@@ -42,7 +42,7 @@ tokenRoute.get(
   checkAuth,
   async (req, res) => {
     const { address, id } = req.params;
-    let { types } = req.query;
+    let { types, continuation } = req.query;
     let tokenActivities = {};
 
     if (
@@ -53,12 +53,20 @@ tokenRoute.get(
       types = null;
     }
 
+    const params = {};
+    if (types) {
+      params.types = types;
+    }
+    if (continuation) {
+      params.continuation = continuation;
+    }
+
     try {
       tokenActivities = await (
         await fetch(
-          `https://api.reservoir.tools/tokens/${address}%3A${id}/activity/v4${
-            types ? `?types=${types}` : ""
-          }`,
+          `https://api.reservoir.tools/tokens/${address}%3A${id}/activity/v4?${new URLSearchParams(
+            params
+          ).toString()}`,
           {
             headers: {
               accept: "*/*",

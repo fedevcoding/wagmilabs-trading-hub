@@ -1,0 +1,90 @@
+.buynow-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  backdrop-filter: blur(2px);
+  background-color: #11111166;
+  z-index: 100000;
+
+  * {
+    color: white;
+  }
+
+  .buynow-modal {
+    height: auto;
+    border-radius: 15px;
+    width: 25vw;
+    background-color: #1e1e1e;
+    box-shadow: #000000e3 0px 0px 19px 5px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 30px 40px;
+
+    .buynow-modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 20px;
+    }
+
+    .buynow-modal-header i {
+      cursor: pointer;
+    }
+
+    .buynow-modal-body {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      justify-content: space-evenly;
+    }
+
+    .buynow-modal-body img {
+      width: 80px;
+      border-radius: 10px;
+      aspect-ratio: 1;
+    }
+
+    .buynow-modal-token-details {
+      gap: 10px;
+      display: flex;
+      padding-bottom: 0.5rem;
+    }
+
+    .space-between {
+      margin: 0.5rem 0;
+    }
+
+    .buy-now-modal-ethereum-price {
+      display: flex;
+      gap: 5px;
+      align-items: center;
+    }
+
+    .buynow-modal-button {
+      width: 100%;
+    }
+
+    .buy-now-modal-currency-container {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      /* gap: 10px; */
+    }
+
+    .buynow-modal-marketplace {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .buynow-modal-marketplace img {
+      width: 25px;
+      height: 25px;
+      /* border-radius: 50%; */
+    }
+  }
+}

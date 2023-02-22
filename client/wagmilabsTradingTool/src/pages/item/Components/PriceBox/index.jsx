@@ -27,7 +27,7 @@ export const PriceBox = React.memo(
               </div>
               {(!isErc721 && (market?.quantityRemaining || 0) > 1 && (
                 <div className="amount">
-                  <p className="text-right">Quantity</p>
+                  <p className="text-right">Buy now quantity</p>
                   <NumberInput
                     min={1}
                     max={market?.quantityRemaining}

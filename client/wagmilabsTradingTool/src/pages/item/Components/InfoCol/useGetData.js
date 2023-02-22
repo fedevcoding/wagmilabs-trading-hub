@@ -3,13 +3,27 @@ import { useAccount } from "wagmi";
 
 export function useGetData(details, address, id) {
   const { address: accountAddress } = useAccount();
-  const collectionImage = details.token?.collection?.image;
   const isErc721 = details.token?.kind === "erc721";
-  const { data: tokens } = useUserTokens(accountAddress);
-  const isOwner = tokens
-    .map(t => t.token.contract + ":" + t.token.tokenId)
-    .includes(`${address}:${id}`);
 
+  const { data: tokens } = useUserTokens(
+    isErc721 ? undefined : accountAddress,
+    isErc721
+      ? undefined
+      : {
+          tokens: [`${address}:${id}`],
+        }
+  );
+
+  let isOwner;
+  if (isErc721) {
+    isOwner =
+      details.token?.owner?.toLowerCase() === accountAddress?.toLowerCase();
+  } else {
+    isOwner = tokens.length;
+  }
+
+  const collectionImage = details.token?.collection?.image;
+  const ownershipTokenCount = isOwner ? tokens[0]?.ownership?.tokenCount : null;
   const ownerBestListing =
     details?.market?.floorAsk?.maker?.toLowerCase() ===
     accountAddress?.toLowerCase();
@@ -32,5 +46,6 @@ export function useGetData(details, address, id) {
     isErc721,
     accountAddress,
     ownerBestListing,
+    ownershipTokenCount,
   };
 }

@@ -22,6 +22,7 @@ export const InfoCol = React.memo(({ details, address, id }) => {
     isFetchingListings,
     isErc721,
     ownerBestListing,
+    ownershipTokenCount,
   } = useGetData(details, address, id);
 
   return (
@@ -45,6 +46,13 @@ export const InfoCol = React.memo(({ details, address, id }) => {
               {details.token.collection.name}
             </div>
           </div>
+          {(!isErc721 && (
+            <div>
+              {"Ownership Token Count: "}
+              {ownershipTokenCount}
+            </div>
+          )) ||
+            ""}
         </div>
         {isOwner ? (
           <div className="owner-buttons">

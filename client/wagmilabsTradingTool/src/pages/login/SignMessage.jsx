@@ -8,10 +8,10 @@ const SignMessage = ({ setWalletConnected, setMessage }) => {
   useEffect(() => {
     if (isConnected === true) {
       setWalletConnected(true);
-      setMessage("Please sign the message to verify pass ownership.");
+      setMessage("Welcome, verify wallet ownership by signing in.");
     } else {
       setWalletConnected(false);
-      setMessage("Please connect your wallet to access the NFT tool.");
+      setMessage("Enter the world of advanced NFT Trading...");
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isConnected]);
