@@ -1,21 +1,23 @@
 import React, { useContext, useMemo } from "react";
 import { notFound } from "@Assets";
-import "./style.css";
 import { Button, useToast } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { UserDataContext } from "@Context";
 import emptyCart from "@Utils/database-functions/emptyCart";
 import { getFiatPrice, roundPrice } from "@Utils/formats/formats";
-
 import { fetchSigner } from "@wagmi/core";
 import { getClient } from "@reservoir0x/reservoir-kit-client";
-import removeFromCart from "@Utils/database-functions/removeFromCart";
+import { useRemoveItemFromCart } from "@Hooks";
+
+import "./style.css";
 
 export const CartModal = ({ modalOpen, closeCartModal }) => {
   const toast = useToast();
   const { userCartItems, setUserCartItems, ethData, gasSettings } =
     useContext(UserDataContext);
   const navigate = useNavigate();
+
+  const { removeItemFromCart } = useRemoveItemFromCart();
 
   function startExploring(e) {
     closeCartModal(e);
@@ -27,27 +29,6 @@ export const CartModal = ({ modalOpen, closeCartModal }) => {
       let status = await emptyCart();
       if (status === "success") setUserCartItems([]);
       else throw new Error("error");
-    } catch (e) {
-      toast({
-        title: "Error",
-        description: "Something went wrong, try again later",
-        status: "error",
-        duration: 3000,
-        isClosable: true,
-      });
-    }
-  }
-
-  async function removeTokenFromCart(contractAddress, tokenId) {
-    try {
-      const { pushStatus, filteredItems } = await removeFromCart(
-        tokenId,
-        contractAddress
-      );
-
-      if (pushStatus !== "success") throw new Error("error");
-
-      setUserCartItems(filteredItems);
     } catch (e) {
       toast({
         title: "Error",
@@ -106,13 +87,20 @@ export const CartModal = ({ modalOpen, closeCartModal }) => {
   const userCartMapping = useMemo(
     () =>
       userCartItems.map(item => {
-        const { name, tokenId, contractAddress, image, price, collectionName } =
-          item;
+        const {
+          name,
+          tokenId,
+          contractAddress,
+          image,
+          price,
+          collectionName,
+          listingId,
+        } = item;
 
         return (
           <div
             className="user-cart-single-item"
-            key={contractAddress + tokenId}
+            key={contractAddress + tokenId + listingId}
           >
             <img src={image} className="user-cart-item-image" alt="" />
             <div className="user-cart-item-details-container wrap-text">
@@ -128,7 +116,9 @@ export const CartModal = ({ modalOpen, closeCartModal }) => {
 
               <p
                 className="user-cart-item-remove"
-                onClick={() => removeTokenFromCart(contractAddress, tokenId)}
+                onClick={() =>
+                  removeItemFromCart(tokenId, contractAddress, listingId)
+                }
               >
                 <i className="fa-solid fa-trash-can"></i>
               </p>
