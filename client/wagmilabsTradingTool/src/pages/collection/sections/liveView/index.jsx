@@ -7,6 +7,7 @@ import SalesMapping from "./mappings/SalesMapping";
 import ListingMapping from "./mappings/ListingsMapping";
 import BubbleChart from "./components/BubbleChart";
 import ListingChart from "./components/ListingChart";
+import ComparisonChart from "./components/ComparisonChart";
 
 const LiveView = memo(({ address, floorPrice }) => {
 
@@ -15,7 +16,7 @@ const LiveView = memo(({ address, floorPrice }) => {
     sales: false,
   });
 
-  const { isLoading, sales, listings, totalListings, totalSales, listingChartObject } = useGetData(address, columnHovered, floorPrice);
+  const { isLoading, sales, listings, totalListings, totalSales, tokens } = useGetData(address, columnHovered, floorPrice);
 
 
   const changeHover = (type, hovered) => {
@@ -33,7 +34,10 @@ const LiveView = memo(({ address, floorPrice }) => {
           <SalesMapping sales={sales} address={address} />
         </Column>
 
-        <ListingChart listingChartObject={listingChartObject} />
+        <div className="charts-column">
+          <ListingChart floorPrice={floorPrice} tokensData={tokens} />
+          <ComparisonChart totalListings={totalListings} totalSales={totalSales} floorPrice={floorPrice} />
+        </div>
       </div>
 
       <div>

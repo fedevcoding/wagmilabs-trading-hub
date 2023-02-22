@@ -23,8 +23,9 @@ const BubbleChart = memo(({ totalListings, totalSales, floorPrice }) => {
         else if (floorPrice < 1) setMaxPrice(1.4)
         else if (floorPrice < 5) setMaxPrice(8)
         else if (floorPrice < 10) setMaxPrice(18)
+        const minValue = Math.min(...totalListings?.map(listing => listing.value), ...totalSales?.map(sale => sale.value))
 
-        setMinPrice(floorPrice)
+        setMinPrice(minValue)
     }, [floorPrice])
 
 
@@ -160,24 +161,26 @@ const BubbleChart = memo(({ totalListings, totalSales, floorPrice }) => {
         },
         tooltip: {
             useHTML: true
-        }
+        },
     }
 
     return (
         <div className='bubble-chart'>
-            <HStack>
-                <NumberInput>
-                    <HStack>
-                        <NumberInputField placeholder="Min offset" onChange={e => setMinPrice(e.target.value)} defaultValue={floorPrice} value={floorPrice} />
-                    </HStack>
-                </NumberInput>
+            <div className='chart-options'>
+                <HStack>
+                    <NumberInput>
+                        <HStack>
+                            <NumberInputField placeholder="Min price (ETH)" onChange={e => setMinPrice(e.target.value)} defaultValue={floorPrice} value={floorPrice} />
+                        </HStack>
+                    </NumberInput>
 
-                <NumberInput>
-                    <HStack>
-                        <NumberInputField placeholder="Max offset" onChange={e => setMaxPrice(e.target.value)} defaultValue={maxPrice} />
-                    </HStack>
-                </NumberInput>
-            </HStack>
+                    <NumberInput>
+                        <HStack>
+                            <NumberInputField placeholder="Max price (ETH)" onChange={e => setMaxPrice(e.target.value)} defaultValue={maxPrice} />
+                        </HStack>
+                    </NumberInput>
+                </HStack>
+            </div>
 
             <HighchartsReact
                 highcharts={HighCharts}
