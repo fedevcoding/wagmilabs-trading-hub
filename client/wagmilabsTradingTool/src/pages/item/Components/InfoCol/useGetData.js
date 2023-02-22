@@ -5,10 +5,12 @@ export function useGetData(details, address, id) {
   const { address: accountAddress } = useAccount();
   const collectionImage = details.token?.collection?.image;
   const isErc721 = details.token?.kind === "erc721";
-  const { data: tokens } = useUserTokens(accountAddress);
-  const isOwner = tokens
-    .map(t => t.token.contract + ":" + t.token.tokenId)
-    .includes(`${address}:${id}`);
+  const { data: tokens } = useUserTokens(accountAddress, {
+    tokens: [`${address}:${id}`],
+  });
+
+  const isOwner = tokens.length;
+  const ownershipTokenCount = isOwner ? tokens[0]?.ownership?.tokenCount : null;
 
   const ownerBestListing =
     details?.market?.floorAsk?.maker?.toLowerCase() ===
@@ -32,5 +34,6 @@ export function useGetData(details, address, id) {
     isErc721,
     accountAddress,
     ownerBestListing,
+    ownershipTokenCount,
   };
 }
