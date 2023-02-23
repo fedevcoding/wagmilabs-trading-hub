@@ -15,3 +15,4 @@ export { useCancelListing } from "./useCancelListing";
 export { useSetPageTitle } from "./useSetPageTitle";
 export { useRefreshSecond } from "./useRefreshSecond";
 export { useConnected } from "./useConnected";
+export { useGetTab } from "./useGetTab";
