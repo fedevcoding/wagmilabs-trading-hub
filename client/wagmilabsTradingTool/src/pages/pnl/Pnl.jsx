@@ -4,9 +4,15 @@ import { CardRecap, SettingsAndFilters, Table } from "./Components";
 import { useSetPageTitle } from "@Hooks";
 
 import "./style.scss";
+import { useTimeframe } from "./useTimeframe";
+import { useGetData } from "./useGetData";
 
 export default React.memo(() => {
   useSetPageTitle("Portfolio P&L | Wagmi Labs");
+  const { startDate, endDate, setStartDate, setEndDate } = useTimeframe();
+  const { data } = useGetData(startDate, endDate);
+
+  console.log("data", data);
 
   return (
     <PageWrapper page="pnl">
@@ -16,7 +22,12 @@ export default React.memo(() => {
           <CardRecap />
         </Col>
         <Col className="text-right">
-          <SettingsAndFilters />
+          <SettingsAndFilters
+            startDate={startDate}
+            endDate={endDate}
+            setStartDate={setStartDate}
+            setEndDate={setEndDate}
+          />
         </Col>
       </Row>
       <Card>
