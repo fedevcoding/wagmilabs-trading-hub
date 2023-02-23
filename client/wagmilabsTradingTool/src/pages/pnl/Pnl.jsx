@@ -1,25 +1,12 @@
 import React from "react";
-import { Col, PageWrapper, Row, Tabs } from "@Components";
-import { CardRecap, Nft } from "./Components";
-import { useGetTab, useSetPageTitle } from "@Hooks";
+import { Card, Col, PageWrapper, Row } from "@Components";
+import { CardRecap, SettingsAndFilters, Table } from "./Components";
+import { useSetPageTitle } from "@Hooks";
 
 import "./style.scss";
 
 export default React.memo(() => {
   useSetPageTitle("Portfolio P&L | Wagmi Labs");
-  const defaultTab = "NFT";
-  const tabs = [
-    defaultTab,
-    "Paid",
-    "Sold",
-    "Gas fees",
-    "Pool",
-    "Hold duration",
-    "Gross profit",
-    "Taxes",
-    "Owned",
-  ];
-  const [tab, setTab] = useGetTab(tabs, defaultTab);
 
   return (
     <PageWrapper page="pnl">
@@ -28,10 +15,13 @@ export default React.memo(() => {
         <Col>
           <CardRecap />
         </Col>
-        <Col></Col>
+        <Col className="text-right">
+          <SettingsAndFilters />
+        </Col>
       </Row>
-      <Tabs tabs={tabs} active={tab} setTab={setTab} updateUrl />
-      {tab === defaultTab ? <Nft /> : <p>Work in progress...</p>}
+      <Card>
+        <Table />
+      </Card>
     </PageWrapper>
   );
 });
