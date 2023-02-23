@@ -8,7 +8,7 @@ import { useParams } from 'react-router-dom';
 import { useAccount } from 'wagmi';
 import { AnimationOnScroll } from 'react-animation-on-scroll';
 import moment from "moment";
-import { daysOfTheWeek, hoursIntervals } from '../../Calendar';
+import { hoursIntervals } from '../../Calendar';
 import { chunkArrayInGroups } from 'src/utils/formats/utils';
 import { IconLink } from '../IconLink';
 import { MonthSwitch } from '../MonthSwitch';
@@ -90,6 +90,7 @@ export const MonthlyCalendar = React.memo(({sectionData}) => {
 
   const changeDate = (back) => {
     setIsLoading(true);
+    setCurEventDetail(null);
     let nextDate = new Date(currentDate.getTime())
     if (back) {
       nextDate.setMonth(currentDate.getMonth()-1)
@@ -175,32 +176,19 @@ export const MonthlyCalendar = React.memo(({sectionData}) => {
 
 const [curEventDetail, setCurEventDetail] = useState(null);
 
-const showEventDetail = (eventId) => {
-  document.getElementById(eventId).classList.remove('hide');
-}
-
-const hideEventDetail = (eventId) => {
-  document.getElementById(eventId).classList.add('hide');
-}
-
   const onEventDetails = (eventId) => {
     if (eventId) {
       if (curEventDetail) {
         if (curEventDetail === eventId) {
-          hideEventDetail(curEventDetail);
           setCurEventDetail(null);
         } else {
-          hideEventDetail(curEventDetail);
-          showEventDetail(eventId);
           setCurEventDetail(eventId);
         }
       } else {
-        showEventDetail(eventId);
         setCurEventDetail(eventId);
       }
     } else {
       if (curEventDetail) {
-        hideEventDetail(curEventDetail);
         setCurEventDetail(null);
       }
     }
@@ -212,8 +200,9 @@ const hideEventDetail = (eventId) => {
       <>
       {eventsInHour.map((event) => (
         <div className="selected-event-in-day">
-          <div className='event-name' onClick={() =>onEventDetails(event?.eventName || event?.collectionName)}>{event?.eventName || event?.collectionName}</div>
-          <div className='event-detail hide' id={event?.eventName || event?.collectionName}>
+          <div className='event-name' onClick={() =>onEventDetails(event?._id)}>{event?.eventName || event?.collectionName}</div>
+          {event._id === curEventDetail && (
+          <div className='event-detail' id={event?.eventName || event?.collectionName}>
             <div>{event?.eventName || event?.collectionName}</div>
             <div className='arrow-right'></div>
             <div className="event-tile">{event?.eventDescription ? (event?.eventDescription) : (`price: ${event?.price}`)}</div>
@@ -227,6 +216,7 @@ const hideEventDetail = (eventId) => {
             </>
             )}
           </div>
+          )}
         </div>
     ))}
     </>
