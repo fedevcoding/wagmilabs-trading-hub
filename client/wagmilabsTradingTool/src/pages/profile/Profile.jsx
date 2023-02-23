@@ -23,7 +23,7 @@ import {
 import { UserDataContext } from "@Context";
 
 import copy from "copy-to-clipboard";
-import setPageTitle from "@Utils/functions/setPageTitle";
+import { useSetPageTitle } from "@Hooks";
 
 const sortItemsOptions = [
   { value: "desc", label: "Newest" },
@@ -68,10 +68,11 @@ const Profile = () => {
   const [copyState, setCopyState] = useState({ ens: "Copy", address: "Copy" });
 
   useEffect(() => {
-    setPageTitle("Profile | Wagmi Labs");
     fetchUserData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useSetPageTitle("Profile | Wagmi Labs");
 
   useEffect(() => {
     fetchUserCollections(debounceCollectionSearch, 0, 20);

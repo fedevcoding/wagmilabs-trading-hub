@@ -9,7 +9,7 @@ import WatchList from "./tools/watchList/WatchList";
 import Owned from "./tools/owned/Owned";
 import { LivePulsing } from "@Components";
 
-import setPageTitle from "@Utils/functions/setPageTitle";
+import { setPageTitle } from "@Utils";
 import { PromoModal } from "@Components";
 import { useDisclosure } from "@chakra-ui/react";
 

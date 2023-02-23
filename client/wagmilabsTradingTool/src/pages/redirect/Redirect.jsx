@@ -1,17 +1,15 @@
-import React, { useEffect } from "react";
-
+import React from "react";
 import { notFound } from "@Assets";
 import { Button } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
-import "./redirect.css";
-import setPageTitle from "@Utils/functions/setPageTitle";
+import { useSetPageTitle } from "@Hooks";
+
+import "./style.scss";
 
 const Redirect = () => {
+  useSetPageTitle("404 Not foun | Wagmi Labs");
   const navigate = useNavigate();
 
-  useEffect(() => {
-    setPageTitle("404 Not foun | Wagmi Labs");
-  }, []);
   return (
     <div className="page-not-found-container">
       <p>404: The page you are looking for could not be found</p>

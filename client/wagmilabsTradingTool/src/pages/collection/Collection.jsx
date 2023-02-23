@@ -41,7 +41,7 @@ import getMarketplaceImage from "@Utils/marketplaceImageMapping";
 import copy from "copy-to-clipboard";
 import { useDebounce } from "use-debounce";
 import { Badge, useToast } from "@chakra-ui/react";
-import setPageTitle from "@Utils/functions/setPageTitle";
+import { setPageTitle } from "@Utils";
 import { SocketContext } from "src/context/SocketContext";
 
 // Item.js
@@ -518,12 +518,11 @@ const Collection = () => {
                 <div>{collectionInfo.name || "---"}</div>
 
                 <span onClick={handleChangeWatchlist}>
-                  {
-                    isWatchList ?
-                      <i className="fa-solid fa-star starWatchlist full"></i>
-                      :
-                      <i className="fa-light fa-star starWatchlist"></i>
-                  }
+                  {isWatchList ? (
+                    <i className="fa-solid fa-star starWatchlist full"></i>
+                  ) : (
+                    <i className="fa-light fa-star starWatchlist"></i>
+                  )}
                 </span>
               </div>
               <div

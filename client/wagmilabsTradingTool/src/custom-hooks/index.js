@@ -10,7 +10,8 @@ export { useHasItem } from "./useHasItem";
 export { useRemoveItemFromCart } from "./useRemoveItemFromCart";
 export { useGetBuyNowModalFunctions } from "./useGetBuyNowModalFunctions";
 export { useTransferItem } from "./useTransferItem";
-export {useRefreshMetadata} from "./useRefreshMetadata";
+export { useRefreshMetadata } from "./useRefreshMetadata";
 export { useCancelListing } from "./useCancelListing";
-export {useRefreshSecond} from "./useRefreshSecond";
-export {useConnected} from "./useConnected"
+export { useSetPageTitle } from "./useSetPageTitle";
+export { useRefreshSecond } from "./useRefreshSecond";
+export { useConnected } from "./useConnected";
