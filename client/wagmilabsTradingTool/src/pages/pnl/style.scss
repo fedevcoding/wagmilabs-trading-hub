@@ -1,0 +1,28 @@
+#page-pnl {
+  .recap-card {
+    .row + .row {
+      margin-top: 1.5rem;
+    }
+  }
+
+  .timeframe {
+    margin: 1rem 0 0.5rem;
+  }
+
+  .react-datepicker-wrapper {
+    max-width: 220px;
+  }
+
+  table {
+    th {
+      text-align: left;
+      font-weight: bold;
+      border-bottom: 1px solid var(--light-gray);
+      padding: 0.5rem 0;
+    }
+
+    td {
+      padding: 0.3rem 0;
+    }
+  }
+}

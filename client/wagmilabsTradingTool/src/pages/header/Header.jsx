@@ -17,7 +17,6 @@ import { fetchEnsName } from "@wagmi/core";
 import { useAccount } from "wagmi";
 
 const Header = () => {
-
   const {
     setEns,
     setProfileImage,
@@ -310,8 +309,9 @@ const Header = () => {
           </div>
           <div onClick={() => navigate("/volumes")}>
             <div
-              className={`${isVolumesPage ? "active" : ""
-                } volumes-button header-links`}
+              className={`${
+                isVolumesPage ? "active" : ""
+              } volumes-button header-links`}
             >
               Volumes
             </div>
@@ -321,8 +321,10 @@ const Header = () => {
               <span>P&L</span>
 
               <div className="pnl-options-dropdown invisible">
-                <div onClick={() => navigate("/pnl/all")}>All</div>
-                <div onClick={() => navigate("/pnl/taxes")}>Taxes</div>
+                <div onClick={() => navigate("/profitandloss")}>All</div>
+                <div onClick={() => navigate("/profitandloss/taxes")}>
+                  Taxes
+                </div>
               </div>
             </div>
           </div>
@@ -380,7 +382,10 @@ const Header = () => {
                 <p>Switch account</p>
               </div>
 
-              <div onClick={() => logOut(setConnected)} className="logout-container">
+              <div
+                onClick={() => logOut(setConnected)}
+                className="logout-container"
+              >
                 <i className="fa-solid fa-arrow-right-from-bracket"></i>
                 <p>Log Out</p>
               </div>
