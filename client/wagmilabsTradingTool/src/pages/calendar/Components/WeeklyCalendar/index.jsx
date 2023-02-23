@@ -4,6 +4,7 @@ import "./style.scss";
 import { AddEventModal } from 'src/components/Modals/AddEventModal';
 import { Button, useDisclosure } from "@chakra-ui/react";
 import { useAccount } from 'wagmi';
+import moment from 'moment';
 
 const daysOfTheWeak = [
 	"Sunday",
@@ -65,17 +66,16 @@ export const WeeklyCalendar = ({sectionData}) => {
   const { address } = useAccount();
   const allowedAddresses = ["0x8d50Ca23bDdFCA6DB5AE6dE31ca0E6A17586E5B8","0xfe697C5527ab86DaA1e4c08286D2bE744a0E321E","0x7FAC7b0161143Acfd80257873FB9cDb3F316C10C"];
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const getEventsInWeekday = (weekDay) => (sampleEvents.filter((event)=>(event.day === weekDay)))
-  const getAllEventsInAllWeakdays = () => (daysOfTheWeak.map((_, index)=>(getEventsInWeekday(index))))
+  const getEventsInWeekday = (weekDay) => (sectionData.filter((el)=>moment(el?.timestamp)?.day() === weekDay))
+  const getAllEventsInAllWeakdays = () => ( daysOfTheWeak.map((_, index)=>(getEventsInWeekday(index))))
   const allEventsInAllWeakdays = getAllEventsInAllWeakdays();
-  const getAllHoursBlockUsedForEachWeakDay = () => {
-    return allEventsInAllWeakdays.map((eventsInWeekDay) => {
-      const distinctHoursinWeekDayEvents = eventsInWeekDay.map((el)=>el.hours).filter((value, index, array) => array.indexOf(value) === index);
-      return distinctHoursinWeekDayEvents;
-    })
-  }
+  const getUsedHoursBlocks = () => (
+    allEventsInAllWeakdays.map((eventsInWeekDay) => (
+      eventsInWeekDay.map((el)=>moment(el?.timestamp).hours()).filter((value, index, array) => array.indexOf(value) === index))
+    )
+  )
 
-  const usedHoursBlocks = getAllHoursBlockUsedForEachWeakDay();
+  const usedHoursBlocks = getUsedHoursBlocks();
 
   const renderHeader = () => (
     <Row className="calendar-row">
@@ -87,7 +87,7 @@ export const WeeklyCalendar = ({sectionData}) => {
               <div className={usedHoursBlocks[dayIndex] && usedHoursBlocks[dayIndex].includes(h.idx) ? "active-hour-section" : "hour-section"}>
                 {getEventsInWeekday(dayIndex).map((event)=>(
                   <>
-                  {event.hours === h.idx && <div className="hour-event">{event.title}</div>}
+                  {moment(event?.timestamp).hours() === h.idx && <div className="hour-event">{event?.spaceName}</div>}
                   </>
                 ))}
               </div>
