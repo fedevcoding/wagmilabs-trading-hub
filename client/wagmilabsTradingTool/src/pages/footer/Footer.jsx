@@ -70,7 +70,7 @@ const Footer = () => {
           <i className="fa-solid fa-scale-unbalanced"></i>
         </a>
 
-        <a href="#info" target={"_blank"}>
+        <a href="https://docs.wagmilabs.tools/trading-hub-documentation" target={"_blank"}>
           <i className="fa-regular fa-circle-info"></i>
         </a>
 

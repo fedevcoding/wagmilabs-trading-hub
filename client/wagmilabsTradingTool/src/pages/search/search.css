@@ -12,6 +12,10 @@
     border-radius: 10px;
 }
 
+.login-search-container {
+    width: 320px;
+}
+
 .container.invisible {
     display: none;
 }

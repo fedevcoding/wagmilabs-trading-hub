@@ -1,0 +1,84 @@
+.login-header {
+    width: 100vw;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    // border-bottom: 3px solid transparent;
+    // border-image: linear-gradient(45deg, #3494E6, #EC6EAD);
+    // border-image-slice: 1;
+    background-color: rgb(0, 0, 0);
+    transition: all 0.3s;
+
+    color: white;
+
+    .links-container {
+        display: flex;
+
+        gap: 25px;
+
+        div {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            opacity: 0.6;
+            transition: all 0.3s;
+
+        }
+
+        div:hover {
+            transform: scale(1.02);
+            opacity: 1;
+        }
+
+        i {
+            font-size: 11px;
+        }
+    }
+
+
+    .logo {
+        width: 170px;
+    }
+
+    .logo-search-container {
+        display: flex;
+        align-items: center;
+        gap: 70px;
+    }
+
+}
+
+.connect-wallet-container {
+    background-color: transparent;
+    border: 2px solid white;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 5px 12px;
+    cursor: pointer;
+    border-radius: 6px;
+    color: white;
+
+    transition: all 400ms;
+    font-size: 14px;
+}
+
+.connect-wallet-container.not-header {
+    font-size: 22px;
+    padding: 10px 15px;
+}
+
+
+.connect-button {
+    color: inherit;
+    background-color: transparent;
+    font-size: inherit;
+}
+
+.connect-wallet-container:hover {
+    // font-size: 16px;
+    background-color: white;
+    color: black;
+}

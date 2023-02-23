@@ -11,7 +11,9 @@ import { placeholderImage } from "@Utils/images";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { BannerSearch } from "./BannerSearch";
 
-const EthereumSearch = () => {
+
+
+const EthereumSearch = ({ inLogin }) => {
   const firstRender = useFirstRender();
 
   const [text, setText] = useState("");
@@ -55,14 +57,7 @@ const EthereumSearch = () => {
     try {
       setLoadingCollections(true);
 
-      let collectionsApi = await fetch(
-        `${baseUrl}/searchCollection/${value}/${type}`,
-        {
-          headers: {
-            "x-auth-token": localStorage.jsonwebtoken,
-          },
-        }
-      );
+      let collectionsApi = await fetch(`${baseUrl}/searchCollection/${value}/${type}`);
       collectionsApi = await collectionsApi.json();
 
       const { collections: fetchedCollections } = collectionsApi || {};
@@ -232,14 +227,14 @@ const EthereumSearch = () => {
         <i className="fa-solid fa-magnifying-glass lens"></i>
         <input
           type="text"
-          className="search-bar"
+          className={`search-bar ${inLogin && "login-searchbar"}`}
           placeholder="Search collections"
           onChange={({ target }) => setText(target.value)}
           onClick={() => loadCollections(true)}
         ></input>
 
         {loadingCollections ? (
-          <div className="container">
+          <div className={`container ${inLogin && "login-search-container"}`}>
             <SkeletonTheme baseColor="#202020" highlightColor="#444">
               <div className="search-skeleton-row">
                 <Skeleton circle={true} width={30} height={30} count={5} />
@@ -248,7 +243,7 @@ const EthereumSearch = () => {
             </SkeletonTheme>
           </div>
         ) : (
-          collections.length > 0 && <div className="container">{memoList}</div>
+          collections.length > 0 && <div className={`container ${inLogin && "login-search-container"}`}>{memoList}</div>
         )}
       </div>
     </>

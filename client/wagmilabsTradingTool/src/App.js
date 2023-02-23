@@ -155,7 +155,7 @@ function App() {
   useEffect(() => {
     if (!connected) {
       document.body.style.background =
-        "linear-gradient(to right, #3494E6, #EC6EAD)";
+        "#0e0f0e";
     } else {
       document.body.style.background = "#0E0F0E";
     }
@@ -282,157 +282,164 @@ function App() {
                 coolMode
                 theme={darkTheme({ overlayBlur: "small" })}
               >
-                {!loading &&
-                  (checking ? (
-                    <Checking
-                      setConnected={setConnected}
-                      setChecking={setChecking}
-                    />
-                  ) : !connected ? (
-                    <>
-                      <BrowserRouter>
-                        <Routes>
-                          <Route
-                            exact
-                            path="/"
-                            element={
-                              <Login
-                                setConnected={setConnected}
-                                connected={connected}
-                              />
-                            }
-                          />
-                          <Route exact path="/legal" element={<Legals />} />
-                        </Routes>
-                      </BrowserRouter>
-                    </>
-                  ) : (
-                    <>
-                      <CheckWalletDisconnect />
-                      <ConnectedContext.Provider value={connectedContextValues}>
+                <div className="not-responsive">
+                  <p>
+                    This application is not optimized for small screens yet.
+                  </p>
+                </div>
+                <div id="application-wrapper">
+                  {!loading &&
+                    (checking ? (
+                      <Checking
+                        setConnected={setConnected}
+                        setChecking={setChecking}
+                      />
+                    ) : !connected ? (
+                      <>
                         <BrowserRouter>
                           <Routes>
                             <Route
                               exact
                               path="/"
                               element={
-                                connected && (
-                                  <>
-                                    <Header
-                                      setConnected={setConnected}
-                                      profileImage={profileImage}
-                                      setProfileImage={setProfileImage}
-                                      connected={connected}
-                                    />
-                                    <Home />
-                                    <Footer />
-                                  </>
-                                )
+                                <Login
+                                  setConnected={setConnected}
+                                  connected={connected}
+                                />
                               }
                             />
-
-                            <Route
-                              exact
-                              path="/collection/:address"
-                              element={
-                                <>
-                                  <Header /> <Collection /> <Footer />{" "}
-                                </>
-                              }
-                            />
-
-                            <Route
-                              exact
-                              path="/item/:address/:id"
-                              element={
-                                <>
-                                  <Header />
-                                  <Item />
-                                  <Footer />
-                                </>
-                              }
-                            />
-
-                            <Route
-                              exact
-                              path="/bots/sniper"
-                              element={
-                                <>
-                                  <Header />
-                                  <SniperBot />
-                                  <Footer />
-                                </>
-                              }
-                            />
-
-                            <Route
-                              exact
-                              path="/calculators"
-                              element={
-                                <>
-                                  <Header />
-                                  <Calculators />
-                                  <Footer />
-                                </>
-                              }
-                            />
-
-                            <Route
-                              exact
-                              path="/volumes"
-                              element={
-                                <>
-                                  <Header />
-                                  <Volumes />
-                                  <Footer />
-                                </>
-                              }
-                            />
-
-                            <Route
-                              exact
-                              path="/feed"
-                              element={
-                                <>
-                                  <Header />
-                                  <Feed />
-                                  <Footer />
-                                </>
-                              }
-                            />
-
-                            <Route
-                              exact
-                              path="/profitandloss"
-                              element={
-                                <>
-                                  <Header />
-                                  <Pnl />
-                                  <Footer />
-                                </>
-                              }
-                            />
-
-                            <Route
-                              exact
-                              path="/profile"
-                              element={
-                                <>
-                                  <Header />
-                                  <Profile />
-                                  <Footer />
-                                </>
-                              }
-                            />
-
                             <Route exact path="/legal" element={<Legals />} />
-
-                            <Route path="*" element={<Redirect />} />
                           </Routes>
                         </BrowserRouter>
-                      </ConnectedContext.Provider>
-                    </>
-                  ))}
+                      </>
+                    ) : (
+                      <>
+                        <CheckWalletDisconnect />
+                        <ConnectedContext.Provider value={connectedContextValues}>
+                          <BrowserRouter>
+                            <Routes>
+                              <Route
+                                exact
+                                path="/"
+                                element={
+                                  connected && (
+                                    <>
+                                      <Header
+                                        setConnected={setConnected}
+                                        profileImage={profileImage}
+                                        setProfileImage={setProfileImage}
+                                        connected={connected}
+                                      />
+                                      <Home />
+                                      <Footer />
+                                    </>
+                                  )
+                                }
+                              />
+
+                              <Route
+                                exact
+                                path="/collection/:address"
+                                element={
+                                  <>
+                                    <Header /> <Collection /> <Footer />{" "}
+                                  </>
+                                }
+                              />
+
+                              <Route
+                                exact
+                                path="/item/:address/:id"
+                                element={
+                                  <>
+                                    <Header />
+                                    <Item />
+                                    <Footer />
+                                  </>
+                                }
+                              />
+
+                              <Route
+                                exact
+                                path="/bots/sniper"
+                                element={
+                                  <>
+                                    <Header />
+                                    <SniperBot />
+                                    <Footer />
+                                  </>
+                                }
+                              />
+
+                              <Route
+                                exact
+                                path="/calculators"
+                                element={
+                                  <>
+                                    <Header />
+                                    <Calculators />
+                                    <Footer />
+                                  </>
+                                }
+                              />
+
+                              <Route
+                                exact
+                                path="/volumes"
+                                element={
+                                  <>
+                                    <Header />
+                                    <Volumes />
+                                    <Footer />
+                                  </>
+                                }
+                              />
+
+                              <Route
+                                exact
+                                path="/feed"
+                                element={
+                                  <>
+                                    <Header />
+                                    <Feed />
+                                    <Footer />
+                                  </>
+                                }
+                              />
+
+                              <Route
+                                exact
+                                path="/profitandloss"
+                                element={
+                                  <>
+                                    <Header />
+                                    <Pnl />
+                                    <Footer />
+                                  </>
+                                }
+                              />
+
+                              <Route
+                                exact
+                                path="/profile"
+                                element={
+                                  <>
+                                    <Header />
+                                    <Profile />
+                                    <Footer />
+                                  </>
+                                }
+                              />
+
+                              <Route exact path="/legal" element={<Legals />} />
+
+                              <Route path="*" element={<Redirect />} />
+                            </Routes>
+                          </BrowserRouter>
+                        </ConnectedContext.Provider>
+                      </>
+                    ))}
+                </div>
               </RainbowKitProvider>
             </WagmiConfig>
           </ReservoirKitProvider>
