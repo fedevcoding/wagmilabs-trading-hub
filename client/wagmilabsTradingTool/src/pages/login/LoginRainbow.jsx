@@ -19,7 +19,7 @@ const Login = ({ setConnected }) => {
   return (
     <>
       <div className="login-container">
-        <img src={loginBackground} className="login-background"></img>
+        <img src={loginBackground} className="login-background" alt="login-background"></img>
         <Header setConnected={setConnected} setWalletConnected={setWalletConnected} />
 
         {
@@ -28,7 +28,6 @@ const Login = ({ setConnected }) => {
         }
 
         <Home setWalletConnected={setWalletConnected} />
-
         <Footer />
       </div>
     </>
