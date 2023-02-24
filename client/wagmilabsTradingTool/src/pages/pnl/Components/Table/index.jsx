@@ -1,6 +1,8 @@
 import React from "react";
+import { formatAddress } from "@Utils/formats/formats";
+import { roundPrice, roundPrice2 } from "src/utils/formats/formats";
 
-export const Table = React.memo(() => {
+export const Table = React.memo(({ data }) => {
   return (
     <table>
       <thead>
@@ -16,16 +18,32 @@ export const Table = React.memo(() => {
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td>NFT #123</td>
-          <td>$500</td>
-          <td>$1,000</td>
-          <td>$50</td>
-          <td>$450</td>
-          <td>2 months</td>
-          <td>$950</td>
-          <td>$130</td>
-        </tr>
+        {data.map(n => {
+          const nft = n.info;
+          return (
+            <tr key={n.info.nft.address + n.info.nft.id}>
+              <td>
+                {formatAddress(nft.nft.address)}
+                <br />
+                {"#" + nft.nft.id}
+              </td>
+              <td>
+                {nft.paid.eth + " ETH"} <br /> {nft.paid.usd + "$"}
+              </td>
+              <td>
+                {nft.sold.eth + " ETH"} <br /> {nft.sold.usd + "$"}
+              </td>
+              <td>
+                {roundPrice(nft.gasFees.total.eth) + " ETH"} <br />{" "}
+                {roundPrice2(nft.gasFees.total.usd) + "$"}
+              </td>
+              <td>...</td>
+              <td>...</td>
+              <td>...</td>
+              <td>...</td>
+            </tr>
+          );
+        })}
       </tbody>
     </table>
   );
