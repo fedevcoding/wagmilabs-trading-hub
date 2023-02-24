@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, Col, PageWrapper, Row } from "@Components";
+import { Card, Col, LoadingSpinner, PageWrapper, Row } from "@Components";
 import { CardRecap, SettingsAndFilters, Table } from "./Components";
 import { useSetPageTitle } from "@Hooks";
 
@@ -34,9 +34,7 @@ export default React.memo(() => {
           />
         </Col>
       </Row>
-      <Card>
-        <Table />
-      </Card>
+      <Card>{data ? <Table data={data} /> : <LoadingSpinner />}</Card>
     </PageWrapper>
   );
 });
