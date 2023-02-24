@@ -1,5 +1,5 @@
 import React from "react";
-import { getCurrencies, getTaxedTypes } from "../functions";
+import { getCurrencies, getTaxedTypes } from "./functions";
 
 export function useSettings() {
   const taxedTypes = getTaxedTypes();

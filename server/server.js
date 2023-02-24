@@ -39,6 +39,8 @@ const profileActivityRoute = require("./routes/ethereum/profile/profileActivityR
 const profileTradedCollectionsRoute = require("./routes/ethereum/profile/profileTradedCollectionsRoute.js");
 const collectionListingsRoute = require("./routes/ethereum/collections/collectionListingsRoute.js");
 const collectionSalesRoute = require("./routes/ethereum/collections/collectionSalesRoute.js");
+const pnlRoute = require("./routes/ethereum/pnlRoute.js");
+
 //
 
 // port
@@ -80,34 +82,27 @@ const io = socketIO(server, {
 
 app.set("socketio", io);
 
-
-
 let ethData;
 async function updateGasData() {
   try {
-    let currentEthData = await getCoinsGasData()
-    ethData = currentEthData
-  }
-  catch (e) {
-    console.log(e)
+    let currentEthData = await getCoinsGasData();
+    ethData = currentEthData;
+  } catch (e) {
+    console.log(e);
   }
 }
-updateGasData()
+updateGasData();
 setInterval(async () => {
-  await updateGasData()
-}, 10000)
+  await updateGasData();
+}, 10000);
 
-
-
-io.on('connection', (socket) => {
-
+io.on("connection", (socket) => {
   setInterval(() => {
-    socket.emit("ethData", ethData)
-  }, 10000)
+    socket.emit("ethData", ethData);
+  }, 10000);
   socket.on("getEthData", () => {
-    socket.emit("ethData", ethData)
-  })
-
+    socket.emit("ethData", ethData);
+  });
 
   socket.on("joinSales", (collectionAddress) => {
     const channel = `sales${collectionAddress}`;
@@ -196,7 +191,10 @@ app.use("/api/v1/wagmilabs/activityChart", activityChartRoute);
 app.use("/api/v1/wagmilabs/collectionActivity", collectionActivityRoute);
 app.use("/api/v1/wagmilabs/tokenListPrice", tokenLisrPriceRoute);
 app.use("/api/v1/wagmilabs/profileActivity", profileActivityRoute);
-app.use("/api/v1/wagmilabs/profileTradedCollections", profileTradedCollectionsRoute);
+app.use(
+  "/api/v1/wagmilabs/profileTradedCollections",
+  profileTradedCollectionsRoute
+);
 app.use("/api/v1/wagmilabs/collectionListings", collectionListingsRoute);
 app.use("/api/v1/wagmilabs/collectionSales", collectionSalesRoute);
 
@@ -217,9 +215,8 @@ app.use("/api/v1/wagmilabs/collectionItems", collectionItemsRoute);
 app.use("/api/v1/wagmilabs/watchlistCollections", watchlistCollectionsRoute);
 app.use("/api/v1/wagmilabs/ownedCollections", ownedCollectionsRoute);
 app.use("/api/v1/wagmilabs/refreshCollection", refreshCollectionRoute);
-
+app.use("/api/v1/wagmilabs/pnl", pnlRoute);
 app.use("/api/v1/wagmilabs/stats", statsRoute);
-
 
 // bots routes
 
