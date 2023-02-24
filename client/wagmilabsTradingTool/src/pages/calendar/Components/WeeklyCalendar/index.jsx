@@ -3,7 +3,7 @@ import { Col, Row } from '@Components';
 import { AddEventModal } from 'src/components/Modals/AddEventModal';
 import { Button, useDisclosure } from "@chakra-ui/react";
 import { useAccount } from 'wagmi';
-import { getSelectedDateTitle, hoursIntervals as allHoursIntervals } from '../../Calendar';
+import { getSelectedDateTitle, hoursIntervals} from '../../Calendar';
 import { WeeklyScheduler } from '../WeeklyScheduler';
 import { WeeklySubtitle } from '../WeeklySubtitle';
 import { CalendarEventDetail } from '../CalendarEventDetail';
@@ -11,7 +11,6 @@ import moment from 'moment';
 import "./style.scss";
 
 export const WeeklyCalendar = ({sectionData}) => {
-  const [hoursIntervals, setHoursIntervals] = useState(allHoursIntervals);
   const [selectedEvents, setSelectedEvents] = useState([]);
   const { address } = useAccount();
   const allowedAddresses = ["0x8d50Ca23bDdFCA6DB5AE6dE31ca0E6A17586E5B8","0xfe697C5527ab86DaA1e4c08286D2bE744a0E321E","0x7FAC7b0161143Acfd80257873FB9cDb3F316C10C"];
@@ -25,12 +24,6 @@ export const WeeklyCalendar = ({sectionData}) => {
       }
     )
   }
-
-  useEffect(()=>{
-    const min = Math.min(...sectionData.map(o => moment(o.timestamp).hours()));
-    const max = Math.max(...sectionData.map(o => moment(o.timestamp).hours()));
-    setHoursIntervals(allHoursIntervals.filter((el)=>el.idx >= min && el.idx <= max));
-  },[sectionData])
 
   useEffect(() => {
     if (selectedDate) {
