@@ -1,19 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { Col, Row } from '@Components';
 import { Button } from '@chakra-ui/react';
-import "./style.scss";
 import { AddEventModal } from 'src/components/Modals/AddEventModal';
 import { useDisclosure } from "@chakra-ui/react";
 import { useParams } from 'react-router-dom';
 import { useAccount } from 'wagmi';
 import { AnimationOnScroll } from 'react-animation-on-scroll';
-import moment from "moment";
-import { hoursIntervals } from '../../Calendar';
+import { getSelectedDateTitle, hoursIntervals } from '../../Calendar';
 import { chunkArrayInGroups } from 'src/utils/formats/utils';
-import { IconLink } from '../IconLink';
 import { MonthSwitch } from '../MonthSwitch';
 import { CalendarHeader } from '../CalendarHeader';
 import { DayTile } from '../DayTile';
+import { CalendarEventDetail } from '../CalendarEventDetail';
+import moment from "moment";
+import "./style.scss";
+
 
 export const MonthlyCalendar = React.memo(({sectionData}) => {
   const { address } = useAccount();
@@ -24,6 +25,7 @@ export const MonthlyCalendar = React.memo(({sectionData}) => {
   const [currentDate, setCurrentDate] = useState(today);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedEvents, setSelectedEvents] = useState([]);
+  const [curEventDetail, setCurEventDetail] = useState(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const getDaysInMonth = (month, year, changedDate) => {
@@ -115,8 +117,6 @@ export const MonthlyCalendar = React.memo(({sectionData}) => {
 
   }
 
-  const getSelectedDateTitle = (selDate) => (`${selDate.toLocaleDateString('en-GB', { month: 'long'})}, ${selDate.toLocaleDateString('en-GB', { weekday: 'long' })}, ${selDate.getDate()}, ${selDate.getFullYear()}`)
-
   const showSelectedDate = (d, idx) => {
     const allDaysInMonthCopy = [...allDaysInMonth];
     if (idx>0) {
@@ -174,8 +174,6 @@ export const MonthlyCalendar = React.memo(({sectionData}) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   },[])
 
-const [curEventDetail, setCurEventDetail] = useState(null);
-
   const onEventDetails = (eventId) => {
     if (eventId) {
       if (curEventDetail) {
@@ -202,20 +200,7 @@ const [curEventDetail, setCurEventDetail] = useState(null);
         <div className="selected-event-in-day">
           <div className='event-name' onClick={() =>onEventDetails(event?._id)}>{event?.eventName || event?.collectionName}</div>
           {event._id === curEventDetail && (
-          <div className='event-detail' id={event?.eventName || event?.collectionName}>
-            <div>{event?.eventName || event?.collectionName}</div>
-            <div className='arrow-right'></div>
-            <div className="event-tile">{event?.eventDescription ? (event?.eventDescription) : (`price: ${event?.price}`)}</div>
-            {event?.eventLocation && <div className="event-tile">{`location: ${event?.eventLocation}`}</div>}
-            {event?.supply && <div className="event-tile">{`supply: ${event?.supply}`}</div>}
-            {event?.links && (
-            <>
-            {Object.keys(event?.links).map((key) => (
-              <IconLink type={key} link={event?.links[key]} />
-            ))}
-            </>
-            )}
-          </div>
+            <CalendarEventDetail event={event} />
           )}
         </div>
     ))}

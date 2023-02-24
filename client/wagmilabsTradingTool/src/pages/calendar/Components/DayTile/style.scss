@@ -12,13 +12,14 @@
   overflow: hidden;
   white-space: nowrap;
   flex-direction: column;
+  cursor: pointer;
 }
 
 .not-curr-day {
   background-color: #414141;
 }
 
-.today {
+.selected-tile {
   border: 3px solid rgb(69, 178, 21);
   box-shadow: inset 0 0 8px rgba(69,178,21,0.8);
   height: 92px;

@@ -2,6 +2,7 @@ import React from 'react'
 import Twitter from "../../../../assets/twitter.png";
 import Discord from "../../../../assets/discord.png";
 import Youtube from "../../../../assets/youtube.svg";
+import Eventbrite from "../../../../assets/eventbrite.svg";
 import './style.scss';
 
 const matchIcon = (type) => {
@@ -12,6 +13,8 @@ const matchIcon = (type) => {
       return Discord;
     case 'youtube':
       return Youtube;
+    case 'tickets':
+      return Eventbrite;
     default:
       return null;
   }

@@ -35,5 +35,5 @@ export function useGetData() {
     getData();
   }, [socket]);
 
-  return { isLoading, drops, events, personal, spaces };
+  return {isLoading, drops, events, personal, spaces};
 }

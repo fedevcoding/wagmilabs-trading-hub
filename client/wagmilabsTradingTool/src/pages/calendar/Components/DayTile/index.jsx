@@ -5,12 +5,12 @@ import './style.scss'
 const dayClass = (d) => {
   if (d.notCurrent) {
     if (d.isSelected) {
-      return "day-container not-curr-day today"
+      return "day-container not-curr-day selected-tile"
     }
     return "day-container not-curr-day"
   } else {
     if (d.isSelected) {
-      return "day-container today"
+      return "day-container selected-tile"
     }
     return "day-container"
   }

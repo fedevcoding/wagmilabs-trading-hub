@@ -27,11 +27,6 @@
   margin-bottom: 40px;
 }
 
-.weekly-calendar-subtitle {
-  justify-content: center;
-  padding: 10px 0px 10px 0px;
-}
-
 .calendar-right-inner-container {
   display: flex;
   flex: 1;
@@ -55,23 +50,6 @@
   margin: 10px 0px 10px 0px;
 }
 
-.weekday-calendar-column {
-  display: flex;
-  flex: 1;
-  min-width: 75px;
-  justify-content: center;
-}
-
-.weekday-calendar-inner-column {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.weekday-col-title {
-  margin-bottom: 8px;
-}
-
 .calendar-row {
   display: flex;
   flex: 1;
@@ -80,31 +58,4 @@
 .main-title {
   justify-content: center;
   padding-bottom: 15px;
-}
-
-.hour-section {
-  height: 60px;
-  border-radius: 5px;
-  width: 60px;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
-  background-color: #0E0F0E;
-}
-
-.active-hour-section {
-  height: 60px;
-  border-radius: 5px;
-  width: 60px;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
-  background-color: #616161;
-}
-
-.hour-event {
-  width: 60px;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
 }

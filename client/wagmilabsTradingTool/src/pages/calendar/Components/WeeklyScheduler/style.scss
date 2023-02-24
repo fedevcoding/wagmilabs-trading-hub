@@ -1,0 +1,54 @@
+.weekday-calendar-column {
+  display: flex;
+  flex: 1;
+  min-width: 75px;
+  justify-content: center;
+}
+
+.weekday-calendar-inner-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.weekday-col-title {
+  margin-bottom: 8px;
+}
+
+.calendar-row {
+  display: flex;
+  flex: 1;
+}
+
+.hour-section {
+  height: 60px;
+  border-radius: 5px;
+  width: 60px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  background-color: #0E0F0E;
+}
+
+.active-hour-section {
+  height: 60px;
+  border-radius: 5px;
+  width: 60px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  background-color: #616161;
+}
+
+.hour-slot {
+  width: 60px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.selected-hour {
+  border: 3px solid rgb(69, 178, 21);
+  box-shadow: inset 0 0 8px rgba(69,178,21,0.8);
+}

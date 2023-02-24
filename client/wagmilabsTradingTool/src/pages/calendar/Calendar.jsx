@@ -50,8 +50,10 @@ export const hoursIntervals = [
   {val:"4:00",idx:4},
 ]
 
+export const getSelectedDateTitle = (selDate) => (`${selDate.toLocaleDateString('en-GB', { month: 'long'})}, ${selDate.toLocaleDateString('en-GB', { weekday: 'long' })}, ${selDate.getDate()}, ${selDate.getFullYear()}`)
+
 export const Calendar = () => {
-  const [sectionData, setSectionData] = useState([]);
+  const [sectionData, setSectionData] = useState(null);
   const data = useGetData();
   const {section} = useParams();
   const mainTitle = titles[section];
@@ -63,16 +65,22 @@ export const Calendar = () => {
   )
   
   useEffect(()=>{
-    setSectionData(section === 'raffles' ? data.personal : data[section]);
+    if(!data.isLoading){
+      setSectionData(section === 'raffles' ? data.personal : data[section]);
+    }
   },[data, section])
 
   return (
     <PageWrapper page="calendar">
       {renderMainTitle()}
-      {section === "spaces" ? (
-        <WeeklyCalendar sectionData={sectionData} />
-      ):(
-        <MonthlyCalendar sectionData={sectionData} />
+      {sectionData && (
+        <>
+        {sectionData.length > 0 && section === "spaces" ? (
+          <WeeklyCalendar sectionData={sectionData} />
+        ):(
+          <MonthlyCalendar sectionData={sectionData} />
+        )}
+        </>
       )}
     </PageWrapper>
   )
