@@ -7,10 +7,11 @@ import "./style.scss";
 import { useTimeframe } from "./useTimeframe";
 import { useGetData } from "./useGetData";
 import { useSettings } from "./useSettings";
+import { useAccount } from "wagmi";
 
 export default React.memo(() => {
-  const address = "0xfe697C5527ab86DaA1e4c08286D2bE744a0E321E";
-  // const { address } = useAccount();
+  // const address = "0xfe697C5527ab86DaA1e4c08286D2bE744a0E321E";
+  const { address } = useAccount();
   useSetPageTitle("Portfolio P&L | Wagmi Labs");
   const { startDate, endDate, setStartDate, setEndDate } = useTimeframe();
   const { data } = useGetData(address, startDate, endDate);
