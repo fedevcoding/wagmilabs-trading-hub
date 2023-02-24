@@ -1,14 +1,16 @@
-import { Button, DatePicker } from "@Components";
+import { Button, DatePicker, TaxSettingsModal } from "@Components";
 import React from "react";
 
 export const SettingsAndFilters = React.memo(
-  ({ startDate, endDate, setStartDate, setEndDate }) => {
+  ({ startDate, endDate, setStartDate, setEndDate, ...settings }) => {
+    const [isOpen, setIsOpen] = React.useState(false);
     const today = new Date();
     const aYearAgo = new Date().setFullYear(today.getFullYear() - 1);
 
     return (
       <>
-        <Button>Tax settings</Button>
+        <Button onClick={() => setIsOpen(true)}>Tax settings</Button>
+        <TaxSettingsModal isOpen={isOpen} setIsOpen={setIsOpen} {...settings} />
         <p className="timeframe">Timeframe</p>
         <DatePicker
           selectsRange={true}
