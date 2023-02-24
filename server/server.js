@@ -39,7 +39,7 @@ const profileActivityRoute = require("./routes/ethereum/profile/profileActivityR
 const profileTradedCollectionsRoute = require("./routes/ethereum/profile/profileTradedCollectionsRoute.js");
 const collectionListingsRoute = require("./routes/ethereum/collections/collectionListingsRoute.js");
 const collectionSalesRoute = require("./routes/ethereum/collections/collectionSalesRoute.js");
-const pnlRoute = require("./routes/ethereum/pnlRoute.js");
+const pAndLRoute = require("./routes/ethereum/pAndLRoute.js");
 
 //
 
@@ -215,7 +215,7 @@ app.use("/api/v1/wagmilabs/collectionItems", collectionItemsRoute);
 app.use("/api/v1/wagmilabs/watchlistCollections", watchlistCollectionsRoute);
 app.use("/api/v1/wagmilabs/ownedCollections", ownedCollectionsRoute);
 app.use("/api/v1/wagmilabs/refreshCollection", refreshCollectionRoute);
-app.use("/api/v1/wagmilabs/pnl", pnlRoute);
+app.use("/api/v1/wagmilabs/p-and-l", pAndLRoute);
 app.use("/api/v1/wagmilabs/stats", statsRoute);
 
 // bots routes

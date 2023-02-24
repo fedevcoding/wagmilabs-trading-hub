@@ -7,7 +7,7 @@ export function useGetData(address, startDate, endDate) {
   React.useEffect(() => {
     (async () => {
       let data = await fetch(
-        `${baseUrl}/pnl/${address}?startDate=${startDate}&endDate=${endDate}`,
+        `${baseUrl}/p-and-l/${address}?startDate=${startDate}&endDate=${endDate}`,
         {
           headers: {
             "x-auth-token": localStorage.jsonwebtoken,
