@@ -5,10 +5,23 @@ import { HStack, NumberInput, NumberInputField } from "@chakra-ui/react";
 
 const columns = 25;
 
+
+const defaultChartSettings = {
+  title: {
+    text: "Listings wall",
+  },
+  chart: {
+    backgroundColor: "transparent",
+  },
+  legend: {
+    enabled: false,
+  },
+};
+
 const ListingChart = memo(({ floorPrice, tokensData }) => {
   const [offset, setOffset] = useState(0);
 
-  const [chartOptions, setChartOptions] = useState({});
+  const [chartOptions, setChartOptions] = useState(defaultChartSettings);
 
   useEffect(() => {
     if (floorPrice) {
@@ -28,8 +41,14 @@ const ListingChart = memo(({ floorPrice, tokensData }) => {
 
   useEffect(() => {
     if (floorPrice) {
+      const numberOffset = Number(offset);
+
+      if(numberOffset === 0) {
+        setChartOptions(defaultChartSettings);
+      };
+
       const tokens = { ...tokensData };
-      const maxPrice = floorPrice + columns * offset;
+      const maxPrice = floorPrice + columns * numberOffset;
       Object.keys(tokens).forEach(
         key => tokens[key] >= maxPrice && delete tokens[key]
       );
@@ -39,9 +58,9 @@ const ListingChart = memo(({ floorPrice, tokensData }) => {
       const max = Math.max(...values);
 
       const obj = {};
-      for (let i = min; i <= max; i += offset) {
+      for (let i = min; i <= max; i += numberOffset) {
         let valueMin = Number(i).toFixed(2);
-        let valueMax = Number.parseFloat(i + offset).toFixed(2);
+        let valueMax = Number.parseFloat(i + numberOffset).toFixed(2);
         obj[`${valueMin}-${valueMax}`] = 0;
       }
 
@@ -58,7 +77,6 @@ const ListingChart = memo(({ floorPrice, tokensData }) => {
       const keys = Object.keys(obj);
       const chartValues = Object.values(obj);
 
-      console.log(keys, values);
 
       const newChartSettings = {
         series: [
@@ -67,7 +85,7 @@ const ListingChart = memo(({ floorPrice, tokensData }) => {
           },
         ],
         title: {
-          text: "",
+          text: "Listings wall",
         },
         xAxis: {
           categories: keys,
@@ -76,10 +94,13 @@ const ListingChart = memo(({ floorPrice, tokensData }) => {
           type: "column",
           backgroundColor: "transparent",
           borderRadius: 10,
-          height: "50%",
+          height: "55%",
         },
         tooltip: {
           shared: true,
+          formatter: function () {
+            return `<b>${this.x} ETH</b><br/>${this.y} listings`;
+          },
           hideDelay: 200,
           outside: false,
         },
@@ -95,13 +116,13 @@ const ListingChart = memo(({ floorPrice, tokensData }) => {
   return (
     <div className="listingWallChart">
       <HStack className="chart-options">
-        <NumberInput>
+        <NumberInput value={offset} >
           <HStack>
             <NumberInputField
               placeholder="Offset"
               onChange={e =>
                 setOffset(
-                  Number(e.target.value.length > 0 ? e.target.value : 0)
+                  e.target.value.length > 0 ? e.target.value : 0
                 )
               }
             />

@@ -83,7 +83,7 @@ export function useGetData(address, columnHovered, floorPrice) {
           marketplace,
         };
 
-
+        setTokens(old => ({ ...old, [tokenId]: price}))
         !columnHoveredRef.current.listings ? setTotalListings(oldListings => [...oldListings, dataObj]) : setHoveredListings(oldListings => [...oldListings, dataObj]);
       });
     }
@@ -110,6 +110,12 @@ export function useGetData(address, columnHovered, floorPrice) {
           marketplace,
         };
 
+        setTokens(old => {
+          const newTokens = { ...old }
+          delete newTokens[tokenId]
+
+          return newTokens
+        })
         !columnHoveredRef.current.sales ? setTotalSales(oldSales => [...oldSales, dataObj]) : setHoveredSales(oldSales => [...oldSales, dataObj]);
       });
     }

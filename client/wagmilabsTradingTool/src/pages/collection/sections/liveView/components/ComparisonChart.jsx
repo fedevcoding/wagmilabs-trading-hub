@@ -8,6 +8,8 @@ import {
   NumberInputField,
   Select,
 } from "@chakra-ui/react";
+import { useRefreshSecond } from "@Hooks";
+// import { roundPrice } from "@Utils";
 
 const ComparisonChart = memo(({ totalListings, totalSales, floorPrice }) => {
   HC_more(HighCharts);
@@ -19,20 +21,28 @@ const ComparisonChart = memo(({ totalListings, totalSales, floorPrice }) => {
   );
   const [minPrice] = React.useState(0);
 
-  const [timeframe, setTimeframe] = React.useState(Date.now() - 60000);
+  const [time, setTime] = React.useState(60000);
 
   const [chartOptions, setChartOptions] = React.useState({});
+  const refresh = useRefreshSecond()
+  
+
+  useEffect(()=>{
+    floorPrice && setMaxPrice(floorPrice + (floorPrice / 100) * 20)
+  }, [floorPrice])
 
   useEffect(() => {
+    const timeframe = Date.now() - time;
+    const numberMaxPrice = Number(maxPrice);
     const rightSales = totalSales.filter(
       sale =>
-        sale.value < maxPrice &&
+        sale.value < numberMaxPrice &&
         sale.value > minPrice &&
         sale.timestamp >= timeframe
     ).length;
     const rightListings = totalListings.filter(
       listing =>
-        listing.value < maxPrice &&
+        listing.value < numberMaxPrice &&
         listing.value > minPrice &&
         listing.timestamp * 1000 >= timeframe
     ).length;
@@ -47,9 +57,11 @@ const ComparisonChart = memo(({ totalListings, totalSales, floorPrice }) => {
         text: "",
       },
       tooltip: {
-        useHTML: true,
-        pointFormat: "Listings: {point.z}",
-        followPointer: true,
+
+        formatter : function() {
+          return `<div>${this.point.z} ${this.series.name}</div>`;
+        },
+
       },
       series: [
         {
@@ -91,18 +103,25 @@ const ComparisonChart = memo(({ totalListings, totalSales, floorPrice }) => {
       legend: {
         enabled: false,
       },
+      tooltip: {
+        useHTML: true,
+        formatter: function () {
+          return `<div>${this.point.y} ${this.series.name}</div>`;
+        },
+        followPointer: true,
+      }
     };
 
-    setChartOptions(chartType === "column" ? chartOptions2 : chartOptions1);
+    setChartOptions(chartType === "bubble" ? chartOptions1 : chartOptions2);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [totalListings, totalSales, timeframe, chartType]);
+  }, [totalListings, totalSales, time, chartType, maxPrice, refresh]);
 
   return (
     <div className="sale-list-comparison-chart">
       <div className="options-container">
         <HStack>
           <Select
-            onChange={e => setTimeframe(Date.now() - e.target.value)}
+            onChange={e => setTime(e.target.value)}
             color="white"
             colorScheme={"white"}
           >
@@ -112,14 +131,13 @@ const ComparisonChart = memo(({ totalListings, totalSales, floorPrice }) => {
           </Select>
         </HStack>
 
-        <NumberInput>
+        <NumberInput value={maxPrice}>
           <HStack>
             <NumberInputField
-              placeholder="% above floor"
+              placeholder="Max price (ETH)"
               onChange={e =>
-                setMaxPrice(floorPrice + (floorPrice / 100) * e.target.value)
+                setMaxPrice(e.target.value)
               }
-              defaultValue={maxPrice}
             />
           </HStack>
         </NumberInput>
