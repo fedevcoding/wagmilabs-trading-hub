@@ -17,7 +17,7 @@ searchCollectionsRoute.get('/:query/:type', (req, res) => {
             if(type === "name") url = `https://api.reservoir.tools/search/collections/v1?name=${query}&limit=5`
             else if(type === "contract") url = `https://api.reservoir.tools/collections/v5?id=${query}&includeTopBid=false&includeAttributes=false&includeOwnerCount=false&normalizeRoyalties=false&useNonFlaggedFloorAsk=false&sortBy=allTimeVolume&limit=1`
     
-            const data = await execReservoirApi(url, custom)
+            const data = await execReservoirApi(url, true)
             const {collections} = data
     
             res.status(200).json({collections, status: "success", ok: true})

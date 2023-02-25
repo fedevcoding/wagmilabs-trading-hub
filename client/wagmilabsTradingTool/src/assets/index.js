@@ -32,7 +32,7 @@ export { default as hoverStar } from "./hover-star.png";
 export { default as wagmiLogo } from "./wagmiLogo.png";
 export { default as wrappedEthereumImage } from "./weth.svg";
 export { default as instructions } from "./instructions.png";
-export { default as www } from "./www.svg";
+export { default as www } from "./www.png";
 export { default as logo } from "./logo.png";
 export { default as wwwSvg } from "./www.svg";
 export { default as logoBeta } from "./logoBeta.png";

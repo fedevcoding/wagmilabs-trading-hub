@@ -21,3 +21,12 @@
     width: 210px;
     height: 210px;
 }
+
+
+.watchlist-created-date{
+    font-size: 12px;
+    opacity: 0.8;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}

@@ -1,7 +1,7 @@
 .container {
     position: absolute;
     top: 45px;
-    width: 410px;
+    width: 390px;
     max-height: 300px;
     background-color: transparent;
     backdrop-filter: blur(15px);

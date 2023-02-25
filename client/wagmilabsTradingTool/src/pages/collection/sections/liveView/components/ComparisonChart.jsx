@@ -25,9 +25,9 @@ const ComparisonChart = memo(({ totalListings, totalSales, floorPrice }) => {
 
   const [chartOptions, setChartOptions] = React.useState({});
   const refresh = useRefreshSecond()
-  
 
-  useEffect(()=>{
+
+  useEffect(() => {
     floorPrice && setMaxPrice(floorPrice + (floorPrice / 100) * 20)
   }, [floorPrice])
 
@@ -58,7 +58,7 @@ const ComparisonChart = memo(({ totalListings, totalSales, floorPrice }) => {
       },
       tooltip: {
 
-        formatter : function() {
+        formatter: function () {
           return `<div>${this.point.z} ${this.series.name}</div>`;
         },
 
@@ -132,7 +132,7 @@ const ComparisonChart = memo(({ totalListings, totalSales, floorPrice }) => {
           </Select>
         </HStack>
 
-        <NumberInput value={roundPrice(maxPrice)}>
+        <NumberInput value={maxPrice}>
           <HStack>
             <NumberInputField
               placeholder="Max price (ETH)"
@@ -145,15 +145,13 @@ const ComparisonChart = memo(({ totalListings, totalSales, floorPrice }) => {
 
         <div className="chart-type-selector">
           <i
-            className={`fa-solid fa-chart-simple ${
-              chartType === "column" && "selected"
-            }`}
+            className={`fa-solid fa-chart-simple ${chartType === "column" && "selected"
+              }`}
             onClick={() => setChartType("column")}
           ></i>
           <i
-            className={`fa-sharp fa-solid fa-chart-scatter-bubble ${
-              chartType === "bubble" && "selected"
-            }`}
+            className={`fa-sharp fa-solid fa-chart-scatter-bubble ${chartType === "bubble" && "selected"
+              }`}
             onClick={() => setChartType("bubble")}
           ></i>
         </div>

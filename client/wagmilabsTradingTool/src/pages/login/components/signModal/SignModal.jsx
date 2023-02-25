@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import { Button, Checkbox, ModalOverlay } from "@chakra-ui/react";
+import { Button, Checkbox } from "@chakra-ui/react";
 
 import { useSignMessage, useAccount } from "wagmi";
 import { Loader } from "@Components";
