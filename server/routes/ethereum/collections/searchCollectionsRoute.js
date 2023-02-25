@@ -4,7 +4,7 @@ const { execReservoirApi } = require("../../../services/externalAPI/reservoirApi
 
 const searchCollectionsRoute = express()
 
-searchCollectionsRoute.get('/:query/:type', checkAuth, (req, res) => {
+searchCollectionsRoute.get('/:query/:type', (req, res) => {
     const {query, type} = req.params
 
     if(!query || !type) return res.status(400).json({status: "error", ok: false, message: "Missing query or type"})
@@ -17,7 +17,7 @@ searchCollectionsRoute.get('/:query/:type', checkAuth, (req, res) => {
             if(type === "name") url = `https://api.reservoir.tools/search/collections/v1?name=${query}&limit=5`
             else if(type === "contract") url = `https://api.reservoir.tools/collections/v5?id=${query}&includeTopBid=false&includeAttributes=false&includeOwnerCount=false&normalizeRoyalties=false&useNonFlaggedFloorAsk=false&sortBy=allTimeVolume&limit=1`
     
-            const data = await execReservoirApi(url)
+            const data = await execReservoirApi(url, custom)
             const {collections} = data
     
             res.status(200).json({collections, status: "success", ok: true})
