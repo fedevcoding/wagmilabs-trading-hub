@@ -389,6 +389,7 @@ const Activity = () => {
                 <td className="profile-activity-single-token">
                   <img
                     src={tokenImage || placeholderImage}
+                    onError={e => e.currentTarget.src = placeholderImage}
                     alt=""
                     className="profile-activity-single-image"
                   />

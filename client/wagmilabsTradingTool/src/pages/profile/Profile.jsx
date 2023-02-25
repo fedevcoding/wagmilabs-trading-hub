@@ -774,7 +774,9 @@ const Profile = () => {
             </div>
             <div className="single-profile-section">Stats</div>
           </div>
-          {showPromoBanner && (
+
+
+          {section === "nft" && showPromoBanner && (
             <a
               className="profile-promo-container"
               href="https://www.premint.xyz/WAGMI-Labs/"

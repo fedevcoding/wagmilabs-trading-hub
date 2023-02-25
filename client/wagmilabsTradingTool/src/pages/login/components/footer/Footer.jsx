@@ -1,7 +1,7 @@
 import React from "react";
 import "./style.scss"
 
-import { www, twitter2, discord2, instructions } from "src/assets";
+import { wwwSvg, twitter2, discord2, instructions } from "src/assets";
 
 const Footer = () => {
     return (
@@ -10,7 +10,7 @@ const Footer = () => {
                 <div className="login-general-links-line"></div>
 
                 <a target="_blank" href="https://wagmilabs.tools" rel="noreferrer">
-                    <img src={www} className="login-general-links-img" alt="" />
+                    <img src={wwwSvg} className="login-general-links-img" alt="" />
                 </a>
                 <a
                     target="_blank"
