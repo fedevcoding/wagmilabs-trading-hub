@@ -15,6 +15,11 @@ $headerHeight: 50;
 		color: white;
 	}
 
+	option {
+		background-color: black;
+	}
+
+
 	.listingWallChart,
 	.sale-list-comparison-chart {
 		height: 49%;
@@ -33,11 +38,6 @@ $headerHeight: 50;
 	}
 
 	.sale-list-comparison-chart {
-
-		option {
-			background-color: black;
-		}
-
 		background-color: #201f1e;
 		border-radius: 10px;
 

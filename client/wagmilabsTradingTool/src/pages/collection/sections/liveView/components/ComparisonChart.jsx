@@ -21,7 +21,7 @@ const ComparisonChart = memo(({ totalListings, totalSales, floorPrice }) => {
   );
   const [minPrice] = React.useState(0);
 
-  const [time, setTime] = React.useState(60000);
+  const [time, setTime] = React.useState(300000);
 
   const [chartOptions, setChartOptions] = React.useState({});
   const refresh = useRefreshSecond()
@@ -124,6 +124,7 @@ const ComparisonChart = memo(({ totalListings, totalSales, floorPrice }) => {
             onChange={e => setTime(e.target.value)}
             color="white"
             colorScheme={"white"}
+            defaultValue={300000}
           >
             <option value={60000}>1 minute</option>
             <option value={300000}>5 minutes</option>

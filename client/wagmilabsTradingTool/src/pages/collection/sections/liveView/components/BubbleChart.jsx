@@ -1,12 +1,24 @@
 import React, { memo, useEffect, useRef } from "react";
 import HighchartsReact from "highcharts-react-official";
 import HighCharts from "highcharts";
-import { HStack, NumberInput, NumberInputField } from "@chakra-ui/react";
-import { useMemo } from "react";
+import { HStack, NumberInput, NumberInputField, Select } from "@chakra-ui/react";
+
+
+
+const dateOptions = {
+  month: 'short',
+  year: 'numeric',
+  hour: 'numeric',
+  minute: 'numeric'
+}
+
 
 const BubbleChart = memo(({ totalListings, totalSales, floorPrice }) => {
   const [maxPrice, setMaxPrice] = React.useState(0);
   const [minPrice, setMinPrice] = React.useState(0);
+  const [maxTime, setMaxTime] = React.useState(21600000);
+
+  const [chartOptions, setChartOptions] = React.useState({});
 
   const chartRef = useRef();
 
@@ -30,155 +42,142 @@ const BubbleChart = memo(({ totalListings, totalSales, floorPrice }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [floorPrice]);
 
-  const listingData = useMemo(
-    () =>
-      totalListings?.map(listing => {
-        const { value, timestamp, name, image, tokenId, marketplace } = listing;
-        const realTimestamp = timestamp * 1000;
 
-        let newObject = {};
-        if (value < maxPrice && value > minPrice) {
-          newObject = {
-            x: realTimestamp,
-            y: value,
-            name: name || tokenId,
-            image: image,
-            tokenId: tokenId,
-            marketplace: marketplace,
-            readableDate: new Date(realTimestamp).toDateString(),
-          };
-        }
-        return newObject;
-      }),
-    [totalListings, maxPrice, minPrice]
-  );
-
-  const salesData = useMemo(
-    () =>
-      totalSales?.map(sale => {
-        const { value, timestamp, name, image, tokenId, marketplace } = sale;
-
-        let newObject = {};
-        if (value < maxPrice && value > minPrice) {
-          newObject = {
-            x: timestamp,
-            y: value,
-            name: name || tokenId,
-            image: image,
-            tokenId: tokenId,
-            marketplace: marketplace,
-            readableDate: new Date(timestamp).toDateString(),
-          };
-        }
-        return newObject;
-      }),
-    [totalSales, maxPrice, minPrice]
-  );
 
   useEffect(() => {
-    if (salesData && listingData) {
-      const chart = chartRef.current.chart;
-      chart.series[0].setData(salesData);
-      chart.series[1].setData(listingData);
-    }
-  }, [maxPrice, minPrice, salesData, listingData]);
 
-  const minTimestamp = useMemo(
-    () =>
-      Math.min(
-        ...totalListings?.map(listing => listing.timestamp * 1000),
-        ...totalSales?.map(sale => sale.timestamp)
-      ),
-    [totalListings, totalSales]
-  );
-  const maxTimestamp = useMemo(
-    () =>
-      Math.max(
-        ...totalListings?.map(listing => listing.timestamp * 1000),
-        ...totalSales?.map(sale => sale.timestamp)
-      ),
-    [totalListings, totalSales]
-  );
+      const listingData = totalListings?.map(listing => {
+            const { value, timestamp, name, image, tokenId, marketplace } = listing;
+            const realTimestamp = timestamp * 1000;
+    
+            const rightTime = Date.now() - maxTime;
+    
+            let newObject = {};
+            if (value < maxPrice && value > minPrice && realTimestamp >= rightTime) {
+              newObject = {
+                x: realTimestamp,
+                y: value,
+                name: name || tokenId,
+                image: image,
+                tokenId: tokenId,
+                marketplace: marketplace,
+                readableDate: new Date(realTimestamp).toLocaleString("en-US", dateOptions),
+              };
+            }
+            return newObject;
+      }).filter(listing => listing.x !== undefined)
+    
+      const salesData = totalSales?.map(sale => {
+            const { value, timestamp, name, image, tokenId, marketplace } = sale;
+            const rightTime = Date.now() - maxTime;
+            let newObject = {};
+            if (value < maxPrice && value > minPrice && timestamp >= rightTime) {
+              newObject = {
+                x: timestamp,
+                y: value,
+                name: name || tokenId,
+                image: image,
+                tokenId: tokenId,
+                marketplace: marketplace,
+                readableDate: new Date(timestamp).toLocaleString("en-US", dateOptions),
+              };
+            }
+            return newObject;
+      }).filter(listing => listing.x !== undefined)
 
-  const chartOptions = {
-    series: [
-      {
-        type: "scatter",
-        name: "Sales",
-        turboThreshold: 2500,
-        data: salesData,
-        zIndex: 2,
+      const minTimestamp = Math.min(
+            ...listingData?.map(listing => listing.x),
+            ...salesData?.map(sale => sale.x)
+      )
+      const maxTimestamp = Math.max(
+            ...listingData?.map(listing => listing.x),
+            ...salesData?.map(sale => sale.x)
+      )
+    
+      const chartObject = {
+        series: [
+          {
+            type: "scatter",
+            name: "Sales",
+            turboThreshold: 2500,
+            data: salesData,
+            zIndex: 2,
+            tooltip: {
+              pointFormat: `
+                        <div>
+                            <p>{point.readableDate}</p>
+                            <p>Sale of {point.name}</p>
+                            <p>Price: {point.y} ETH</p>
+                            <p>Marketplace: {point.marketplace}</p>
+                            <p>Token ID: {point.tokenId}</p>
+                            <img class="bubble-chart-image" src={point.image} style={{width: 50px, height: 50px}} />
+                        </div>
+                        `,
+            },
+            marker: {
+              fillColor: "red",
+              lineColor: "#FFFFFF",
+              zIndex: 100,
+            },
+          },
+          {
+            type: "scatter",
+            name: "Listings",
+            data: listingData,
+            zIndex: 1,
+            turboThreshold: 2500,
+            tooltip: {
+              pointFormat: `
+                        <div>
+                            <p>{point.readableDate}</p>
+                            <p>Listing of {point.name}</p>
+                            <p>Price: {point.y} ETH</p>
+                            <p>Marketplace: {point.marketplace}</p>
+                            <p>Token ID: {point.tokenId}</p>
+                            <img class="bubble-chart-image" src={point.image} style={{width: 50px, height: 50px}} />
+                        </div>
+                        `,
+            },
+            marker: {
+              fillColor: "orange",
+              lineColor: "#FFFFFF",
+            },
+          },
+        ],
+        plotOptions: {
+          series: {
+            marker: {
+              symbol: "circle",
+              radius: 4,
+            },
+          },
+        },
+        title: {
+          text: "Sales and Listings",
+        },
+        xAxis: {
+          type: "datetime",
+          min: minTimestamp,
+          max: maxTimestamp,
+        },
+        yAxis: {
+          title: {
+            text: "Price (ETH)",
+          },
+        },
+        chart: {
+          backgroundColor: "transparent",
+          borderRadius: 10,
+        },
         tooltip: {
-          pointFormat: `
-                    <div>
-                        <p>{point.readableDate}</p>
-                        <p>Sale of {point.name}</p>
-                        <p>Price: {point.y} ETH</p>
-                        <p>Marketplace: {point.marketplace}</p>
-                        <p>Token ID: {point.tokenId}</p>
-                        <img class="bubble-chart-image" src={point.image} style={{width: 50px, height: 50px}} />
-                    </div>
-                    `,
+          useHTML: true,
         },
-        marker: {
-          fillColor: "red",
-          lineColor: "#FFFFFF",
-          zIndex: 100,
-        },
-      },
-      {
-        type: "scatter",
-        name: "Listings",
-        data: listingData,
-        zIndex: 1,
-        turboThreshold: 2500,
-        tooltip: {
-          pointFormat: `
-                    <div>
-                        <p>{point.readableDate}</p>
-                        <p>Listing of {point.name}</p>
-                        <p>Price: {point.y} ETH</p>
-                        <p>Marketplace: {point.marketplace}</p>
-                        <p>Token ID: {point.tokenId}</p>
-                        <img class="bubble-chart-image" src={point.image} style={{width: 50px, height: 50px}} />
-                    </div>
-                    `,
-        },
-        marker: {
-          fillColor: "orange",
-          lineColor: "#FFFFFF",
-        },
-      },
-    ],
-    plotOptions: {
-      series: {
-        marker: {
-          symbol: "circle",
-          radius: 4,
-        },
-      },
-    },
-    title: {
-      text: "Sales and Listings",
-    },
-    xAxis: {
-      type: "datetime",
-      min: minTimestamp,
-      max: maxTimestamp,
-    },
-    yAxis: {
-      title: {
-        text: "Price (ETH)",
-      },
-    },
-    chart: {
-      backgroundColor: "transparent",
-      borderRadius: 10,
-    },
-    tooltip: {
-      useHTML: true,
-    },
-  };
+      };
+
+      salesData && listingData && setChartOptions(chartObject);
+
+  }, [maxPrice, minPrice, maxTime, floorPrice, totalListings, totalSales]);
+
 
   return (
     <div className="bubble-chart">
@@ -209,6 +208,23 @@ const BubbleChart = memo(({ totalListings, totalSales, floorPrice }) => {
                 />
               </HStack>
             </NumberInput>
+          </HStack>
+
+          <HStack>
+            <Select
+              onChange={e => setMaxTime(e.target.value)}
+              color="white"
+              colorScheme={"white"}
+              defaultValue={21600000}
+            >
+              <option value={300000}>5 minutes</option>
+              <option value={1800000}>30 minutes</option>
+              <option value={7200000}>2 hours</option>
+              <option value={21600000}>6 hours</option>
+              <option value={86400000}>1 day</option>
+              <option value={259200000}>3 days</option>
+              <option value={604800000}>7 days</option>
+            </Select>
           </HStack>
 
           <HStack>
