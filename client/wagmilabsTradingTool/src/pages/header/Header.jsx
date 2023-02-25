@@ -297,6 +297,7 @@ const Header = () => {
               <span>Bots</span>
 
               <div className="bots-options-dropdown invisible">
+                <div onClick={() => navigate("/bots/wallets")}>Wallets</div>
                 <div onClick={() => navigate("/bots/sniper")}>Sniper bot</div>
                 <div onClick={() => navigate("/bots/contractMinter")}>
                   Contract minter
@@ -309,9 +310,8 @@ const Header = () => {
           </div>
           <div onClick={() => navigate("/volumes")}>
             <div
-              className={`${
-                isVolumesPage ? "active" : ""
-              } volumes-button header-links`}
+              className={`${isVolumesPage ? "active" : ""
+                } volumes-button header-links`}
             >
               Volumes
             </div>

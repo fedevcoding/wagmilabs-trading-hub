@@ -1,0 +1,43 @@
+#page-bots-wallets{
+
+    margin: 20px 50px;
+
+    .options{
+        justify-content: space-between;
+
+
+        .wallet{
+            font-size: 22px;
+            font-weight: 600;
+            letter-spacing: 1.2px;
+        }
+
+
+        .actions{
+            gap: 20px;
+            justify-content: space-between;
+
+            div{
+                background-color: #525352;
+                border: 1px solid black;
+                padding: 7px 12px;
+                border-radius: 9px;
+                cursor: pointer;
+                transition: background-color 0.3s;
+            }
+
+            div:hover{
+                background-color: #3f3f3f;
+            }
+        }
+    }
+
+    hr{
+        margin: 20px 0;
+    }
+
+
+    .wallets{
+        width: 100%;
+    }
+}
