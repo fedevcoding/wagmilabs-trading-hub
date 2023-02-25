@@ -4,7 +4,7 @@ import etherscan from "@Assets/etherscan.svg";
 import getMarketplaceImage from "@Utils/marketplaceImageMapping";
 import { TimeAgo } from "@Components";
 
-const SalesMapping = memo(({ sales, address }) => {
+const SalesMapping = memo(({ sales, address, collectionImage }) => {
   return (
     <>
       {sales.map((sale, index) => {
@@ -29,9 +29,9 @@ const SalesMapping = memo(({ sales, address }) => {
             href={`/item/${address}/${tokenId}`}
           >
             <div className="token-info-container wrap-text">
-              <img src={image} className="item-image" alt="" />
+              <img src={image || collectionImage} className="item-image" alt="" />
               <div className="wrap-text">
-                <p className="wrap-text">{name}</p>
+                <p className="wrap-text">{name || tokenId}</p>
                 <p className="live-view-sale-time low-opacity little-text">
                   <TimeAgo
                     timestamp={timestamp}
@@ -59,7 +59,7 @@ const SalesMapping = memo(({ sales, address }) => {
             </div>
           </a>
         );
-      })}
+      }, [collectionImage])}
     </>
   );
 });

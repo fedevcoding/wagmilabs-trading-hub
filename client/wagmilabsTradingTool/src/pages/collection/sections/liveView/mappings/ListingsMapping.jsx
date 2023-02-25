@@ -5,7 +5,7 @@ import { Button } from "@chakra-ui/react";
 import { useBuyNow } from "@Hooks";
 import { TimeAgo } from "@Components";
 
-const ListingMapping = memo(({ listings, contractAddress }) => {
+const ListingMapping = memo(({ listings, contractAddress, collectionImage }) => {
   const { buyNow } = useBuyNow();
 
   return (
@@ -20,9 +20,9 @@ const ListingMapping = memo(({ listings, contractAddress }) => {
         return (
           <div key={randomUUID} className={`single-item-row`}>
             <div className="token-info-container wrap-text">
-              <img src={image} className="item-image" alt="" />
+              <img src={image || collectionImage} className="item-image" alt="" />
               <div className="wrap-text">
-                <p className="wrap-text">{name}</p>
+                <p className="wrap-text">{name || tokenId}</p>
                 <p className="live-view-sale-time low-opacity little-text">
                   <TimeAgo
                     timestamp={timestamp}
@@ -48,7 +48,7 @@ const ListingMapping = memo(({ listings, contractAddress }) => {
             </div>
           </div>
         );
-      })}
+      }, [collectionImage])}
     </>
   );
 });

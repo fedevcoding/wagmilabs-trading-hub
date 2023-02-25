@@ -9,7 +9,7 @@ import {
   Select,
 } from "@chakra-ui/react";
 import { useRefreshSecond } from "@Hooks";
-// import { roundPrice } from "@Utils";
+import { roundPrice } from "@Utils";
 
 const ComparisonChart = memo(({ totalListings, totalSales, floorPrice }) => {
   HC_more(HighCharts);
@@ -51,10 +51,10 @@ const ComparisonChart = memo(({ totalListings, totalSales, floorPrice }) => {
       chart: {
         type: "bubble",
         plotBorderWidth: 1,
-        height: "50%",
+        height: "55%",
       },
       title: {
-        text: "",
+        text: "Listings vs Sales",
       },
       tooltip: {
 
@@ -82,10 +82,10 @@ const ComparisonChart = memo(({ totalListings, totalSales, floorPrice }) => {
       chart: {
         type: "column",
         backgroundColor: "transparent",
-        height: "50%",
+        height: "55%",
       },
       title: {
-        text: "",
+        text: "Listings vs Sales",
       },
       yAxis: {
         text: "",
@@ -131,7 +131,7 @@ const ComparisonChart = memo(({ totalListings, totalSales, floorPrice }) => {
           </Select>
         </HStack>
 
-        <NumberInput value={maxPrice}>
+        <NumberInput value={roundPrice(maxPrice)}>
           <HStack>
             <NumberInputField
               placeholder="Max price (ETH)"

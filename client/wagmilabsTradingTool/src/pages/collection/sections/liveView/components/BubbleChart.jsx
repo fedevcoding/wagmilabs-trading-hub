@@ -159,7 +159,7 @@ const BubbleChart = memo(({ totalListings, totalSales, floorPrice }) => {
       },
     },
     title: {
-      text: "",
+      text: "Sales and Listings",
     },
     xAxis: {
       type: "datetime",
@@ -183,27 +183,39 @@ const BubbleChart = memo(({ totalListings, totalSales, floorPrice }) => {
   return (
     <div className="bubble-chart">
       <div className="chart-options">
-        <HStack>
-          <NumberInput>
-            <HStack>
-              <NumberInputField
-                placeholder="Min price (ETH)"
-                onChange={e => setMinPrice(e.target.value)}
-                defaultValue={floorPrice}
-                value={floorPrice}
-              />
-            </HStack>
-          </NumberInput>
+        <HStack gap={"30px"}>
 
-          <NumberInput>
-            <HStack>
-              <NumberInputField
-                placeholder="Max price (ETH)"
-                onChange={e => setMaxPrice(e.target.value)}
-                defaultValue={maxPrice}
-              />
-            </HStack>
-          </NumberInput>
+          <HStack>
+            <label>Min price: </label>
+            <NumberInput value={minPrice}>
+              <HStack>
+                <NumberInputField
+                  onChange={e => setMinPrice(e.target.value)}
+                  defaultValue={floorPrice}
+                  value={floorPrice}
+                />
+              </HStack>
+            </NumberInput>
+          </HStack>
+
+          <HStack>
+            <label>Max price: </label>
+            <NumberInput value={maxPrice}>
+
+              <HStack>
+                <NumberInputField
+                  onChange={e => setMaxPrice(e.target.value)}
+                  defaultValue={maxPrice}
+                />
+              </HStack>
+            </NumberInput>
+          </HStack>
+
+          <HStack>
+            <i className="fa-regular fa-triangle-exclamation little-text low-opacity"></i>
+            <p className="little-text low-opacity">Sales and Listings are limited to 2000 results</p>
+          </HStack>
+
         </HStack>
       </div>
 
