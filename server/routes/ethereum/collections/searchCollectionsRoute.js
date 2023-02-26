@@ -1,5 +1,4 @@
 const express = require("express")
-const checkAuth = require("../../../middleware/checkAuth")
 const { execReservoirApi } = require("../../../services/externalAPI/reservoirApi")
 
 const searchCollectionsRoute = express()

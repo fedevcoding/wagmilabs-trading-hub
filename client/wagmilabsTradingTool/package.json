@@ -20,6 +20,7 @@
     "centrifuge": "^2.8.3",
     "chart.js": "^3.8.0",
     "copy-to-clipboard": "^3.3.3",
+    "ethers": "^5.7.2",
     "framer-motion": "^9.0.1",
     "highcharts": "^9.0.0",
     "highcharts-react-official": "^3.1.0",
@@ -44,7 +45,8 @@
     "socket.io-client": "^4.5.4",
     "use-debounce": "^9.0.2",
     "wagmi": "^0.7.3",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "web3": "^1.8.2"
   },
   "scripts": {
     "start": "react-app-rewired start",
