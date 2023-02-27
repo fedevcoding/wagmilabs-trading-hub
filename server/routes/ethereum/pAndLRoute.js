@@ -88,7 +88,22 @@ route.get("/:address", checkAuth, (req, res) => {
             AND ${exchangeCondition}
         )`;
 
-      const data = await execTranseposeAPI(query);
+      const querySell = `
+      SELECT timestamp, contract_address, token_id, usd_price, eth_price, royalty_fee, platform_fee
+      FROM ethereum.nft_sales
+      WHERE seller_address = '${address}' AND timestamp >= '${start}'  AND timestamp <= '${end}'
+      AND ${exchangeCondition}
+      AND CONCAT(contract_address, token_id) IN (
+          SELECT CONCAT(contract_address, token_id)
+          FROM ethereum.nft_sales
+          WHERE buyer_address = '${address}' AND timestamp >= '${start}' AND timestamp <= '${end}'
+          AND ${exchangeCondition}
+      )`;
+
+      const [data, sold] = await Promise.all([
+        execTranseposeAPI(query),
+        execTranseposeAPI(querySell),
+      ]);
 
       const nfts = {};
       for (const k in data) {
@@ -100,27 +115,10 @@ route.get("/:address", checkAuth, (req, res) => {
           };
       }
 
-      const nftsIds = Object.keys(nfts);
-      if (nftsIds.length) {
-        const query = `
-        SELECT timestamp, contract_address, token_id, usd_price, eth_price, royalty_fee, platform_fee
-        FROM ethereum.nft_sales
-        WHERE seller_address = '${address}' AND timestamp >= '${start}'  AND timestamp <= '${end}'
-        AND ${exchangeCondition}
-        AND CONCAT(contract_address, token_id) IN (
-            SELECT CONCAT(contract_address, token_id)
-            FROM ethereum.nft_sales
-            WHERE buyer_address = '${address}' AND timestamp >= '${start}' AND timestamp <= '${end}'
-            AND ${exchangeCondition}
-        )`;
-
-        const sold = await execTranseposeAPI(query);
-
-        for (const k in sold) {
-          const nft = sold[k];
-          const key = (nft.contract_address + ":" + nft.token_id).toLowerCase();
-          if (nfts[key] && !nfts[key].sold) nfts[key].sold = nft;
-        }
+      for (const k in sold) {
+        const nft = sold[k];
+        const key = (nft.contract_address + ":" + nft.token_id).toLowerCase();
+        if (nfts[key] && !nfts[key].sold) nfts[key].sold = nft;
       }
 
       res.status(200).json(formatPAndLData(Object.values(nfts)));
