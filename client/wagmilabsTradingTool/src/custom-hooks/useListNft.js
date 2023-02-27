@@ -3,8 +3,8 @@ import { fetchSigner } from "@wagmi/core";
 import { getClient } from "@reservoir0x/reservoir-kit-client";
 import { useToast } from "@chakra-ui/react";
 import { UserDataContext } from "@Context";
-import { getListingExpirationDate } from "../utils/formats/formats";
-import { marketListingMapping } from "../utils/mappings";
+import { getListingExpirationDate } from "@Utils/formats/formats";
+import { marketListingMapping } from "@Utils/mappings";
 
 export const useListNft = (
   { contractAddress, tokenId, listingPrice },

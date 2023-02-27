@@ -1,12 +1,32 @@
-import { useListings } from "@reservoir0x/reservoir-kit-ui";
+import { useListings, useUserTokens } from "@reservoir0x/reservoir-kit-ui";
 import { useAccount } from "wagmi";
 
 export function useGetData(details, address, id) {
   const { address: accountAddress } = useAccount();
-  const isOwner = details
-    ? accountAddress?.toLowerCase() === details?.token?.owner?.toLowerCase()
-    : false;
+  const isErc721 = details.token?.kind === "erc721";
+
+  const { data: tokens } = useUserTokens(
+    isErc721 ? undefined : accountAddress,
+    isErc721
+      ? undefined
+      : {
+          tokens: [`${address}:${id}`],
+        }
+  );
+
+  let isOwner;
+  if (isErc721) {
+    isOwner =
+      details.token?.owner?.toLowerCase() === accountAddress?.toLowerCase();
+  } else {
+    isOwner = tokens.length;
+  }
+
   const collectionImage = details.token?.collection?.image;
+  const ownershipTokenCount = isOwner ? tokens[0]?.ownership?.tokenCount : null;
+  const ownerBestListing =
+    details?.market?.floorAsk?.maker?.toLowerCase() ===
+    accountAddress?.toLowerCase();
 
   const currency =
     Object.values(details.market)[0]?.price?.currency?.symbol || "ETH";
@@ -17,5 +37,15 @@ export function useGetData(details, address, id) {
     limit: 20,
   });
 
-  return { collectionImage, currency, isOwner, listings, isFetchingListings };
+  return {
+    collectionImage,
+    currency,
+    isOwner,
+    listings,
+    isFetchingListings,
+    isErc721,
+    accountAddress,
+    ownerBestListing,
+    ownershipTokenCount,
+  };
 }

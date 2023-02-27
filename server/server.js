@@ -43,6 +43,7 @@ const dropsRoute = require("./routes/ethereum/calendars/dropsRoute.js");
 const eventsRoute = require("./routes/ethereum/calendars/eventsRoute.js");
 const personalRoute = require("./routes/ethereum/calendars/personalRoute.js");
 const spacesRoute = require("./routes/ethereum/calendars/spacesRoute.js");
+const pAndLRoute = require("./routes/ethereum/pAndLRoute.js");
 //
 
 // port
@@ -57,6 +58,7 @@ const express = require("express");
 const connectDB = require("./config/db");
 const cookieParser = require("cookie-parser");
 const getCoinsGasData = require("./websockets/coinsGasData.js");
+const rateLimit = require("express-rate-limit");
 //
 
 // http server
@@ -84,34 +86,27 @@ const io = socketIO(server, {
 
 app.set("socketio", io);
 
-
-
 let ethData;
 async function updateGasData() {
   try {
-    let currentEthData = await getCoinsGasData()
-    ethData = currentEthData
-  }
-  catch (e) {
-    console.log(e)
+    let currentEthData = await getCoinsGasData();
+    ethData = currentEthData;
+  } catch (e) {
+    console.log(e);
   }
 }
-updateGasData()
+updateGasData();
 setInterval(async () => {
-  await updateGasData()
-}, 10000)
+  await updateGasData();
+}, 10000);
 
-
-
-io.on('connection', (socket) => {
-
+io.on("connection", (socket) => {
   setInterval(() => {
-    socket.emit("ethData", ethData)
-  }, 10000)
+    socket.emit("ethData", ethData);
+  }, 10000);
   socket.on("getEthData", () => {
-    socket.emit("ethData", ethData)
-  })
-
+    socket.emit("ethData", ethData);
+  });
 
   socket.on("joinSales", (collectionAddress) => {
     const channel = `sales${collectionAddress}`;
@@ -182,6 +177,15 @@ function newPendingSnipe(accountAddress, id) {
   }
 }
 
+// rate limit
+
+const limiter = rateLimit({
+  windowMs: 1000,
+  max: 15,
+  message: "Too many requests from this IP, please try again later.",
+});
+app.use(limiter);
+
 // http routes
 
 app.use("/api/v1/wagmilabs/login", loginRoute);
@@ -200,7 +204,10 @@ app.use("/api/v1/wagmilabs/activityChart", activityChartRoute);
 app.use("/api/v1/wagmilabs/collectionActivity", collectionActivityRoute);
 app.use("/api/v1/wagmilabs/tokenListPrice", tokenLisrPriceRoute);
 app.use("/api/v1/wagmilabs/profileActivity", profileActivityRoute);
-app.use("/api/v1/wagmilabs/profileTradedCollections", profileTradedCollectionsRoute);
+app.use(
+  "/api/v1/wagmilabs/profileTradedCollections",
+  profileTradedCollectionsRoute
+);
 app.use("/api/v1/wagmilabs/collectionListings", collectionListingsRoute);
 app.use("/api/v1/wagmilabs/collectionSales", collectionSalesRoute);
 app.use("/api/v1/wagmilabs/drops", dropsRoute);
@@ -225,9 +232,8 @@ app.use("/api/v1/wagmilabs/collectionItems", collectionItemsRoute);
 app.use("/api/v1/wagmilabs/watchlistCollections", watchlistCollectionsRoute);
 app.use("/api/v1/wagmilabs/ownedCollections", ownedCollectionsRoute);
 app.use("/api/v1/wagmilabs/refreshCollection", refreshCollectionRoute);
-
+app.use("/api/v1/wagmilabs/p-and-l", pAndLRoute);
 app.use("/api/v1/wagmilabs/stats", statsRoute);
-
 
 // bots routes
 

@@ -1,7 +1,7 @@
 .container {
     position: absolute;
     top: 45px;
-    width: 410px;
+    width: 390px;
     max-height: 300px;
     background-color: transparent;
     backdrop-filter: blur(15px);
@@ -10,6 +10,10 @@
     overflow-x: hidden;
     overflow-y: scroll;
     border-radius: 10px;
+}
+
+.login-search-container {
+    width: 320px;
 }
 
 .container.invisible {

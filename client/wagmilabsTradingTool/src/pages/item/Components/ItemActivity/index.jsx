@@ -1,48 +1,47 @@
 import React from "react";
-import { LoadingSpinner, Select } from "@Components";
+import { Select, ActivityTable } from "@Components";
 import { getActivityOptions } from "./functions";
+import { useGetData } from "./useGetData";
 
 import "./style.scss";
-import { useGetData } from "./useGetData";
-import { ActivityTable } from "./ActivityTable";
 
-export const ItemActivity = React.memo(({ address, id, market }) => {
+export const ItemActivity = React.memo(({ address, id }) => {
   const [types, setTypes] = React.useState([]);
-  const [activities, isLoading] = useGetData(
+  const { activities, isLoading, loadingMoreActivity } = useGetData(
     address,
     id,
     types.map(t => t.value).join(",")
   );
   const activityOptions = getActivityOptions();
-  const currency = Object.values(market)[0]?.price?.currency?.symbol || "ETH";
 
   return (
     <div id="item-activity">
-      {(activities && !isLoading && (
-        <>
-          <div className="space-between item-activity-title">
-            <h2>Item Activity</h2>
-            <Select
-              id="filer-activity-type"
-              onChange={t => setTypes(t)}
-              label="Choose an item"
-              value={types}
-              options={Object.keys(activityOptions).map(a => ({
-                value: a,
-                label: activityOptions[a],
-              }))}
-              isMulti
-            />
-          </div>
-          {(types.length && !(activities?.activities || []).length && (
-            <h3>No activities for this filter</h3>
-          )) || (
-            <div className="activity-table-container">
-              <ActivityTable activities={activities} currency={currency} />
-            </div>
-          )}
-        </>
-      )) || <LoadingSpinner />}
+      <div className="space-between item-activity-title">
+        <h2>Item Activity</h2>
+        <Select
+          id="filer-activity-type"
+          onChange={t => setTypes(t)}
+          label="Choose an item"
+          value={types}
+          options={Object.keys(activityOptions).map(a => ({
+            value: a,
+            label: activityOptions[a],
+          }))}
+          isMulti
+        />
+      </div>
+      {(types.length && !(activities?.activities || []).length && (
+        <h3>No activities for this filter</h3>
+      )) || (
+        <div className="activity-table-container">
+          <ActivityTable
+            collectionActivityLoading={isLoading}
+            collectionActivity={activities?.activities || []}
+            address={address}
+            loadingMoreActivity={loadingMoreActivity}
+          />
+        </div>
+      )}
     </div>
   );
 });

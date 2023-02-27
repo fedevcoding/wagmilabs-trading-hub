@@ -3,7 +3,7 @@ import { getClient } from "@reservoir0x/reservoir-kit-client";
 import { useGetReservoirOptions } from ".";
 import { useToast } from "@chakra-ui/react";
 
-export const useBuyNow = callback => {
+export const useBuyNow = (callback, quantity) => {
   const { options } = useGetReservoirOptions();
 
   const toast = useToast();
@@ -13,6 +13,9 @@ export const useBuyNow = callback => {
 
       console.log(options)
       const signer = await fetchSigner();
+      if (typeof quantity !== "undefined") {
+        options.quantity = parseInt(quantity);
+      }
 
       await getClient()?.actions.buyToken({
         tokens: [{ tokenId, contract: contract }],

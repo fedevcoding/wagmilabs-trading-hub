@@ -1,0 +1,24 @@
+@import "../style";
+
+.tax-settings-modal {
+  .input {
+    margin-top: 1rem;
+  }
+
+  .react-select {
+    width: 140px;
+  }
+  input {
+    width: 120px;
+  }
+
+  .tax-perc {
+    display: flex;
+    align-items: center;
+
+    span {
+      display: inline-block;
+      padding-left: 0.5rem;
+    }
+  }
+}

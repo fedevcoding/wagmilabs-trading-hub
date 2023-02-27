@@ -15,7 +15,7 @@ collectionSalesRoute.get('/:address', checkAuth, (req, res) => {
             const lowerCasedAddress = address.toLowerCase()
 
             console.time("startSales")
-            const totalSales = (await Sales.findOne({ contractAddress: lowerCasedAddress }, { sales: { $slice: -500 } }))?.sales || []
+            const totalSales = (await Sales.findOne({ contractAddress: lowerCasedAddress }, { sales: { $slice: -2000 } }))?.sales || []
             console.timeEnd("startSales")
             console.log("sales", totalSales.length)
 

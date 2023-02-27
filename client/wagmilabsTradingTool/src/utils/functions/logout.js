@@ -14,6 +14,7 @@ async function logOut(setConnected) {
     if (result.ok) {
       setConnected(false)
       document.body.style.background = "linear-gradient(to right, #3494E6, #EC6EAD)";
+      window.location.href = "/"
       localStorage.removeItem("jsonwebtoken");
     }
   }

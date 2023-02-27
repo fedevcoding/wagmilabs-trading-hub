@@ -17,7 +17,6 @@ import { fetchEnsName } from "@wagmi/core";
 import { useAccount } from "wagmi";
 
 const Header = () => {
-
   const {
     setEns,
     setProfileImage,
@@ -322,8 +321,10 @@ const Header = () => {
               <span>P&L</span>
 
               <div className="pnl-options-dropdown invisible">
-                <div onClick={() => navigate("/pnl/all")}>All</div>
-                <div onClick={() => navigate("/pnl/taxes")}>Taxes</div>
+                <div onClick={() => navigate("/profitandloss")}>All</div>
+                <div onClick={() => navigate("/profitandloss/taxes")}>
+                  Taxes
+                </div>
               </div>
             </div>
           </div>
@@ -381,7 +382,10 @@ const Header = () => {
                 <p>Switch account</p>
               </div>
 
-              <div onClick={() => logOut(setConnected)} className="logout-container">
+              <div
+                onClick={() => logOut(setConnected)}
+                className="logout-container"
+              >
                 <i className="fa-solid fa-arrow-right-from-bracket"></i>
                 <p>Log Out</p>
               </div>
@@ -389,14 +393,14 @@ const Header = () => {
           </div>
 
           <i
-            className="fa-solid fa-wallet"
-            style={{ fontSize: "25px", cursor: "pointer" }}
+            className="fa-solid fa-wallet low-opacity"
+            style={{ fontSize: "25px", cursor: "pointer", color: "white" }}
             onClick={openWalletModal}
           ></i>
 
           <i
-            className="header-cart-item fa-solid fa-cart-shopping"
-            style={{ fontSize: "25px", cursor: "pointer" }}
+            className="header-cart-item fa-solid fa-cart-shopping low-opacity"
+            style={{ fontSize: "25px", cursor: "pointer", color: "white" }}
             onClick={openCartModal}
           ></i>
         </div>

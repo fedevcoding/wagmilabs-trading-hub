@@ -2,8 +2,9 @@ import { useEffect, useState, useContext, useRef } from "react";
 import { getFromServer } from "@Utils/functions/serverCalls.js";
 import { SocketContext } from "@Context";
 
-export function useGetData(address, columnHovered) {
+export function useGetData(address, columnHovered, floorPrice) {
   const socket = useContext(SocketContext);
+
 
   const [hoveredListings, setHoveredListings] = useState([]);
   const [hoveredSales, setHoveredSales] = useState([]);
@@ -15,20 +16,22 @@ export function useGetData(address, columnHovered) {
   const [isLoading, setLoading] = useState(false);
   const columnHoveredRef = useRef(columnHovered)
 
-  useEffect(()=>{
+  const [tokens, setTokens] = useState({});
+
+  useEffect(() => {
     columnHoveredRef.current = columnHovered
-    if(!columnHovered.listings && hoveredListings.length > 0){
+    if (!columnHovered.listings && hoveredListings.length > 0) {
       setTotalListings(oldListings => [...oldListings, ...hoveredListings]);
     }
 
-    if(!columnHovered.sales && hoveredSales.length > 0){
+    if (!columnHovered.sales && hoveredSales.length > 0) {
       setTotalSales(oldSales => [...oldSales, ...hoveredSales]);
     }
   }, [columnHovered, hoveredListings, hoveredSales])
 
-  useEffect(()=>{
-      setHoveredListings([]);
-      setHoveredSales([]);
+  useEffect(() => {
+    setHoveredListings([]);
+    setHoveredSales([]);
   }, [totalListings, totalSales])
 
   useEffect(() => {
@@ -44,12 +47,19 @@ export function useGetData(address, columnHovered) {
       ]);
 
       setTotalSales(totalSales);
-
       setTotalListings(totalListings);
-
       setLoading(false);
     }
+    async function getReservoirListing() {
+      const url = `https://api.reservoir.tools/tokens/floor/v1?collection=${address}`
+
+      const api = await fetch(url)
+      const { tokens } = await api.json()
+
+      setTokens(tokens)
+    }
     getData();
+    getReservoirListing()
 
 
     async function listenToListings() {
@@ -73,7 +83,7 @@ export function useGetData(address, columnHovered) {
           marketplace,
         };
 
-        
+        setTokens(old => ({ ...old, [tokenId]: price}))
         !columnHoveredRef.current.listings ? setTotalListings(oldListings => [...oldListings, dataObj]) : setHoveredListings(oldListings => [...oldListings, dataObj]);
       });
     }
@@ -100,12 +110,18 @@ export function useGetData(address, columnHovered) {
           marketplace,
         };
 
+        setTokens(old => {
+          const newTokens = { ...old }
+          delete newTokens[tokenId]
+
+          return newTokens
+        })
         !columnHoveredRef.current.sales ? setTotalSales(oldSales => [...oldSales, dataObj]) : setHoveredSales(oldSales => [...oldSales, dataObj]);
       });
     }
     listenToListings();
     listenToSales()
-  }, [address, socket]);
+  }, [address, socket, floorPrice]);
 
 
 
@@ -117,5 +133,5 @@ export function useGetData(address, columnHovered) {
     setSales([...totalSales]?.reverse()?.splice(0, 50));
   }, [totalSales]);
 
-  return { isLoading, totalListings, totalSales, listings, sales };
+  return { isLoading, totalListings, totalSales, listings, sales, tokens };
 }

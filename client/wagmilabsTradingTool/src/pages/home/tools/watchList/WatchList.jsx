@@ -6,9 +6,10 @@ import { notFound } from "@Assets";
 
 import times from "./times";
 
-import { placeholderImage } from "../../../../utils/images";
+import { placeholderImage } from "@Utils/images";
 
 import { LazyLoadImage } from "react-lazy-load-image-component";
+import moment from "moment";
 
 const WatchList = ({ tool, timeFrame, setTimeFrame, resetTime }) => {
   const [collections, setCollections] = useState([]);
@@ -166,13 +167,14 @@ const WatchList = ({ tool, timeFrame, setTimeFrame, resetTime }) => {
   const collectionsMapping = useMemo(
     () =>
       collections.map((collection, index) => {
-        const { name, image, tokenCount, onSaleCount } = collection;
+        const { name, image, tokenCount, onSaleCount, createdAt } = collection;
         const volume = collection?.volume[time];
         const totalVolume = collection?.volume?.allTime;
         const contractAddress = collection?.id;
         const floorPrice = collection?.floorAsk?.price?.amount?.decimal;
         const bidValue = collection?.topBid?.price?.amount?.decimal;
 
+        const creationDay = moment(createdAt).fromNow();
         return (
           <>
             <tr
@@ -191,7 +193,10 @@ const WatchList = ({ tool, timeFrame, setTimeFrame, resetTime }) => {
                     placeholderSrc={placeholderImage}
                   />
 
-                  <p className="owned-name">{name}</p>
+                  <div className="minting-name-date">
+                    <p className="watchlist-name">{name || "- - -"}</p>
+                    <p className="watchlist-created-date">{creationDay}</p>
+                  </div>
                 </div>
               </td>
               <td>

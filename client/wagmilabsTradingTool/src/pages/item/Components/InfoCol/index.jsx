@@ -14,8 +14,16 @@ import { useGetData } from "./useGetData";
 
 export const InfoCol = React.memo(({ details, address, id }) => {
   const navigate = useNavigate();
-  const { collectionImage, currency, isOwner, listings, isFetchingListings } =
-    useGetData(details, address, id);
+  const {
+    collectionImage,
+    currency,
+    isOwner,
+    listings,
+    isFetchingListings,
+    isErc721,
+    ownerBestListing,
+    ownershipTokenCount,
+  } = useGetData(details, address, id);
 
   return (
     <div className="item-name-container">
@@ -38,6 +46,13 @@ export const InfoCol = React.memo(({ details, address, id }) => {
               {details.token.collection.name}
             </div>
           </div>
+          {(!isErc721 && (
+            <div>
+              {"Ownership Token Count: "}
+              {ownershipTokenCount}
+            </div>
+          )) ||
+            ""}
         </div>
         {isOwner ? (
           <div className="owner-buttons">
@@ -60,17 +75,20 @@ export const InfoCol = React.memo(({ details, address, id }) => {
         )}
       </div>
 
-      {isOwner ? (
-        ""
-      ) : (
-        <PriceBox details={details} address={address} currency={currency} />
-      )}
+      <PriceBox
+        details={details}
+        address={address}
+        currency={currency}
+        ownerBestListing={ownerBestListing}
+        isErc721={isErc721}
+      />
 
       <BestOfferBox
         details={details}
         address={address}
         isOwner={isOwner}
         currency={currency}
+        isErc721={isErc721}
       />
       <Listings
         details={details}
@@ -78,7 +96,7 @@ export const InfoCol = React.memo(({ details, address, id }) => {
         listings={listings}
         isFetching={isFetchingListings}
       />
-      <BestOfferTable details={details} />
+      <BestOfferTable details={details} isErc721={isErc721} />
     </div>
   );
 });

@@ -1,11 +1,11 @@
-import opensea from "../assets/opensea.svg";
-import x2y2 from "../assets/x2y2.svg";
-import looksrare from "../assets/looksrare.svg";
-import sudoswap from "../assets/sudoswap.svg";
-import blur from "../assets/blur.png";
-import cryptopunks from "../assets/cryptopunks.svg";
-import ensvision from "../assets/ensvision.svg";
-import gem from "../assets/gem.png";
+import opensea from "@Assets/opensea.svg";
+import x2y2 from "@Assets/x2y2.svg";
+import looksrare from "@Assets/looksrare.svg";
+import sudoswap from "@Assets/sudoswap.svg";
+import blur from "@Assets/blur.png";
+import cryptopunks from "@Assets/cryptopunks.svg";
+import ensvision from "@Assets/ensvision.svg";
+import gem from "@Assets/gem.png";
 
 const getMarketplaceImage = marketplaceName => {
   marketplaceName = marketplaceName?.toString();

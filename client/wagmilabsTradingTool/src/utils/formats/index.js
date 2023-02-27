@@ -1,1 +1,2 @@
-export {formatTime} from "./formats"
+export * from "./formats";
+export * from "./utils";

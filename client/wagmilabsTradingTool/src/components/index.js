@@ -1,6 +1,7 @@
 export * from "./Form";
 export * from "./Charts";
 export * from "./Modals";
+export * from "./Tables";
 
 export { Loader } from "./Loader";
 export { Tabs } from "./Tabs";
@@ -11,4 +12,5 @@ export { LoadingSpinner } from "./LoadingSpinner";
 export { Pagination } from "./Pagination";
 export { LivePulsing } from "./LivePulsing";
 export { OrderInfo } from "./OrderInfo";
-export {TimeAgo} from "./TimeAgo"
+export { TimeAgo } from "./TimeAgo";
+export { Card } from "./Card";

@@ -78,6 +78,12 @@ export const BarChart = ({
               tooltip: {
                 valueSuffix: tooltipSuffix,
                 formatter: function () {
+                  let amount = this.y;
+                  if (typeof amount === "number") {
+                    amount = amount.toLocaleString("EN-us", {
+                      maximumFractionDigits: 2,
+                    });
+                  }
                   const dollarValue = (values?.secondValue || [])[
                     this.point.index
                   ];
@@ -86,8 +92,8 @@ export const BarChart = ({
                     label +
                     "<br><br>" +
                     (dollarValue
-                      ? this.y + ` ${tooltipSuffix}<br>$` + dollarValue
-                      : this.y + tooltipSuffix)
+                      ? amount + ` ${tooltipSuffix}<br>$` + dollarValue
+                      : amount + tooltipSuffix)
                   );
                 },
               },

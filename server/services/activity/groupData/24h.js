@@ -19,7 +19,7 @@ const last24h = async (contractAddress) => {
     hour.setHours(hour.getHours() + 1)
   ) {
     const day = hour.toISOString();
-    hours[day] = { averageprice: 1, sales: 0, volume: 1, day: day };
+    hours[day] = { averageprice: 0.00001, sales: 0, volume: 0.00001, day: day };
   }
 
   const query = `

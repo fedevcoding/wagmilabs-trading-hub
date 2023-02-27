@@ -13,9 +13,9 @@ const last30d = async (contractAddress) => {
     day.setMilliseconds(0);
     const dateString = day.toISOString();
     days[dateString.split("T")[0]] = {
-      averageprice: 1,
+      averageprice: 0.00001,
       sales: 0,
-      volume: 1,
+      volume: 0.00001,
       day: dateString,
     };
   }

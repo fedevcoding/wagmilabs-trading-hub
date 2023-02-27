@@ -36,8 +36,6 @@ export const getChartData = async (
 
   data = await data.json();
 
-  console.log("getChartData", data);
-
   const averagePrices = data.map(item => roundPrice2(item.averageprice));
   const volumes = data.map(item => roundPrice2(item.volume));
 

@@ -21,7 +21,7 @@
 
 .search-bar {
   height: 20px;
-  width: 370px;
+  width: 350px;
   border-radius: 10px;
   outline: none;
   padding: 5px 0px;
@@ -32,6 +32,11 @@
   font-family: inherit;
   font-size: 15px;
   letter-spacing: 0.5px;
+  border: 2px solid #606060;
+}
+
+.login-searchbar {
+  width: 280px;
 }
 
 .search-bar:hover {
@@ -40,7 +45,6 @@
 
 .search-bar:focus {
   background-color: #343434;
-  border: 2px solid #606060;
 }
 
 .header-links-container {
@@ -76,24 +80,6 @@
   position: absolute;
   left: 15px;
   width: 5px;
-}
-
-.connect-button {
-  color: white;
-  background-color: transparent;
-  border: 2px solid #fff;
-  border-radius: 10px;
-  cursor: pointer;
-  font-size: 16px;
-  padding: 8px 10px;
-  margin-left: 0px;
-  font-family: inherit;
-  transition: all 400ms;
-}
-
-.connect-button:hover {
-  background-color: white;
-  color: black;
 }
 
 a {

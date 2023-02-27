@@ -40,8 +40,12 @@
 
 .starWatchlist {
   cursor: pointer;
-  width: 22px;
+  font-size: 22px;
   margin-left: 10px;
+}
+
+.starWatchlist.full {
+  color: yellow;
 }
 
 .collection-info-name {

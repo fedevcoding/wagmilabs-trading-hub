@@ -8,7 +8,7 @@ import getMarketplaceImage from "@Utils/marketplaceImageMapping";
 
 import "./style.scss";
 
-export const BestOfferTable = React.memo(({ details }) => {
+export const BestOfferTable = React.memo(({ details, isErc721 }) => {
   const { address: accountAddress } = useAccount();
   const isOwner = details ? accountAddress === details?.token?.owner : false;
   const topBid = details?.market?.topBid;
@@ -16,7 +16,7 @@ export const BestOfferTable = React.memo(({ details }) => {
 
   return (
     <>
-      {(!isOwner && topBid.id && (
+      {((!isOwner || isErc721) && topBid.id && (
         <div className="best-offer">
           <p>
             Best offer

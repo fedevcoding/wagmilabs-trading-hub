@@ -30,25 +30,6 @@
         width: 100%;
       }
     }
-
-    table {
-      width: 100%;
-
-      th {
-        text-align: left;
-        font-weight: bold;
-        border-bottom: 1px solid #333;
-        padding-bottom: 5px;
-      }
-
-      tr:first-child td {
-        padding-top: 10px;
-      }
-
-      tr td {
-        padding: 5px 0;
-      }
-    }
   }
 
   .activity-table-container {
@@ -68,6 +49,12 @@
     &::-webkit-scrollbar-thumb {
       background: black;
       border-radius: 10px;
+    }
+
+    .spinner {
+      margin: 0 0 0 1rem;
+      width: 20px;
+      height: 20px;
     }
   }
 }

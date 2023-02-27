@@ -1,4 +1,5 @@
 $main-color: white;
+$headerHeight: 50;
 
 
 
@@ -9,25 +10,117 @@ $main-color: white;
 	background-color: var(--grey-1);
 	height: 200vh;
 
+	input,
+	select {
+		color: white;
+	}
+
+	option {
+		background-color: black;
+	}
+
+
+	.listingWallChart,
+	.sale-list-comparison-chart {
+		height: 49%;
+		width: 35vw;
+	}
+
+	.listingWallChart {
+
+		.chart-options {
+			padding: 10px 20px;
+		}
+
+		background-color: #201f1e;
+		border-radius: 10px;
+
+	}
+
+	.sale-list-comparison-chart {
+		background-color: #201f1e;
+		border-radius: 10px;
+
+		.options-container {
+			display: flex;
+			justify-content: space-evenly;
+			padding: 10px 0;
+		}
+
+		.chart-type-selector {
+			display: inline-table;
+			cursor: pointer;
+			border-radius: 10px;
+
+
+			:nth-child(1) {
+				padding: 10px;
+				background-color: #161310;
+				border-top-left-radius: 10px;
+				border-bottom-left-radius: 10px;
+			}
+
+			:nth-child(2) {
+				padding: 10px;
+				background-color: #161310;
+				border-top-right-radius: 10px;
+				border-bottom-right-radius: 10px;
+			}
+
+			.selected {
+				background-color: black;
+			}
+		}
+	}
+
+	.bubble-chart {
+		margin-top: 35px;
+		background-color: #201f1e;
+		border-radius: 20px;
+		padding: 0 20px;
+
+		.chart-options {
+			padding: 30px 20px;
+		}
+
+		img {
+			width: 80px;
+			height: 80px;
+		}
+
+	}
+
+	.charts-column {
+		display: flex;
+		flex-direction: column;
+		height: 100%;
+		justify-content: space-between;
+	}
+
 	.column {
 		background-color: #201f1e;
 		border-radius: 10px;
 		cursor: pointer;
+		height: 100%;
 
-		.column-header{
-			.title{
+		.column-header {
+			.title {
 				display: flex;
 				align-items: center;
 				gap: 20px;
+				height: 50px;
+				padding: 0 20px;
+				border-bottom: 1px solid rgb(117, 117, 117);
 			}
 		}
 
 		.items {
-			height: 80vh;
+			height: calc(100% - 50px);
 			overflow: scroll;
 			width: 25vw;
 		}
-		.items.hovered{
+
+		.items.hovered {
 			border: 2px solid red;
 		}
 
@@ -35,11 +128,6 @@ $main-color: white;
 			width: 45px;
 			height: 45px;
 			border-radius: 10px;
-		}
-
-		.title {
-			padding: 15px 20px;
-			border-bottom: 1px solid rgb(117, 117, 117);
 		}
 	}
 
@@ -55,7 +143,7 @@ $main-color: white;
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		max-width: 60%;
+		height: 100vh;
 	}
 
 	.single-item-row {

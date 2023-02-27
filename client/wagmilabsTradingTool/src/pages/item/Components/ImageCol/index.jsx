@@ -1,5 +1,5 @@
 import React from "react";
-import { default as notFound } from "@Assets/question.png";
+import { placeholderImage } from "@Assets";
 import { MoreInfo } from "../MoreInfo";
 
 import "./style.scss";
@@ -9,11 +9,11 @@ export const ImageCol = React.memo(({ details, address }) => {
     <div className="image-col">
       <img
         className="item-image"
-        src={details.token?.image || notFound}
+        src={details.token?.image || placeholderImage}
         alt={details.token.name}
         onError={({ currentTarget }) => {
           currentTarget.onerror = null; // prevents looping
-          currentTarget.src = notFound;
+          currentTarget.src = placeholderImage;
         }}
       />
       <div className="info">

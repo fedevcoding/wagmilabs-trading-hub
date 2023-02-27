@@ -1,0 +1,96 @@
+.login-footer {
+
+    height: 100px;
+
+    .instructions-img {
+        height: 18px;
+    }
+
+    .instructions-btn {
+        position: absolute;
+        bottom: 20px;
+        right: 50px;
+        font-size: 20px;
+        font-family: inherit, sans-serif;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        color: black;
+    }
+
+    .instructions-btn div {
+        margin-left: 10px;
+    }
+
+
+
+
+
+
+
+    .terms-and-conditions-link {
+        text-decoration: underline;
+    }
+
+
+
+
+
+
+    .login-general-links {
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        width: 25%;
+        transform: translate(-50%, 0);
+
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .login-general-links-line {
+        height: 4px;
+        width: 70px;
+        border-radius: 10px;
+        background-color: white;
+    }
+
+    .login-general-links a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .login-general-links-img {
+        width: 35px;
+        cursor: pointer;
+    }
+
+
+    .legal-btn {
+        left: 50px;
+        position: absolute;
+        bottom: 20px;
+        font-size: 20px;
+        font-family: "Poppins";
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        color: black;
+    }
+
+    .legal-btn div {
+        margin-left: 10px;
+    }
+
+    .legal-img {
+        height: 18px;
+    }
+
+
+
+    .legal-terms-link {
+        text-decoration: underline;
+    }
+}

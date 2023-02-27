@@ -1,0 +1,16 @@
+.default-btn {
+  padding: 0.5rem 1.5rem;
+  display: inline-block;
+  background-color: var(--secondary-color);
+  border: 1px solid var(--light-gray);
+  border-radius: 10px;
+  cursor: pointer;
+  text-align: center;
+  max-width: 500px;
+  min-width: 100px;
+  color: white;
+
+  &:hover:not(:disabled) {
+    background-color: black;
+  }
+}
