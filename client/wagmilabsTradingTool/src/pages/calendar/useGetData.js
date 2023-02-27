@@ -10,30 +10,31 @@ export function useGetData() {
   const [spaces, setSpaces] = useState([]);
   const [isLoading, setLoading] = useState(false);
 
+  async function getData() {
+    setLoading(true);
+
+    const dropsUrl = `/drops`;
+    const eventsUrl = `/events`;
+    const personalUrl = `/personal`;
+    const spacesUrl = `/spaces`;
+
+    const [{drops}, {events}, {personal}, {spaces}] = await Promise.all([
+      getFromServer(dropsUrl),
+      getFromServer(eventsUrl),
+      getFromServer(personalUrl),
+      getFromServer(spacesUrl),
+    ]);
+    
+    setDrops(drops);
+    setEvents(events);
+    setPersonal(personal);
+    setSpaces(spaces);
+    setLoading(false);
+  }
+
   useEffect(() => {
-    async function getData() {
-      setLoading(true);
-
-      const dropsUrl = `/drops`;
-      const eventsUrl = `/events`;
-      const personalUrl = `/personal`;
-      const spacesUrl = `/spaces`;
-
-      const [{drops}, {events}, {personal}, {spaces}] = await Promise.all([
-        getFromServer(dropsUrl),
-        getFromServer(eventsUrl),
-        getFromServer(personalUrl),
-        getFromServer(spacesUrl),
-      ]);
-      
-      setDrops(drops);
-      setEvents(events);
-      setPersonal(personal);
-      setSpaces(spaces);
-      setLoading(false);
-    }
     getData();
   }, [socket]);
 
-  return {isLoading, drops, events, personal, spaces};
+  return {isLoading, drops, events, personal, spaces, refetch: getData};
 }
