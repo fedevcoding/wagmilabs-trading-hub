@@ -7,8 +7,6 @@ const Stats = require("../../models/StatsModel");
 
 statsRoute.post('/', checkAuth, async (req, res) => {
 
-    console.log("called")
-
     const { type, timestamp, address } = req.body || {};
 
     try {
