@@ -15,29 +15,35 @@ export const BestOfferBox = React.memo(
     const showBox =
       topBid?.id && ((!market.id && isErc721) || (!isErc721 && isOwner));
 
+    const showOnlyOffer = !market.id && !topBid?.id && !isOwner;
+
     return (
       <>
-        {(showBox && (
+        {((showBox || showOnlyOffer) && (
           <div className="price-box">
-            <p className="current-price">Best offer</p>
-            <div className="price">
-              {topBid.price.amount.decimal} {topBid.price.currency.symbol}
-              <small>
-                $
-                {topBid.price.amount.usd.toLocaleString("EN-us", {
-                  maximumFractionDigits: 2,
-                })}
-              </small>
-            </div>
-            <small className="market-from">
-              From {marketplace}
-              <img
-                src={marketplaceImage}
-                alt={marketplace}
-                width={20}
-                className="market-img"
-              />
-            </small>
+            {(!showOnlyOffer && (
+              <>
+                <p className="current-price">Best offer</p>
+                <div className="price">
+                  {topBid.price.amount.decimal} {topBid.price.currency.symbol}
+                  <small>
+                    $
+                    {topBid.price.amount.usd.toLocaleString("EN-us", {
+                      maximumFractionDigits: 2,
+                    })}
+                  </small>
+                </div>
+                <small className="market-from">
+                  From {marketplace}
+                  <img
+                    src={marketplaceImage}
+                    alt={marketplace}
+                    width={20}
+                    className="market-img"
+                  />
+                </small>
+              </>
+            )) || <p>There are no offers for this asset</p>}
             <Row className="actions">
               <Col>
                 {isOwner ? (
