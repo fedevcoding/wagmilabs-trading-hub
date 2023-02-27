@@ -5,16 +5,19 @@ import getMarketplaceImage from "@Utils/marketplaceImageMapping";
 import { AcceptOffer } from "./AcceptOffer";
 
 export const BestOfferBox = React.memo(
-  ({ details, address, isOwner, currency }) => {
+  ({ details, address, isOwner, currency, isErc721 }) => {
     const market = Object.values(details.market)[0];
     const topBid = details?.market?.topBid;
     const tokenId = details?.token?.tokenId || "";
     const marketplace = topBid?.source?.name || "";
     const marketplaceImage = getMarketplaceImage(marketplace);
 
+    const showBox =
+      topBid?.id && ((!market.id && isErc721) || (!isErc721 && isOwner));
+
     return (
       <>
-        {(!market.id && topBid?.id && (
+        {(showBox && (
           <div className="price-box">
             <p className="current-price">Best offer</p>
             <div className="price">
