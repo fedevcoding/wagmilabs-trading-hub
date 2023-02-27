@@ -81,8 +81,8 @@ route.get("/:address", checkAuth, (req, res) => {
         FROM ethereum.nft_sales
         WHERE buyer_address = '${address}' AND timestamp >= '${start}'  AND timestamp <= '${end}'
         AND ${exchangeCondition}
-        AND (contract_address, token_id) IN (
-            SELECT contract_address, token_id
+        AND CONCAT(contract_address, token_id) IN (
+            SELECT CONCAT(contract_address, token_id)
             FROM ethereum.nft_sales
             WHERE seller_address = '${address}' AND timestamp >= '${start}' AND timestamp <= '${end}'
             AND ${exchangeCondition}
@@ -115,14 +115,15 @@ route.get("/:address", checkAuth, (req, res) => {
         const sold = await execTranseposeAPI(query);
 
         for (const k in sold) {
-          const nft = data[k];
+          const nft = sold[k];
           const key = nft.contract_address + ":" + nft.token_id;
-          if (nfts[key]) nfts[key].sold = nft;
+          if (nfts[key] && !nfts[key].sold) nfts[key].sold = nft;
         }
       }
 
       res.status(200).json(formatPAndLData(Object.values(nfts)));
     } catch (e) {
+      console.log("err", e);
       res.status(500).json({ error: e });
     }
   }
