@@ -3,7 +3,6 @@ import { Col, Row } from '@Components';
 import { Button } from '@chakra-ui/react';
 import { AddEventModal } from 'src/components/Modals/AddEventModal';
 import { useDisclosure } from "@chakra-ui/react";
-import { useParams } from 'react-router-dom';
 import { useAccount } from 'wagmi';
 import { AnimationOnScroll } from 'react-animation-on-scroll';
 import { getSelectedDateTitle, hoursIntervals } from '../../Calendar';
@@ -13,14 +12,14 @@ import { CalendarHeader } from '../CalendarHeader';
 import { DayTile } from '../DayTile';
 import { CalendarEventDetail } from '../CalendarEventDetail';
 import moment from "moment";
+import { pushToServer } from "../../../../utils/functions";
 import "./style.scss";
 
 
-export const MonthlyCalendar = React.memo(({sectionData}) => {
+export const MonthlyCalendar = React.memo(({sectionData, section}) => {
   const { address } = useAccount();
   const allowedAddresses = ["0x8d50Ca23bDdFCA6DB5AE6dE31ca0E6A17586E5B8","0xfe697C5527ab86DaA1e4c08286D2bE744a0E321E","0x7FAC7b0161143Acfd80257873FB9cDb3F316C10C"];
   const today = new Date();
-  const {section} = useParams();
   const [selectedDate, setSelectedDate] = useState(null);
   const [currentDate, setCurrentDate] = useState(today);
   const [isLoading, setIsLoading] = useState(false);
@@ -89,6 +88,16 @@ export const MonthlyCalendar = React.memo(({sectionData}) => {
       )
     }
   },[sectionData, selectedDate])
+
+  const onSave = async (params) => {
+    try{
+      const res = await pushToServer(section === 'raffles' ? '/personal' : ('/' + section), {...params, wallet: address});
+      onClose();
+    } catch (err){
+      console.log('error on Save: ', err)
+      onClose();
+    }
+  }
 
   const changeDate = (back) => {
     setIsLoading(true);
@@ -224,7 +233,7 @@ export const MonthlyCalendar = React.memo(({sectionData}) => {
 
   return (
       <div>
-        <AddEventModal isOpen={isOpen} onClose={onClose} onOpen={onOpen} />
+        <AddEventModal isOpen={isOpen} onClose={onClose} onOpen={onOpen} onSave={onSave} address={address} section={section} />
         <Row>
           <Col className="calendar-left-inner-container">
           <MonthSwitch currentDate={currentDate} changeDate={changeDate} />

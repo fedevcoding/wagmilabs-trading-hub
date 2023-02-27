@@ -8,8 +8,6 @@ export const WeeklyScheduler = React.memo(
   ({
     hoursIntervals,
     sectionData,
-    selectedDate,
-    setSelectedDate,
     showSelectedDate
   }) => {
     const getEventsInWeekday = (weekDay) => (sectionData.filter((el)=>moment(el?.timestamp)?.day() === weekDay))
