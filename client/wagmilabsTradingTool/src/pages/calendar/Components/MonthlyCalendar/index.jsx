@@ -12,7 +12,7 @@ import { CalendarHeader } from '../CalendarHeader';
 import { DayTile } from '../DayTile';
 import { CalendarEventDetail } from '../CalendarEventDetail';
 import moment from "moment";
-import { pushToServer } from "../../../../utils/functions";
+import { pushToServer, deleteFromServer } from "../../../../utils/functions";
 import "./style.scss";
 
 
@@ -26,6 +26,9 @@ export const MonthlyCalendar = React.memo(({sectionData, section}) => {
   const [selectedEvents, setSelectedEvents] = useState([]);
   const [curEventDetail, setCurEventDetail] = useState(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const deleteFirstEventInDay = async () => {
+    await deleteFromServer(section === 'raffles' ? '/personal' : ('/' + section), {id: selectedEvents[0]._id });
+  }
 
   const getDaysInMonth = (month, year, changedDate) => {
     var date = new Date(year, month, 1);
@@ -252,6 +255,7 @@ export const MonthlyCalendar = React.memo(({sectionData, section}) => {
             <div className="selected-date-title">{selectedDate?.title}</div>
             { section === "raffles" && <Button colorScheme={"blue"} className="button" onClick={onOpen}>Add Event</Button>}
             { allowedAddresses.includes(address) &&<Button colorScheme={"blue"} className="button btn-spacing" onClick={onOpen}>Add Event As Admin</Button>}
+            { allowedAddresses.includes(address) &&<Button colorScheme={"blue"} className="button btn-spacing" onClick={deleteFirstEventInDay}>Delete first event in day</Button>}
             {renderEventsInfo()}
           </div>
           ) : (

@@ -32,5 +32,18 @@ eventsRoute.post('/', async (req, res) => {
     }
 });
 
+eventsRoute.delete('/', async (req, res) => {
+
+    const { id } = req.body || {};
+
+    try {
+        const events = await Events.deleteOne({_id: id});
+        if (!events) throw Error('Something went wrong deleting all the admin IRL events');
+        return res.status(200).json({events});
+    } catch (e) {
+        return res.status(400).json({ msg: e.message });
+    }
+});
+
 
 module.exports = eventsRoute

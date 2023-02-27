@@ -33,5 +33,18 @@ personalRoute.post('/', async (req, res) => {
     }
 });
 
+personalRoute.delete('/', async (req, res) => {
+
+    const { id } = req.body || {};
+
+    try {
+        const personal = await Personal.deleteOne({_id: id});
+        if (!personal) throw Error('Something went wrong deleting all the admin personal events');
+        return res.status(200).json({personal});
+    } catch (e) {
+        return res.status(400).json({ msg: e.message });
+    }
+});
+
 
 module.exports = personalRoute
