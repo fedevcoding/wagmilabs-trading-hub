@@ -11,10 +11,10 @@ personalRoute.get("/", async (req, res) => {
 
         if (!personal) throw new Error("Personal not found")
 
-        res.status(200).json({personal})
+        return res.status(200).json({personal})
     }
     catch (e) {
-        res.status(400).json({ error: e, status: "error" })
+        return res.status(400).json({ msg: e.message });
     }
 
 })
@@ -26,7 +26,8 @@ personalRoute.post('/', async (req, res) => {
     try {
         const personal = await Personal.create({ timestamp,address,eventName,links,eventDescription })
         if (!personal) throw Error('Something went wrong saving the admin personal event');
-        res.status(200)
+        
+        return res.status(200).json({personal});
     } catch (e) {
         res.status(400).json({ msg: e.message });
     }

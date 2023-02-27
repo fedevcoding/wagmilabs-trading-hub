@@ -26,9 +26,9 @@ dropsRoute.post('/', async (req, res) => {
     try {
         const drops = await Drops.create({ collectionName, links, price, supply, timestamp, address })
         if (!drops) throw Error('Something went wrong saving the admin drops event');
-        res.status(200)
+        return res.status(200).json({drops});
     } catch (e) {
-        res.status(400).json({ msg: e.message });
+        return res.status(400).json({ msg: e.message });
     }
 });
 
