@@ -5,60 +5,62 @@ const { execTranseposeAPI } = require("../../services/externalAPI/transpose");
 const route = express();
 
 function formatPAndLData(nfts) {
-  return nfts.map((nft) => {
-    const totalGasFees =
-      nft.bought.royalty_fee +
-      nft.bought.platform_fee +
-      nft.sold.royalty_fee +
-      nft.sold.platform_fee;
+  return nfts
+    .filter((nft) => nft.sold)
+    .map((nft) => {
+      const totalGasFees =
+        nft.bought.royalty_fee +
+        nft.bought.platform_fee +
+        nft.sold.royalty_fee +
+        nft.sold.platform_fee;
 
-    const paidCoef = nft.bought.usd_price / nft.bought.eth_price;
-    const soldCoef = nft.sold.usd_price / nft.sold.eth_price;
+      const paidCoef = nft.bought.usd_price / nft.bought.eth_price;
+      const soldCoef = nft.sold.usd_price / nft.sold.eth_price;
 
-    const totalGasFeesUsd =
-      (nft.bought.royalty_fee + nft.bought.platform_fee) * paidCoef +
-      (nft.sold.royalty_fee + nft.sold.platform_fee) * soldCoef;
+      const totalGasFeesUsd =
+        (nft.bought.royalty_fee + nft.bought.platform_fee) * paidCoef +
+        (nft.sold.royalty_fee + nft.sold.platform_fee) * soldCoef;
 
-    const diffInSeconds =
-      (new Date(nft.sold.timestamp).getTime() -
-        new Date(nft.bought.timestamp).getTime()) /
-      1000;
+      const diffInSeconds =
+        (new Date(nft.sold.timestamp).getTime() -
+          new Date(nft.bought.timestamp).getTime()) /
+        1000;
 
-    return {
-      ...nft,
-      info: {
-        nft: {
-          address: nft.bought.contract_address,
-          id: nft.bought.token_id,
-        },
-        paid: {
-          usd: nft.bought.usd_price,
-          eth: nft.bought.eth_price,
-        },
-        sold: {
-          usd: nft.sold.usd_price,
-          eth: nft.sold.eth_price,
-        },
-        gasFees: {
-          paid: nft.bought.royalty_fee + nft.bought.platform_fee,
-          sold: nft.sold.royalty_fee + nft.sold.platform_fee,
-          total: {
-            eth: totalGasFees,
-            usd: totalGasFeesUsd,
+      return {
+        ...nft,
+        info: {
+          nft: {
+            address: nft.bought.contract_address,
+            id: nft.bought.token_id,
+          },
+          paid: {
+            usd: nft.bought.usd_price,
+            eth: nft.bought.eth_price,
+          },
+          sold: {
+            usd: nft.sold.usd_price,
+            eth: nft.sold.eth_price,
+          },
+          gasFees: {
+            paid: nft.bought.royalty_fee + nft.bought.platform_fee,
+            sold: nft.sold.royalty_fee + nft.sold.platform_fee,
+            total: {
+              eth: totalGasFees,
+              usd: totalGasFeesUsd,
+            },
+          },
+          pOrL: {
+            eth: nft.sold.eth_price - nft.bought.eth_price - totalGasFees,
+            usd: nft.sold.usd_price - nft.bought.usd_price - totalGasFeesUsd,
+          },
+          holdDuration: diffInSeconds,
+          gross: {
+            eth: nft.sold.eth_price - totalGasFees,
+            usd: nft.sold.usd_price - totalGasFeesUsd,
           },
         },
-        pOrL: {
-          eth: nft.sold.eth_price - nft.bought.eth_price - totalGasFees,
-          usd: nft.sold.usd_price - nft.bought.usd_price - totalGasFeesUsd,
-        },
-        holdDuration: diffInSeconds,
-        gross: {
-          eth: nft.sold.eth_price - totalGasFees,
-          usd: nft.sold.usd_price - totalGasFeesUsd,
-        },
-      },
-    };
-  });
+      };
+    });
 }
 
 route.get("/:address", checkAuth, (req, res) => {
