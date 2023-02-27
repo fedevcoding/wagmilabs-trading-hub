@@ -93,13 +93,8 @@ export const MonthlyCalendar = React.memo(({sectionData, section, refetch}) => {
   },[sectionData, selectedDate])
 
   const onSave = async (params) => {
-    try{
-      const res = await pushToServer(section === 'raffles' ? '/personal' : ('/' + section), {...params, wallet: address});
-      const temp = [...selectedEvents];
-      const nextEvent = section === 'raffles' ? res.personal : res[section];
-      nextEvent.hour = moment(params.timestamp).hours();
-      temp.push(nextEvent);
-      setSelectedEvents(temp);
+    try {
+      await pushToServer(section === 'raffles' ? '/personal' : ('/' + section), {...params, wallet: address});
       onClose();
       refetch();
     } catch (err){
