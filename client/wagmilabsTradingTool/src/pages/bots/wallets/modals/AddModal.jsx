@@ -11,9 +11,12 @@ import {
     HStack,
     Input,
     NumberInput,
-    NumberInputField
+    NumberInputField,
+    useToast
 } from '@chakra-ui/react'
 import { useWeb3Utils } from '@Hooks';
+import { Loader } from '@Components';
+import { wait } from '@Utils';
 
 const initialState = {
     type: "use",
@@ -41,56 +44,106 @@ function reducer(state, action) {
 
 export const AddModal = ({ showAddModal, toggleModal, toggleWallet }) => {
 
+    const toast = useToast()
+
     const { getAddressAndBalance, generateWallets } = useWeb3Utils()
 
-    const [type, setType] = React.useState("generate")
     const [data, dispatch] = React.useReducer(reducer, initialState)
+
+    const [loading, setLoading] = React.useState(false)
+
 
 
     useEffect(() => {
         dispatch({ type: "SET_INITIAL_STATE", payload: initialState })
+
+        return () => {
+            dispatch({ type: "SET_INITIAL_STATE", payload: initialState })
+        }
     }, [showAddModal])
 
 
-    useEffect(() => {
-        dispatch({ type: "SET_TYPE", payload: type })
-    }, [type])
-
     const createWallet = async () => {
 
-        const { type, name, amount, privateKey } = data
+        try {
+            if (!hasAddConditions || loading) return
 
-        if (type === "generate") {
-            const wallets = await generateWallets(amount, name)
+            const { type, name, amount, privateKey } = data
 
-            for (let i = 0; i < wallets.length; i++) {
-                const wallet = wallets[i]
-                toggleWallet(wallet, true)
+            setLoading(true)
+            let code;
+
+            const date = new Date().toISOString().slice(0, 10)
+
+            if (type === "generate") {
+
+                await wait(100)
+
+                const wallets = await generateWallets(amount, name, date)
+
+                for (let i = 0; i < wallets.length; i++) {
+                    const wallet = wallets[i]
+                    code = toggleWallet(wallet, true)
+                }
+
+            }
+            else if (type === "use") {
+
+                const id = crypto.randomUUID()
+
+                const { address, balance } = await getAddressAndBalance(privateKey)
+
+                const wallet = { type, name, privateKey, address, balance, id, date }
+
+                code = toggleWallet(wallet, true)
             }
 
-            console.log(wallets)
+            if (code === 1) {
+                toast({
+                    title: "Wallet(s) added.",
+                    status: "success",
+                    duration: 3000,
+                    isClosable: true,
+                })
+            }
+            else if (code === 0) {
+                toast({
+                    title: "Wallet already exists.",
+                    status: "warning",
+                    duration: 3000,
+                    isClosable: true,
+                })
+            }
+            else if (code === 2) {
+                toast({
+                    title: "Name already exists.",
+                    status: "error",
+                    duration: 3000,
+                    isClosable: true,
+                })
+            }
+            else if (code === 4) {
+                toast({
+                    title: "Max wallets reached (50).",
+                    status: "error",
+                    duration: 3000,
+                    isClosable: true,
+                })
+            }
+
+            toggleModal("add", false)
         }
-        else if (type === "use") {
-
-            // const testWalletPrivateKey = "c2def227bb82d299425c65c261f1b0926f76ae0aa310e082d834561bdd8a5216"
-
-            const id = crypto.randomUUID()
-
-            const { address, balance } = await getAddressAndBalance(privateKey)
-
-            const wallet = { type, name, privateKey, count: 1, address, balance, id }
-
-            toggleWallet(wallet, true)
+        catch (e) {
+            console.log(e)
+        }
+        finally {
+            setLoading(false)
         }
 
-        // set data as initial state
-        dispatch({ type: "SET_INITIAL_STATE", payload: initialState })
-
-        toggleModal("add", false)
     }
 
 
-    const hasAddConditions = useMemo(() => data.name.length > 0 && data.privateKey.length === 64 ? true : false, [data])
+    const hasAddConditions = useMemo(() => data.type === "use" ? data.name.length > 0 && data.privateKey.length === 64 ? true : false : data.name.length > 0 && data.amount > 0 ? true : false, [data])
 
     return (
         <>
@@ -108,14 +161,14 @@ export const AddModal = ({ showAddModal, toggleModal, toggleWallet }) => {
                             <ModalBody>
                                 <div className='form'>
                                     <div className='options'>
-                                        <p onClick={() => setType("use")} className={`${type === "use" && "active"}`}>Use</p>
-                                        <p onClick={() => setType("generate")} className={`${type === "generate" && "active"}`}>Generate</p>
+                                        <p onClick={() => dispatch({ type: "SET_TYPE", payload: "use" })} className={`${data.type === "use" && "active"}`}>Use</p>
+                                        <p onClick={() => dispatch({ type: "SET_TYPE", payload: "generate" })} className={`${data.type === "generate" && "active"}`}>Generate</p>
                                     </div>
 
                                     <div className='inputs'>
 
                                         {
-                                            type === "use" ?
+                                            data.type === "use" ?
                                                 <>
                                                     <div>
                                                         <p>Wallet name</p>
@@ -133,13 +186,13 @@ export const AddModal = ({ showAddModal, toggleModal, toggleWallet }) => {
                                                     </HStack>
                                                 </>
                                                 :
-                                                type === "generate" ?
+                                                data.type === "generate" ?
 
                                                     <>
 
                                                         <div>
-                                                            <p>Group name</p>
-                                                            <Input value={data.name} placeholder={"Group name"} onChange={e => dispatch({ type: "SET_NAME", payload: e.target.value })} />
+                                                            <p>Wallet name</p>
+                                                            <Input value={data.name} placeholder={"Name"} onChange={e => dispatch({ type: "SET_NAME", payload: e.target.value })} />
                                                         </div>
 
                                                         <div>
@@ -163,7 +216,12 @@ export const AddModal = ({ showAddModal, toggleModal, toggleWallet }) => {
 
                             <ModalFooter justifyContent={"center"}>
                                 <Button colorScheme='blue' width={"100%"} onClick={createWallet} className={`add-button ${hasAddConditions && "active"}`}>
-                                    Add!
+                                    {
+                                        loading ?
+                                            <Loader width={"20px"} height={"20px"} />
+                                            :
+                                            <p>Add!</p>
+                                    }
                                 </Button>
                             </ModalFooter>
                         </ModalContent>

@@ -1,8 +1,13 @@
 #page-bots-wallets{
 
     $dominant-grey: #3d3d3d;
+    $secondary-grey: #1e1e1e;
+    $table-radius: 10px;
 
     margin: 20px 50px;
+    padding-bottom: 50px;
+    
+
 
     .options{
         justify-content: space-between;
@@ -29,13 +34,20 @@
             }
 
             div:hover{
-                background-color: #222222;
+                background-color: $secondary-grey;
             }
         }
     }
 
-    hr{
+    .header-divider{
         margin: 20px 0 0 0;
+    }
+
+    .wallet-divison{
+        background-color: #eee;
+        border: 0 none;
+        color: #eee;
+        height: 1px;
     }
 
 
@@ -46,23 +58,69 @@
             width: 100%;
             border-spacing: 0;
 
+            .no-wallets{
+                border-bottom-left-radius: $table-radius;
+                border-bottom-right-radius: $table-radius;
+
+                div{
+                    display: flex;
+                    flex-direction: column;
+                    height: 55vh;
+                }
+
+                img{
+                    width: 220px;
+                }
+            }
+
+            tr{
+                td{
+                    background-color: $dominant-grey;
+    
+                    div{
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                    }
+                }
+                .name {
+                    padding: 20px 0;
+                }
+                .address {
+                    cursor: pointer;
+                }
+                p{
+                    text-align: center;
+                }
+            }
+
+            .last-tr{
+                td:first-child{
+                    border-bottom-left-radius: $table-radius;
+                }
+
+                td:last-child{
+                    border-bottom-right-radius: $table-radius;
+                }
+
+            }
+
+
             thead th{
                 margin: 0;
                 padding: 20px 0;
-                background-color: $dominant-grey;
+                background-color: $secondary-grey;
             }
 
             thead th:first-child{
-                border-top-left-radius: 5px;
+                border-top-left-radius: $table-radius;
             }
 
             thead th:last-child{
-                border-top-right-radius: 5px;
+                border-top-right-radius: $table-radius;
             }
         }
     }
-
-
 }
 
 
@@ -117,29 +175,47 @@
                 margin-bottom: 5px;
             }
         }
+    }
+}
 
-        // .inputs{
-        //     margin: 20px 0;
-        //     display: flex;
-        //     flex-direction: column;
-        //     gap: 10px;
 
-        //     label{
-        //         font-size: 18px;
-        //         font-weight: 600;
-        //     }
 
-        //     input{
-        //         padding: 10px;
-        //         border: 1px solid grey;
-        //         border-radius: 5px;
-        //         outline: none;
-        //         transition: all 0.2s;
-        //     }
+.export-wallet-modal{
 
-        //     input:focus{
-        //         border: 1px solid white;
-        //     }
-        // }
+    .export-btn{
+        opacity: 0.8;
+        cursor: not-allowed;
+        transition: all 0.2s;
+
+        &.active{
+            opacity: 1;
+            cursor: pointer;
+        }
+    }
+    .alert{
+        margin-top: 10px;
+    }
+
+    input,
+	select {
+		color: white;
+	}
+	option {
+		background-color: black !important;
+	}
+
+
+    .rmsc {
+        margin-top: 15px;
+
+        --rmsc-main: #4285f4 !important;
+        --rmsc-hover: #1d1d1d !important;
+        --rmsc-selected: #212121 !important;
+        --rmsc-border: #ccc !important;
+        --rmsc-gray: #aaa !important;
+        --rmsc-bg: #2e2e30 !important;
+        --rmsc-p: 10px !important;
+        --rmsc-radius: 4px !important;
+        --rmsc-h: 38px !important;
     }
 }

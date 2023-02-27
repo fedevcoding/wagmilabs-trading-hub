@@ -7,18 +7,18 @@ export const useWeb3Utils = () => {
     const getAddressAndBalance = async (privateKey) => {
         const account = await web3.eth.accounts.privateKeyToAccount(privateKey)
         const address = account.address
-        const balance = await web3.eth.getBalance(address)
+        const balance = (await web3.eth.getBalance(address)) / 10 ** 18
         return {address, balance}
     }
 
-    const generateWallets = async (amount, name) => {
+    const generateWallets = async (amount, name, date) => {
         const wallets = []
         for(let i = 0; i < amount; i++){
             const wallet = ethers.Wallet.createRandom()
             const {address, privateKey} = wallet
-            const balance = 0
             const id = crypto.randomUUID()
-            wallets.push({type: "generate", name, balance, privateKey, count: amount, id, address})
+            const newName = `${name} ${i + 1}`
+            wallets.push({type: "generate", name: newName, date, balance: 0, privateKey, id, address})
         }
         return wallets
     }

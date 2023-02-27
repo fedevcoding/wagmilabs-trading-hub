@@ -1,32 +1,39 @@
-import { HStack, Button } from '@chakra-ui/react'
+import { HStack, Tooltip } from '@chakra-ui/react'
 import { PageWrapper } from '@Components'
-import React from 'react'
+import React, { useMemo } from 'react'
 
 
 import "./style.scss"
 import { useManageData, useManageModals } from './hooks'
 import { AddModal, ExportModal, TransferModal } from "./modals"
+import { formatAddress, roundPrice } from 'src/utils/formats/formats'
+import copy from 'copy-to-clipboard'
+import { notFound } from 'src/assets'
 
 
 const Wallets = React.memo(() => {
 
-    const clear = () => {
+    const { showAddModal, showExportModal, showTransferModal, toggleModal } = useManageModals()
+    const { wallets, toggleWallet } = useManageData()
 
-        localStorage.removeItem("wallets")
-        remove()
+    const [copyState, setCopyState] = React.useState("Copy")
+
+    const copyAddress = (address) => {
+        copy(address)
+        setCopyState("Copied")
+        setTimeout(() => {
+            setCopyState("Copy")
+        }, 400)
     }
 
-    const { showAddModal, showExportModal, showTransferModal, toggleModal } = useManageModals()
-    const { wallets, toggleWallet, remove } = useManageData()
 
     return (
         <PageWrapper page="bots-wallets">
-            <Button onClick={clear}>Clear wallets</Button>
 
             <div className='modals'>
                 <AddModal showAddModal={showAddModal} toggleModal={toggleModal} toggleWallet={toggleWallet} />
                 <TransferModal showTransferModal={showTransferModal} toggleModal={toggleModal} />
-                <ExportModal showExportModal={showExportModal} />
+                <ExportModal showExportModal={showExportModal} toggleModal={toggleModal} />
             </div>
 
 
@@ -55,43 +62,76 @@ const Wallets = React.memo(() => {
                 </HStack>
             </HStack>
 
-            <hr />
+            <hr className='header-divider' />
 
             <div className='wallets'>
                 <table className='table'>
                     <thead>
                         <tr>
                             <th>Name</th>
-                            <th>Count</th>
                             <th>Address</th>
                             <th>Balance</th>
-                            <th></th>
+                            <th>Added date</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         {
+                            useMemo(
+                                () =>
+                                    wallets.length === 0 ?
 
-                            wallets?.map(wallet => {
+                                        <tr>
+                                            <td colSpan={6} className='no-wallets'>
+                                                <div>
+                                                    <img src={notFound} alt="no wallets found"></img>
+                                                    <p>No wallets added yet.</p>
+                                                </div>
+                                            </td>
+                                        </tr> :
 
-                                const key = crypto.randomUUID()
-                                const { id } = wallet
+                                        wallets?.map((wallet, index) => {
 
-                                return (
-                                    <tr key={key}>
-                                        <td>{wallet.name}</td>
-                                        <td>{wallet.count}</td>
-                                        <td>{wallet.address}</td>
-                                        <td>{wallet.balance}</td>
-                                        <td>
-                                            <HStack gap="5px" onClick={() => toggleWallet({ id }, false)}>
-                                                <i className="fa-solid fa-trash"></i>
-                                                <p>Delete</p>
-                                            </HStack>
-                                        </td>
-                                    </tr>
+                                            const key = crypto.randomUUID()
+                                            const { id } = wallet
+                                            const isLast = index === wallets.length - 1
 
-                                )
-                            })
+                                            return (
+                                                <React.Fragment key={key}>
+                                                    <tr className={`${isLast && "last-tr"}`}>
+                                                        <td>
+                                                            <p className='name'>{wallet.name}</p>
+                                                        </td>
+                                                        <td>
+                                                            <Tooltip label={copyState} closeOnClick={false} hasArrow fontSize="xs" bg="black" color={"white"} placement="top" borderRadius={"7px"}>
+                                                                <p className='address' onClick={() => copyAddress(wallet.address)}>{formatAddress(wallet.address)}</p>
+                                                            </Tooltip>
+                                                        </td>
+
+                                                        <td>
+                                                            <HStack>
+                                                                <p>{roundPrice(wallet.balance)}</p>
+                                                                <i className="fa-brands fa-ethereum"></i>
+                                                            </HStack>
+                                                        </td>
+                                                        <td>
+                                                            <p>{wallet.date}</p>
+                                                        </td>
+                                                        <td>
+                                                            <HStack gap="5px" onClick={() => toggleWallet({ id }, false)} cursor="pointer">
+                                                                <i className="fa-solid fa-trash"></i>
+                                                                <p>Delete</p>
+                                                            </HStack>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colSpan={6}>
+                                                            <hr className='wallet-divison' />
+                                                        </td>
+                                                    </tr>
+                                                </React.Fragment>
+                                            )
+                                        }), [wallets, copyState, toggleWallet])
                         }
                     </tbody>
                 </table>
