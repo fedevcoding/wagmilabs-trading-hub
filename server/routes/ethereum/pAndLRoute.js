@@ -73,16 +73,19 @@ route.get("/:address", checkAuth, (req, res) => {
       const start = new Date(parseInt(startDate)).toISOString();
       const end = new Date(parseInt(endDate)).toISOString();
 
+      const exchangeCondition =
+        "exchange_name IN('opensea', 'blur', 'x2y2', 'sudoswap', 'looksrare')";
+
       const query = `
         SELECT timestamp, contract_address, token_id, usd_price, eth_price, royalty_fee, platform_fee
         FROM ethereum.nft_sales
         WHERE buyer_address = '${address}' AND timestamp >= '${start}'  AND timestamp <= '${end}'
-        AND exchange_name IN('opensea', 'blur', 'x2y2', 'sudoswap', 'looksrare')
+        AND ${exchangeCondition}
         AND (contract_address, token_id) IN (
             SELECT contract_address, token_id
             FROM ethereum.nft_sales
             WHERE seller_address = '${address}' AND timestamp >= '${start}' AND timestamp <= '${end}'
-            AND exchange_name IN('opensea', 'blur', 'x2y2', 'sudoswap', 'looksrare')
+            AND ${exchangeCondition}
         )`;
 
       const data = await execTranseposeAPI(query);
@@ -103,7 +106,7 @@ route.get("/:address", checkAuth, (req, res) => {
           SELECT timestamp, contract_address, token_id, usd_price, eth_price, royalty_fee, platform_fee
           FROM ethereum.nft_sales
           WHERE seller_address = '${address}' AND timestamp >= '${start}' AND timestamp <= '${end}'
-            AND exchange_name IN('opensea', 'blur', 'x2y2', 'sudoswap', 'looksrare')
+            AND ${exchangeCondition}
             AND CONCAT(contract_address, token_id) IN ('${nftsIds
               .join("','")
               .replace(":", "")}')

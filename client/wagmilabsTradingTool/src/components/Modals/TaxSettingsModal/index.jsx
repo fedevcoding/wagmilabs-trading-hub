@@ -43,7 +43,7 @@ export const TaxSettingsModal = React.memo(
             <div className="space-between input">
               <span>Tax %</span>
               <div className="tax-perc">
-                <NumberInput max={100} min={0} step={0.01}>
+                <NumberInput max={100} min={0} step={0.01} value={taxPerc}>
                   <NumberInputField
                     placeholder={`Value...`}
                     onChange={e => setTaxPerc(e.target.value)}
