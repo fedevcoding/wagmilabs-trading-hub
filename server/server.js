@@ -55,6 +55,7 @@ const express = require("express");
 const connectDB = require("./config/db");
 const cookieParser = require("cookie-parser");
 const getCoinsGasData = require("./websockets/coinsGasData.js");
+const rateLimit = require("express-rate-limit");
 //
 
 // http server
@@ -172,6 +173,15 @@ function newPendingSnipe(accountAddress, id) {
     console.log(e);
   }
 }
+
+// rate limit
+
+const limiter = rateLimit({
+  windowMs: 1000,
+  max: 15,
+  message: "Too many requests from this IP, please try again later.",
+});
+app.use(limiter);
 
 // http routes
 
