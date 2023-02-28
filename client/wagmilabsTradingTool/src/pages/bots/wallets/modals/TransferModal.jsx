@@ -42,8 +42,6 @@ function fixedReducer(state, action) {
             return action.payload;
         case "SET_SELECT_OPTIONS":
             return { ...state, selectOptions: action.payload };
-        case "SET_INITIAL_STATE":
-            return action.payload;
         default:
             throw new Error(`Unsupported action type: ${action.type}`);
     }
