@@ -1,7 +1,7 @@
 import { Button, Modal, ModalBody, ModalContent, ModalOverlay, Input, HStack, NumberInput, NumberInputField } from "@chakra-ui/react";
 import React, { useState } from "react";
 import ReactDatePicker from "react-datepicker";
-import "./index.scss"
+import "./style.scss"
 
 const formatLinks = (links) => {
     if(links && links.length > 0){
@@ -32,10 +32,15 @@ const formatEventInfo = (eventInfo, section) => {
         eventToSave.eventDescription = eventInfo.eventDescription;
         eventToSave.eventLocation = eventInfo.eventLocation;
       }
-    if(section === 'raffles') {
+    if(section === 'personal') {
       eventToSave.address = eventInfo.address;
       eventToSave.eventName = eventInfo.name;
       eventToSave.eventDescription = eventInfo.eventDescription;
+    }
+    if(section === 'spaces') {
+      eventToSave.spaceName = eventInfo.name;
+      eventToSave.spaceDescrition = eventInfo.eventDescription;
+      eventToSave.spaceHost = eventInfo.spaceHost;
     }
     return eventToSave;
 }
@@ -77,6 +82,9 @@ export const AddEventModal = React.memo(({
             break;
           case "eventLocation":
             setEventInfo(prev => ({ ...prev, eventLocation: value }));
+            break;
+          case "spaceHost":
+            setEventInfo(prev => ({ ...prev, spaceHost: value }));
             break;
           case "address":
             setEventInfo(prev => ({ ...prev, address: value }));
@@ -136,7 +144,7 @@ export const AddEventModal = React.memo(({
                         </HStack>
                     </div>
                     )}
-                    {section === 'raffles' && (
+                    {section === 'personal' && (
                     <div className="field-container">
                         Address
                         <HStack>
@@ -183,6 +191,18 @@ export const AddEventModal = React.memo(({
                         </NumberInput>
                     </div>
                     </>
+                    )}
+                    {section === 'spaces' && (
+                    <div className="field-container">
+                      Host
+                      <HStack>
+                          <Input
+                            placeholder="host"
+                            color={"white"}
+                            onChange={e => updateEventInfo(e, "spaceHost", true)}
+                          />
+                      </HStack>
+                    </div>
                     )}
                     <div className="field-container">
                         Links

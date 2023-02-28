@@ -19,5 +19,30 @@ spacesRoute.get("/", async (req, res) => {
 
 })
 
+spacesRoute.post('/', async (req, res) => {
+
+    const { timestamp,spaceName,links,spaceDescrition,spaceHost } = req.body || {};
+
+    try {
+        const spaces = await Spaces.create({ timestamp,spaceName,links,spaceDescrition,spaceHost })
+        if (!spaces) throw Error('Something went wrong saving the admin spaces event');
+        return res.status(200).json({spaces});
+    } catch (e) {
+        return res.status(400).json({ msg: e.message });
+    }
+});
+
+spacesRoute.delete('/', async (req, res) => {
+
+    const { id } = req.body || {};
+
+    try {
+        const spaces = await Spaces.deleteOne({_id: id});
+        if (!spaces) throw Error('Something went wrong deleting all the admin spaces event');
+        return res.status(200).json({spaces});
+    } catch (e) {
+        return res.status(400).json({ msg: e.message });
+    }
+});
 
 module.exports = spacesRoute

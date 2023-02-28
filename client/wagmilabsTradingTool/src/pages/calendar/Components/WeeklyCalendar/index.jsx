@@ -7,13 +7,15 @@ import { getSelectedDateTitle, hoursIntervals} from '../../Calendar';
 import { WeeklyScheduler } from '../WeeklyScheduler';
 import { WeeklySubtitle } from '../WeeklySubtitle';
 import { CalendarEventDetail } from '../CalendarEventDetail';
+import { pushToServer, deleteFromServer } from "../../../../utils/functions";
 import moment from 'moment';
 import "./style.scss";
 
-export const WeeklyCalendar = ({sectionData}) => {
+export const WeeklyCalendar = ({sectionData, refetch}) => {
   const [selectedEvents, setSelectedEvents] = useState([]);
   const { address } = useAccount();
   const allowedAddresses = ["0x8d50Ca23bDdFCA6DB5AE6dE31ca0E6A17586E5B8","0xfe697C5527ab86DaA1e4c08286D2bE744a0E321E","0x7FAC7b0161143Acfd80257873FB9cDb3F316C10C"];
+  const isAdmin = allowedAddresses.includes(address);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedDate, setSelectedDate] = useState(null);
   const [curEventDetail, setCurEventDetail] = useState(null);
@@ -23,6 +25,11 @@ export const WeeklyCalendar = ({sectionData}) => {
         date: d,
       }
     )
+  }
+
+  const deleteEvent = async (id) => {
+    await deleteFromServer('/spaces', {id});
+    refetch();
   }
 
   useEffect(() => {
@@ -62,7 +69,7 @@ export const WeeklyCalendar = ({sectionData}) => {
       <div className="selected-event-in-day">
         <div className='event-name' onClick={() =>onEventDetails(event?._id)}>{event?.spaceName}</div>
         {event._id === curEventDetail && (
-          <CalendarEventDetail event={event} />
+          <CalendarEventDetail event={event} deleteEvent={deleteEvent} isAdmin={isAdmin} />
         )}
       </div>
   ))}
@@ -84,9 +91,20 @@ export const WeeklyCalendar = ({sectionData}) => {
   ))
  )
 
+ const onSave = async (params) => {
+  try {
+    await pushToServer('/spaces', {...params, wallet: address});
+    onClose();
+    refetch();
+  } catch (err){
+    console.log('error on Save: ', err)
+    onClose();
+  }
+}
+
   return (
     <div>
-      <AddEventModal isOpen={isOpen} onClose={onClose} onOpen={onOpen} />
+      <AddEventModal isOpen={isOpen} onClose={onClose} onOpen={onOpen} section="spaces" onSave={onSave} />
       <Row>
         <Col className="calendar-hours-inner-container">
           {hoursIntervals.map((h)=>(
@@ -102,11 +120,17 @@ export const WeeklyCalendar = ({sectionData}) => {
         {selectedDate ? (
         <div className="selected-event-detail">
           <div className="selected-event-title">{selectedDate?.title}</div>
-          { allowedAddresses.includes(address) &&<Button colorScheme={"blue"} className="button btn-spacing" onClick={onOpen}>Add Event As Admin</Button>}
+          { isAdmin &&<Button colorScheme={"blue"} className="button btn-spacing" onClick={onOpen}>Add Event As Admin</Button>}
           {renderEventsInfo()}
         </div>
         ) : (
-          <div className='selected-event-title'>No events selected</div>
+          <>
+          { isAdmin  ? (
+          <Button colorScheme={"blue"} className="button btn-spacing" onClick={onOpen}>Add Event As Admin</Button>
+            ):(
+          <div>No event selected</div>
+            )}
+          </>
         )}
         </Col>
       </Row>

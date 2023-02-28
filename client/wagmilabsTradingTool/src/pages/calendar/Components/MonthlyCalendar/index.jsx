@@ -19,6 +19,7 @@ import "./style.scss";
 export const MonthlyCalendar = React.memo(({sectionData, section, refetch}) => {
   const { address } = useAccount();
   const allowedAddresses = ["0x8d50Ca23bDdFCA6DB5AE6dE31ca0E6A17586E5B8","0xfe697C5527ab86DaA1e4c08286D2bE744a0E321E","0x7FAC7b0161143Acfd80257873FB9cDb3F316C10C"];
+  const isAdmin = allowedAddresses.includes(address);
   const today = new Date();
   const [selectedDate, setSelectedDate] = useState(null);
   const [currentDate, setCurrentDate] = useState(today);
@@ -26,8 +27,10 @@ export const MonthlyCalendar = React.memo(({sectionData, section, refetch}) => {
   const [selectedEvents, setSelectedEvents] = useState([]);
   const [curEventDetail, setCurEventDetail] = useState(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const deleteFirstEventInDay = async () => {
-    await deleteFromServer(section === 'raffles' ? '/personal' : ('/' + section), {id: selectedEvents[0]._id });
+
+  const deleteEvent = async (id) => {
+    await deleteFromServer('/' + section, {id});
+    refetch();
   }
 
   const getDaysInMonth = (month, year, changedDate) => {
@@ -94,7 +97,7 @@ export const MonthlyCalendar = React.memo(({sectionData, section, refetch}) => {
 
   const onSave = async (params) => {
     try {
-      await pushToServer(section === 'raffles' ? '/personal' : ('/' + section), {...params, wallet: address});
+      await pushToServer('/' + section, {...params, wallet: address});
       onClose();
       refetch();
     } catch (err){
@@ -213,7 +216,7 @@ export const MonthlyCalendar = React.memo(({sectionData, section, refetch}) => {
         <div className="selected-event-in-day">
           <div className='event-name' onClick={() =>onEventDetails(event?._id)}>{event?.eventName || event?.collectionName}</div>
           {event._id === curEventDetail && (
-            <CalendarEventDetail event={event} />
+            <CalendarEventDetail event={event} deleteEvent={deleteEvent} isAdmin={isAdmin} />
           )}
         </div>
     ))}
@@ -249,9 +252,8 @@ export const MonthlyCalendar = React.memo(({sectionData, section, refetch}) => {
           {selectedDate ? (
           <div className="selected-date-detail">
             <div className="selected-date-title">{selectedDate?.title}</div>
-            { section === "raffles" && <Button colorScheme={"blue"} className="button" onClick={onOpen}>Add Event</Button>}
-            { allowedAddresses.includes(address) &&<Button colorScheme={"blue"} className="button btn-spacing" onClick={onOpen}>Add Event As Admin</Button>}
-            { allowedAddresses.includes(address) &&<Button colorScheme={"blue"} className="button btn-spacing" onClick={deleteFirstEventInDay}>Delete first event in day</Button>}
+            { section === "personal" && <Button colorScheme={"blue"} className="button" onClick={()=>null}>Add Event</Button>}
+            { isAdmin &&<Button colorScheme={"blue"} className="button btn-spacing" onClick={onOpen}>Add Event As Admin</Button>}
             {renderEventsInfo()}
           </div>
           ) : (

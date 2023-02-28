@@ -10,6 +10,7 @@ export const WeeklyScheduler = React.memo(
     sectionData,
     showSelectedDate
   }) => {
+    console.log('NEW SECTION DATA',sectionData)
     const getEventsInWeekday = (weekDay) => (sectionData.filter((el)=>moment(el?.timestamp)?.day() === weekDay))
     const getAllEventsInAllWeakdays = () => ( daysOfTheWeek.map((_, index)=>(getEventsInWeekday(index))))
     const allEventsInAllWeakdays = getAllEventsInAllWeakdays();

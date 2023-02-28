@@ -3,7 +3,7 @@ const mongoose = require("mongoose")
 const PersonalSchema = mongoose.Schema({
     address: {
         type: String,
-        unique: True
+        unique: true,
     },
     events: [
         {

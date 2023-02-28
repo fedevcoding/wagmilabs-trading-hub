@@ -76,9 +76,9 @@ export const Calendar = () => {
       {sectionData && (
         <>
         {sectionData.length > 0 && section === "spaces" ? (
-          <WeeklyCalendar sectionData={sectionData} />
+          <WeeklyCalendar sectionData={sectionData} refetch={data.refetch} />
         ):(
-          <MonthlyCalendar sectionData={sectionData} section={section} refetch={data.refetch} />
+          <MonthlyCalendar sectionData={sectionData} section={section === 'raffles' ? 'personal' : section} refetch={data.refetch} />
         )}
         </>
       )}
