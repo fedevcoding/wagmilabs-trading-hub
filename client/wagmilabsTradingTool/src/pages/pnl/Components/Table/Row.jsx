@@ -16,10 +16,10 @@ export const Row = React.memo(
     const symbol = currency === "usd" ? "$" : " ETH";
 
     return (
-      <tr key={nft.address + nft.id}>
+      <tr>
         <td
           className="nft-info-box"
-          onClick={() => navigate(`/item/${nft.address}/${nft.id}`)}
+          onClick={() => navigate(`/item/${nft.nft.address}/${nft.nft.id}`)}
         >
           {isFetchingInitialData ? (
             <LoadingSpinner />
@@ -28,7 +28,8 @@ export const Row = React.memo(
               <img
                 src={
                   images[
-                    (nft.address + nft.id).toLowerCase() || placeholderImage
+                    (nft.nft.address + nft.nft.id).toLowerCase() ||
+                      placeholderImage
                   ]
                 }
                 alt={"#" + nft.nft.id}

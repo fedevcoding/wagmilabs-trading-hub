@@ -22,6 +22,7 @@ export const Table = React.memo(({ data, taxPerc, taxedOn, currency }) => {
       <tbody>
         {data.map(n => (
           <Row
+            key={JSON.stringify(n)}
             nft={n.info}
             taxPerc={taxPerc}
             taxedOn={taxedOn}
