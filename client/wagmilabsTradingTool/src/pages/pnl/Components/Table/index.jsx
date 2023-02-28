@@ -2,8 +2,16 @@ import React from "react";
 import { formatAddress } from "@Utils/formats/formats";
 import { roundPrice, roundPrice2 } from "src/utils/formats/formats";
 import moment from "moment";
+import { useImages } from "./useImages";
+import { placeholderImage } from "src/assets";
+import { LoadingSpinner } from "@Components";
+import { useNavigate } from "react-router-dom";
 
 export const Table = React.memo(({ data, taxPerc, taxedOn, currency }) => {
+  const { images, isFetchingInitialData } = useImages(data);
+
+  const navigate = useNavigate();
+
   return (
     <table>
       <thead>
@@ -30,10 +38,34 @@ export const Table = React.memo(({ data, taxPerc, taxedOn, currency }) => {
 
           return (
             <tr key={n.info.nft.address + n.info.nft.id}>
-              <td>
-                {formatAddress(nft.nft.address)}
-                <br />
-                {"#" + nft.nft.id}
+              <td
+                className="nft-info-box"
+                onClick={() =>
+                  navigate(`/item/${n.info.nft.address}/${n.info.nft.id}`)
+                }
+              >
+                {isFetchingInitialData ? (
+                  <LoadingSpinner />
+                ) : (
+                  <>
+                    <img
+                      src={
+                        images[
+                          (n.info.nft.address + n.info.nft.id).toLowerCase() ||
+                            placeholderImage
+                        ]
+                      }
+                      alt={"#" + nft.nft.id}
+                      width={120}
+                      className="nft-img"
+                    />
+                    <div className="nft-text">
+                      {formatAddress(nft.nft.address)}
+                      <br />
+                      {"#" + nft.nft.id}
+                    </div>
+                  </>
+                )}
               </td>
               <td>
                 {nft.paid.eth + " ETH"} <br /> {nft.paid.usd + "$"}
