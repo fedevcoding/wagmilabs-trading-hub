@@ -15,36 +15,72 @@ import {
 } from '@chakra-ui/react'
 import { MultiSelect } from 'react-multi-select-component';
 
-const initialState = {
-    type: "fixed",
+
+
+const fixedInitialState = {
     value: 0,
-    wallets: [],
     loading: false,
-    selectedWallets: [],
-    customWalletsAmount: 1,
-    customWallets: []
+    selectOptions: []
+}
+const customInitialState = {
+    transfers: [
+        {
+            id: crypto.randomUUID(),
+            address: undefined,
+            value: undefined,
+        }
+    ],
 }
 
-function reducer(state, action) {
+function fixedReducer(state, action) {
     switch (action.type) {
-        case "SET_TYPE":
-            return { ...state, type: action.payload };
-        case "SET_WALLETS":
-            return { ...state, wallets: action.payload };
+        case "SET_VALUE":
+            return { ...state, value: action.payload };
         case "SET_LOADING":
             return { ...state, loading: action.payload };
         case "SET_INITIAL_STATE":
             return action.payload;
-        case "SET_SELECTED_WALLETS":
-            return { ...state, selectedWallets: action.payload };
-        case "SET_VALUE":
-            return { ...state, value: action.payload };
-        case "SET_CUSTOM_WALLETS_AMOUNT":
-            return { ...state, customWalletsAmount: action.payload };
-        case "ADD_CUSTOM_WALLET":
-            return { ...state, customWallets: [...state.customWallets, { address: "", amount: 0 }] };
-        case "REMOVE_CUSTOM_WALLET":
-            return { ...state, customWallets: state.customWallets.filter((row, index) => index !== action.payload) };
+        case "SET_SELECT_OPTIONS":
+            return { ...state, selectOptions: action.payload };
+        case "SET_INITIAL_STATE":
+            return action.payload;
+        default:
+            throw new Error(`Unsupported action type: ${action.type}`);
+    }
+}
+
+function customReducer(state, action) {
+    switch (action.type) {
+        case "ADD_TRANSFER":
+            return { ...state, transfers: [...state.transfers, action.payload] };
+        case "REMOVE_TRANSFER":
+            return { ...state, transfers: state.transfers.filter((_, i) => i !== action.payload) };
+        case "CHANGE_TRANSFER_ADDRESS":
+            {
+                const { id, newAddress } = action.payload
+                const transfers = state.transfers.map((transfer) => {
+                    if (transfer.id === id) {
+                        return { ...transfer, address: newAddress }
+                    }
+                    return transfer
+                })
+                return { ...state, transfers }
+            }
+        case "CHANGE_TRANSFER_VALUE":
+            {
+                const { id, newValue } = action.payload
+                const transfers = state.transfers.map((transfer) => {
+                    if (transfer.id === id) {
+                        return { ...transfer, value: newValue }
+                    }
+                    return transfer
+                }
+                )
+                return { ...state, transfers }
+
+            }
+        case "SET_INITIAL_STATE":
+            return action.payload;
         default:
             throw new Error(`Unsupported action type: ${action.type}`);
     }
@@ -52,20 +88,36 @@ function reducer(state, action) {
 
 export const TransferModal = ({ showTransferModal, toggleModal }) => {
 
-    const [data, dispatch] = React.useReducer(reducer, initialState)
-    const [selectedWallets, setSelectedWallets] = React.useState([]);
+    const [type, setType] = React.useState("fixed");
+    const [wallets, setWallets] = React.useState([]);
+
+    // fixed type states
+    const [fixedData, dispatchFixed] = React.useReducer(fixedReducer, fixedInitialState)
+    const [selectedWallets, setSelectedWallets] = React.useState([])
+
+    // custom type states
+    const [customData, dispatchCustom] = React.useReducer(customReducer, customInitialState)
+
 
     useEffect(() => {
         const wallets = JSON.parse(localStorage.getItem('wallets')) || [];
         const options = wallets.map(row => ({ label: row.name, value: row.address }));
 
-        dispatch({ type: "SET_WALLETS", payload: options })
-
+        dispatchFixed({ type: "SET_SELECT_OPTIONS", payload: options })
+        setWallets(wallets)
 
         return () => {
-            dispatch({ type: "SET_INITIAL_STATE", payload: initialState })
+            setType("fixed")
+            dispatchFixed({ type: "SET_INITIAL_STATE", payload: fixedInitialState })
+            dispatchCustom({ type: "SET_INITIAL_STATE", payload: customInitialState })
         }
     }, [showTransferModal])
+
+
+
+    useEffect(() => {
+        console.log(customData)
+    }, [customData])
 
 
     return (
@@ -83,56 +135,74 @@ export const TransferModal = ({ showTransferModal, toggleModal }) => {
 
                             <ModalBody>
                                 <div className='form'>
-                                    <div className='options'>
-                                        <p onClick={() => dispatch({ type: "SET_TYPE", payload: "fixed" })} className={`${data.type === "fixed" && "active"}`}>Fixed</p>
-                                        <p onClick={() => dispatch({ type: "SET_TYPE", payload: "custom" })} className={`${data.type === "custom" && "active"}`}>Custom</p>
+                                    <div className='modal-types'>
+                                        <p onClick={() => setType("fixed")} className={`${type === "fixed" && "active"}`}>Fixed</p>
+                                        <p onClick={() => setType("custom")} className={`${type === "custom" && "active"}`}>Custom</p>
                                     </div>
 
                                     <div className='inputs'>
 
                                         {
-                                            data.type === "fixed" ?
+                                            type === "fixed" ?
                                                 <>
                                                     <p>Wallets</p>
-                                                    <MultiSelect options={data.wallets} hasSelectAll={true} className="multi-select" value={selectedWallets} onChange={setSelectedWallets} />
+                                                    <MultiSelect options={fixedData.selectOptions} hasSelectAll={true} className="multi-select" value={selectedWallets} onChange={setSelectedWallets} />
 
-                                                    <NumberInput value={data.value}>
-                                                        <NumberInputField placeholder="Value (ETH)" onChange={e => dispatch({ type: "SET_VALUE", payload: e.target.value })} />
+                                                    <NumberInput value={fixedData.value}>
+                                                        <NumberInputField placeholder="Value (ETH)" onChange={e => dispatchFixed({ type: "SET_VALUE", payload: e.target.value })} />
                                                     </NumberInput>
 
 
                                                     <div className='total'>
                                                         <HStack>
-                                                            <p>Total:</p>
-                                                            <p>{selectedWallets.length * data.value} ETH</p>
+                                                            <p>Total wallets:</p>
+                                                            <p>{selectedWallets.length}</p>
+                                                        </HStack>
+
+                                                        <HStack>
+                                                            <p>Total ETH:</p>
+                                                            <p>{selectedWallets.length * fixedData.value} ETH</p>
                                                         </HStack>
                                                     </div>
                                                 </>
                                                 :
-                                                data.type === "custom" ?
+                                                type === "custom" ?
 
                                                     <>
-                                                        <HStack>
-                                                            <Select>
-                                                                {
-                                                                    data?.wallets?.map(row => (
-                                                                        <option value={row.value}>{row.label}</option>
-                                                                    ))
-                                                                }
-                                                            </Select>
+                                                        {
+                                                            customData.transfers.map(transfer => {
 
-                                                            <NumberInput value={data.value}>
-                                                                <NumberInputField placeholder="Value (ETH)" onChange={e => dispatch({ type: "SET_VALUE", payload: e.target.value })} />
-                                                            </NumberInput>
-                                                        </HStack>
+                                                                const { id } = transfer
 
-                                                        <Button onClick={() => dispatch("SET_")}>
-                                                            <i class="fa-solid fa-plus"></i>
+                                                                return (
+                                                                    <>
+                                                                        <HStack>
+                                                                            <Select onChange={e => dispatchCustom({ type: "CHANGE_TRANSFER_ADDRESS", payload: { newAddress: e.target.value, id } })}>
+                                                                                <option value={undefined} style={{ display: "none" }}>Select wallet</option>
+                                                                                {
+                                                                                    wallets?.map(row => (
+                                                                                        <option value={row.address}>{row.name}</option>
+                                                                                    ))
+                                                                                }
+                                                                            </Select>
+
+                                                                            <NumberInput value={transfer.value}>
+                                                                                <NumberInputField placeholder="Value (ETH)" onChange={e => dispatchCustom({ type: "CHANGE_TRANSFER_VALUE", payload: { newValue: e.target.value, id } })} />
+                                                                            </NumberInput>
+                                                                        </HStack>
+                                                                    </>
+
+                                                                )
+                                                            })
+                                                        }
+
+                                                        <Button onClick={() => dispatchCustom({ type: "ADD_TRANSFER", payload: { value: undefined, address: undefined, id: crypto.randomUUID() } })}>
+                                                            <i className="fa-solid fa-plus"></i>
                                                             <p>Add wallet</p>
                                                         </Button>
 
                                                         <HStack className='alert low-opacity little-text'>
-                                                            <i class="fa-solid fa-triangle-exclamation"></i>
+                                                            <i className="fa-solid fa-triangle-exclamation"></i>
                                                             <p>You will be able to export the keys after.</p>
                                                         </HStack>
                                                     </>

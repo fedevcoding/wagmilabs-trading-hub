@@ -181,7 +181,7 @@ export const AddModal = ({ showAddModal, toggleModal, toggleWallet }) => {
                                                     </div>
 
                                                     <HStack className='alert low-opacity little-text'>
-                                                        <i class="fa-solid fa-triangle-exclamation"></i>
+                                                        <i className="fa-solid fa-triangle-exclamation"></i>
                                                         <p>Your private key not be stored on our database.</p>
                                                     </HStack>
                                                 </>
@@ -203,7 +203,7 @@ export const AddModal = ({ showAddModal, toggleModal, toggleWallet }) => {
                                                         </div>
 
                                                         <HStack className='alert low-opacity little-text'>
-                                                            <i class="fa-solid fa-triangle-exclamation"></i>
+                                                            <i className="fa-solid fa-triangle-exclamation"></i>
                                                             <p>You will be able to export the keys after.</p>
                                                         </HStack>
                                                     </>

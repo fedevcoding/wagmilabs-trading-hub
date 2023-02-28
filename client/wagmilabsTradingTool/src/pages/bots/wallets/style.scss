@@ -222,32 +222,40 @@
 
 
 .transfer-wallet-modal{
-    .options{
-        display: flex;
-        align-items: center;
-        justify-content: space-evenly;
-        cursor: pointer;
-
-        p{
-            opacity: 0.8;
-            font-size: 20px;
-            color: grey;
-
-            transition: all 0.2s;
-        }
-        .active{
-            opacity: 1;
-            color: white;
-
-            text-decoration: underline;
-            text-decoration-thickness: 2px;
-            text-underline-offset: 5px;
-        }
-    }
-
+    
     
     .form{
+        .modal-types{
+            display: flex;
+            align-items: center;
+            justify-content: space-evenly;
+            cursor: pointer;
+    
+            p{
+                opacity: 0.8;
+                font-size: 20px;
+                color: grey;
+    
+                transition: all 0.2s;
+            }
+            .active{
+                opacity: 1;
+                color: white;
+    
+                text-decoration: underline;
+                text-decoration-thickness: 2px;
+                text-underline-offset: 5px;
+            }
+        }
+        
         .inputs{
+            input,
+            select {
+                color: white;
+            }
+            option {
+                background-color: black !important;
+            }
             .rmsc {
                 margin-top: 15px;
         

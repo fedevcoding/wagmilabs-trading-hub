@@ -105,7 +105,7 @@ export const ExportModal = React.memo(({ showExportModal, toggleModal }) => {
                                 }
 
                                 <HStack className='alert low-opacity little-text'>
-                                    <i class="fa-solid fa-triangle-exclamation"></i>
+                                    <i className="fa-solid fa-triangle-exclamation"></i>
                                     <p>Excel file will contain your wallet private keys.</p>
                                 </HStack>
                             </ModalBody>
