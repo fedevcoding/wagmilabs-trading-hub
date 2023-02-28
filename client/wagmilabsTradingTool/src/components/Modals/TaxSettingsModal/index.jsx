@@ -15,13 +15,20 @@ import {
 import { Select } from "@Components";
 
 import "./style.scss";
-import { getCurrencies, getTaxedTypes } from "./functions";
 
 export const TaxSettingsModal = React.memo(
   ({ isOpen, setIsOpen, ...settings }) => {
     const toast = useToast();
-    const { taxedOn, currency, taxPerc, setTaxedOn, setCurrency, setTaxPerc } =
-      settings;
+    const {
+      taxedOn,
+      currency,
+      taxPerc,
+      setTaxedOn,
+      setCurrency,
+      setTaxPerc,
+      currencies,
+      taxedTypes,
+    } = settings;
     const [modalTaxedOn, setModalTaxedOn] = React.useState(taxedOn);
     const [modalCurrency, setModalCurrency] = React.useState(currency);
     const [modalTaxPerc, setModalTaxPerc] = React.useState(taxPerc);
@@ -40,7 +47,7 @@ export const TaxSettingsModal = React.memo(
                 onChange={v => setModalTaxedOn(v)}
                 label="Set taxed on"
                 value={modalTaxedOn}
-                options={getTaxedTypes()}
+                options={taxedTypes}
               />
             </div>
             <div className="space-between input">
@@ -62,7 +69,7 @@ export const TaxSettingsModal = React.memo(
                 onChange={v => setModalCurrency(v)}
                 label="Set currency"
                 value={modalCurrency}
-                options={getCurrencies()}
+                options={currencies}
               />
             </div>
           </ModalBody>

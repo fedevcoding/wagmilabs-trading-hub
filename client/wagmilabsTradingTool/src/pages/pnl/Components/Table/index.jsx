@@ -3,7 +3,7 @@ import { formatAddress } from "@Utils/formats/formats";
 import { roundPrice, roundPrice2 } from "src/utils/formats/formats";
 import moment from "moment";
 
-export const Table = React.memo(({ data, taxPerc, taxedOn }) => {
+export const Table = React.memo(({ data, taxPerc, taxedOn, currency }) => {
   return (
     <table>
       <thead>
@@ -25,6 +25,8 @@ export const Table = React.memo(({ data, taxPerc, taxedOn }) => {
           const momentDuration = moment
             .duration(nft.holdDuration, "seconds")
             .humanize();
+
+          const symbol = currency === "usd" ? "$" : " ETH";
 
           return (
             <tr key={n.info.nft.address + n.info.nft.id}>
@@ -55,14 +57,16 @@ export const Table = React.memo(({ data, taxPerc, taxedOn }) => {
               <td>
                 {taxedOn === "net" ? (
                   <>
-                    {nft.pOrL.usd > 0
-                      ? roundPrice2((nft.pOrL.usd / 100) * taxPerc) + "$"
+                    {nft.pOrL[currency] > 0
+                      ? roundPrice2((nft.pOrL[currency] / 100) * taxPerc) +
+                        symbol
                       : "0"}
                   </>
                 ) : (
                   <>
-                    {nft.gross.usd > 0
-                      ? roundPrice2((nft.gross.usd / 100) * taxPerc) + "$"
+                    {nft.gross[currency] > 0
+                      ? roundPrice2((nft.gross[currency] / 100) * taxPerc) +
+                        symbol
                       : "0"}
                   </>
                 )}

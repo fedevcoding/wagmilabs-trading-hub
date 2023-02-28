@@ -14,12 +14,12 @@ export function getTaxedTypes() {
 export function getCurrencies() {
   return [
     {
-      value: "eth",
-      label: "ETH",
+      value: "usd",
+      label: "USD",
     },
     {
-      value: "weth",
-      label: "WETH",
+      value: "eth",
+      label: "ETH",
     },
   ];
 }

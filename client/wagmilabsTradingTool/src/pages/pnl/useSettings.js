@@ -15,5 +15,7 @@ export function useSettings() {
     setTaxedOn,
     setCurrency,
     setTaxPerc,
+    currencies,
+    taxedTypes,
   };
 }

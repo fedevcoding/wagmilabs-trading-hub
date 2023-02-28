@@ -10,7 +10,6 @@ import { useSettings } from "./useSettings";
 import { useAccount } from "wagmi";
 
 export default React.memo(() => {
-  // const address = "0xfe697C5527ab86DaA1e4c08286D2bE744a0E321E";
   const { address } = useAccount();
   useSetPageTitle("Portfolio P&L | Wagmi Labs");
   const { startDate, endDate, setStartDate, setEndDate } = useTimeframe();
@@ -23,7 +22,12 @@ export default React.memo(() => {
       <h1>Portfolio P&L</h1>
       <Row>
         <Col>
-          <CardRecap data={data} />
+          <CardRecap
+            data={data}
+            taxPerc={settings.taxPerc}
+            currency={settings.currency.value}
+            taxedOn={settings.taxedOn.value}
+          />
         </Col>
         <Col className="text-right">
           <SettingsAndFilters
@@ -41,6 +45,7 @@ export default React.memo(() => {
             data={data}
             taxPerc={settings.taxPerc}
             taxedOn={settings.taxedOn.value}
+            currency={settings.currency.value}
           />
         ) : (
           <LoadingSpinner />
