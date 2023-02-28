@@ -9,7 +9,6 @@ import {
     ModalCloseButton,
     Button,
     HStack,
-    Input,
     NumberInput,
     NumberInputField,
     Select,
