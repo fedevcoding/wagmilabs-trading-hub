@@ -1,7 +1,21 @@
 import { useProvider } from "./useProvider"
-const ethers = require("ethers")
+import { useSigner  } from "wagmi"
+import {ethers} from "ethers"
 
+
+const abiFunction = [
+    {
+        "name":"multiSendEther","outputs":[{"type":"bool","name":"out"}],
+        "inputs":[{"type":"address[100]","name":"addresses"},{"type":"uint256[100]","name":"amounts"}], 
+        "constant":false,"payable":true,"type":"function"
+    }
+]
+
+const contractAddress = "0x941F40C2955EE09ba638409F67ef27C531fc055C"
 export const useWeb3Utils = () => {
+
+    const { data: signer } = useSigner()
+
     const {web3} = useProvider()
 
     const getAddressAndBalance = async (privateKey) => {
@@ -23,5 +37,12 @@ export const useWeb3Utils = () => {
         return wallets
     }
 
-    return {getAddressAndBalance, generateWallets}
+    const batchTransferEth = async (value, toArray, valueArray) => {
+        const contract = new ethers.Contract(contractAddress, abiFunction, signer)
+        const totalValue = ethers.utils.parseEther(value)
+        const tx = await contract.multiSendEther(toArray, valueArray, {value: totalValue})
+
+    }
+
+    return {getAddressAndBalance, generateWallets, batchTransferEth}
 }

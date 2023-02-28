@@ -222,6 +222,17 @@
 
 
 .transfer-wallet-modal{
+
+    .add-button{
+        cursor: not-allowed;
+        opacity: 0.5;
+        transition: all 0.2s;
+
+        &.active{
+            cursor: pointer;
+            opacity: 1;
+        }
+    }
     
     
     .form{
@@ -257,8 +268,6 @@
                 background-color: black !important;
             }
             .rmsc {
-                margin-top: 15px;
-        
                 --rmsc-main: #4285f4 !important;
                 --rmsc-hover: #1d1d1d !important;
                 --rmsc-selected: #212121 !important;
@@ -268,6 +277,25 @@
                 --rmsc-p: 10px !important;
                 --rmsc-radius: 4px !important;
                 --rmsc-h: 38px !important;
+            }
+
+
+            .fixed{
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+
+                .wallets{
+                    display: flex;
+                    flex-direction: column;
+                    gap: 5px;
+                    margin-top: 25px;
+                }
+
+                .total{
+                    margin-top: 20px;
+                }
+
             }
 
         }
