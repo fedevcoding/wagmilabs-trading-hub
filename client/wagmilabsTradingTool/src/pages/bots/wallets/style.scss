@@ -219,3 +219,50 @@
         --rmsc-h: 38px !important;
     }
 }
+
+
+.transfer-wallet-modal{
+    .options{
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+        cursor: pointer;
+
+        p{
+            opacity: 0.8;
+            font-size: 20px;
+            color: grey;
+
+            transition: all 0.2s;
+        }
+        .active{
+            opacity: 1;
+            color: white;
+
+            text-decoration: underline;
+            text-decoration-thickness: 2px;
+            text-underline-offset: 5px;
+        }
+    }
+
+    
+    .form{
+        .inputs{
+            .rmsc {
+                margin-top: 15px;
+        
+                --rmsc-main: #4285f4 !important;
+                --rmsc-hover: #1d1d1d !important;
+                --rmsc-selected: #212121 !important;
+                --rmsc-border: #ccc !important;
+                --rmsc-gray: #aaa !important;
+                --rmsc-bg: #2e2e30 !important;
+                --rmsc-p: 10px !important;
+                --rmsc-radius: 4px !important;
+                --rmsc-h: 38px !important;
+            }
+
+        }
+    }
+
+}
