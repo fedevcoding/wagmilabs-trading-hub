@@ -1,25 +1,25 @@
-import { HStack, Tooltip } from '@chakra-ui/react';
-import { PageWrapper } from '@Components';
-import React, { useMemo } from 'react';
+import { HStack, Tooltip } from "@chakra-ui/react";
+import { PageWrapper } from "@Components";
+import React, { useMemo } from "react";
 
-import './style.scss';
-import { useManageData, useManageModals } from './hooks';
-import { AddModal, ExportModal, TransferModal } from './modals';
-import { formatAddress, roundPrice } from 'src/utils/formats/formats';
-import copy from 'copy-to-clipboard';
-import { notFound } from 'src/assets';
+import "./style.scss";
+import { useManageData, useManageModals } from "./hooks";
+import { AddModal, ExportModal, TransferModal } from "./modals";
+import { formatAddress, roundPrice } from "src/utils/formats/formats";
+import copy from "copy-to-clipboard";
+import { notFound } from "src/assets";
 
 const Wallets = React.memo(() => {
   const { showAddModal, showExportModal, showTransferModal, toggleModal } = useManageModals();
   const { wallets, toggleWallet } = useManageData();
 
-  const [copyState, setCopyState] = React.useState('Copy');
+  const [copyState, setCopyState] = React.useState("Copy");
 
   const copyAddress = address => {
     copy(address);
-    setCopyState('Copied');
+    setCopyState("Copied");
     setTimeout(() => {
-      setCopyState('Copy');
+      setCopyState("Copy");
     }, 400);
   };
 
@@ -32,23 +32,23 @@ const Wallets = React.memo(() => {
       </div>
 
       <HStack className="options">
-        <HStack className="wallet" gap={'5px'}>
+        <HStack className="wallet" gap={"5px"}>
           <i className="fa-solid fa-wallet"></i>
           <p>Wallets manager</p>
         </HStack>
 
         <HStack className="actions">
-          <HStack gap="5px" onClick={() => toggleModal('transfer', true)}>
+          <HStack gap="5px" onClick={() => toggleModal("transfer", true)}>
             <i className="fa-solid fa-truck"></i>
             <p>Transfer</p>
           </HStack>
 
-          <HStack gap="5px" onClick={() => toggleModal('export', true)}>
+          <HStack gap="5px" onClick={() => toggleModal("export", true)}>
             <i className="fa-sharp fa-solid fa-upload"></i>
             <p>Export</p>
           </HStack>
 
-          <HStack gap="5px" onClick={() => toggleModal('add', true)}>
+          <HStack gap="5px" onClick={() => toggleModal("add", true)}>
             <i className="fa-solid fa-plus"></i>
             <p>Add wallet</p>
           </HStack>
@@ -88,7 +88,7 @@ const Wallets = React.memo(() => {
 
                     return (
                       <React.Fragment key={key}>
-                        <tr className={`${isLast && 'last-tr'}`}>
+                        <tr className={`${isLast && "last-tr"}`}>
                           <td>
                             <p className="name">{wallet.name}</p>
                           </td>
@@ -99,9 +99,9 @@ const Wallets = React.memo(() => {
                               hasArrow
                               fontSize="xs"
                               bg="black"
-                              color={'white'}
+                              color={"white"}
                               placement="top"
-                              borderRadius={'7px'}
+                              borderRadius={"7px"}
                             >
                               <p className="address" onClick={() => copyAddress(wallet.address)}>
                                 {formatAddress(wallet.address)}
@@ -125,11 +125,14 @@ const Wallets = React.memo(() => {
                             </HStack>
                           </td>
                         </tr>
-                        <tr>
-                          <td colSpan={6}>
-                            <hr className="wallet-divison" />
-                          </td>
-                        </tr>
+
+                        {!isLast && (
+                          <tr>
+                            <td colSpan={6}>
+                              <hr className="wallet-divison" />
+                            </td>
+                          </tr>
+                        )}
                       </React.Fragment>
                     );
                   })

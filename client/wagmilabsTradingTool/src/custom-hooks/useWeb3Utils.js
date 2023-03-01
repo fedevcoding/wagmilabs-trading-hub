@@ -26,21 +26,31 @@ export const useWeb3Utils = () => {
     }
 
     const generateWallets = async (amount, name, date) => {
-        const wallets = []
-        for(let i = 0; i < amount; i++){
-            const wallet = ethers.Wallet.createRandom()
-            const {address, privateKey} = wallet
-            const id = crypto.randomUUID()
-            const newName = `${name} ${i + 1}`
-            wallets.push({type: "generate", name: newName, date, balance: 0, privateKey, id, address})
+        try{
+            const wallets = []
+            for(let i = 0; i < amount; i++){
+                const wallet = ethers.Wallet.createRandom()
+                const {address, privateKey} = wallet
+                const id = crypto.randomUUID()
+                const newName = `${name} ${i + 1}`
+                wallets.push({type: "generate", name: newName, date, balance: 0, privateKey, id, address})
+            }
+            return wallets
         }
-        return wallets
+        catch(e){
+            throw new Error(e)
+        }
     }
 
     const batchTransferEth = async (value, toArray, valueArray) => {
-        const contract = new ethers.Contract(contractAddress, abiFunction, signer)
-        const totalValue = ethers.utils.parseEther(value)
-        const tx = await contract.multiSendEther(toArray, valueArray, {value: totalValue})
+        try{
+            const contract = new ethers.Contract(contractAddress, abiFunction, signer)
+            const totalValue = ethers.utils.parseEther(value)
+            await contract.multiSendEther(toArray, valueArray, {value: totalValue})
+        }
+        catch(e){
+            throw new Error(e)
+        }
 
     }
 

@@ -1,5 +1,5 @@
-import React, { useEffect, useMemo } from 'react';
-import { useWeb3Utils } from '@Hooks';
+import React, { useEffect, useMemo } from "react";
+import { useWeb3Utils } from "@Hooks";
 import {
   Modal,
   ModalOverlay,
@@ -13,12 +13,14 @@ import {
   NumberInput,
   NumberInputField,
   Select,
-} from '@chakra-ui/react';
-import { MultiSelect } from 'react-multi-select-component';
-import { BigNumber } from 'ethers';
-import { roundPrice } from '@Utils';
+  useToast,
+} from "@chakra-ui/react";
+import { MultiSelect } from "react-multi-select-component";
+import { BigNumber } from "ethers";
+import { checkErrors, roundPrice } from "@Utils";
+import { Loader } from "@Components";
 
-const nullAddress = '0x0000000000000000000000000000000000000000';
+const nullAddress = "0x0000000000000000000000000000000000000000";
 
 const fixedInitialState = {
   value: 0,
@@ -37,13 +39,13 @@ const customInitialState = {
 
 function fixedReducer(state, action) {
   switch (action.type) {
-    case 'SET_VALUE':
+    case "SET_VALUE":
       return { ...state, value: action.payload };
-    case 'SET_LOADING':
+    case "SET_LOADING":
       return { ...state, loading: action.payload };
-    case 'SET_INITIAL_STATE':
+    case "SET_INITIAL_STATE":
       return action.payload;
-    case 'SET_SELECT_OPTIONS':
+    case "SET_SELECT_OPTIONS":
       return { ...state, selectOptions: action.payload };
     default:
       throw new Error(`Unsupported action type: ${action.type}`);
@@ -52,11 +54,11 @@ function fixedReducer(state, action) {
 
 function customReducer(state, action) {
   switch (action.type) {
-    case 'ADD_TRANSFER':
+    case "ADD_TRANSFER":
       return { ...state, transfers: [...state.transfers, action.payload] };
-    case 'REMOVE_TRANSFER':
+    case "REMOVE_TRANSFER":
       return { ...state, transfers: state.transfers.filter(transfer => transfer.id !== action.payload) };
-    case 'CHANGE_TRANSFER_ADDRESS': {
+    case "CHANGE_TRANSFER_ADDRESS": {
       const { id, newAddress } = action.payload;
       const transfers = state.transfers.map(transfer => {
         if (transfer.id === id) {
@@ -66,7 +68,7 @@ function customReducer(state, action) {
       });
       return { ...state, transfers };
     }
-    case 'CHANGE_TRANSFER_VALUE': {
+    case "CHANGE_TRANSFER_VALUE": {
       const { id, newValue } = action.payload;
       const transfers = state.transfers.map(transfer => {
         if (transfer.id === id) {
@@ -76,7 +78,7 @@ function customReducer(state, action) {
       });
       return { ...state, transfers };
     }
-    case 'SET_INITIAL_STATE':
+    case "SET_INITIAL_STATE":
       return action.payload;
     default:
       throw new Error(`Unsupported action type: ${action.type}`);
@@ -86,8 +88,9 @@ function customReducer(state, action) {
 export const TransferModal = React.memo(({ showTransferModal, toggleModal }) => {
   const { batchTransferEth } = useWeb3Utils();
 
-  const [type, setType] = React.useState('fixed');
+  const [type, setType] = React.useState("fixed");
   const [wallets, setWallets] = React.useState([]);
+  const [loading, setLoading] = React.useState(false);
 
   // fixed type states
   const [fixedData, dispatchFixed] = React.useReducer(fixedReducer, fixedInitialState);
@@ -96,23 +99,25 @@ export const TransferModal = React.memo(({ showTransferModal, toggleModal }) => 
   // custom type states
   const [customData, dispatchCustom] = React.useReducer(customReducer, customInitialState);
 
+  const toast = useToast();
+
   useEffect(() => {
-    const wallets = JSON.parse(localStorage.getItem('wallets')) || [];
+    const wallets = JSON.parse(localStorage.getItem("wallets")) || [];
     const options = wallets.map(row => ({ label: row.name, value: row.address }));
 
-    dispatchFixed({ type: 'SET_SELECT_OPTIONS', payload: options });
+    dispatchFixed({ type: "SET_SELECT_OPTIONS", payload: options });
     setWallets(wallets);
 
     return () => {
-      setType('fixed');
-      dispatchFixed({ type: 'SET_INITIAL_STATE', payload: fixedInitialState });
-      dispatchCustom({ type: 'SET_INITIAL_STATE', payload: customInitialState });
+      setType("fixed");
+      dispatchFixed({ type: "SET_INITIAL_STATE", payload: fixedInitialState });
+      dispatchCustom({ type: "SET_INITIAL_STATE", payload: customInitialState });
     };
   }, [showTransferModal]);
 
   const transferAllowed = useMemo(
     () =>
-      type === 'fixed'
+      type === "fixed"
         ? selectedWallets.length > 0 && fixedData.value > 0
         : customData.transfers.length > 0 &&
           !customData.transfers.find(transfer => transfer.address === undefined || transfer.value === undefined),
@@ -121,12 +126,14 @@ export const TransferModal = React.memo(({ showTransferModal, toggleModal }) => 
 
   async function transferEth() {
     if (!transferAllowed) return;
+
+    setLoading(true);
     try {
       const total = 100;
 
       const toBigNumber = number => BigNumber.from((parseFloat(number) * 1000000000000000000).toString());
 
-      if (type === 'fixed') {
+      if (type === "fixed") {
         const addresses = selectedWallets.map(wallet => wallet.value);
         const remainingWallets = total - addresses.length;
 
@@ -139,11 +146,11 @@ export const TransferModal = React.memo(({ showTransferModal, toggleModal }) => 
 
         const valuesToTransfer = [
           ...Array(addresses.length).fill(parsedValue),
-          ...Array(remainingWallets).fill(toBigNumber('0')),
+          ...Array(remainingWallets).fill(toBigNumber("0")),
         ];
 
-        batchTransferEth(totalValue, addressesToTransfer, valuesToTransfer);
-      } else if (type === 'custom') {
+        await batchTransferEth(totalValue, addressesToTransfer, valuesToTransfer);
+      } else if (type === "custom") {
         const addresses = customData.transfers.map(wallet => wallet.address);
         const values = customData.transfers.map(wallet => toBigNumber(wallet.value));
 
@@ -154,22 +161,33 @@ export const TransferModal = React.memo(({ showTransferModal, toggleModal }) => 
         const remainingWallets = total - addresses.length;
 
         const addressesToTransfer = [...addresses, ...Array(remainingWallets).fill(nullAddress)];
-        const valuesToTransfer = [...values, ...Array(remainingWallets).fill(toBigNumber('0'))];
+        const valuesToTransfer = [...values, ...Array(remainingWallets).fill(toBigNumber("0"))];
 
-        batchTransferEth(totalValue, addressesToTransfer, valuesToTransfer);
+        await batchTransferEth(totalValue, addressesToTransfer, valuesToTransfer);
       }
     } catch (e) {
+      const errorMessage = checkErrors(e);
+      toast({
+        title: "Error",
+        description: errorMessage,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+
       console.log(e);
+    } finally {
+      setLoading(false);
     }
   }
 
   return (
     <>
       {showTransferModal && (
-        <Modal isOpen={true} onClose={() => toggleModal('transfer', false)} isCentered={true}>
+        <Modal isOpen={true} onClose={() => toggleModal("transfer", false)} isCentered={true}>
           <ModalOverlay />
           <ModalContent className="transfer-wallet-modal">
-            <ModalHeader textAlign={'center'}>
+            <ModalHeader textAlign={"center"}>
               <p>Transfer ETH</p>
             </ModalHeader>
 
@@ -178,16 +196,16 @@ export const TransferModal = React.memo(({ showTransferModal, toggleModal }) => 
             <ModalBody>
               <div className="form">
                 <div className="modal-types">
-                  <p onClick={() => setType('fixed')} className={`${type === 'fixed' && 'active'}`}>
+                  <p onClick={() => setType("fixed")} className={`${type === "fixed" && "active"}`}>
                     Fixed
                   </p>
-                  <p onClick={() => setType('custom')} className={`${type === 'custom' && 'active'}`}>
+                  <p onClick={() => setType("custom")} className={`${type === "custom" && "active"}`}>
                     Custom
                   </p>
                 </div>
 
                 <div className="inputs">
-                  {type === 'fixed' ? (
+                  {type === "fixed" ? (
                     <div className="fixed">
                       <div className="wallets">
                         <p>Select wallets</p>
@@ -203,7 +221,7 @@ export const TransferModal = React.memo(({ showTransferModal, toggleModal }) => 
                       <NumberInput value={fixedData.value}>
                         <NumberInputField
                           placeholder="Value (ETH)"
-                          onChange={e => dispatchFixed({ type: 'SET_VALUE', payload: e.target.value })}
+                          onChange={e => dispatchFixed({ type: "SET_VALUE", payload: e.target.value })}
                         />
                       </NumberInput>
 
@@ -219,7 +237,7 @@ export const TransferModal = React.memo(({ showTransferModal, toggleModal }) => 
                         </HStack>
                       </div>
                     </div>
-                  ) : type === 'custom' ? (
+                  ) : type === "custom" ? (
                     <div className="custom">
                       <div className="wallets">
                         {customData.transfers.map(transfer => {
@@ -231,13 +249,13 @@ export const TransferModal = React.memo(({ showTransferModal, toggleModal }) => 
                                 <Select
                                   onChange={e =>
                                     dispatchCustom({
-                                      type: 'CHANGE_TRANSFER_ADDRESS',
+                                      type: "CHANGE_TRANSFER_ADDRESS",
                                       payload: { newAddress: e.target.value, id },
                                     })
                                   }
                                   value={address}
                                 >
-                                  <option value={undefined} style={{ display: 'none' }}>
+                                  <option value={undefined} style={{ display: "none" }}>
                                     Select wallet
                                   </option>
                                   {wallets?.map(row => (
@@ -252,7 +270,7 @@ export const TransferModal = React.memo(({ showTransferModal, toggleModal }) => 
                                     placeholder="Value (ETH)"
                                     onChange={e =>
                                       dispatchCustom({
-                                        type: 'CHANGE_TRANSFER_VALUE',
+                                        type: "CHANGE_TRANSFER_VALUE",
                                         payload: { newValue: e.target.value, id },
                                       })
                                     }
@@ -260,10 +278,10 @@ export const TransferModal = React.memo(({ showTransferModal, toggleModal }) => 
                                 </NumberInput>
 
                                 <div
-                                  className={`remove ${customData.transfers.length > 1 && 'active'}`}
+                                  className={`remove ${customData.transfers.length > 1 && "active"}`}
                                   onClick={() =>
                                     customData.transfers.length > 1 &&
-                                    dispatchCustom({ type: 'REMOVE_TRANSFER', payload: id })
+                                    dispatchCustom({ type: "REMOVE_TRANSFER", payload: id })
                                   }
                                 >
                                   <i className="fa-sharp fa-solid fa-trash-can"></i>
@@ -277,7 +295,7 @@ export const TransferModal = React.memo(({ showTransferModal, toggleModal }) => 
                       <Button
                         onClick={() =>
                           dispatchCustom({
-                            type: 'ADD_TRANSFER',
+                            type: "ADD_TRANSFER",
                             payload: { value: undefined, address: undefined, id: crypto.randomUUID() },
                           })
                         }
@@ -300,7 +318,7 @@ export const TransferModal = React.memo(({ showTransferModal, toggleModal }) => 
                               customData.transfers
                                 .reduce((prevVal, currentVal) => +prevVal + (+currentVal.value || 0), 0)
                                 .toFixed(10)
-                            )}{' '}
+                            )}{" "}
                             ETH
                           </p>
                         </HStack>
@@ -311,19 +329,14 @@ export const TransferModal = React.memo(({ showTransferModal, toggleModal }) => 
               </div>
             </ModalBody>
 
-            <ModalFooter justifyContent={'center'}>
+            <ModalFooter justifyContent={"center"}>
               <Button
                 colorScheme="blue"
-                width={'100%'}
-                className={`add-button ${transferAllowed && 'active'}`}
+                width={"100%"}
+                className={`add-button ${transferAllowed && "active"}`}
                 onClick={transferEth}
               >
-                {
-                  // loading ?
-                  // <Loader width={"20px"} height={"20px"} />
-                  // :
-                  <p>Transfer</p>
-                }
+                {loading ? <Loader width={"20px"} height={"20px"} /> : <p>Transfer</p>}
               </Button>
             </ModalFooter>
           </ModalContent>
