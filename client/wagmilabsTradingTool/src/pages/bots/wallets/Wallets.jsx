@@ -4,7 +4,7 @@ import React, { useMemo } from "react";
 
 import "./style.scss";
 import { useManageData, useManageModals } from "./hooks";
-import { AddModal, ExportModal, TransferModal } from "./modals";
+import { AddModal, ExportModal, TransferModal, ConfirmDeleteModal } from "./modals";
 import { formatAddress, roundPrice } from "src/utils/formats/formats";
 import copy from "copy-to-clipboard";
 import { notFound } from "src/assets";
@@ -12,6 +12,8 @@ import { notFound } from "src/assets";
 const Wallets = React.memo(() => {
   const { showAddModal, showExportModal, showTransferModal, toggleModal } = useManageModals();
   const { wallets, toggleWallet } = useManageData();
+
+  const [confirmDelete, setConfirmDelete] = React.useState({ show: false, id: null });
 
   const [copyState, setCopyState] = React.useState("Copy");
 
@@ -23,12 +25,21 @@ const Wallets = React.memo(() => {
     }, 400);
   };
 
+  const openConfirmDelete = id => {
+    setConfirmDelete({ show: true, id });
+  };
+
   return (
     <PageWrapper page="bots-wallets">
       <div className="modals">
         <AddModal showAddModal={showAddModal} toggleModal={toggleModal} toggleWallet={toggleWallet} />
         <TransferModal showTransferModal={showTransferModal} toggleModal={toggleModal} />
         <ExportModal showExportModal={showExportModal} toggleModal={toggleModal} />
+        <ConfirmDeleteModal
+          confirmDelete={confirmDelete}
+          toggleWallet={toggleWallet}
+          setConfirmDelete={setConfirmDelete}
+        />
       </div>
 
       <HStack className="options">
@@ -119,7 +130,7 @@ const Wallets = React.memo(() => {
                             <p>{wallet.date}</p>
                           </td>
                           <td>
-                            <HStack gap="5px" onClick={() => toggleWallet({ id }, false)} cursor="pointer">
+                            <HStack gap="5px" onClick={() => openConfirmDelete(id)} cursor="pointer">
                               <i className="fa-solid fa-trash"></i>
                               <p>Delete</p>
                             </HStack>
@@ -137,7 +148,7 @@ const Wallets = React.memo(() => {
                     );
                   })
                 ),
-              [wallets, copyState, toggleWallet]
+              [wallets, copyState]
             )}
           </tbody>
         </table>
