@@ -343,7 +343,7 @@ const Header = () => {
                   Twitter spaces
                 </div>
                 <div onClick={() => navigate("/calendars/raffles")}>
-                  Raffle/allowlist
+                  Personal
                 </div>
                 <div onClick={() => navigate("/calendars/events")}>
                   IRL events

@@ -35,7 +35,6 @@ personalRoute.post('/', checkAuth, async (req, res) => {
     const { address } = req.userDetails;
     const isAdmin = adminAddresses.includes(address);
     const { event } = req.body || {};
-    console.log('PARAMS: ',address,isAdmin,event)
 
     try {
         const personal = await Personal.updateOne({ address: isAdmin ? nullAddress : address }, { $push: { events: {$each: [event], $slice: -150} } }, { upsert: true })

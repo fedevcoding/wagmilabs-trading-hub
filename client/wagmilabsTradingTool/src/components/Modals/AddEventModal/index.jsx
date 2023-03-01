@@ -128,6 +128,8 @@ export const AddEventModal = React.memo(
               className="date-picker"
               showTimeSelect
               dateFormat="Pp"
+              preventOpenOnFocus
+              showMonthYearDropdown={false}
             />
             <div className="field-container">
               Collection name

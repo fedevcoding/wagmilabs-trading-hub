@@ -16,3 +16,4 @@ export { useSetPageTitle } from "./useSetPageTitle";
 export { useRefreshSecond } from "./useRefreshSecond";
 export { useConnected } from "./useConnected";
 export { useGetTab } from "./useGetTab";
+export { useOnClickOutside } from "./useOnClickOutside";
