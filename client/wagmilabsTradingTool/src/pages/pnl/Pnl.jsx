@@ -15,7 +15,6 @@ export default React.memo(() => {
   const { startDate, endDate, setStartDate, setEndDate } = useTimeframe();
   const { data } = useGetData(address, startDate, endDate);
   const settings = useSettings();
-  console.log("data", data);
 
   return (
     <PageWrapper page="pnl">
@@ -29,7 +28,7 @@ export default React.memo(() => {
             taxedOn={settings.taxedOn.value}
           />
         </Col>
-        <Col className="text-right">
+        <Col className="text-right settings">
           <SettingsAndFilters
             startDate={startDate}
             endDate={endDate}

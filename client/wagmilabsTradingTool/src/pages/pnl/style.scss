@@ -3,14 +3,27 @@
     .row + .row {
       margin-top: 1.5rem;
     }
+
+    h3 {
+      font-size: 22px;
+    }
+
+    p {
+      font-size: 20px;
+    }
   }
 
-  .timeframe {
-    margin: 1rem 0 0.5rem;
-  }
+  .settings {
+    max-width: 40%;
+    padding-top: 1rem;
 
-  .react-datepicker-wrapper {
-    max-width: 220px;
+    .timeframe {
+      margin: 1rem 0 0.5rem;
+    }
+
+    .react-datepicker-wrapper {
+      max-width: 220px;
+    }
   }
 
   .pagination {
