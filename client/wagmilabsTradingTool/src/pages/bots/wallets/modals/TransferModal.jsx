@@ -150,6 +150,14 @@ export const TransferModal = React.memo(({ showTransferModal, toggleModal }) => 
         ];
 
         await batchTransferEth(totalValue, addressesToTransfer, valuesToTransfer);
+
+        toast({
+          title: "Success",
+          description: "Eth transferred successfully",
+          status: "success",
+          duration: 5000,
+          isClosable: true,
+        });
       } else if (type === "custom") {
         const addresses = customData.transfers.map(wallet => wallet.address);
         const values = customData.transfers.map(wallet => toBigNumber(wallet.value));
@@ -164,6 +172,14 @@ export const TransferModal = React.memo(({ showTransferModal, toggleModal }) => 
         const valuesToTransfer = [...values, ...Array(remainingWallets).fill(toBigNumber("0"))];
 
         await batchTransferEth(totalValue, addressesToTransfer, valuesToTransfer);
+
+        toast({
+          title: "Success",
+          description: "Eth transferred successfully",
+          status: "success",
+          duration: 5000,
+          isClosable: true,
+        });
       }
     } catch (e) {
       const errorMessage = checkErrors(e);

@@ -4,16 +4,17 @@ import React, { useMemo } from "react";
 
 import "./style.scss";
 import { useManageData, useManageModals } from "./hooks";
-import { AddModal, ExportModal, TransferModal, ConfirmDeleteModal } from "./modals";
+import { AddModal, ExportModal, TransferModal, ConfirmDeleteModal, RenameModal } from "./modals";
 import { formatAddress, roundPrice } from "src/utils/formats/formats";
 import copy from "copy-to-clipboard";
 import { notFound } from "src/assets";
 
 const Wallets = React.memo(() => {
   const { showAddModal, showExportModal, showTransferModal, toggleModal } = useManageModals();
-  const { wallets, toggleWallet } = useManageData();
+  const { wallets, toggleWallet, reloadBalances, loadingBalances, renameWallet } = useManageData();
 
   const [confirmDelete, setConfirmDelete] = React.useState({ show: false, id: null });
+  const [showRenameModal, setShowRenameModal] = React.useState({ show: false, id: null, newName: "" });
 
   const [copyState, setCopyState] = React.useState("Copy");
 
@@ -39,6 +40,11 @@ const Wallets = React.memo(() => {
           confirmDelete={confirmDelete}
           toggleWallet={toggleWallet}
           setConfirmDelete={setConfirmDelete}
+        />
+        <RenameModal
+          showRenameModal={showRenameModal}
+          setShowRenameModal={setShowRenameModal}
+          renameWallet={renameWallet}
         />
       </div>
 
@@ -74,7 +80,12 @@ const Wallets = React.memo(() => {
             <tr>
               <th>Name</th>
               <th>Address</th>
-              <th>Balance</th>
+              <th>
+                <HStack gap={"10px"} justifyContent={"center"} onClick={reloadBalances}>
+                  <p>Balance</p>
+                  <i className={`fa-regular fa-arrows-rotate reload-balance ${loadingBalances && "rotate"}`}></i>
+                </HStack>
+              </th>
               <th>Added date</th>
               <th>Actions</th>
             </tr>
@@ -130,9 +141,19 @@ const Wallets = React.memo(() => {
                             <p>{wallet.date}</p>
                           </td>
                           <td>
-                            <HStack gap="5px" onClick={() => openConfirmDelete(id)} cursor="pointer">
-                              <i className="fa-solid fa-trash"></i>
-                              <p>Delete</p>
+                            <HStack gap={"20px"} justifyContent="space-between">
+                              <HStack
+                                gap="5px"
+                                onClick={() => setShowRenameModal({ show: true, id, newName: "" })}
+                                cursor="pointer"
+                              >
+                                <i className="fa-sharp fa-solid fa-pen-to-square"></i>
+                                <p>Rename</p>
+                              </HStack>
+                              <HStack gap="5px" onClick={() => openConfirmDelete(id)} cursor="pointer">
+                                <i className="fa-solid fa-trash"></i>
+                                <p>Delete</p>
+                              </HStack>
                             </HStack>
                           </td>
                         </tr>
