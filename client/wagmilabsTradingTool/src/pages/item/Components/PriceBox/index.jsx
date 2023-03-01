@@ -28,7 +28,12 @@ export const PriceBox = React.memo(({ details, address, currency, ownerBestListi
               <div className="amount">
                 <p className="text-right">Buy now quantity</p>
                 <NumberInput min={1} max={market?.quantityRemaining} defaultValue={quantity}>
-                  <NumberInputField onChange={e => setQuantity(e.target.value)} />
+                  <NumberInputField
+                    onChange={e => {
+                      const value = e.target.value;
+                      setQuantity(value > market?.quantityRemaining ? market?.quantityRemaining : value);
+                    }}
+                  />
                 </NumberInput>
               </div>
             )) ||
