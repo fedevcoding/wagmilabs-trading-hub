@@ -16,6 +16,7 @@ export const InfoCol = React.memo(({ details, address, id }) => {
     isErc721,
     ownerBestListing,
     ownershipTokenCount,
+    totalSupply,
   } = useGetData(details, address, id);
 
   return (
@@ -34,7 +35,14 @@ export const InfoCol = React.memo(({ details, address, id }) => {
               ""}
             <div className="item-collection-name">{details.token.collection.name}</div>
           </div>
-          {(!isErc721 && (
+          {(!isErc721 && totalSupply && (
+            <div>
+              {"Total Supply: "}
+              {totalSupply.toLocaleString("EN-us")}
+            </div>
+          )) ||
+            ""}
+          {(!isErc721 && ownershipTokenCount && (
             <div>
               {"Ownership Token Count: "}
               {ownershipTokenCount}

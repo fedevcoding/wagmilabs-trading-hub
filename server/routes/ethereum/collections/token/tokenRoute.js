@@ -1,6 +1,9 @@
 const express = require("express");
 require("dotenv").config();
 const checkAuth = require("../../../../middleware/checkAuth");
+const {
+  execTranseposeAPI,
+} = require("../../../../services/externalAPI/transpose");
 const { lruCache } = require("../../../../services/cache/lru");
 
 const tokenRoute = express();
@@ -81,6 +84,34 @@ tokenRoute.get(
 
     async function getData() {
       res.status(200).json(tokenActivities);
+    }
+    getData();
+  }
+);
+
+tokenRoute.get(
+  "/:address/token/:id/total-supply",
+  checkAuth,
+  async (req, res) => {
+    const { address, id } = req.params;
+    let totalSupply = null;
+
+    try {
+      totalSupply = (
+        await execTranseposeAPI(
+          `SELECT SUM(balance) AS total_supply FROM ethereum.nft_owners WHERE contract_address = '${address}' and token_id = '${id}'`
+        )
+      )[0].total_supply;
+    } catch (error) {
+      // token not found or reservoir error
+    }
+
+    console.log("totalSupply", totalSupply);
+
+    async function getData() {
+      res.status(200).json({
+        totalSupply,
+      });
     }
     getData();
   }

@@ -1,5 +1,6 @@
 import { useListings, useUserTokens } from "@reservoir0x/reservoir-kit-ui";
 import { useAccount } from "wagmi";
+import { useGetTotalSupply } from "./useGetTotalSupply";
 
 export function useGetData(details, address, id) {
   const { address: accountAddress } = useAccount();
@@ -13,6 +14,8 @@ export function useGetData(details, address, id) {
           tokens: [`${address}:${id}`],
         }
   );
+
+  const totalSupply = useGetTotalSupply(isErc721 ? undefined : address, isErc721 ? undefined : id);
 
   let isOwner;
   if (isErc721) {
@@ -43,5 +46,6 @@ export function useGetData(details, address, id) {
     accountAddress,
     ownerBestListing,
     ownershipTokenCount,
+    totalSupply,
   };
 }
