@@ -16,3 +16,5 @@ export { useSetPageTitle } from "./useSetPageTitle";
 export { useRefreshSecond } from "./useRefreshSecond";
 export { useConnected } from "./useConnected";
 export { useGetTab } from "./useGetTab";
+export { useProvider } from "./useProvider";
+export {useWeb3Utils} from "./useWeb3Utils";
