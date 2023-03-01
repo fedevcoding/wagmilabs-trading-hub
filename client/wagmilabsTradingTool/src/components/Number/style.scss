@@ -1,0 +1,13 @@
+span.number {
+  &.positive {
+    color: lightgreen;
+  }
+
+  &.negative {
+    color: #ff5a57;
+  }
+
+  &.neutral {
+    color: #ccc;
+  }
+}

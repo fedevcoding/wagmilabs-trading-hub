@@ -16,7 +16,7 @@ export const Table = React.memo(({ data, taxPerc, taxedOn, currency }) => {
       {(totalItems > paginationCount && (
         <div className="pagination">
           <p>
-            Page {page} - Showing {itemsInPage} of {totalItems} NFTs
+            Page {page} - Showing {itemsInPage} of {totalItems} Trades
           </p>
           {(page > 1 && (
             <Button onClick={() => setPage(page - 1)}>
@@ -33,7 +33,7 @@ export const Table = React.memo(({ data, taxPerc, taxedOn, currency }) => {
         </div>
       )) || (
         <div className="pagination">
-          <p>Showing {totalItems} NFTs</p>
+          <p>Showing {totalItems} Trades</p>
         </div>
       )}
       <table>
