@@ -28,7 +28,7 @@ const Links = ({ setWalletConnected, setMessage, setConnected }) => {
             );
           }),
         // eslint-disable-next-line react-hooks/exhaustive-deps
-        []
+        [setConnected, setMessage, setWalletConnected]
       )}
     </div>
   );
