@@ -47,12 +47,18 @@ personalRoute.post('/', checkAuth, async (req, res) => {
     }
 });
 
-personalRoute.delete('/', async (req, res) => {
+personalRoute.delete('/', checkAuth, async (req, res) => {
+
+    const { address } = req.userDetails;
+    const isAdmin = adminAddresses.includes(address);
 
     const { id } = req.body || {};
 
     try {
-        const personal = await Personal.deleteOne({_id: id});
+        const personal = await Personal.findOneAndUpdate({address: isAdmin ? nullAddress : address}, {
+            $pull: { 
+                events: { _id: id }
+              }} );
         if (!personal) throw Error('Something went wrong deleting all the personal events');
         return res.status(200).json({personal});
     } catch (e) {
