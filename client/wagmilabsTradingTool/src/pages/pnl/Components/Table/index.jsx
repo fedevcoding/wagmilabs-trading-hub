@@ -2,6 +2,7 @@ import React from "react";
 import { useTokensInfo } from "./useTokensInfo";
 import { Row } from "./Row";
 import { Button } from "@Components";
+import { notFound } from "@Assets";
 
 export const Table = React.memo(({ data, taxPerc, taxedOn, currency }) => {
   const paginationCount = 10;
@@ -65,6 +66,10 @@ export const Table = React.memo(({ data, taxPerc, taxedOn, currency }) => {
       </table>
     </>
   ) : (
-    <h3>No NFTs were found in this range!</h3>
+    <h3 className="text-center">
+      <img src={notFound} alt="best offer" width={100} />
+      <br />
+      No NFTs were found in this range!
+    </h3>
   );
 });
