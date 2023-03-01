@@ -6,20 +6,13 @@ import { UserDataContext } from "@Context";
 import { getListingExpirationDate } from "@Utils/formats/formats";
 import { marketListingMapping } from "@Utils/mappings";
 
-export const useListNft = (
-  { contractAddress, tokenId, listingPrice },
-  callback
-) => {
+export const useListNft = ({ contractAddress, tokenId, listingPrice }, callback) => {
   const { listingSettings } = useContext(UserDataContext);
 
   const toast = useToast();
 
-  async function listNft(
-    setConfirmingList,
-    expirationTime = null,
-    marketplaceName = null
-  ) {
-    if (listingPrice <= 0) {
+  async function listNft(setConfirmingList, expirationTime = null, marketplaceName = null) {
+    if (listingPrice < 0 || listingPrice === null || listingPrice === "") {
       toast({
         title: "Error listing NFT.",
         description: "Please, insert a valid price",
@@ -37,9 +30,7 @@ export const useListNft = (
       const marketplace = marketplaceName || listingSettings.marketplace;
 
       if (!expirationTime) {
-        expirationTime = (
-          getListingExpirationDate(listingSettings).getTime() / 1000
-        ).toString();
+        expirationTime = (getListingExpirationDate(listingSettings).getTime() / 1000).toString();
       }
 
       const orderbook = marketListingMapping[marketplace].orderbook;
@@ -82,8 +73,7 @@ export const useListNft = (
       }
       toast({
         title: "Error listing NFT.",
-        description:
-          "There has been an error while trying to list your NFT, try again later.",
+        description: "There has been an error while trying to list your NFT, try again later.",
         status: "error",
         duration: 3000,
         isClosable: true,
