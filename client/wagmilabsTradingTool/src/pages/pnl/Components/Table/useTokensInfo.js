@@ -1,18 +1,17 @@
 import { useTokens } from "@reservoir0x/reservoir-kit-ui";
 
-export function useImages(data) {
-  const images = {};
+export function useTokensInfo(data) {
+  const tokensInfo = {};
   const { data: tokens, isFetchingInitialData } = useTokens(
-    data
+    data.length
       ? {
           tokens: data.map(n => n.info.nft.address + ":" + n.info.nft.id),
         }
       : undefined
   );
   tokens.forEach(nft => {
-    images[(nft.token.contract + nft.token.tokenId).toLowerCase()] =
-      nft.token.image;
+    tokensInfo[(nft.token.contract + nft.token.tokenId).toLowerCase()] = nft.token;
   });
 
-  return { images, isFetchingInitialData };
+  return { tokensInfo, isFetchingInitialData };
 }

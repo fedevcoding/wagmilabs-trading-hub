@@ -1,16 +1,13 @@
 import React from "react";
-import { useImages } from "./useImages";
+import { useTokensInfo } from "./useTokensInfo";
 import { Row } from "./Row";
 import { Button } from "@Components";
 
 export const Table = React.memo(({ data, taxPerc, taxedOn, currency }) => {
   const paginationCount = 10;
   const [page, setPage] = React.useState(1);
-  const items = data.slice(
-    (page - 1) * paginationCount,
-    page * paginationCount
-  );
-  const { images, isFetchingInitialData } = useImages(items);
+  const items = data.slice((page - 1) * paginationCount, page * paginationCount);
+  const { tokensInfo, isFetchingInitialData } = useTokensInfo(items);
   const totalItems = data.length;
   const itemsInPage = items.length;
 
@@ -60,7 +57,7 @@ export const Table = React.memo(({ data, taxPerc, taxedOn, currency }) => {
               taxPerc={taxPerc}
               taxedOn={taxedOn}
               currency={currency}
-              images={images}
+              tokensInfo={tokensInfo}
               isFetchingInitialData={isFetchingInitialData}
             />
           ))}

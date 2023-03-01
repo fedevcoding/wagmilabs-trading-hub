@@ -36,21 +36,15 @@
     }
 
     .nft-info-box {
-      position: relative;
       box-sizing: border-box;
       display: flex;
+      align-items: center;
       cursor: pointer;
-      min-height: 120px;
+      min-height: 70px;
 
       .nft-text {
         font-size: 12px;
-        position: absolute;
-        width: 120px;
-        left: 0;
-        bottom: 0.3rem;
-        background-color: rgba(0, 0, 0, 0.6);
-        border-bottom-left-radius: 5px;
-        border-bottom-right-radius: 5px;
+        margin-left: 1rem;
       }
 
       .nft-img {

@@ -1,7 +1,5 @@
 const formatAddress = address => {
-  return address
-    ? address.substring(0, 6) + "..." + address.substring(38)
-    : undefined;
+  return address ? address.substring(0, 6) + "..." + address.substring(38) : undefined;
 };
 
 const formatContractAddress = address => {
@@ -26,6 +24,12 @@ const roundPrice = price => {
 
 const roundPrice2 = price => {
   return price ?? typeof price === "number" ? Math.round(price * 1000) / 1000 : 0;
+};
+
+const roundPriceUsd = price => {
+  return (Math.round((price || 0) * 100) / 100).toLocaleString("En-us", {
+    minimumFractionDigits: 2,
+  });
 };
 
 const getFiatPrice = (cryptoValue, fiatPrice) => {
@@ -116,6 +120,7 @@ module.exports = {
   formatAddress2,
   roundPrice,
   roundPrice2,
+  roundPriceUsd,
   dateFormat1,
   formatAddress3,
   getFiatPrice,
