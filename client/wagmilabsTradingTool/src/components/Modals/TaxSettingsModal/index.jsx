@@ -15,13 +15,23 @@ import {
 import { Select } from "@Components";
 
 import "./style.scss";
-import { getCurrencies, getTaxedTypes } from "./functions";
 
 export const TaxSettingsModal = React.memo(
   ({ isOpen, setIsOpen, ...settings }) => {
     const toast = useToast();
-    const { taxedOn, currency, taxPerc, setTaxedOn, setCurrency, setTaxPerc } =
-      settings;
+    const {
+      taxedOn,
+      currency,
+      taxPerc,
+      setTaxedOn,
+      setCurrency,
+      setTaxPerc,
+      currencies,
+      taxedTypes,
+    } = settings;
+    const [modalTaxedOn, setModalTaxedOn] = React.useState(taxedOn);
+    const [modalCurrency, setModalCurrency] = React.useState(currency);
+    const [modalTaxPerc, setModalTaxPerc] = React.useState(taxPerc);
 
     return (
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
@@ -34,19 +44,19 @@ export const TaxSettingsModal = React.memo(
               <span>Taxed on</span>
               <Select
                 id="set-taxed-on"
-                onChange={v => setTaxedOn(v)}
+                onChange={v => setModalTaxedOn(v)}
                 label="Set taxed on"
-                value={taxedOn}
-                options={getTaxedTypes()}
+                value={modalTaxedOn}
+                options={taxedTypes}
               />
             </div>
             <div className="space-between input">
               <span>Tax %</span>
               <div className="tax-perc">
-                <NumberInput max={100} min={0} step={0.01}>
+                <NumberInput max={100} min={0} step={0.01} value={modalTaxPerc}>
                   <NumberInputField
                     placeholder={`Value...`}
-                    onChange={e => setTaxPerc(e.target.value)}
+                    onChange={e => setModalTaxPerc(e.target.value)}
                   />
                 </NumberInput>
                 <span>%</span>
@@ -56,10 +66,10 @@ export const TaxSettingsModal = React.memo(
               <span>Currency</span>
               <Select
                 id="set-currency"
-                onChange={v => setCurrency(v)}
+                onChange={v => setModalCurrency(v)}
                 label="Set currency"
-                value={currency}
-                options={getCurrencies()}
+                value={modalCurrency}
+                options={currencies}
               />
             </div>
           </ModalBody>
@@ -77,6 +87,9 @@ export const TaxSettingsModal = React.memo(
                     isClosable: true,
                   });
                 } else {
+                  setTaxedOn(modalTaxedOn);
+                  setCurrency(modalCurrency);
+                  setTaxPerc(modalTaxPerc);
                   setIsOpen(false);
                 }
               }}

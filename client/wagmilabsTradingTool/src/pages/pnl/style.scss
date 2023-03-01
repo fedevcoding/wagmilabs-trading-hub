@@ -13,6 +13,16 @@
     max-width: 220px;
   }
 
+  .pagination {
+    display: flex;
+    align-items: center;
+
+    .default-btn {
+      margin-left: 1rem;
+      min-width: 10px;
+    }
+  }
+
   table {
     th {
       text-align: left;
@@ -23,6 +33,29 @@
 
     td {
       padding: 0.3rem 0;
+    }
+
+    .nft-info-box {
+      position: relative;
+      box-sizing: border-box;
+      display: flex;
+      cursor: pointer;
+      min-height: 120px;
+
+      .nft-text {
+        font-size: 12px;
+        position: absolute;
+        width: 120px;
+        left: 0;
+        bottom: 0.3rem;
+        background-color: rgba(0, 0, 0, 0.6);
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
+      }
+
+      .nft-img {
+        border-radius: 5px;
+      }
     }
   }
 }

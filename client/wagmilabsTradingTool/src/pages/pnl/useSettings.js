@@ -6,7 +6,7 @@ export function useSettings() {
   const currencies = getCurrencies();
   const [taxedOn, setTaxedOn] = React.useState(taxedTypes[0]);
   const [currency, setCurrency] = React.useState(currencies[0]);
-  const [taxPerc, setTaxPerc] = React.useState(0);
+  const [taxPerc, setTaxPerc] = React.useState(26);
 
   return {
     taxedOn,
@@ -15,5 +15,7 @@ export function useSettings() {
     setTaxedOn,
     setCurrency,
     setTaxPerc,
+    currencies,
+    taxedTypes,
   };
 }

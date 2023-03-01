@@ -5,7 +5,7 @@ import Lottie from "react-lottie-player";
 import "./checking.css";
 
 const Checking = ({ setConnected, setChecking }) => {
-  const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
+  // const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
 
   useEffect(() => {
     async function verify() {

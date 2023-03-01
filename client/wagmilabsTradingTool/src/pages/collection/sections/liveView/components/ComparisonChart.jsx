@@ -9,7 +9,6 @@ import {
   Select,
 } from "@chakra-ui/react";
 import { useRefreshSecond } from "@Hooks";
-import { roundPrice } from "@Utils";
 
 const ComparisonChart = memo(({ totalListings, totalSales, floorPrice }) => {
   HC_more(HighCharts);
@@ -24,12 +23,11 @@ const ComparisonChart = memo(({ totalListings, totalSales, floorPrice }) => {
   const [time, setTime] = React.useState(300000);
 
   const [chartOptions, setChartOptions] = React.useState({});
-  const refresh = useRefreshSecond()
-
+  const refresh = useRefreshSecond();
 
   useEffect(() => {
-    floorPrice && setMaxPrice(floorPrice + (floorPrice / 100) * 20)
-  }, [floorPrice])
+    floorPrice && setMaxPrice(floorPrice + (floorPrice / 100) * 20);
+  }, [floorPrice]);
 
   useEffect(() => {
     const timeframe = Date.now() - time;
@@ -57,11 +55,9 @@ const ComparisonChart = memo(({ totalListings, totalSales, floorPrice }) => {
         text: "Listings vs Sales",
       },
       tooltip: {
-
         formatter: function () {
           return `<div>${this.point.z} ${this.series.name}</div>`;
         },
-
       },
       series: [
         {
@@ -109,7 +105,7 @@ const ComparisonChart = memo(({ totalListings, totalSales, floorPrice }) => {
           return `<div>${this.point.y} ${this.series.name}</div>`;
         },
         followPointer: true,
-      }
+      },
     };
 
     setChartOptions(chartType === "bubble" ? chartOptions1 : chartOptions2);
@@ -136,22 +132,22 @@ const ComparisonChart = memo(({ totalListings, totalSales, floorPrice }) => {
           <HStack>
             <NumberInputField
               placeholder="Max price (ETH)"
-              onChange={e =>
-                setMaxPrice(e.target.value)
-              }
+              onChange={e => setMaxPrice(e.target.value)}
             />
           </HStack>
         </NumberInput>
 
         <div className="chart-type-selector">
           <i
-            className={`fa-solid fa-chart-simple ${chartType === "column" && "selected"
-              }`}
+            className={`fa-solid fa-chart-simple ${
+              chartType === "column" && "selected"
+            }`}
             onClick={() => setChartType("column")}
           ></i>
           <i
-            className={`fa-sharp fa-solid fa-chart-scatter-bubble ${chartType === "bubble" && "selected"
-              }`}
+            className={`fa-sharp fa-solid fa-chart-scatter-bubble ${
+              chartType === "bubble" && "selected"
+            }`}
             onClick={() => setChartType("bubble")}
           ></i>
         </div>

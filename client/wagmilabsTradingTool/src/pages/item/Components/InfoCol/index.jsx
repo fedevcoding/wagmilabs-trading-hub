@@ -88,6 +88,7 @@ export const InfoCol = React.memo(({ details, address, id }) => {
         address={address}
         isOwner={isOwner}
         currency={currency}
+        isErc721={isErc721}
       />
       <Listings
         details={details}
