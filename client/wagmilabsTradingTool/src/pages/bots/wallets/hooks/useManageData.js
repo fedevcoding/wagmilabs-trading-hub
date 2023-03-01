@@ -17,13 +17,13 @@ export const useManageData = () => {
         const data = JSON.parse(localStorage.getItem("wallets")) || [];
 
 
-        if(data.find((w) => w.name === wallet.name)) return 2;
+        if (data.find((w) => w.name === wallet.name)) return 2;
 
-        if(add){
+        if (add) {
 
-            if(data.length >= 50) return 4;
+            if (data.length >= 50) return 4;
 
-            if(data.find((w) => w.address === wallet.address)) return 0;
+            if (data.find((w) => w.address === wallet.address)) return 0;
 
             data.push(wallet);
             localStorage.setItem("wallets", JSON.stringify(data));
@@ -31,8 +31,8 @@ export const useManageData = () => {
             setWallets(data);
             return 1;
         }
-        else if(!add) {
-            const {id} = wallet;
+        else if (!add) {
+            const { id } = wallet;
             const newData = data.filter((wallet) => wallet.id !== id);
             localStorage.setItem("wallets", JSON.stringify(newData));
             setWallets(newData);
@@ -41,5 +41,5 @@ export const useManageData = () => {
         }
     };
 
-    return {wallets, toggleWallet};
+    return { wallets, toggleWallet };
 }

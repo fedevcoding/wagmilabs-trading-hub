@@ -1,4 +1,4 @@
-#page-bots-wallets{
+#page-bots-wallets {
 
     $dominant-grey: #3d3d3d;
     $secondary-grey: #1e1e1e;
@@ -6,25 +6,25 @@
 
     margin: 20px 50px;
     padding-bottom: 50px;
-    
 
 
-    .options{
+
+    .options {
         justify-content: space-between;
 
 
-        .wallet{
+        .wallet {
             font-size: 22px;
             font-weight: 600;
             letter-spacing: 1.2px;
         }
 
 
-        .actions{
+        .actions {
             gap: 20px;
             justify-content: space-between;
 
-            div{
+            div {
                 background-color: $dominant-grey;
                 border: 1px solid black;
                 padding: 7px 12px;
@@ -33,17 +33,17 @@
                 transition: background-color 0.3s;
             }
 
-            div:hover{
+            div:hover {
                 background-color: $secondary-grey;
             }
         }
     }
 
-    .header-divider{
-        margin: 20px 0 0 0;
+    .header-divider {
+        margin: 20px 0 30px 0;
     }
 
-    .wallet-divison{
+    .wallet-divison {
         background-color: #eee;
         border: 0 none;
         color: #eee;
@@ -51,72 +51,75 @@
     }
 
 
-    .wallets{
+    .wallets {
         width: 100%;
 
-        .table{
+        .table {
             width: 100%;
             border-spacing: 0;
 
-            .no-wallets{
+            .no-wallets {
                 border-bottom-left-radius: $table-radius;
                 border-bottom-right-radius: $table-radius;
 
-                div{
+                div {
                     display: flex;
                     flex-direction: column;
                     height: 55vh;
                 }
 
-                img{
+                img {
                     width: 220px;
                 }
             }
 
-            tr{
-                td{
+            tr {
+                td {
                     background-color: $dominant-grey;
-    
-                    div{
+
+                    div {
                         display: flex;
                         align-items: center;
                         justify-content: center;
                     }
                 }
+
                 .name {
                     padding: 20px 0;
                 }
+
                 .address {
                     cursor: pointer;
                 }
-                p{
+
+                p {
                     text-align: center;
                 }
             }
 
-            .last-tr{
-                td:first-child{
+            .last-tr {
+                td:first-child {
                     border-bottom-left-radius: $table-radius;
                 }
 
-                td:last-child{
+                td:last-child {
                     border-bottom-right-radius: $table-radius;
                 }
 
             }
 
 
-            thead th{
+            thead th {
                 margin: 0;
                 padding: 20px 0;
                 background-color: $secondary-grey;
             }
 
-            thead th:first-child{
+            thead th:first-child {
                 border-top-left-radius: $table-radius;
             }
 
-            thead th:last-child{
+            thead th:last-child {
                 border-top-right-radius: $table-radius;
             }
         }
@@ -124,40 +127,40 @@
 }
 
 
-.add-wallet-modal{
+.add-wallet-modal {
 
 
-    .add-button{
+    .add-button {
         cursor: not-allowed;
         opacity: 0.5;
 
-        &.active{
+        &.active {
             cursor: pointer;
             pointer-events: all;
             opacity: 1;
         }
     }
 
-    .form{
+    .form {
 
-        .options{
+        .options {
             display: flex;
             align-items: center;
             justify-content: space-evenly;
             cursor: pointer;
-    
-            p{
+
+            p {
                 opacity: 0.8;
                 font-size: 20px;
                 color: grey;
-    
+
                 transition: all 0.2s;
             }
-    
-            .active{
+
+            .active {
                 opacity: 1;
                 color: white;
-    
+
                 text-decoration: underline;
                 text-decoration-thickness: 2px;
                 text-underline-offset: 5px;
@@ -165,13 +168,13 @@
         }
 
 
-        .inputs{
+        .inputs {
             margin: 40px 0;
             display: flex;
             flex-direction: column;
             gap: 20px;
 
-            p{
+            p {
                 margin-bottom: 5px;
             }
         }
@@ -180,29 +183,31 @@
 
 
 
-.export-wallet-modal{
+.export-wallet-modal {
 
-    .export-btn{
+    .export-btn {
         opacity: 0.8;
         cursor: not-allowed;
         transition: all 0.2s;
 
-        &.active{
+        &.active {
             opacity: 1;
             cursor: pointer;
         }
     }
-    .alert{
+
+    .alert {
         margin-top: 10px;
     }
 
     input,
-	select {
-		color: white;
-	}
-	option {
-		background-color: black !important;
-	}
+    select {
+        color: white;
+    }
+
+    option {
+        background-color: black !important;
+    }
 
 
     .rmsc {
@@ -221,52 +226,56 @@
 }
 
 
-.transfer-wallet-modal{
+.transfer-wallet-modal {
 
-    .add-button{
+    .add-button {
         cursor: not-allowed;
         opacity: 0.5;
         transition: all 0.2s;
 
-        &.active{
+        &.active {
             cursor: pointer;
             opacity: 1;
         }
     }
-    
-    
-    .form{
-        .modal-types{
+
+
+    .form {
+        .modal-types {
             display: flex;
             align-items: center;
             justify-content: space-evenly;
             cursor: pointer;
-    
-            p{
+
+            p {
                 opacity: 0.8;
                 font-size: 20px;
                 color: grey;
-    
+
                 transition: all 0.2s;
             }
-            .active{
+
+            .active {
                 opacity: 1;
                 color: white;
-    
+
                 text-decoration: underline;
                 text-decoration-thickness: 2px;
                 text-underline-offset: 5px;
             }
         }
-        
-        .inputs{
+
+        .inputs {
+
             input,
             select {
                 color: white;
             }
+
             option {
                 background-color: black !important;
             }
+
             .rmsc {
                 --rmsc-main: #4285f4 !important;
                 --rmsc-hover: #1d1d1d !important;
@@ -280,39 +289,39 @@
             }
 
 
-            .fixed{
+            .fixed {
                 display: flex;
                 flex-direction: column;
                 gap: 10px;
 
-                .wallets{
+                .wallets {
                     display: flex;
                     flex-direction: column;
                     gap: 5px;
                     margin-top: 25px;
                 }
 
-                .total{
+                .total {
                     margin-top: 20px;
                 }
 
             }
 
 
-            .custom{
+            .custom {
                 margin-top: 20px;
 
-                .wallets{
+                .wallets {
                     display: flex;
                     flex-direction: column;
                     gap: 20px;
-                    
-                    .remove{
+
+                    .remove {
                         cursor: not-allowed;
                         opacity: 0.8;
                         transition: 0.2s;
-                        
-                        &.active{
+
+                        &.active {
                             cursor: pointer;
                             opacity: 1;
                         }
@@ -320,7 +329,7 @@
                 }
 
 
-                .add-wallet-btn{
+                .add-wallet-btn {
                     margin: 15px 0 20px 0;
                 }
             }

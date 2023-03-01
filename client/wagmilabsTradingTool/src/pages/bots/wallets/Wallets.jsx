@@ -71,7 +71,7 @@ const Wallets = React.memo(() => {
           <tbody>
             {useMemo(
               () =>
-                wallets.length === 0 ? (
+                !wallets?.length || wallets?.length === 0 ? (
                   <tr>
                     <td colSpan={6} className="no-wallets">
                       <div>
