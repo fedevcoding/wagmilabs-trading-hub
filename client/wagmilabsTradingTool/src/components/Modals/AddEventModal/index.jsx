@@ -30,27 +30,36 @@ const formatLinks = links => {
 
 const formatEventInfo = (eventInfo, section) => {
   const eventToSave = {};
-  eventToSave.timestamp = eventInfo.date.getTime();
-  eventToSave.links = formatLinks(eventInfo.links);
-  if (section === "drops") {
-    eventToSave.collectionName = eventInfo.name;
-    eventToSave.price = eventInfo.price;
-    eventToSave.supply = eventInfo.supply;
+  if (section !== "personal") {
+    eventToSave.timestamp = eventInfo.date.getTime();
+    eventToSave.links = formatLinks(eventInfo.links);
   }
-  if (section === "events") {
-    eventToSave.eventName = eventInfo.name;
-    eventToSave.eventDescription = eventInfo.eventDescription;
-    eventToSave.eventLocation = eventInfo.eventLocation;
-  }
-  if (section === "personal") {
-    eventToSave.address = eventInfo.address;
-    eventToSave.eventName = eventInfo.name;
-    eventToSave.eventDescription = eventInfo.eventDescription;
-  }
-  if (section === "spaces") {
-    eventToSave.spaceName = eventInfo.name;
-    eventToSave.spaceDescrition = eventInfo.eventDescription;
-    eventToSave.spaceHost = eventInfo.spaceHost;
+  switch (section) {
+    case "drops":
+      eventToSave.collectionName = eventInfo.name;
+      eventToSave.price = eventInfo.price;
+      eventToSave.supply = eventInfo.supply;
+      break;
+    case "events":
+      eventToSave.eventName = eventInfo.name;
+      eventToSave.eventDescription = eventInfo.eventDescription;
+      eventToSave.eventLocation = eventInfo.eventLocation;
+      break;
+    case "personal":
+      eventToSave.event = {
+          timestamp: eventInfo.date.getTime(),
+          links: formatLinks(eventInfo.links),
+          eventName: eventInfo.name,
+          eventDescription: eventInfo.eventDescription
+        }
+      break;
+    case "spaces":
+      eventToSave.spaceName = eventInfo.name;
+      eventToSave.spaceDescrition = eventInfo.eventDescription;
+      eventToSave.spaceHost = eventInfo.spaceHost;
+      break;
+    default:
+      break;
   }
   return eventToSave;
 };
@@ -90,9 +99,6 @@ export const AddEventModal = React.memo(
           break;
         case "spaceHost":
           setEventInfo(prev => ({ ...prev, spaceHost: value }));
-          break;
-        case "address":
-          setEventInfo(prev => ({ ...prev, address: value }));
           break;
         case "links":
           setEventInfo(prev => ({ ...prev, links: value }));
@@ -141,18 +147,6 @@ export const AddEventModal = React.memo(
                     placeholder="description"
                     color={"white"}
                     onChange={e => updateEventInfo(e, "eventDescription", true)}
-                  />
-                </HStack>
-              </div>
-            )}
-            {section === "personal" && (
-              <div className="field-container">
-                Address
-                <HStack>
-                  <Input
-                    placeholder="address"
-                    color={"white"}
-                    onChange={e => updateEventInfo(e, "address", true)}
                   />
                 </HStack>
               </div>

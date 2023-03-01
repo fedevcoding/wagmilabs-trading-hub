@@ -117,7 +117,7 @@ export const MonthlyCalendar = React.memo(
 
     const onSave = async params => {
       try {
-        await pushToServer("/" + section, { ...params, wallet: address });
+        await pushToServer("/" + section, params);
         onClose();
         refetch();
       } catch (err) {
@@ -277,7 +277,6 @@ export const MonthlyCalendar = React.memo(
           onClose={onClose}
           onOpen={onOpen}
           onSave={onSave}
-          address={address}
           section={section}
         />
         <Row>
@@ -295,7 +294,7 @@ export const MonthlyCalendar = React.memo(
                   <Button
                     colorScheme={"blue"}
                     className="button"
-                    onClick={() => null}
+                    onClick={onOpen}
                   >
                     Add Event
                   </Button>
