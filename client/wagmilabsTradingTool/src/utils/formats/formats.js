@@ -19,11 +19,11 @@ const formatAddress3 = address => {
 };
 
 const roundPrice = price => {
-  return price ? Math.round(price * 100000) / 100000 : 0;
+  return price ?? typeof price === "number" ? Math.round(price * 100000) / 100000 : 0;
 };
 
 const roundPrice2 = price => {
-  return price ? Math.round(price * 1000) / 1000 : 0;
+  return price ?? typeof price === "number" ? Math.round(price * 1000) / 1000 : 0;
 };
 
 const roundPriceUsd = price => {
