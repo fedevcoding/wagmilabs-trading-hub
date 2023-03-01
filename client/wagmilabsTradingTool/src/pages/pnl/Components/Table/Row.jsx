@@ -2,7 +2,7 @@ import React from "react";
 import { roundPrice, roundPriceUsd } from "@Utils";
 import moment from "moment";
 import { placeholderImage } from "@Assets";
-import { LoadingSpinner } from "@Components";
+import { LoadingSpinner, Number } from "@Components";
 import { useNavigate } from "react-router-dom";
 
 export const Row = React.memo(({ nft, taxPerc, taxedOn, currency, tokensInfo, isFetchingInitialData }) => {
@@ -40,7 +40,9 @@ export const Row = React.memo(({ nft, taxPerc, taxedOn, currency, tokensInfo, is
         {roundPrice(nft.gasFees.total.eth) + " ETH"} <br /> {roundPriceUsd(nft.gasFees.total.usd) + "$"}
       </td>
       <td className="td-p-or-l">
-        {roundPrice(nft.pOrL.eth) + " ETH"} <br /> {roundPriceUsd(nft.pOrL.usd) + "$"}
+        <Number n={nft.pOrL.eth} symbol={" ETH"} />
+        <br />
+        <Number n={nft.pOrL.usd} symbol={"$"} crypto={false} />
       </td>
       <td className="duration">{nft.holdDuration ? momentDuration : nft.holdDuration}</td>
       <td className="gross">

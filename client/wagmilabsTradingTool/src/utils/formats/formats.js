@@ -27,9 +27,10 @@ const roundPrice2 = price => {
 };
 
 const roundPriceUsd = price => {
-  return (Math.round((price || 0) * 100) / 100).toLocaleString("En-us", {
+  const value = (Math.round((price || 0) * 100) / 100).toLocaleString("En-us", {
     minimumFractionDigits: 2,
   });
+  return value === "-0.00" ? "0.00" : value;
 };
 
 const getFiatPrice = (cryptoValue, fiatPrice) => {

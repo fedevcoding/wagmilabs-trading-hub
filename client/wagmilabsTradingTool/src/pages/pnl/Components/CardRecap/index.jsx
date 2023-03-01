@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, Col, Row } from "@Components";
+import { Card, Col, Number, Row } from "@Components";
 import { getRecap } from "./function";
 import { roundPrice, roundPriceUsd } from "@Utils";
 
@@ -15,7 +15,12 @@ export const CardRecap = React.memo(({ data, taxPerc, taxedOn, currency }) => {
         </Col>
         <Col>
           <h3>Net P&L:</h3>
-          <p>{pAndL.eth + "ETH (" + roundPriceUsd(pAndL.usd) + "$)"}</p>
+          <p>
+            <Number n={pAndL.eth} symbol=" ETH" />
+            {" ("}
+            <Number n={pAndL.usd} symbol="$" crypto={false} />
+            {")"}
+          </p>
         </Col>
       </Row>
       <Row>
