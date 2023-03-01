@@ -8,17 +8,10 @@ function formatPAndLData(nfts) {
   return nfts
     .filter((nft) => nft.sold)
     .map((nft) => {
-      const totalGasFees =
-        nft.bought.royalty_fee +
-        nft.bought.platform_fee +
-        nft.sold.royalty_fee +
-        nft.sold.platform_fee;
-
-      const paidCoef = nft.bought.usd_price / nft.bought.eth_price;
+      const totalGasFees = nft.sold.royalty_fee + nft.sold.platform_fee;
       const soldCoef = nft.sold.usd_price / nft.sold.eth_price;
 
       const totalGasFeesUsd =
-        (nft.bought.royalty_fee + nft.bought.platform_fee) * paidCoef +
         (nft.sold.royalty_fee + nft.sold.platform_fee) * soldCoef;
 
       const diffInSeconds =

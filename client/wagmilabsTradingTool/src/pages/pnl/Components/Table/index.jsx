@@ -45,7 +45,7 @@ export const Table = React.memo(({ data, taxPerc, taxedOn, currency }) => {
             <th>NFT</th>
             <th>Paid</th>
             <th>Sold</th>
-            <th>Gas fees</th>
+            <th>Fees</th>
             <th>P&L</th>
             <th>Hold duration</th>
             <th>Gross profit</th>
