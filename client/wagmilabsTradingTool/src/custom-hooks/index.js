@@ -17,4 +17,5 @@ export { useRefreshSecond } from "./useRefreshSecond";
 export { useConnected } from "./useConnected";
 export { useGetTab } from "./useGetTab";
 export { useProvider } from "./useProvider";
-export {useWeb3Utils} from "./useWeb3Utils";
+export { useWeb3Utils } from "./useWeb3Utils";
+export { useUpdateBalance } from "./useUpdateBalances";

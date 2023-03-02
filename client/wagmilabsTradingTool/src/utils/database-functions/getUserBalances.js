@@ -14,8 +14,7 @@ async function getUserBalances(address, setUserBalances) {
     userBalances = await userBalances.json();
     const { usdc, weth, usdt } = userBalances;
 
-    const eth =
-      (await fetchBalance({ addressOrName: address }))?.formatted || 0;
+    const eth = (await fetchBalance({ addressOrName: address }))?.formatted || 0;
 
     setUserBalances({ eth, weth, usdc, usdt });
   } catch (e) {

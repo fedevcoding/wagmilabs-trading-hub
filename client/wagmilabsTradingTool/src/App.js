@@ -23,24 +23,12 @@ import Footer from "./pages/footer/Footer";
 import { ChakraProvider } from "@chakra-ui/react";
 
 // wagmi / rainbowkit
-import {
-  ReservoirKitProvider,
-  darkTheme as reservoirDarkTheme,
-} from "@reservoir0x/reservoir-kit-ui";
-import {
-  chain,
-  configureChains,
-  WagmiConfig,
-  createClient as createWagmiClient,
-} from "wagmi";
+import { ReservoirKitProvider, darkTheme as reservoirDarkTheme } from "@reservoir0x/reservoir-kit-ui";
+import { chain, configureChains, WagmiConfig, createClient as createWagmiClient } from "wagmi";
 import { createClient } from "@reservoir0x/reservoir-kit-client";
 import { infuraProvider } from "wagmi/providers/infura";
 import { publicProvider } from "wagmi/providers/public";
-import {
-  getDefaultWallets,
-  RainbowKitProvider,
-  darkTheme,
-} from "@rainbow-me/rainbowkit";
+import { getDefaultWallets, RainbowKitProvider, darkTheme } from "@rainbow-me/rainbowkit";
 import { SIGNER_PRIVATE_KEY, RESERVOIR_API_KEY } from "@Variables";
 
 // react router
@@ -155,8 +143,7 @@ function App() {
   // set colors based on states
   useEffect(() => {
     if (!connected) {
-      document.body.style.background =
-        "#0e0f0e";
+      document.body.style.background = "#0e0f0e";
     } else {
       document.body.style.background = "#0E0F0E";
     }
@@ -278,23 +265,14 @@ function App() {
             theme={theme}
           >
             <WagmiConfig client={wagmiClient}>
-              <RainbowKitProvider
-                chains={chains}
-                coolMode
-                theme={darkTheme({ overlayBlur: "small" })}
-              >
+              <RainbowKitProvider chains={chains} coolMode theme={darkTheme({ overlayBlur: "small" })}>
                 <div className="not-responsive">
-                  <p>
-                    This application is not optimized for small screens yet.
-                  </p>
+                  <p>This application is not optimized for small screens yet.</p>
                 </div>
                 <div id="application-wrapper">
                   {!loading &&
                     (checking ? (
-                      <Checking
-                        setConnected={setConnected}
-                        setChecking={setChecking}
-                      />
+                      <Checking setConnected={setConnected} setChecking={setChecking} />
                     ) : !connected ? (
                       <>
                         <BrowserRouter>
@@ -302,12 +280,7 @@ function App() {
                             <Route
                               exact
                               path="/"
-                              element={
-                                <Login
-                                  setConnected={setConnected}
-                                  connected={connected}
-                                />
-                              }
+                              element={<Login setConnected={setConnected} connected={connected} />}
                             />
                             <Route exact path="/legal" element={<Legals />} />
                           </Routes>

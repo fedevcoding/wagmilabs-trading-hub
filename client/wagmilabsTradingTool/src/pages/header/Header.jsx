@@ -11,7 +11,7 @@ import { CartModal, WalletModal } from "@Components";
 
 import { UserDataContext } from "@Context";
 
-import getUserBalances from "@Utils/database-functions/getUserBalances";
+import { useUpdateBalance } from "@Hooks";
 
 import { fetchEnsName } from "@wagmi/core";
 import { useAccount } from "wagmi";
@@ -23,7 +23,6 @@ const Header = () => {
     setListingSettings,
     profileImage,
     setUserCartItems,
-    setUserBalances,
     setGasSettings,
     setConnected,
     connected,
@@ -35,6 +34,8 @@ const Header = () => {
 
   const [modalOpen, setModalOpen] = useState(false);
   const [walletModalOpen, setWalletModalOpen] = useState(false);
+
+  const updateBalance = useUpdateBalance(address);
 
   // profile options hover
   useEffect(() => {
@@ -181,7 +182,7 @@ const Header = () => {
   useEffect(() => {
     fetchUserData();
     getEnsName(address);
-    getUserBalances(address, setUserBalances);
+    updateBalance();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
