@@ -4,6 +4,7 @@ import moment from "moment";
 import { placeholderImage } from "@Assets";
 import { LoadingSpinner, Number } from "@Components";
 import { useNavigate } from "react-router-dom";
+import { Tooltip } from "@chakra-ui/react";
 
 export const Row = React.memo(({ nft, taxPerc, taxedOn, currency, tokensInfo, isFetchingInitialData }) => {
   const navigate = useNavigate();
@@ -37,7 +38,33 @@ export const Row = React.memo(({ nft, taxPerc, taxedOn, currency, tokensInfo, is
         {nft.sold.eth + " ETH"} <br /> {nft.sold.usd + "$"}
       </td>
       <td className="td-gas-fees">
-        {roundPrice(nft.gasFees.total.eth) + " ETH"} <br /> {roundPriceUsd(nft.gasFees.total.usd) + "$"}
+        <Tooltip
+          closeOnClick={false}
+          hasArrow
+          label={
+            <>
+              {`Royalty fee: ${roundPrice(nft.gasFees.sold.royaltyFee)} ETH`}
+              <br />
+              {`Platform fee: ${roundPrice(nft.gasFees.sold.platformFee)} ETH`}
+              {(nft.gasFees.approval && (
+                <>
+                  <br />
+                  {`Approval fee: ${roundPrice(nft.gasFees.approval)} ETH`}
+                </>
+              )) ||
+                ""}
+            </>
+          }
+          fontSize="xs"
+          bg="black"
+          color={"white"}
+          placement="top"
+          borderRadius={"7px"}
+        >
+          <div>
+            {roundPrice(nft.gasFees.total.eth) + " ETH"} <br /> {roundPriceUsd(nft.gasFees.total.usd) + "$"}
+          </div>
+        </Tooltip>
       </td>
       <td className="td-p-or-l">
         <Number n={nft.pOrL.eth} symbol={" ETH"} />

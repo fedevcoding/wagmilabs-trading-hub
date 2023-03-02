@@ -4,15 +4,33 @@ const { execTranseposeAPI } = require("../../services/externalAPI/transpose");
 
 const route = express();
 
-function formatPAndLData(nfts) {
+function getPAndLData(bought, sold, allApprovalGasFees) {
+  let nfts = {};
+  for (const k in bought) {
+    const nft = bought[k];
+    const key = (nft.contract_address + ":" + nft.token_id).toLowerCase();
+    if (!nfts[key])
+      nfts[key] = {
+        bought: nft,
+      };
+  }
+
+  for (const k in sold) {
+    const nft = sold[k];
+    const key = (nft.contract_address + ":" + nft.token_id).toLowerCase();
+    if (nfts[key] && !nfts[key].sold) nfts[key].sold = nft;
+  }
+
+  nfts = Object.values(nfts);
+
   return nfts
     .filter((nft) => nft.sold)
     .map((nft) => {
-      const totalGasFees = nft.sold.royalty_fee + nft.sold.platform_fee;
+      const approvalGasFees =
+        allApprovalGasFees[nft.bought.contract_address?.toLowerCase()] ?? 0;
+      const soldGasFees = nft.sold.royalty_fee + nft.sold.platform_fee;
       const soldCoef = nft.sold.usd_price / nft.sold.eth_price;
-
-      const totalGasFeesUsd =
-        (nft.sold.royalty_fee + nft.sold.platform_fee) * soldCoef;
+      const soldGasFeesUsd = soldGasFees * soldCoef;
 
       const diffInSeconds =
         (new Date(nft.sold.timestamp).getTime() -
@@ -35,25 +53,41 @@ function formatPAndLData(nfts) {
             eth: nft.sold.eth_price,
           },
           gasFees: {
-            paid: nft.bought.royalty_fee + nft.bought.platform_fee,
-            sold: nft.sold.royalty_fee + nft.sold.platform_fee,
+            paid: {
+              royaltyFee: nft.bought.royalty_fee,
+              platformFee: nft.bought.platform_fee,
+            },
+            sold: {
+              royaltyFee: nft.sold.royalty_fee,
+              platformFee: nft.sold.platform_fee,
+            },
+            approval: approvalGasFees,
             total: {
-              eth: totalGasFees,
-              usd: totalGasFeesUsd,
+              eth: soldGasFees,
+              usd: soldGasFeesUsd,
             },
           },
           pOrL: {
-            eth: nft.sold.eth_price - nft.bought.eth_price - totalGasFees,
-            usd: nft.sold.usd_price - nft.bought.usd_price - totalGasFeesUsd,
+            eth: nft.sold.eth_price - nft.bought.eth_price - soldGasFees,
+            usd: nft.sold.usd_price - nft.bought.usd_price - soldGasFeesUsd,
           },
           holdDuration: diffInSeconds,
           gross: {
-            eth: nft.sold.eth_price - totalGasFees,
-            usd: nft.sold.usd_price - totalGasFeesUsd,
+            eth: nft.sold.eth_price - soldGasFees,
+            usd: nft.sold.usd_price - soldGasFeesUsd,
           },
         },
       };
     });
+}
+
+function formatApprovalGasFees(approvalGasFees) {
+  const output = {};
+  for (const value of approvalGasFees) {
+    output[value.collection_address.toLowerCase()] =
+      value.approval_gas_fees / 10 ** 18;
+  }
+  return output;
 }
 
 route.get("/:address", checkAuth, (req, res) => {
@@ -93,28 +127,22 @@ route.get("/:address", checkAuth, (req, res) => {
           AND ${exchangeCondition}
       )`;
 
-      const [data, sold] = await Promise.all([
+      const queryApprovalGasFees = `
+        SELECT (gas_used * gas_price) as approval_gas_fees, to_address as collection_address FROM ethereum.transactions
+            WHERE from_address = '${address}'
+            AND input = '0xa22cb4650000000000000000000000001e0049783f008a0085193e00003d00cd54003c710000000000000000000000000000000000000000000000000000000000000001'`;
+
+      const [bought, sold, approvalGasFees] = await Promise.all([
         execTranseposeAPI(query),
         execTranseposeAPI(querySell),
+        execTranseposeAPI(queryApprovalGasFees),
       ]);
 
-      const nfts = {};
-      for (const k in data) {
-        const nft = data[k];
-        const key = (nft.contract_address + ":" + nft.token_id).toLowerCase();
-        if (!nfts[key])
-          nfts[key] = {
-            bought: nft,
-          };
-      }
-
-      for (const k in sold) {
-        const nft = sold[k];
-        const key = (nft.contract_address + ":" + nft.token_id).toLowerCase();
-        if (nfts[key] && !nfts[key].sold) nfts[key].sold = nft;
-      }
-
-      res.status(200).json(formatPAndLData(Object.values(nfts)));
+      res
+        .status(200)
+        .json(
+          getPAndLData(bought, sold, formatApprovalGasFees(approvalGasFees))
+        );
     } catch (e) {
       console.log("err", e);
       res.status(500).json({ error: e });
