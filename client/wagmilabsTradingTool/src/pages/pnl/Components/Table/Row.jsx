@@ -43,13 +43,20 @@ export const Row = React.memo(({ nft, taxPerc, taxedOn, currency, tokensInfo, is
           hasArrow
           label={
             <>
-              {`Royalty fee: ${roundPrice(nft.gasFees.sold.royaltyFee)} ETH`}
+              {`Royalty fees: ${roundPrice(nft.gasFees.sold.royaltyFee)} ETH`}
               <br />
-              {`Platform fee: ${roundPrice(nft.gasFees.sold.platformFee)} ETH`}
-              {(nft.gasFees.approval && (
+              {`Platform fees: ${roundPrice(nft.gasFees.sold.platformFee)} ETH`}
+              {(nft.gasFees.paid.tx.eth && (
                 <>
                   <br />
-                  {`Approval fee: ${roundPrice(nft.gasFees.approval)} ETH`}
+                  {`buy fees: ${roundPrice(nft.gasFees.paid.tx.eth)} ETH`}
+                </>
+              )) ||
+                ""}
+              {(nft.gasFees.approval.eth && (
+                <>
+                  <br />
+                  {`Approval fees: ${roundPrice(nft.gasFees.approval.eth)} ETH`}
                 </>
               )) ||
                 ""}

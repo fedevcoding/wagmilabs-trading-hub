@@ -4,7 +4,7 @@ const { execTranseposeAPI } = require("../../services/externalAPI/transpose");
 
 const route = express();
 
-function getPAndLData(bought, sold, allApprovalGasFees) {
+function getNftObj(bought, sold) {
   let nfts = {};
   for (const k in bought) {
     const nft = bought[k];
@@ -21,64 +21,87 @@ function getPAndLData(bought, sold, allApprovalGasFees) {
     if (nfts[key] && !nfts[key].sold) nfts[key].sold = nft;
   }
 
-  nfts = Object.values(nfts);
+  return Object.values(nfts).filter((nft) => nft.sold);
+}
 
-  return nfts
-    .filter((nft) => nft.sold)
-    .map((nft) => {
-      const approvalGasFees =
-        allApprovalGasFees[nft.bought.contract_address?.toLowerCase()] ?? 0;
-      const soldGasFees = nft.sold.royalty_fee + nft.sold.platform_fee;
-      const soldCoef = nft.sold.usd_price / nft.sold.eth_price;
-      const soldGasFeesUsd = soldGasFees * soldCoef;
+function getPAndLData(nfts, allApprovalGasFees, txsGasFees) {
+  return nfts.map((nft) => {
+    const approvalGasFees =
+      allApprovalGasFees[nft.bought.contract_address?.toLowerCase()] ?? 0;
+    const soldGasFees = nft.sold.royalty_fee + nft.sold.platform_fee;
+    const boughtCoef = nft.bought.usd_price / nft.bought.eth_price;
+    const soldCoef = nft.sold.usd_price / nft.sold.eth_price;
+    const soldGasFeesUsd = soldGasFees * soldCoef;
+    const approvalGasFeesUsd = approvalGasFees * soldCoef;
 
-      const diffInSeconds =
-        (new Date(nft.sold.timestamp).getTime() -
-          new Date(nft.bought.timestamp).getTime()) /
-        1000;
+    const boughtGasFeesTx =
+      txsGasFees[nft.bought.transaction_hash.toLowerCase()] ?? 0;
+    const boughtGasFeesTxUsd = boughtGasFeesTx * boughtCoef;
 
-      return {
-        ...nft,
-        info: {
-          nft: {
-            address: nft.bought.contract_address,
-            id: nft.bought.token_id,
-          },
+    const diffInSeconds =
+      (new Date(nft.sold.timestamp).getTime() -
+        new Date(nft.bought.timestamp).getTime()) /
+      1000;
+
+    return {
+      ...nft,
+      info: {
+        nft: {
+          address: nft.bought.contract_address,
+          id: nft.bought.token_id,
+        },
+        paid: {
+          usd: nft.bought.usd_price,
+          eth: nft.bought.eth_price,
+        },
+        sold: {
+          usd: nft.sold.usd_price,
+          eth: nft.sold.eth_price,
+        },
+        gasFees: {
           paid: {
-            usd: nft.bought.usd_price,
-            eth: nft.bought.eth_price,
+            royaltyFee: nft.bought.royalty_fee,
+            platformFee: nft.bought.platform_fee,
+            tx: {
+              eth: boughtGasFeesTx,
+              usd: boughtGasFeesTxUsd,
+            },
           },
           sold: {
-            usd: nft.sold.usd_price,
-            eth: nft.sold.eth_price,
+            royaltyFee: nft.sold.royalty_fee,
+            platformFee: nft.sold.platform_fee,
           },
-          gasFees: {
-            paid: {
-              royaltyFee: nft.bought.royalty_fee,
-              platformFee: nft.bought.platform_fee,
-            },
-            sold: {
-              royaltyFee: nft.sold.royalty_fee,
-              platformFee: nft.sold.platform_fee,
-            },
-            approval: approvalGasFees,
-            total: {
-              eth: soldGasFees,
-              usd: soldGasFeesUsd,
-            },
+          approval: {
+            eth: approvalGasFees,
+            usd: approvalGasFeesUsd,
           },
-          pOrL: {
-            eth: nft.sold.eth_price - nft.bought.eth_price - soldGasFees,
-            usd: nft.sold.usd_price - nft.bought.usd_price - soldGasFeesUsd,
-          },
-          holdDuration: diffInSeconds,
-          gross: {
-            eth: nft.sold.eth_price - soldGasFees,
-            usd: nft.sold.usd_price - soldGasFeesUsd,
+          total: {
+            eth: soldGasFees + approvalGasFees + boughtGasFeesTx,
+            usd: soldGasFeesUsd + approvalGasFeesUsd + boughtGasFeesTxUsd,
           },
         },
-      };
-    });
+        pOrL: {
+          eth:
+            nft.sold.eth_price -
+            nft.bought.eth_price -
+            soldGasFees -
+            approvalGasFees -
+            boughtGasFeesTx,
+          usd:
+            nft.sold.usd_price -
+            nft.bought.usd_price -
+            soldGasFeesUsd -
+            approvalGasFeesUsd -
+            boughtGasFeesTxUsd,
+        },
+        holdDuration: diffInSeconds,
+        gross: {
+          eth: nft.sold.eth_price - soldGasFees,
+          usd: nft.sold.usd_price - soldGasFeesUsd,
+        },
+      },
+    };
+  });
 }
 
 function formatApprovalGasFees(approvalGasFees) {
@@ -88,6 +111,27 @@ function formatApprovalGasFees(approvalGasFees) {
       value.approval_gas_fees / 10 ** 18;
   }
   return output;
+}
+
+async function getTxsGasFees(nfts) {
+  const hashes = [];
+  for (const nft of nfts) {
+    hashes.push(nft.bought.transaction_hash);
+  }
+
+  const query = `
+    SELECT transaction_fee, transaction_hash FROM ethereum.transactions
+              WHERE transaction_hash IN ('${hashes.join("','")}')`;
+
+  const data = await execTranseposeAPI(query);
+  const txsGasFees = {};
+  if (data) {
+    for (const value of data) {
+      txsGasFees[value.transaction_hash.toLowerCase()] =
+        value.transaction_fee / 10 ** 18;
+    }
+  }
+  return txsGasFees;
 }
 
 route.get("/:address", checkAuth, (req, res) => {
@@ -104,7 +148,7 @@ route.get("/:address", checkAuth, (req, res) => {
         "exchange_name IN('opensea', 'blur', 'x2y2', 'sudoswap', 'looksrare')";
 
       const query = `
-        SELECT timestamp, contract_address, token_id, usd_price, eth_price, royalty_fee, platform_fee
+        SELECT timestamp, contract_address, token_id, usd_price, eth_price, royalty_fee, platform_fee, transaction_hash
         FROM ethereum.nft_sales
         WHERE buyer_address = '${address}' AND timestamp >= '${start}'  AND timestamp <= '${end}'
         AND ${exchangeCondition}
@@ -116,7 +160,7 @@ route.get("/:address", checkAuth, (req, res) => {
         )`;
 
       const querySell = `
-      SELECT timestamp, contract_address, token_id, usd_price, eth_price, royalty_fee, platform_fee
+      SELECT timestamp, contract_address, token_id, usd_price, eth_price, royalty_fee, platform_fee, transaction_hash
       FROM ethereum.nft_sales
       WHERE seller_address = '${address}' AND timestamp >= '${start}'  AND timestamp <= '${end}'
       AND ${exchangeCondition}
@@ -138,10 +182,13 @@ route.get("/:address", checkAuth, (req, res) => {
         execTranseposeAPI(queryApprovalGasFees),
       ]);
 
+      const nfts = getNftObj(bought, sold);
+      const txsGasFees = await getTxsGasFees(nfts);
+
       res
         .status(200)
         .json(
-          getPAndLData(bought, sold, formatApprovalGasFees(approvalGasFees))
+          getPAndLData(nfts, formatApprovalGasFees(approvalGasFees), txsGasFees)
         );
     } catch (e) {
       console.log("err", e);
