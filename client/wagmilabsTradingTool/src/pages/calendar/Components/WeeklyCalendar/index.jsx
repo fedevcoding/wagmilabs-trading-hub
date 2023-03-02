@@ -24,7 +24,7 @@ export const WeeklyCalendar = ({ sectionData, refetch }) => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [curEventDetail, setCurEventDetail] = useState(null);
   const showSelectedDate = d => {
-    setSelectedDate({ title: getSelectedDateTitle(d), date: d });
+    setSelectedDate({ title: getSelectedDateTitle(d, true), date: d });
   };
 
   const deleteEvent = async id => {
@@ -65,6 +65,14 @@ export const WeeklyCalendar = ({ sectionData, refetch }) => {
     }
   };
 
+  const renderHourInterval = (h) => (
+    (Math.min(...selectedEvents
+      .map((el) => el.hour)) <= h.idx
+    && Math.max(...selectedEvents
+      .map((el) => el.hour)) >= h.idx)
+    && <div className="hour-container-r">{h.val}</div>
+  );
+
   const renderEventsInHour = h => {
     const eventsInHour = selectedEvents.filter(event => event.hour === h.idx);
     return (
@@ -95,11 +103,8 @@ export const WeeklyCalendar = ({ sectionData, refetch }) => {
       <>
         {selectedEvents.length > 0 && (
           <>
-            {h.idx === selectedEvents[0].hour && <div>{h.val}</div>}
+            {renderHourInterval(h)}
             {renderEventsInHour(h)}
-            {h.idx === selectedEvents[selectedEvents.length - 1].hour + 1 && (
-              <div>{h.val}</div>
-            )}
           </>
         )}
       </>

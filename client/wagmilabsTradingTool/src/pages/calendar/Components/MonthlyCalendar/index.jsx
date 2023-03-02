@@ -31,7 +31,6 @@ export const MonthlyCalendar = React.memo(
     const [selectedEvents, setSelectedEvents] = useState([]);
     const [curEventDetail, setCurEventDetail] = useState(null);
     const { isOpen, onOpen, onClose } = useDisclosure();
-
     const deleteEvent = async id => {
       await deleteFromServer("/" + section, { id });
       refetch();
@@ -230,6 +229,14 @@ export const MonthlyCalendar = React.memo(
       }
     };
 
+    const renderHourInterval = (h) => (
+      (Math.min(...selectedEvents
+        .map((el) => el.hour)) <= h.idx
+      && Math.max(...selectedEvents
+        .map((el) => el.hour)) >= h.idx)
+      && <div className="hour-container-r">{h.val}</div>
+    );
+
     const renderEventsInHour = h => {
       const eventsInHour = selectedEvents.filter(event => event.hour === h.idx);
       return (
@@ -260,8 +267,7 @@ export const MonthlyCalendar = React.memo(
         <>
           {selectedEvents.length > 0 && (
             <>
-              {selectedEvents.map((el)=>el.hour).includes(h.idx) && <div className="hour-container-r">{h.val}</div>}
-              {!selectedEvents.map((el)=>el.hour).includes(h.idx) && <div className="hour-container-r">{h.val}</div>}
+              {renderHourInterval(h)}
               {renderEventsInHour(h)}
 
             </>

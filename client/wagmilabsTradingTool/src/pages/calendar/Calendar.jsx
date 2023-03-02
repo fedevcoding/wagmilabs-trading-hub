@@ -50,12 +50,18 @@ export const hoursIntervals = [
   { val: "4:00", idx: 4 },
 ];
 
-export const getSelectedDateTitle = selDate =>
-  `${selDate.toLocaleDateString("en-GB", {
+export const getSelectedDateTitle = (selDate, weekly) => {
+  if(weekly) {
+    return `${selDate.toLocaleDateString("en-GB", {
+      weekday: "long",
+    })}`;
+  }
+  return `${selDate.toLocaleDateString("en-GB", {
     month: "long",
   })}, ${selDate.toLocaleDateString("en-GB", {
     weekday: "long",
   })}, ${selDate.getDate()}, ${selDate.getFullYear()}`;
+}
 
 export const Calendar = () => {
   const [sectionData, setSectionData] = useState(null);
