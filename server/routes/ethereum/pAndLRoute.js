@@ -106,9 +106,13 @@ function getPAndLData(nfts, allApprovalGasFees, txsGasFees) {
 
 function formatApprovalGasFees(approvalGasFees) {
   const output = {};
-  for (const value of approvalGasFees) {
-    output[value.collection_address.toLowerCase()] =
-      value.approval_gas_fees / 10 ** 18;
+  if (approvalGasFees) {
+    for (const value of approvalGasFees) {
+      output[value.collection_address.toLowerCase()] =
+        value.approval_gas_fees / 10 ** 18;
+    }
+  } else {
+    console.log("Error approvalGasFees undefined");
   }
   return output;
 }
@@ -165,22 +169,37 @@ route.get("/:address", checkAuth, (req, res) => {
       WHERE seller_address = '${address}' AND timestamp >= '${start}'  AND timestamp <= '${end}'
       AND ${exchangeCondition}
       AND CONCAT(contract_address, token_id) IN (
-          SELECT CONCAT(contract_address, token_id)
-          FROM ethereum.nft_sales
-          WHERE buyer_address = '${address}' AND timestamp >= '${start}' AND timestamp <= '${end}'
-          AND ${exchangeCondition}
+        SELECT CONCAT(contract_address, token_id)
+        FROM ethereum.nft_sales
+        WHERE buyer_address = '${address}' AND timestamp >= '${start}' AND timestamp <= '${end}'
+        AND ${exchangeCondition}
       )`;
 
       const queryApprovalGasFees = `
         SELECT (gas_used * gas_price) as approval_gas_fees, to_address as collection_address FROM ethereum.transactions
-            WHERE from_address = '${address}'
-            AND input = '0xa22cb4650000000000000000000000001e0049783f008a0085193e00003d00cd54003c710000000000000000000000000000000000000000000000000000000000000001'`;
+          WHERE from_address = '${address}'
+          AND input = '0xa22cb4650000000000000000000000001e0049783f008a0085193e00003d00cd54003c710000000000000000000000000000000000000000000000000000000000000001'`;
 
-      const [bought, sold, approvalGasFees] = await Promise.all([
+      const mintedNftsQuery = `
+        SELECT transfer.contract_address, transfer.token_id, transfer.transaction_hash, transfer.quantity as quantity_minted, t.transaction_fee as mint_tx_fee, transfer.timestamp as minted_timestamp,
+          s.timestamp as sold_timestamp, s.usd_price, s.eth_price, s.royalty_fee, s.platform_fee
+          FROM ethereum.nft_transfers transfer
+          INNER JOIN ethereum.transactions t ON t.transaction_hash = transfer.transaction_hash
+          INNER JOIN ethereum.nft_sales s ON s.contract_address = transfer.contract_address AND s.token_id = transfer.token_id AND s.seller_address = '${address}' and AND s.timestamp >= '${start}' AND s.timestamp <= '${end}'
+          WHERE transfer.to_address = '${address}' and transfer.category = 'mint' AND transfer.timestamp >= '${start}' AND transfer.timestamp <= '${end}'
+          `;
+
+      const [bought, sold, approvalGasFees, nftsMinted] = await Promise.all([
         execTranseposeAPI(query),
         execTranseposeAPI(querySell),
         execTranseposeAPI(queryApprovalGasFees),
+        execTranseposeAPI(mintedNftsQuery),
       ]);
+
+      console.log("bought", bought);
+      console.log("sold", sold);
+      console.log("approvalGasFees", approvalGasFees);
+      console.log("nftsMinted", nftsMinted);
 
       const nfts = getNftObj(bought, sold);
       const txsGasFees = await getTxsGasFees(nfts);
