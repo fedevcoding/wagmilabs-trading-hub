@@ -17,12 +17,17 @@
     max-width: 40%;
     padding-top: 1rem;
 
-    .timeframe {
-      margin: 1rem 0 0.5rem;
+    .btn-settings {
+      padding: 0.6rem 1.5rem;
+      width: 200px;
+
+      i {
+        margin-left: 0.5rem;
+      }
     }
 
-    .react-datepicker-wrapper {
-      max-width: 220px;
+    .timeframe {
+      margin: 2rem 0 0.5rem;
     }
   }
 
