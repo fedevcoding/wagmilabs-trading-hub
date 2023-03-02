@@ -7,12 +7,15 @@ import { notFound } from "@Assets";
 import { placeholderImage } from "@Utils/images";
 
 import { LazyLoadImage } from "react-lazy-load-image-component";
+import { useFirstRender } from "@Hooks";
 
 const Owned = ({ setTimeFrame, tool, timeFrame, resetTime }) => {
   const [collections, setCollections] = useState([]);
   const [loading, setLoading] = useState(false);
 
   const [sort, setSort] = useState({ name: "owned", type: "desc" });
+
+  const firstRender = useFirstRender();
 
   useEffect(() => {
     resetTime("24H");
@@ -29,9 +32,7 @@ const Owned = ({ setTimeFrame, tool, timeFrame, resetTime }) => {
     if (loading) {
       document.querySelector(".reloadIcon").classList.add("rotatingReloader");
     } else {
-      document
-        .querySelector(".reloadIcon")
-        .classList.remove("rotatingReloader");
+      document.querySelector(".reloadIcon").classList.remove("rotatingReloader");
     }
   }, [loading]);
 
@@ -44,6 +45,7 @@ const Owned = ({ setTimeFrame, tool, timeFrame, resetTime }) => {
 
   async function getOwnedCollections() {
     try {
+      if (firstRender && timeFrame !== "24H") return;
       setLoading(true);
 
       let data = await fetch(`${baseUrl}/ownedCollections`, {
@@ -74,64 +76,48 @@ const Owned = ({ setTimeFrame, tool, timeFrame, resetTime }) => {
     switch (name) {
       case "floor-price":
         const filteredFloor = statsToSort.sort((a, b) => {
-          if (type === "asc")
-            return a.collection?.floorAskPrice - b.collection?.floorAskPrice;
-          else if (type === "desc")
-            return b.collection?.floorAskPrice - a.collection?.floorAskPrice;
+          if (type === "asc") return a.collection?.floorAskPrice - b.collection?.floorAskPrice;
+          else if (type === "desc") return b.collection?.floorAskPrice - a.collection?.floorAskPrice;
           return 0;
         });
         setCollections([...filteredFloor]);
         break;
       case "volume":
         const filteredVolume = statsToSort.sort((a, b) => {
-          if (type === "asc")
-            return a.collection?.volume[time] - b.collection?.volume[time];
-          else if (type === "desc")
-            return b.collection?.volume[time] - a.collection?.volume[time];
+          if (type === "asc") return a.collection?.volume[time] - b.collection?.volume[time];
+          else if (type === "desc") return b.collection?.volume[time] - a.collection?.volume[time];
           return 0;
         });
         setCollections([...filteredVolume]);
         break;
       case "top-bid":
         const filteredBid = statsToSort.sort((a, b) => {
-          if (type === "asc")
-            return a.collection?.topBidValue - b.collection?.topBidValue;
-          else if (type === "desc")
-            return b.collection?.topBidValue - a.collection?.topBidValue;
+          if (type === "asc") return a.collection?.topBidValue - b.collection?.topBidValue;
+          else if (type === "desc") return b.collection?.topBidValue - a.collection?.topBidValue;
           return 0;
         });
         setCollections([...filteredBid]);
         break;
       case "total-volume":
         const filteredTotalVolume = statsToSort.sort((a, b) => {
-          if (type === "asc")
-            return (
-              a.collection?.volume?.allTime - b.collection?.volume?.allTime
-            );
-          else if (type === "desc")
-            return (
-              b.collection?.volume?.allTime - a.collection?.volume?.allTime
-            );
+          if (type === "asc") return a.collection?.volume?.allTime - b.collection?.volume?.allTime;
+          else if (type === "desc") return b.collection?.volume?.allTime - a.collection?.volume?.allTime;
           return 0;
         });
         setCollections([...filteredTotalVolume]);
         break;
       case "supply":
         const filteredSupply = statsToSort.sort((a, b) => {
-          if (type === "asc")
-            return a.collection?.tokenCount - b.collection?.tokenCount;
-          else if (type === "desc")
-            return b.collection?.tokenCount - a.collection?.tokenCount;
+          if (type === "asc") return a.collection?.tokenCount - b.collection?.tokenCount;
+          else if (type === "desc") return b.collection?.tokenCount - a.collection?.tokenCount;
           return 0;
         });
         setCollections([...filteredSupply]);
         break;
       case "owned":
         const filteredOwned = statsToSort.sort((a, b) => {
-          if (type === "asc")
-            return a.ownership?.tokenCount - b.ownership?.tokenCount;
-          else if (type === "desc")
-            return b.ownership?.tokenCount - a.ownership?.tokenCount;
+          if (type === "asc") return a.ownership?.tokenCount - b.ownership?.tokenCount;
+          else if (type === "desc") return b.ownership?.tokenCount - a.ownership?.tokenCount;
           return 0;
         });
         setCollections([...filteredOwned]);
@@ -162,9 +148,7 @@ const Owned = ({ setTimeFrame, tool, timeFrame, resetTime }) => {
     });
     e.currentTarget.children[1].classList.add("selected");
     e.currentTarget.children[1].classList.toggle("rotate");
-    e.currentTarget.children[1].previousElementSibling.classList.add(
-      "nameSelected"
-    );
+    e.currentTarget.children[1].previousElementSibling.classList.add("nameSelected");
   }
 
   const collectionsMapping = useMemo(
@@ -190,12 +174,7 @@ const Owned = ({ setTimeFrame, tool, timeFrame, resetTime }) => {
             onClick={() => window.open(`/collection/${address}`, "_blank")}
           >
             <td className="image-name-container">
-              <LazyLoadImage
-                src={image}
-                className="owned-image"
-                effect="blur"
-                placeholderSrc={placeholderImage}
-              />
+              <LazyLoadImage src={image} className="owned-image" effect="blur" placeholderSrc={placeholderImage} />
               <p className="owned-name">{name}</p>
             </td>
             <td>
@@ -242,10 +221,7 @@ const Owned = ({ setTimeFrame, tool, timeFrame, resetTime }) => {
           <tr>
             <th>
               <div className="refresh">
-                <i
-                  className="fa-solid fa-rotate reloadIcon"
-                  onClick={getOwnedCollections}
-                ></i>
+                <i className="fa-solid fa-rotate reloadIcon" onClick={getOwnedCollections}></i>
               </div>
               <p>Collection</p>
             </th>

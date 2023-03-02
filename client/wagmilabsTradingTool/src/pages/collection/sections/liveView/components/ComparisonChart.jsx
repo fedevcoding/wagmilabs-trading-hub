@@ -1,11 +1,11 @@
-import React, { memo, useEffect } from "react";
+import React, { memo, useEffect, useMemo } from "react";
 import HighchartsReact from "highcharts-react-official";
 import HighCharts from "highcharts";
 import HC_more from "highcharts/highcharts-more";
 import { HStack, NumberInput, NumberInputField, Select } from "@chakra-ui/react";
-import { useRefreshSecond } from "@Hooks";
-
+import { useRefreshTime } from "@Hooks";
 HC_more(HighCharts);
+
 const ComparisonChart = memo(({ totalListings, totalSales, floorPrice }) => {
   const [chartType, setChartType] = React.useState("column");
 
@@ -15,11 +15,11 @@ const ComparisonChart = memo(({ totalListings, totalSales, floorPrice }) => {
   const [time, setTime] = React.useState(300000);
 
   const [chartOptions, setChartOptions] = React.useState({});
-  const refresh = useRefreshSecond();
+  const refresh = useRefreshTime(5000);
 
-  useEffect(() => {
-    floorPrice && setMaxPrice(floorPrice + (floorPrice / 100) * 20);
-  }, [floorPrice]);
+  // useEffect(() => {
+  //   floorPrice && setMaxPrice(floorPrice + (floorPrice / 100) * 20);
+  // }, [floorPrice]);
 
   useEffect(() => {
     const timeframe = Date.now() - time;
@@ -126,7 +126,6 @@ const ComparisonChart = memo(({ totalListings, totalSales, floorPrice }) => {
           ></i>
         </div>
       </div>
-
       <HighchartsReact highcharts={HighCharts} options={chartOptions} />
     </div>
   );

@@ -1,0 +1,13 @@
+const { useEffect, useState } = require("react");
+
+export const useRefreshTime = time => {
+  const [refresh, setRefresh] = useState(false);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setRefresh(!refresh);
+    }, time);
+
+    return () => clearInterval(interval);
+  }, [refresh, time]);
+  return refresh;
+};
