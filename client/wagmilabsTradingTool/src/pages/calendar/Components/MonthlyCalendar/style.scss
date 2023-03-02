@@ -25,6 +25,8 @@
   justify-content: center;
   margin-bottom: 40px;
   min-width: 270px;
+  max-height: 690px;
+  overflow-y: scroll;
 }
 
 .selected-date-detail {
@@ -77,4 +79,9 @@
   overflow: hidden;
   white-space: nowrap;
   cursor: pointer;
+}
+
+.hour-container-r {
+  padding-top: 20px;
+  padding-bottom: 5px;
 }

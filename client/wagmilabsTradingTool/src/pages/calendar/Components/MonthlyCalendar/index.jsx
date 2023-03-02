@@ -260,11 +260,10 @@ export const MonthlyCalendar = React.memo(
         <>
           {selectedEvents.length > 0 && (
             <>
-              {h.idx === selectedEvents[0].hour && <div>{h.val}</div>}
+              {selectedEvents.map((el)=>el.hour).includes(h.idx) && <div className="hour-container-r">{h.val}</div>}
+              {!selectedEvents.map((el)=>el.hour).includes(h.idx) && <div className="hour-container-r">{h.val}</div>}
               {renderEventsInHour(h)}
-              {h.idx === selectedEvents[selectedEvents.length - 1].hour + 1 && (
-                <div>{h.val}</div>
-              )}
+
             </>
           )}
         </>

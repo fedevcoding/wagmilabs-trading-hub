@@ -22,7 +22,6 @@ export const CalendarEventDetail = ({ event, deleteEvent, isAdmin }) => (
           />
         )}
       </div>
-      <div className="arrow-right"></div>
       <div className="event-tile">
         {event?.eventDescription ||
           event?.spaceDescrition ||
