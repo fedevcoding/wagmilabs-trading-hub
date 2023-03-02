@@ -30,6 +30,12 @@ export const WeeklyScheduler = React.memo(
       showSelectedDate(date);
       setUsedHoursBlocks(prev =>
         prev.map((el, index) => {
+          const oldSelectedIdx = el.findIndex(
+            e => e.isSel
+          );
+          if (oldSelectedIdx !== -1) {
+            el[oldSelectedIdx].isSel = false;
+          }
           if (index === date.getDay()) {
             const next = el.map(el => {
               if (el.hour === date.getHours()) {
