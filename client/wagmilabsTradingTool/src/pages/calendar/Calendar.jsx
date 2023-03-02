@@ -86,10 +86,10 @@ export const Calendar = () => {
       {renderMainTitle()}
       {sectionData && (
         <>
-          {sectionData.length > 0 && section === "spaces" && (
+          {section === "spaces" && (
             <WeeklyCalendar sectionData={data.spaces} refetch={data.refetch} />
           )}
-          {sectionData.length > 0 && (section === "drops" || section === "events") &&
+          {(section === "drops" || section === "events") &&
           (
             <MonthlyCalendar
               sectionData={sectionData}
@@ -97,7 +97,7 @@ export const Calendar = () => {
               refetch={data.refetch}
             />
           )}
-          {sectionData.length > 0 && (section === "raffles") &&
+          {(section === "raffles") &&
           (
             <MonthlyCalendar
               sectionData={sectionData.map((s)=>s.events).flat()}

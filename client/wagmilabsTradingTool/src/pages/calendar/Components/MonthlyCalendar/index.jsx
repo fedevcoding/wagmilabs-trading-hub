@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Col, Row } from "@Components";
 import { Button } from "@chakra-ui/react";
 import { AddEventModal } from "src/components/Modals/AddEventModal";
@@ -14,6 +14,7 @@ import { CalendarEventDetail } from "../CalendarEventDetail";
 import moment from "moment";
 import { pushToServer, deleteFromServer } from "../../../../utils/functions";
 import "./style.scss";
+import { useOnClickOutside } from "@Hooks";
 
 export const MonthlyCalendar = React.memo(
   ({ sectionData, section, refetch }) => {
@@ -31,6 +32,9 @@ export const MonthlyCalendar = React.memo(
     const [selectedEvents, setSelectedEvents] = useState([]);
     const [curEventDetail, setCurEventDetail] = useState(null);
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const ref = useRef();
+    useOnClickOutside(ref, () => setCurEventDetail(null));
+
     const deleteEvent = async id => {
       await deleteFromServer("/" + section, { id });
       refetch();
@@ -250,11 +254,13 @@ export const MonthlyCalendar = React.memo(
                 {event?.eventName || event?.collectionName}
               </div>
               {event._id === curEventDetail && (
-                <CalendarEventDetail
-                  event={event}
-                  deleteEvent={deleteEvent}
-                  isAdmin={isAdmin}
-                />
+                <div ref={ref}>
+                  <CalendarEventDetail
+                    event={event}
+                    deleteEvent={deleteEvent}
+                    isAdmin={isAdmin}
+                  />
+                </div>
               )}
             </div>
           ))}

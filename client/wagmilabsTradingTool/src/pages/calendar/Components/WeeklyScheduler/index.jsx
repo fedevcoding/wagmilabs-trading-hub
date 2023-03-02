@@ -57,12 +57,20 @@ export const WeeklyScheduler = React.memo(
     },[sectionData])
 
     const activeHourClass = d => {
-      console.log("activeHourClass day", d);
       if (d?.isSel) {
         return "active-hour-section selected-hour";
       }
       return "active-hour-section";
     };
+
+    const dateByWeekdayAndHour = (dayToSet,hour) => {
+      const date = new Date();
+      let currentDay = date.getDay();
+      let distance = dayToSet - currentDay;
+      date.setDate(date.getDate() + distance);
+      date.setHours(hour)
+      return date;
+    }
 
     return (
       <Row className="calendar-row">
@@ -72,6 +80,9 @@ export const WeeklyScheduler = React.memo(
               <div className="weekday-col-title">{d}</div>
               {hoursIntervals.map(h => (
                 <div
+                  onClick={() =>
+                    onSelectDate(dateByWeekdayAndHour(dayIndex,h.idx))
+                  }
                   className={
                     usedHoursBlocks[dayIndex] &&
                     usedHoursBlocks[dayIndex]
@@ -90,9 +101,6 @@ export const WeeklyScheduler = React.memo(
                       {moment(event?.timestamp).hours() === h.idx && (
                         <div
                           className="hour-slot"
-                          onClick={() =>
-                            onSelectDate(moment(event?.timestamp)?.toDate())
-                          }
                         >
                           {event?.spaceName}
                         </div>

@@ -18,7 +18,7 @@ const dayClass = d => {
 
 const renderEventName = (event, date) => {
   if (
-    moment(event.timestamp).format("YYYY-MM-DD") ===
+    moment(event?.timestamp).format("YYYY-MM-DD") ===
     moment(date).format("YYYY-MM-DD")
   ) {
     return (

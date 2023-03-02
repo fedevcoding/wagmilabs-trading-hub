@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Col, Row } from "@Components";
 import { AddEventModal } from "src/components/Modals/AddEventModal";
 import { Button, useDisclosure } from "@chakra-ui/react";
@@ -10,6 +10,7 @@ import { CalendarEventDetail } from "../CalendarEventDetail";
 import { pushToServer, deleteFromServer } from "../../../../utils/functions";
 import moment from "moment";
 import "./style.scss";
+import { useOnClickOutside } from "@Hooks";
 
 export const WeeklyCalendar = ({ sectionData, refetch }) => {
   const [selectedEvents, setSelectedEvents] = useState([]);
@@ -23,6 +24,9 @@ export const WeeklyCalendar = ({ sectionData, refetch }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedDate, setSelectedDate] = useState(null);
   const [curEventDetail, setCurEventDetail] = useState(null);
+  const ref = useRef();
+  useOnClickOutside(ref, () => setCurEventDetail(null));
+  
   const showSelectedDate = d => {
     setSelectedDate({ title: getSelectedDateTitle(d, true), date: d });
   };
@@ -38,8 +42,8 @@ export const WeeklyCalendar = ({ sectionData, refetch }) => {
         sectionData
           .filter(
             event =>
-              moment(event.timestamp).format("YYYY-MM-DD") ===
-              moment(selectedDate.date).format("YYYY-MM-DD")
+              moment(event.timestamp).format("d") ===
+              moment(selectedDate.date).format("d")
           )
           .map(el => ({ ...el, hour: moment(el.timestamp).hours() }))
           .sort(({ hour: a }, { hour: b }) => a - b)
@@ -86,11 +90,13 @@ export const WeeklyCalendar = ({ sectionData, refetch }) => {
               {event?.spaceName}
             </div>
             {event._id === curEventDetail && (
-              <CalendarEventDetail
-                event={event}
-                deleteEvent={deleteEvent}
-                isAdmin={isAdmin}
-              />
+              <div ref={ref}>
+                <CalendarEventDetail
+                  event={event}
+                  deleteEvent={deleteEvent}
+                  isAdmin={isAdmin}
+                />
+              </div>
             )}
           </div>
         ))}
