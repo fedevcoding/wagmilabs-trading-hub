@@ -8,72 +8,33 @@ import {
   HStack,
   NumberInput,
   NumberInputField,
+  useDisclosure,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import ReactDatePicker from "react-datepicker";
+import { ErrorAlert } from "src/components/Alerts/ErrorAlert";
 import "./style.scss";
-
-const formatLinks = links => {
-  if (links && links.length > 0) {
-    const temp = links.split(/:\s|,/);
-    console.log(temp);
-    const res = {};
-    temp.map((el, index) => {
-      if (index % 2 === 0) {
-        return (res[el] = temp[index + 1]);
-      }
-    });
-    return res;
-  }
-  return null;
-};
-
-const formatEventInfo = (eventInfo, section) => {
-  const eventToSave = {};
-  if (section !== "personal") {
-    eventToSave.timestamp = eventInfo.date.getTime();
-    eventToSave.links = formatLinks(eventInfo.links);
-  }
-  switch (section) {
-    case "drops":
-      eventToSave.collectionName = eventInfo.name;
-      eventToSave.price = eventInfo.price;
-      eventToSave.supply = eventInfo.supply;
-      break;
-    case "events":
-      eventToSave.eventName = eventInfo.name;
-      eventToSave.eventDescription = eventInfo.eventDescription;
-      eventToSave.eventLocation = eventInfo.eventLocation;
-      break;
-    case "personal":
-      eventToSave.event = {
-          timestamp: eventInfo.date.getTime(),
-          links: formatLinks(eventInfo.links),
-          eventName: eventInfo.name,
-          eventDescription: eventInfo.eventDescription
-        }
-      break;
-    case "spaces":
-      eventToSave.spaceName = eventInfo.name;
-      eventToSave.spaceDescrition = eventInfo.eventDescription;
-      eventToSave.spaceHost = eventInfo.spaceHost;
-      break;
-    default:
-      break;
-  }
-  return eventToSave;
-};
+import { formatEventInfo } from "./utils/formatEventInfo";
 
 export const AddEventModal = React.memo(
   ({ isOpen, onClose, onSave, section }) => {
     const [eventInfo, setEventInfo] = useState({});
+    const { isOpen: isOpenAlert, onOpen: onOpenAlert, onClose: onCloseAlert } = useDisclosure();
+    const cancelRef = React.useRef();
 
     const addEvent = () => {
-      const eventToSave = formatEventInfo(eventInfo, section);
-      onSave(eventToSave);
+      if (!eventInfo.date
+          || !eventInfo.name
+          || (section === "drops" && (!eventInfo.price || !eventInfo.supply))
+          ) {
+        onOpenAlert();
+      } else {
+        const eventToSave = formatEventInfo(eventInfo, section);
+        onSave(eventToSave);
+      }
     };
 
-    function updateEventInfo(e, type, isEvent) {
+    const updateEventInfo = (e, type, isEvent) => {
       let value;
       if (isEvent) value = e.target.value;
       else value = e;
@@ -116,9 +77,16 @@ export const AddEventModal = React.memo(
           <ModalBody className="modal-body">
             <h1 className="title">Add Event</h1>
           </ModalBody>
-
           <ModalBody className="modal-body">
-            <h3 className="body">Date picker</h3>
+            <div className="body">Date *</div>
+            <ErrorAlert
+              title="Missing required fields *"
+              description="Attention! Fill required fields to add event.  "
+              btnRightLabel="OK"
+              isOpen={isOpenAlert}
+              onClose={onCloseAlert}
+              cancelRef={cancelRef}
+            />
             <ReactDatePicker
               minDate={new Date().getTime()}
               onChange={v => updateEventInfo(v, "date")}
@@ -132,7 +100,7 @@ export const AddEventModal = React.memo(
               showMonthYearDropdown={false}
             />
             <div className="field-container">
-              Collection name
+              Name *
               <HStack>
                 <Input
                   placeholder="name"
@@ -168,7 +136,7 @@ export const AddEventModal = React.memo(
             {section === "drops" && (
               <>
                 <div className="field-container">
-                  Price
+                  Price *
                   <NumberInput>
                     <NumberInputField
                       placeholder="price"
@@ -178,7 +146,7 @@ export const AddEventModal = React.memo(
                   </NumberInput>
                 </div>
                 <div className="field-container">
-                  Supply
+                  Supply *
                   <NumberInput>
                     <NumberInputField
                       placeholder="supply"

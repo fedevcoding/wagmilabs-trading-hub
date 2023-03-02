@@ -22,11 +22,15 @@ export const CalendarEventDetail = ({ event, deleteEvent, isAdmin }) => (
           />
         )}
       </div>
-      <div className="event-tile">
-        {event?.eventDescription ||
-          event?.spaceDescrition ||
-          `price: ${event?.price}`}
-      </div>
+      {event?.eventDescription && (
+        <div className="event-tile">{event?.eventDescription}</div>
+      )}
+      {event?.spaceDescrition && (
+        <div className="event-tile">{event?.spaceDescrition}</div>
+      )}
+      {event?.price && (
+        <div className="event-tile">{`price: ${event?.price}`}</div>
+      )}
       {event?.spaceHost && (
         <div className="event-tile">{`host: ${event?.spaceHost}`}</div>
       )}
