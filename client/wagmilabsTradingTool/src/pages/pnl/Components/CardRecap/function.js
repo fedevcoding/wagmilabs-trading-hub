@@ -9,8 +9,8 @@ export function getRecap(data, taxPerc, taxedOn) {
 
   const pAndLData = data?.map(a => a.info.pOrL);
   const pAndL = {
-    eth: data ? roundPrice(pAndLData?.map(a => a.eth).reduce((a, b) => a + b, 0)) : 0,
-    usd: data ? roundPriceUsd(pAndLData?.map(a => a.usd).reduce((a, b) => a + b, 0)) : 0,
+    eth: data ? pAndLData?.map(a => a.eth).reduce((a, b) => a + b, 0) : 0,
+    usd: data ? pAndLData?.map(a => a.usd).reduce((a, b) => a + b, 0) : 0,
   };
 
   const soldData = data?.map(a => a.info.sold);
@@ -28,12 +28,12 @@ export function getRecap(data, taxPerc, taxedOn) {
   const taxes =
     taxedOn === "gross"
       ? {
-          eth: (gross.eth / 100) * taxPerc,
-          usd: (gross.usd / 100) * taxPerc,
+          eth: roundPrice((gross.eth / 100) * taxPerc),
+          usd: roundPriceUsd((gross.usd / 100) * taxPerc),
         }
       : {
-          eth: pAndL.eth > 0 ? (pAndL.eth / 100) * taxPerc : 0,
-          usd: pAndL.usd > 0 ? (pAndL.usd / 100) * taxPerc : 0,
+          eth: roundPrice(pAndL.eth > 0 ? (pAndL.eth / 100) * taxPerc : 0),
+          usd: roundPriceUsd(pAndL.usd > 0 ? (pAndL.usd / 100) * taxPerc : 0),
         };
 
   return { paid, sold, pAndL, taxes };

@@ -4,4 +4,12 @@
   .react-datepicker-wrapper {
     max-width: 220px;
   }
+
+  .space-between + .space-between {
+    margin-top: 1rem;
+  }
+
+  input[type="radio"] {
+    margin-right: 0.5rem;
+  }
 }
