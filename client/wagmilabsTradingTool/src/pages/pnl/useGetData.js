@@ -13,7 +13,7 @@ export function useGetData(address, startDate, endDate) {
           },
         });
 
-        setData((await data.json()).reverse());
+        setData(await data.json());
       })();
     }
   }, [address, startDate, endDate]);

@@ -55,6 +55,7 @@ export const Table = React.memo(({ data, taxPerc, taxedOn, currency }) => {
             <Row
               key={JSON.stringify(n)}
               nft={n.info}
+              isMinted={!!n.minted}
               taxPerc={taxPerc}
               taxedOn={taxedOn}
               currency={currency}

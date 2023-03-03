@@ -6,7 +6,7 @@ import { LoadingSpinner, Number } from "@Components";
 import { useNavigate } from "react-router-dom";
 import { Tooltip } from "@chakra-ui/react";
 
-export const Row = React.memo(({ nft, taxPerc, taxedOn, currency, tokensInfo, isFetchingInitialData }) => {
+export const Row = React.memo(({ nft, taxPerc, taxedOn, currency, tokensInfo, isFetchingInitialData, isMinted }) => {
   const navigate = useNavigate();
   const momentDuration = moment.duration(nft.holdDuration, "seconds").humanize();
   const symbol = currency === "usd" ? "$" : " ETH";
@@ -32,7 +32,13 @@ export const Row = React.memo(({ nft, taxPerc, taxedOn, currency, tokensInfo, is
         )}
       </td>
       <td className="td-paid">
-        {nft.paid.eth + " ETH"} <br /> {nft.paid.usd + "$"}
+        {isMinted ? (
+          "Minted"
+        ) : (
+          <>
+            {nft.paid.eth + " ETH"} <br /> {nft.paid.usd + "$"}
+          </>
+        )}
       </td>
       <td className="td-sold">
         {nft.sold.eth + " ETH"} <br /> {nft.sold.usd + "$"}
@@ -46,17 +52,24 @@ export const Row = React.memo(({ nft, taxPerc, taxedOn, currency, tokensInfo, is
               {`Royalty fees: ${roundPrice(nft.gasFees.sold.royaltyFee)} ETH`}
               <br />
               {`Platform fees: ${roundPrice(nft.gasFees.sold.platformFee)} ETH`}
-              {(nft.gasFees.paid.tx.eth && (
+              {(nft.gasFees?.paid?.tx?.eth && (
                 <>
                   <br />
                   {`buy fees: ${roundPrice(nft.gasFees.paid.tx.eth)} ETH`}
                 </>
               )) ||
                 ""}
-              {(nft.gasFees.approval.eth && (
+              {(nft.gasFees?.approval?.eth && (
                 <>
                   <br />
                   {`Approval fees: ${roundPrice(nft.gasFees.approval.eth)} ETH`}
+                </>
+              )) ||
+                ""}
+              {(nft.gasFees?.minted?.eth && (
+                <>
+                  <br />
+                  {`Minted fees: ${roundPrice(nft.gasFees.minted.eth)} ETH`}
                 </>
               )) ||
                 ""}

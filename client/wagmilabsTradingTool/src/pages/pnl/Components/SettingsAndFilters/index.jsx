@@ -9,7 +9,7 @@ export const SettingsAndFilters = React.memo(({ startDate, endDate, setStartDate
   return (
     <>
       <Button className="btn-settings" onClick={() => setIsOpen(true)}>
-        Tax settings <i class="fa-solid fa-gear" />
+        Tax settings <i className="fa-solid fa-gear" />
       </Button>
       <div>
         <p className="timeframe">
@@ -19,7 +19,7 @@ export const SettingsAndFilters = React.memo(({ startDate, endDate, setStartDate
         </p>
         <Button className="btn-settings" onClick={() => setIsOpenTimeframe(true)}>
           Change Timeframe
-          <i class="fa-solid fa-clock" />
+          <i className="fa-solid fa-clock" />
         </Button>
       </div>
 
