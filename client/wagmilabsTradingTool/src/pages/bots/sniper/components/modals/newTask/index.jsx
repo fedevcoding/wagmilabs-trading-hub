@@ -12,6 +12,7 @@ import {
   NumberInput,
   Radio,
   RadioGroup,
+  Select,
 } from "@chakra-ui/react";
 import React, { useEffect } from "react";
 import EthereumSearch from "src/pages/search/EthereumSearch";
@@ -20,7 +21,17 @@ import { useHandleData, useSteps } from "./hooks";
 export const NewTaskModal = React.memo(({ showNewTask, toggleNewTask }) => {
   const { step, nextStep, prevStep, resetStep } = useSteps();
 
-  const { collection, minPrice, maxPrice, walletType, walletAddress, privateKey, handleSetData } = useHandleData();
+  const {
+    collection,
+    minPrice,
+    maxPrice,
+    walletType,
+    walletAddress,
+    privateKey,
+    handleSetData,
+    handleCollectionClick,
+    resetCollection,
+  } = useHandleData();
 
   useEffect(() => {
     if (showNewTask) {
@@ -39,32 +50,70 @@ export const NewTaskModal = React.memo(({ showNewTask, toggleNewTask }) => {
   return (
     <Modal isOpen={showNewTask} onClose={closeNewTask}>
       <ModalOverlay />
-      <ModalContent>
+      <ModalContent className="new-snipe-task-modal">
+        <ModalHeader>New Snipe Task {" " + step}/2</ModalHeader>
         <ModalCloseButton />
 
         <ModalBody>
           {step === 1 ? (
             <>
-              <p>Collection</p>
-              <EthereumSearch inLogin={false} usage={"sniperBot"} onClick={data => console.log(data)} />
-              <p>Price</p>
-              <HStack>
-                <NumberInput>
-                  <Input placeholder="Min" />
-                </NumberInput>
-                <p>-</p>
-                <NumberInput>
-                  <Input placeholder="Max" />
-                </NumberInput>
-              </HStack>
+              <div className="step1-container">
+                <div className="option">
+                  <p>Collection</p>
 
-              <p>Wallet</p>
-              <RadioGroup>
-                <Radio>Private key</Radio>
-                <Radio>Wallets</Radio>
-              </RadioGroup>
+                  {collection.address ? (
+                    <div className="collection-container">
+                      <HStack>
+                        <img src={collection.image} alt={collection.name} className="collection-image" />
+                        <p className="collection-name">{collection.name}</p>
+                      </HStack>
 
-              <Input placeholder="Private key" />
+                      <i class="fa-solid fa-x" onClick={resetCollection}></i>
+                    </div>
+                  ) : (
+                    <EthereumSearch inLogin={false} usage={"sniperBot"} onClick={handleCollectionClick} />
+                  )}
+                </div>
+
+                <div className="option">
+                  <p>Price</p>
+                  <HStack>
+                    <NumberInput>
+                      <Input
+                        placeholder="Min"
+                        value={minPrice}
+                        onChange={e => handleSetData("minPrice", e.target.value)}
+                      />
+                    </NumberInput>
+                    <p>-</p>
+                    <NumberInput>
+                      <Input
+                        placeholder="Max"
+                        value={maxPrice}
+                        onChange={e => handleSetData("maxPrice", e.target.value)}
+                      />
+                    </NumberInput>
+                  </HStack>
+                </div>
+
+                <div className="option">
+                  <p>Wallet</p>
+                  <RadioGroup onChange={value => handleSetData("walletType", value)} defaultValue={walletType}>
+                    <HStack gap={"15px"}>
+                      <Radio value="privatekey">Private key</Radio>
+                      <Radio value={"wallet"}>Wallets</Radio>
+                    </HStack>
+                  </RadioGroup>
+
+                  {walletType === "privatekey" ? (
+                    <Input placeholder="Private key" type="password" />
+                  ) : (
+                    <Select>
+                      <option value="wallet">Wallet</option>
+                    </Select>
+                  )}
+                </div>
+              </div>
             </>
           ) : (
             step === 2 && (

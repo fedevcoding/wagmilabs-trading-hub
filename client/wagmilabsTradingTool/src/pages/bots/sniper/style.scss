@@ -92,6 +92,46 @@
   }
 }
 
+.new-snipe-task-modal {
+  .search-bar {
+    padding: 15px 0 15px 40px;
+    width: 100%;
+  }
+
+  .step1-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+
+    .option {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .collection-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      i {
+        cursor: pointer;
+      }
+
+      .collection-image {
+        width: 35px;
+        height: 35px;
+        object-fit: contain;
+
+        border-radius: 50%;
+      }
+      .collection-name {
+        font-size: 16px;
+        font-weight: 500;
+      }
+    }
+  }
+}
 // .sniper-bot-single-task {
 //   background-color: rgb(57, 57, 57);
 //   height: 80px;
