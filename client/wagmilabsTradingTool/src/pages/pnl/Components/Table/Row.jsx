@@ -93,7 +93,22 @@ export const Row = React.memo(({ nft, taxPerc, taxedOn, currency, tokensInfo, is
       </td>
       <td className="duration">{nft.holdDuration ? momentDuration : nft.holdDuration}</td>
       <td className="gross">
-        {roundPrice(nft.gross.eth) + " ETH"} <br /> {roundPriceUsd(nft.gross.usd) + "$"}
+        <Tooltip
+          closeOnClick={false}
+          hasArrow
+          label={
+            "Gross Profit is listed value minus creator royalties & marketplace fees (which is what effectively enters your wallet after a sale)."
+          }
+          fontSize="xs"
+          bg="black"
+          color={"white"}
+          placement="top"
+          borderRadius={"7px"}
+        >
+          <div>
+            {roundPrice(nft.gross.eth) + " ETH"} <br /> {roundPriceUsd(nft.gross.usd) + "$"}
+          </div>
+        </Tooltip>
       </td>
       <td className="taxes">
         {taxedOn === "net" ? (

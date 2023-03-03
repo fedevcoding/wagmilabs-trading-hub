@@ -13,12 +13,14 @@ import { DatePicker, Select } from "@Components";
 
 import "./style.scss";
 import { useYearRange } from "./useYearRange";
+import { useQuarterRange } from "./useQuarterRange";
 
 export const TimeframeModal = React.memo(({ isOpen, setIsOpen, startDate, endDate, setStartDate, setEndDate }) => {
   const [startDateModal, setStartDateModal] = React.useState(startDate);
   const [endDateModal, setEndDateModal] = React.useState(endDate);
   const [typeRange, setTypeRange] = React.useState("custom");
   const { years, rangeYear, setRangeYear } = useYearRange();
+  const { quarters, rangeQuarter, setRangeQuarter } = useQuarterRange();
 
   return (
     <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
@@ -66,10 +68,36 @@ export const TimeframeModal = React.memo(({ isOpen, setIsOpen, startDate, endDat
             </div>
             <Select
               id="set-year"
-              onChange={v => setRangeYear(v)}
+              onChange={v => {
+                setRangeYear(v);
+                setRangeQuarter(null);
+              }}
               label="Set taxed on"
               value={rangeYear}
               options={years}
+              isSearchable={false}
+            />
+          </div>
+          <div className="space-between">
+            <div>
+              <input
+                type="radio"
+                name="range-type"
+                value="quarter"
+                checked={typeRange === "quarter"}
+                onChange={e => setTypeRange(e.target.value)}
+              />
+              <span>Select quarter</span>
+            </div>
+            <Select
+              id="set-quarter"
+              onChange={v => {
+                setRangeQuarter(v);
+                setRangeYear(null);
+              }}
+              label="Set taxed on"
+              value={rangeQuarter}
+              options={quarters}
               isSearchable={false}
             />
           </div>
@@ -86,6 +114,10 @@ export const TimeframeModal = React.memo(({ isOpen, setIsOpen, startDate, endDat
               if (typeRange === "year") {
                 setStartDate(rangeYear.startDate);
                 setEndDate(rangeYear.endDate);
+              }
+              if (typeRange === "quarter") {
+                setStartDate(rangeQuarter.startDate);
+                setEndDate(rangeQuarter.endDate);
               }
               setIsOpen(false);
             }}
