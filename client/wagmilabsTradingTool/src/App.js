@@ -87,7 +87,6 @@ function App() {
     usdc: 0,
     usdt: 0,
   });
-  const [snipingTasks, setSnipingTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [connected, setConnected] = useState(true);
   const [ethData, setEthData] = useState({});
@@ -103,7 +102,6 @@ function App() {
   });
   const [ens, setEns] = useState("");
   const activeGasRef = useRef(gasSettings.value);
-  const currentSnipingTasks = useRef(snipingTasks);
 
   // set checking in base of tokens
   useEffect(() => {
@@ -195,11 +193,6 @@ function App() {
     }
   }, [gasSettings]);
 
-  // set tasks ref when they change
-  useEffect(() => {
-    currentSnipingTasks.current = snipingTasks;
-  }, [snipingTasks]);
-
   // context values
   const providerValues = useMemo(
     () => ({
@@ -216,12 +209,9 @@ function App() {
       setGasSettings,
       userBalances,
       setUserBalances,
-      snipingTasks,
-      setSnipingTasks,
       ethData,
       connected,
       setConnected,
-      currentSnipingTasks,
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [
@@ -238,10 +228,7 @@ function App() {
       setGasSettings,
       userBalances,
       setUserBalances,
-      snipingTasks,
-      setSnipingTasks,
       ethData,
-      currentSnipingTasks,
     ]
   );
 

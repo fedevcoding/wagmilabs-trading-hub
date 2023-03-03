@@ -42,3 +42,4 @@ export { default as x2y2Svg } from "./x2y2.svg";
 export { default as looksrare } from "./looksrare.svg";
 export { default as loginVideo } from "./loginVideo.mp4";
 export { default as loginBackground } from "./loginBackground.svg";
+export { default as linkedin } from "./linkedin.png";

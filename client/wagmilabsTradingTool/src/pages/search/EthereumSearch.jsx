@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { useDebounce } from "use-debounce";
-import "./search.css";
+import "./search.scss";
 import verified from "@Assets/verified.png";
 import { baseUrl } from "@Variables";
 
@@ -11,9 +11,7 @@ import { placeholderImage } from "@Utils/images";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { BannerSearch } from "./BannerSearch";
 
-
-
-const EthereumSearch = ({ inLogin }) => {
+const EthereumSearch = ({ inLogin, usage, onClick }) => {
   const firstRender = useFirstRender();
 
   const [text, setText] = useState("");
@@ -28,8 +26,7 @@ const EthereumSearch = ({ inLogin }) => {
         const searchbar = document.querySelector(".search-bar");
 
         const path = e.composedPath();
-        if (path.includes(collectionsContainer) || path.includes(searchbar))
-          return;
+        if (path.includes(collectionsContainer) || path.includes(searchbar)) return;
 
         setCollections([]);
       }
@@ -76,8 +73,7 @@ const EthereumSearch = ({ inLogin }) => {
     () =>
       collections &&
       collections.map((collection, index) => {
-        const { image, name, openseaVerificationStatus, isLocaleStorage } =
-          collection;
+        const { image, name, openseaVerificationStatus, isLocaleStorage } = collection;
 
         const collectionId = collection.collectionId || collection.id;
 
@@ -85,50 +81,67 @@ const EthereumSearch = ({ inLogin }) => {
 
         return (
           <>
-            <a
-              className="container-div"
-              href={link}
-              target="_blank"
-              key={index}
-              onClick={e =>
-                addToLocalStorage(
-                  e,
-                  image,
-                  collectionId,
-                  name,
-                  openseaVerificationStatus
-                )
-              }
-              rel="noreferrer"
-            >
-              <LazyLoadImage
-                visibleByDefault={true}
-                src={image}
-                className="collection-image"
-                effect="blur"
-                placeholderSrc={placeholderImage}
-              />
-              <div className="searchbar-collection-infos">
-                <div className="name-verified-container">
-                  <p className="searchbar-collection-name">{name || "-------"}</p>
-                  {openseaVerificationStatus === "verified" && (
-                    <img className="verified" src={verified} alt="" />
+            {usage === "sniperBot" ? (
+              <div className={`container-div`} onClick={() => onClick(collection)}>
+                <LazyLoadImage
+                  visibleByDefault={true}
+                  src={image}
+                  className="collection-image"
+                  effect="blur"
+                  placeholderSrc={placeholderImage}
+                />
+                <div className="searchbar-collection-infos">
+                  <div className="name-verified-container">
+                    <p className="searchbar-collection-name">{name || "-------"}</p>
+                    {openseaVerificationStatus === "verified" && <img className="verified" src={verified} alt="" />}
+                  </div>
+                  <p className="searchbar-collection-address">{collectionId}</p>
+                  {isLocaleStorage && (
+                    <i
+                      className="fa-solid fa-xmark searchbar-collection-remove"
+                      onClick={e => removeFromLocalStorage(e, collectionId)}
+                    ></i>
                   )}
                 </div>
-                <p className="searchbar-collection-address">{collectionId}</p>
-                {isLocaleStorage && (
-                  <i
-                    className="fa-solid fa-xmark searchbar-collection-remove"
-                    onClick={e => removeFromLocalStorage(e, collectionId)}
-                  ></i>
-                )}
               </div>
-            </a>
-            {index === collections.length - 1 && <BannerSearch />}
+            ) : (
+              <>
+                <a
+                  className="container-div"
+                  href={link}
+                  target="_blank"
+                  key={index}
+                  onClick={e => addToLocalStorage(e, image, collectionId, name, openseaVerificationStatus)}
+                  rel="noreferrer"
+                >
+                  <LazyLoadImage
+                    visibleByDefault={true}
+                    src={image}
+                    className="collection-image"
+                    effect="blur"
+                    placeholderSrc={placeholderImage}
+                  />
+                  <div className="searchbar-collection-infos">
+                    <div className="name-verified-container">
+                      <p className="searchbar-collection-name">{name || "-------"}</p>
+                      {openseaVerificationStatus === "verified" && <img className="verified" src={verified} alt="" />}
+                    </div>
+                    <p className="searchbar-collection-address">{collectionId}</p>
+                    {isLocaleStorage && (
+                      <i
+                        className="fa-solid fa-xmark searchbar-collection-remove"
+                        onClick={e => removeFromLocalStorage(e, collectionId)}
+                      ></i>
+                    )}
+                  </div>
+                </a>
+                {index === collections.length - 1 && <BannerSearch />}
+              </>
+            )}
           </>
         );
       }),
-    [collections]
+    [collections, usage, onClick]
   );
 
   // function removeFromLocalStorage(image, collectionId, name, openseaVerificationStatus){
@@ -137,15 +150,12 @@ const EthereumSearch = ({ inLogin }) => {
   function removeFromLocalStorage(e, collectionId) {
     e.preventDefault();
 
-    let clickedCollections =
-      localStorage.getItem("clickedCollections") || false;
+    let clickedCollections = localStorage.getItem("clickedCollections") || false;
     let collectionObject;
 
     if (clickedCollections) {
       clickedCollections = JSON.parse(clickedCollections);
-      clickedCollections = clickedCollections.filter(
-        collection => collection.collectionId !== collectionId
-      );
+      clickedCollections = clickedCollections.filter(collection => collection.collectionId !== collectionId);
       collectionObject = JSON.stringify([...clickedCollections]);
     } else {
       collectionObject = JSON.stringify([]);
@@ -154,27 +164,18 @@ const EthereumSearch = ({ inLogin }) => {
     localStorage.setItem("clickedCollections", collectionObject);
     setCollections(clickedCollections);
   }
-  function addToLocalStorage(
-    e,
-    image,
-    collectionId,
-    name,
-    openseaVerificationStatus
-  ) {
+  function addToLocalStorage(e, image, collectionId, name, openseaVerificationStatus) {
     const i = document.querySelector(".searchbar-collection-remove");
     if (e.target === i) return;
 
-    let clickedCollections =
-      localStorage.getItem("clickedCollections") || false;
+    let clickedCollections = localStorage.getItem("clickedCollections") || false;
     let collectionObject;
 
     const time = new Date().getTime();
 
     if (clickedCollections) {
       clickedCollections = JSON.parse(clickedCollections);
-      clickedCollections = clickedCollections.filter(
-        collection => collection.collectionId !== collectionId
-      );
+      clickedCollections = clickedCollections.filter(collection => collection.collectionId !== collectionId);
 
       if (clickedCollections.length >= 5) {
         clickedCollections.shift();
@@ -223,7 +224,7 @@ const EthereumSearch = ({ inLogin }) => {
 
   return (
     <>
-      <div className="input-lens-container">
+      <div className="ethereumsearch-container input-lens-container">
         <i className="fa-solid fa-magnifying-glass lens"></i>
         <input
           type="text"
@@ -243,7 +244,11 @@ const EthereumSearch = ({ inLogin }) => {
             </SkeletonTheme>
           </div>
         ) : (
-          collections.length > 0 && <div className={`container ${inLogin && "login-search-container"}`}>{memoList}</div>
+          collections.length > 0 && (
+            <div className={`container ${inLogin && "login-search-container"} ${usage === "sniperBot" && "bots"}`}>
+              {memoList}
+            </div>
+          )
         )}
       </div>
     </>

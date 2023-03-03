@@ -209,15 +209,14 @@ const Header = () => {
 
       const userData = await res.json();
 
-      const { gasSettings, profileImage, listSettings, shoppingCart, bots } = userData || {};
+      const { gasSettings, profileImage, listSettings, shoppingCart } = userData || {};
 
-      const { snipingBotTasks } = bots || {};
+      // const { snipingBotTasks } = bots || {};
 
       setGasSettings({ ...gasSettings, maxFeePerGas: 0 });
       setProfileImage(profileImage);
       setListingSettings(listSettings);
       setUserCartItems(shoppingCart);
-      setSnipingTasks(snipingBotTasks);
     } catch (e) {
       console.log(e);
     }

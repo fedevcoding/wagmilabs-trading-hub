@@ -17,12 +17,7 @@ import { UserDataContext } from "@Context";
 import { useAccount } from "wagmi";
 import updateSnipeTasks from "@Utils/database-functions/updateSnipeTasks";
 
-export const NewTaskModal = ({
-  openNewTask,
-  closeTaskModal,
-  setSnipingTasks,
-  snipingTasks,
-}) => {
+export const NewTaskModal = ({ openNewTask, closeTaskModal, setSnipingTasks, snipingTasks }) => {
   const { address } = useAccount();
 
   const { gasSettings } = useContext(UserDataContext);
@@ -101,10 +96,7 @@ export const NewTaskModal = ({
   return (
     <>
       {openNewTask && (
-        <div
-          className="new-task-modal-overlay"
-          onClick={e => closeTaskModal(false, e)}
-        >
+        <div className="new-task-modal-overlay" onClick={e => closeTaskModal(false, e)}>
           <div className="new-task-modal-wrapper">
             <header className="new-task-modal-header">
               <p>NEW TASK</p>
@@ -113,28 +105,16 @@ export const NewTaskModal = ({
             <div>
               Collection address
               <HStack>
-                <Input
-                  placeholder="address"
-                  color={"white"}
-                  onChange={e => updateTaskInfo(e, "address", true)}
-                />
+                <Input placeholder="address" color={"white"} onChange={e => updateTaskInfo(e, "address", true)} />
               </HStack>
             </div>
 
             <div>
               Price
               <HStack>
-                <Input
-                  placeholder="Min"
-                  color={"white"}
-                  onChange={e => updateTaskInfo(e, "min", true)}
-                />
+                <Input placeholder="Min" color={"white"} onChange={e => updateTaskInfo(e, "min", true)} />
                 <span>-</span>
-                <Input
-                  placeholder="Max"
-                  color={"white"}
-                  onChange={e => updateTaskInfo(e, "max", true)}
-                />
+                <Input placeholder="Max" color={"white"} onChange={e => updateTaskInfo(e, "max", true)} />
               </HStack>
             </div>
 
@@ -155,10 +135,7 @@ export const NewTaskModal = ({
                   />
                 </HStack>
               ) : (
-                <Select
-                  style={{ color: "white" }}
-                  onChange={e => updateTaskInfo(e, "privateKey", true)}
-                >
+                <Select style={{ color: "white" }} onChange={e => updateTaskInfo(e, "privateKey", true)}>
                   <WalletMappings updateTaskInfo={updateTaskInfo} />
                 </Select>
               )}
@@ -223,11 +200,7 @@ const WalletMappings = ({ updateTaskInfo }) => {
         () =>
           wallets?.map(wallet => {
             return (
-              <option
-                key={crypto.randomUUID()}
-                value={wallet.key}
-                style={{ background: "black" }}
-              >
+              <option key={crypto.randomUUID()} value={wallet.key} style={{ background: "black" }}>
                 {wallet.name}
               </option>
             );
