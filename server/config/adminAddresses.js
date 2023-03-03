@@ -4,4 +4,4 @@ const adminAddresses = [
   "0x7fac7b0161143acfd80257873fb9cdb3f316c10c",
 ];
 
-module.exports = adminAddresses;
+module.exports = { adminAddresses }

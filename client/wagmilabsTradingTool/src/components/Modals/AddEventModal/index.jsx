@@ -10,18 +10,18 @@ import {
   NumberInputField,
   useDisclosure,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ReactDatePicker from "react-datepicker";
 import { ErrorAlert } from "src/components/Alerts/ErrorAlert";
 import "./style.scss";
 import { formatEventInfo } from "./utils/formatEventInfo";
 
 export const AddEventModal = React.memo(
-  ({ isOpen, onClose, onSave, section }) => {
+  ({ isOpen, onClose, onSave, section, selectedDate }) => {
     const [eventInfo, setEventInfo] = useState({});
     const { isOpen: isOpenAlert, onOpen: onOpenAlert, onClose: onCloseAlert } = useDisclosure();
     const cancelRef = React.useRef();
-
+    
     const addEvent = () => {
       if (!eventInfo.date
           || !eventInfo.name
@@ -69,6 +69,12 @@ export const AddEventModal = React.memo(
       }
     }
 
+    useEffect(()=>{
+      if(selectedDate) {
+        setEventInfo((prev) => ({...prev, date: selectedDate.date}))
+      }
+    },[selectedDate])
+
     return (
       <Modal isOpen={isOpen} onClose={onClose} isCentered>
         <ModalOverlay backdropFilter="blur(5px)" />
@@ -90,7 +96,7 @@ export const AddEventModal = React.memo(
             <ReactDatePicker
               minDate={new Date().getTime()}
               onChange={v => updateEventInfo(v, "date")}
-              selected={eventInfo.date}
+              selected={eventInfo.date || selectedDate?.date}
               isClearable={true}
               placeholderText="Select event date"
               className="date-picker"
@@ -109,6 +115,18 @@ export const AddEventModal = React.memo(
                 />
               </HStack>
             </div>
+            {section === "spaces" && (
+              <div className="field-container">
+                Host
+                <HStack>
+                  <Input
+                    placeholder="host"
+                    color={"white"}
+                    onChange={e => updateEventInfo(e, "spaceHost", true)}
+                  />
+                </HStack>
+              </div>
+            )}
             {section !== "drops" && (
               <div className="field-container">
                 Description
@@ -156,18 +174,6 @@ export const AddEventModal = React.memo(
                   </NumberInput>
                 </div>
               </>
-            )}
-            {section === "spaces" && (
-              <div className="field-container">
-                Host
-                <HStack>
-                  <Input
-                    placeholder="host"
-                    color={"white"}
-                    onChange={e => updateEventInfo(e, "spaceHost", true)}
-                  />
-                </HStack>
-              </div>
             )}
             <div className="field-container">
               Links

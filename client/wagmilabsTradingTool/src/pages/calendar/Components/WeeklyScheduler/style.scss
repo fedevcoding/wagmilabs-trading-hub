@@ -31,13 +31,14 @@
 }
 
 .active-hour-section {
-  height: 60px;
+  height: 57px;
   border-radius: 5px;
-  width: 60px;
+  width: 57px;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
   background-color: #616161;
+  border: 3px solid #616161;
 }
 
 .hour-slot {
@@ -45,10 +46,23 @@
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
+  padding-left: 3px;
   cursor: pointer;
 }
 
 .selected-hour {
   border: 3px solid rgb(69, 178, 21);
   box-shadow: inset 0 0 8px rgba(69, 178, 21, 0.8);
+}
+
+.selected-hour {
+  border: 3px solid rgb(69, 178, 21);
+  box-shadow: inset 0 0 8px rgba(69, 178, 21, 0.8);
+  height: 57px;
+  border-radius: 5px;
+  width: 57px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  background-color: #616161;
 }

@@ -4,9 +4,9 @@ import "./style.scss";
 
 export const MonthSwitch = ({ currentDate, changeDate }) => (
   <Row className="calendar-month-switch-container">
-    <h3>{`${currentDate.toLocaleString("en-GB", {
+    <div className="month-switch-title">{`${currentDate.toLocaleString("en-GB", {
       month: "long",
-    })} ${currentDate.getFullYear()}`}</h3>
+    })} ${currentDate.getFullYear()}`}</div>
     <h3 className="calendar-month-switch" onClick={() => changeDate(true)}>
       &lt;
     </h3>

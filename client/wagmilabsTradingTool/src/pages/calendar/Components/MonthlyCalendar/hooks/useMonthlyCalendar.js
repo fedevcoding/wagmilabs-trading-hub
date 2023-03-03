@@ -15,6 +15,7 @@ export const useMonthlyCalendar = ({sectionData, section, refetch}) => {
     "0xfe697C5527ab86DaA1e4c08286D2bE744a0E321E",
     "0x7FAC7b0161143Acfd80257873FB9cDb3F316C10C",
   ];
+  const [slideLeft, setSlideLeft] = useState(true);
   const isAdmin = allowedAddresses.includes(address);
   const today = new Date();
   const [selectedDate, setSelectedDate] = useState(null);
@@ -77,6 +78,7 @@ export const useMonthlyCalendar = ({sectionData, section, refetch}) => {
   };
 
   const changeDate = back => {
+    if(slideLeft !== back) setSlideLeft(back);
     setIsLoading(true);
     setCurEventDetail(null);
     let nextDate = new Date(currentDate.getTime());
@@ -122,6 +124,8 @@ export const useMonthlyCalendar = ({sectionData, section, refetch}) => {
     setAllDaysInMonth(allDaysInMonthCopy);
   };
 
+  const getEventsInDay = (sectionData, date) => sectionData?.filter((el)=>moment(el?.timestamp).format("YYYY-MM-DD") === moment(date).format("YYYY-MM-DD"))
+
   return({
     isLoading,
     showSelectedDate,
@@ -140,5 +144,7 @@ export const useMonthlyCalendar = ({sectionData, section, refetch}) => {
     onSave,
     changeDate,
     selectedDate,
+    slideLeft,
+    getEventsInDay,
   })
 }

@@ -1,5 +1,4 @@
 import React from "react";
-import moment from "moment";
 import "./style.scss";
 
 const dayClass = d => {
@@ -16,32 +15,33 @@ const dayClass = d => {
   }
 };
 
-const renderEventName = (event, date) => {
-  if (
-    moment(event?.timestamp).format("YYYY-MM-DD") ===
-    moment(date).format("YYYY-MM-DD")
-  ) {
-    return (
-      <div className="day-event-name">
-        {event?.collectionName || event?.eventName}
-      </div>
-    );
-  }
-};
+const renderEvents = (events) => (
+  events.map((event,index) => {
+    if(index < 2) return renderEventName(event)
+  })
+)
+
+const renderEventName = (event) => (
+    <div className="day-event-name">
+      {event?.collectionName || event?.eventName}
+    </div>
+  );
 
 export const DayTile = ({
   day,
   index,
   startIdx,
   showSelectedDate,
-  sectionData,
-}) => (
-  <div
-    key={day.date.getDate().toString()}
-    className={dayClass(day)}
-    onClick={() => showSelectedDate(day, index + startIdx)}
-  >
-    <div>{day.date.getDate()}</div>
-    {sectionData.map(event => renderEventName(event, day.date))}
-  </div>
-);
+  events,
+}) => {
+  return(
+    <div
+      key={day.date.getDate().toString()}
+      className={dayClass(day)}
+      onClick={() => showSelectedDate(day, index + startIdx)}
+    >
+      <div>{day.date.getDate()}</div>
+      {renderEvents(events)}
+      {events.length >2 && <div>{`+ ${events.length - 2} more`}</div>}
+    </div>
+)}

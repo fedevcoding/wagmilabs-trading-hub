@@ -32,11 +32,14 @@ export const MonthlyCalendar = React.memo(
       onSave,
       changeDate,
       selectedDate,
+      slideLeft,
+      getEventsInDay,
     } = useMonthlyCalendar({sectionData, section, refetch});
+
     const renderRow = (days, startIdx) => (
       <>
         {!isLoading && (
-          <AnimationOnScroll animateIn="animate__fadeInLeftBig" offset={0}>
+          <AnimationOnScroll animateIn={slideLeft ? "animate__fadeInLeftBig" : "animate__fadeInRightBig"}  offset={0}>
             <Row className="calendar-row">
               {days?.map((d, index) => (
                 <DayTile
@@ -44,7 +47,7 @@ export const MonthlyCalendar = React.memo(
                   index={index}
                   startIdx={startIdx}
                   showSelectedDate={showSelectedDate}
-                  sectionData={sectionData}
+                  events={getEventsInDay(sectionData, d.date)}
                 />
               ))}
             </Row>
@@ -148,6 +151,7 @@ export const MonthlyCalendar = React.memo(
           onOpen={onOpen}
           onSave={onSave}
           section={section}
+          selectedDate={selectedDate}
         />
         <Row>
           <Col className="calendar-left-inner-container">
@@ -157,32 +161,19 @@ export const MonthlyCalendar = React.memo(
           </Col>
 
           <Col className="calendar-right-inner-container-m">
-            {selectedDate ? (
               <div className="selected-date-detail">
                 <div className="selected-date-title">{selectedDate?.title}</div>
-                {section === "personal" && (
-                  <Button
-                    colorScheme={"blue"}
-                    className="button"
-                    onClick={onOpen}
-                  >
-                    Add Event
-                  </Button>
-                )}
                 {isAdmin && (
                   <Button
                     colorScheme={"blue"}
                     className="button btn-spacing"
                     onClick={onOpen}
                   >
-                    Add Event As Admin
+                    {isAdmin  ? "Add Event As Admin" : "Add Event"}
                   </Button>
                 )}
                 {renderEventsInfo()}
               </div>
-            ) : (
-              <div className="selected-date-title">No day selected</div>
-            )}
           </Col>
         </Row>
       </div>

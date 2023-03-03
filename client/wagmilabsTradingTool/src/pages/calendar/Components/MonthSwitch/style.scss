@@ -6,4 +6,10 @@
 .calendar-month-switch {
   padding: 2px 10px 0px 10px;
   cursor: pointer;
+  user-select: none;
+}
+
+.month-switch-title {
+  font-size: 20px;
+  width: 164px;
 }

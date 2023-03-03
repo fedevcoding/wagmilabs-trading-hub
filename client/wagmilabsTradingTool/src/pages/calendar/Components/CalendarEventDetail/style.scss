@@ -4,7 +4,7 @@
   background-color: black;
   position: relative;
   right: 370px;
-  bottom: 300px;
+  top: 200px;
   border-radius: 25px;
   padding: 20px;
   border: 3px solid rgb(69, 178, 21);
@@ -33,11 +33,16 @@
   background-color: white;
   padding: 5px;
   border-radius: 25px;
+  cursor: pointer;
+}
+
+.delete-event:hover {
+  background: #45b215;
 }
 
 .event-tile {
   background-color: #616161;
-  border-radius: 25px;
+  border-radius: 12px;
   display: table;
   padding: 5px;
   margin-top: 5px;

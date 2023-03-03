@@ -41,7 +41,7 @@ personalRoute.post("/", checkAuth, checkAdmin, async (req, res) => {
   }
 });
 
-personalRoute.delete("/", checkAuth, async (req, res) => {
+personalRoute.delete("/", checkAuth, checkAdmin, async (req, res) => {
   const { address } = req.userDetails;
   const isAdmin = req.isAdmin;
 

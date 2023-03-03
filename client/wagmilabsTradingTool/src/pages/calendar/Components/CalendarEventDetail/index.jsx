@@ -29,19 +29,16 @@ export const CalendarEventDetail = ({ event, deleteEvent, isAdmin }) => (
         <div className="event-tile">{event?.spaceDescrition}</div>
       )}
       {event?.price && (
-        <div className="event-tile">{`price: ${event?.price}`}</div>
+        <div className="event-tile">{`PRICE: ${event?.price}`}</div>
       )}
       {event?.spaceHost && (
-        <div className="event-tile">{`host: ${event?.spaceHost}`}</div>
+        <div className="event-tile">{`HOST: ${event?.spaceHost}`}</div>
       )}
       {event?.eventLocation && (
-        <div className="event-tile">{`location: ${event?.eventLocation}`}</div>
-      )}
-      {event?.address && (
-        <div className="event-tile">{`location: ${event?.address}`}</div>
+        <div className="event-tile">{`LOCATION: ${event?.eventLocation}`}</div>
       )}
       {event?.supply && (
-        <div className="event-tile">{`supply: ${event?.supply}`}</div>
+        <div className="event-tile">{`SUPPLY: ${event?.supply}`}</div>
       )}
       {event?.links && (
         <>
