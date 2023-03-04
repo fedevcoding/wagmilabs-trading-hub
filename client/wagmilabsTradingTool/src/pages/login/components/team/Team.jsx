@@ -2,7 +2,7 @@ import React from "react";
 
 import { twitter, linkedin } from "@Assets";
 
-import "./style.css";
+import "./style.scss";
 
 const Team = () => {
   return (

@@ -9,6 +9,8 @@ import Home from "./components/home/Home";
 
 import { loginBackground } from "src/assets";
 import Footer from "./components/footer/Footer";
+// import Team from "./components/team/Team";
+import { Reviews } from "./components/reviews/Reviews.jsx";
 
 const Login = ({ setConnected }) => {
   const [walletConnected, setWalletConnected] = useState(false);
@@ -16,14 +18,18 @@ const Login = ({ setConnected }) => {
   return (
     <>
       <div className="login-container">
-        <img src={loginBackground} className="login-background" alt="login-background"></img>
-        <Header setConnected={setConnected} setWalletConnected={setWalletConnected} />
-
-        {walletConnected && <SignModal setConnected={setConnected} setWalletConnected={setWalletConnected} />}
-
-        <Home setWalletConnected={setWalletConnected} />
-        {/* <Team /> */}
-        <Footer />
+        <div className="section1">
+          <img src={loginBackground} className="login-background" alt="login-background"></img>
+          <Header setConnected={setConnected} setWalletConnected={setWalletConnected} />
+          {walletConnected && <SignModal setConnected={setConnected} setWalletConnected={setWalletConnected} />}
+          <Home setWalletConnected={setWalletConnected} />
+        </div>
+        <div className="section2">
+          <hr className="hr"></hr>
+          <Reviews />
+          {/* <Team /> */}
+          <Footer />
+        </div>
       </div>
     </>
   );
