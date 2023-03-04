@@ -11,6 +11,7 @@ import { loginBackground } from "src/assets";
 import Footer from "./components/footer/Footer";
 import Team from "./components/team/Team";
 import { Reviews } from "./components/reviews/Reviews.jsx";
+import { Comparison } from "./components/comparison/Comparison";
 
 const Login = ({ setConnected }) => {
   const [walletConnected, setWalletConnected] = useState(false);
@@ -28,6 +29,7 @@ const Login = ({ setConnected }) => {
           <hr className="hr"></hr>
           <Reviews />
           <Team />
+          <Comparison />
           <Footer />
         </div>
       </div>

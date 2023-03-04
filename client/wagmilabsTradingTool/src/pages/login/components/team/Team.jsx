@@ -6,7 +6,11 @@ import "./style.scss";
 
 const Team = () => {
   return (
-    <div className="team-section">
+    <section className={"aboutUs"} id="about-us">
+      {/* <img src={wave4} alt="Wagmi Labs" className="wave-image" /> */}
+
+      <h1 className={"title"}>Built by</h1>
+
       <div className="cardsContainer">
         <div className="card">
           <img
@@ -74,7 +78,7 @@ const Team = () => {
       </div>
 
       <section className={"investors"}>
-        <p className={"partnerTitle"}>OUR PARTNERS</p>
+        <h1 className={"title"}>Our partners</h1>
         <div className={"imgContainer"}>
           <a href="https://www.verumcapital.it/" target="_blank" rel="noreferrer">
             <img
@@ -96,19 +100,19 @@ const Team = () => {
             <img
               src={"https://wagmilabs.tools/static/media/luckytrader.30b5019011b1ce6b1c5e.png"}
               alt="Wagmi Labs"
-              className={"promotescaleImg"}
+              className={"luckyTraderImg"}
             />
           </a>
           <a href="https://mikcosentino.com" target="_blank" rel="noreferrer">
             <img
               src={"https://wagmilabs.tools/static/media/psLogo.62e8eb3b7857532f6ecc.png"}
               alt="Wagmi Labs"
-              className={"promotescaleImg"}
+              className={"mikImg"}
             />
           </a>
         </div>
       </section>
-    </div>
+    </section>
   );
 };
 

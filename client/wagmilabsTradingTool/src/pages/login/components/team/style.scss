@@ -1,8 +1,7 @@
-.team-section {
-  .aboutUs {
+#about-us {
+  & .aboutUs {
     min-height: 100vh;
     color: white;
-    background-color: #051233;
     padding-bottom: 40px;
   }
 
@@ -10,8 +9,7 @@
     text-align: center;
     padding: 50px 0;
     font-size: 34px;
-    font-weight: 400;
-    letter-spacing: 1px;
+    letter-spacing: 1.2px;
   }
 
   .cardsContainer {
@@ -21,42 +19,41 @@
   }
 
   .card {
-    width: 370px;
-    height: 480px;
-    background-color: #121828;
-    // box-shadow: 0px -1px 16px 3px rgb(133 133 133 / 50%);
-
+    width: 350px;
+    background-color: #0e0f0e;
+    border: 1px solid white;
+    padding: 30px 20px;
     border-radius: 20px;
-
     transition: all 350ms;
   }
   .card:hover {
-    margin-top: -15px;
+    transform: translateY(-20px);
   }
   .teamImg {
-    width: 150px;
+    width: 120px;
     border-radius: 50%;
     display: block;
     margin: 0 auto;
-    margin-top: 30px;
   }
   .cardName {
     text-align: center;
     letter-spacing: 3px;
-    margin: 20px 0 10px 0;
+    margin: 15px 0 10px 0;
+    font-size: 20px;
   }
 
   .cardRole {
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
     color: #1993eb;
+    font-size: 15px;
     letter-spacing: 1.1px;
   }
 
   .cardDescription {
     text-align: center;
-    margin: 0 auto;
-    width: 320px;
+    margin: 0 15px;
+    font-size: 15px;
   }
 
   .cardLinks {
@@ -65,7 +62,7 @@
   }
   .cardsSocialImages {
     width: 30px;
-    margin: 25px 20px;
+    margin: 25px 20px 0 20px;
     transition: scale 250ms;
   }
   .cardsSocialImages:hover {
@@ -83,15 +80,6 @@
     width: 100vw;
     margin: 0 auto;
     margin-top: 100px;
-    background-color: #051233;
-  }
-
-  .partnerTitle {
-    text-align: center;
-    font-size: 32px;
-    padding-top: 20px;
-    letter-spacing: 1px;
-    font-weight: 400;
   }
 
   .imgContainer {
@@ -103,6 +91,7 @@
 
   .vcImg {
     height: 120px;
+    cursor: pointer;
   }
 
   .entreprenistonImg {
@@ -110,190 +99,198 @@
     width: auto;
     margin-right: 30px;
     margin-left: 38px;
+    cursor: pointer;
   }
 
-  .promotescaleImg {
+  .luckyTraderImg {
     height: 100px;
     margin-left: 40px;
+    cursor: pointer;
   }
 
-  @media screen and (max-width: 1400px) {
-    .cardsContainer {
-      flex-wrap: wrap;
-      gap: 140px 0;
-      margin-top: 40px;
-    }
-    .card {
-      margin: 0 70px;
-    }
-    .cardsContainer:last-child {
-      margin-bottom: 100px;
-    }
+  .mikImg {
+    height: 100px;
+    margin-left: 40px;
+    cursor: pointer;
   }
 
-  @media screen and (max-width: 1000px) {
-    .title {
-      font-size: 30px;
-    }
-    .vcImg {
-      height: 95px;
-    }
-    .promotescaleImg {
-      height: 85px;
-    }
-    .entreprenistonImg {
-      height: 100px;
-    }
-  }
+  // @media screen and (max-width: 1400px) {
+  //   .cardsContainer {
+  //     flex-wrap: wrap;
+  //     gap: 140px 0;
+  //     margin-top: 40px;
+  //   }
+  //   .card {
+  //     margin: 0 70px;
+  //   }
+  //   .cardsContainer:last-child {
+  //     margin-bottom: 100px;
+  //   }
+  // }
 
-  @media screen and (max-width: 900px) {
-    .vcImg {
-      height: 80px;
-    }
-    .promotescaleImg {
-      height: 75px;
-    }
-    .entreprenistonImg {
-      height: 90px;
-    }
-  }
+  // @media screen and (max-width: 1000px) {
+  //   .title {
+  //     font-size: 30px;
+  //   }
+  //   .vcImg {
+  //     height: 95px;
+  //   }
+  //   .promotescaleImg {
+  //     height: 85px;
+  //   }
+  //   .entreprenistonImg {
+  //     height: 100px;
+  //   }
+  // }
 
-  @media screen and (max-width: 750px) {
-    .vcImg {
-      height: 70px;
-    }
-    .promotescaleImg {
-      height: 65px;
-    }
-    .entreprenistonImg {
-      height: 80px;
-    }
+  // @media screen and (max-width: 900px) {
+  //   .vcImg {
+  //     height: 80px;
+  //   }
+  //   .promotescaleImg {
+  //     height: 75px;
+  //   }
+  //   .entreprenistonImg {
+  //     height: 90px;
+  //   }
+  // }
 
-    .imgContainer {
-      padding: 0 40px;
-    }
-  }
+  // @media screen and (max-width: 750px) {
+  //   .vcImg {
+  //     height: 70px;
+  //   }
+  //   .promotescaleImg {
+  //     height: 65px;
+  //   }
+  //   .entreprenistonImg {
+  //     height: 80px;
+  //   }
 
-  @media screen and (max-width: 659px) {
-    .promotescaleImg {
-      margin-top: 40px;
-    }
-  }
+  //   .imgContainer {
+  //     padding: 0 40px;
+  //   }
+  // }
 
-  @media screen and (max-width: 520px) {
-    .card {
-      margin: 0;
-      width: 340px;
-      height: 500px;
-    }
-    .cardDescription {
-      max-width: 270px;
-    }
-  }
+  // @media screen and (max-width: 659px) {
+  //   .promotescaleImg {
+  //     margin-top: 40px;
+  //   }
+  // }
 
-  @media screen and (max-width: 500px) {
-    .card {
-      margin: 0;
-      width: 300px;
-      height: 530px;
-    }
-    .cardDescription {
-      max-width: 220px;
-    }
-    .title {
-      font-size: 26px;
-    }
+  // @media screen and (max-width: 520px) {
+  //   .card {
+  //     margin: 0;
+  //     width: 340px;
+  //     height: 500px;
+  //   }
+  //   .cardDescription {
+  //     max-width: 270px;
+  //   }
+  // }
 
-    .imgContainer {
-      padding: 20px;
-    }
-    .vcImg {
-      height: 60px;
-    }
-    .promotescaleImg {
-      height: 55px;
-    }
-    .entreprenistonImg {
-      height: 70px;
-    }
-  }
+  // @media screen and (max-width: 500px) {
+  //   .card {
+  //     margin: 0;
+  //     width: 300px;
+  //     height: 530px;
+  //   }
+  //   .cardDescription {
+  //     max-width: 220px;
+  //   }
+  //   .title {
+  //     font-size: 26px;
+  //   }
 
-  @media screen and (max-width: 344px) {
-    .entreprenistonImg {
-      margin-top: 40px;
-    }
-  }
+  //   .imgContainer {
+  //     padding: 20px;
+  //   }
+  //   .vcImg {
+  //     height: 60px;
+  //   }
+  //   .promotescaleImg {
+  //     height: 55px;
+  //   }
+  //   .entreprenistonImg {
+  //     height: 70px;
+  //   }
+  // }
 
-  @media screen and (max-width: 400px) {
-    .card {
-      margin: 0;
-      width: 250px;
-      height: 450px;
-    }
-    .teamImg {
-      width: 120px;
-    }
-    .cardName {
-      font-size: 20px;
-    }
-    .cardRole {
-      font-size: 14px;
-    }
-    .cardDescription {
-      font-size: 14px;
-      max-width: 200px;
-    }
-  }
+  // @media screen and (max-width: 344px) {
+  //   .entreprenistonImg {
+  //     margin-top: 40px;
+  //   }
+  // }
 
-  @media screen and (max-width: 320px) {
-    .vcImg {
-      height: 55px;
-    }
-    .promotescaleImg {
-      height: 50px;
-    }
-    .entreprenistonImg {
-      height: 65px;
-    }
-  }
+  // @media screen and (max-width: 400px) {
+  //   .card {
+  //     margin: 0;
+  //     width: 250px;
+  //     height: 450px;
+  //   }
+  //   .teamImg {
+  //     width: 120px;
+  //   }
+  //   .cardName {
+  //     font-size: 20px;
+  //   }
+  //   .cardRole {
+  //     font-size: 14px;
+  //   }
+  //   .cardDescription {
+  //     font-size: 14px;
+  //     max-width: 200px;
+  //   }
+  // }
 
-  @media screen and (min-width: 1600px) {
-    .title,
-    .partnerTitle {
-      font-size: 38px;
-    }
-    .card {
-      width: 410px;
-      height: 520px;
-    }
-    .cardName {
-      font-size: 28px;
-    }
-    .cardRole {
-      font-size: 18px;
-    }
-    .cardDescription {
-      font-size: 18px;
-    }
-  }
+  // @media screen and (max-width: 320px) {
+  //   .vcImg {
+  //     height: 55px;
+  //   }
+  //   .promotescaleImg {
+  //     height: 50px;
+  //   }
+  //   .entreprenistonImg {
+  //     height: 65px;
+  //   }
+  // }
 
-  @media screen and (min-width: 1800px) {
-    .title,
-    .partnerTitle {
-      font-size: 40px;
-    }
-    .card {
-      width: 430px;
-      height: 550px;
-    }
-    .cardName {
-      font-size: 30px;
-    }
-    .cardRole {
-      font-size: 20px;
-    }
-    .cardDescription {
-      font-size: 20px;
-    }
-  }
+  // @media screen and (min-width: 1600px) {
+  //   .title,
+  //   .partnerTitle {
+  //     font-size: 38px;
+  //   }
+  //   .card {
+  //     width: 410px;
+  //     height: 520px;
+  //   }
+  //   .cardName {
+  //     font-size: 28px;
+  //   }
+  //   .cardRole {
+  //     font-size: 18px;
+  //   }
+  //   .cardDescription {
+  //     font-size: 18px;
+  //   }
+  // }
+
+  // @media screen and (min-width: 1800px) {
+  //   .title,
+  //   .partnerTitle {
+  //     font-size: 40px;
+  //   }
+  //   .card {
+  //     width: 430px;
+  //     height: 550px;
+  //   }
+  //   .cardName {
+  //     font-size: 30px;
+  //   }
+  //   .cardRole {
+  //     font-size: 20px;
+  //   }
+  //   .cardDescription {
+  //     font-size: 20px;
+  //   }
+  // }
 }
