@@ -10,11 +10,7 @@ import "./nfts.css";
 
 import { notFound, placeholderImage } from "@Assets";
 
-import {
-  getListingExpirationDate,
-  roundPrice,
-  roundPrice2,
-} from "@Utils/formats/formats";
+import { getListingExpirationDate, roundPrice, roundPrice2 } from "@Utils/formats/formats";
 import { Button, Tooltip, useToast } from "@chakra-ui/react";
 import { UserDataContext } from "@Context";
 import { Loader, TransferItemModal } from "@Components";
@@ -133,9 +129,7 @@ const Nfts = ({
   }, [selectBulk]);
 
   const handleFilterCollection = (collectionAddress, e) => {
-    if (
-      collectionAddress?.toLowerCase() === nftsCollectionFilter?.toLowerCase()
-    ) {
+    if (collectionAddress?.toLowerCase() === nftsCollectionFilter?.toLowerCase()) {
       setNftsCollectionFilter("");
     } else {
       setNftsCollectionFilter(collectionAddress);
@@ -143,9 +137,7 @@ const Nfts = ({
   };
 
   function toggleCollectionDropdown(e) {
-    const profileCollectionArrow = document.querySelector(
-      ".profile-collection-arrow"
-    );
+    const profileCollectionArrow = document.querySelector(".profile-collection-arrow");
     const collectionDropdown = document.querySelector(".collection-dropdown");
 
     if (e.target !== profileCollectionArrow && e.target !== e.currentTarget) {
@@ -157,28 +149,18 @@ const Nfts = ({
   }
 
   function closeCollectionDropdown() {
-    document
-      .querySelector(".profile-collection-arrow")
-      .classList.remove("selected");
+    document.querySelector(".profile-collection-arrow").classList.remove("selected");
     document.querySelector(".collection-dropdown").classList.add("invisible");
   }
 
   const activateList = index => {
-    document
-      .querySelectorAll(".profile-list-nft")
-    [index].classList.remove("inactive");
-    document
-      .querySelectorAll(".profile-list-nft")
-    [index].classList.add("active");
+    document.querySelectorAll(".profile-list-nft")[index].classList.remove("inactive");
+    document.querySelectorAll(".profile-list-nft")[index].classList.add("active");
   };
 
   const deactivateList = index => {
-    document
-      .querySelectorAll(".profile-list-nft")
-    [index].classList.remove("active");
-    document
-      .querySelectorAll(".profile-list-nft")
-    [index].classList.add("inactive");
+    document.querySelectorAll(".profile-list-nft")[index].classList.remove("active");
+    document.querySelectorAll(".profile-list-nft")[index].classList.add("inactive");
   };
 
   const toggleOptions = index => {
@@ -193,9 +175,7 @@ const Nfts = ({
   };
 
   const closeAllOptions = () => {
-    document
-      .querySelectorAll(".single-nft-options")
-      .forEach(el => el.classList.add("invisible"));
+    document.querySelectorAll(".single-nft-options").forEach(el => el.classList.add("invisible"));
   };
 
   const changeBulk = state => {
@@ -289,8 +269,7 @@ const Nfts = ({
       console.log(e);
       toast({
         title: "Error changing profile image.",
-        description:
-          "There has been an error while trying to update your profile image, try again later.",
+        description: "There has been an error while trying to update your profile image, try again later.",
         status: "error",
         duration: 3000,
         isClosable: true,
@@ -305,9 +284,7 @@ const Nfts = ({
         let name = item?.token?.name;
 
         const marketplace = item?.ownership?.floorAsk?.source?.name;
-        const marketplaceImage = marketplace
-          ? getMarketplaceImage(marketplace)
-          : "";
+        const marketplaceImage = marketplace ? getMarketplaceImage(marketplace) : "";
         const price = item?.ownership?.floorAsk?.price?.amount?.decimal;
 
         const { rarityRank } = item?.token;
@@ -332,20 +309,16 @@ const Nfts = ({
               onMouseOut={() => deactivateList(index)}
             >
               <div
-                className={`${selectBulk
-                  ? "profile-items-details-container-bulk"
-                  : "profile-items-details-container"
-                  }`}
+                className={`${selectBulk ? "profile-items-details-container-bulk" : "profile-items-details-container"}`}
               >
                 <div className="image-hover-overflow">
                   <img
                     src={image}
-                    onError={e => e.currentTarget.src = placeholderImage}
+                    onError={e => (e.currentTarget.src = placeholderImage)}
                     alt=""
-                    className={`profile-single-item-image ${selectBulk
-                      ? "single-item-image"
-                      : "single-item-image-scale"
-                      }`}
+                    className={`profile-single-item-image ${
+                      selectBulk ? "single-item-image" : "single-item-image-scale"
+                    }`}
                     onClick={e =>
                       selectBulk
                         ? changeBulkItems(contractAddress, tokenId, id, e)
@@ -366,10 +339,7 @@ const Nfts = ({
                   )}
                 </div>
 
-                <div
-                  className="option-button"
-                  onClick={() => toggleOptions(index)}
-                >
+                <div className="option-button" onClick={() => toggleOptions(index)}>
                   <i className="fa-regular fa-ellipsis item-option-button"></i>
 
                   <div className="single-nft-options invisible">
@@ -393,11 +363,7 @@ const Nfts = ({
                   </div>
                 </div>
 
-                <a
-                  href={`/collection/${contractAddress}`}
-                  rel="noreferrer"
-                  target="_blank"
-                >
+                <a href={`/collection/${contractAddress}`} rel="noreferrer" target="_blank">
                   <Tooltip
                     hasArrow
                     label={collectionName}
@@ -407,32 +373,20 @@ const Nfts = ({
                     placement="top"
                     borderRadius={"7px"}
                   >
-                    <img
-                      src={collectionImage}
-                      alt=""
-                      className="profile-item-collection-image"
-                    />
+                    <img src={collectionImage} alt="" className="profile-item-collection-image" />
                   </Tooltip>
                 </a>
                 <div className="profile-item-stats">
                   <div className="profile-item-name-stats">
                     <p className="single-item-name">{name || tokenId}</p>
                     {/* <p className='single-item-collection-name'>{collectionName}</p> */}
-                    <p className="single-item-rarity">
-                      Floor price: {floor_price && roundPrice(floor_price)} ETH
-                    </p>
+                    <p className="single-item-rarity">Floor price: {floor_price && roundPrice(floor_price)} ETH</p>
                   </div>
                   <hr></hr>
                   {/* getListingInfo(tokenId, contractAddress, floor_price) */}
                   <div
                     className="profile-list-nft inactive"
-                    onClick={() =>
-                      openSmartListingModal(
-                        tokenId,
-                        contractAddress,
-                        floor_price
-                      )
-                    }
+                    onClick={() => openSmartListingModal(tokenId, contractAddress, floor_price)}
                   >
                     <i className="fa-solid fa-tag"></i>
                     <span>Smart list</span>
@@ -442,17 +396,13 @@ const Nfts = ({
             </div>
 
             {index === randomPositionPromo[0] && (
-              <div
-                className={`single-item-container ${isLast && "last-token"}`}
-              >
+              <div className={`single-item-container ${isLast && "last-token"}`}>
                 <ItemBanner primary></ItemBanner>
               </div>
             )}
 
             {index === randomPositionPromo[1] && (
-              <div
-                className={`single-item-container ${isLast && "last-token"}`}
-              >
+              <div className={`single-item-container ${isLast && "last-token"}`}>
                 <ItemBanner></ItemBanner>
               </div>
             )}
@@ -494,8 +444,7 @@ const Nfts = ({
             <div className="profile-sort-items-option">
               {selectedSortOption.label}
               <i
-                className={`fa-solid fa-caret-down profile-collection-sort-arrow ${showSortItemsOptions && "selected"
-                  }`}
+                className={`fa-solid fa-caret-down profile-collection-sort-arrow ${showSortItemsOptions && "selected"}`}
               ></i>
             </div>
 
@@ -516,15 +465,9 @@ const Nfts = ({
         </div>
 
         <div className="profile-filters">
-          <div
-            className="profile-filter-collection"
-            onClick={e => toggleCollectionDropdown(e)}
-          >
-            {nftsCollectionFilter?.length > 0 && (
-              <p className="collection-filter-indicator">1</p>
-            )}
-            Collection{" "}
-            <i className="fa-solid fa-caret-down profile-collection-arrow"></i>
+          <div className="profile-filter-collection" onClick={e => toggleCollectionDropdown(e)}>
+            {nftsCollectionFilter?.length > 0 && <p className="collection-filter-indicator">1</p>}
+            Collection <i className="fa-solid fa-caret-down profile-collection-arrow"></i>
             <div className="collection-dropdown invisible">
               {collections && (
                 <div className="collection-dropdown-search">
@@ -547,8 +490,7 @@ const Nfts = ({
 
                     return (
                       <div
-                        className={`single-collection-dropdown ${address === nftsCollectionFilter && "selected"
-                          }`}
+                        className={`single-collection-dropdown ${address === nftsCollectionFilter && "selected"}`}
                         key={index}
                         active="false"
                         onClick={e => handleFilterCollection(address, e)}
@@ -562,29 +504,22 @@ const Nfts = ({
                     );
                   })
                 ) : (
-                  <div className="collection-dropdown-notfound">
-                    No collection found.
-                  </div>
+                  <div className="collection-dropdown-notfound">No collection found.</div>
                 )
               ) : (
-                <div className="collection-dropdown-notfound">
-                  Loading collections...
-                </div>
+                <div className="collection-dropdown-notfound">Loading collections...</div>
               )}
             </div>
           </div>
 
           {selectBulk ? (
-            <div
-              className="profile-item-bulk-list-transfer-cancel"
-              onClick={() => changeBulk(false)}
-            >
+            <div className="profile-item-bulk-list-transfer-cancel" onClick={() => changeBulk(false)}>
               Cancel
             </div>
           ) : (
             <div
-              className="profile-item-bulk-list-transfer"
-              onClick={() => changeBulk(true)}
+              className="profile-item-bulk-list-transfer not-allowed"
+              // onClick={() => changeBulk(true)}
             >
               Bulk list / transfer
             </div>
@@ -595,12 +530,7 @@ const Nfts = ({
       {loadingNfts ? (
         <div className="profile-items-container">
           <div className="profile-skeleton-container">
-            <SkeletonTheme
-              baseColor="#202020"
-              highlightColor="#444"
-              height={"327px"}
-              borderRadius={"10px"}
-            >
+            <SkeletonTheme baseColor="#202020" highlightColor="#444" height={"327px"} borderRadius={"10px"}>
               <p>
                 <Skeleton count={14} wrapper={Box} />
               </p>
@@ -616,26 +546,16 @@ const Nfts = ({
 
                 <div className="nfts-bulk-information-buttons">
                   {bulkItems.length > 0 ? (
-                    <button
-                      className="nfts-bulk-information-clear-button"
-                      onClick={clearAllBulkItems}
-                    >
+                    <button className="nfts-bulk-information-clear-button" onClick={clearAllBulkItems}>
                       Clear All
                     </button>
                   ) : (
-                    <button
-                      className="nfts-bulk-information-select-button"
-                      onClick={selectAllBulkItems}
-                    >
+                    <button className="nfts-bulk-information-select-button" onClick={selectAllBulkItems}>
                       Select All
                     </button>
                   )}
-                  <button className="nfts-bulk-information-list-button">
-                    List
-                  </button>
-                  <button className="nfts-bulk-information-transfer-button">
-                    Transfer
-                  </button>
+                  <button className="nfts-bulk-information-list-button">List</button>
+                  <button className="nfts-bulk-information-transfer-button">Transfer</button>
                 </div>
               </div>
               <hr className="nfts-bulk-information-hr" />
@@ -654,12 +574,7 @@ const Nfts = ({
               {loadingMoreNfts &&
                 [...Array(18)].map(i => {
                   return (
-                    <SkeletonTheme
-                      baseColor="#202020"
-                      highlightColor="#444"
-                      height={"327px"}
-                      borderRadius={"10px"}
-                    >
+                    <SkeletonTheme baseColor="#202020" highlightColor="#444" height={"327px"} borderRadius={"10px"}>
                       <p>
                         <Skeleton count={1} wrapper={Box} />
                       </p>
@@ -702,8 +617,7 @@ const SmartListModal = ({
       const { profitType, profitValue, type } = listingSettings?.price;
 
       let listingType = "";
-      if (type === "profit")
-        listingType = `${type}-${profitValue}-${profitType}`;
+      if (type === "profit") listingType = `${type}-${profitValue}-${profitType}`;
       else if (type === "break-even") listingType = type;
 
       const { tokenId, contractAddress } = quickListData;
@@ -718,10 +632,7 @@ const SmartListModal = ({
         }
       );
 
-      if (!res.ok)
-        throw new Error(
-          "Something went wrong while fetching listing price. Please try again."
-        );
+      if (!res.ok) throw new Error("Something went wrong while fetching listing price. Please try again.");
 
       res = await res.json();
 
@@ -732,8 +643,7 @@ const SmartListModal = ({
     } catch (e) {
       toast({
         title: "Error",
-        description:
-          "Something went wrong while fetching listing price. Please try again.",
+        description: "Something went wrong while fetching listing price. Please try again.",
         status: "error",
         duration: 5000,
         isClosable: true,
@@ -750,46 +660,29 @@ const SmartListModal = ({
         <div className="bg-modal"></div>
 
         <div className="nft-listing-modal">
-          <button
-            className="smart-list-close-modal"
-            onClick={closeSmartListingModal}
-          >
+          <button className="smart-list-close-modal" onClick={closeSmartListingModal}>
             <i className="fa-solid fa-xmark"></i>
           </button>
 
           {loadingData ? (
-            <SkeletonTheme
-              baseColor="#202020"
-              highlightColor="#444"
-              height={"100%"}
-              borderRadius={"10px"}
-            >
+            <SkeletonTheme baseColor="#202020" highlightColor="#444" height={"100%"} borderRadius={"10px"}>
               <Skeleton count={1} />
             </SkeletonTheme>
           ) : (
             <div className="smart-list-modal-container">
               <p>
-                You are going to list your NFT at {quickListData?.listingPrice}{" "}
-                on {listingSettings?.marketplace?.toUpperCase()}
+                You are going to list your NFT at {quickListData?.listingPrice} on{" "}
+                {listingSettings?.marketplace?.toUpperCase()}
               </p>
 
               <p>Collection floor price: {quickListData?.floorPrice}</p>
 
               <p>
-                Listing will expire:{" "}
-                {moment(getListingExpirationDate(listingSettings)).format(
-                  "DD/MM/YYYY hh:mm A"
-                )}
+                Listing will expire: {moment(getListingExpirationDate(listingSettings)).format("DD/MM/YYYY hh:mm A")}
               </p>
 
-              <Button
-                onClick={() => !confirmingList && listNft(setConfirmingList)}
-              >
-                {confirmingList ? (
-                  <Loader width={"20px"} height={"20px"} />
-                ) : (
-                  "Confirm"
-                )}
+              <Button onClick={() => !confirmingList && listNft(setConfirmingList)}>
+                {confirmingList ? <Loader width={"20px"} height={"20px"} /> : "Confirm"}
               </Button>
             </div>
           )}

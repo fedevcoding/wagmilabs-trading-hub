@@ -76,12 +76,6 @@ route.get("/:address", checkAuth, (req, res) => {
       const nftsMinted = getNftMintedObj(minted);
       const txsGasFees = await getTxsGasFees(nfts);
 
-      console.log("bought", !!bought);
-      console.log("sold", !!sold);
-      console.log("approvalGasFees", !!approvalGasFees);
-      console.log("minted", !!minted);
-      console.log("txsGasFees", !!txsGasFees);
-
       res
         .status(200)
         .json(

@@ -20,9 +20,6 @@ export const useBuyNow = (callback, quantity) => {
         signer,
         options,
         expectedPrice: value,
-        onProgress: steps => {
-          console.log(steps);
-        },
       });
 
       toast({
