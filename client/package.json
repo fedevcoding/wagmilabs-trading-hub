@@ -4,8 +4,7 @@
   "description": "",
   "main": "index.jsx",
   "scripts": {
-    "start": "node server.js",
-    "heroku-postbuild": "cd wagmilabsTradingTool && npm install --only=dev && npm install && npm run build"
+    "start": "cd wagmilabsTradingTool && npm i && npm run build && cd .. && npm i && node server.js"
   },
   "keywords": [],
   "author": "",
