@@ -32,8 +32,8 @@ import { SIGNER_PRIVATE_KEY, RESERVOIR_API_KEY } from "@Variables";
 
 // react router
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-// import SniperBot from "./pages/bots/sniper/SniperBot";
-// import Wallets from "./pages/bots/wallets/Wallets";
+import SniperBot from "./pages/bots/sniper/SniperBot";
+import Wallets from "./pages/bots/wallets/Wallets";
 
 // socket io
 import io from "socket.io-client";
@@ -319,7 +319,7 @@ function App() {
                                 }
                               />
 
-                              {/* <Route
+                              <Route
                                 exact
                                 path="/bots/wallets"
                                 element={
@@ -341,7 +341,7 @@ function App() {
                                     <Footer />
                                   </>
                                 }
-                              /> */}
+                              />
 
                               <Route
                                 exact
