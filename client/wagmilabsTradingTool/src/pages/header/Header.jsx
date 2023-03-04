@@ -273,7 +273,7 @@ const Header = () => {
 
         <div className="header-links-container">
           <div>
-            <div className="bots-button header-links not-allowed">
+            <div className="bots-button header-links">
               <span>Bots</span>
             </div>
           </div>
@@ -281,7 +281,7 @@ const Header = () => {
             <div className={`${isVolumesPage ? "active" : ""} volumes-button header-links`}>Volumes</div>
           </div>
           <div>
-            <div className="pnl-button header-links not-allowed">
+            <div className="pnl-button header-links" onClick={() => navigate("/profitandloss")}>
               <span>P&L</span>
             </div>
           </div>
