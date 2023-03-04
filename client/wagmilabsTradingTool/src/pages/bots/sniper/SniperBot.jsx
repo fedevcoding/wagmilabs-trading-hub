@@ -8,7 +8,7 @@ import { Header, NewTaskModal, Table } from "./components";
 import { useHandleData } from "./hooks";
 
 const SniperBot = () => {
-  const { showNewTask, showDeleteTask, toggleNewTask, toggleDeleteTask } = useHandleData();
+  const { showNewTask, toggleNewTask } = useHandleData();
 
   const { address } = useAccount();
   const [section, setSection] = useState("active");

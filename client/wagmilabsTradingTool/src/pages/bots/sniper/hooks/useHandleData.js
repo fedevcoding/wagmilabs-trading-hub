@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState } from "react";
 
 export const useHandleData = () => {
   const [showNewTask, setShowNewTask] = useState(false);
