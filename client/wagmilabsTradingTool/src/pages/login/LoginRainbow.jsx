@@ -9,7 +9,6 @@ import Home from "./components/home/Home";
 
 import { loginBackground } from "src/assets";
 import Footer from "./components/footer/Footer";
-import Team from "./components/team/Team";
 
 const Login = ({ setConnected }) => {
   const [walletConnected, setWalletConnected] = useState(false);

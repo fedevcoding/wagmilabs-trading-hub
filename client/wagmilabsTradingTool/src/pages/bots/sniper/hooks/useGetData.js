@@ -1,9 +1,9 @@
 import { getFromServer } from "@Utils";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 
 export const useGetData = () => {
   const [activeSnipes, setActiveSnipes] = useState(null);
-  const [snipeActivity, setSnipeActivity] = useState(null);
+  const [, setSnipeActivity] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
