@@ -6,10 +6,9 @@ import { jwtExpired, pushToServer } from "@Utils/functions";
 import Header from "./pages/header/Header";
 import Home from "./pages/home/Home";
 import Collection from "./pages/collection/Collection";
-import Calculators from "./pages/calculators/Calculators";
 import Volumes from "./pages/volumes/Volumes";
 import Feed from "./pages/feed/Feed";
-import Pnl from "./pages/pnl/Pnl";
+// import Pnl from "./pages/pnl/Pnl";
 import Login from "./pages/login/LoginRainbow";
 import Profile from "./pages/profile/Profile";
 import Item from "./pages/item/Item";
@@ -33,8 +32,8 @@ import { SIGNER_PRIVATE_KEY, RESERVOIR_API_KEY } from "@Variables";
 
 // react router
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import SniperBot from "./pages/bots/sniper/SniperBot";
-import Wallets from "./pages/bots/wallets/Wallets";
+// import SniperBot from "./pages/bots/sniper/SniperBot";
+// import Wallets from "./pages/bots/wallets/Wallets";
 
 // socket io
 import io from "socket.io-client";
@@ -320,7 +319,7 @@ function App() {
                                 }
                               />
 
-                              <Route
+                              {/* <Route
                                 exact
                                 path="/bots/wallets"
                                 element={
@@ -342,19 +341,7 @@ function App() {
                                     <Footer />
                                   </>
                                 }
-                              />
-
-                              <Route
-                                exact
-                                path="/calculators"
-                                element={
-                                  <>
-                                    <Header />
-                                    <Calculators />
-                                    <Footer />
-                                  </>
-                                }
-                              />
+                              /> */}
 
                               <Route
                                 exact
@@ -380,7 +367,7 @@ function App() {
                                 }
                               />
 
-                              <Route
+                              {/* <Route
                                 exact
                                 path="/profitandloss"
                                 element={
@@ -390,7 +377,7 @@ function App() {
                                     <Footer />
                                   </>
                                 }
-                              />
+                              /> */}
 
                               <Route
                                 exact

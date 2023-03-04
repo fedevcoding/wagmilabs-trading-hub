@@ -34,8 +34,7 @@ const Profile = () => {
   const { address } = useAccount();
   const ensName = useEnsName({ address });
 
-  const { listingSettings, setListingSettings, profileImage, setProfileImage } =
-    useContext(UserDataContext);
+  const { listingSettings, setListingSettings, profileImage, setProfileImage } = useContext(UserDataContext);
 
   const [userItems, setUserItems] = useState([]);
   const [userAddress] = useState(address);
@@ -51,12 +50,9 @@ const Profile = () => {
   const nftsContinuation = useRef();
 
   const [openListingSettings, setOpenListingSettings] = useState(false);
-  const [stageListingSettings, setStageListingSettings] =
-    useState(listingSettings);
+  const [stageListingSettings, setStageListingSettings] = useState(listingSettings);
 
-  const [selectedSortOption, setSelectedSortOption] = useState(
-    sortItemsOptions[0]
-  );
+  const [selectedSortOption, setSelectedSortOption] = useState(sortItemsOptions[0]);
 
   const [nftsCollectionFilter, setNftsCollectionFilter] = useState("");
 
@@ -85,15 +81,12 @@ const Profile = () => {
 
   async function fetchUserCollections(query, offset, limit) {
     try {
-      let data = await fetch(
-        `${baseUrl}/profileCollections?search=${query}&offset=${offset}&limit=${limit}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "x-auth-token": localStorage.jsonwebtoken,
-          },
-        }
-      );
+      let data = await fetch(`${baseUrl}/profileCollections?search=${query}&offset=${offset}&limit=${limit}`, {
+        headers: {
+          "Content-Type": "application/json",
+          "x-auth-token": localStorage.jsonwebtoken,
+        },
+      });
       data = await data.json();
 
       const { collections } = data;
@@ -108,9 +101,7 @@ const Profile = () => {
     try {
       setLoadingMoreNfts(true);
 
-      const continuationFilter = nftsContinuation.current
-        ? `&continuation=${nftsContinuation.current}`
-        : "";
+      const continuationFilter = nftsContinuation.current ? `&continuation=${nftsContinuation.current}` : "";
       let data = await fetch(
         `${baseUrl}/profileItems?sortDirection=${selectedSortOption.value}&collection=${nftsCollectionFilter}${continuationFilter}`,
         {
@@ -218,9 +209,7 @@ const Profile = () => {
   }
 
   const changeSection = (section, e) => {
-    document
-      .querySelectorAll(".single-profile-section")
-      .forEach(el => el.classList.remove("selected"));
+    document.querySelectorAll(".single-profile-section").forEach(el => el.classList.remove("selected"));
     e.target.classList.add("selected");
     setSection(section);
   };
@@ -307,9 +296,7 @@ const Profile = () => {
   }
 
   useEffect(() => {
-    !openListingSettings &&
-      listingSettings &&
-      setStageListingSettings(listingSettings);
+    !openListingSettings && listingSettings && setStageListingSettings(listingSettings);
   }, [openListingSettings, listingSettings]);
 
   function copyData(type, data) {
@@ -329,10 +316,7 @@ const Profile = () => {
           <section className="nft-listings-settings-modal">
             {listingSettings ? (
               <>
-                <button
-                  onClick={() => toggleListingSettings(false)}
-                  className="smart-listings-close-btn"
-                >
+                <button onClick={() => toggleListingSettings(false)} className="smart-listings-close-btn">
                   <i className="fa-solid fa-xmark"></i>
                 </button>
 
@@ -345,9 +329,7 @@ const Profile = () => {
                     <p>Price type:</p>
                     <div>
                       <RadioGroup
-                        onChange={value =>
-                          modifyStageListing("priceType", value)
-                        }
+                        onChange={value => modifyStageListing("priceType", value)}
                         value={stageListingSettings.price.type}
                       >
                         <Stack direction="row">
@@ -359,24 +341,15 @@ const Profile = () => {
 
                     {stageListingSettings.price.type === "profit" && (
                       <div className="listing-settings-profit-amount">
-                        <label htmlFor="profit-radio-button">
-                          Profit amount
-                        </label>
+                        <label htmlFor="profit-radio-button">Profit amount</label>
                         <div className="listing-settings-profit-values">
                           <Stack direction={"row"} alignItems="center">
-                            <NumberInput
-                              value={stageListingSettings?.price?.profitValue}
-                            >
+                            <NumberInput value={stageListingSettings?.price?.profitValue}>
                               <HStack>
                                 <NumberInputField
                                   className="listing-settings-value"
                                   placeholder="Amount"
-                                  onChange={e =>
-                                    modifyStageListing(
-                                      "profitValue",
-                                      e.target.value
-                                    )
-                                  }
+                                  onChange={e => modifyStageListing("profitValue", e.target.value)}
                                 />
                               </HStack>
                             </NumberInput>
@@ -386,9 +359,7 @@ const Profile = () => {
                               id=""
                               className="listing-settings-currency-type"
                               value={stageListingSettings?.price?.profitType}
-                              onChange={e =>
-                                modifyStageListing("profitType", e.target.value)
-                              }
+                              onChange={e => modifyStageListing("profitType", e.target.value)}
                             >
                               <option value="%">%</option>
                               <option value="eth">ETH</option>
@@ -406,9 +377,7 @@ const Profile = () => {
                     <HStack>
                       <Select
                         id="listing-settings-months"
-                        onChange={e =>
-                          modifyStageListing("months", e.target.value)
-                        }
+                        onChange={e => modifyStageListing("months", e.target.value)}
                         value={stageListingSettings?.time?.months}
                         size="sm"
                       >
@@ -424,9 +393,7 @@ const Profile = () => {
 
                       <Select
                         id="listing-settings-days"
-                        onChange={e =>
-                          modifyStageListing("days", e.target.value)
-                        }
+                        onChange={e => modifyStageListing("days", e.target.value)}
                         value={stageListingSettings?.time?.days}
                         size="sm"
                       >
@@ -466,9 +433,7 @@ const Profile = () => {
 
                       <Select
                         id="listing-settings-hours"
-                        onChange={e =>
-                          modifyStageListing("hours", e.target.value)
-                        }
+                        onChange={e => modifyStageListing("hours", e.target.value)}
                         value={stageListingSettings?.time?.hours}
                         size="sm"
                       >
@@ -502,9 +467,7 @@ const Profile = () => {
 
                       <Select
                         id="listing-settings-minutes"
-                        onChange={e =>
-                          modifyStageListing("minutes", e.target.value)
-                        }
+                        onChange={e => modifyStageListing("minutes", e.target.value)}
                         value={stageListingSettings?.time?.minutes}
                         size="sm"
                       >
@@ -575,16 +538,12 @@ const Profile = () => {
                   </div>
 
                   <div className="listing-settings-marketplace">
-                    <label htmlFor="listing-settings-marketplace">
-                      Marketplace:
-                    </label>
+                    <label htmlFor="listing-settings-marketplace">Marketplace:</label>
                     <HStack>
                       <Select
                         name=""
                         id="listing-settings-marketplace"
-                        onChange={e =>
-                          modifyStageListing("marketplace", e.target.value)
-                        }
+                        onChange={e => modifyStageListing("marketplace", e.target.value)}
                         value={stageListingSettings.marketplace}
                       >
                         <option value="opensea">Opensea</option>
@@ -619,9 +578,7 @@ const Profile = () => {
                   placement="top"
                   borderRadius={"7px"}
                 >
-                  <span onClick={() => copyData("ens", userEns)}>
-                    {userEns}
-                  </span>
+                  <span onClick={() => copyData("ens", userEns)}>{userEns}</span>
                 </Tooltip>
               )}
 
@@ -638,10 +595,7 @@ const Profile = () => {
                   placement="top"
                   borderRadius={"7px"}
                 >
-                  <span
-                    onClick={() => copyData("address", userAddress)}
-                    className="profile-address-copy"
-                  >
+                  <span onClick={() => copyData("address", userAddress)} className="profile-address-copy">
                     {formatAddress(userAddress)}
                   </span>
                 </Tooltip>
@@ -670,23 +624,17 @@ const Profile = () => {
             <div className="number-profits-losses">
               <p>
                 Mint count
-                <div className="nft-pnl-profit">
-                  {loadingData ? <Spinner /> : pnl?.mintCount || 0}
-                </div>
+                <div className="nft-pnl-profit">{loadingData ? <Spinner /> : pnl?.mintCount || 0}</div>
               </p>
 
               <p>
                 Bought count
-                <div className="nft-pnl-profit">
-                  {loadingData ? <Spinner /> : pnl?.boughtCount || 0}
-                </div>
+                <div className="nft-pnl-profit">{loadingData ? <Spinner /> : pnl?.boughtCount || 0}</div>
               </p>
 
               <p>
                 Sold count
-                <div className="nft-pnl-profit">
-                  {loadingData ? <Spinner /> : pnl?.soldCount || 0}
-                </div>
+                <div className="nft-pnl-profit">{loadingData ? <Spinner /> : pnl?.soldCount || 0}</div>
               </p>
 
               <p>
@@ -726,11 +674,7 @@ const Profile = () => {
                   ) : (
                     <>
                       <span
-                        className={
-                          Math.round(pnl.realizedPnl * 1000) / 1000 >= 0
-                            ? "nft-pnl-profit"
-                            : "nft-pnl-loss"
-                        }
+                        className={Math.round(pnl.realizedPnl * 1000) / 1000 >= 0 ? "nft-pnl-profit" : "nft-pnl-loss"}
                       >
                         {Math.round(pnl.realizedPnl * 1000) / 1000 || 0}
                         <span className="eth-char-logo">Ξ</span>
@@ -760,21 +704,14 @@ const Profile = () => {
 
         <div className="profile-sections-tabs">
           <div className="profile-sections">
-            <div
-              className="single-profile-section selected"
-              onClick={e => changeSection("nft", e)}
-            >
+            <div className="single-profile-section selected" onClick={e => changeSection("nft", e)}>
               NFTs
             </div>
-            <div
-              className="single-profile-section"
-              onClick={e => changeSection("activity", e)}
-            >
+            <div className="single-profile-section" onClick={e => changeSection("activity", e)}>
               Activity
             </div>
-            <div className="single-profile-section">Stats</div>
+            <div className="single-profile-section not-allowed">Stats</div>
           </div>
-
 
           {section === "nft" && showPromoBanner && (
             <a
@@ -786,12 +723,8 @@ const Profile = () => {
             >
               <i className="fa-solid fa-x profile-promo-close-btn"></i>
 
-              <h3 className="profile-promo-header">
-                FREE beta is ending soon..!
-              </h3>
-              <h4 className="profile-promo-body">
-                Get whitelisted to mint the NFT pass for yearly access!
-              </h4>
+              <h3 className="profile-promo-header">FREE beta is ending soon..!</h3>
+              <h4 className="profile-promo-body">Get whitelisted to mint the NFT pass for yearly access!</h4>
               <Button colorScheme={"gray"} className="profile-promo-button">
                 Get Whitelisted
               </Button>
@@ -808,10 +741,7 @@ const Profile = () => {
               >
                 Calcs<i className="fa-solid fa-calculator"></i>
               </a>
-              <div
-                className="profile-settings-button"
-                onClick={() => toggleListingSettings(true)}
-              >
+              <div className="profile-settings-button" onClick={() => toggleListingSettings(true)}>
                 Smart list settings<i className="fa-solid fa-gear"></i>
               </div>
             </div>
@@ -864,15 +794,7 @@ const Spinner = () => {
         viewBox="0 0 66 66"
         xmlns="http://www.w3.org/2000/svg"
       >
-        <circle
-          className="path"
-          fill="none"
-          strokeWidth="6"
-          strokeLinecap="round"
-          cx="33"
-          cy="33"
-          r="30"
-        ></circle>
+        <circle className="path" fill="none" strokeWidth="6" strokeLinecap="round" cx="33" cy="33" r="30"></circle>
       </svg>
     </div>
   );
