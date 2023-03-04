@@ -1,19 +1,18 @@
-const express = require("express")
-const cors = require("cors")
-const path = require("path")
+const express = require("express");
+const cors = require("cors");
+const path = require("path");
 
-const app = express()
-app.use(cors())
+const app = express();
+app.use(cors());
 
-app.use(express.json())
+app.use(express.json());
 
-const port = process.env.PORT || 4000
+const port = process.env.PORT || 4000;
 
 app.use(express.static(path.join(__dirname, "/wagmilabsTradingTool/build")));
 
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, "/wagmilabsTradingTool/build/index.html"));
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "/wagmilabsTradingTool/build/index.html"));
 });
 
-// testt roles 
-app.listen(port, () => console.log("app listening on port " + port))
+app.listen(port, () => console.log("app listening on port " + port));
