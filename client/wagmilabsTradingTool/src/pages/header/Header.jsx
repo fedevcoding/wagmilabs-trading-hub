@@ -311,7 +311,7 @@ const Header = () => {
                 <p>Profile</p>
               </div>
 
-              <div className="switch-account-option-container">
+              <div className="switch-account-option-container not-allowed">
                 <i className="fa-solid fa-arrows-repeat"></i>
                 <p>Switch account</p>
               </div>
