@@ -13,8 +13,7 @@ import "./style.css";
 
 export const CartModal = ({ modalOpen, closeCartModal }) => {
   const toast = useToast();
-  const { userCartItems, setUserCartItems, ethData, gasSettings } =
-    useContext(UserDataContext);
+  const { userCartItems, setUserCartItems, ethData, gasSettings } = useContext(UserDataContext);
   const navigate = useNavigate();
 
   const { removeItemFromCart } = useRemoveItemFromCart();
@@ -44,9 +43,7 @@ export const CartModal = ({ modalOpen, closeCartModal }) => {
     try {
       const signer = await fetchSigner();
       const maxFeePerGas = (gasSettings.maxFeePerGas * 1000000000).toString();
-      const maxPriorityFeePerGas = (
-        gasSettings.maxPriorityFeePerGas * 1000000000
-      ).toString();
+      const maxPriorityFeePerGas = (gasSettings.maxPriorityFeePerGas * 1000000000).toString();
 
       const tokens = userCartItems.map(item => {
         const { tokenId, contractAddress } = item;
@@ -61,17 +58,13 @@ export const CartModal = ({ modalOpen, closeCartModal }) => {
           maxFeePerGas,
           maxPriorityFeePerGas,
         },
-        onProgress: steps => {
-          // console.log(steps)
-        },
       });
 
       if (res.response.data.statusCode === 400) throw new Error("error");
     } catch (e) {
       toast({
         title: "Error",
-        description:
-          "Something went wrong, try checking orders availability or wallet balance",
+        description: "Something went wrong, try checking orders availability or wallet balance",
         status: "error",
         duration: 3000,
         isClosable: true,
@@ -79,46 +72,26 @@ export const CartModal = ({ modalOpen, closeCartModal }) => {
     }
   }
 
-  const totalPrice = useMemo(
-    () => userCartItems.reduce((total, item) => item.price + total, 0),
-    [userCartItems]
-  );
+  const totalPrice = useMemo(() => userCartItems.reduce((total, item) => item.price + total, 0), [userCartItems]);
 
   const userCartMapping = useMemo(
     () =>
       userCartItems.map(item => {
-        const {
-          name,
-          tokenId,
-          contractAddress,
-          image,
-          price,
-          collectionName,
-          listingId,
-        } = item;
+        const { name, tokenId, contractAddress, image, price, collectionName, listingId } = item;
 
         return (
-          <div
-            className="user-cart-single-item"
-            key={contractAddress + tokenId + listingId}
-          >
+          <div className="user-cart-single-item" key={contractAddress + tokenId + listingId}>
             <img src={image} className="user-cart-item-image" alt="" />
             <div className="user-cart-item-details-container wrap-text">
               <p className="user-cart-item-name wrap-text">{name}</p>
-              <p className="user-cart-collection-name wrap-text">
-                {collectionName}
-              </p>
+              <p className="user-cart-collection-name wrap-text">{collectionName}</p>
             </div>
             <div className="user-cart-item-price-container">
-              <p className="user-cart-item-price big-text">
-                {roundPrice(price)} ETH
-              </p>
+              <p className="user-cart-item-price big-text">{roundPrice(price)} ETH</p>
 
               <p
                 className="user-cart-item-remove"
-                onClick={() =>
-                  removeItemFromCart(tokenId, contractAddress, listingId)
-                }
+                onClick={() => removeItemFromCart(tokenId, contractAddress, listingId)}
               >
                 <i className="fa-solid fa-trash-can"></i>
               </p>
@@ -138,10 +111,7 @@ export const CartModal = ({ modalOpen, closeCartModal }) => {
             <header className="cart-modal-header">
               <div className="modal-cart-your-cart">
                 <p>Your cart</p>
-                <i
-                  className="fa-solid fa-xmark"
-                  onClick={e => closeCartModal(e)}
-                ></i>
+                <i className="fa-solid fa-xmark" onClick={e => closeCartModal(e)}></i>
               </div>
               <hr className="cart-hr"></hr>
             </header>
@@ -163,27 +133,16 @@ export const CartModal = ({ modalOpen, closeCartModal }) => {
 
                   <div className="user-cart-total-price">
                     <div>
-                      <p className="user-cart-price-total-price">
-                        Total price:
-                      </p>
+                      <p className="user-cart-price-total-price">Total price:</p>
                     </div>
 
                     <div className="user-cart-price-currencies">
-                      <p className="user-cart-price-currencies-eth">
-                        {roundPrice(totalPrice)} ETH
-                      </p>
-                      <p className="user-cart-price-currencies-usd">
-                        ${getFiatPrice(ethData.ethPrice, totalPrice)}
-                      </p>
+                      <p className="user-cart-price-currencies-eth">{roundPrice(totalPrice)} ETH</p>
+                      <p className="user-cart-price-currencies-usd">${getFiatPrice(ethData.ethPrice, totalPrice)}</p>
                     </div>
                   </div>
 
-                  <Button
-                    className="user-cart-buy-button"
-                    colorScheme={"blue"}
-                    onClick={batchBuyItems}
-                    height="50px"
-                  >
+                  <Button className="user-cart-buy-button" colorScheme={"blue"} onClick={batchBuyItems} height="50px">
                     Complete purchase
                   </Button>
                 </div>
@@ -193,11 +152,7 @@ export const CartModal = ({ modalOpen, closeCartModal }) => {
                 <img src={notFound} className="cart-notfound-img" alt="" />
                 <p>Your cart is empty.</p>
 
-                <Button
-                  colorScheme={"blue"}
-                  onClick={startExploring}
-                  className="cart-start-exploring-button"
-                >
+                <Button colorScheme={"blue"} onClick={startExploring} className="cart-start-exploring-button">
                   Start exploring
                 </Button>
               </div>

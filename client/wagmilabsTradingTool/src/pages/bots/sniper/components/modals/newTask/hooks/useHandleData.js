@@ -19,7 +19,6 @@ export const useHandleData = wallets => {
       const privateKey = wallets.find(
         wallet => wallet?.address?.toLowerCase() === data?.walletAddress?.toLowerCase()
       )?.privateKey;
-      console.log(privateKey);
       setData(prevData => {
         return { ...prevData, privateKey };
       });
