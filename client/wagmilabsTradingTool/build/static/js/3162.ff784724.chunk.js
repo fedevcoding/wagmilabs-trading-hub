@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkwagmi_labs_trading_tool=self.webpackChunkwagmi_labs_trading_tool||[]).push([[3162],{53162:function(a,s,t){t.r(s),t.d(s,{default:function(){return e}});var e={messages:{}}}}]);
+//# sourceMappingURL=3162.ff784724.chunk.js.map
