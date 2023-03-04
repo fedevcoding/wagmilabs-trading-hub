@@ -9,7 +9,7 @@ import Home from "./components/home/Home";
 
 import { loginBackground } from "src/assets";
 import Footer from "./components/footer/Footer";
-// import Team from "./components/team/Team";
+import Team from "./components/team/Team";
 import { Reviews } from "./components/reviews/Reviews.jsx";
 
 const Login = ({ setConnected }) => {
@@ -27,7 +27,7 @@ const Login = ({ setConnected }) => {
         <div className="section2">
           <hr className="hr"></hr>
           <Reviews />
-          {/* <Team /> */}
+          <Team />
           <Footer />
         </div>
       </div>
