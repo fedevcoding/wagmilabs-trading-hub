@@ -1,1 +1,0 @@
-(self.webpackChunkwagmi_labs_trading_tool=self.webpackChunkwagmi_labs_trading_tool||[]).push([[4726],{52361:function(){},94616:function(){}}]);

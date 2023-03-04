@@ -1,1 +1,0 @@
-{"version":3,"file":"static/js/9545.6cad2dc1.chunk.js","mappings":"sLAEA,IAAIA,EAAK,CAACC,SAAS,CAAC,E","sources":["../node_modules/@uniswap/widgets/dist/locales/id-ID.js"],"sourcesContent":["/*eslint-disable*/\n\nvar idID={messages:{}};\n\nexport { idID as default };\n"],"names":["idID","messages"],"sourceRoot":""}
