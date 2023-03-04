@@ -25,8 +25,6 @@ tokenRoute.get("/:address/token/:id/details", checkAuth, async (req, res) => {
       )
     ).json();
 
-    console.log(tokenInfo);
-
     if ((tokenInfo?.tokens || [])[0]) {
       data = tokenInfo?.tokens[0];
     }
@@ -105,8 +103,6 @@ tokenRoute.get(
     } catch (error) {
       // token not found or reservoir error
     }
-
-    console.log("totalSupply", totalSupply);
 
     async function getData() {
       res.status(200).json({
