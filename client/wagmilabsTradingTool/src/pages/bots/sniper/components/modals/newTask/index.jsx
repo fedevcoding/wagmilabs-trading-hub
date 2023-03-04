@@ -14,12 +14,14 @@ import {
   RadioGroup,
   Select,
 } from "@chakra-ui/react";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import EthereumSearch from "src/pages/search/EthereumSearch";
 import { useHandleData, useSteps } from "./hooks";
 
 export const NewTaskModal = React.memo(({ showNewTask, toggleNewTask }) => {
   const { step, nextStep, prevStep, resetStep } = useSteps();
+
+  const [wallets, setWallets] = useState([]);
 
   const {
     collection,
@@ -31,7 +33,12 @@ export const NewTaskModal = React.memo(({ showNewTask, toggleNewTask }) => {
     handleSetData,
     handleCollectionClick,
     resetCollection,
-  } = useHandleData();
+  } = useHandleData(wallets);
+
+  useEffect(() => {
+    const wallets = JSON.parse(localStorage.getItem("wallets")) || [];
+    setWallets(wallets);
+  }, []);
 
   useEffect(() => {
     if (showNewTask) {
@@ -106,10 +113,22 @@ export const NewTaskModal = React.memo(({ showNewTask, toggleNewTask }) => {
                   </RadioGroup>
 
                   {walletType === "privatekey" ? (
-                    <Input placeholder="Private key" type="password" />
+                    <Input
+                      placeholder="Private key"
+                      type="password"
+                      value={privateKey}
+                      onChange={e => handleSetData("privateKey", e.target.value)}
+                    />
                   ) : (
-                    <Select>
-                      <option value="wallet">Wallet</option>
+                    <Select onChange={e => handleSetData("walletAddress", e.target.value)} value={walletAddress}>
+                      <option value={undefined} style={{ display: "none" }}>
+                        Select wallet
+                      </option>
+                      {wallets?.map(row => (
+                        <option value={row.address} key={crypto.randomUUID()}>
+                          {row.name}
+                        </option>
+                      ))}
                     </Select>
                   )}
                 </div>

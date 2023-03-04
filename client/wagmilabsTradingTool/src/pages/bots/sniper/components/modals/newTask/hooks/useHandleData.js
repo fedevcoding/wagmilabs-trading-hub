@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-export const useHandleData = () => {
+export const useHandleData = wallets => {
   const [data, setData] = useState({
     collection: {
       name: "",
@@ -14,8 +14,19 @@ export const useHandleData = () => {
     privateKey: "",
   });
 
+  useEffect(() => {
+    if (data?.walletAddress?.length > 0 && wallets?.length > 0) {
+      const privateKey = wallets.find(
+        wallet => wallet?.address?.toLowerCase() === data?.walletAddress?.toLowerCase()
+      )?.privateKey;
+      console.log(privateKey);
+      setData(prevData => {
+        return { ...prevData, privateKey };
+      });
+    }
+  }, [data.walletAddress, wallets]);
+
   const handleSetData = (dataIndex, data) => {
-    console.log(dataIndex, data);
     setData(prevData => {
       return { ...prevData, [dataIndex]: data };
     });
