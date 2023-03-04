@@ -98,7 +98,6 @@ body.overflow-hidden {
   margin-right: 10px;
 }
 
-
 .not-responsive {
   display: none;
 }
@@ -124,3 +123,6 @@ body.overflow-hidden {
   }
 }
 
+.not-allowed {
+  cursor: not-allowed;
+}
