@@ -64,7 +64,7 @@ const wagmiClient = createWagmiClient({
 createClient({
   apiBase: "https://api.reservoir.tools",
   apiKey: RESERVOIR_API_KEY,
-  source: "http://localhost:3000",
+  source: "app.wagmilabs.tools",
 });
 
 // for reservoir
