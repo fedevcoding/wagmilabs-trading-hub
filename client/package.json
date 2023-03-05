@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.jsx",
   "scripts": {
+    "dev": "cd wagmilabsTradingTool && npm start",
     "start": "node server.js"
   },
   "keywords": [],
