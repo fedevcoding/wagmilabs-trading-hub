@@ -18,10 +18,7 @@ createClient({
 });
 
 const INFURA_API_KEY = "65b930ca2b6d44f3aca1217115af002e";
-const provider = new ethers.providers.InfuraProvider(
-  "homestead",
-  INFURA_API_KEY
-);
+const provider = new ethers.providers.InfuraProvider("homestead", INFURA_API_KEY);
 
 const saleBotRoute = express();
 
@@ -52,7 +49,7 @@ saleBotRoute.post("/", checkAuth, async (req, res) => {
   // }
 });
 
-const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 // listenToListings()
 // async function listenToListings() {

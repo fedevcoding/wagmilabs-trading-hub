@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 const { Button, HStack } = require("@chakra-ui/react");
 
-export const Header = ({ section, setSection, toggleNewTask }) => {
+export const Header = ({ section, setSection, toggleNewTaskModal }) => {
   const navigate = useNavigate();
 
   const changeSection = section => {
@@ -21,7 +21,7 @@ export const Header = ({ section, setSection, toggleNewTask }) => {
       </div>
 
       <div className="options-right">
-        <Button onClick={() => toggleNewTask(true)}>
+        <Button onClick={() => toggleNewTaskModal(true)}>
           <HStack>
             <i className="fa-solid fa-plus"></i>
             <p>New task</p>

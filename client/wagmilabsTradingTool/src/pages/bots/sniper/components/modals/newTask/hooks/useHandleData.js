@@ -2,11 +2,9 @@ import { useState, useEffect, useMemo } from "react";
 
 export const useHandleData = (wallets, step) => {
   const [data, setData] = useState({
-    collection: {
-      name: undefined,
-      image: undefined,
-      address: undefined,
-    },
+    collectionName: undefined,
+    collectionImage: undefined,
+    collectionAddress: undefined,
     minPrice: undefined,
     maxPrice: undefined,
     walletType: "privatekey",
@@ -18,10 +16,8 @@ export const useHandleData = (wallets, step) => {
   });
 
   useEffect(() => {
-    console.log("data.walletAddress", data.walletAddress);
     if (data?.walletAddress?.length > 0 && wallets?.length > 0) {
       const privateKey = wallets.find(wallet => wallet?.address === data?.walletAddress)?.privateKey;
-      console.log("privateKey", privateKey);
       setData(prevData => {
         return { ...prevData, privateKey };
       });
@@ -38,20 +34,18 @@ export const useHandleData = (wallets, step) => {
     const { name, image, collectionId } = data;
 
     setData(prevData => {
-      return { ...prevData, collection: { name, image, address: collectionId } };
+      return { ...prevData, collectionAddress: collectionId, collectionImage: image, collectionName: name };
     });
   };
 
   const resetCollection = () => {
     setData(prevData => {
-      return { ...prevData, collection: { name: "", image: "", address: "" } };
+      return { ...prevData, collectionAddress: undefined, collectionImage: undefined, collectionName: undefined };
     });
   };
 
   const isValidNextStep = useMemo(() => {
-    console.log(data);
     const {
-      collection,
       maxPrice,
       walletType,
       walletAddress,
@@ -59,14 +53,13 @@ export const useHandleData = (wallets, step) => {
       // maxFeePerGas,
       maxPriorityFeePerGas,
       maxAutoBuy,
+      collectionAddress,
     } = data;
     if (step === 1) {
       if (walletType === "privatekey")
-        return collection.address && maxPrice && (privateKey?.length === 64 || privateKey?.length === 66)
-          ? true
-          : false;
+        return collectionAddress && maxPrice && (privateKey?.length === 64 || privateKey?.length === 66) ? true : false;
       else
-        return collection.address &&
+        return collectionAddress &&
           maxPrice &&
           walletAddress &&
           (privateKey?.length === 64 || privateKey?.length === 66)
@@ -79,11 +72,9 @@ export const useHandleData = (wallets, step) => {
 
   const resetData = () => {
     setData({
-      collection: {
-        name: undefined,
-        image: undefined,
-        address: undefined,
-      },
+      collectionName: undefined,
+      collectionImage: undefined,
+      collectionAddress: undefined,
       minPrice: undefined,
       maxPrice: undefined,
       walletType: "privatekey",
@@ -95,9 +86,22 @@ export const useHandleData = (wallets, step) => {
     });
   };
 
-  const { collection, minPrice, maxPrice, walletType, walletAddress, privateKey, maxFeePerGas, maxAutoBuy } = data;
+  const {
+    collectionAddress,
+    collectionImage,
+    collectionName,
+    minPrice,
+    maxPrice,
+    walletType,
+    walletAddress,
+    privateKey,
+    maxFeePerGas,
+    maxAutoBuy,
+  } = data;
   return {
-    collection,
+    collectionAddress,
+    collectionImage,
+    collectionName,
     minPrice,
     maxPrice,
     walletType,

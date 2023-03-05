@@ -5,14 +5,14 @@ import "./style.scss";
 import { SocketContext } from "@Context";
 import { useAccount } from "wagmi";
 import { Header, NewTaskModal, Table } from "./components";
-import { useHandleData } from "./hooks";
+import { useHandleData, useGetData } from "./hooks";
 
 const SniperBot = () => {
-  const { showNewTask, toggleNewTask } = useHandleData();
+  const { activeSnipes } = useGetData();
+  const { showNewTask, toggleNewTaskModal, section, setSection, toggleSnipe } = useHandleData(activeSnipes);
 
+  /*
   const { address } = useAccount();
-  const [section, setSection] = useState("active");
-
   const socket = useContext(SocketContext);
   useEffect(() => {
     socket.emit("joinPendingSnipes", address);
@@ -26,14 +26,15 @@ const SniperBot = () => {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+  */
 
   return (
     <section className="sniper-bot-section">
-      <Header section={section} setSection={setSection} toggleNewTask={toggleNewTask} />
+      <Header section={section} setSection={setSection} toggleNewTaskModal={toggleNewTaskModal} />
 
-      <NewTaskModal showNewTask={showNewTask} toggleNewTask={toggleNewTask} />
+      <NewTaskModal showNewTask={showNewTask} toggleNewTaskModal={toggleNewTaskModal} toggleSnipe={toggleSnipe} />
 
-      <Table section={section} />
+      <Table section={section} activeSnipes={activeSnipes} />
     </section>
   );
 };

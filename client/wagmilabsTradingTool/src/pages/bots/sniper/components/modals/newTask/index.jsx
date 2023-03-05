@@ -21,11 +21,13 @@ import { useHandleData, useSteps } from "./hooks";
 import { useGetWallets } from "@Hooks";
 import { useSaveTask } from "./hooks/useSaveTask";
 
-export const NewTaskModal = React.memo(({ showNewTask, toggleNewTask }) => {
+export const NewTaskModal = React.memo(({ showNewTask, toggleNewTaskModal, toggleSnipe }) => {
   const { step, nextStep, prevStep, resetStep } = useSteps();
   const wallets = useGetWallets();
   const {
-    collection,
+    collectionAddress,
+    collectionImage,
+    collectionName,
     minPrice,
     maxPrice,
     walletType,
@@ -42,12 +44,12 @@ export const NewTaskModal = React.memo(({ showNewTask, toggleNewTask }) => {
   } = useHandleData(wallets, step);
 
   const closeNewTask = () => {
-    toggleNewTask(false);
+    toggleNewTaskModal(false);
     resetStep();
     resetData();
   };
 
-  const { saveTask, isLoading } = useSaveTask(closeNewTask);
+  const { saveTask, isLoading } = useSaveTask(closeNewTask, toggleSnipe);
 
   return (
     <Modal isOpen={showNewTask} onClose={closeNewTask}>
@@ -63,11 +65,11 @@ export const NewTaskModal = React.memo(({ showNewTask, toggleNewTask }) => {
                 <div className="option">
                   <p className="titles">Collection</p>
 
-                  {collection.address ? (
+                  {collectionAddress ? (
                     <div className="collection-container">
                       <HStack>
-                        <img src={collection.image} alt={collection.name} className="collection-image" />
-                        <p className="collection-name">{collection.name}</p>
+                        <img src={collectionImage} alt={collectionName} className="collection-image" />
+                        <p className="collection-name">{collectionName}</p>
                       </HStack>
 
                       <i class="fa-solid fa-x" onClick={resetCollection}></i>

@@ -1,6 +1,6 @@
 import React from "react";
 
-export const Table = ({ section }) => {
+export const Table = ({ section, activeSnipes }) => {
   return (
     <div className="table-wrapper">
       <table cellSpacing={0} className="table">
@@ -35,7 +35,26 @@ export const Table = ({ section }) => {
           </tr>
         </thead>
 
-        <tbody></tbody>
+        <tbody>
+          {section === "active" &&
+            activeSnipes?.map((snipe, index) => {
+              const { collectionName, collectionImage, maxPrice, maxAutoBuy, walletAddress, maxPriorityFeePerGas } =
+                snipe;
+              return (
+                <tr key={index}>
+                  <td>{collectionName}</td>
+                  <td>{maxPrice}</td>
+                  <td>{maxAutoBuy}</td>
+                  <td>{walletAddress}</td>
+                  <td>{"active"}</td>
+                  <td>{maxPriorityFeePerGas}</td>
+                  <td>
+                    <button className="btn btn-danger">Cancel</button>
+                  </td>
+                </tr>
+              );
+            })}
+        </tbody>
       </table>
     </div>
   );
