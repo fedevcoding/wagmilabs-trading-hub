@@ -49,6 +49,7 @@ export const useListNft = ({ contractAddress, tokenId, listingPrice }, callback)
           },
         ],
         signer,
+        onProgress: steps => console.log(steps),
       });
 
       setConfirmingList(false);

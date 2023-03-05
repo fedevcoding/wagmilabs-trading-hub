@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  Button,
-  Modal,
-  ModalBody,
-  ModalContent,
-  ModalOverlay,
-} from "@chakra-ui/react";
+import { Button, Modal, ModalBody, ModalContent, ModalOverlay } from "@chakra-ui/react";
 
 import "./index.scss";
 
@@ -33,11 +27,7 @@ export const PromoModal = React.memo(({ isOpen, onClose }) => {
             target={"_blank"}
             rel="noreferrer"
           >
-            <Button
-              colorScheme={"blue"}
-              className="button"
-              onClick={addClicked}
-            >
+            <Button colorScheme={"blue"} className="button" onClick={addClicked}>
               Share on the bird app!
             </Button>
           </a>

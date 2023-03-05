@@ -1,0 +1,296 @@
+#about-us {
+  & .aboutUs {
+    min-height: 100vh;
+    color: white;
+    padding-bottom: 40px;
+  }
+
+  .title {
+    text-align: center;
+    padding: 50px 0;
+    font-size: 34px;
+    letter-spacing: 1.2px;
+  }
+
+  .cardsContainer {
+    display: flex;
+    gap: 10px;
+    justify-content: space-around;
+  }
+
+  .card {
+    width: 350px;
+    background-color: #0e0f0e;
+    border: 1px solid white;
+    padding: 30px 20px;
+    border-radius: 20px;
+    transition: all 350ms;
+  }
+  .card:hover {
+    transform: translateY(-20px);
+  }
+  .teamImg {
+    width: 120px;
+    border-radius: 50%;
+    display: block;
+    margin: 0 auto;
+  }
+  .cardName {
+    text-align: center;
+    letter-spacing: 3px;
+    margin: 15px 0 10px 0;
+    font-size: 20px;
+  }
+
+  .cardRole {
+    text-align: center;
+    margin-bottom: 15px;
+    color: #1993eb;
+    font-size: 15px;
+    letter-spacing: 1.1px;
+  }
+
+  .cardDescription {
+    text-align: center;
+    margin: 0 15px;
+    font-size: 15px;
+  }
+
+  .cardLinks {
+    display: flex;
+    justify-content: center;
+  }
+  .cardsSocialImages {
+    width: 30px;
+    margin: 25px 20px 0 20px;
+    transition: scale 250ms;
+  }
+  .cardsSocialImages:hover {
+    scale: 1.15;
+  }
+  .description {
+    width: 90vw;
+    font-size: 20px;
+    margin: 0 auto;
+    text-align: center;
+    padding: 90px 0 60px 0;
+  }
+
+  .investors {
+    width: 100vw;
+    margin: 0 auto;
+    margin-top: 100px;
+  }
+
+  .imgContainer {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 50px;
+  }
+
+  .vcImg {
+    height: 120px;
+    cursor: pointer;
+  }
+
+  .entreprenistonImg {
+    height: 120px;
+    width: auto;
+    margin-right: 30px;
+    margin-left: 38px;
+    cursor: pointer;
+  }
+
+  .luckyTraderImg {
+    height: 100px;
+    margin-left: 40px;
+    cursor: pointer;
+  }
+
+  .mikImg {
+    height: 100px;
+    margin-left: 40px;
+    cursor: pointer;
+  }
+
+  // @media screen and (max-width: 1400px) {
+  //   .cardsContainer {
+  //     flex-wrap: wrap;
+  //     gap: 140px 0;
+  //     margin-top: 40px;
+  //   }
+  //   .card {
+  //     margin: 0 70px;
+  //   }
+  //   .cardsContainer:last-child {
+  //     margin-bottom: 100px;
+  //   }
+  // }
+
+  // @media screen and (max-width: 1000px) {
+  //   .title {
+  //     font-size: 30px;
+  //   }
+  //   .vcImg {
+  //     height: 95px;
+  //   }
+  //   .promotescaleImg {
+  //     height: 85px;
+  //   }
+  //   .entreprenistonImg {
+  //     height: 100px;
+  //   }
+  // }
+
+  // @media screen and (max-width: 900px) {
+  //   .vcImg {
+  //     height: 80px;
+  //   }
+  //   .promotescaleImg {
+  //     height: 75px;
+  //   }
+  //   .entreprenistonImg {
+  //     height: 90px;
+  //   }
+  // }
+
+  // @media screen and (max-width: 750px) {
+  //   .vcImg {
+  //     height: 70px;
+  //   }
+  //   .promotescaleImg {
+  //     height: 65px;
+  //   }
+  //   .entreprenistonImg {
+  //     height: 80px;
+  //   }
+
+  //   .imgContainer {
+  //     padding: 0 40px;
+  //   }
+  // }
+
+  // @media screen and (max-width: 659px) {
+  //   .promotescaleImg {
+  //     margin-top: 40px;
+  //   }
+  // }
+
+  // @media screen and (max-width: 520px) {
+  //   .card {
+  //     margin: 0;
+  //     width: 340px;
+  //     height: 500px;
+  //   }
+  //   .cardDescription {
+  //     max-width: 270px;
+  //   }
+  // }
+
+  // @media screen and (max-width: 500px) {
+  //   .card {
+  //     margin: 0;
+  //     width: 300px;
+  //     height: 530px;
+  //   }
+  //   .cardDescription {
+  //     max-width: 220px;
+  //   }
+  //   .title {
+  //     font-size: 26px;
+  //   }
+
+  //   .imgContainer {
+  //     padding: 20px;
+  //   }
+  //   .vcImg {
+  //     height: 60px;
+  //   }
+  //   .promotescaleImg {
+  //     height: 55px;
+  //   }
+  //   .entreprenistonImg {
+  //     height: 70px;
+  //   }
+  // }
+
+  // @media screen and (max-width: 344px) {
+  //   .entreprenistonImg {
+  //     margin-top: 40px;
+  //   }
+  // }
+
+  // @media screen and (max-width: 400px) {
+  //   .card {
+  //     margin: 0;
+  //     width: 250px;
+  //     height: 450px;
+  //   }
+  //   .teamImg {
+  //     width: 120px;
+  //   }
+  //   .cardName {
+  //     font-size: 20px;
+  //   }
+  //   .cardRole {
+  //     font-size: 14px;
+  //   }
+  //   .cardDescription {
+  //     font-size: 14px;
+  //     max-width: 200px;
+  //   }
+  // }
+
+  // @media screen and (max-width: 320px) {
+  //   .vcImg {
+  //     height: 55px;
+  //   }
+  //   .promotescaleImg {
+  //     height: 50px;
+  //   }
+  //   .entreprenistonImg {
+  //     height: 65px;
+  //   }
+  // }
+
+  // @media screen and (min-width: 1600px) {
+  //   .title,
+  //   .partnerTitle {
+  //     font-size: 38px;
+  //   }
+  //   .card {
+  //     width: 410px;
+  //     height: 520px;
+  //   }
+  //   .cardName {
+  //     font-size: 28px;
+  //   }
+  //   .cardRole {
+  //     font-size: 18px;
+  //   }
+  //   .cardDescription {
+  //     font-size: 18px;
+  //   }
+  // }
+
+  // @media screen and (min-width: 1800px) {
+  //   .title,
+  //   .partnerTitle {
+  //     font-size: 40px;
+  //   }
+  //   .card {
+  //     width: 430px;
+  //     height: 550px;
+  //   }
+  //   .cardName {
+  //     font-size: 30px;
+  //   }
+  //   .cardRole {
+  //     font-size: 20px;
+  //   }
+  //   .cardDescription {
+  //     font-size: 20px;
+  //   }
+  // }
+}
