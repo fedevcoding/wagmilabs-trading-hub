@@ -63,10 +63,10 @@ const Team = () => {
             alt="Wagmi Labs"
           />
           <h1 className="cardName">Vito Lattanzi</h1>
-          <div className="cardRole">BizDevOps, GTM & Mentor</div>
+          <div className="cardRole">VC, GTM & Mentor</div>
           <div className="cardDescription">
             Innovation manager with over 25 years of experience in corporate, covering strategic roles in sales and
-            marketing, leading to partnerships with startups as a mentor, business angel and VC point of contact.
+            marketing, leading to partnerships with startups as a mentor, business angel and VC.
           </div>
 
           <div className="cardLinks">
@@ -78,7 +78,6 @@ const Team = () => {
       </div>
 
       <section className={"investors"}>
-        <h1 className={"title"}>Our partners</h1>
         <div className={"imgContainer"}>
           <a href="https://www.verumcapital.it/" target="_blank" rel="noreferrer">
             <img
