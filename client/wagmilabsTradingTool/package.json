@@ -2,10 +2,6 @@
   "name": "wagmi-labs-trading-tool",
   "version": "0.1.0",
   "private": true,
-  "engines": {
-    "node": "14.20.0",
-    "npm": "6.14.17"
-  },
   "dependencies": {
     "@chakra-ui/react": "^2.4.3",
     "@emotion/styled": "^11.10.5",

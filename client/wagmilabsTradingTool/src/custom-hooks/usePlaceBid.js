@@ -6,8 +6,7 @@ import { useToast } from "@chakra-ui/react";
 
 export const usePlaceBid = marketplace => {
   const { options } = useGetReservoirOptions();
-  const { orderbook, orderKind } =
-    marketListingMapping[marketplace.toLowerCase()] || {};
+  const { orderbook, orderKind } = marketListingMapping[marketplace.toLowerCase()] || {};
   const toast = useToast();
 
   async function placeBid(tokenAddress, price, date) {
@@ -44,9 +43,7 @@ export const usePlaceBid = marketplace => {
             orderbook,
             orderKind,
             token: tokenAddress,
-            expirationTime: parseInt(
-              new Date(date).getTime() / 1000
-            ).toString(),
+            expirationTime: parseInt(new Date(date).getTime() / 1000).toString(),
           },
         ],
         signer,
