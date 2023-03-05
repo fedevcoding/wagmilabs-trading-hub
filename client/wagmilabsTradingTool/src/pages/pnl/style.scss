@@ -69,5 +69,10 @@
         border-radius: 5px;
       }
     }
+
+    .td-paid a,
+    .td-sold a {
+      cursor: pointer;
+    }
   }
 }

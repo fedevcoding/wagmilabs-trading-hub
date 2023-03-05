@@ -6,11 +6,12 @@ import { LoadingSpinner, Number } from "@Components";
 import { useNavigate } from "react-router-dom";
 import { Tooltip } from "@chakra-ui/react";
 
-export const Row = React.memo(({ nft, taxPerc, taxedOn, currency, tokensInfo, isFetchingInitialData, isMinted }) => {
+export const Row = React.memo(({ nft, allInfo, taxPerc, taxedOn, currency, tokensInfo, isFetchingInitialData }) => {
   const navigate = useNavigate();
   const momentDuration = moment.duration(nft.holdDuration, "seconds").humanize();
   const symbol = currency === "usd" ? "$" : " ETH";
   const tokenInfo = tokensInfo[(nft.nft.address + nft.nft.id).toLowerCase()];
+  const isMinted = !!allInfo.minted;
 
   return (
     <tr>
@@ -35,13 +36,15 @@ export const Row = React.memo(({ nft, taxPerc, taxedOn, currency, tokensInfo, is
         {isMinted ? (
           "Minted"
         ) : (
-          <>
+          <a href={`https://etherscan.io/tx/${allInfo.bought.transaction_hash}`} target="_blank" rel="noreferrer">
             {nft.paid.eth + " ETH"} <br /> {nft.paid.usd + "$"}
-          </>
+          </a>
         )}
       </td>
       <td className="td-sold">
-        {nft.sold.eth + " ETH"} <br /> {nft.sold.usd + "$"}
+        <a href={`https://etherscan.io/tx/${allInfo.sold.transaction_hash}`} target="_blank" rel="noreferrer">
+          {nft.sold.eth + " ETH"} <br /> {nft.sold.usd + "$"}
+        </a>
       </td>
       <td className="td-gas-fees">
         <Tooltip
