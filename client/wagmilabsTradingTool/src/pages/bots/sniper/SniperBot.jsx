@@ -24,6 +24,7 @@ const SniperBot = () => {
     return () => {
       socket.emit("leavePendingSnipes", address);
     };
+    //
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
