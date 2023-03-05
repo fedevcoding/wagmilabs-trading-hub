@@ -21,13 +21,12 @@ route.get("/:address", checkAuth, (req, res) => {
       const start = new Date(parseInt(startDate)).toISOString();
       const end = new Date(parseInt(endDate)).toISOString();
 
-      const exchangeCondition =
-        "exchange_name IN('opensea', 'blur', 'x2y2', 'sudoswap', 'looksrare')";
+      const exchangeCondition = "exchange_name IN('opensea', 'blur', 'x2y2', 'sudoswap', 'looksrare')";
 
       const query = `
         SELECT timestamp, contract_address, token_id, usd_price, eth_price, royalty_fee, platform_fee, transaction_hash
         FROM ethereum.nft_sales
-        WHERE buyer_address = '${address}' AND timestamp >= '${start}'  AND timestamp <= '${end}'
+        WHERE buyer_address = '${address}' AND timestamp <= '${end}'
         AND ${exchangeCondition}
         AND CONCAT(contract_address, token_id) IN (
             SELECT CONCAT(contract_address, token_id)
@@ -44,7 +43,7 @@ route.get("/:address", checkAuth, (req, res) => {
         AND CONCAT(contract_address, token_id) IN (
           SELECT CONCAT(contract_address, token_id)
           FROM ethereum.nft_sales
-          WHERE buyer_address = '${address}' AND timestamp >= '${start}' AND timestamp <= '${end}'
+          WHERE buyer_address = '${address}' AND timestamp <= '${end}'
           AND ${exchangeCondition}
         )`;
 
@@ -59,13 +58,10 @@ route.get("/:address", checkAuth, (req, res) => {
           FROM ethereum.nft_transfers transfer
           INNER JOIN ethereum.transactions t ON t.transaction_hash = transfer.transaction_hash
           INNER JOIN ethereum.nft_sales s ON s.contract_address = transfer.contract_address AND s.token_id = transfer.token_id AND s.seller_address = '${address}' AND s.timestamp >= '${start}' AND s.timestamp <= '${end}'
-          WHERE transfer.to_address = '${address}' and transfer.category = 'mint' AND transfer.timestamp >= '${start}' AND transfer.timestamp <= '${end}'
+          WHERE transfer.to_address = '${address}' and transfer.category = 'mint' AND transfer.timestamp <= '${end}'
           `;
 
-      const [bought, sold] = await Promise.all([
-        execTranseposeAPI(query),
-        execTranseposeAPI(querySell),
-      ]);
+      const [bought, sold] = await Promise.all([execTranseposeAPI(query), execTranseposeAPI(querySell)]);
 
       const [approvalGasFees, minted] = await Promise.all([
         execTranseposeAPI(queryApprovalGasFees),
@@ -76,15 +72,7 @@ route.get("/:address", checkAuth, (req, res) => {
       const nftsMinted = getNftMintedObj(minted);
       const txsGasFees = await getTxsGasFees(nfts);
 
-      res
-        .status(200)
-        .json(
-          getPAndLData(
-            nfts.concat(nftsMinted),
-            formatApprovalGasFees(approvalGasFees),
-            txsGasFees
-          )
-        );
+      res.status(200).json(getPAndLData(nfts.concat(nftsMinted), formatApprovalGasFees(approvalGasFees), txsGasFees));
     } catch (e) {
       console.log("err", e);
       res.status(500).json({ error: e });

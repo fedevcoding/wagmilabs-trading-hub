@@ -35,16 +35,6 @@ export const TimeframeModal = React.memo(({ isOpen, setIsOpen, startDate, endDat
           <RadioGroup onChange={e => setTypeRange(e)} value={typeRange}>
             <div className="space-between">
               <div>
-                {/** 
-                <input
-                  type="radio"
-                  name="range-type"
-                  value="custom"
-                  checked={typeRange === "custom"}
-                  onChange={e => setTypeRange(e.target.value)}
-                />
-                <span>Custom range</span>
-               */}
                 <Radio value="custom">Custom range</Radio>
               </div>
               <DatePicker
