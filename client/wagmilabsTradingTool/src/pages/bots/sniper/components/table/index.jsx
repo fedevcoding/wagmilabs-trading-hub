@@ -1,3 +1,5 @@
+import { Button, HStack } from "@chakra-ui/react";
+import { formatAddress } from "@Utils";
 import React from "react";
 
 export const Table = ({ section, activeSnipes }) => {
@@ -42,14 +44,24 @@ export const Table = ({ section, activeSnipes }) => {
                 snipe;
               return (
                 <tr key={index}>
-                  <td>{collectionName}</td>
-                  <td>{maxPrice}</td>
-                  <td>{maxAutoBuy}</td>
-                  <td>{walletAddress}</td>
-                  <td>{"active"}</td>
-                  <td>{maxPriorityFeePerGas}</td>
                   <td>
-                    <button className="btn btn-danger">Cancel</button>
+                    <HStack className="name-container">
+                      <img src={collectionImage} alt="collection" />
+                      <p>{collectionName}</p>
+                    </HStack>
+                  </td>
+                  <td>{maxPrice} ETH</td>
+                  <td>{maxAutoBuy}</td>
+                  <td>{formatAddress(walletAddress)}</td>
+                  <td>{"active"}</td>
+                  <td>
+                    <HStack flexDirection={"column"}>
+                      <p>Max priority: {maxPriorityFeePerGas}</p>
+                      <p>Max fee per gas: 50</p>
+                    </HStack>
+                  </td>
+                  <td>
+                    <Button className="btn btn-danger">Cancel</Button>
                   </td>
                 </tr>
               );
