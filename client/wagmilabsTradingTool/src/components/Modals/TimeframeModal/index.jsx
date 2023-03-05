@@ -8,7 +8,10 @@ import {
   ModalBody,
   ModalCloseButton,
   Button,
+  Radio,
+  RadioGroup,
 } from "@chakra-ui/react";
+
 import { DatePicker, Select } from "@Components";
 
 import "./style.scss";
@@ -29,78 +32,69 @@ export const TimeframeModal = React.memo(({ isOpen, setIsOpen, startDate, endDat
         <ModalHeader>P&L Timeframe</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <div className="space-between">
-            <div>
-              <input
-                type="radio"
-                name="range-type"
-                value="custom"
-                checked={typeRange === "custom"}
-                onChange={e => setTypeRange(e.target.value)}
+          <RadioGroup onChange={e => setTypeRange(e)} value={typeRange}>
+            <div className="space-between">
+              <div>
+                {/** 
+                <input
+                  type="radio"
+                  name="range-type"
+                  value="custom"
+                  checked={typeRange === "custom"}
+                  onChange={e => setTypeRange(e.target.value)}
+                />
+                <span>Custom range</span>
+               */}
+                <Radio value="custom">Custom range</Radio>
+              </div>
+              <DatePicker
+                selectsRange={true}
+                startDate={startDateModal}
+                endDate={endDateModal}
+                maxDate={new Date().getTime()}
+                onChange={update => {
+                  const start = update[0] ? update[0] : null;
+                  const end = update[1] ? update[1] : null;
+                  setStartDateModal(typeof start === "number" ? start : new Date(start).getTime());
+                  setEndDateModal(typeof end === "number" ? end : new Date(end).getTime());
+                }}
+                isClearable={true}
+                placeholderText="Select timeframe"
               />
-              <span>Custom range</span>
             </div>
-            <DatePicker
-              selectsRange={true}
-              startDate={startDateModal}
-              endDate={endDateModal}
-              maxDate={new Date().getTime()}
-              onChange={update => {
-                const start = update[0] ? update[0] : null;
-                const end = update[1] ? update[1] : null;
-                setStartDateModal(typeof start === "number" ? start : new Date(start).getTime());
-                setEndDateModal(typeof end === "number" ? end : new Date(end).getTime());
-              }}
-              isClearable={true}
-              placeholderText="Select timeframe"
-            />
-          </div>
-          <div className="space-between">
-            <div>
-              <input
-                type="radio"
-                name="range-type"
-                value="year"
-                checked={typeRange === "year"}
-                onChange={e => setTypeRange(e.target.value)}
+            <div className="space-between">
+              <div>
+                <Radio value="year">Select year</Radio>
+              </div>
+              <Select
+                id="set-year"
+                onChange={v => {
+                  setRangeYear(v);
+                  setRangeQuarter(null);
+                }}
+                label="Set taxed on"
+                value={rangeYear}
+                options={years}
+                isSearchable={false}
               />
-              <span>Select year</span>
             </div>
-            <Select
-              id="set-year"
-              onChange={v => {
-                setRangeYear(v);
-                setRangeQuarter(null);
-              }}
-              label="Set taxed on"
-              value={rangeYear}
-              options={years}
-              isSearchable={false}
-            />
-          </div>
-          <div className="space-between">
-            <div>
-              <input
-                type="radio"
-                name="range-type"
-                value="quarter"
-                checked={typeRange === "quarter"}
-                onChange={e => setTypeRange(e.target.value)}
+            <div className="space-between">
+              <div>
+                <Radio value="quarter">Select quarter</Radio>
+              </div>
+              <Select
+                id="set-quarter"
+                onChange={v => {
+                  setRangeQuarter(v);
+                  setRangeYear(null);
+                }}
+                label="Set taxed on"
+                value={rangeQuarter}
+                options={quarters}
+                isSearchable={false}
               />
-              <span>Select quarter</span>
             </div>
-            <Select
-              id="set-quarter"
-              onChange={v => {
-                setRangeQuarter(v);
-                setRangeYear(null);
-              }}
-              label="Set taxed on"
-              value={rangeQuarter}
-              options={quarters}
-              isSearchable={false}
-            />
-          </div>
+          </RadioGroup>
         </ModalBody>
         <ModalFooter>
           <Button
