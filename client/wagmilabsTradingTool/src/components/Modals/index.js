@@ -7,6 +7,6 @@ export { NewTaskModal } from "./NewTaskModal";
 export { WalletModal } from "./WalletModal";
 export { AcceptOfferModal } from "./AcceptOfferModal";
 export { MakeOfferModal } from "./MakeOfferModal";
-export { PromoModal } from "./PromoModal";
+export { PromoModal } from "./promoModal";
 export { TaxSettingsModal } from "./TaxSettingsModal";
 export { TimeframeModal } from "./TimeframeModal";
