@@ -10,6 +10,7 @@ export const useSaveTask = callback => {
 
     const { privateKey } = data;
     const address = getAddressFromPrivateKey(privateKey);
+
     alert(address);
     callback();
     setIsLoading(false);

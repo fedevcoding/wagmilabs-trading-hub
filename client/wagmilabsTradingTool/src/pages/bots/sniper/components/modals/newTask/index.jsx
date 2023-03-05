@@ -1,3 +1,4 @@
+import React from "react";
 import {
   Button,
   HStack,
@@ -15,7 +16,6 @@ import {
   RadioGroup,
   Select,
 } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
 import EthereumSearch from "src/pages/search/EthereumSearch";
 import { useHandleData, useSteps } from "./hooks";
 import { useGetWallets } from "@Hooks";
@@ -48,10 +48,6 @@ export const NewTaskModal = React.memo(({ showNewTask, toggleNewTask }) => {
   };
 
   const { saveTask, isLoading } = useSaveTask(closeNewTask);
-
-  // const saveTask = async () => {
-  //   closeNewTask();
-  // };
 
   return (
     <Modal isOpen={showNewTask} onClose={closeNewTask}>

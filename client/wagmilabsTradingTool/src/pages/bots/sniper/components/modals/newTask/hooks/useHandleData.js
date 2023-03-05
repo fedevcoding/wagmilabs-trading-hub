@@ -18,10 +18,10 @@ export const useHandleData = (wallets, step) => {
   });
 
   useEffect(() => {
+    console.log("data.walletAddress", data.walletAddress);
     if (data?.walletAddress?.length > 0 && wallets?.length > 0) {
-      const privateKey = wallets.find(
-        wallet => wallet?.address?.toLowerCase() === data?.walletAddress?.toLowerCase()
-      )?.privateKey;
+      const privateKey = wallets.find(wallet => wallet?.address === data?.walletAddress)?.privateKey;
+      console.log("privateKey", privateKey);
       setData(prevData => {
         return { ...prevData, privateKey };
       });
@@ -49,6 +49,7 @@ export const useHandleData = (wallets, step) => {
   };
 
   const isValidNextStep = useMemo(() => {
+    console.log(data);
     const {
       collection,
       maxPrice,
@@ -61,8 +62,16 @@ export const useHandleData = (wallets, step) => {
     } = data;
     if (step === 1) {
       if (walletType === "privatekey")
-        return collection.address && maxPrice && privateKey?.length === 64 ? true : false;
-      else return collection.address && maxPrice && walletAddress && privateKey?.length === 64 ? true : false;
+        return collection.address && maxPrice && (privateKey?.length === 64 || privateKey?.length === 66)
+          ? true
+          : false;
+      else
+        return collection.address &&
+          maxPrice &&
+          walletAddress &&
+          (privateKey?.length === 64 || privateKey?.length === 66)
+          ? true
+          : false;
     } else if (step === 2) {
       return maxPriorityFeePerGas && maxAutoBuy ? true : false;
     }
