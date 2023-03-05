@@ -47,6 +47,12 @@ export const useWeb3Utils = () => {
     return { address, balance };
   };
 
+  const getAddressFromPrivateKey = privateKey => {
+    const account = web3.eth.accounts.privateKeyToAccount(privateKey);
+    const address = account.address;
+    return address;
+  };
+
   const generateWallets = async (amount, name, date) => {
     try {
       const wallets = [];
@@ -74,5 +80,5 @@ export const useWeb3Utils = () => {
     }
   };
 
-  return { getAddressAndBalance, generateWallets, batchTransferEth, getBalances };
+  return { getAddressAndBalance, generateWallets, batchTransferEth, getBalances, getAddressFromPrivateKey };
 };

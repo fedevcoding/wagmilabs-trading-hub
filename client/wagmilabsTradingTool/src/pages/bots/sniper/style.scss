@@ -101,12 +101,16 @@
   .step1-container {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 30px;
 
     .option {
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 10px;
+
+      .titles {
+        font-size: 22px;
+      }
     }
 
     .collection-container {
@@ -129,6 +133,29 @@
         font-size: 16px;
         font-weight: 500;
       }
+    }
+
+    input,
+    select {
+      color: white;
+    }
+
+    option {
+      background-color: black !important;
+    }
+  }
+
+  .step2-container {
+    gap: 35px;
+    .flex-col {
+      gap: 12px;
+    }
+  }
+
+  .modal-footer {
+    .not-active {
+      cursor: not-allowed;
+      opacity: 0.8;
     }
   }
 }

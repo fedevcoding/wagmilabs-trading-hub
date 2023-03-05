@@ -10,6 +10,7 @@ import {
   ModalHeader,
   ModalOverlay,
   NumberInput,
+  NumberInputField,
   Radio,
   RadioGroup,
   Select,
@@ -17,12 +18,12 @@ import {
 import React, { useEffect, useState } from "react";
 import EthereumSearch from "src/pages/search/EthereumSearch";
 import { useHandleData, useSteps } from "./hooks";
+import { useGetWallets } from "@Hooks";
+import { useSaveTask } from "./hooks/useSaveTask";
 
 export const NewTaskModal = React.memo(({ showNewTask, toggleNewTask }) => {
   const { step, nextStep, prevStep, resetStep } = useSteps();
-
-  const [wallets, setWallets] = useState([]);
-
+  const wallets = useGetWallets();
   const {
     collection,
     minPrice,
@@ -30,29 +31,27 @@ export const NewTaskModal = React.memo(({ showNewTask, toggleNewTask }) => {
     walletType,
     walletAddress,
     privateKey,
+    maxFeePerGas,
+    maxAutoBuy,
+    data,
     handleSetData,
     handleCollectionClick,
     resetCollection,
-  } = useHandleData(wallets);
-
-  useEffect(() => {
-    const wallets = JSON.parse(localStorage.getItem("wallets")) || [];
-    setWallets(wallets);
-  }, []);
-
-  useEffect(() => {
-    if (showNewTask) {
-      resetStep();
-    }
-  }, [showNewTask, resetStep]);
+    resetData,
+    isValidNextStep,
+  } = useHandleData(wallets, step);
 
   const closeNewTask = () => {
     toggleNewTask(false);
+    resetStep();
+    resetData();
   };
 
-  const saveTask = () => {
-    closeNewTask();
-  };
+  const { saveTask, isLoading } = useSaveTask(closeNewTask);
+
+  // const saveTask = async () => {
+  //   closeNewTask();
+  // };
 
   return (
     <Modal isOpen={showNewTask} onClose={closeNewTask}>
@@ -66,7 +65,7 @@ export const NewTaskModal = React.memo(({ showNewTask, toggleNewTask }) => {
             <>
               <div className="step1-container">
                 <div className="option">
-                  <p>Collection</p>
+                  <p className="titles">Collection</p>
 
                   {collection.address ? (
                     <div className="collection-container">
@@ -83,7 +82,7 @@ export const NewTaskModal = React.memo(({ showNewTask, toggleNewTask }) => {
                 </div>
 
                 <div className="option">
-                  <p>Price</p>
+                  <p className="titles">Price</p>
                   <HStack>
                     <NumberInput>
                       <Input
@@ -104,7 +103,7 @@ export const NewTaskModal = React.memo(({ showNewTask, toggleNewTask }) => {
                 </div>
 
                 <div className="option">
-                  <p>Wallet</p>
+                  <p className="titles">Wallet</p>
                   <RadioGroup onChange={value => handleSetData("walletType", value)} defaultValue={walletType}>
                     <HStack gap={"15px"}>
                       <Radio value="privatekey">Private key</Radio>
@@ -136,42 +135,53 @@ export const NewTaskModal = React.memo(({ showNewTask, toggleNewTask }) => {
             </>
           ) : (
             step === 2 && (
-              <>
-                <p>Gas</p>
-                <HStack>
+              <div className="step2-container flex-col">
+                {/* <HStack className="flex-col">
                   <p>Max Fee Per Gas:</p>
-                  <NumberInput>
+                  <NumberInput  onChange={e => handleSetData("maxFeePerGas", e.target.value)}>
                     <Input placeholder="Max Fee Per Gas" />
                   </NumberInput>
-                </HStack>
-                <HStack>
+                </HStack> */}
+                <HStack className="flex-col">
                   <p>Max Priority Fee Per Gas:</p>
-                  <NumberInput>
-                    <Input placeholder="Max Priority Fee Per Gas" />
+                  <NumberInput value={maxFeePerGas} onChange={value => handleSetData("maxPriorityFeePerGas", value)}>
+                    <NumberInputField placeholder="Max Priority Fee Per Gas" />
                   </NumberInput>
                 </HStack>
 
-                <p>Max auto buy</p>
-                <NumberInput>
-                  <Input placeholder="Max auto buy" />
-                </NumberInput>
-              </>
+                <HStack className="flex-col">
+                  <p>Max auto buy</p>
+                  <NumberInput value={maxAutoBuy} onChange={value => handleSetData("maxAutoBuy", value)}>
+                    <NumberInputField placeholder="Max auto buy" />
+                  </NumberInput>
+                </HStack>
+              </div>
             )
           )}
         </ModalBody>
 
-        <ModalFooter>
+        <ModalFooter className="modal-footer">
           <HStack gap={"10px"}>
             {step === 1 ? (
               <>
                 <Button onClick={closeNewTask}>Cancel</Button>
-                <Button onClick={nextStep}>Next</Button>
+                <Button
+                  onClick={isValidNextStep ? nextStep : undefined}
+                  className={`${!isValidNextStep && "not-active"}`}
+                >
+                  Next
+                </Button>
               </>
             ) : (
               step === 2 && (
                 <>
                   <Button onClick={prevStep}>Back</Button>
-                  <Button onClick={saveTask}>Save</Button>
+                  <Button
+                    onClick={() => isValidNextStep && saveTask(data)}
+                    className={`${!isValidNextStep && "not-active"}`}
+                  >
+                    Save
+                  </Button>
                 </>
               )
             )}

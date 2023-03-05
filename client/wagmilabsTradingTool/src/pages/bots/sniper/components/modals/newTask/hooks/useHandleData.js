@@ -1,17 +1,20 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 
-export const useHandleData = wallets => {
+export const useHandleData = (wallets, step) => {
   const [data, setData] = useState({
     collection: {
-      name: "",
-      image: "",
-      address: "",
+      name: undefined,
+      image: undefined,
+      address: undefined,
     },
     minPrice: undefined,
     maxPrice: undefined,
     walletType: "privatekey",
-    walletAddress: "",
-    privateKey: "",
+    walletAddress: undefined,
+    privateKey: undefined,
+    maxFeePerGas: undefined,
+    maxPriorityFeePerGas: undefined,
+    maxAutoBuy: undefined,
   });
 
   useEffect(() => {
@@ -45,7 +48,45 @@ export const useHandleData = wallets => {
     });
   };
 
-  const { collection, minPrice, maxPrice, walletType, walletAddress, privateKey } = data;
+  const isValidNextStep = useMemo(() => {
+    const {
+      collection,
+      maxPrice,
+      walletType,
+      walletAddress,
+      privateKey,
+      // maxFeePerGas,
+      maxPriorityFeePerGas,
+      maxAutoBuy,
+    } = data;
+    if (step === 1) {
+      if (walletType === "privatekey")
+        return collection.address && maxPrice && privateKey?.length === 64 ? true : false;
+      else return collection.address && maxPrice && walletAddress && privateKey?.length === 64 ? true : false;
+    } else if (step === 2) {
+      return maxPriorityFeePerGas && maxAutoBuy ? true : false;
+    }
+  }, [data, step]);
+
+  const resetData = () => {
+    setData({
+      collection: {
+        name: undefined,
+        image: undefined,
+        address: undefined,
+      },
+      minPrice: undefined,
+      maxPrice: undefined,
+      walletType: "privatekey",
+      walletAddress: undefined,
+      privateKey: undefined,
+      maxFeePerGas: undefined,
+      maxPriorityFeePerGas: undefined,
+      maxAutoBuy: undefined,
+    });
+  };
+
+  const { collection, minPrice, maxPrice, walletType, walletAddress, privateKey, maxFeePerGas, maxAutoBuy } = data;
   return {
     collection,
     minPrice,
@@ -53,8 +94,13 @@ export const useHandleData = wallets => {
     walletType,
     walletAddress,
     privateKey,
+    maxFeePerGas,
+    maxAutoBuy,
+    data,
     handleSetData,
     handleCollectionClick,
     resetCollection,
+    isValidNextStep,
+    resetData,
   };
 };
