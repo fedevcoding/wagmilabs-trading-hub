@@ -53,12 +53,18 @@ route.get("/:address", checkAuth, (req, res) => {
           AND input = '0xa22cb4650000000000000000000000001e0049783f008a0085193e00003d00cd54003c710000000000000000000000000000000000000000000000000000000000000001'`;
 
       const mintedNftsQuery = `
-        SELECT transfer.contract_address, transfer.token_id, transfer.transaction_hash, transfer.quantity as quantity_minted, t.transaction_fee as mint_tx_fee, transfer.timestamp as minted_timestamp,
-          s.timestamp, s.usd_price, s.eth_price, s.royalty_fee, s.platform_fee
-          FROM ethereum.nft_transfers transfer
-          INNER JOIN ethereum.transactions t ON t.transaction_hash = transfer.transaction_hash
-          INNER JOIN ethereum.nft_sales s ON s.contract_address = transfer.contract_address AND s.token_id = transfer.token_id AND s.seller_address = '${address}' AND s.timestamp >= '${start}' AND s.timestamp <= '${end}'
-          WHERE transfer.to_address = '${address}' and transfer.category = 'mint' AND transfer.timestamp <= '${end}'
+        SELECT tx.*, 
+          transfer.token_id, transfer.quantity as quantity_minted, transfer.timestamp as minted_timestamp,
+          s.timestamp, s.usd_price, s.eth_price, s.royalty_fee, s.platform_fee, s.transaction_hash
+          FROM (
+              SELECT (max(t.transaction_fee) / count(token_id)) as mint_tx_fee, transfer.contract_address, transfer.transaction_hash as minted_transaction_hash
+              FROM ethereum.nft_transfers transfer
+              INNER JOIN ethereum.transactions t ON t.transaction_hash = transfer.transaction_hash
+              WHERE transfer.to_address = '${address}' and transfer.category = 'mint' AND transfer.timestamp <= '${end}'
+              group by transfer.transaction_hash, transfer.contract_address
+          ) tx
+          INNER JOIN ethereum.nft_transfers transfer ON transfer.contract_address = tx.contract_address AND  transfer.transaction_hash = tx.minted_transaction_hash AND transfer.to_address = '${address}' and transfer.category = 'mint' AND transfer.timestamp <= '${end}'
+          INNER JOIN ethereum.nft_sales s ON s.contract_address = tx.contract_address AND s.token_id = transfer.token_id AND s.seller_address = '${address}' AND s.timestamp >= '${start}' AND s.timestamp <= '${end}'
           `;
 
       const [bought, sold] = await Promise.all([execTranseposeAPI(query), execTranseposeAPI(querySell)]);

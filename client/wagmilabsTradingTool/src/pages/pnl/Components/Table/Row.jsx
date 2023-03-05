@@ -22,6 +22,7 @@ export const Row = React.memo(({ nft, allInfo, taxPerc, taxedOn, currency, token
           <>
             <img src={tokenInfo?.image || placeholderImage} alt={"#" + nft.nft.id} width={70} className="nft-img" />
             <div className="nft-text">
+              {isMinted ? <div className="mint-label">Minted</div> : <></>}
               {tokenInfo?.collection?.name && !tokenInfo?.name?.includes(tokenInfo?.collection?.name) && (
                 <>
                   {tokenInfo?.collection?.name || ""} <br />
@@ -34,7 +35,9 @@ export const Row = React.memo(({ nft, allInfo, taxPerc, taxedOn, currency, token
       </td>
       <td className="td-paid">
         {isMinted ? (
-          "Minted"
+          <a href={`https://etherscan.io/tx/${allInfo.minted.transaction_hash}`} target="_blank" rel="noreferrer">
+            {`${roundPrice(nft.gasFees.minted.eth)} ETH`} <br /> {roundPriceUsd(nft.gasFees.minted.usd) + "$"}
+          </a>
         ) : (
           <a href={`https://etherscan.io/tx/${allInfo.bought.transaction_hash}`} target="_blank" rel="noreferrer">
             {nft.paid.eth + " ETH"} <br /> {nft.paid.usd + "$"}
