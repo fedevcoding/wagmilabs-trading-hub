@@ -20,7 +20,16 @@ export const Row = React.memo(({ nft, allInfo, taxPerc, taxedOn, currency, token
           <LoadingSpinner />
         ) : (
           <>
-            <img src={tokenInfo?.image || placeholderImage} alt={"#" + nft.nft.id} width={70} className="nft-img" />
+            <img
+              src={tokenInfo?.image || placeholderImage}
+              onError={({ currentTarget }) => {
+                currentTarget.onerror = null; // prevents looping
+                currentTarget.src = placeholderImage;
+              }}
+              alt={"#" + nft.nft.id}
+              width={70}
+              className="nft-img"
+            />
             <div className="nft-text">
               {isMinted ? <div className="mint-label">Minted</div> : <></>}
               {tokenInfo?.collection?.name && !tokenInfo?.name?.includes(tokenInfo?.collection?.name) && (

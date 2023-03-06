@@ -11,6 +11,7 @@ import {
   NumberInput,
   NumberInputField,
   useToast,
+  Switch,
 } from "@chakra-ui/react";
 import { Select } from "@Components";
 
@@ -18,10 +19,22 @@ import "./style.scss";
 
 export const TaxSettingsModal = React.memo(({ isOpen, setIsOpen, ...settings }) => {
   const toast = useToast();
-  const { taxedOn, currency, taxPerc, setTaxedOn, setCurrency, setTaxPerc, currencies, taxedTypes } = settings;
+  const {
+    taxedOn,
+    currency,
+    taxPerc,
+    setTaxedOn,
+    setCurrency,
+    setTaxPerc,
+    currencies,
+    taxedTypes,
+    taxLossHarvesting,
+    setTaxLossHarvesting,
+  } = settings;
   const [modalTaxedOn, setModalTaxedOn] = React.useState(taxedOn);
   const [modalCurrency, setModalCurrency] = React.useState(currency);
   const [modalTaxPerc, setModalTaxPerc] = React.useState(taxPerc);
+  const [modalTaxLossHarvesting, setModalTaxLossHarvesting] = React.useState(taxLossHarvesting);
 
   return (
     <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
@@ -61,6 +74,14 @@ export const TaxSettingsModal = React.memo(({ isOpen, setIsOpen, ...settings }) 
               isSearchable={false}
             />
           </div>
+          <div className="space-between input">
+            <span>Apply tax loss harvesting</span>
+            <Switch
+              isChecked={modalTaxLossHarvesting}
+              colorScheme="gray"
+              onChange={e => setModalTaxLossHarvesting(e.target.checked)}
+            />
+          </div>
         </ModalBody>
         <ModalFooter>
           <Button
@@ -79,6 +100,7 @@ export const TaxSettingsModal = React.memo(({ isOpen, setIsOpen, ...settings }) 
                 setTaxedOn(modalTaxedOn);
                 setCurrency(modalCurrency);
                 setTaxPerc(modalTaxPerc);
+                setTaxLossHarvesting(modalTaxLossHarvesting);
                 setIsOpen(false);
               }
             }}
