@@ -26,6 +26,7 @@
     .hr {
       border: 2px solid white;
     }
+
     background-image: linear-gradient(to right, #3a5d84, #3d94c7, #1c465e);
 
     .reviews-section {
@@ -34,11 +35,13 @@
       justify-content: space-evenly;
 
       height: 65vh;
+
       h1 {
         font-size: 36px;
         letter-spacing: 1.2px;
         text-align: center;
       }
+
       .reviews-container {
         display: flex;
         width: 100%;
