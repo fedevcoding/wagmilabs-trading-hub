@@ -1,27 +1,21 @@
-export const formatLinks = links => {
-  if (links && links.length > 0) {
-    const temp = links.split(/:\s|,/);
-    console.log(temp);
-    const res = {};
-    temp.map((el, index) => {
-      if (index % 2 === 0) {
-        return (res[el] = temp[index + 1]);
-      }
-    });
-    return res;
-  }
-  return null;
+const formatLinks = (links) => {
+  const res = {};
+  links.map((el) => (
+    res[el.type] = el.link
+  ))
+  return res;
 };
 
-export const formatEventInfo = (eventInfo, section) => {
+export const formatEventInfo = (eventInfo, section, links) => {
   const eventToSave = {};
   if (section !== "personal") {
     eventToSave.timestamp = eventInfo.date.getTime();
-    eventToSave.links = formatLinks(eventInfo.links);
+    eventToSave.links = formatLinks(links);
   }
   switch (section) {
     case "drops":
       eventToSave.collectionName = eventInfo.name;
+      eventToSave.eventDescription = eventInfo.eventDescription;
       eventToSave.price = eventInfo.price;
       eventToSave.supply = eventInfo.supply;
       break;

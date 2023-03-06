@@ -24,5 +24,32 @@
     padding: 25px 20px;
     border-radius: 9px;
     margin-bottom: 20px;
+    .add-link {
+      font-size: 10px;
+    }
+    .remove-link {
+      font-size: 10px;
+    }
+  }
+
+  .input-links-list {
+    display: flex;
+    flex-direction: column;
+    .input-link-container {
+      display: flex;
+      align-items: center;
+      .input-link-inner-container {
+        padding: 3px 0px 3px 0px;
+        margin-right: 16px;
+        .input-link-type {
+          width: 302px;
+          margin-bottom: 5px;
+        }
+        .input-link-url {
+          width: 302px;
+        }
+      }
+    }
   }
 }
+

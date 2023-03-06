@@ -21,10 +21,10 @@ dropsRoute.get("/", async (req, res) => {
 
 dropsRoute.post('/', async (req, res) => {
 
-    const { collectionName, links, price, supply, timestamp, address } = req.body || {};
+    const { collectionName, links, price, supply, timestamp, address, eventDescription } = req.body || {};
 
     try {
-        const drops = await Drops.create({ collectionName, links, price, supply, timestamp, address })
+        const drops = await Drops.create({ collectionName, links, price, supply, timestamp, address, eventDescription })
         if (!drops) throw Error('Something went wrong saving the admin drops event');
         return res.status(200).json({drops});
     } catch (e) {

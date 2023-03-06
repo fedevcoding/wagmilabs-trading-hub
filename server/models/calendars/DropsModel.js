@@ -16,6 +16,9 @@ const DropsSchema = mongoose.Schema({
     supply: {
         type: Number
     },
+    eventDescription: {
+        type: String
+    }
 
 }, {
     timestamps: true

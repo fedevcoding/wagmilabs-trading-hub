@@ -9,6 +9,7 @@ import {
   NumberInput,
   NumberInputField,
   useDisclosure,
+  Stack,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import ReactDatePicker from "react-datepicker";
@@ -19,6 +20,7 @@ import { formatEventInfo } from "./utils/formatEventInfo";
 export const AddEventModal = React.memo(
   ({ isOpen, onClose, onSave, section, selectedDate }) => {
     const [eventInfo, setEventInfo] = useState({});
+    const [inputLinkList, setInputLinkList] = useState([{ type: "", link: "" }]);
     const { isOpen: isOpenAlert, onOpen: onOpenAlert, onClose: onCloseAlert } = useDisclosure();
     const cancelRef = React.useRef();
     
@@ -29,9 +31,29 @@ export const AddEventModal = React.memo(
           ) {
         onOpenAlert();
       } else {
-        const eventToSave = formatEventInfo(eventInfo, section);
+        const eventToSave = formatEventInfo(eventInfo, section, inputLinkList);
         onSave(eventToSave);
       }
+    };
+
+    const handleInputLinkChange = (e, index, name) => {
+      const { value } = e.target;
+      console.log({ name, value })
+      const list = [...inputLinkList];
+      list[index][name] = value;
+      console.log('list',list)
+      setInputLinkList(list);
+    };
+    
+    const handleRemoveLinkClick = index => {
+      const list = [...inputLinkList];
+      list.splice(index, 1);
+      setInputLinkList(list);
+    };
+    
+    const handleAddLinkClick = () => {
+      if(inputLinkList.length < 3)
+      setInputLinkList([...inputLinkList, { firstName: "", lastName: "" }]);
     };
 
     const updateEventInfo = (e, type, isEvent) => {
@@ -60,9 +82,6 @@ export const AddEventModal = React.memo(
           break;
         case "spaceHost":
           setEventInfo(prev => ({ ...prev, spaceHost: value }));
-          break;
-        case "links":
-          setEventInfo(prev => ({ ...prev, links: value }));
           break;
         default:
           break;
@@ -127,18 +146,16 @@ export const AddEventModal = React.memo(
                 </HStack>
               </div>
             )}
-            {section !== "drops" && (
-              <div className="field-container">
-                Description
-                <HStack>
-                  <Input
-                    placeholder="description"
-                    color={"white"}
-                    onChange={e => updateEventInfo(e, "eventDescription", true)}
-                  />
-                </HStack>
-              </div>
-            )}
+            <div className="field-container">
+              Description
+              <HStack>
+                <Input
+                  placeholder="description"
+                  color={"white"}
+                  onChange={e => updateEventInfo(e, "eventDescription", true)}
+                />
+              </HStack>
+            </div>
             {section === "events" && (
               <div className="field-container">
                 Location
@@ -176,15 +193,43 @@ export const AddEventModal = React.memo(
               </>
             )}
             <div className="field-container">
-              Links
-              <HStack>
+            Links
+            <HStack>
+              <div className="input-links-list">
+            {inputLinkList.map((_, i) => (
+              <div className="input-link-container">
+                <div className="input-link-inner-container">
                 <Input
-                  placeholder="type1: url1,type2: url2"
+                  placeholder="type"
                   color={"white"}
-                  onChange={e => updateEventInfo(e, "links", true)}
+                  onChange={e => handleInputLinkChange(e, i, 'type')}
+                  className="input-link-type"
                 />
-              </HStack>
+                <Input
+                  placeholder="url"
+                  color={"white"}
+                  onChange={e => handleInputLinkChange(e, i, 'link')}
+                  className="input-link-url"
+                />
+                </div>
+                <Stack spacing={2} direction='row' align='center'>
+                  {inputLinkList.length-1 === i && (
+                    <Button colorScheme={"blue"} className="add-link" onClick={handleAddLinkClick}>
+                      +
+                    </Button>
+                  )}
+                  {inputLinkList.length !== 1 && (
+                    <Button colorScheme={"blue"} className="remove-link" onClick={() => handleRemoveLinkClick(i)}>
+                      -
+                    </Button>
+                  )}
+                </Stack>
+              </div>
+
+            ))}
             </div>
+            </HStack>
+          </div>
           </ModalBody>
 
           <ModalBody className="modal-body">
