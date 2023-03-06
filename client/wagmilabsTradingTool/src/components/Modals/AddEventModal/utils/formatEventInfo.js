@@ -27,7 +27,7 @@ export const formatEventInfo = (eventInfo, section, links) => {
     case "personal":
       eventToSave.event = {
           timestamp: eventInfo.date.getTime(),
-          links: formatLinks(eventInfo.links),
+          links: formatLinks(links),
           eventName: eventInfo.name,
           eventDescription: eventInfo.eventDescription
         }
