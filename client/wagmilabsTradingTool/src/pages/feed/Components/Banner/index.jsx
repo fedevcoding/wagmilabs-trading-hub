@@ -9,16 +9,10 @@ export const Banner = React.memo(() => {
   const headline = "Wagmi Labs launching NFT pass mint to access Trading Hub";
   const summary =
     "The Wagmi Labs Trading Hub is now in FREE Beta for a limited period of time, after that whitelisted users will be able to mint an NFT pass to keep using the product";
-  const link = "https://www.premint.xyz/WAGMI-Labs/";
+  const link = "https://discord.gg/wagmilabs";
 
   return (
-    <a
-      className="card"
-      title={`News detail page: ${headline}`}
-      href={link}
-      target="_blank"
-      rel="noreferrer"
-    >
+    <a className="card" title={`News detail page: ${headline}`} href={link} target="_blank" rel="noreferrer">
       <Row>
         <Col className="info">
           <h3>{headline}</h3>

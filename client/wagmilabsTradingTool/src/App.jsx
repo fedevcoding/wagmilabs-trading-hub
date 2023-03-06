@@ -252,30 +252,26 @@ function App() {
           >
             <WagmiConfig client={wagmiClient}>
               <RainbowKitProvider chains={chains} coolMode theme={darkTheme({ overlayBlur: "small" })}>
-                <div className="not-responsive">
-                  <p>This application is not optimized for small screens yet.</p>
-                </div>
-                <div id="application-wrapper">
-                  {!loading &&
-                    (checking ? (
-                      <Checking setConnected={setConnected} setChecking={setChecking} />
-                    ) : !connected ? (
-                      <>
-                        <BrowserRouter>
-                          <Routes>
-                            <Route
-                              exact
-                              path="/"
-                              element={<Login setConnected={setConnected} connected={connected} />}
-                            />
-                            <Route exact path="/legal" element={<Legals />} />
-                          </Routes>
-                        </BrowserRouter>
-                      </>
-                    ) : (
-                      <>
-                        <CheckWalletDisconnect />
-                        <ConnectedContext.Provider value={connectedContextValues}>
+                {!loading &&
+                  (checking ? (
+                    <Checking setConnected={setConnected} setChecking={setChecking} />
+                  ) : !connected ? (
+                    <>
+                      <BrowserRouter>
+                        <Routes>
+                          <Route exact path="/" element={<Login setConnected={setConnected} connected={connected} />} />
+                          <Route exact path="/legal" element={<Legals />} />
+                        </Routes>
+                      </BrowserRouter>
+                    </>
+                  ) : (
+                    <>
+                      <CheckWalletDisconnect />
+                      <ConnectedContext.Provider value={connectedContextValues}>
+                        <div className={`${"not-responsive"}`}>
+                          <p>This application is not optimized for small screens yet.</p>
+                        </div>
+                        <div id="application-wrapper">
                           <BrowserRouter>
                             <Routes>
                               <Route
@@ -396,10 +392,10 @@ function App() {
                               <Route path="*" element={<Redirect />} />
                             </Routes>
                           </BrowserRouter>
-                        </ConnectedContext.Provider>
-                      </>
-                    ))}
-                </div>
+                        </div>
+                      </ConnectedContext.Provider>
+                    </>
+                  ))}
               </RainbowKitProvider>
             </WagmiConfig>
           </ReservoirKitProvider>

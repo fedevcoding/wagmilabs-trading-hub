@@ -716,7 +716,7 @@ const Profile = () => {
           {section === "nft" && showPromoBanner && (
             <a
               className="profile-promo-container"
-              href="https://www.premint.xyz/WAGMI-Labs/"
+              href="https://discord.gg/wagmilabs"
               target={"_blank"}
               rel="noreferrer"
               onClick={() => setShowPromoBanner(false)}
