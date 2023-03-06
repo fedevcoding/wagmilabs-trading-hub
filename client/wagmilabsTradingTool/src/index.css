@@ -102,34 +102,13 @@ body.overflow-hidden {
   display: none;
 }
 
-@media screen and (max-width: 1000px) {
-  #application-wrapper {
-    display: none;
-  }
-
-  .not-responsive {
-    color: white;
-    display: flex;
-    width: 80vw;
-    margin: 0 auto;
-    height: 100vh;
-    font-size: 25px;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .not-responsive p {
-    text-align: center;
-  }
-}
-
 .not-allowed {
   cursor: not-allowed;
 }
 
 
-.flex-col{
+.flex-col {
   display: flex;
   flex-direction: column;
-  
+
 }

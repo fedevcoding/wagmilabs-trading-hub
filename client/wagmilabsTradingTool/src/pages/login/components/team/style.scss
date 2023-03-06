@@ -19,22 +19,25 @@
   }
 
   .card {
-    width: 350px;
+    width: 300px;
     background-color: #0e0f0e;
     border: 1px solid white;
     padding: 20px 5px;
     border-radius: 20px;
     transition: all 350ms;
   }
+
   .card:hover {
     transform: translateY(-20px);
   }
+
   .teamImg {
     width: 100px;
     border-radius: 50%;
     display: block;
     margin: 0 auto;
   }
+
   .cardName {
     text-align: center;
     letter-spacing: 3px;
@@ -60,15 +63,18 @@
     display: flex;
     justify-content: center;
   }
+
   .cardsSocialImages {
     width: 25px;
     margin: 25px 20px 0 20px;
     cursor: pointer;
     transition: scale 250ms;
   }
+
   .cardsSocialImages:hover {
     scale: 1.15;
   }
+
   .description {
     width: 90vw;
     font-size: 20px;
