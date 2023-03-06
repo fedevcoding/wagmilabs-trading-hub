@@ -10,15 +10,19 @@ export const useSaveTask = (callback, toggleSnipe) => {
     try {
       setIsLoading(true);
 
-      const { privateKey, maxPrice, minPrice } = data;
+      const { privateKey, maxPrice, minPrice, maxFeePerGas, maxPriorityFeePerGas } = data;
 
       const parsedMaxPrice = parseFloat(maxPrice) || undefined;
       const parsedMinPrice = parseFloat(minPrice) || undefined;
+      const parsedMaxFeePerGas = parseFloat(maxFeePerGas) || undefined;
+      const parsedMaxPriorityFeePerGas = parseFloat(maxPriorityFeePerGas) || undefined;
 
       const address = getAddressFromPrivateKey(privateKey);
       data["walletAddress"] = address;
       data["maxPrice"] = parsedMaxPrice;
       data["minPrice"] = parsedMinPrice;
+      data["maxFeePerGas"] = parsedMaxFeePerGas;
+      data["maxPriorityFeePerGas"] = parsedMaxPriorityFeePerGas;
 
       const body = { data, type: "add" };
 

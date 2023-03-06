@@ -11,6 +11,7 @@ export const useHandleData = (wallets, step) => {
     walletAddress: undefined,
     privateKey: undefined,
     maxFeePerGas: undefined,
+    maxFeePerGasType: "auto",
     maxPriorityFeePerGas: undefined,
     maxAutoBuy: undefined,
   });
@@ -97,6 +98,7 @@ export const useHandleData = (wallets, step) => {
     privateKey,
     maxFeePerGas,
     maxAutoBuy,
+    maxFeePerGasType,
   } = data;
   return {
     collectionAddress,
@@ -110,6 +112,7 @@ export const useHandleData = (wallets, step) => {
     maxFeePerGas,
     maxAutoBuy,
     data,
+    maxFeePerGasType,
     handleSetData,
     handleCollectionClick,
     resetCollection,

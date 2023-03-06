@@ -36,6 +36,7 @@ export const NewTaskModal = React.memo(({ showNewTask, toggleNewTaskModal, toggl
     maxFeePerGas,
     maxAutoBuy,
     data,
+    maxFeePerGasType,
     handleSetData,
     handleCollectionClick,
     resetCollection,
@@ -134,12 +135,22 @@ export const NewTaskModal = React.memo(({ showNewTask, toggleNewTaskModal, toggl
           ) : (
             step === 2 && (
               <div className="step2-container flex-col">
-                {/* <HStack className="flex-col">
+                <HStack className="flex-col">
                   <p>Max Fee Per Gas:</p>
-                  <NumberInput  onChange={e => handleSetData("maxFeePerGas", e.target.value)}>
-                    <Input placeholder="Max Fee Per Gas" />
-                  </NumberInput>
-                </HStack> */}
+                  <HStack width={"40%"}>
+                    <Select onChange={(e) => handleSetData("maxFeePerGasType", e.target.value)}>
+                      <option value="auto">Auto</option>
+                      <option value="custom">Custom</option>
+                    </Select>
+                  </HStack>
+
+                  {maxFeePerGasType === "custom" && (
+                    <NumberInput onChange={e => handleSetData("maxFeePerGas", e.target.value)}>
+                      <Input placeholder="Max Fee Per Gas" />
+                    </NumberInput>
+                  )}
+                </HStack>
+
                 <HStack className="flex-col">
                   <p>Max Priority Fee Per Gas:</p>
                   <NumberInput value={maxFeePerGas} onChange={value => handleSetData("maxPriorityFeePerGas", value)}>
