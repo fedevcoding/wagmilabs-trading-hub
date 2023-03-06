@@ -10,36 +10,85 @@
     padding: 50px 0;
     font-size: 34px;
     letter-spacing: 1.2px;
+
+    @media screen and (max-width: 1300px) {
+      font-size: 30px;
+    }
+
+    @media screen and (max-width: 1000px) {
+      font-size: 27px;
+      padding: 40px 0;
+    }
+
+    @media screen and (max-width: 1000px) {
+      font-size: 24px;
+    }
   }
 
   .cardsContainer {
     display: flex;
     gap: 100px;
     justify-content: center;
+
+    @media screen and (max-width: 1000px) {
+      gap: 50px;
+    }
+
+    @media screen and (max-width: 1000px) {
+      flex-wrap: wrap;
+    }
   }
 
   .card {
-    width: 350px;
+    width: 300px;
     background-color: #0e0f0e;
     border: 1px solid white;
     padding: 20px 5px;
     border-radius: 20px;
     transition: all 350ms;
+
+    @media screen and (max-width: 1300px) {
+      width: 250px;
+
+    }
+
+    @media screen and (max-width: 1100px) {
+      width: 220px;
+    }
   }
+
   .card:hover {
     transform: translateY(-20px);
   }
+
   .teamImg {
     width: 100px;
     border-radius: 50%;
     display: block;
     margin: 0 auto;
+
+    @media screen and (max-width: 1300px) {
+      width: 90px;
+    }
+
+    @media screen and (max-width: 1300px) {
+      width: 70px;
+    }
   }
+
   .cardName {
     text-align: center;
     letter-spacing: 3px;
     margin: 15px 0 10px 0;
     font-size: 19px;
+
+    @media screen and (max-width: 1300px) {
+      font-size: 16px;
+    }
+
+    @media screen and (max-width: 1000px) {
+      font-size: 13px;
+    }
   }
 
   .cardRole {
@@ -48,27 +97,51 @@
     color: #1993eb;
     font-size: 14px;
     letter-spacing: 1.1px;
+
+    @media screen and (max-width: 1300px) {
+      font-size: 12px;
+    }
+
+    @media screen and (max-width: 1000px) {
+      font-size: 10px;
+    }
   }
 
   .cardDescription {
     text-align: center;
     margin: 0 15px;
     font-size: 14px;
+
+    @media screen and (max-width: 1300px) {
+      font-size: 10px;
+    }
+
+    @media screen and (max-width: 1000px) {
+      font-size: 8px;
+    }
   }
 
   .cardLinks {
     display: flex;
     justify-content: center;
   }
+
   .cardsSocialImages {
     width: 25px;
     margin: 25px 20px 0 20px;
     cursor: pointer;
     transition: scale 250ms;
+
+    @media screen and (max-width: 1000px) {
+      width: 20px;
+      margin-top: 10px;
+    }
   }
+
   .cardsSocialImages:hover {
     scale: 1.15;
   }
+
   .description {
     width: 90vw;
     font-size: 20px;
@@ -94,6 +167,22 @@
   .vcImg {
     height: 120px;
     cursor: pointer;
+
+    @media screen and (max-width: 1300px) {
+      height: 100px;
+    }
+
+    @media screen and (max-width: 1000px) {
+      height: 70px;
+    }
+
+    @media screen and (max-width: 500px) {
+      height: 50px;
+    }
+
+    @media screen and (max-width: 350px) {
+      height: 37px;
+    }
   }
 
   .entreprenistonImg {
@@ -102,6 +191,22 @@
     margin-right: 30px;
     margin-left: 38px;
     cursor: pointer;
+
+    @media screen and (max-width: 1300px) {
+      height: 100px;
+    }
+
+    @media screen and (max-width: 1000px) {
+      height: 70px;
+    }
+
+    @media screen and (max-width: 500px) {
+      height: 50px;
+    }
+
+    @media screen and (max-width: 350px) {
+      height: 45px;
+    }
   }
 
   .luckyTraderImg {
@@ -109,12 +214,44 @@
     margin-left: 40px;
     cursor: pointer;
     margin-right: 15px;
+
+    @media screen and (max-width: 1300px) {
+      height: 100px;
+    }
+
+    @media screen and (max-width: 1000px) {
+      height: 70px;
+    }
+
+    @media screen and (max-width: 500px) {
+      height: 50px;
+    }
+
+    @media screen and (max-width: 350px) {
+      height: 46px;
+    }
   }
 
   .mikImg {
     height: 125px;
     margin-left: 40px;
     cursor: pointer;
+
+    @media screen and (max-width: 1300px) {
+      height: 103px;
+    }
+
+    @media screen and (max-width: 1000px) {
+      height: 74px;
+    }
+
+    @media screen and (max-width: 500px) {
+      height: 52px;
+    }
+
+    @media screen and (max-width: 350px) {
+      height: 48px;
+    }
   }
 
   // @media screen and (max-width: 1400px) {

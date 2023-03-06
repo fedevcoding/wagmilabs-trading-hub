@@ -232,3 +232,53 @@ a {
 #chakra-modal-cart {
   border-radius: 0;
 }
+
+@media screen and (max-width: 1300px) {
+  .search-bar {
+    width: 250px;
+    height: 18px;
+    font-size: 15px;
+  }
+}
+
+@media screen and (max-width: 1100px) {
+  .search-bar {
+    width: 220px;
+    height: 16px;
+    font-size: 13px;
+  }
+}
+
+@media screen and (max-width: 980px) {
+  .search-bar {
+    width: 180px;
+    height: 13px;
+    font-size: 11px;
+  }
+}
+
+@media screen and (max-width: 900px) {
+  .search-bar {
+    width: 250px;
+    height: 16px;
+    font-size: 14px;
+  }
+}
+
+@media screen and (max-width: 700px) {
+  .search-bar {
+    width: 230px;
+    height: 14px;
+    font-size: 12px;
+  }
+}
+
+@media screen and (max-width: 580px) {
+  .search-bar {
+    display: none;
+  }
+
+  .lens {
+    display: none;
+  }
+}

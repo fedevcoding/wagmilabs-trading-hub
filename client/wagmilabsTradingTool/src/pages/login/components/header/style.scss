@@ -37,6 +37,153 @@
         }
     }
 
+    @media screen and (max-width: 1300px) {
+        .logo {
+            width: 150px !important;
+            height: auto;
+            margin-right: -40px;
+        }
+
+        .links-container {
+            font-size: 13px;
+        }
+
+        .connect-button {
+            font-size: 11px;
+        }
+    }
+
+    @media screen and (max-width: 1100px) {
+        .logo {
+            width: 120px !important;
+            height: auto;
+            margin-right: -60px;
+        }
+
+        .links-container {
+            font-size: 11px;
+        }
+
+        .connect-button {
+            font-size: 10px;
+        }
+    }
+
+    @media screen and (max-width: 980px) {
+        .logo {
+            width: 110px !important;
+            height: auto;
+            margin-right: -60px;
+        }
+
+        .links-container {
+            font-size: 11px;
+        }
+
+        .connect-button {
+            font-size: 8px;
+        }
+    }
+
+    @media screen and (max-width: 900px) {
+        .logo {
+            width: 160px !important;
+            height: auto;
+            margin-right: 20px;
+        }
+
+        .links-container {
+            display: none;
+        }
+
+        .connect-button {
+            font-size: 14px;
+        }
+    }
+
+    @media screen and (max-width: 800px) {
+        .logo {
+            width: 140px !important;
+            height: auto;
+            margin-right: -40px;
+        }
+
+        .links-container {
+            display: none;
+        }
+
+        .connect-button {
+            font-size: 11px;
+        }
+    }
+
+    @media screen and (max-width: 700px) {
+        .logo {
+            width: 110px !important;
+            height: auto;
+            margin-right: -50px;
+        }
+
+        .links-container {
+            display: none;
+        }
+
+        .connect-button {
+            font-size: 10px;
+        }
+    }
+
+    @media screen and (max-width: 580px) {
+        .logo {
+            width: 180px !important;
+            height: auto;
+            margin-right: -50px;
+        }
+
+        .links-container {
+            display: none;
+        }
+
+        .connect-button {
+            font-size: 15px;
+        }
+    }
+
+    @media screen and (max-width: 500px) {
+        .logo {
+            width: 150px !important;
+            height: auto;
+            margin-right: -50px;
+        }
+
+        .links-container {
+            display: none;
+        }
+
+        .connect-button {
+            font-size: 12px;
+        }
+    }
+
+    @media screen and (max-width: 400px) {
+        .logo {
+            width: 130px !important;
+            height: auto;
+            margin-right: -70px;
+        }
+
+        .links-container {
+            display: none;
+        }
+
+        .connect-button {
+            font-size: 10px;
+        }
+    }
+
+
+
+
 
     .logo {
         width: 170px;
