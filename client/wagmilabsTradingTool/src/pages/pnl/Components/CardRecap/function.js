@@ -1,6 +1,7 @@
 import { roundPrice, roundPriceUsd } from "@Utils";
+import { longTermDays } from "@Variables";
 
-export function getRecap(data, taxPerc, taxedOn, taxLossHarvesting) {
+export function getRecap(data, taxPerc, taxedOn, taxLossHarvesting, longTermTax) {
   const paidData = data?.map(a => a.info.paid) || [];
   const paid = {
     eth: data ? roundPrice(paidData?.map(a => a.eth).reduce((a, b) => a + b, 0)) : 0,
@@ -33,9 +34,23 @@ export function getRecap(data, taxPerc, taxedOn, taxLossHarvesting) {
       usd: roundPriceUsd(valueToBeTaxed.usd > 0 ? (valueToBeTaxed.usd / 100) * taxPerc : 0),
     };
   } else {
-    const listValues = data?.map(a => a.info[taxedOn === "gross" ? "gross" : "pOrL"]) || [];
-    const taxesEth = listValues?.map(a => (a.eth > 0 ? (a.eth / 100) * taxPerc : 0)).reduce((a, b) => a + b, 0);
-    const taxesUsd = listValues?.map(a => (a.usd > 0 ? (a.usd / 100) * taxPerc : 0)).reduce((a, b) => a + b, 0);
+    const taxesEth = data
+      ?.map(a => {
+        const objToBeTaxed = a.info[taxedOn === "gross" ? "gross" : "pOrL"];
+        const applyLongTermTax = longTermTax !== undefined && Math.abs(a.info.holdDuration) > longTermDays * 3600 * 24;
+        const taxPercToApply = applyLongTermTax ? longTermTax : taxPerc;
+        return objToBeTaxed.eth > 0 ? (objToBeTaxed.eth / 100) * taxPercToApply : 0;
+      })
+      .reduce((a, b) => a + b, 0);
+
+    const taxesUsd = data
+      ?.map(a => {
+        const objToBeTaxed = a.info[taxedOn === "gross" ? "gross" : "pOrL"];
+        const applyLongTermTax = longTermTax !== undefined && Math.abs(a.info.holdDuration) > longTermDays * 3600 * 24;
+        const taxPercToApply = applyLongTermTax ? longTermTax : taxPerc;
+        return objToBeTaxed.usd > 0 ? (objToBeTaxed.usd / 100) * taxPercToApply : 0;
+      })
+      .reduce((a, b) => a + b, 0);
 
     taxes = {
       eth: roundPrice(taxesEth > 0 ? taxesEth : 0),

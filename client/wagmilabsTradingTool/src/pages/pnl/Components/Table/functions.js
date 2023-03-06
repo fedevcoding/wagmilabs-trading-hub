@@ -1,8 +1,8 @@
 import { roundPrice, roundPriceUsd } from "@Utils";
+import { longTermDays } from "@Variables";
 
 export function getTaxValue(nft, taxedOn, currency, taxPerc, longTermTax) {
   const symbol = currency === "usd" ? "$" : " ETH";
-  const longTermDays = 365;
   const valueToBeTaxed = (taxedOn === "net" ? nft.pOrL : nft.gross)[currency];
   const applyLongTermTax = longTermTax !== undefined && Math.abs(nft.holdDuration) > longTermDays * 3600 * 24;
   let approxedValue;

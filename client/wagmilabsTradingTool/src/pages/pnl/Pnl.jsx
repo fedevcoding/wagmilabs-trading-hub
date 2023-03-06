@@ -27,6 +27,7 @@ export default React.memo(() => {
             currency={settings.currency.value}
             taxedOn={settings.taxedOn.value}
             taxLossHarvesting={settings.taxLossHarvesting}
+            longTermTax={settings.longTermTax}
           />
         </Col>
         <Col className="text-right settings">

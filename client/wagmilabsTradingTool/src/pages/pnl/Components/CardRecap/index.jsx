@@ -2,8 +2,8 @@ import React from "react";
 import { Card, Col, Number, Row } from "@Components";
 import { getRecap } from "./function";
 
-export const CardRecap = React.memo(({ data, taxPerc, taxedOn, currency, taxLossHarvesting }) => {
-  const { paid, sold, pAndL, taxes } = getRecap(data, taxPerc, taxedOn, taxLossHarvesting);
+export const CardRecap = React.memo(({ data, taxPerc, taxedOn, currency, taxLossHarvesting, longTermTax }) => {
+  const { paid, sold, pAndL, taxes } = getRecap(data, taxPerc, taxedOn, taxLossHarvesting, longTermTax);
 
   return (
     <Card className="recap-card">
