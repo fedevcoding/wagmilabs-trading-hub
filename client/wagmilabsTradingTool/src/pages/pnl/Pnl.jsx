@@ -46,6 +46,7 @@ export default React.memo(() => {
             taxPerc={settings.taxPerc}
             taxedOn={settings.taxedOn.value}
             currency={settings.currency.value}
+            longTermTax={settings.longTermTax}
           />
         ) : (
           <LoadingSpinner />

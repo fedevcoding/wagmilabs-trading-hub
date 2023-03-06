@@ -4,7 +4,7 @@ import { Row } from "./Row";
 import { Button } from "@Components";
 import { notFound } from "@Assets";
 
-export const Table = React.memo(({ data, taxPerc, taxedOn, currency }) => {
+export const Table = React.memo(({ data, taxPerc, taxedOn, currency, longTermTax }) => {
   const paginationCount = 10;
   const [page, setPage] = React.useState(1);
   const items = data.slice((page - 1) * paginationCount, page * paginationCount);
@@ -60,6 +60,7 @@ export const Table = React.memo(({ data, taxPerc, taxedOn, currency }) => {
               taxedOn={taxedOn}
               currency={currency}
               tokensInfo={tokensInfo}
+              longTermTax={longTermTax}
               isFetchingInitialData={isFetchingInitialData}
             />
           ))}
