@@ -10,9 +10,15 @@ export const useSaveTask = (callback, toggleSnipe) => {
     try {
       setIsLoading(true);
 
-      const { privateKey } = data;
+      const { privateKey, maxPrice, minPrice } = data;
+
+      const parsedMaxPrice = parseFloat(maxPrice) || undefined;
+      const parsedMinPrice = parseFloat(minPrice) || undefined;
+
       const address = getAddressFromPrivateKey(privateKey);
       data["walletAddress"] = address;
+      data["maxPrice"] = parsedMaxPrice;
+      data["minPrice"] = parsedMinPrice;
 
       const body = { data, type: "add" };
 

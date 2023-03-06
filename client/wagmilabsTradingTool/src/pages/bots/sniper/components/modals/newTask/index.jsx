@@ -83,7 +83,7 @@ export const NewTaskModal = React.memo(({ showNewTask, toggleNewTaskModal, toggl
                   <p className="titles">Price</p>
                   <HStack>
                     <NumberInput>
-                      <Input
+                      <NumberInputField
                         placeholder="Min"
                         value={minPrice}
                         onChange={e => handleSetData("minPrice", e.target.value)}
@@ -91,7 +91,7 @@ export const NewTaskModal = React.memo(({ showNewTask, toggleNewTaskModal, toggl
                     </NumberInput>
                     <p>-</p>
                     <NumberInput>
-                      <Input
+                      <NumberInputField
                         placeholder="Max"
                         value={maxPrice}
                         onChange={e => handleSetData("maxPrice", e.target.value)}
