@@ -10,7 +10,7 @@ const SpacesSchema = mongoose.Schema({
     links: {
         type: Object
     },
-    spaceDescrition: {
+    spaceDescription: {
         type: String
     },
     spaceHost: {

@@ -34,7 +34,7 @@ export const formatEventInfo = (eventInfo, section, links) => {
       break;
     case "spaces":
       eventToSave.spaceName = eventInfo.name;
-      eventToSave.spaceDescrition = eventInfo.eventDescription;
+      eventToSave.spaceDescription = eventInfo.eventDescription;
       eventToSave.spaceHost = eventInfo.spaceHost;
       break;
     default:

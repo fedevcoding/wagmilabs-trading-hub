@@ -21,10 +21,10 @@ spacesRoute.get("/", async (req, res) => {
 
 spacesRoute.post('/', async (req, res) => {
 
-    const { timestamp,spaceName,links,spaceDescrition,spaceHost } = req.body || {};
+    const { timestamp,spaceName,links,spaceDescription,spaceHost } = req.body || {};
 
     try {
-        const spaces = await Spaces.create({ timestamp,spaceName,links,spaceDescrition,spaceHost })
+        const spaces = await Spaces.create({ timestamp,spaceName,links,spaceDescription,spaceHost })
         if (!spaces) throw Error('Something went wrong saving the admin spaces event');
         return res.status(200).json({spaces});
     } catch (e) {
