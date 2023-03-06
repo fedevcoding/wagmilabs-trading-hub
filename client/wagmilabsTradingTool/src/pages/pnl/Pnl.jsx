@@ -36,6 +36,7 @@ export default React.memo(() => {
             endDate={endDate}
             setStartDate={setStartDate}
             setEndDate={setEndDate}
+            data={data}
             {...settings}
           />
         </Col>

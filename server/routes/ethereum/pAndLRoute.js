@@ -24,24 +24,24 @@ route.get("/:address", checkAuth, (req, res) => {
       const exchangeCondition = "exchange_name IN('opensea', 'blur', 'x2y2', 'sudoswap', 'looksrare')";
 
       const query = `
-        SELECT timestamp, contract_address, token_id, usd_price, eth_price, royalty_fee, platform_fee, transaction_hash
+        SELECT timestamp, contract_address, CONCAT('', token_id) as token_id, usd_price, eth_price, royalty_fee, platform_fee, transaction_hash
         FROM ethereum.nft_sales
         WHERE buyer_address = '${address}' AND timestamp <= '${end}'
         AND ${exchangeCondition}
-        AND CONCAT(contract_address, token_id) IN (
-            SELECT CONCAT(contract_address, token_id)
+        AND CONCAT(contract_address, CONCAT('', token_id)) IN (
+            SELECT CONCAT(contract_address, CONCAT('', token_id))
             FROM ethereum.nft_sales
             WHERE seller_address = '${address}' AND timestamp >= '${start}' AND timestamp <= '${end}'
             AND ${exchangeCondition}
         )`;
 
       const querySell = `
-        SELECT timestamp, contract_address, token_id, usd_price, eth_price, royalty_fee, platform_fee, transaction_hash
+        SELECT timestamp, contract_address, CONCAT('', token_id) as token_id, usd_price, eth_price, royalty_fee, platform_fee, transaction_hash
         FROM ethereum.nft_sales
         WHERE seller_address = '${address}' AND timestamp >= '${start}'  AND timestamp <= '${end}'
         AND ${exchangeCondition}
-        AND CONCAT(contract_address, token_id) IN (
-          SELECT CONCAT(contract_address, token_id)
+        AND CONCAT(contract_address, CONCAT('', token_id)) IN (
+          SELECT CONCAT(contract_address, CONCAT('', token_id))
           FROM ethereum.nft_sales
           WHERE buyer_address = '${address}' AND timestamp <= '${end}'
           AND ${exchangeCondition}
