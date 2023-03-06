@@ -11,7 +11,7 @@ import { CartModal, WalletModal } from "@Components";
 
 import { UserDataContext } from "@Context";
 
-import getUserBalances from "@Utils/database-functions/getUserBalances";
+import { useUpdateBalance } from "@Hooks";
 
 import { fetchEnsName } from "@wagmi/core";
 import { useAccount } from "wagmi";
@@ -23,11 +23,9 @@ const Header = () => {
     setListingSettings,
     profileImage,
     setUserCartItems,
-    setUserBalances,
     setGasSettings,
     setConnected,
     connected,
-    setSnipingTasks,
   } = useContext(UserDataContext);
 
   const { address } = useAccount();
@@ -36,11 +34,11 @@ const Header = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [walletModalOpen, setWalletModalOpen] = useState(false);
 
+  const updateBalance = useUpdateBalance(address);
+
   // profile options hover
   useEffect(() => {
-    const profileOptionsContainer = document.querySelector(
-      ".pfp-options-container"
-    );
+    const profileOptionsContainer = document.querySelector(".pfp-options-container");
     const profileOptions = document.querySelector(".profile-options");
 
     let hovered;
@@ -71,10 +69,7 @@ const Header = () => {
     profileOptionsContainer.addEventListener("click", profileClick);
 
     return () => {
-      profileOptionsContainer.removeEventListener(
-        "mouseover",
-        profileMouseOver
-      );
+      profileOptionsContainer.removeEventListener("mouseover", profileMouseOver);
       profileOptionsContainer.removeEventListener("mouseout", profileMouseOut);
       profileOptionsContainer.removeEventListener("click", profileClick);
     };
@@ -83,9 +78,7 @@ const Header = () => {
   // calendars dropdown hover
   useEffect(() => {
     const calendarOptionContainer = document.querySelector(".calendars-button");
-    const profileOptions = document.querySelector(
-      ".calendars-options-dropdown"
-    );
+    const profileOptions = document.querySelector(".calendars-options-dropdown");
 
     let hovered;
 
@@ -114,14 +107,8 @@ const Header = () => {
     calendarOptionContainer.addEventListener("click", calendarsClick);
 
     return () => {
-      calendarOptionContainer.removeEventListener(
-        "mouseover",
-        calendarsMouseOver
-      );
-      calendarOptionContainer.removeEventListener(
-        "mouseout",
-        calendarsMouseOut
-      );
+      calendarOptionContainer.removeEventListener("mouseover", calendarsMouseOver);
+      calendarOptionContainer.removeEventListener("mouseout", calendarsMouseOut);
       calendarOptionContainer.removeEventListener("click", calendarsClick);
     };
   }, []);
@@ -194,7 +181,7 @@ const Header = () => {
   useEffect(() => {
     fetchUserData();
     getEnsName(address);
-    getUserBalances(address, setUserBalances);
+    updateBalance();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -221,16 +208,14 @@ const Header = () => {
 
       const userData = await res.json();
 
-      const { gasSettings, profileImage, listSettings, shoppingCart, bots } =
-        userData || {};
+      const { gasSettings, profileImage, listSettings, shoppingCart } = userData || {};
 
-      const { snipingBotTasks } = bots || {};
+      // const { snipingBotTasks } = bots || {};
 
       setGasSettings({ ...gasSettings, maxFeePerGas: 0 });
       setProfileImage(profileImage);
       setListingSettings(listSettings);
       setUserCartItems(shoppingCart);
-      setSnipingTasks(snipingBotTasks);
     } catch (e) {
       console.log(e);
     }
@@ -282,72 +267,36 @@ const Header = () => {
     <>
       <RefreshToken connected={connected} setConnected={setConnected} />
       <header className="search-header">
-        <img
-          src={logoImage}
-          onClick={() => navigate("/")}
-          className="logo-image"
-          alt=""
-        />
+        <img src={logoImage} onClick={() => navigate("/")} className="logo-image" alt="" />
 
         <EthereumSearch />
 
         <div className="header-links-container">
           <div>
-            <div className="bots-button header-links">
+            <div className="bots-button header-links not-allowed">
               <span>Bots</span>
-
-              <div className="bots-options-dropdown invisible">
-                <div onClick={() => navigate("/bots/sniper")}>Sniper bot</div>
-                <div onClick={() => navigate("/bots/contractMinter")}>
-                  Contract minter
-                </div>
-                <div onClick={() => navigate("/bots/notifications")}>
-                  Notifications
-                </div>
-              </div>
             </div>
           </div>
           <div onClick={() => navigate("/volumes")}>
-            <div
-              className={`${
-                isVolumesPage ? "active" : ""
-              } volumes-button header-links`}
-            >
-              Volumes
-            </div>
+            <div className={`${isVolumesPage ? "active" : ""} volumes-button header-links`}>Volumes</div>
           </div>
           <div>
-            <div className="pnl-button header-links">
+            <div className="pnl-button header-links not-allowed">
               <span>P&L</span>
-
-              <div className="pnl-options-dropdown invisible">
-                <div onClick={() => navigate("/profitandloss")}>All</div>
-                <div onClick={() => navigate("/profitandloss/taxes")}>
-                  Taxes
-                </div>
-              </div>
             </div>
           </div>
           <div onClick={() => navigate("/feed")}>
             <div className="feed-button header-links">Feed</div>
           </div>
           <div>
-            <div className="calendars-button header-links">
+            <div className="calendars-button header-links not-allowed">
               <span>Calendars</span>
 
               <div className="calendars-options-dropdown invisible">
-                <div onClick={() => navigate("/calendars/drops")}>
-                  NFT drops
-                </div>
-                <div onClick={() => navigate("/calendars/spaces")}>
-                  Twitter spaces
-                </div>
-                <div onClick={() => navigate("/calendars/raffles")}>
-                  Personal
-                </div>
-                <div onClick={() => navigate("/calendars/events")}>
-                  IRL events
-                </div>
+                <div onClick={() => navigate("/calendars/drops")}>NFT drops</div>
+                <div onClick={() => navigate("/calendars/spaces")}>Twitter spaces</div>
+                <div onClick={() => navigate("/calendars/raffles")}>Personal</div>
+                <div onClick={() => navigate("/calendars/events")}>IRL events</div>
               </div>
             </div>
           </div>
@@ -362,30 +311,19 @@ const Header = () => {
           }}
         >
           <div className="pfp-options-container">
-            <img
-              src={profileImage}
-              alt=""
-              className="pfp"
-              onClick={() => navigate("/profile")}
-            />
+            <img src={profileImage} alt="" className="pfp" onClick={() => navigate("/profile")} />
             <div className="profile-options invisible">
-              <div
-                onClick={() => navigate("/profile")}
-                className="pfp-icon-container"
-              >
+              <div onClick={() => navigate("/profile")} className="pfp-icon-container">
                 <i className="fa-solid fa-circle-user"></i>
                 <p>Profile</p>
               </div>
 
-              <div className="switch-account-option-container">
+              <div className="switch-account-option-container not-allowed">
                 <i className="fa-solid fa-arrows-repeat"></i>
                 <p>Switch account</p>
               </div>
 
-              <div
-                onClick={() => logOut(setConnected)}
-                className="logout-container"
-              >
+              <div onClick={() => logOut(setConnected)} className="logout-container">
                 <i className="fa-solid fa-arrow-right-from-bracket"></i>
                 <p>Log Out</p>
               </div>
@@ -409,11 +347,7 @@ const Header = () => {
           openWalletModal={openWalletModal}
           closeWalletModal={closeWalletModal}
         />
-        <CartModal
-          modalOpen={modalOpen}
-          openCartModal={openCartModal}
-          closeCartModal={closeCartModal}
-        />
+        <CartModal modalOpen={modalOpen} openCartModal={openCartModal} closeCartModal={closeCartModal} />
       </header>
     </>
   );

@@ -1,76 +1,76 @@
 import React from "react";
-import { formatAddress } from "@Utils/formats/formats";
-import { roundPrice, roundPrice2 } from "src/utils/formats/formats";
-import moment from "moment";
+import { useTokensInfo } from "./useTokensInfo";
+import { Row } from "./Row";
+import { Button } from "@Components";
+import { notFound } from "@Assets";
 
-export const Table = React.memo(({ data, taxPerc, taxedOn }) => {
-  return (
-    <table>
-      <thead>
-        <tr>
-          <th>NFT</th>
-          <th>Paid</th>
-          <th>Sold</th>
-          <th>Gas fees</th>
-          <th>P&L</th>
-          <th>Hold duration</th>
-          <th>Gross profit</th>
-          <th>Taxes owed</th>
-        </tr>
-      </thead>
-      <tbody>
-        {data.map(n => {
-          const nft = n.info;
+export const Table = React.memo(({ data, taxPerc, taxedOn, currency }) => {
+  const paginationCount = 10;
+  const [page, setPage] = React.useState(1);
+  const items = data.slice((page - 1) * paginationCount, page * paginationCount);
+  const { tokensInfo, isFetchingInitialData } = useTokensInfo(items);
+  const totalItems = data.length;
+  const itemsInPage = items.length;
 
-          const momentDuration = moment
-            .duration(nft.holdDuration, "seconds")
-            .humanize();
-
-          return (
-            <tr key={n.info.nft.address + n.info.nft.id}>
-              <td>
-                {formatAddress(nft.nft.address)}
-                <br />
-                {"#" + nft.nft.id}
-              </td>
-              <td>
-                {nft.paid.eth + " ETH"} <br /> {nft.paid.usd + "$"}
-              </td>
-              <td>
-                {nft.sold.eth + " ETH"} <br /> {nft.sold.usd + "$"}
-              </td>
-              <td>
-                {roundPrice(nft.gasFees.total.eth) + " ETH"} <br />{" "}
-                {roundPrice2(nft.gasFees.total.usd) + "$"}
-              </td>
-              <td>
-                {roundPrice(nft.pOrL.eth) + " ETH"} <br />{" "}
-                {roundPrice2(nft.pOrL.usd) + "$"}
-              </td>
-              <td>{nft.holdDuration ? momentDuration : nft.holdDuration}</td>
-              <td>
-                {roundPrice(nft.gross.eth) + " ETH"} <br />{" "}
-                {roundPrice2(nft.gross.usd) + "$"}
-              </td>
-              <td>
-                {taxedOn === "net" ? (
-                  <>
-                    {nft.pOrL.usd > 0
-                      ? roundPrice2((nft.pOrL.usd / 100) * taxPerc) + "$"
-                      : "0"}
-                  </>
-                ) : (
-                  <>
-                    {nft.gross.usd > 0
-                      ? roundPrice2((nft.gross.usd / 100) * taxPerc) + "$"
-                      : "0"}
-                  </>
-                )}
-              </td>
-            </tr>
-          );
-        })}
-      </tbody>
-    </table>
+  return totalItems ? (
+    <>
+      {(totalItems > paginationCount && (
+        <div className="pagination">
+          <p>
+            Page {page} - Showing {itemsInPage} of {totalItems} Trades
+          </p>
+          {(page > 1 && (
+            <Button onClick={() => setPage(page - 1)}>
+              <i className="fa-solid fa-backward" />
+            </Button>
+          )) ||
+            ""}
+          {(page * paginationCount < totalItems && (
+            <Button onClick={() => setPage(page + 1)}>
+              <i className="fa-solid fa-forward" />
+            </Button>
+          )) ||
+            ""}
+        </div>
+      )) || (
+        <div className="pagination">
+          <p>Showing {totalItems} Trades</p>
+        </div>
+      )}
+      <table>
+        <thead>
+          <tr>
+            <th>NFT</th>
+            <th>Paid</th>
+            <th>Sold</th>
+            <th>Fees</th>
+            <th>P&L</th>
+            <th>Hold duration</th>
+            <th>Gross profit</th>
+            <th>Taxes owed</th>
+          </tr>
+        </thead>
+        <tbody>
+          {items.map(n => (
+            <Row
+              key={JSON.stringify(n)}
+              nft={n.info}
+              isMinted={!!n.minted}
+              taxPerc={taxPerc}
+              taxedOn={taxedOn}
+              currency={currency}
+              tokensInfo={tokensInfo}
+              isFetchingInitialData={isFetchingInitialData}
+            />
+          ))}
+        </tbody>
+      </table>
+    </>
+  ) : (
+    <h3 className="text-center">
+      <img src={notFound} alt="best offer" width={100} />
+      <br />
+      No NFTs were found in this range!
+    </h3>
   );
 });

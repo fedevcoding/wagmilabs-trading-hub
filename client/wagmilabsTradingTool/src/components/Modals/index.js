@@ -9,3 +9,4 @@ export { AcceptOfferModal } from "./AcceptOfferModal";
 export { MakeOfferModal } from "./MakeOfferModal";
 export { PromoModal } from "./PromoModal";
 export { TaxSettingsModal } from "./TaxSettingsModal";
+export { TimeframeModal } from "./TimeframeModal";

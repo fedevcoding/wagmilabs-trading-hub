@@ -3,14 +3,42 @@
     .row + .row {
       margin-top: 1.5rem;
     }
+
+    h3 {
+      font-size: 22px;
+    }
+
+    p {
+      font-size: 20px;
+    }
   }
 
-  .timeframe {
-    margin: 1rem 0 0.5rem;
+  .settings {
+    max-width: 40%;
+    padding-top: 1rem;
+
+    .btn-settings {
+      padding: 0.6rem 1.5rem;
+      width: 200px;
+
+      i {
+        margin-left: 0.5rem;
+      }
+    }
+
+    .timeframe {
+      margin: 2rem 0 0.5rem;
+    }
   }
 
-  .react-datepicker-wrapper {
-    max-width: 220px;
+  .pagination {
+    display: flex;
+    align-items: center;
+
+    .default-btn {
+      margin-left: 1rem;
+      min-width: 10px;
+    }
   }
 
   table {
@@ -23,6 +51,23 @@
 
     td {
       padding: 0.3rem 0;
+    }
+
+    .nft-info-box {
+      box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      min-height: 70px;
+
+      .nft-text {
+        font-size: 12px;
+        margin-left: 1rem;
+      }
+
+      .nft-img {
+        border-radius: 5px;
+      }
     }
   }
 }

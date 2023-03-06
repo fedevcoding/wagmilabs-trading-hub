@@ -2,47 +2,33 @@ import React, { memo, useEffect } from "react";
 import HighchartsReact from "highcharts-react-official";
 import HighCharts from "highcharts";
 import HC_more from "highcharts/highcharts-more";
-import {
-  HStack,
-  NumberInput,
-  NumberInputField,
-  Select,
-} from "@chakra-ui/react";
-import { useRefreshSecond } from "@Hooks";
+import { HStack, NumberInput, NumberInputField, Select } from "@chakra-ui/react";
+import { useRefreshTime } from "@Hooks";
+HC_more(HighCharts);
 
 const ComparisonChart = memo(({ totalListings, totalSales, floorPrice }) => {
-  HC_more(HighCharts);
-
   const [chartType, setChartType] = React.useState("column");
 
-  const [maxPrice, setMaxPrice] = React.useState(
-    floorPrice + (floorPrice / 100) * 20
-  );
+  const [maxPrice, setMaxPrice] = React.useState(floorPrice + (floorPrice / 100) * 20);
   const [minPrice] = React.useState(0);
 
   const [time, setTime] = React.useState(300000);
 
   const [chartOptions, setChartOptions] = React.useState({});
-  const refresh = useRefreshSecond();
+  const refresh = useRefreshTime(5000);
 
-  useEffect(() => {
-    floorPrice && setMaxPrice(floorPrice + (floorPrice / 100) * 20);
-  }, [floorPrice]);
+  // useEffect(() => {
+  //   floorPrice && setMaxPrice(floorPrice + (floorPrice / 100) * 20);
+  // }, [floorPrice]);
 
   useEffect(() => {
     const timeframe = Date.now() - time;
     const numberMaxPrice = Number(maxPrice);
     const rightSales = totalSales.filter(
-      sale =>
-        sale.value < numberMaxPrice &&
-        sale.value > minPrice &&
-        sale.timestamp >= timeframe
+      sale => sale.value < numberMaxPrice && sale.value > minPrice && sale.timestamp >= timeframe
     ).length;
     const rightListings = totalListings.filter(
-      listing =>
-        listing.value < numberMaxPrice &&
-        listing.value > minPrice &&
-        listing.timestamp * 1000 >= timeframe
+      listing => listing.value < numberMaxPrice && listing.value > minPrice && listing.timestamp * 1000 >= timeframe
     ).length;
 
     const chartOptions1 = {
@@ -116,12 +102,7 @@ const ComparisonChart = memo(({ totalListings, totalSales, floorPrice }) => {
     <div className="sale-list-comparison-chart">
       <div className="options-container">
         <HStack>
-          <Select
-            onChange={e => setTime(e.target.value)}
-            color="white"
-            colorScheme={"white"}
-            defaultValue={300000}
-          >
+          <Select onChange={e => setTime(e.target.value)} color="white" colorScheme={"white"} defaultValue={300000}>
             <option value={60000}>1 minute</option>
             <option value={300000}>5 minutes</option>
             <option value={600000}>10 minutes</option>
@@ -130,29 +111,21 @@ const ComparisonChart = memo(({ totalListings, totalSales, floorPrice }) => {
 
         <NumberInput value={maxPrice}>
           <HStack>
-            <NumberInputField
-              placeholder="Max price (ETH)"
-              onChange={e => setMaxPrice(e.target.value)}
-            />
+            <NumberInputField placeholder="Max price (ETH)" onChange={e => setMaxPrice(e.target.value)} />
           </HStack>
         </NumberInput>
 
         <div className="chart-type-selector">
           <i
-            className={`fa-solid fa-chart-simple ${
-              chartType === "column" && "selected"
-            }`}
+            className={`fa-solid fa-chart-simple ${chartType === "column" && "selected"}`}
             onClick={() => setChartType("column")}
           ></i>
           <i
-            className={`fa-sharp fa-solid fa-chart-scatter-bubble ${
-              chartType === "bubble" && "selected"
-            }`}
+            className={`fa-sharp fa-solid fa-chart-scatter-bubble ${chartType === "bubble" && "selected"}`}
             onClick={() => setChartType("bubble")}
           ></i>
         </div>
       </div>
-
       <HighchartsReact highcharts={HighCharts} options={chartOptions} />
     </div>
   );

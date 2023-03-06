@@ -1,17 +1,7 @@
 import React, { useEffect, useState, useRef, useContext } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-import {
-  placeholderImage,
-  etherscan,
-  opensea,
-  x2y2,
-  www,
-  twitter,
-  looksRare,
-  discord,
-  gem,
-} from "@Assets";
+import { placeholderImage, etherscan, opensea, x2y2, www, twitter, looksRare, discord, gem } from "@Assets";
 
 import Items from "./sections/items/Items";
 import Activity from "./sections/activity/Activity";
@@ -124,18 +114,8 @@ const Collection = () => {
   }, [address]);
 
   function addNewListing(listingData) {
-    const {
-      tokenId,
-      price,
-      image,
-      name,
-      timestamp,
-      marketplace,
-      rarity,
-      rarityRank,
-      orderHash,
-      isFlagged,
-    } = listingData;
+    const { tokenId, price, image, name, timestamp, marketplace, rarity, rarityRank, orderHash, isFlagged } =
+      listingData;
 
     if (
       (itemFilters.tokenId !== undefined && itemFilters.tokenId !== "") ||
@@ -145,11 +125,7 @@ const Collection = () => {
       return;
     }
 
-    if (
-      itemFilters.priceFilter.min > price ||
-      itemFilters.priceFilter.max < price
-    )
-      return;
+    if (itemFilters.priceFilter.min > price || itemFilters.priceFilter.max < price) return;
 
     const newListing = {
       token: {
@@ -187,32 +163,18 @@ const Collection = () => {
     }
 
     if (itemFilters.sortBy === "p-lth") {
-      if (
-        price >
-        oldItems[oldItems.length - 1]?.market?.floorAsk?.price?.amount?.decimal
-      )
-        return;
+      if (price > oldItems[oldItems.length - 1]?.market?.floorAsk?.price?.amount?.decimal) return;
 
       const newItems = [newListing, ...oldItems].sort((a, b) => {
-        return (
-          a?.market?.floorAsk?.price?.amount?.decimal -
-          b?.market?.floorAsk?.price?.amount?.decimal
-        );
+        return a?.market?.floorAsk?.price?.amount?.decimal - b?.market?.floorAsk?.price?.amount?.decimal;
       });
 
       setItems(newItems);
     } else if (itemFilters.sortBy === "p-htl") {
-      if (
-        price <
-        oldItems[oldItems.length - 1]?.market?.floorAsk?.price?.amount?.decimal
-      )
-        return;
+      if (price < oldItems[oldItems.length - 1]?.market?.floorAsk?.price?.amount?.decimal) return;
 
       const newItems = [newListing, ...oldItems].sort((a, b) => {
-        return (
-          b?.market?.floorAsk?.price?.amount?.decimal -
-          a?.market?.floorAsk?.price?.amount?.decimal
-        );
+        return b?.market?.floorAsk?.price?.amount?.decimal - a?.market?.floorAsk?.price?.amount?.decimal;
       });
 
       setItems(newItems);
@@ -356,15 +318,11 @@ const Collection = () => {
       const { name } = data;
       setPageTitle(`${name} | Wagmi Labs`);
 
-      const openseContractDataApi = await fetch(
-        `https://api.opensea.io/api/v1/asset_contract/${address}`
-      );
+      const openseContractDataApi = await fetch(`https://api.opensea.io/api/v1/asset_contract/${address}`);
       const openseContractData = await openseContractDataApi.json();
       const { slug } = openseContractData?.collection || data;
 
-      const openseaDataApi = await fetch(
-        `https://api.opensea.io/api/v1/collection/${slug}`
-      );
+      const openseaDataApi = await fetch(`https://api.opensea.io/api/v1/collection/${slug}`);
       const openseaData = (await openseaDataApi.json())?.collection;
 
       const royalties =
@@ -372,12 +330,10 @@ const Collection = () => {
         openseContractData?.dev_seller_fee_basis_points ||
         data?.royalties?.bps ||
         "";
-      const createdDate =
-        openseaData?.created_date || openseContractData?.created_date;
+      const createdDate = openseaData?.created_date || openseContractData?.created_date;
       const marketCap = openseaData?.stats?.market_cap;
       const avgPrice = openseaData?.stats?.average_price;
-      const owners =
-        openseaData?.stats?.num_owners || openseContractData?.owner;
+      const owners = openseaData?.stats?.num_owners || openseContractData?.owner;
       const daySales = openseaData?.stats?.one_day_sales;
       const totalSales = openseaData?.stats?.total_sales;
       const ercType = openseContractData?.schema_name;
@@ -401,8 +357,7 @@ const Collection = () => {
 
   function expandDetails(e) {
     if (extra) {
-      document.querySelector(".collection-info-boxes2").style.animation =
-        "out 1.1s";
+      document.querySelector(".collection-info-boxes2").style.animation = "out 1.1s";
       setTimeout(() => setExtra(oldValue => !oldValue), 1000);
     } else {
       setExtra(oldValue => !oldValue);
@@ -430,10 +385,7 @@ const Collection = () => {
     const { onSaleCount, tokenCount } = collectionInfo;
     let data = "- - -";
     if (onSaleCount && tokenCount) {
-      data = `${onSaleCount} / ${tokenCount} (${getPercentage(
-        onSaleCount,
-        tokenCount
-      )}%)`;
+      data = `${onSaleCount} / ${tokenCount} (${getPercentage(onSaleCount, tokenCount)}%)`;
     }
     return data;
   };
@@ -483,10 +435,7 @@ const Collection = () => {
   return (
     <>
       <div className="collection-info-container">
-        <div
-          className="banner-image"
-          style={{ backgroundImage: `url(${collectionInfo.banner})` }}
-        ></div>
+        <div className="banner-image" style={{ backgroundImage: `url(${collectionInfo.banner})` }}></div>
         <hr style={{ border: "1.5px solid grey", backgroundColor: "grey" }} />
 
         <div className="infos">
@@ -509,11 +458,7 @@ const Collection = () => {
             </>
           ) : (
             <>
-              <img
-                className="collection-info-image"
-                src={collectionInfo.image || placeholderImage}
-                alt=""
-              />
+              <img className="collection-info-image" src={collectionInfo.image || placeholderImage} alt="" />
               <div className="collection-info-name">
                 <div>{collectionInfo.name || "---"}</div>
 
@@ -532,23 +477,15 @@ const Collection = () => {
                 onMouseOut={() => handleHoverCopy(false)}
               >
                 <div>{formatContractAddress(address)}</div>
-                <div className="collection-address-copy-btn inactive">
-                  {copyState.value}
-                </div>
+                <div className="collection-address-copy-btn inactive">{copyState.value}</div>
                 <i className="fa-solid fa-clipboard"></i>
               </div>
 
               <div className="flex-normal">
                 <div className="collection-info-royalties">
                   <i className="fa-solid fa-wallet"></i>
-                  <div>
-                    {collectionInfo?.collectionRoyalties / 100}% Royalties
-                  </div>
-                  <img
-                    style={{ width: "15px", marginLeft: "5px" }}
-                    src={opensea}
-                    alt=""
-                  />
+                  <div>{collectionInfo?.collectionRoyalties / 100}% Royalties</div>
+                  <img style={{ width: "15px", marginLeft: "5px" }} src={opensea} alt="" />
                 </div>
               </div>
             </>
@@ -561,8 +498,7 @@ const Collection = () => {
             ) : (
               <>
                 <span className="low-opacity-text">
-                  {collectionInfo.description ||
-                    "There is no description available for this collection."}
+                  {collectionInfo.description || "There is no description available for this collection."}
                 </span>
               </>
             )}
@@ -570,29 +506,17 @@ const Collection = () => {
 
           <div className="links">
             {
-              <a
-                href={`https://etherscan.io/address/${address}`}
-                target={"_blank"}
-                rel="noreferrer"
-              >
+              <a href={`https://etherscan.io/address/${address}`} target={"_blank"} rel="noreferrer">
                 <img src={etherscan} alt="" />
               </a>
             }
             {collectionInfo.slug && (
-              <a
-                href={`https://opensea.io/collection/${collectionInfo.slug}`}
-                target={"_blank"}
-                rel="noreferrer"
-              >
+              <a href={`https://opensea.io/collection/${collectionInfo.slug}`} target={"_blank"} rel="noreferrer">
                 <img src={opensea} alt="" />
               </a>
             )}
             {
-              <a
-                href={`https://x2y2.io/collection/${address}/items`}
-                target={"_blank"}
-                rel="noreferrer"
-              >
+              <a href={`https://x2y2.io/collection/${address}/items`} target={"_blank"} rel="noreferrer">
                 <img src={x2y2} alt="" />
               </a>
             }
@@ -606,38 +530,22 @@ const Collection = () => {
               </a>
             }
             {
-              <a
-                href={`https://www.gem.xyz/collection/${address}/`}
-                target={"_blank"}
-                rel="noreferrer"
-              >
+              <a href={`https://www.gem.xyz/collection/${address}/`} target={"_blank"} rel="noreferrer">
                 <img src={gem} alt="" />
               </a>
             }
             {collectionInfo.externalUrl && (
-              <a
-                href={`${collectionInfo.externalUrl}`}
-                target={"_blank"}
-                rel="noreferrer"
-              >
+              <a href={`${collectionInfo.externalUrl}`} target={"_blank"} rel="noreferrer">
                 <img src={www} alt="" />
               </a>
             )}
             {collectionInfo.twitterUsername && (
-              <a
-                href={`https://twitter.com/${collectionInfo.twitterUsername}`}
-                target={"_blank"}
-                rel="noreferrer"
-              >
+              <a href={`https://twitter.com/${collectionInfo.twitterUsername}`} target={"_blank"} rel="noreferrer">
                 <img src={twitter} alt="" />
               </a>
             )}
             {collectionInfo.discordUrl && (
-              <a
-                href={`${collectionInfo.discordUrl}`}
-                target={"_blank"}
-                rel="noreferrer"
-              >
+              <a href={`${collectionInfo.discordUrl}`} target={"_blank"} rel="noreferrer">
                 <img src={discord} alt="" />
               </a>
             )}
@@ -649,9 +557,7 @@ const Collection = () => {
                 Creation date:
                 <span className="low-opacity">
                   {" "}
-                  {collectionInfo.createdAt
-                    ? formatTime(collectionInfo.createdAt)
-                    : "- - -"}
+                  {collectionInfo.createdAt ? formatTime(collectionInfo.createdAt) : "- - -"}
                 </span>
               </div>
 
@@ -681,16 +587,10 @@ const Collection = () => {
             ) : (
               <div>
                 <i className="fa-brands fa-ethereum"></i>
-                <p>
-                  {roundPrice(
-                    collectionInfo.floorAsk?.price?.amount?.decimal
-                  ) || "- - -"}
-                </p>
+                <p>{roundPrice(collectionInfo.floorAsk?.price?.amount?.decimal) || "- - -"}</p>
                 {collectionInfo?.floorAsk?.price && (
                   <img
-                    src={getMarketplaceImage(
-                      collectionInfo?.floorAsk?.sourceDomain
-                    )}
+                    src={getMarketplaceImage(collectionInfo?.floorAsk?.sourceDomain)}
                     className="collectioninfo-fp-image"
                     alt=""
                   />
@@ -728,11 +628,7 @@ const Collection = () => {
             ) : (
               <div>
                 <i className="fa-brands fa-ethereum"></i>
-                <p>
-                  {collectionInfo.volume
-                    ? roundPrice(collectionInfo.volume["1day"])
-                    : "- - -"}
-                </p>
+                <p>{collectionInfo.volume ? roundPrice(collectionInfo.volume["1day"]) : "- - -"}</p>
               </div>
             )}
           </div>
@@ -747,16 +643,10 @@ const Collection = () => {
               ) : (
                 <div>
                   <i className="fa-brands fa-ethereum"></i>
-                  <p>
-                    {roundPrice(
-                      collectionInfo.topBid?.price?.amount?.decimal
-                    ) || "- - -"}
-                  </p>
+                  <p>{roundPrice(collectionInfo.topBid?.price?.amount?.decimal) || "- - -"}</p>
                   {collectionInfo?.topBid?.price && (
                     <img
-                      src={getMarketplaceImage(
-                        collectionInfo?.topBid?.sourceDomain
-                      )}
+                      src={getMarketplaceImage(collectionInfo?.topBid?.sourceDomain)}
                       className="collectioninfo-fp-image"
                       alt=""
                     />
@@ -772,11 +662,7 @@ const Collection = () => {
               ) : (
                 <div>
                   <i className="fa-brands fa-ethereum"></i>
-                  <p>
-                    {collectionInfo.marketCap
-                      ? Math.round(collectionInfo.marketCap)
-                      : "- - -"}
-                  </p>
+                  <p>{collectionInfo.marketCap ? Math.round(collectionInfo.marketCap) : "- - -"}</p>
                 </div>
               )}
             </div>
@@ -788,11 +674,7 @@ const Collection = () => {
               ) : (
                 <div>
                   <i className="fa-brands fa-ethereum"></i>
-                  <p>
-                    {collectionInfo.avgPrice
-                      ? roundPrice(collectionInfo.avgPrice)
-                      : "- - -"}
-                  </p>
+                  <p>{collectionInfo.avgPrice ? roundPrice(collectionInfo.avgPrice) : "- - -"}</p>
                 </div>
               )}
             </div>
@@ -822,10 +704,7 @@ const Collection = () => {
           </div>
         )}
 
-        <i
-          onClick={e => expandDetails(e)}
-          className="fa-solid fa-chevron-down info-arrow"
-        ></i>
+        <i onClick={e => expandDetails(e)} className="fa-solid fa-chevron-down info-arrow"></i>
       </div>
 
       <div className="collection-sections">
@@ -837,32 +716,24 @@ const Collection = () => {
           <p>Items</p>
           <LivePulsing notActive={!liveItems} />
         </div>
-        <div
-          section="liveview"
-          onClick={e => changeCollectionSection(e)}
-          className="single-collection-section flex-15"
-        >
+        <div section="liveview" onClick={e => changeCollectionSection(e)} className="single-collection-section flex-15">
           <p>Live view</p>
           <LivePulsing />
         </div>
-        <div
-          section="activity"
-          onClick={e => changeCollectionSection(e)}
-          className="single-collection-section"
-        >
+        <div section="activity" onClick={e => changeCollectionSection(e)} className="single-collection-section">
           Activity
         </div>
         <div
           section="charts"
-          onClick={e => changeCollectionSection(e)}
-          className="single-collection-section"
+          // onClick={e => changeCollectionSection(e)}
+          className="single-collection-section not-allowed"
         >
           Charts
         </div>
         <div
           section="leaderboard"
-          onClick={e => changeCollectionSection(e)}
-          className="single-collection-section"
+          // onClick={e => changeCollectionSection(e)}
+          className="single-collection-section not-allowed"
         >
           Leaderboard
         </div>
@@ -920,11 +791,7 @@ const Loader = ({ className }) => {
   if (className === "collection-info-image-loader") borderRadius = "50%";
 
   return (
-    <SkeletonTheme
-      baseColor="#202020"
-      highlightColor="#4444"
-      borderRadius={borderRadius}
-    >
+    <SkeletonTheme baseColor="#202020" highlightColor="#4444" borderRadius={borderRadius}>
       <Skeleton count={1} children={Box} className={className} />
     </SkeletonTheme>
   );

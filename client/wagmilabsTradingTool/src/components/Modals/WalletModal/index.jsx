@@ -4,18 +4,9 @@ import "./style.scss";
 
 import { UserDataContext } from "@Context";
 import { useAccount } from "wagmi";
-import {
-  formatAddress,
-  getFiatPrice,
-  roundPrice,
-} from "@Utils/formats/formats";
+import { formatAddress, getFiatPrice, roundPrice } from "@Utils/formats/formats";
 
-import {
-  ethereumImage,
-  usdcImage,
-  usdtImage,
-  wrappedEthereumImage,
-} from "@Assets";
+import { ethereumImage, usdcImage, usdtImage, wrappedEthereumImage } from "@Assets";
 
 import logOut from "@Utils/functions/logout";
 import { Button, Tooltip } from "@chakra-ui/react";
@@ -57,17 +48,12 @@ export const WalletModal = ({ walletModalOpen, closeWalletModal }) => {
   const [copyState, setCopyState] = useState("Copy");
 
   const { address, connector } = useAccount();
-  const { ens, userBalances, profileImage, cryptoPrices } =
-    useContext(UserDataContext);
+  const { ens, userBalances, profileImage, cryptoPrices } = useContext(UserDataContext);
 
   useEffect(() => {
     getProvider();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  useEffect(() => {
-    console.log("provider", provider);
-  }, [provider]);
 
   useEffect(() => {
     if (walletModalOpen) {
@@ -138,11 +124,7 @@ export const WalletModal = ({ walletModalOpen, closeWalletModal }) => {
                 <img src={profileImage} alt=""></img>
 
                 <div>
-                  <a
-                    href={`https://etherscan.io/address/${address}`}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
+                  <a href={`https://etherscan.io/address/${address}`} target="_blank" rel="noreferrer">
                     <p>{formatAddress(address)}</p>
                   </a>
 
@@ -156,20 +138,14 @@ export const WalletModal = ({ walletModalOpen, closeWalletModal }) => {
                     placement="top"
                     borderRadius={"7px"}
                   >
-                    <p
-                      className="wallet-modal-ens-name"
-                      onClick={() => handleCopy(ens)}
-                    >
+                    <p className="wallet-modal-ens-name" onClick={() => handleCopy(ens)}>
                       {ens}
                     </p>
                   </Tooltip>
                 </div>
               </div>
 
-              <div
-                className="wallet-modal-logout-container"
-                onClick={() => logOut(setConnected)}
-              >
+              <div className="wallet-modal-logout-container" onClick={() => logOut(setConnected)}>
                 <p>Log out</p>
                 <i className="fa-solid fa-right-from-bracket"></i>
               </div>
@@ -184,7 +160,7 @@ export const WalletModal = ({ walletModalOpen, closeWalletModal }) => {
             </div>
             <Button
               colorScheme={"blue"}
-              className="wallet-modal-add-funds-button"
+              className="wallet-modal-add-funds-button not-allowed"
               height="50px"
               display={"block"}
               borderTopLeftRadius={0}
@@ -201,14 +177,9 @@ export const WalletModal = ({ walletModalOpen, closeWalletModal }) => {
                 </div>
 
                 <div className="wallet-modal-crypto-fiat">
-                  <p>
-                    {userBalances?.eth ? roundPrice(userBalances.eth) : "0"}
-                  </p>
+                  <p>{userBalances?.eth ? roundPrice(userBalances.eth) : "0"}</p>
                   <p className="wallet-modal-usd-currency">
-                    $
-                    {userBalances?.eth
-                      ? getFiatPrice(userBalances.eth, cryptoPrices.ethPrice)
-                      : "0"}
+                    ${userBalances?.eth ? getFiatPrice(userBalances.eth, cryptoPrices.ethPrice) : "0"}
                   </p>
                 </div>
               </div>
@@ -221,14 +192,9 @@ export const WalletModal = ({ walletModalOpen, closeWalletModal }) => {
                 </div>
 
                 <div className="wallet-modal-crypto-fiat">
-                  <p>
-                    {userBalances?.weth ? roundPrice(userBalances.weth) : "0"}
-                  </p>
+                  <p>{userBalances?.weth ? roundPrice(userBalances.weth) : "0"}</p>
                   <p className="wallet-modal-usd-currency">
-                    $
-                    {userBalances?.weth
-                      ? getFiatPrice(userBalances.weth, cryptoPrices.ethPrice)
-                      : "0"}
+                    ${userBalances?.weth ? getFiatPrice(userBalances.weth, cryptoPrices.ethPrice) : "0"}
                   </p>
                 </div>
               </div>
@@ -241,14 +207,9 @@ export const WalletModal = ({ walletModalOpen, closeWalletModal }) => {
                 </div>
 
                 <div className="wallet-modal-crypto-fiat">
-                  <p>
-                    {userBalances?.usdc ? roundPrice(userBalances.usdc) : "0"}
-                  </p>
+                  <p>{userBalances?.usdc ? roundPrice(userBalances.usdc) : "0"}</p>
                   <p className="wallet-modal-usd-currency">
-                    $
-                    {userBalances?.usdc
-                      ? getFiatPrice(userBalances.usdc, cryptoPrices.usdcPrice)
-                      : "0"}
+                    ${userBalances?.usdc ? getFiatPrice(userBalances.usdc, cryptoPrices.usdcPrice) : "0"}
                   </p>
                 </div>
               </div>
@@ -261,14 +222,9 @@ export const WalletModal = ({ walletModalOpen, closeWalletModal }) => {
                 </div>
 
                 <div className="wallet-modal-crypto-fiat">
-                  <p>
-                    {userBalances?.usdt ? roundPrice(userBalances.usdt) : "0"}
-                  </p>
+                  <p>{userBalances?.usdt ? roundPrice(userBalances.usdt) : "0"}</p>
                   <p className="wallet-modal-usd-currency">
-                    $
-                    {userBalances?.usdt
-                      ? getFiatPrice(userBalances.usdt, cryptoPrices.usdtPrice)
-                      : "0"}
+                    ${userBalances?.usdt ? getFiatPrice(userBalances.usdt, cryptoPrices.usdtPrice) : "0"}
                   </p>
                 </div>
               </div>

@@ -10,12 +10,15 @@ import { placeholderImage } from "@Utils/images";
 
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import moment from "moment";
+import { useFirstRender } from "@Hooks";
 
 const WatchList = ({ tool, timeFrame, setTimeFrame, resetTime }) => {
   const [collections, setCollections] = useState([]);
   const [loading, setLoading] = useState(false);
 
   const [sort, setSort] = useState({ name: "volume", type: "desc" });
+
+  const firstRender = useFirstRender();
 
   useEffect(() => {
     resetTime("24H");
@@ -27,9 +30,7 @@ const WatchList = ({ tool, timeFrame, setTimeFrame, resetTime }) => {
     if (loading) {
       document.querySelector(".reloadIcon").classList.add("rotatingReloader");
     } else {
-      document
-        .querySelector(".reloadIcon")
-        .classList.remove("rotatingReloader");
+      document.querySelector(".reloadIcon").classList.remove("rotatingReloader");
     }
   }, [loading]);
 
@@ -47,6 +48,8 @@ const WatchList = ({ tool, timeFrame, setTimeFrame, resetTime }) => {
 
   async function getWatchListCollections() {
     try {
+      if (firstRender && timeFrame !== "24H") return;
+
       setLoading(true);
 
       let collectionData = await fetch(`${baseUrl}/watchlistCollections`, {
@@ -78,16 +81,8 @@ const WatchList = ({ tool, timeFrame, setTimeFrame, resetTime }) => {
     switch (name) {
       case "floor-price":
         const filteredFloor = statsToSort.sort((a, b) => {
-          if (type === "asc")
-            return (
-              a.floorAsk?.price?.amount?.decimal -
-              b.floorAsk?.price?.amount?.decimal
-            );
-          else if (type === "desc")
-            return (
-              b.floorAsk?.price?.amount?.decimal -
-              a.floorAsk?.price?.amount?.decimal
-            );
+          if (type === "asc") return a.floorAsk?.price?.amount?.decimal - b.floorAsk?.price?.amount?.decimal;
+          else if (type === "desc") return b.floorAsk?.price?.amount?.decimal - a.floorAsk?.price?.amount?.decimal;
           return 0;
         });
         setCollections([...filteredFloor]);
@@ -103,24 +98,15 @@ const WatchList = ({ tool, timeFrame, setTimeFrame, resetTime }) => {
       case "total-volume":
         const filteredTotalVolume = statsToSort.sort((a, b) => {
           if (type === "asc") return a.volume?.allTime - b.volume?.allTime;
-          else if (type === "desc")
-            return b.volume?.allTime - a.volume?.allTime;
+          else if (type === "desc") return b.volume?.allTime - a.volume?.allTime;
           return 0;
         });
         setCollections([...filteredTotalVolume]);
         break;
       case "top-bid":
         const filteredTopBid = statsToSort.sort((a, b) => {
-          if (type === "asc")
-            return (
-              a.topBid?.price?.amount?.decimal -
-              b.topBid?.price?.amount?.decimal
-            );
-          else if (type === "desc")
-            return (
-              b.topBid?.price?.amount?.decimal -
-              a.topBid?.price?.amount?.decimal
-            );
+          if (type === "asc") return a.topBid?.price?.amount?.decimal - b.topBid?.price?.amount?.decimal;
+          else if (type === "desc") return b.topBid?.price?.amount?.decimal - a.topBid?.price?.amount?.decimal;
           return 0;
         });
         setCollections([...filteredTopBid]);
@@ -159,9 +145,7 @@ const WatchList = ({ tool, timeFrame, setTimeFrame, resetTime }) => {
     });
     e.currentTarget.children[1].classList.add("selected");
     e.currentTarget.children[1].classList.toggle("rotate");
-    e.currentTarget.children[1].previousElementSibling.classList.add(
-      "nameSelected"
-    );
+    e.currentTarget.children[1].previousElementSibling.classList.add("nameSelected");
   }
 
   const collectionsMapping = useMemo(
@@ -180,18 +164,11 @@ const WatchList = ({ tool, timeFrame, setTimeFrame, resetTime }) => {
             <tr
               className="single-collection-container"
               key={index}
-              onClick={() =>
-                window.open(`/collection/${contractAddress}`, "_blank")
-              }
+              onClick={() => window.open(`/collection/${contractAddress}`, "_blank")}
             >
               <td>
                 <div className="image-name-container">
-                  <LazyLoadImage
-                    src={image}
-                    className="owned-image"
-                    effect="blur"
-                    placeholderSrc={placeholderImage}
-                  />
+                  <LazyLoadImage src={image} className="owned-image" effect="blur" placeholderSrc={placeholderImage} />
 
                   <div className="minting-name-date">
                     <p className="watchlist-name">{name || "- - -"}</p>
@@ -244,10 +221,7 @@ const WatchList = ({ tool, timeFrame, setTimeFrame, resetTime }) => {
             <tr>
               <th>
                 <div className="refresh">
-                  <i
-                    onClick={getWatchListCollections}
-                    className="fa-solid fa-rotate reloadIcon"
-                  ></i>
+                  <i onClick={getWatchListCollections} className="fa-solid fa-rotate reloadIcon"></i>
                 </div>
                 <p>Collection</p>
               </th>

@@ -1,13 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  BestOfferBox,
-  BestOfferTable,
-  Listings,
-  ListItem,
-  PriceBox,
-  TransferItem,
-} from "..";
+import { BestOfferBox, BestOfferTable, Listings, ListItem, PriceBox, TransferItem } from "..";
 
 import "./style.scss";
 import { useGetData } from "./useGetData";
@@ -23,6 +16,7 @@ export const InfoCol = React.memo(({ details, address, id }) => {
     isErc721,
     ownerBestListing,
     ownershipTokenCount,
+    totalSupply,
   } = useGetData(details, address, id);
 
   return (
@@ -30,10 +24,7 @@ export const InfoCol = React.memo(({ details, address, id }) => {
       <div className="space-between">
         <div>
           <h1 className="item-name">{details.token.name}</h1>
-          <div
-            className="item-collection-info"
-            onClick={() => navigate(`/collection/${address}`)}
-          >
+          <div className="item-collection-info" onClick={() => navigate(`/collection/${address}`)}>
             {(collectionImage && (
               <img
                 className="item-collection-image"
@@ -42,11 +33,16 @@ export const InfoCol = React.memo(({ details, address, id }) => {
               />
             )) ||
               ""}
-            <div className="item-collection-name">
-              {details.token.collection.name}
-            </div>
+            <div className="item-collection-name">{details.token.collection.name}</div>
           </div>
-          {(!isErc721 && (
+          {(!isErc721 && totalSupply && (
+            <div>
+              {"Total Supply: "}
+              {totalSupply.toLocaleString("EN-us")}
+            </div>
+          )) ||
+            ""}
+          {(!isErc721 && ownershipTokenCount && (
             <div>
               {"Ownership Token Count: "}
               {ownershipTokenCount}
@@ -56,12 +52,7 @@ export const InfoCol = React.memo(({ details, address, id }) => {
         </div>
         {isOwner ? (
           <div className="owner-buttons">
-            <TransferItem
-              details={details}
-              address={address}
-              id={id}
-              currency={currency}
-            />
+            <TransferItem details={details} address={address} id={id} currency={currency} />
             <ListItem
               details={details}
               address={address}
@@ -83,18 +74,15 @@ export const InfoCol = React.memo(({ details, address, id }) => {
         isErc721={isErc721}
       />
 
-      <BestOfferBox
-        details={details}
-        address={address}
-        isOwner={isOwner}
-        currency={currency}
-        isErc721={isErc721}
-      />
+      <BestOfferBox details={details} address={address} isOwner={isOwner} currency={currency} isErc721={isErc721} />
       <Listings
         details={details}
         address={address}
+        currency={currency}
         listings={listings}
+        isErc721={isErc721}
         isFetching={isFetchingListings}
+        ownerBestListing={ownerBestListing}
       />
       <BestOfferTable details={details} isErc721={isErc721} />
     </div>

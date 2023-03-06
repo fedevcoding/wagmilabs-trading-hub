@@ -6,10 +6,9 @@ import { jwtExpired, pushToServer } from "./utils/functions";
 import Header from "./pages/header/Header";
 import Home from "./pages/home/Home";
 import Collection from "./pages/collection/Collection";
-import Calculators from "./pages/calculators/Calculators";
 import Volumes from "./pages/volumes/Volumes";
 import Feed from "./pages/feed/Feed";
-import Pnl from "./pages/pnl/Pnl";
+// import Pnl from "./pages/pnl/Pnl";
 import Login from "./pages/login/LoginRainbow";
 import Profile from "./pages/profile/Profile";
 import Item from "./pages/item/Item";
@@ -23,29 +22,18 @@ import Footer from "./pages/footer/Footer";
 import { ChakraProvider } from "@chakra-ui/react";
 
 // wagmi / rainbowkit
-import {
-  ReservoirKitProvider,
-  darkTheme as reservoirDarkTheme,
-} from "@reservoir0x/reservoir-kit-ui";
-import {
-  chain,
-  configureChains,
-  WagmiConfig,
-  createClient as createWagmiClient,
-} from "wagmi";
+import { ReservoirKitProvider, darkTheme as reservoirDarkTheme } from "@reservoir0x/reservoir-kit-ui";
+import { chain, configureChains, WagmiConfig, createClient as createWagmiClient } from "wagmi";
 import { createClient } from "@reservoir0x/reservoir-kit-client";
 import { infuraProvider } from "wagmi/providers/infura";
 import { publicProvider } from "wagmi/providers/public";
-import {
-  getDefaultWallets,
-  RainbowKitProvider,
-  darkTheme,
-} from "@rainbow-me/rainbowkit";
+import { getDefaultWallets, RainbowKitProvider, darkTheme } from "@rainbow-me/rainbowkit";
 import { SIGNER_PRIVATE_KEY, RESERVOIR_API_KEY } from "@Variables";
 
 // react router
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import SniperBot from "./pages/bots/sniper/SniperBot";
+// import SniperBot from "./pages/bots/sniper/SniperBot";
+// import Wallets from "./pages/bots/wallets/Wallets";
 
 // socket io
 import io from "socket.io-client";
@@ -54,9 +42,6 @@ import io from "socket.io-client";
 
 import { UserDataContext, SocketContext, ConnectedContext } from "@Context";
 import Redirect from "./pages/redirect/Redirect";
-
-
-
 
 import Legals from "./pages/Legal/Legals";
 import { serverUrl } from "@Variables";
@@ -94,11 +79,6 @@ const theme = reservoirDarkTheme({
 // for socket io
 const socket = io(serverUrl);
 
-
-
-
-
-
 function App() {
   // states
   const [userBalances, setUserBalances] = useState({
@@ -107,8 +87,7 @@ function App() {
     usdc: 0,
     usdt: 0,
   });
-  const [snipingTasks, setSnipingTasks] = useState([]);
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(true);
   const [connected, setConnected] = useState(true);
   const [ethData, setEthData] = useState({});
   const [profileImage, setProfileImage] = useState("");
@@ -123,61 +102,50 @@ function App() {
   });
   const [ens, setEns] = useState("");
   const activeGasRef = useRef(gasSettings.value);
-  const currentSnipingTasks = useRef(snipingTasks);
 
   // set checking in base of tokens
   useEffect(() => {
-
     async function view() {
       try {
-        await pushToServer("/stats", { type: "view", timestamp: Date.now() })
-      }
-      catch (e) {
-        console.log(e)
+        await pushToServer("/stats", { type: "view", timestamp: Date.now() });
+      } catch (e) {
+        console.log(e);
       }
     }
-    view()
+    view();
 
     async function verify() {
-
-      const { pathname } = window.location
+      const { pathname } = window.location;
       const { jsonwebtoken } = localStorage;
 
       if (pathname === "/legal") {
-        setChecking(false)
-        setLoading(false)
-      }
-      else {
+        setChecking(false);
+        setLoading(false);
+      } else {
         if (jsonwebtoken && pathname !== "/") {
           const valid = await jwtExpired(jsonwebtoken);
-          if (valid) setConnected(true)
+          if (valid) setConnected(true);
           else setChecking(true);
+        } else if (jsonwebtoken) {
+          setChecking(true);
+        } else {
+          if (pathname !== "/") window.location.href = "/";
+          setConnected(false);
         }
-        else if (jsonwebtoken) {
-          setChecking(true)
-        }
-        else {
-          if (pathname !== "/") window.location.href = "/"
-          setConnected(false)
-        }
-        setLoading(false)
+        setLoading(false);
       }
-
     }
-    verify()
-
+    verify();
   }, []);
 
   // set colors based on states
   useEffect(() => {
     if (!connected) {
-      document.body.style.background = "linear-gradient(to right, #3494E6, #EC6EAD)";
+      document.body.style.background = "#0e0f0e";
     } else {
       document.body.style.background = "#0E0F0E";
     }
   }, [connected, checking]);
-
-
 
   // socket io connection
   useEffect(() => {
@@ -225,11 +193,6 @@ function App() {
     }
   }, [gasSettings]);
 
-  // set tasks ref when they change
-  useEffect(() => {
-    currentSnipingTasks.current = snipingTasks;
-  }, [snipingTasks]);
-
   // context values
   const providerValues = useMemo(
     () => ({
@@ -246,12 +209,9 @@ function App() {
       setGasSettings,
       userBalances,
       setUserBalances,
-      snipingTasks,
-      setSnipingTasks,
       ethData,
       connected,
       setConnected,
-      currentSnipingTasks,
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [
@@ -268,10 +228,7 @@ function App() {
       setGasSettings,
       userBalances,
       setUserBalances,
-      snipingTasks,
-      setSnipingTasks,
       ethData,
-      currentSnipingTasks,
     ]
   );
 
@@ -279,7 +236,9 @@ function App() {
     () => ({
       connected,
       setConnected,
-    }), [connected, setConnected])
+    }),
+    [connected, setConnected]
+  );
 
   return (
     <ChakraProvider resetCSS={false}>
@@ -293,192 +252,163 @@ function App() {
             theme={theme}
           >
             <WagmiConfig client={wagmiClient}>
-              <RainbowKitProvider
-                chains={chains}
-                coolMode
-                theme={darkTheme({ overlayBlur: "small" })}
-              >
-
-                {
-
-                  !loading &&
-
-                  (
-                    checking ?
-                      <Checking setConnected={setConnected} setChecking={setChecking} />
-
-                      :
-
-                      !connected ?
-
-                        <>
-
+              <RainbowKitProvider chains={chains} coolMode theme={darkTheme({ overlayBlur: "small" })}>
+                {!loading &&
+                  (checking ? (
+                    <Checking setConnected={setConnected} setChecking={setChecking} />
+                  ) : !connected ? (
+                    <>
+                      <BrowserRouter>
+                        <Routes>
+                          <Route exact path="/" element={<Login setConnected={setConnected} connected={connected} />} />
+                          <Route exact path="/legal" element={<Legals />} />
+                        </Routes>
+                      </BrowserRouter>
+                    </>
+                  ) : (
+                    <>
+                      <CheckWalletDisconnect />
+                      <ConnectedContext.Provider value={connectedContextValues}>
+                        <div className={`${"not-responsive"}`}>
+                          <p>This application is not optimized for small screens yet.</p>
+                        </div>
+                        <div id="application-wrapper">
                           <BrowserRouter>
                             <Routes>
+                              <Route
+                                exact
+                                path="/"
+                                element={
+                                  connected && (
+                                    <>
+                                      <Header
+                                        setConnected={setConnected}
+                                        profileImage={profileImage}
+                                        setProfileImage={setProfileImage}
+                                        connected={connected}
+                                      />
+                                      <Home />
+                                      <Footer />
+                                    </>
+                                  )
+                                }
+                              />
 
-                              <Route exact path="/" element={
+                              <Route
+                                exact
+                                path="/collection/:address"
+                                element={
+                                  <>
+                                    <Header /> <Collection /> <Footer />{" "}
+                                  </>
+                                }
+                              />
 
-                                <Login
-                                  setConnected={setConnected}
-                                  connected={connected}
-                                />
-                              } />
+                              <Route
+                                exact
+                                path="/item/:address/:id"
+                                element={
+                                  <>
+                                    <Header />
+                                    <Item />
+                                    <Footer />
+                                  </>
+                                }
+                              />
+
+                              {/* <Route
+                                exact
+                                path="/bots/wallets"
+                                element={
+                                  <>
+                                    <Header />
+                                    <Wallets />
+                                    <Footer />
+                                  </>
+                                }
+                              />
+
+                              <Route
+                                exact
+                                path="/bots/sniper"
+                                element={
+                                  <>
+                                    <Header />
+                                    <SniperBot />
+                                    <Footer />
+                                  </>
+                                }
+                              /> */}
+
+                              <Route
+                                exact
+                                path="/volumes"
+                                element={
+                                  <>
+                                    <Header />
+                                    <Volumes />
+                                    <Footer />
+                                  </>
+                                }
+                              />
+
+                              <Route
+                                exact
+                                path="/calendars/:section"
+                                element={
+                                  <>
+                                    <Header />
+                                    <Calendar />
+                                    <Footer />
+                                  </>
+                                }
+                              />
+
+                              <Route
+                                exact
+                                path="/feed"
+                                element={
+                                  <>
+                                    <Header />
+                                    <Feed />
+                                    <Footer />
+                                  </>
+                                }
+                              />
+
+                              {/* <Route
+                                exact
+                                path="/profitandloss"
+                                element={
+                                  <>
+                                    <Header />
+                                    <Pnl />
+                                    <Footer />
+                                  </>
+                                }
+                              /> */}
+
+                              <Route
+                                exact
+                                path="/profile"
+                                element={
+                                  <>
+                                    <Header />
+                                    <Profile />
+                                    <Footer />
+                                  </>
+                                }
+                              />
+
                               <Route exact path="/legal" element={<Legals />} />
 
+                              <Route path="*" element={<Redirect />} />
                             </Routes>
                           </BrowserRouter>
-                        </>
-
-                        :
-
-                        <>
-                          <CheckWalletDisconnect />
-                          <ConnectedContext.Provider value={connectedContextValues}>
-                            <BrowserRouter>
-                              <Routes>
-                                <Route
-                                  exact
-                                  path="/"
-                                  element={
-                                    connected && (
-                                      <>
-                                        <Header
-                                          setConnected={setConnected}
-                                          profileImage={profileImage}
-                                          setProfileImage={setProfileImage}
-                                          connected={connected}
-                                        />
-                                        <Home />
-                                        <Footer />
-                                      </>
-                                    )
-                                  }
-                                />
-
-                                <Route
-                                  exact
-                                  path="/collection/:address"
-                                  element={
-                                    <>
-                                      <Header /> <Collection /> <Footer />{" "}
-                                    </>
-                                  }
-                                />
-
-                                <Route
-                                  exact
-                                  path="/item/:address/:id"
-                                  element={
-                                    <>
-                                      <Header />
-                                      <Item />
-                                      <Footer />
-                                    </>
-                                  }
-                                />
-
-                                <Route
-                                  exact
-                                  path="/bots/sniper"
-                                  element={
-                                    <>
-                                      <Header />
-                                      <SniperBot />
-                                      <Footer />
-                                    </>
-                                  }
-                                />
-
-                                <Route
-                                  exact
-                                  path="/calculators"
-                                  element={
-                                    <>
-                                      <Header />
-                                      <Calculators />
-                                      <Footer />
-                                    </>
-                                  }
-                                />
-
-                                <Route
-                                  exact
-                                  path="/volumes"
-                                  element={
-                                    <>
-                                      <Header />
-                                      <Volumes />
-                                      <Footer />
-                                    </>
-                                  }
-                                />
-
-                                <Route
-                                  exact
-                                  path="/calendars/:section"
-                                  element={
-                                    <>
-                                      <Header />
-                                      <Calendar />
-                                      <Footer />
-                                    </>
-                                  }
-                                />
-
-                                <Route
-                                  exact
-                                  path="/feed"
-                                  element={
-                                    <>
-                                      <Header />
-                                      <Feed />
-                                      <Footer />
-                                    </>
-                                  }
-                                />
-
-                                <Route
-                                  exact
-                                  path="/profitandloss"
-                                  element={
-                                    <>
-                                      <Header />
-                                      <Pnl />
-                                      <Footer />
-                                    </>
-                                  }
-                                />
-
-                                <Route
-                                  exact
-                                  path="/profile"
-                                  element={
-                                    <>
-                                      <Header />
-                                      <Profile />
-                                      <Footer />
-                                    </>
-                                  }
-                                />
-
-                                <Route exact path="/legal" element={<Legals />} />
-
-                                <Route path="*" element={<Redirect />} />
-
-
-                              </Routes>
-                            </BrowserRouter>
-                          </ConnectedContext.Provider>
-                        </>
-                  )
-
-                }
-
-
-
-
-
-
+                        </div>
+                      </ConnectedContext.Provider>
+                    </>
+                  ))}
               </RainbowKitProvider>
             </WagmiConfig>
           </ReservoirKitProvider>

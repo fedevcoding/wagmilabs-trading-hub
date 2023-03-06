@@ -14,3 +14,4 @@ export { LivePulsing } from "./LivePulsing";
 export { OrderInfo } from "./OrderInfo";
 export { TimeAgo } from "./TimeAgo";
 export { Card } from "./Card";
+export { Number } from "./Number";

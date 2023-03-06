@@ -107,18 +107,10 @@ export const ListItemModal = React.memo(
               mr={3}
               onClick={() => {
                 if (!confirmingList)
-                  listNft(
-                    setConfirmingList,
-                    parseInt(new Date(date).getTime() / 1000).toString(),
-                    marketplace.value
-                  );
+                  listNft(setConfirmingList, parseInt(new Date(date).getTime() / 1000).toString(), marketplace.value);
               }}
             >
-              {confirmingList ? (
-                <Loader width={"20px"} height={"20px"} />
-              ) : (
-                "Confirm"
-              )}
+              {confirmingList ? <Loader width={"20px"} height={"20px"} /> : "Confirm"}
             </Button>
             <Button onClick={() => setIsOpen(false)}>Cancel</Button>
           </ModalFooter>

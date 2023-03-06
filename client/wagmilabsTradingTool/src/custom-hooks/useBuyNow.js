@@ -22,9 +22,7 @@ export const useBuyNow = (callback, quantity) => {
         signer,
         options,
         expectedPrice: value,
-        onProgress: steps => {
-          console.log(steps);
-        },
+        onProgress: steps => console.log(steps),
       });
 
       toast({
@@ -35,6 +33,7 @@ export const useBuyNow = (callback, quantity) => {
         isClosable: true,
       });
     } catch (e) {
+      console.log(e);
       if (callback && typeof callback === "function") {
         callback();
       }

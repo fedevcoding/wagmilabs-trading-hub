@@ -98,11 +98,9 @@ body.overflow-hidden {
   margin-right: 10px;
 }
 
-
 .not-responsive {
   display: none;
 }
-
 @media screen and (max-width: 1000px) {
   #application-wrapper {
     display: none;
@@ -122,4 +120,17 @@ body.overflow-hidden {
   .not-responsive p {
     text-align: center;
   }
+}
+
+
+
+.not-allowed {
+  cursor: not-allowed;
+}
+
+
+.flex-col {
+  display: flex;
+  flex-direction: column;
+
 }

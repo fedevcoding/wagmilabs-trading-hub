@@ -1,17 +1,17 @@
 import React, { useState } from "react";
 import "./style.scss";
 
-
 import "@rainbow-me/rainbowkit/styles.css";
 
 import Header from "./components/header/Header";
 import SignModal from "./components/signModal/SignModal";
 import Home from "./components/home/Home";
 
-
 import { loginBackground } from "src/assets";
 import Footer from "./components/footer/Footer";
-
+import Team from "./components/team/Team";
+import { Reviews } from "./components/reviews/Reviews.jsx";
+import { Comparison } from "./components/comparison/Comparison";
 
 const Login = ({ setConnected }) => {
   const [walletConnected, setWalletConnected] = useState(false);
@@ -19,21 +19,22 @@ const Login = ({ setConnected }) => {
   return (
     <>
       <div className="login-container">
-        <img src={loginBackground} className="login-background" alt="login-background"></img>
-        <Header setConnected={setConnected} setWalletConnected={setWalletConnected} />
-
-        {
-          walletConnected &&
-          <SignModal setConnected={setConnected} setWalletConnected={setWalletConnected} />
-        }
-
-        <Home setWalletConnected={setWalletConnected} />
-        <Footer />
+        <div className="section1">
+          <img src={loginBackground} className="login-background" alt="login-background"></img>
+          <Header setConnected={setConnected} setWalletConnected={setWalletConnected} />
+          {walletConnected && <SignModal setConnected={setConnected} setWalletConnected={setWalletConnected} />}
+          <Home setWalletConnected={setWalletConnected} />
+        </div>
+        <div className="section2">
+          <hr className="hr"></hr>
+          <Reviews />
+          <Team />
+          <Comparison />
+          <Footer />
+        </div>
       </div>
     </>
   );
 };
-
-
 
 export default Login;

@@ -1,5 +1,6 @@
 import { useListings, useUserTokens } from "@reservoir0x/reservoir-kit-ui";
 import { useAccount } from "wagmi";
+import { useGetTotalSupply } from "./useGetTotalSupply";
 
 export function useGetData(details, address, id) {
   const { address: accountAddress } = useAccount();
@@ -14,22 +15,20 @@ export function useGetData(details, address, id) {
         }
   );
 
+  const totalSupply = useGetTotalSupply(isErc721 ? undefined : address, isErc721 ? undefined : id);
+
   let isOwner;
   if (isErc721) {
-    isOwner =
-      details.token?.owner?.toLowerCase() === accountAddress?.toLowerCase();
+    isOwner = details.token?.owner?.toLowerCase() === accountAddress?.toLowerCase();
   } else {
     isOwner = tokens.length;
   }
 
   const collectionImage = details.token?.collection?.image;
   const ownershipTokenCount = isOwner ? tokens[0]?.ownership?.tokenCount : null;
-  const ownerBestListing =
-    details?.market?.floorAsk?.maker?.toLowerCase() ===
-    accountAddress?.toLowerCase();
+  const ownerBestListing = details?.market?.floorAsk?.maker?.toLowerCase() === accountAddress?.toLowerCase();
 
-  const currency =
-    Object.values(details.market)[0]?.price?.currency?.symbol || "ETH";
+  const currency = Object.values(details.market)[0]?.price?.currency?.symbol || "ETH";
 
   const { data: listings, isFetchingListings } = useListings({
     token: [`${address}:${id}`],
@@ -47,5 +46,6 @@ export function useGetData(details, address, id) {
     accountAddress,
     ownerBestListing,
     ownershipTokenCount,
+    totalSupply,
   };
 }
