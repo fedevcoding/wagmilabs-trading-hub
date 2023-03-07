@@ -441,7 +441,7 @@ const Collection = () => {
     // show modal every 6 times
 
     if (!visitedTimes || visitedTimes % 6 === 0) {
-      setTimeout(onOpen, 1000);
+      setTimeout(onOpen, 12000);
     }
   }, [onOpen]);
 
