@@ -46,7 +46,7 @@ export const PromoModal = React.memo(({ isOpen, onClose, type }) => {
             </ModalBody>
 
             <ModalBody className="modal-body">
-              <h3 className="body">Keep using out platform by minting out NFT pass END OF MARCH!</h3>
+              <h3 className="body">Keep using our platform by minting our NFT pass END OF MARCH!</h3>
             </ModalBody>
           </ModalContent>
         )
