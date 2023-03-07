@@ -15,7 +15,7 @@ const Item = React.memo(() => {
       {(details && !isLoading && (
         <>
           <div className="nft-container">
-            <ImageCol details={details} address={address} />
+            <ImageCol details={details} address={address} id={id} />
             <InfoCol details={details} address={address} id={id} />
           </div>
           <ItemActivity address={address} id={id} market={details?.market} />
