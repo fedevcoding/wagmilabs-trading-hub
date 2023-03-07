@@ -3,7 +3,7 @@ import { IconLink } from "../IconLink";
 import Delete from "../../../../assets/delete.svg";
 import "./style.scss";
 
-export const CalendarEventDetail = ({ event, deleteEvent, isAdmin }) => (
+export const CalendarEventDetail = ({ event, deleteEvent, isAdmin, section }) => (
   <>
     <div className="calendar-event-detail">
       <div className="event-title-container">
@@ -12,7 +12,7 @@ export const CalendarEventDetail = ({ event, deleteEvent, isAdmin }) => (
           {event?.collectionName}
           {event?.spaceName}
         </span>
-        {isAdmin && (
+        {(isAdmin || (section === 'personal' && event.isAdmin))&& (
           <img
             src={Delete}
             alt=""

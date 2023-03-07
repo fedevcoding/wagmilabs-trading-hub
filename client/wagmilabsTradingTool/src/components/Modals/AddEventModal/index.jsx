@@ -126,7 +126,7 @@ export const AddEventModal = React.memo(
               Name *
               <HStack>
                 <Input
-                  placeholder="name"
+                  placeholder="Name"
                   color={"white"}
                   onChange={e => updateEventInfo(e, "name", true)}
                 />
@@ -137,7 +137,7 @@ export const AddEventModal = React.memo(
                 Host
                 <HStack>
                   <Input
-                    placeholder="host"
+                    placeholder="Host"
                     color={"white"}
                     onChange={e => updateEventInfo(e, "spaceHost", true)}
                   />
@@ -148,7 +148,7 @@ export const AddEventModal = React.memo(
               Description
               <HStack>
                 <Input
-                  placeholder="description"
+                  placeholder="Description"
                   color={"white"}
                   onChange={e => updateEventInfo(e, "eventDescription", true)}
                 />
@@ -159,7 +159,7 @@ export const AddEventModal = React.memo(
                 Location
                 <HStack>
                   <Input
-                    placeholder="location"
+                    placeholder="Location"
                     color={"white"}
                     onChange={e => updateEventInfo(e, "eventLocation", true)}
                   />
@@ -172,7 +172,7 @@ export const AddEventModal = React.memo(
                   Price *
                   <NumberInput>
                     <NumberInputField
-                      placeholder="price"
+                      placeholder="Price"
                       color={"white"}
                       onChange={e => updateEventInfo(e, "price", true)}
                     />
@@ -182,7 +182,7 @@ export const AddEventModal = React.memo(
                   Supply *
                   <NumberInput>
                     <NumberInputField
-                      placeholder="supply"
+                      placeholder="Supply"
                       color={"white"}
                       onChange={e => updateEventInfo(e, "supply", true)}
                     />
@@ -198,13 +198,13 @@ export const AddEventModal = React.memo(
               <div className="input-link-container">
                 <div className="input-link-inner-container">
                 <Input
-                  placeholder="type"
+                  placeholder="Type"
                   color={"white"}
                   onChange={e => handleInputLinkChange(e, i, 'type')}
                   className="input-link-type"
                 />
                 <Input
-                  placeholder="url"
+                  placeholder="Url"
                   color={"white"}
                   onChange={e => handleInputLinkChange(e, i, 'link')}
                   className="input-link-url"

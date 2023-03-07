@@ -3,7 +3,7 @@ import Twitter from "../../../../assets/twitter.png";
 import Discord from "../../../../assets/discord.png";
 import Youtube from "../../../../assets/youtube.svg";
 import Eventbrite from "../../../../assets/eventbrite.svg";
-import LinkIcon from "../../../../assets/link-icon.png";
+import LinkIcon from "../../../../assets/earth-globe.png";
 import "./style.scss";
 
 const matchIcon = type => {

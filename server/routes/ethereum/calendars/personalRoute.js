@@ -45,7 +45,8 @@ personalRoute.get("/", checkAuth, checkAdmin, async (req, res) => {
 personalRoute.post("/", checkAuth, checkAdmin, async (req, res) => {
   const { address } = req.userDetails;
   const isAdmin = req.isAdmin;
-  const { event } = req.body || {};
+  let { event: evnt } = req.body || {};
+  const event = isAdmin ? {...evnt, isAdmin: true} : evnt;
 
   try {
     const personal = await Personal.updateOne(

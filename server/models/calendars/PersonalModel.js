@@ -19,6 +19,9 @@ const PersonalSchema = mongoose.Schema({
             eventDescription: {
                 type: String
             },
+            isAdmin: {
+                type: Boolean
+            },
         }
     ]
 }, {

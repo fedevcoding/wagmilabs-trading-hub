@@ -62,8 +62,9 @@ export const MonthlyCalendar = React.memo(
         {renderRow(chunkDaysInMonth[1], 7)}
         {renderRow(chunkDaysInMonth[2], 14)}
         {renderRow(chunkDaysInMonth[3], 21)}
-        {chunkDaysInMonth.length === 5 && renderRow(chunkDaysInMonth[4], 28)}
-        {chunkDaysInMonth.length === 6 && renderRow(chunkDaysInMonth[5], 35)}
+        {chunkDaysInMonth.length > 4 && renderRow(chunkDaysInMonth[4], 28)}
+        {chunkDaysInMonth.length > 5 && renderRow(chunkDaysInMonth[5], 35)}
+        {chunkDaysInMonth.length > 6 && renderRow(chunkDaysInMonth[6], 42)}
       </>
     );
 
@@ -121,6 +122,7 @@ export const MonthlyCalendar = React.memo(
                     event={event}
                     deleteEvent={deleteEvent}
                     isAdmin={isAdmin}
+                    section={section}
                   />
                 </div>
               )}
@@ -158,6 +160,7 @@ export const MonthlyCalendar = React.memo(
             <MonthSwitch currentDate={currentDate} changeDate={changeDate} />
             <CalendarHeader />
             {renderlist()}
+            {console.log('ooo',chunkDaysInMonth)}
           </Col>
 
           <Col className="calendar-right-inner-container-m">
