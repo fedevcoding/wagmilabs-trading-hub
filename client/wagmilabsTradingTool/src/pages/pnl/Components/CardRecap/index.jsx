@@ -28,7 +28,7 @@ export const CardRecap = React.memo(({ data, taxPerc, taxedOn, currency, taxLoss
           <p>{sold.eth + "ETH (" + sold.usd + "$)"}</p>
         </Col>
         <Col>
-          <h3>Taxes owned:</h3>
+          <h3>Taxes owed:</h3>
           <p>{currency === "usd" ? taxes[currency] + "$" : taxes[currency] + " ETH"}</p>
         </Col>
       </Row>

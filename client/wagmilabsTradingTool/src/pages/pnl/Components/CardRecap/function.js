@@ -28,11 +28,32 @@ export function getRecap(data, taxPerc, taxedOn, taxLossHarvesting, longTermTax)
 
   let taxes;
   if (taxLossHarvesting) {
-    const valueToBeTaxed = taxedOn === "gross" ? gross : pAndL;
-    taxes = {
-      eth: roundPrice(valueToBeTaxed.eth > 0 ? (valueToBeTaxed.eth / 100) * taxPerc : 0),
-      usd: roundPriceUsd(valueToBeTaxed.usd > 0 ? (valueToBeTaxed.usd / 100) * taxPerc : 0),
-    };
+    if (longTermTax === undefined) {
+      const valueToBeTaxed = taxedOn === "gross" ? gross : pAndL;
+      taxes = {
+        eth: roundPrice(valueToBeTaxed.eth > 0 ? (valueToBeTaxed.eth / 100) * taxPerc : 0),
+        usd: roundPriceUsd(valueToBeTaxed.usd > 0 ? (valueToBeTaxed.usd / 100) * taxPerc : 0),
+      };
+    } else {
+      const longTermItems = data?.filter(a => Math.abs(a.info.holdDuration) > longTermDays * 3600 * 24);
+      const shortTermItems = data?.filter(a => Math.abs(a.info.holdDuration) <= longTermDays * 3600 * 24);
+      const longTermData = longTermItems?.map(a => a.info[taxedOn === "gross" ? "gross" : "pOrL"]) || [];
+      const shortTermData = shortTermItems?.map(a => a.info[taxedOn === "gross" ? "gross" : "pOrL"]) || [];
+      const longTermTaxes = {
+        eth: data ? (longTermData?.map(a => a.eth).reduce((a, b) => a + b, 0) / 100) * longTermTax : 0,
+        usd: data ? (longTermData?.map(a => a.usd).reduce((a, b) => a + b, 0) / 100) * longTermTax : 0,
+      };
+      const shortTermTaxes = {
+        eth: data ? (shortTermData?.map(a => a.eth).reduce((a, b) => a + b, 0) / 100) * taxPerc : 0,
+        usd: data ? (shortTermData?.map(a => a.usd).reduce((a, b) => a + b, 0) / 100) * taxPerc : 0,
+      };
+      const taxesEth = longTermTaxes.eth + shortTermTaxes.eth;
+      const taxesUsd = longTermTaxes.usd + shortTermTaxes.usd;
+      taxes = {
+        eth: roundPrice(taxesEth < 0 ? 0 : taxesEth),
+        usd: roundPriceUsd(taxesUsd < 0 ? 0 : taxesUsd),
+      };
+    }
   } else {
     const taxesEth = data
       ?.map(a => {
