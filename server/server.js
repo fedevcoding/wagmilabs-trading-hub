@@ -75,8 +75,8 @@ const server = new http.createServer(app);
 const socketIO = require("socket.io");
 const refreshCollectionRoute = require("./routes/ethereum/collections/resfreshColelctionRoute.js");
 const statsRoute = require("./routes/ethereum/statsRoute.js");
-const newSnipeRoute = require("./routes/ethereum/bots/sniperBot/newSnipeRoute.js");
 const getSnipeTasksRoute = require("./routes/ethereum/bots/sniperBot/getSnipeTasksRoute.js");
+const editSnipeRoute = require("./routes/ethereum/bots/sniperBot/editSnipeRoute.js");
 const io = socketIO(server, {
   cors: {
     origin: CLIENT_URL,
@@ -228,7 +228,7 @@ app.use("/api/v1/wagmilabs/p-and-l", pAndLRoute);
 app.use("/api/v1/wagmilabs/stats", statsRoute);
 
 // bots routes
-app.use("/api/v1/wagmilabs/bots", newSnipeRoute);
+app.use("/api/v1/wagmilabs/bots", editSnipeRoute);
 app.use("/api/v1/wagmilabs/bots", getSnipeTasksRoute);
 
 app.use("/api/v1/wagmilabs/salesBot/", saleBotRoute);

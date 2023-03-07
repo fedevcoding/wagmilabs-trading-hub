@@ -46,16 +46,8 @@ export const useHandleData = (wallets, step) => {
   };
 
   const isValidNextStep = useMemo(() => {
-    const {
-      maxPrice,
-      walletType,
-      walletAddress,
-      privateKey,
-      // maxFeePerGas,
-      maxPriorityFeePerGas,
-      maxAutoBuy,
-      collectionAddress,
-    } = data;
+    const { maxPrice, walletType, walletAddress, privateKey, maxPriorityFeePerGas, maxAutoBuy, collectionAddress } =
+      data;
     if (step === 1) {
       if (walletType === "privatekey")
         return collectionAddress && maxPrice && (privateKey?.length === 64 || privateKey?.length === 66) ? true : false;
@@ -82,6 +74,7 @@ export const useHandleData = (wallets, step) => {
       walletAddress: undefined,
       privateKey: undefined,
       maxFeePerGas: undefined,
+      maxFeePerGasType: "auto",
       maxPriorityFeePerGas: undefined,
       maxAutoBuy: undefined,
     });
@@ -97,6 +90,7 @@ export const useHandleData = (wallets, step) => {
     walletAddress,
     privateKey,
     maxFeePerGas,
+    maxPriorityFeePerGas,
     maxAutoBuy,
     maxFeePerGasType,
   } = data;
@@ -110,6 +104,7 @@ export const useHandleData = (wallets, step) => {
     walletAddress,
     privateKey,
     maxFeePerGas,
+    maxPriorityFeePerGas,
     maxAutoBuy,
     data,
     maxFeePerGasType,

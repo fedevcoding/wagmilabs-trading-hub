@@ -1,8 +1,10 @@
 import { Button, HStack } from "@chakra-ui/react";
 import { formatAddress } from "@Utils";
 import React from "react";
+import { useEditTask } from "../../hooks/useEditTask";
 
-export const Table = ({ section, activeSnipes }) => {
+export const Table = ({ section, activeSnipes, toggleSnipe }) => {
+  const { removeTask } = useEditTask(1, toggleSnipe);
   return (
     <div className="table-wrapper">
       <table cellSpacing={0} className="table">
@@ -40,8 +42,17 @@ export const Table = ({ section, activeSnipes }) => {
         <tbody>
           {section === "active" &&
             activeSnipes?.map((snipe, index) => {
-              const { collectionName, collectionImage, maxPrice, maxAutoBuy, walletAddress, maxPriorityFeePerGas } =
-                snipe;
+              const {
+                collectionName,
+                collectionImage,
+                maxPrice,
+                maxAutoBuy,
+                walletAddress,
+                maxPriorityFeePerGas,
+                maxFeePerGas,
+                inactive,
+                taskId,
+              } = snipe;
               return (
                 <tr key={index}>
                   <td>
@@ -53,15 +64,17 @@ export const Table = ({ section, activeSnipes }) => {
                   <td>{maxPrice} ETH</td>
                   <td>{maxAutoBuy}</td>
                   <td>{formatAddress(walletAddress)}</td>
-                  <td>{"active"}</td>
+                  <td>{inactive ? "inactive" : "active"}</td>
                   <td>
                     <HStack flexDirection={"column"}>
                       <p>Max priority: {maxPriorityFeePerGas}</p>
-                      <p>Max fee per gas: 50</p>
+                      <p>Max fee per gas: {maxFeePerGas || "auto"}</p>
                     </HStack>
                   </td>
                   <td>
-                    <Button className="btn btn-danger">Cancel</Button>
+                    <Button className="btn btn-danger" onClick={() => removeTask(taskId)}>
+                      Cancel
+                    </Button>
                   </td>
                 </tr>
               );

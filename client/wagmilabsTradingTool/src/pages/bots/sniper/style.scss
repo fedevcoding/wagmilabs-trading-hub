@@ -23,6 +23,7 @@
         padding: 10px 20px;
         border-radius: 10px;
         transition: background-color 250ms;
+        border: 1px solid transparent;
       }
       & .active {
         background-color: $lightGrey;
@@ -160,15 +161,6 @@
         font-size: 16px;
         font-weight: 500;
       }
-    }
-
-    input,
-    select {
-      color: white;
-    }
-
-    option {
-      background-color: black !important;
     }
   }
 

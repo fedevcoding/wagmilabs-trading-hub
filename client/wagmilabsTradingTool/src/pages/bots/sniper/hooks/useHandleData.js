@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export const useHandleData = activeSnipes => {
+export const useHandleData = (activeSnipes, setActiveSnipes) => {
   const [section, setSection] = useState("active");
 
   const [showNewTask, setShowNewTask] = useState(false);
@@ -16,7 +16,12 @@ export const useHandleData = activeSnipes => {
 
   const toggleSnipe = (state, data) => {
     if (state === "add") {
-      activeSnipes.push(data);
+      const newTasks = [data, ...activeSnipes];
+      setActiveSnipes(newTasks);
+    }
+    if (state === "remove") {
+      const newTasks = activeSnipes.filter(snipe => snipe.taskId !== data);
+      setActiveSnipes(newTasks);
     }
   };
 

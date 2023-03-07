@@ -8,8 +8,11 @@ import { Header, NewTaskModal, Table } from "./components";
 import { useHandleData, useGetData } from "./hooks";
 
 const SniperBot = () => {
-  const { activeSnipes } = useGetData();
-  const { showNewTask, toggleNewTaskModal, section, setSection, toggleSnipe } = useHandleData(activeSnipes);
+  const { activeSnipes, setActiveSnipes } = useGetData();
+  const { showNewTask, toggleNewTaskModal, section, setSection, toggleSnipe } = useHandleData(
+    activeSnipes,
+    setActiveSnipes
+  );
 
   /*
   const { address } = useAccount();
@@ -34,7 +37,7 @@ const SniperBot = () => {
 
       <NewTaskModal showNewTask={showNewTask} toggleNewTaskModal={toggleNewTaskModal} toggleSnipe={toggleSnipe} />
 
-      <Table section={section} activeSnipes={activeSnipes} />
+      <Table section={section} activeSnipes={activeSnipes} toggleSnipe={toggleSnipe} />
     </section>
   );
 };

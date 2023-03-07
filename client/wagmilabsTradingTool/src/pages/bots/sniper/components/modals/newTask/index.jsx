@@ -19,7 +19,8 @@ import {
 import EthereumSearch from "src/pages/search/EthereumSearch";
 import { useHandleData, useSteps } from "./hooks";
 import { useGetWallets } from "@Hooks";
-import { useSaveTask } from "./hooks/useSaveTask";
+import { useEditTask } from "../../../hooks/useEditTask";
+import { Loader } from "@Components";
 
 export const NewTaskModal = React.memo(({ showNewTask, toggleNewTaskModal, toggleSnipe }) => {
   const { step, nextStep, prevStep, resetStep } = useSteps();
@@ -33,6 +34,7 @@ export const NewTaskModal = React.memo(({ showNewTask, toggleNewTaskModal, toggl
     walletType,
     walletAddress,
     privateKey,
+    maxPriorityFeePerGas,
     maxFeePerGas,
     maxAutoBuy,
     data,
@@ -50,7 +52,7 @@ export const NewTaskModal = React.memo(({ showNewTask, toggleNewTaskModal, toggl
     resetData();
   };
 
-  const { saveTask, isLoading } = useSaveTask(closeNewTask, toggleSnipe);
+  const { saveTask, addLoading } = useEditTask(closeNewTask, toggleSnipe);
 
   return (
     <Modal isOpen={showNewTask} onClose={closeNewTask}>
@@ -137,23 +139,26 @@ export const NewTaskModal = React.memo(({ showNewTask, toggleNewTaskModal, toggl
               <div className="step2-container flex-col">
                 <HStack className="flex-col">
                   <p>Max Fee Per Gas:</p>
-                  <HStack width={"40%"}>
-                    <Select onChange={(e) => handleSetData("maxFeePerGasType", e.target.value)}>
+                  <HStack width={"50%"}>
+                    <Select onChange={e => handleSetData("maxFeePerGasType", e.target.value)} className="chakra-select">
                       <option value="auto">Auto</option>
                       <option value="custom">Custom</option>
                     </Select>
                   </HStack>
 
                   {maxFeePerGasType === "custom" && (
-                    <NumberInput onChange={e => handleSetData("maxFeePerGas", e.target.value)}>
-                      <Input placeholder="Max Fee Per Gas" />
+                    <NumberInput value={maxFeePerGas} onChange={value => handleSetData("maxFeePerGas", value)}>
+                      <NumberInputField placeholder="Max Fee Per Gas" />
                     </NumberInput>
                   )}
                 </HStack>
 
                 <HStack className="flex-col">
                   <p>Max Priority Fee Per Gas:</p>
-                  <NumberInput value={maxFeePerGas} onChange={value => handleSetData("maxPriorityFeePerGas", value)}>
+                  <NumberInput
+                    value={maxPriorityFeePerGas}
+                    onChange={value => handleSetData("maxPriorityFeePerGas", value)}
+                  >
                     <NumberInputField placeholder="Max Priority Fee Per Gas" />
                   </NumberInput>
                 </HStack>
@@ -186,10 +191,10 @@ export const NewTaskModal = React.memo(({ showNewTask, toggleNewTaskModal, toggl
                 <>
                   <Button onClick={prevStep}>Back</Button>
                   <Button
-                    onClick={() => isValidNextStep && saveTask(data)}
+                    onClick={() => isValidNextStep && !addLoading && saveTask(data)}
                     className={`${!isValidNextStep && "not-active"}`}
                   >
-                    Save
+                    {addLoading ? <Loader width={"25px"} height="25px" /> : <p>Save</p>}
                   </Button>
                 </>
               )

@@ -52,10 +52,10 @@ async function fullfillOrder(listing, collectionTask) {
           data: {
             protocolData,
           },
-          kind: "opensea",
+          kind: "seaport-v1.4",
         },
       ],
-      expectedPrice: listingPrice,
+      // expectedPrice: listingPrice,
       onProgress: progress => {
         console.log(progress);
       },

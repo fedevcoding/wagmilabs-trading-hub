@@ -28,5 +28,5 @@ export const useGetData = () => {
     getData();
   }, []);
 
-  return { activeSnipes, loading };
+  return { activeSnipes, loading, setActiveSnipes };
 };

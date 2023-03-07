@@ -134,3 +134,12 @@ body.overflow-hidden {
   display: flex !important;
   flex-direction: column !important;
 }
+
+
+.chakra-select {
+  color: white;
+}
+
+.chakra-select option {
+  background-color: black !important;
+}
