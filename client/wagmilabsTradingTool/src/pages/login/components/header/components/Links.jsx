@@ -24,6 +24,7 @@ const Links = ({ setWalletConnected, setMessage, setConnected }) => {
                 setWalletConnected={setWalletConnected}
                 text={text}
                 value={key}
+                key={key}
               />
             );
           }),

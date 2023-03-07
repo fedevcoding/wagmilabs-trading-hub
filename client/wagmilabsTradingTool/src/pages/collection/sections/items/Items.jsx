@@ -56,8 +56,7 @@ const Items = ({
   setSelectedItem,
   fetchMoreTokens,
 }) => {
-
-  const { refreshMetadata } = useRefreshMetadata((state) => setRefreshingMetadata(state))
+  const { refreshMetadata } = useRefreshMetadata(state => setRefreshingMetadata(state));
   const { userCartItems } = useContext(UserDataContext);
   const firstRender = useFirstRender();
 
@@ -66,13 +65,8 @@ const Items = ({
 
   const navigate = useNavigate();
 
-  const {
-    buyNowModalData,
-    showBuyNowModal,
-    openBuyModal,
-    closeBuynowModal,
-    setBuyNowModalData,
-  } = useGetBuyNowModalFunctions();
+  const { buyNowModalData, showBuyNowModal, openBuyModal, closeBuynowModal, setBuyNowModalData } =
+    useGetBuyNowModalFunctions();
 
   useEffect(() => {
     const options = {
@@ -87,9 +81,7 @@ const Items = ({
       }
     }, options);
 
-    const target = document.querySelector(
-      ".collection-single-item-container.last-token"
-    );
+    const target = document.querySelector(".collection-single-item-container.last-token");
     if (target) {
       observer.current.observe(target);
     }
@@ -135,19 +127,12 @@ const Items = ({
     if (checked) {
       setItemFilters(prev => ({
         ...prev,
-        attributeFilter: [
-          ...prev.attributeFilter,
-          { attributeKey, attributeValue },
-        ],
+        attributeFilter: [...prev.attributeFilter, { attributeKey, attributeValue }],
       }));
     } else {
       setItemFilters(prev => {
         const filteredAttributes = prev.attributeFilter.filter(attr => {
-          if (
-            attr.attributeKey === attributeKey &&
-            attr.attributeValue === attributeValue
-          )
-            return false;
+          if (attr.attributeKey === attributeKey && attr.attributeValue === attributeValue) return false;
           return attr;
         });
         return {
@@ -159,19 +144,12 @@ const Items = ({
   }
 
   function applyChanges() {
-    const priceOptions = Array.from(
-      document.querySelectorAll(".collection-item-price-filter")
-    );
+    const priceOptions = Array.from(document.querySelectorAll(".collection-item-price-filter"));
 
     const max = priceOptions[1].value ? priceOptions[1].value : undefined;
     const min = priceOptions[0].value ? priceOptions[0].value : undefined;
 
-    if (
-      !_.isEqual(
-        { ...itemFilters },
-        { ...itemFilters, priceFilter: { min, max } }
-      )
-    ) {
+    if (!_.isEqual({ ...itemFilters }, { ...itemFilters, priceFilter: { min, max } })) {
       setItemFilters(prev => ({
         ...prev,
         priceFilter: { min, max },
@@ -180,9 +158,7 @@ const Items = ({
   }
 
   function animateAddToCart(index, image) {
-    const item = document.querySelectorAll(".collection-single-item-container")[
-      index
-    ];
+    const item = document.querySelectorAll(".collection-single-item-container")[index];
     const cart = document.querySelector(".header-cart-item");
 
     const cartX = cart.getBoundingClientRect().left;
@@ -230,11 +206,8 @@ const Items = ({
     () =>
       items &&
       items.map((item, index) => {
-        const { tokenId, name, image, rarityRank, isFlagged, isLive } =
-          item?.token;
-        const isInCart = userCartItems.some(
-          item => item.tokenId.toString() === tokenId.toString()
-        );
+        const { tokenId, name, image, rarityRank, isFlagged, isLive } = item?.token;
+        const isInCart = userCartItems.some(item => item.tokenId.toString() === tokenId.toString());
 
         const collectionName = item?.token?.collection?.name;
         const collectionImage = item?.token?.collection?.image;
@@ -249,22 +222,19 @@ const Items = ({
         let isListed = false;
         if (value) isListed = true;
 
-        const marketplaceImg =
-          getMarketplaceImage(marketplace) || marketplaceIcon;
+        const marketplaceImg = getMarketplaceImage(marketplace) || marketplaceIcon;
 
         const isLast = index === items.length - 1;
 
         return (
           <>
             <div
-              className={`collection-single-item-container ${isLast && "last-token"
-                } ${isLive && "live-token-animation"}`}
+              className={`collection-single-item-container ${isLast && "last-token"} ${
+                isLive && "live-token-animation"
+              }`}
               key={orderHash}
             >
-              <div
-                className={`collection-item-details-container ${isInCart && "item-cart-selected"
-                  }`}
-              >
+              <div className={`collection-item-details-container ${isInCart && "item-cart-selected"}`}>
                 <div className="collection-item-image-hover-overflow">
                   <img
                     src={image || collectionImage}
@@ -280,11 +250,7 @@ const Items = ({
                   {isListed && (
                     <>
                       <a href={marketplaceUrl} target="_blank" rel="noreferrer">
-                        <img
-                          src={marketplaceImg}
-                          className="collection-item-marketplace-image"
-                          alt=""
-                        />
+                        <img src={marketplaceImg} className="collection-item-marketplace-image" alt="" />
                       </a>
 
                       {isFlagged && (
@@ -299,11 +265,7 @@ const Items = ({
                           placement="top"
                           borderRadius={"7px"}
                         >
-                          <img
-                            src={flaggedImg}
-                            className="collection-items-flagged-img"
-                            alt=""
-                          />
+                          <img src={flaggedImg} className="collection-items-flagged-img" alt="" />
                         </Tooltip>
                       )}
                     </>
@@ -324,13 +286,9 @@ const Items = ({
 
                 <div className="collection-items-item-stats">
                   <div>
-                    <p className="collection-item-single-collection-name">
-                      {collectionInfo?.name}
-                    </p>
+                    <p className="collection-item-single-collection-name">{collectionInfo?.name}</p>
                     <div className="collection-item-single-item-name-price">
-                      <p className="collection-item-single-item-name">
-                        {name || tokenId}
-                      </p>
+                      <p className="collection-item-single-item-name">{name || tokenId}</p>
                       {isListed && (
                         <div className="collection-item-single-item-price">
                           <i className="fa-brands fa-ethereum" />
@@ -367,20 +325,18 @@ const Items = ({
                             isInCart
                               ? removeItemFromCart(tokenId, address)
                               : addItemToCart(
-                                name,
-                                tokenId,
-                                value,
-                                image,
-                                marketplace,
-                                collectionName || collectionInfo?.name,
-                                index
-                              )
+                                  name,
+                                  tokenId,
+                                  value,
+                                  image,
+                                  marketplace,
+                                  collectionName || collectionInfo?.name,
+                                  index
+                                )
                           }
                         >
                           <i className="fa-light fa-cart-shopping item-buy-not-visible"></i>
-                          <p className="item-buy-not-visible">
-                            {isInCart ? "Remove" : "Add"}
-                          </p>
+                          <p className="item-buy-not-visible">{isInCart ? "Remove" : "Add"}</p>
                         </div>
                       </>
                     )}
@@ -394,8 +350,6 @@ const Items = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [items, userCartItems, collectionInfo]
   );
-
-
 
   return (
     <>
@@ -426,9 +380,7 @@ const Items = ({
 
           <div className="collection-item-filter-section2">
             <div className="collection-item-filter-pricerange">
-              <p className="collection-item-filter-pricerange-name">
-                PRICE RANGE
-              </p>
+              <p className="collection-item-filter-pricerange-name">PRICE RANGE</p>
               <HStack>
                 <NumberInput defaultValue={itemFilters?.priceFilter?.min}>
                   <HStack>
@@ -441,70 +393,36 @@ const Items = ({
                 <p>-</p>
                 <NumberInput defaultValue={itemFilters?.priceFilter?.max}>
                   <HStack>
-                    <NumberInputField
-                      placeholder="Max"
-                      className="collection-item-price-filter"
-                    />
+                    <NumberInputField placeholder="Max" className="collection-item-price-filter" />
                   </HStack>
                 </NumberInput>
               </HStack>
             </div>
 
             <div className="collection-item-filter-marketplace">
-              <p className="collection-item-filter-marketplace-name">
-                Marketplace:
-              </p>
-              <Checkbox
-                defaultChecked={true}
-                isDisabled
-                size={"sm"}
-                className="collection-item-marketplace-filter"
-              >
+              <p className="collection-item-filter-marketplace-name">Marketplace:</p>
+              <Checkbox defaultChecked={true} isDisabled size={"sm"} className="collection-item-marketplace-filter">
                 Opensea
               </Checkbox>
               <br />
-              <Checkbox
-                defaultChecked={true}
-                isDisabled
-                size={"sm"}
-                className="collection-item-marketplace-filter"
-              >
+              <Checkbox defaultChecked={true} isDisabled size={"sm"} className="collection-item-marketplace-filter">
                 X2Y2
               </Checkbox>
               <br />
-              <Checkbox
-                defaultChecked={true}
-                isDisabled
-                size={"sm"}
-                className="collection-item-marketplace-filter"
-              >
+              <Checkbox defaultChecked={true} isDisabled size={"sm"} className="collection-item-marketplace-filter">
                 LooksRare
               </Checkbox>
               <br />
-              <Checkbox
-                defaultChecked={true}
-                isDisabled
-                size={"sm"}
-                className="collection-item-marketplace-filter"
-              >
+              <Checkbox defaultChecked={true} isDisabled size={"sm"} className="collection-item-marketplace-filter">
                 Sudoswap
               </Checkbox>
               <br />
-              <Checkbox
-                defaultChecked={true}
-                isDisabled
-                size={"sm"}
-                className="collection-item-marketplace-filter"
-              >
+              <Checkbox defaultChecked={true} isDisabled size={"sm"} className="collection-item-marketplace-filter">
                 Alienswap
               </Checkbox>
             </div>
 
-            <Button
-              colorScheme={"blue"}
-              onClick={applyChanges}
-              className="collection-item-filter-apply"
-            >
+            <Button colorScheme={"blue"} onClick={applyChanges} className="collection-item-filter-apply">
               Apply
             </Button>
           </div>
@@ -523,45 +441,30 @@ const Items = ({
                     const sortedItems = item?.values?.sort((b, a) => a?.count - b?.count);
 
                     return (
-                      <AccordionItem>
-                        <AccordionButton
-                          backgroundColor={"transparent"}
-                          padding="15px 5px"
-                        >
-                          <Box
-                            as="span"
-                            flex="1"
-                            textAlign="left"
-                            display={"flex"}
-                            alignItems="center"
-                            gap="10px"
-                          >
+                      <AccordionItem key={JSON.stringify(item)}>
+                        <AccordionButton backgroundColor={"transparent"} padding="15px 5px">
+                          <Box as="span" flex="1" textAlign="left" display={"flex"} alignItems="center" gap="10px">
                             <i className="fa-solid fa-filters"></i>
                             <p>{attributeName}</p>
                           </Box>
 
-                          <span className="mr-10 little-text low-opacity">
-                            {length}
-                          </span>
+                          <span className="mr-10 little-text low-opacity">{length}</span>
                           <AccordionIcon />
                         </AccordionButton>
 
                         <AccordionPanel pb={4}>
-                          {sortedItems && sortedItems.map(innerItem => {
-                            const attributeValue = innerItem.value;
-                            const { count } = innerItem;
+                          {sortedItems &&
+                            sortedItems.map(innerItem => {
+                              const attributeValue = innerItem.value;
+                              const { count } = innerItem;
 
-                            return (
-                              <>
-                                <Row className="collection-item-property-row wrap-text">
+                              return (
+                                <Row key={JSON.stringify(innerItem)} className="collection-item-property-row wrap-text">
                                   <Checkbox
                                     defaultChecked={
                                       itemFilters?.attributeFilter?.filter(
                                         item =>
-                                          item.attributeKey ===
-                                          attributeName &&
-                                          item.attributeValue ===
-                                          attributeValue
+                                          item.attributeKey === attributeName && item.attributeValue === attributeValue
                                       ).length > 0
                                         ? true
                                         : false
@@ -571,22 +474,15 @@ const Items = ({
                                     key={crypto.randomUUID()}
                                     value={attributeValue}
                                     onChange={e =>
-                                      changeAttributeFilter(
-                                        e.target.checked,
-                                        attributeName,
-                                        attributeValue
-                                      )
+                                      changeAttributeFilter(e.target.checked, attributeName, attributeValue)
                                     }
                                   >
                                     {attributeValue}
                                   </Checkbox>
-                                  <span className="little-text low-opacity">
-                                    {count}
-                                  </span>
+                                  <span className="little-text low-opacity">{count}</span>
                                 </Row>
-                              </>
-                            );
-                          })}
+                              );
+                            })}
 
                           <Divider marginTop={"15px"} />
                         </AccordionPanel>
@@ -620,19 +516,19 @@ const Items = ({
               </InputGroup>
 
               <Tooltip label="Refresh Metadata" placement="top">
-                <i className={`fa-solid fa-arrows-rotate refresh-collection-metadata ${refreshingMetadata && "rotating"}`} onClick={() => !refreshingMetadata && refreshMetadata(address)}></i>
+                <i
+                  className={`fa-solid fa-arrows-rotate refresh-collection-metadata ${
+                    refreshingMetadata && "rotating"
+                  }`}
+                  onClick={() => !refreshingMetadata && refreshMetadata(address)}
+                ></i>
               </Tooltip>
             </HStack>
           </div>
 
           {loadingItems ? (
             <div className="collection-skeleton-container">
-              <SkeletonTheme
-                baseColor="#202020"
-                highlightColor="#444"
-                height={"301px"}
-                borderRadius={"10px"}
-              >
+              <SkeletonTheme baseColor="#202020" highlightColor="#444" height={"301px"} borderRadius={"10px"}>
                 <p>
                   <Skeleton count={18} wrapper={SkeletonWrapper} />
                 </p>
@@ -647,6 +543,7 @@ const Items = ({
                     {[...Array(18)].map(item => {
                       return (
                         <SkeletonTheme
+                          key={item}
                           baseColor="#202020"
                           highlightColor="#444"
                           height={"301px"}
@@ -673,12 +570,7 @@ const SkeletonWrapper = ({ children }) => {
   return <span className="collection-items-single-skeleton">{children}</span>;
 };
 
-const ItemSortSelect = ({
-  options,
-  changeSorting,
-  selectedItem,
-  setSelectedItem,
-}) => {
+const ItemSortSelect = ({ options, changeSorting, selectedItem, setSelectedItem }) => {
   const [active, setActive] = useState(false);
 
   const changeSelector = option => {
