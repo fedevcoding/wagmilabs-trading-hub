@@ -101,7 +101,6 @@ body.overflow-hidden {
 .not-responsive {
   display: none;
 }
-
 @media screen and (max-width: 1000px) {
   #application-wrapper {
     display: none;
@@ -123,13 +122,15 @@ body.overflow-hidden {
   }
 }
 
+
+
 .not-allowed {
   cursor: not-allowed;
 }
 
 
+
 .flex-col{
   display: flex !important;
   flex-direction: column !important;
-  
 }

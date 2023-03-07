@@ -69,59 +69,30 @@ const Home = () => {
     <>
       <section className="home-wrapper-section">
         <div className="info-container">
-          <PromoModal isOpen={isOpen} onClose={onClose} onOpen={onOpen} />
+          <PromoModal isOpen={isOpen} onClose={onClose} onOpen={onOpen} type={1} />
           <div className="tool-names">
-            <div
-              onClick={e => changeTool(e)}
-              className="active home-trending-section"
-              tool="trending"
-            >
+            <div onClick={e => changeTool(e)} className="active home-trending-section" tool="trending">
               Trending <LivePulsing />
             </div>
-            <div
-              onClick={e => changeTool(e)}
-              className="home-minting-section"
-              tool="minting"
-            >
+            <div onClick={e => changeTool(e)} className="home-minting-section" tool="minting">
               Minting <LivePulsing />
             </div>
-            <div
-              onClick={e => changeTool(e)}
-              className="home-ranking-section"
-              tool="ranking"
-            >
+            <div onClick={e => changeTool(e)} className="home-ranking-section" tool="ranking">
               Ranking <LivePulsing />
             </div>
-            <div
-              onClick={e => changeTool(e)}
-              className="home-minting-section"
-              tool="owned"
-            >
+            <div onClick={e => changeTool(e)} className="home-minting-section" tool="owned">
               Owned
             </div>
-            <div
-              onClick={e => changeTool(e)}
-              className="home-minting-section"
-              tool="watchlist"
-            >
+            <div onClick={e => changeTool(e)} className="home-minting-section" tool="watchlist">
               WatchList
             </div>
           </div>
           <div className="tool-times">
-            <Times
-              tool={tool}
-              rippleEffect={rippleEffect}
-              changeTime={changeTime}
-            />
+            <Times tool={tool} rippleEffect={rippleEffect} changeTime={changeTime} />
           </div>
         </div>
 
-        <Tool
-          tool={tool}
-          timeFrame={timeFrame}
-          setTimeFrame={setTimeFrame}
-          resetTime={resetTime}
-        />
+        <Tool tool={tool} timeFrame={timeFrame} setTimeFrame={setTimeFrame} resetTime={resetTime} />
       </section>
     </>
   );
@@ -131,54 +102,19 @@ const Tool = ({ tool, timeFrame, setTimeFrame, resetTime }) => {
   switch (tool) {
     case "trending":
       setPageTitle("Trending | Wagmi Labs");
-      return (
-        <Trending
-          timeFrame={timeFrame}
-          tool={tool}
-          setTimeFrame={setTimeFrame}
-          resetTime={resetTime}
-        />
-      );
+      return <Trending timeFrame={timeFrame} tool={tool} setTimeFrame={setTimeFrame} resetTime={resetTime} />;
     case "minting":
       setPageTitle("Minting | Wagmi Labs");
-      return (
-        <Minting
-          timeFrame={timeFrame}
-          tool={tool}
-          setTimeFrame={setTimeFrame}
-          resetTime={resetTime}
-        />
-      );
+      return <Minting timeFrame={timeFrame} tool={tool} setTimeFrame={setTimeFrame} resetTime={resetTime} />;
     case "ranking":
       setPageTitle("Ranking | Wagmi Labs");
-      return (
-        <Top100
-          timeFrame={timeFrame}
-          tool={tool}
-          setTimeFrame={setTimeFrame}
-          resetTime={resetTime}
-        />
-      );
+      return <Top100 timeFrame={timeFrame} tool={tool} setTimeFrame={setTimeFrame} resetTime={resetTime} />;
     case "owned":
       setPageTitle("Owned | Wagmi Labs");
-      return (
-        <Owned
-          timeFrame={timeFrame}
-          tool={tool}
-          setTimeFrame={setTimeFrame}
-          resetTime={resetTime}
-        />
-      );
+      return <Owned timeFrame={timeFrame} tool={tool} setTimeFrame={setTimeFrame} resetTime={resetTime} />;
     case "watchlist":
       setPageTitle("Watchlist | Wagmi Labs");
-      return (
-        <WatchList
-          timeFrame={timeFrame}
-          tool={tool}
-          setTimeFrame={setTimeFrame}
-          resetTime={resetTime}
-        />
-      );
+      return <WatchList timeFrame={timeFrame} tool={tool} setTimeFrame={setTimeFrame} resetTime={resetTime} />;
     default:
       break;
   }
