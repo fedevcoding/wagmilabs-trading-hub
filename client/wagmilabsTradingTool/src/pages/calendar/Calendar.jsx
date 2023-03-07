@@ -1,10 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { PageWrapper, Row } from "@Components";
 import "./style.scss";
 import { useParams } from "react-router-dom";
 import { MonthlyCalendar } from "./Components/MonthlyCalendar";
 import { WeeklyCalendar } from "./Components/WeeklyCalendar";
-import { useGetData } from "./useGetData";
+import { useGetDrops } from "./useGetDrops";
+import { useGetEvents } from "./useGetEvents";
+import { useGetSpaces } from "./useGetSpaces";
+import { useGetPersonal } from "./useGetPersonal";
 
 const titles = {
   drops: "Upcoming Drops",
@@ -64,8 +67,10 @@ export const getSelectedDateTitle = (selDate, weekly) => {
 }
 
 export const Calendar = () => {
-  const [sectionData, setSectionData] = useState(null);
-  const data = useGetData();
+  const { drops, refetch: dropsRefetch } = useGetDrops();
+  const { events, refetch: eventsRefetch } = useGetEvents();
+  const { personal, refetch: personalRefetch } = useGetPersonal();
+  const { spaces, refetch: spacesRefetch } = useGetSpaces();
   const { section } = useParams();
   const mainTitle = titles[section];
 
@@ -75,38 +80,38 @@ export const Calendar = () => {
     </Row>
   );
 
-  useEffect(() => {
-    if (!data.isLoading) {
-      setSectionData(section === "raffles" ? data.personal : data[section]);
-    }
-  }, [data, section]);
-
   return (
     <PageWrapper page="calendar">
       {renderMainTitle()}
-      {sectionData && (
         <>
-          {section === "spaces" && (
-            <WeeklyCalendar sectionData={data.spaces} refetch={data.refetch} />
+          {spaces && section === "spaces" && (
+            <WeeklyCalendar sectionData={spaces} refetch={spacesRefetch} />
           )}
-          {(section === "drops" || section === "events") &&
+          {drops && section === "drops" &&
           (
             <MonthlyCalendar
-              sectionData={sectionData}
+              sectionData={drops}
               section={section}
-              refetch={data.refetch}
+              refetch={dropsRefetch}
             />
           )}
-          {(section === "raffles") &&
+          {events && section === "events" &&
           (
             <MonthlyCalendar
-              sectionData={sectionData.map((s)=>s.events).flat()}
+              sectionData={events}
+              section={section}
+              refetch={eventsRefetch}
+            />
+          )}
+          {personal && section === "raffles" &&
+          (
+            <MonthlyCalendar
+              sectionData={personal.map((s)=>s.events).flat()}
               section="personal"
-              refetch={data.refetch}
+              refetch={personalRefetch}
             />
           )}
         </>
-      )}
     </PageWrapper>
   );
 };

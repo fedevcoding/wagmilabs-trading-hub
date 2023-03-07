@@ -38,10 +38,8 @@ export const AddEventModal = React.memo(
 
     const handleInputLinkChange = (e, index, name) => {
       const { value } = e.target;
-      console.log({ name, value })
       const list = [...inputLinkList];
       list[index][name] = value;
-      console.log('list',list)
       setInputLinkList(list);
     };
     
