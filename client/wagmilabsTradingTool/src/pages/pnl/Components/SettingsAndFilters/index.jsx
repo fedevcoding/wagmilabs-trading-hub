@@ -19,7 +19,13 @@ export const SettingsAndFilters = React.memo(({ startDate, endDate, setStartDate
           {moment(startDate).format("MMM DD, YYYY")} - {moment(endDate).format("MMM DD, YYYY")}
         </p>
         <div>
-          <u onClick={() => exportData(data, settings.taxedOn, settings.taxPerc, settings.longTermTax)}>Export data</u>
+          <Button
+            className="btn-settings"
+            onClick={() => exportData(data, settings.taxedOn, settings.taxPerc, settings.longTermTax)}
+          >
+            Export data
+            <i className="fa-solid fa-download" />
+          </Button>
           <Button className="btn-settings" onClick={() => setIsOpenTimeframe(true)}>
             Change Timeframe
             <i className="fa-solid fa-clock" />
