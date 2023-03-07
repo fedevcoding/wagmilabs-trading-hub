@@ -80,7 +80,7 @@ const EthereumSearch = ({ inLogin, usage, onClick }) => {
         const link = `/collection/${collectionId}`;
 
         return (
-          <>
+          <React.Fragment key={JSON.stringify(collection)}>
             {usage === "sniperBot" ? (
               <div className={`container-div`} onClick={() => onClick(collection)}>
                 <LazyLoadImage
@@ -138,7 +138,7 @@ const EthereumSearch = ({ inLogin, usage, onClick }) => {
                 {index === collections.length - 1 && <BannerSearch />}
               </>
             )}
-          </>
+          </React.Fragment>
         );
       }),
     [collections, usage, onClick]

@@ -93,4 +93,168 @@
     .legal-terms-link {
         text-decoration: underline;
     }
+
+    @media screen and (max-width: 1300px) {
+        .legal-btn {
+            font-size: 18px;
+        }
+
+        .legal-img {
+            height: 16px;
+        }
+
+        .instructions-img {
+            height: 16px;
+        }
+
+        .instructions-btn {
+            font-size: 18px;
+        }
+
+        .login-general-links-img {
+            width: 30px;
+        }
+
+        .login-general-links-line {
+            height: 3px;
+            width: 60px;
+        }
+    }
+
+    @media screen and (max-width: 1000px) {
+        .legal-btn {
+            font-size: 16px;
+        }
+
+        .legal-img {
+            height: 14px;
+        }
+
+        .instructions-img {
+            height: 14px;
+        }
+
+        .instructions-btn {
+            font-size: 16px;
+        }
+
+        .login-general-links-img {
+            width: 27px;
+        }
+
+        .login-general-links {
+            gap: 10px;
+        }
+
+        .login-general-links-line {
+            height: 3px;
+            width: 50px;
+        }
+    }
+
+    @media screen and (max-width: 800px) {
+        .legal-btn {
+            font-size: 14px;
+        }
+
+        .legal-img {
+            height: 12px;
+        }
+
+        .instructions-img {
+            height: 12px;
+        }
+
+        .instructions-btn {
+            font-size: 14px;
+        }
+
+        .login-general-links-img {
+            width: 23px;
+        }
+
+        .login-general-links {
+            gap: 10px;
+        }
+
+        .login-general-links-line {
+            height: 2px;
+            width: 40px;
+        }
+    }
+
+    @media screen and (max-width: 600px) {
+        .legal-btn {
+            font-size: 14px;
+        }
+
+        .legal-img {
+            height: 12px;
+        }
+
+        .instructions-img {
+            height: 12px;
+        }
+
+        .instructions-btn {
+            font-size: 14px;
+        }
+
+        .login-general-links {
+            justify-content: space-around;
+        }
+
+        .login-general-links-img {
+            width: 20px;
+        }
+
+        .login-general-links-line {
+            display: none;
+        }
+    }
+
+    @media screen and (max-width: 450px) {
+        .login-general-links {
+            display: none;
+        }
+
+        .login-general-links-line {
+            display: none;
+        }
+
+        .legal-btn {
+            font-size: 18px;
+        }
+
+        .legal-img {
+            height: 16px;
+        }
+
+        .instructions-img {
+            height: 16px;
+        }
+
+        .instructions-btn {
+            font-size: 18px;
+        }
+    }
+
+    @media screen and (max-width: 350px) {
+
+        .legal-btn {
+            font-size: 15px;
+        }
+
+        .legal-img {
+            height: 13px;
+        }
+
+        .instructions-img {
+            height: 13px;
+        }
+
+        .instructions-btn {
+            font-size: 15px;
+        }
+    }
 }

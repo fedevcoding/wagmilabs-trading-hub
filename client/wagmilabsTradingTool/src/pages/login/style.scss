@@ -26,6 +26,7 @@
     .hr {
       border: 2px solid white;
     }
+
     background-image: linear-gradient(to right, #3a5d84, #3d94c7, #1c465e);
 
     .reviews-section {
@@ -34,16 +35,46 @@
       justify-content: space-evenly;
 
       height: 65vh;
+
+      @media screen and (max-width: 480px) {
+        height: unset;
+      }
+
       h1 {
         font-size: 36px;
         letter-spacing: 1.2px;
         text-align: center;
+
+        @media screen and (max-width: 1300px) {
+          font-size: 28px;
+        }
+
+        @media screen and (max-width: 980px) {
+          font-size: 25px;
+        }
+
+        @media screen and (max-width: 750px) {
+          font-size: 22px;
+        }
+
+        @media screen and (max-width: 480px) {
+          font-size: 18px;
+          margin-top: 30px;
+        }
+
       }
+
       .reviews-container {
         display: flex;
         width: 100%;
         align-items: center;
         justify-content: space-evenly;
+
+        @media screen and (max-width: 480px) {
+          margin-top: 30px;
+          flex-wrap: wrap;
+          gap: 30px;
+        }
 
         .review {
           width: 20%;
@@ -57,6 +88,25 @@
           flex-direction: column;
           gap: 15px;
 
+          @media screen and (max-width: 1300px) {
+            height: 25vh;
+          }
+
+          @media screen and (max-width: 980px) {
+            height: 22vh;
+          }
+
+          @media screen and (max-width: 750px) {
+            height: 20vh;
+          }
+
+          @media screen and (max-width: 480px) {
+            height: 30vh;
+            width: 50vw;
+          }
+
+
+
           .image {
             width: 50px;
             height: 50px;
@@ -67,7 +117,111 @@
             font-size: 15px;
             opacity: 0.8;
           }
+
+          @media screen and (max-width: 1300px) {
+
+            .review-description {
+              font-size: 11px;
+            }
+
+            .image {
+              width: 40px;
+              height: 40px;
+            }
+
+            .flex-col {
+              font-size: 14px;
+            }
+
+            .low-opacity.little-text {
+              font-size: 12px;
+            }
+
+          }
+
+          @media screen and (max-width: 980px) {
+
+            .review-description {
+              font-size: 9px;
+            }
+
+            .image {
+              width: 35px;
+              height: 35px;
+            }
+
+            .flex-col {
+              font-size: 12px;
+            }
+
+            .low-opacity.little-text {
+              font-size: 10px;
+            }
+
+          }
+
+          @media screen and (max-width: 750px) {
+
+            .review-description {
+              font-size: 7px;
+            }
+
+            .image {
+              width: 30px;
+              height: 30px;
+            }
+
+            .flex-col {
+              font-size: 10px;
+            }
+
+            .low-opacity.little-text {
+              font-size: 8px;
+            }
+
+          }
+
+          @media screen and (max-width: 480px) {
+
+            .review-description {
+              font-size: 12px;
+            }
+
+            .image {
+              width: 45px;
+              height: 45px;
+            }
+
+            .flex-col {
+              font-size: 15px;
+            }
+
+            .low-opacity.little-text {
+              font-size: 12px;
+            }
+
+          }
+
+          @media screen and (max-width: 350px) {
+
+            .flex-col {
+              font-size: 12px;
+            }
+
+            .image {
+              width: 35px;
+              height: 35px;
+            }
+
+            .low-opacity.little-text {
+              font-size: 10px;
+            }
+
+          }
+
         }
+
+
       }
     }
   }

@@ -19,7 +19,7 @@ import { getPercentage } from "@Utils/formats/utils";
 import { formatContractAddress, roundPrice } from "@Utils/formats/formats";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import LiveView from "./sections/liveView/index";
-import { LivePulsing } from "@Components";
+import { LivePulsing, PromoModal } from "@Components";
 
 // import verified from "../../images/verified-2.png"
 // import notVerified from "../../images/not-verified.png"
@@ -30,7 +30,7 @@ import getMarketplaceImage from "@Utils/marketplaceImageMapping";
 
 import copy from "copy-to-clipboard";
 import { useDebounce } from "use-debounce";
-import { Badge, useToast } from "@chakra-ui/react";
+import { Badge, useDisclosure, useToast } from "@chakra-ui/react";
 import { setPageTitle } from "@Utils";
 import { SocketContext } from "src/context/SocketContext";
 
@@ -50,6 +50,7 @@ const Collection = () => {
 
   const socket = useContext(SocketContext);
   const { address } = useParams();
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const [collectionInfo, setCollectionInfo] = useState({});
   const [extra, setExtra] = useState(false);
@@ -432,9 +433,23 @@ const Collection = () => {
     }
   };
 
+  useEffect(() => {
+    const visitedTimes = parseInt(localStorage.getItem("visitedCollections")) || 0;
+    const newVisited = visitedTimes + 1;
+    localStorage.setItem("visitedCollections", newVisited);
+
+    // show modal every 6 times
+
+    if (!visitedTimes || visitedTimes % 6 === 0) {
+      setTimeout(onOpen, 12000);
+    }
+  }, [onOpen]);
+
   return (
     <>
       <div className="collection-info-container">
+        <PromoModal isOpen={isOpen} onClose={onClose} onOpen={onOpen} type={2} />
+
         <div className="banner-image" style={{ backgroundImage: `url(${collectionInfo.banner})` }}></div>
         <hr style={{ border: "1.5px solid grey", backgroundColor: "grey" }} />
 
