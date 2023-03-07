@@ -745,11 +745,7 @@ const Collection = () => {
         >
           Charts
         </div>
-        <div
-          section="leaderboard"
-          // onClick={e => changeCollectionSection(e)}
-          className="single-collection-section not-allowed"
-        >
+        <div section="leaderboard" onClick={e => changeCollectionSection(e)} className="single-collection-section">
           Leaderboard
         </div>
       </div>

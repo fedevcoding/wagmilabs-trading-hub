@@ -1,7 +1,14 @@
 import React from "react";
 
+import "./style.scss";
+import { useGetData } from "./useGetData";
+
 const Leaderboard = () => {
-  return <div style={{ color: "white" }}>Leaderboard</div>;
+  const { holders } = useGetData();
+
+  console.log("holders", holders);
+
+  return <div id="leaderboard">Work in progress...</div>;
 };
 
 export default Leaderboard;
