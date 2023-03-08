@@ -24,7 +24,7 @@ const jsonRpcUrlMap = {
   1: [ETHEREUM_NETWORK],
 };
 
-console.warn = function () {};
+console.warn = function () { };
 
 const theme = {
   primary: "#FFF",
@@ -188,7 +188,7 @@ export const WalletModal = ({ walletModalOpen, closeWalletModal }) => {
               <div className="wallet-modal-currency-details">
                 <div className="wallet-modal-currency-name">
                   <img src={wrappedEthereumImage} alt="" />
-                  <p>Wrapped ethereum</p>
+                  <p>Wrapped Ethereum</p>
                 </div>
 
                 <div className="wallet-modal-crypto-fiat">

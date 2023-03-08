@@ -6,10 +6,10 @@ import "./style.scss";
 import { Button } from "@chakra-ui/react";
 
 export const Banner = React.memo(() => {
-  const headline = "Wagmi Labs launching NFT pass mint to access Trading Hub";
+  const headline = "Wagmi Labs launching Mint End of March!";
   const summary =
-    "The Wagmi Labs Trading Hub is now in FREE Beta for a limited period of time, after that whitelisted users will be able to mint an NFT pass to keep using the product";
-  const link = "https://www.premint.xyz/WAGMI-Labs/";
+    "The Wagmi Labs Trading Hub is now in FREE Beta until end or March, after that whitelisted users will be able to mint an NFT pass to keep using the product";
+  const link = "https://discord.gg/wagmilabs/";
 
   return (
     <a
