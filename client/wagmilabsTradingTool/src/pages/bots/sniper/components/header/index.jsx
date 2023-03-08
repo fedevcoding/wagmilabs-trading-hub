@@ -1,3 +1,4 @@
+import { LivePulsing } from "@Components";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 const { Button, HStack } = require("@chakra-ui/react");
@@ -13,7 +14,10 @@ export const Header = ({ section, setSection, toggleNewTaskModal }) => {
     <div className="options">
       <div className="options-left">
         <button className={`${section === "active" && "active"}`} onClick={() => changeSection("active")}>
-          Active tasks
+          <HStack gap={"10px"}>
+            <p>Active tasks</p>
+            <LivePulsing />
+          </HStack>
         </button>
         <button className={`${section === "activity" && "active"}`} onClick={() => changeSection("activity")}>
           Activity

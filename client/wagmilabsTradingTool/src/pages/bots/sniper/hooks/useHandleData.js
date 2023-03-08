@@ -25,5 +25,25 @@ export const useHandleData = (activeSnipes, setActiveSnipes) => {
     }
   };
 
-  return { showNewTask, showDeleteTask, toggleNewTaskModal, toggleDeleteTaskModal, toggleSnipe, section, setSection };
+  const handleTaskUpdate = data => {
+    const { type, taskId } = data;
+    const newTasks = activeSnipes.map(task => {
+      if (task.taskId === taskId) {
+        return { ...task, status: type };
+      }
+      return { ...task };
+    });
+    setActiveSnipes(newTasks);
+  };
+
+  return {
+    showNewTask,
+    showDeleteTask,
+    toggleNewTaskModal,
+    toggleDeleteTaskModal,
+    toggleSnipe,
+    section,
+    setSection,
+    handleTaskUpdate,
+  };
 };

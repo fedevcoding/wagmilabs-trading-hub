@@ -28,7 +28,7 @@ getSnipeTasksRoute.get("/sniper/getTasks", checkAuth, async (req, res) => {
       const serverTask = serverTasks?.find(serverTask => serverTask.taskId === dbtask.taskId);
       const newTask = { ...dbtask["_doc"] };
       if (!serverTask) {
-        newTask["inactive"] = true;
+        newTask.status = "inactive";
       }
       return newTask;
     });

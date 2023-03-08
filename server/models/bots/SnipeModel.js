@@ -48,6 +48,10 @@ const SnipeScheme = new mongoose.Schema(
           required: true,
           unique: true,
         },
+        status: {
+          type: String,
+          default: "active",
+        },
       },
     ],
   },

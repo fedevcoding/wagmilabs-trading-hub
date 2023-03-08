@@ -1,6 +1,6 @@
 const CLIENT_URL = "http://localhost:3000";
 
-module.exports = { newSale, newListing, newPendingSnipe, CLIENT_URL };
+module.exports = { newSale, newListing, newSnipeUpdate, CLIENT_URL };
 
 // routes imports
 
@@ -40,7 +40,10 @@ const profileTradedCollectionsRoute = require("./routes/ethereum/profile/profile
 const collectionListingsRoute = require("./routes/ethereum/collections/collectionListingsRoute.js");
 const collectionSalesRoute = require("./routes/ethereum/collections/collectionSalesRoute.js");
 const pAndLRoute = require("./routes/ethereum/pAndLRoute.js");
-
+const refreshCollectionRoute = require("./routes/ethereum/collections/resfreshColelctionRoute.js");
+const statsRoute = require("./routes/ethereum/statsRoute.js");
+const getSnipeTasksRoute = require("./routes/ethereum/bots/sniperBot/getSnipeTasksRoute.js");
+const editSnipeRoute = require("./routes/ethereum/bots/sniperBot/editSnipeRoute.js");
 //
 
 // port
@@ -73,10 +76,6 @@ app.use(cookieParser());
 const http = require("http");
 const server = new http.createServer(app);
 const socketIO = require("socket.io");
-const refreshCollectionRoute = require("./routes/ethereum/collections/resfreshColelctionRoute.js");
-const statsRoute = require("./routes/ethereum/statsRoute.js");
-const getSnipeTasksRoute = require("./routes/ethereum/bots/sniperBot/getSnipeTasksRoute.js");
-const editSnipeRoute = require("./routes/ethereum/bots/sniperBot/editSnipeRoute.js");
 const io = socketIO(server, {
   cors: {
     origin: CLIENT_URL,
@@ -131,16 +130,18 @@ io.on("connection", socket => {
     socket.leave(channel);
   });
 
-  socket.on("joinPendingSnipes", accountAddress => {
+  socket.on("joinSnipeUpdates", accountAddress => {
     accountAddress = accountAddress.toLowerCase();
-    console.log("joining room " + accountAddress);
-    socket.join(accountAddress);
+    const channel = `snipeUpdates:${accountAddress}`;
+    console.log(channel);
+    socket.join(channel);
   });
 
-  socket.on("leavePendingSnipes", accountAddress => {
+  socket.on("leaveSnipeUpdates", accountAddress => {
     accountAddress = accountAddress.toLowerCase();
-    console.log("leaving room " + accountAddress);
-    socket.leave(accountAddress);
+    const channel = `snipeUpdates:${accountAddress}`;
+    console.log(channel);
+    socket.leave(channel);
   });
 });
 
@@ -165,12 +166,13 @@ function newSale(saleData) {
   }
 }
 
-function newPendingSnipe(accountAddress, id) {
+function newSnipeUpdate(accountAddress, data) {
+  console.log("sending update to ", accountAddress, "");
   accountAddress = accountAddress.toLowerCase();
-  console.log(id);
+  const channel = `snipeUpdates:${accountAddress}`;
 
   try {
-    io.sockets.to(accountAddress).emit("newPendingSnipe", id);
+    io.sockets.to(channel).emit("newSnipeUpdates", data);
   } catch (e) {
     console.log(e);
   }

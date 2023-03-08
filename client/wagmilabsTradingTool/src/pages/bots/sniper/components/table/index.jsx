@@ -50,7 +50,7 @@ export const Table = ({ section, activeSnipes, toggleSnipe }) => {
                 walletAddress,
                 maxPriorityFeePerGas,
                 maxFeePerGas,
-                inactive,
+                status,
                 taskId,
               } = snipe;
               return (
@@ -64,7 +64,7 @@ export const Table = ({ section, activeSnipes, toggleSnipe }) => {
                   <td>{maxPrice} ETH</td>
                   <td>{maxAutoBuy}</td>
                   <td>{formatAddress(walletAddress)}</td>
-                  <td>{inactive ? "inactive" : "active"}</td>
+                  <td>{status}</td>
                   <td>
                     <HStack flexDirection={"column"}>
                       <p>Max priority: {maxPriorityFeePerGas}</p>

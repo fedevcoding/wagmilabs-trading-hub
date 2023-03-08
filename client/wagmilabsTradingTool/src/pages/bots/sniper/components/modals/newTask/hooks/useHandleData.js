@@ -14,6 +14,7 @@ export const useHandleData = (wallets, step) => {
     maxFeePerGasType: "auto",
     maxPriorityFeePerGas: undefined,
     maxAutoBuy: undefined,
+    status: "active",
   });
 
   useEffect(() => {
@@ -77,6 +78,7 @@ export const useHandleData = (wallets, step) => {
       maxFeePerGasType: "auto",
       maxPriorityFeePerGas: undefined,
       maxAutoBuy: undefined,
+      status: "active",
     });
   };
 

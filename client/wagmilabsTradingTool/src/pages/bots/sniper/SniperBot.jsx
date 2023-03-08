@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 
 import "./style.scss";
 
@@ -9,27 +9,26 @@ import { useHandleData, useGetData } from "./hooks";
 
 const SniperBot = () => {
   const { activeSnipes, setActiveSnipes } = useGetData();
-  const { showNewTask, toggleNewTaskModal, section, setSection, toggleSnipe } = useHandleData(
+  const { showNewTask, toggleNewTaskModal, section, setSection, toggleSnipe, handleTaskUpdate } = useHandleData(
     activeSnipes,
     setActiveSnipes
   );
 
-  /*
   const { address } = useAccount();
   const socket = useContext(SocketContext);
   useEffect(() => {
-    socket.emit("joinPendingSnipes", address);
+    if (address) {
+      socket.emit("joinSnipeUpdates", address);
 
-    socket.off("newPendingSnipe").on("newPendingSnipe", id => {
-      //   pendingStatus(id);
-    });
+      socket.off("newSnipeUpdates").on("newSnipeUpdates", data => {
+        handleTaskUpdate(data);
+      });
+    }
 
     return () => {
-      socket.emit("leavePendingSnipes", address);
+      socket.emit("leaveSnipeUpdates", address);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-  */
+  }, [socket, address, handleTaskUpdate]);
 
   return (
     <section className="sniper-bot-section">

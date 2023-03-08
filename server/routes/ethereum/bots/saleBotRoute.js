@@ -8,7 +8,7 @@ const WebSocket = require("ws");
 // const { OpenSeaStreamClient, Network } = require('@opensea/stream-js');
 
 const { createClient } = require("@reservoir0x/reservoir-sdk");
-const { newPendingSnipe, CLIENT_URL } = require("../../../server");
+const { CLIENT_URL } = require("../../../server");
 
 // reservoir client
 createClient({

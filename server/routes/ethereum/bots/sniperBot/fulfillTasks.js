@@ -1,7 +1,7 @@
 const ethers = require("ethers");
 const { getClient } = require("@reservoir0x/reservoir-sdk");
 const { createClient } = require("@reservoir0x/reservoir-sdk");
-const { CLIENT_URL } = require("../../../../server");
+const { CLIENT_URL, newSnipeUpdate } = require("../../../../server");
 
 // reservoir client
 createClient({
@@ -31,39 +31,50 @@ const fullfillSnipeTasks = async listing => {
 
 async function fullfillOrder(listing, collectionTask) {
   try {
+    const { walletAddress, taskOwner, privateKey, taskId } = collectionTask;
     console.log("sniping");
 
-    const { price: listingPrice, protocolData } = listing;
-    const { walletAddress, privateKey } = collectionTask;
+    const data = {
+      type: "pending",
+      taskId,
+    };
+    newSnipeUpdate(taskOwner, data);
 
-    const provider = getProvider();
-    const signer = new ethers.Wallet(privateKey, provider);
+    // const { price: listingPrice, protocolData } = listing;
 
-    console.log(protocolData);
-    const snipe = await getClient()?.actions.buyToken({
-      taker: walletAddress,
-      signer,
-      skipBalanceCheck: true,
-      quantity: 1,
-      normalizeRoyalties: false,
-      allowInactiveOrderIds: false,
-      rawOrders: [
-        {
-          data: {
-            protocolData,
-          },
-          kind: "seaport-v1.4",
-        },
-      ],
-      // expectedPrice: listingPrice,
-      onProgress: progress => {
-        console.log(progress);
-      },
-    });
+    // const provider = getProvider();
+    // const signer = new ethers.Wallet(privateKey, provider);
 
-    console.log(snipe);
+    // console.log(protocolData);
+    // const snipe = await getClient()?.actions.buyToken({
+    //   taker: walletAddress,
+    //   signer,
+    //   skipBalanceCheck: true,
+    //   quantity: 1,
+    //   normalizeRoyalties: false,
+    //   allowInactiveOrderIds: false,
+    //   rawOrders: [
+    //     {
+    //       data: {
+    //         protocolData,
+    //       },
+    //       kind: "seaport-v1.4",
+    //     },
+    //   ],
+    //   // expectedPrice: listingPrice,
+    //   onProgress: progress => {
+    //     console.log(progress);
+    //   },
+    // });
+
+    // console.log(snipe);
   } catch (err) {
     // console.log(err);
+    const data = {
+      type: "failed",
+      taskId,
+    };
+    newSnipeUpdate(taskOwner, data);
     console.log(err.message);
   }
 }
