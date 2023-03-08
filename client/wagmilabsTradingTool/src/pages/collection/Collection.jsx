@@ -745,11 +745,7 @@ const Collection = () => {
         >
           Charts
         </div>
-        <div
-          section="leaderboard"
-          // onClick={e => changeCollectionSection(e)}
-          className="single-collection-section not-allowed"
-        >
+        <div section="leaderboard" onClick={e => changeCollectionSection(e)} className="single-collection-section">
           Leaderboard
         </div>
       </div>
@@ -794,7 +790,7 @@ const Collection = () => {
         } else if (section === "charts") {
           return <Charts />;
         } else if (section === "leaderboard") {
-          return <Leaderboard />;
+          return <Leaderboard address={address} />;
         }
       })()}
     </>
