@@ -11,16 +11,12 @@ import { pushToServer, deleteFromServer } from "../../../../utils/functions";
 import moment from "moment";
 import "./style.scss";
 import { useOnClickOutside } from "@Hooks";
+import { adminAddresses } from "@Utils/adminAddresses";
 
 export const WeeklyCalendar = ({ sectionData, refetch }) => {
   const [selectedEvents, setSelectedEvents] = useState([]);
   const { address } = useAccount();
-  const allowedAddresses = [
-    "0x8d50Ca23bDdFCA6DB5AE6dE31ca0E6A17586E5B8",
-    "0xfe697C5527ab86DaA1e4c08286D2bE744a0E321E",
-    "0x7FAC7b0161143Acfd80257873FB9cDb3F316C10C",
-  ];
-  const isAdmin = allowedAddresses.includes(address);
+  const isAdmin = adminAddresses.includes(address);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedDate, setSelectedDate] = useState(null);
   const [curEventDetail, setCurEventDetail] = useState(null);
@@ -135,6 +131,7 @@ export const WeeklyCalendar = ({ sectionData, refetch }) => {
         onOpen={onOpen}
         section="spaces"
         onSave={onSave}
+        isAdmin={isAdmin}
       />
       <Row>
         <Col className="calendar-hours-inner-container">

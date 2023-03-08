@@ -6,6 +6,7 @@ import { LoadingSpinner, Number } from "@Components";
 import { useNavigate } from "react-router-dom";
 import { Tooltip } from "@chakra-ui/react";
 import { getTaxValue } from "./functions";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 export const Row = React.memo(
   ({ nft, allInfo, taxPerc, taxedOn, currency, tokensInfo, longTermTax, isFetchingInitialData }) => {
@@ -22,15 +23,17 @@ export const Row = React.memo(
             <LoadingSpinner />
           ) : (
             <>
-              <img
+              <LazyLoadImage
                 src={tokenInfo?.image || placeholderImage}
+                className="nft-img"
+                effect="blur"
+                placeholderSrc={placeholderImage}
+                alt={"#" + nft.nft.id}
+                width={70}
                 onError={({ currentTarget }) => {
                   currentTarget.onerror = null; // prevents looping
                   currentTarget.src = placeholderImage;
                 }}
-                alt={"#" + nft.nft.id}
-                width={70}
-                className="nft-img"
               />
               <div className="nft-text">
                 {isMinted ? <div className="mint-label">Minted</div> : <></>}

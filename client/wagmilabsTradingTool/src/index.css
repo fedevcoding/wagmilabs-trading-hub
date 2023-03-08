@@ -86,6 +86,10 @@ body.overflow-hidden {
   align-items: center;
 }
 
+.clearfix {
+  clear: both;
+}
+
 .text-center {
   text-align: center;
 }
@@ -122,15 +126,11 @@ body.overflow-hidden {
   }
 }
 
-
-
 .not-allowed {
   cursor: not-allowed;
 }
 
-
 .flex-col {
   display: flex;
   flex-direction: column;
-
 }

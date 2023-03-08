@@ -7,7 +7,7 @@ const dropsRoute = express();
 
 const { lruCache } = require("../../../services/cache/lru");
 
-dropsRoute.get("/", async (req, res) => {
+dropsRoute.get("/", checkAuth, async (req, res) => {
     const ttl = 6 * 60 * 60 * 1000;
     
     try {

@@ -23,6 +23,7 @@ export const formatEventInfo = (eventInfo, section, links) => {
       eventToSave.eventName = eventInfo.name;
       eventToSave.eventDescription = eventInfo.eventDescription;
       eventToSave.eventLocation = eventInfo.eventLocation;
+      eventToSave.more = eventInfo.more;
       break;
     case "personal":
       eventToSave.event = {
@@ -36,6 +37,7 @@ export const formatEventInfo = (eventInfo, section, links) => {
       eventToSave.spaceName = eventInfo.name;
       eventToSave.spaceDescription = eventInfo.eventDescription;
       eventToSave.spaceHost = eventInfo.spaceHost;
+      eventToSave.more = eventInfo.more;
       break;
     default:
       break;

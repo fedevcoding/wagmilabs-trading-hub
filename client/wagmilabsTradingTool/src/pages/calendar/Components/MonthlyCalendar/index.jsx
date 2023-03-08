@@ -154,13 +154,13 @@ export const MonthlyCalendar = React.memo(
           onSave={onSave}
           section={section}
           selectedDate={selectedDate}
+          isAdmin={isAdmin}
         />
         <Row>
           <Col className="calendar-left-inner-container">
             <MonthSwitch currentDate={currentDate} changeDate={changeDate} />
             <CalendarHeader />
             {renderlist()}
-            {console.log('ooo',chunkDaysInMonth)}
           </Col>
 
           <Col className="calendar-right-inner-container-m">

@@ -19,8 +19,9 @@ export const SettingsAndFilters = React.memo(({ startDate, endDate, setStartDate
           {moment(startDate).format("MMM DD, YYYY")} - {moment(endDate).format("MMM DD, YYYY")}
         </p>
         <div>
+          <div />
           <Button
-            className="btn-settings"
+            className="btn-settings btn-export"
             onClick={() => exportData(data, settings.taxedOn, settings.taxPerc, settings.longTermTax)}
           >
             Export data

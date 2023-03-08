@@ -68,10 +68,10 @@ export const Table = React.memo(({ data, taxPerc, taxedOn, currency, longTermTax
       </table>
     </>
   ) : (
-    <h3 className="text-center">
-      <img src={notFound} alt="best offer" width={100} />
+    <p className="text-center">
+      <img src={notFound} alt="best offer" width={150} />
       <br />
       No NFTs were found in this range!
-    </h3>
+    </p>
   );
 });

@@ -7,7 +7,7 @@ const spacesRoute = express();
 
 const { lruCache } = require("../../../services/cache/lru");
 
-spacesRoute.get("/", async (req, res) => {
+spacesRoute.get("/", checkAuth, async (req, res) => {
     const ttl = 6 * 60 * 60 * 1000;
 
     try {
@@ -29,11 +29,23 @@ spacesRoute.get("/", async (req, res) => {
 
 spacesRoute.post('/', checkAuth, checkAdmin, async (req, res) => {
     const isAdmin = req.isAdmin;
-    const { timestamp,spaceName,links,spaceDescription,spaceHost } = req.body || {};
+    const { timestamp, spaceName, links, spaceDescription, spaceHost, more } = req.body || {};
+    const event = { timestamp,spaceName,links,spaceDescription,spaceHost };
 
     try {
         if (isAdmin) {
-            const spaces = await Spaces.create({ timestamp,spaceName,links,spaceDescription,spaceHost })
+            const nextEvents = [event];
+            const oneDayInMilliseconds = 86400000;
+            if (more && parseInt(more) > 0) {
+                Array.from(Array(parseInt(more))).forEach((_, index) => {
+                    const nextTimestamp = timestamp + ((index + 1) * oneDayInMilliseconds);
+                    nextEvents.push({...event, timestamp: nextTimestamp});
+                });
+                const spaces = await Spaces.create(nextEvents);
+                if (!spaces) throw Error('Something went wrong saving multiple admin spaces events');
+                return res.status(200).json({spaces});
+            } 
+            const spaces = await Spaces.create(event);
             if (!spaces) throw Error('Something went wrong saving the admin spaces event');
             return res.status(200).json({spaces});
         } else {

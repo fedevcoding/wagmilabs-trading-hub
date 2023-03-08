@@ -24,6 +24,7 @@ import { UserDataContext } from "@Context";
 
 import copy from "copy-to-clipboard";
 import { useSetPageTitle } from "@Hooks";
+import { ProfitCalcModal } from "@Components";
 
 const sortItemsOptions = [
   { value: "desc", label: "Newest" },
@@ -62,6 +63,7 @@ const Profile = () => {
   const [showPromoBanner, setShowPromoBanner] = useState(true);
 
   const [copyState, setCopyState] = useState({ ens: "Copy", address: "Copy" });
+  const [isOpen, setIsOpen] = React.useState(false);
 
   useEffect(() => {
     fetchUserData();
@@ -733,14 +735,10 @@ const Profile = () => {
 
           <div className="profile-watchList-settings">
             <div className="profile-settings">
-              <a
-                className="profile-calcs-button"
-                href="https://profitcalc.wagmilabs.tools/"
-                target="_blank"
-                rel="noreferrer"
-              >
+              <span className="profile-calcs-button" onClick={() => setIsOpen(true)}>
                 Calcs<i className="fa-solid fa-calculator"></i>
-              </a>
+              </span>
+              <ProfitCalcModal isOpen={isOpen} setIsOpen={setIsOpen} />
               <div className="profile-settings-button" onClick={() => toggleListingSettings(true)}>
                 Smart list settings<i className="fa-solid fa-gear"></i>
               </div>

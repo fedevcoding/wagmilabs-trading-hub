@@ -43,7 +43,9 @@ export const CalendarEventDetail = ({ event, deleteEvent, isAdmin, section }) =>
       {event?.links && (
         <>
           {Object.keys(event?.links).map(key => (
-            <IconLink type={key} link={event?.links[key]} />
+            <>
+            {key && (<IconLink type={key} link={event?.links[key]} />)}
+            </>
           ))}
         </>
       )}

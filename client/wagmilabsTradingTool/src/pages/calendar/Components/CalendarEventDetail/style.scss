@@ -13,6 +13,28 @@
   overflow-y: scroll;
 }
 
+.calendar-event-detail::-webkit-scrollbar{
+  width: 14px;
+  background-color: transparent;
+}
+  
+.calendar-event-detail::-webkit-scrollbar-thumb{
+  background:white;
+  border-radius: 5px;
+  border-right: 2px black solid;
+  border-left: 2px black solid;
+}
+
+.calendar-event-detail::-webkit-scrollbar-track-piece:end {
+  background: transparent;
+  margin-bottom: 14px; 
+}
+
+.calendar-event-detail::-webkit-scrollbar-track-piece:start {
+  background: transparent;
+  margin-top: 14px;
+}
+
 .arrow-right {
   width: 0;
   height: 0;
