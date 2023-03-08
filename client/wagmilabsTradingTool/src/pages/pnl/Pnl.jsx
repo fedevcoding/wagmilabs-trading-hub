@@ -13,7 +13,7 @@ export default React.memo(() => {
   const { address } = useAccount();
   useSetPageTitle("Portfolio P&L | Wagmi Labs");
   const { startDate, endDate, setStartDate, setEndDate } = useTimeframe();
-  const { data } = useGetData(address, startDate, endDate);
+  const { data, isLoading } = useGetData(address, startDate, endDate);
   const settings = useSettings();
 
   return (
@@ -42,7 +42,7 @@ export default React.memo(() => {
         </Col>
       </Row>
       <Card>
-        {data ? (
+        {data && !isLoading ? (
           <Table
             data={data}
             taxPerc={settings.taxPerc}
