@@ -391,3 +391,247 @@
 
 
 }
+
+@media screen and (max-width: 1400px) {
+
+    .profilePfp {
+        width: 60px;
+        height: 60px;
+    }
+
+    .profileDetails {
+        font-size: 14px;
+    }
+
+    .profilePnl {
+        font-size: 14px;
+    }
+
+    .profile-settings {
+        font-size: 14px;
+    }
+
+    .profile-filters {
+        font-size: 14px;
+    }
+
+    .profile-sections {
+        font-size: 14px;
+    }
+
+    .profile-sort-items {
+        font-size: 14px;
+    }
+}
+
+@media screen and (max-width: 1300px) {
+    .profile-promo-container {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 1000px) {
+
+    .profilePfp {
+        width: 50px;
+        height: 50px;
+    }
+
+    .profileDetails {
+        font-size: 12px;
+    }
+
+    .profilePnl {
+        font-size: 12px;
+    }
+
+    .profile-settings {
+        font-size: 12px;
+    }
+
+    .profile-filters {
+        font-size: 12px;
+    }
+
+    .profile-sections {
+        font-size: 12px;
+    }
+
+    .profile-sort-items {
+        font-size: 12px;
+    }
+
+    .profile-list-nft.inactive {
+        opacity: 1;
+    }
+}
+
+@media screen and (max-width: 900px) {
+
+    .profilePfp {
+        width: 50px;
+        height: 50px;
+    }
+
+    .profile-details-container {
+        gap: 10px;
+        text-align: center;
+        align-items: center;
+        padding-left: 10px;
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+
+    .profileDetails {
+        font-size: 12px;
+    }
+
+    .profilePnl {
+        font-size: 12px;
+    }
+
+    .profile-settings {
+        font-size: 12px;
+    }
+
+    .profile-filters {
+        font-size: 12px;
+    }
+
+    .profile-sections {
+        font-size: 12px;
+    }
+
+    .profile-sort-items {
+        font-size: 12px;
+    }
+}
+
+@media screen and (max-width: 800px) {
+    .single-profile-section.not-allowed {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 700px) {
+
+    .profilePfp {
+        margin-top: 20px;
+    }
+
+    .profile-container {
+        gap: 20px;
+    }
+
+    .profileDetails {
+        font-size: 10px;
+    }
+
+    .profilePnl {
+        font-size: 10px;
+    }
+}
+
+@media screen and (max-width: 620px) {
+
+
+    .profile-container {
+        gap: 20px;
+        height: 220px;
+    }
+
+    .profile-sections-tabs {
+        margin-top: 0px;
+    }
+
+    .profileDetails {
+        height: 85%;
+    }
+
+    .profilePnl {
+        height: 85%;
+    }
+
+    .profile-settings {
+        font-size: 10px;
+    }
+
+    .profile-filters {
+        font-size: 10px;
+    }
+
+    .profile-sections {
+        font-size: 10px;
+    }
+
+    .profile-sort-items {
+        font-size: 10px;
+    }
+}
+
+@media screen and (max-width: 575px) {
+
+    .profile-container {
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        height: unset;
+
+    }
+
+    .profile-details-container {
+        margin-bottom: 15px;
+    }
+
+    .profileDetails {
+        width: 50%;
+    }
+
+    .profile-sections-tabs {
+        margin-top: 15px;
+    }
+
+    .number-profits-losses {
+        margin-top: 15px;
+    }
+
+    .avg-pnl {
+        margin-top: 15px;
+        margin-bottom: 15px;
+        padding: unset;
+    }
+}
+
+@media screen and (max-width: 550px) {
+    .profileDetails {
+        width: 70%;
+    }
+
+    .profilePnl {
+        width: 90%;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .profileDetails {
+        width: 80%;
+    }
+
+    .profilePnl {
+        width: 95%;
+    }
+
+    .fa-solid.fa-gear {
+        display: none;
+    }
+
+    .fa-solid.fa-calculator {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 450px) {
+    .single-profile-section:hover {
+        display: none;
+    }
+}
