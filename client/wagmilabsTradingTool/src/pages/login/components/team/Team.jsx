@@ -95,7 +95,7 @@ const Team = () => {
               className={"entreprenistonImg"}
             />
           </a>
-          <a href="https://www.promoteandscale.com" target="_blank" rel="noreferrer">
+          <a href="https://luckytrader.com/" target="_blank" rel="noreferrer">
             <img
               src={"https://wagmilabs.tools/static/media/luckytrader.30b5019011b1ce6b1c5e.png"}
               alt="Wagmi Labs"

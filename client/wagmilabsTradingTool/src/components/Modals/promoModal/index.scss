@@ -39,3 +39,37 @@
     }
   }
 }
+
+.promo-modal-2 {
+  border-radius: 14px !important;
+
+  .close-btn {
+    position: absolute;
+    top: 25px;
+    right: 25px;
+    cursor: pointer;
+  }
+
+  .modal-body {
+    position: relative;
+
+    .title {
+      font-size: 33px;
+      padding: 0 30px;
+      text-align: center;
+    }
+
+    .body {
+      font-size: 22px;
+      font-weight: 400;
+      padding: 10px 5px;
+      text-align: center;
+    }
+
+    .button {
+      font-size: 18px;
+      padding: 25px 20px;
+      border-radius: 9px;
+    }
+  }
+}
