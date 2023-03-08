@@ -33,6 +33,8 @@ export const AddEventModal = React.memo(
       } else {
         const eventToSave = formatEventInfo(eventInfo, section, inputLinkList);
         onSave(eventToSave);
+        setInputLinkList([{ type: "", link: "" }]);
+        setEventInfo({});
       }
     };
 
