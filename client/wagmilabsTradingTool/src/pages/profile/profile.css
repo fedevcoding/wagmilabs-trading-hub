@@ -411,15 +411,7 @@
         font-size: 14px;
     }
 
-    .profile-filters {
-        font-size: 14px;
-    }
-
     .profile-sections {
-        font-size: 14px;
-    }
-
-    .profile-sort-items {
         font-size: 14px;
     }
 }
@@ -449,21 +441,10 @@
         font-size: 12px;
     }
 
-    .profile-filters {
-        font-size: 12px;
-    }
-
     .profile-sections {
         font-size: 12px;
     }
 
-    .profile-sort-items {
-        font-size: 12px;
-    }
-
-    .profile-list-nft.inactive {
-        opacity: 1;
-    }
 }
 
 @media screen and (max-width: 900px) {
@@ -494,15 +475,7 @@
         font-size: 12px;
     }
 
-    .profile-filters {
-        font-size: 12px;
-    }
-
     .profile-sections {
-        font-size: 12px;
-    }
-
-    .profile-sort-items {
         font-size: 12px;
     }
 }
@@ -556,15 +529,7 @@
         font-size: 10px;
     }
 
-    .profile-filters {
-        font-size: 10px;
-    }
-
     .profile-sections {
-        font-size: 10px;
-    }
-
-    .profile-sort-items {
         font-size: 10px;
     }
 }

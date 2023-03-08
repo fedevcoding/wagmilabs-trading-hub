@@ -631,3 +631,49 @@
 .profile-items-image-items {
     position: relative;
 }
+
+
+
+
+
+
+
+
+
+
+@media screen and (max-width: 1400px) {
+
+    .profile-filters {
+        font-size: 14px;
+    }
+
+    .profile-sort-items {
+        font-size: 14px;
+    }
+}
+
+@media screen and (max-width: 1000px) {
+    .profile-list-nft.inactive {
+        opacity: 1;
+    }
+
+    .profile-filters {
+        font-size: 12px;
+    }
+
+    .profile-sort-items {
+        font-size: 12px;
+    }
+}
+
+@media screen and (max-width: 620px) {
+
+    .profile-filters {
+        font-size: 10px;
+    }
+
+
+    .profile-sort-items {
+        font-size: 10px;
+    }
+}
