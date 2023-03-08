@@ -7,7 +7,8 @@ import LinkIcon from "../../../../assets/earth-globe.png";
 import "./style.scss";
 
 const matchIcon = type => {
-  switch (type) {
+  const formattedType = type.toLowerCase();
+  switch (formattedType) {
     case "twitter":
       return Twitter;
     case "discord":

@@ -35,10 +35,10 @@ spacesRoute.post('/', checkAuth, checkAdmin, async (req, res) => {
     try {
         if (isAdmin) {
             const nextEvents = [event];
-            const oneHourInMilliseconds = 3600000;
+            const oneDayInMilliseconds = 86400000;
             if (more && parseInt(more) > 0) {
                 Array.from(Array(parseInt(more))).forEach((_, index) => {
-                    const nextTimestamp = timestamp + ((index + 1) * oneHourInMilliseconds);
+                    const nextTimestamp = timestamp + ((index + 1) * oneDayInMilliseconds);
                     nextEvents.push({...event, timestamp: nextTimestamp});
                 });
                 const spaces = await Spaces.create(nextEvents);
