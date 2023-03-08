@@ -790,7 +790,7 @@ const Collection = () => {
         } else if (section === "charts") {
           return <Charts />;
         } else if (section === "leaderboard") {
-          return <Leaderboard />;
+          return <Leaderboard address={address} />;
         }
       })()}
     </>
