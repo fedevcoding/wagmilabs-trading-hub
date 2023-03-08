@@ -20,3 +20,4 @@ export { useProvider } from "./useProvider";
 export { useWeb3Utils } from "./useWeb3Utils";
 export { useUpdateBalance } from "./useUpdateBalances";
 export { useCopy } from "./useCopy";
+export { useOnClickOutside } from "./useOnClickOutside";

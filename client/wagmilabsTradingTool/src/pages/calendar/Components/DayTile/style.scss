@@ -1,0 +1,27 @@
+.day-container {
+  display: flex;
+  flex: 1;
+  width: 72px;
+  height: 92px;
+  background-color: #616161;
+  justify-content: start;
+  align-items: center;
+  border-radius: 10px;
+  margin: 5px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  flex-direction: column;
+  border: 3px solid #616161;
+  cursor: pointer;
+}
+
+.not-curr-day {
+  background-color: #414141;
+}
+
+.selected-tile {
+  border: 3px solid rgb(49, 130, 206);
+  box-shadow: inset 0 0 8px rgba(49, 130, 206, 0.8);
+  height: 92px;
+}

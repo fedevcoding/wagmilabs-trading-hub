@@ -20,9 +20,9 @@ profileStatsRoute.get("/:address", checkAuth, async (req, res) => {
     }
     else {
 
-        await Stats.create({ type: "profileStats", timestamp: Date.now(), address })
-
         try {
+            await Stats.create({ type: "profileStats", timestamp: Date.now(), address })
+
             let data = await fetch(`https://api.upshot.xyz/v2/wallets/${address}/stats`, {
                 headers: {
                     "x-api-key": UPSHOT_API_KEY

@@ -1,0 +1,25 @@
+.calendar-right-inner-container {
+  display: flex;
+  flex: 1;
+  border: 1px solid white;
+  border-radius: 10px;
+  justify-content: center;
+}
+
+.selected-date-title {
+  padding: 10px 0px 10px 0px;
+}
+
+.btn-spacing {
+  margin: 10px 0px 10px 0px;
+}
+
+.calendar-row {
+  display: flex;
+  flex: 1;
+}
+
+.main-title {
+  justify-content: center;
+  padding-bottom: 15px;
+}

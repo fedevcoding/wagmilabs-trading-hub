@@ -39,9 +39,12 @@ const profileActivityRoute = require("./routes/ethereum/profile/profileActivityR
 const profileTradedCollectionsRoute = require("./routes/ethereum/profile/profileTradedCollectionsRoute.js");
 const collectionListingsRoute = require("./routes/ethereum/collections/collectionListingsRoute.js");
 const collectionSalesRoute = require("./routes/ethereum/collections/collectionSalesRoute.js");
+const dropsRoute = require("./routes/ethereum/calendars/dropsRoute.js");
+const eventsRoute = require("./routes/ethereum/calendars/eventsRoute.js");
+const personalRoute = require("./routes/ethereum/calendars/personalRoute.js");
+const spacesRoute = require("./routes/ethereum/calendars/spacesRoute.js");
 const pAndLRoute = require("./routes/ethereum/pAndLRoute.js");
 const collectionHolders = require("./routes/ethereum/collections/holders.js");
-
 //
 
 // port
@@ -205,6 +208,10 @@ app.use("/api/v1/wagmilabs/profileActivity", profileActivityRoute);
 app.use("/api/v1/wagmilabs/profileTradedCollections", profileTradedCollectionsRoute);
 app.use("/api/v1/wagmilabs/collectionListings", collectionListingsRoute);
 app.use("/api/v1/wagmilabs/collectionSales", collectionSalesRoute);
+app.use("/api/v1/wagmilabs/drops", dropsRoute);
+app.use("/api/v1/wagmilabs/events", eventsRoute);
+app.use("/api/v1/wagmilabs/personal", personalRoute);
+app.use("/api/v1/wagmilabs/spaces", spacesRoute);
 
 app.use("/api/v1/wagmilabs/userBalances", userBalancesRoute);
 app.use("/api/v1/wagmilabs/searchCollection", searchCollectionsRoute);
