@@ -23,6 +23,15 @@ export const useHandleData = (activeSnipes, setActiveSnipes) => {
       const newTasks = activeSnipes.filter(snipe => snipe.taskId !== data);
       setActiveSnipes(newTasks);
     }
+    if (state === "restart") {
+      const newTasks = activeSnipes.map(task => {
+        if (task.taskId === data) {
+          return { ...task, status: "active" };
+        }
+        return { ...task };
+      });
+      setActiveSnipes(newTasks);
+    }
   };
 
   const handleTaskUpdate = data => {

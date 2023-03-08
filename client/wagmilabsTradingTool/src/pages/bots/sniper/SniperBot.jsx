@@ -16,19 +16,19 @@ const SniperBot = () => {
 
   const { address } = useAccount();
   const socket = useContext(SocketContext);
-  useEffect(() => {
-    if (address) {
-      socket.emit("joinSnipeUpdates", address);
+  // useEffect(() => {
+  //   if (address) {
+  //     socket.emit("joinSnipeUpdates", address);
 
-      socket.off("newSnipeUpdates").on("newSnipeUpdates", data => {
-        handleTaskUpdate(data);
-      });
-    }
+  //     socket.off("newSnipeUpdates").on("newSnipeUpdates", data => {
+  //       handleTaskUpdate(data);
+  //     });
+  //   }
 
-    return () => {
-      socket.emit("leaveSnipeUpdates", address);
-    };
-  }, [socket, address, handleTaskUpdate]);
+  //   return () => {
+  //     socket.emit("leaveSnipeUpdates", address);
+  //   };
+  // }, [socket, address, handleTaskUpdate]);
 
   return (
     <section className="sniper-bot-section">

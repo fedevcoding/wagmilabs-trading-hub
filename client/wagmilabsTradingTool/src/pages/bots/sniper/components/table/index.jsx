@@ -4,7 +4,7 @@ import React from "react";
 import { useEditTask } from "../../hooks/useEditTask";
 
 export const Table = ({ section, activeSnipes, toggleSnipe }) => {
-  const { removeTask } = useEditTask(1, toggleSnipe);
+  const { removeTask, restartTask } = useEditTask(undefined, toggleSnipe);
   return (
     <div className="table-wrapper">
       <table cellSpacing={0} className="table">
@@ -72,6 +72,7 @@ export const Table = ({ section, activeSnipes, toggleSnipe }) => {
                     </HStack>
                   </td>
                   <td>
+                    {status === "inactive" && <Button onClick={() => restartTask(taskId)}>Restart</Button>}
                     <Button className="btn btn-danger" onClick={() => removeTask(taskId)}>
                       Cancel
                     </Button>

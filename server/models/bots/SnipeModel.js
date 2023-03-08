@@ -54,6 +54,7 @@ const SnipeScheme = new mongoose.Schema(
         },
       },
     ],
+    activity: [],
   },
   {
     timestamps: true,

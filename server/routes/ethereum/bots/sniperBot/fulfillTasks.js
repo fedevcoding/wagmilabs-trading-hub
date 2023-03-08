@@ -12,6 +12,7 @@ createClient({
 
 const snipeTasks = require("../../../../services/botsCache/snipeBots/snipeTasks");
 const getProvider = require("../../../../services/ethers/getProvider");
+const updateTask = require("../../../../services/botsCache/snipeBots/updateTask");
 
 const fullfillSnipeTasks = async listing => {
   const { contractAddress, price: listingPrice } = listing;
@@ -34,11 +35,13 @@ async function fullfillOrder(listing, collectionTask) {
     const { walletAddress, taskOwner, privateKey, taskId } = collectionTask;
     console.log("sniping");
 
-    const data = {
+    const pendingData = {
+      property: "status",
+      value: "pending",
       type: "pending",
       taskId,
     };
-    newSnipeUpdate(taskOwner, data);
+    await updateTask(taskId, pendingData, taskOwner);
 
     // const { price: listingPrice, protocolData } = listing;
 
@@ -68,14 +71,23 @@ async function fullfillOrder(listing, collectionTask) {
     // });
 
     // console.log(snipe);
+
+    const fulfilledData = {
+      property: "status",
+      value: "fulfilled",
+      type: "fulfilled",
+      taskId,
+    };
+    await updateTask(taskId, fulfilledData, taskOwner);
   } catch (err) {
-    // console.log(err);
-    const data = {
+    console.log(err);
+    const failedData = {
+      property: "status",
+      value: "failed",
       type: "failed",
       taskId,
     };
-    newSnipeUpdate(taskOwner, data);
-    console.log(err.message);
+    await updateTask(taskId, failedData, taskOwner);
   }
 }
 

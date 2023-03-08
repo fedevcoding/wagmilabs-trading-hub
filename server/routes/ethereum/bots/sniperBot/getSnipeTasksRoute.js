@@ -13,7 +13,7 @@ getSnipeTasksRoute.get("/sniper/getTasks", checkAuth, async (req, res) => {
     const dbSnipeTasks = await Snipe.findOne({ address });
     const { tasks: dbtasks } = dbSnipeTasks || { tasks: [] };
 
-    const serverTasks = Object.values(snipeTasks)?.flatMap(arr => arr.filter(task => task.taskOwner === address));
+    const serverTasks = Object.values(snipeTasks)?.flatMap(arr => arr.filter(task => task?.taskOwner === address));
 
     // remove from snipeTasks task that are in server but not in db
     serverTasks.forEach(serverTask => {

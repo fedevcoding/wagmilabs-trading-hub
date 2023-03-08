@@ -10,6 +10,7 @@ export const useEditTask = (callback, toggleSnipe) => {
 
   const [addLoading, setAddLoading] = useState(false);
   const [removeLoading, setRemoveLoading] = useState(false);
+  const [restartingLoading, setRestartLoading] = useState(false);
 
   const saveTask = async data => {
     try {
@@ -58,7 +59,6 @@ export const useEditTask = (callback, toggleSnipe) => {
         duration: 3000,
         isClosable: true,
       });
-      setRemoveLoading(false);
     } catch (e) {
       console.log(e);
       toast({
@@ -68,9 +68,45 @@ export const useEditTask = (callback, toggleSnipe) => {
         duration: 3000,
         isClosable: true,
       });
+    } finally {
       setRemoveLoading(false);
     }
   };
 
-  return { saveTask, addLoading, removeTask, removeLoading };
+  const restartTask = async taskId => {
+    try {
+      setRestartLoading(true);
+      const privateKey = "0xecc615212e9c1fb060c3df4514d82e599318c4bbdf282f03078d99fdd04a69f4";
+      const body = {
+        data: {
+          taskId,
+          privateKey,
+        },
+        type: "restart",
+      };
+      await pushToServer("/bots/sniper/editTask", body);
+
+      toggleSnipe("restart", taskId);
+      toast({
+        title: "Task restarted",
+        description: "Task restarted successfully",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+    } catch (e) {
+      console.log(e);
+      toast({
+        title: "Error",
+        description: "Something went wrong",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    } finally {
+      setRestartLoading(false);
+    }
+  };
+
+  return { saveTask, addLoading, removeTask, removeLoading, restartTask };
 };
