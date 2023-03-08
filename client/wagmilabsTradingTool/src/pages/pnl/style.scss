@@ -20,6 +20,10 @@
       padding: 0.6rem 1.5rem;
       width: 200px;
 
+      &.btn-export {
+        width: auto;
+      }
+
       i {
         margin-left: 0.5rem;
       }
@@ -31,6 +35,11 @@
 
     .timeframe {
       margin: 2rem 0 0.5rem;
+
+      & + div {
+        display: flex;
+        justify-content: space-between;
+      }
     }
   }
 
