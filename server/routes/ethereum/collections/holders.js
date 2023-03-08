@@ -7,24 +7,28 @@ const holdersRoute = express();
 
 holdersRoute.get("/:address/get-holders", checkAuth, async (req, res) => {
   const { address } = req.params;
+  const { sort, direction } = req.query;
   let data = {};
 
   try {
     data = await lruCache(
-      fetch(`https://api.upshot.xyz/v2/collections/${address}/holders`, {
-        method: "GET",
-        headers: {
-          accept: "application/json",
-          "x-api-key": process.env.UPSHOT_API_KEY,
-        },
-      }),
+      (
+        await fetch(
+          `https://api.upshot.xyz/v2/collections/${address}/holders?sort_order=${sort}&sort_direction=${direction}`,
+          {
+            method: "GET",
+            headers: {
+              accept: "application/json",
+              "x-api-key": process.env.UPSHOT_API_KEY,
+            },
+          }
+        )
+      ).json(),
       {
-        key: `upshot#collections#${address}#holders`,
+        key: `upshot#collections#${address}#holders#sort${sort}#direction${direction}`,
         ttl: 12 * 60 * 60 * 1000, // 12h,
       }
     );
-
-    data = await data.json();
   } catch (error) {
     // token not found or upshot api error
     console.log(error);

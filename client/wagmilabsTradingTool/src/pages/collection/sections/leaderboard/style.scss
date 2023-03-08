@@ -3,14 +3,45 @@
   padding: 1.5rem;
   margin-bottom: 2.5rem;
 
+  .card-component {
+    min-height: 400px;
+
+    .spinner {
+      margin: 5rem 0;
+      width: 100px;
+      height: 100px;
+    }
+  }
+
+  .sort-box {
+    float: right;
+    display: flex;
+    align-items: center;
+
+    .react-select {
+      margin-left: 1rem;
+      width: 280px;
+    }
+
+    #set-direction {
+      width: 170px;
+    }
+
+    + .sort-box {
+      margin-right: 2rem;
+    }
+  }
+
   table {
     width: 100%;
+    margin-top: 1rem;
 
     th {
       text-align: left;
       font-weight: bold;
       border-bottom: 1px solid #333;
       padding-bottom: 5px;
+      font-size: 14px;
     }
 
     tr:first-child td {

@@ -1,7 +1,7 @@
 import React from "react";
 import { getFromServer } from "@Utils";
 
-export function useGetData(address) {
+export function useGetData(address, sort, direction) {
   const [holders, setHolders] = React.useState(null);
   const [loading, setLoading] = React.useState(true);
 
@@ -11,7 +11,7 @@ export function useGetData(address) {
         setLoading(true);
         const {
           data: { holders: listHolders },
-        } = await getFromServer(`/collection/${address}/get-holders`);
+        } = await getFromServer(`/collection/${address}/get-holders?sort=${sort}&direction=${direction}`);
 
         setHolders(listHolders);
       } catch (error) {
@@ -21,7 +21,7 @@ export function useGetData(address) {
       }
     };
     getData();
-  }, [address]);
+  }, [address, sort, direction]);
 
   return { holders, loading };
 }
