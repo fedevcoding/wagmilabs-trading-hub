@@ -6,7 +6,7 @@ const eventsRoute = express();
 
 const { lruCache } = require("../../../services/cache/lru");
 
-eventsRoute.get("/", async (req, res) => {
+eventsRoute.get("/", checkAuth, async (req, res) => {
     const ttl = 6 * 60 * 60 * 1000;
 
     try {
@@ -28,11 +28,22 @@ eventsRoute.get("/", async (req, res) => {
 
 eventsRoute.post('/', checkAuth, checkAdmin, async (req, res) => {
     const isAdmin = req.isAdmin;
-    const { timestamp, eventName, links, eventDescription, eventLocation } = req.body || {};
-
+    const { timestamp, eventName, links, eventDescription, eventLocation, more } = req.body || {};
+    const event = { timestamp, eventName, links, eventDescription, eventLocation };
     try {
         if (isAdmin) {
-            const events = await Events.create({ timestamp, eventName, links, eventDescription, eventLocation })
+            const nextEvents = [event];
+            const oneDayInMilliseconds = 86400000;
+            if (more && parseInt(more) > 0) {
+                Array.from(Array(parseInt(more))).forEach((_, index) => {
+                    const nextTimestamp = timestamp + ((index + 1) * oneDayInMilliseconds);
+                    nextEvents.push({...event, timestamp: nextTimestamp});
+                });
+                const events = await Events.create(nextEvents);
+                if (!events) throw Error('Something went wrong saving multiple admin IRL events');
+                return res.status(200).json({events});
+            } 
+            const events = await Events.create(event)
             if (!events) throw Error('Something went wrong saving the admin IRL event');
             return res.status(200).json({events});
         } else {

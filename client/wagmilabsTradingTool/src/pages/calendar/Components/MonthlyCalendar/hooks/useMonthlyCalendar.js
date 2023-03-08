@@ -7,16 +7,12 @@ import moment from "moment";
 import { pushToServer, deleteFromServer } from "../../../../../utils/functions";
 import { useOnClickOutside } from "@Hooks";
 import { getDaysInMonth } from "./useGetDaysInMonth";
+import { adminAddresses } from "@Utils/adminAddresses";
 
 export const useMonthlyCalendar = ({sectionData, section, refetch}) => {
   const { address } = useAccount();
-  const allowedAddresses = [
-    "0x8d50Ca23bDdFCA6DB5AE6dE31ca0E6A17586E5B8",
-    "0xfe697C5527ab86DaA1e4c08286D2bE744a0E321E",
-    "0x7FAC7b0161143Acfd80257873FB9cDb3F316C10C",
-  ];
   const [slideLeft, setSlideLeft] = useState(true);
-  const isAdmin = allowedAddresses.includes(address);
+  const isAdmin = adminAddresses.includes(address);
   const today = new Date();
   const [selectedDate, setSelectedDate] = useState(null);
   const [currentDate, setCurrentDate] = useState(today);

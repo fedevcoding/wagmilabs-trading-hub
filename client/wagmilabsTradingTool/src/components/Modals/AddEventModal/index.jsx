@@ -18,7 +18,7 @@ import "./style.scss";
 import { formatEventInfo } from "./utils/formatEventInfo";
 
 export const AddEventModal = React.memo(
-  ({ isOpen, onClose, onSave, section, selectedDate }) => {
+  ({ isOpen, onClose, onSave, section, selectedDate, isAdmin }) => {
     const [eventInfo, setEventInfo] = useState({});
     const [inputLinkList, setInputLinkList] = useState([{ type: "", link: "" }]);
     const { isOpen: isOpenAlert, onOpen: onOpenAlert, onClose: onCloseAlert } = useDisclosure();
@@ -81,6 +81,9 @@ export const AddEventModal = React.memo(
         case "spaceHost":
           setEventInfo(prev => ({ ...prev, spaceHost: value }));
           break;
+        case "more":
+          setEventInfo(prev => ({ ...prev, more: value }));
+          break;
         default:
           break;
       }
@@ -122,6 +125,18 @@ export const AddEventModal = React.memo(
               preventOpenOnFocus
               showMonthYearDropdown={false}
             />
+            {isAdmin && (section === 'events' || section === 'spaces') && (
+              <div className="field-container">
+                More
+                <NumberInput>
+                  <NumberInputField
+                    placeholder="More"
+                    color={"white"}
+                    onChange={e => updateEventInfo(e, "more", true)}
+                  />
+                </NumberInput>
+              </div>
+            )}
             <div className="field-container">
               Name *
               <HStack>
