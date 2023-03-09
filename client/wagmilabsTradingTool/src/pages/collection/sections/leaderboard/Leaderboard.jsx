@@ -15,7 +15,7 @@ const Leaderboard = React.memo(({ address }) => {
   return (
     <div id="leaderboard">
       <Card>
-        {loading || holders === null ? (
+        {holders === null ? (
           <LoadingSpinner />
         ) : (
           <>
@@ -65,6 +65,14 @@ const Leaderboard = React.memo(({ address }) => {
                     </tr>
                   </thead>
                   <tbody>
+                    {(loading && (
+                      <tr>
+                        <td colSpan={11}>
+                          <LoadingSpinner />
+                        </td>
+                      </tr>
+                    )) ||
+                      ""}
                     {holders.map((h, i) => (
                       <Row h={h} i={i} />
                     ))}
