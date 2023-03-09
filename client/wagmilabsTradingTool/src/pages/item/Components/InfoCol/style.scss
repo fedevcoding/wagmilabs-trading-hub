@@ -23,10 +23,15 @@
     cursor: pointer;
   }
 
-  .owner-buttons {
+  .owner-buttons,
+  .top-right-buttons {
     display: flex;
-    i {
+    i:not(.fa-refresh) {
       margin-right: 0.5rem;
+    }
+
+    .refresh-btn {
+      min-width: fit-content;
     }
   }
 }
