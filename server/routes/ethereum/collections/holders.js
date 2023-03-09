@@ -14,7 +14,7 @@ holdersRoute.get("/:address/get-holders", checkAuth, async (req, res) => {
     data = await lruCache(
       (
         await fetch(
-          `https://api.upshot.xyz/v2/collections/${address}/holders?sort_order=${sort}&sort_direction=${direction}`,
+          `https://api.upshot.xyz/v2/collections/${address}/holders?sort_order=${sort}&sort_direction=${direction}&limit=100`,
           {
             method: "GET",
             headers: {
