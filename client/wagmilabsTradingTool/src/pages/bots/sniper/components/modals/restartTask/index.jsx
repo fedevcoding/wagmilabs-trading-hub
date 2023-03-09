@@ -1,10 +1,14 @@
 import React from "react";
 
-export const RestartTaskModal = () => {
+export const RestartTaskModal = ({ showRestartTaskModal, restartModalData, closerestartModal, restartTask }) => {
   return (
     <>
-      <div>Restart task</div>
-      <p>Select wallet</p>
+      {showRestartTaskModal && (
+        <>
+          <div>Restart task {restartModalData.taskId}</div>
+          <p>Select wallet</p>
+        </>
+      )}
     </>
   );
 };

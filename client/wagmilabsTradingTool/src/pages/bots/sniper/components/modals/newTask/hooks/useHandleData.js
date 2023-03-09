@@ -1,21 +1,24 @@
 import { useState, useEffect, useMemo } from "react";
 
+const defaultData = {
+  collectionName: undefined,
+  collectionImage: undefined,
+  collectionAddress: undefined,
+  minPrice: undefined,
+  maxPrice: undefined,
+  walletType: "privatekey",
+  walletAddress: undefined,
+  privateKey: undefined,
+  maxFeePerGas: undefined,
+  maxFeePerGasType: "auto",
+  maxPriorityFeePerGas: undefined,
+  maxAutoBuy: undefined,
+  status: "active",
+  remaining: undefined,
+};
+
 export const useHandleData = (wallets, step) => {
-  const [data, setData] = useState({
-    collectionName: undefined,
-    collectionImage: undefined,
-    collectionAddress: undefined,
-    minPrice: undefined,
-    maxPrice: undefined,
-    walletType: "privatekey",
-    walletAddress: undefined,
-    privateKey: undefined,
-    maxFeePerGas: undefined,
-    maxFeePerGasType: "auto",
-    maxPriorityFeePerGas: undefined,
-    maxAutoBuy: undefined,
-    status: "active",
-  });
+  const [data, setData] = useState(defaultData);
 
   useEffect(() => {
     if (data?.walletAddress?.length > 0 && wallets?.length > 0) {
@@ -65,21 +68,7 @@ export const useHandleData = (wallets, step) => {
   }, [data, step]);
 
   const resetData = () => {
-    setData({
-      collectionName: undefined,
-      collectionImage: undefined,
-      collectionAddress: undefined,
-      minPrice: undefined,
-      maxPrice: undefined,
-      walletType: "privatekey",
-      walletAddress: undefined,
-      privateKey: undefined,
-      maxFeePerGas: undefined,
-      maxFeePerGasType: "auto",
-      maxPriorityFeePerGas: undefined,
-      maxAutoBuy: undefined,
-      status: "active",
-    });
+    setData(defaultData);
   };
 
   const {

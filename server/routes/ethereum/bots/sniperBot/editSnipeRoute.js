@@ -23,6 +23,7 @@ editSnipeRoute.post("/sniper/editTask", checkAuth, async (req, res) => {
         collectionAddress,
         collectionName,
         collectionImage,
+        remaining,
         taskId,
       } = data;
 
@@ -33,7 +34,8 @@ editSnipeRoute.post("/sniper/editTask", checkAuth, async (req, res) => {
         !walletAddress ||
         !maxAutoBuy ||
         !maxPriorityFeePerGas ||
-        !taskId
+        !taskId ||
+        !remaining
       )
         throw new Error("missinng data");
 
@@ -44,6 +46,7 @@ editSnipeRoute.post("/sniper/editTask", checkAuth, async (req, res) => {
         maxPrice,
         walletAddress,
         maxAutoBuy,
+        remaining,
         maxPriorityFeePerGas,
         taskOwner,
         collectionName,
@@ -51,7 +54,7 @@ editSnipeRoute.post("/sniper/editTask", checkAuth, async (req, res) => {
         taskId,
       };
 
-      await Snipe.findOneAndUpdate({ address: taskOwner }, { $push: { tasks: task } }, { upsert: true });
+      await Snipe.updateOne({ address: taskOwner }, { $push: { tasks: task } }, { upsert: true });
 
       addSnipe(task, collectionAddress);
 
@@ -60,8 +63,7 @@ editSnipeRoute.post("/sniper/editTask", checkAuth, async (req, res) => {
       const taskId = data;
       if (!taskId) throw new Error("missing data");
 
-      await Snipe.updateOne({ address: taskOwner }, { $pull: { tasks: { taskId } } });
-      removeTask(taskId);
+      await removeTask(taskId, taskOwner);
 
       res.status(200).json("task removed");
     } else if (type === "restart") {

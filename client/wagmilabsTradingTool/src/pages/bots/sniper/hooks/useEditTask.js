@@ -16,12 +16,13 @@ export const useEditTask = (callback, toggleSnipe) => {
     try {
       setAddLoading(true);
 
-      const { privateKey, maxPrice, minPrice, maxFeePerGas, maxPriorityFeePerGas, maxFeePerGasType } = data;
+      const { privateKey, maxPrice, minPrice, maxFeePerGas, maxPriorityFeePerGas, maxFeePerGasType, maxAutoBuy } = data;
 
       const parsedMaxPrice = parseFloat(maxPrice) || undefined;
       const parsedMinPrice = parseFloat(minPrice) || undefined;
       const parsedMaxFeePerGas = maxFeePerGasType !== "auto" ? parseFloat(maxFeePerGas) || undefined : undefined;
       const parsedMaxPriorityFeePerGas = parseFloat(maxPriorityFeePerGas) || undefined;
+      const parsedMaxAutoBuy = parseFloat(maxAutoBuy) || undefined;
 
       const taskId = crypto.randomUUID();
 
@@ -32,6 +33,8 @@ export const useEditTask = (callback, toggleSnipe) => {
       data["maxFeePerGas"] = parsedMaxFeePerGas;
       data["maxPriorityFeePerGas"] = parsedMaxPriorityFeePerGas;
       data["taskId"] = taskId;
+      data["maxAutoBuy"] = parsedMaxAutoBuy;
+      data["remaining"] = parsedMaxAutoBuy;
 
       const body = { data, type: "add" };
 
@@ -76,7 +79,7 @@ export const useEditTask = (callback, toggleSnipe) => {
   const restartTask = async taskId => {
     try {
       setRestartLoading(true);
-      const privateKey = "0xecc615212e9c1fb060c3df4514d82e599318c4bbdf282f03078d99fdd04a69f4";
+      const privateKey = "";
       const body = {
         data: {
           taskId,

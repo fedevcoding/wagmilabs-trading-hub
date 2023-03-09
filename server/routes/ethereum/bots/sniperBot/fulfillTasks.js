@@ -5,14 +5,27 @@ const { CLIENT_URL, newSnipeUpdate } = require("../../../../server");
 
 // reservoir client
 createClient({
-  apiBase: "https://api.reservoir.tools",
-  apiKey: "9a16bf8e-ec68-5d88-a7a5-a24044de3f38",
   source: CLIENT_URL,
+  chains: [
+    {
+      id: 1,
+      apiKey: "9a16bf8e-ec68-5d88-a7a5-a24044de3f38",
+      baseApiUrl: "https://api.reservoir.tools",
+      default: true,
+    },
+  ],
 });
 
 const snipeTasks = require("../../../../services/botsCache/snipeBots/snipeTasks");
 const getProvider = require("../../../../services/ethers/getProvider");
 const updateTask = require("../../../../services/botsCache/snipeBots/updateTask");
+const {
+  pendingSnipes,
+  addPendingSnipe,
+  removePendingSnipe,
+} = require("../../../../services/botsCache/snipeBots/pendingSnipes");
+const { updateActivity } = require("../../../../services/botsCache/snipeBots/activityTasks");
+const removeTask = require("../../../../services/botsCache/snipeBots/removeTask");
 
 const fullfillSnipeTasks = async listing => {
   const { contractAddress, price: listingPrice } = listing;
@@ -20,93 +33,136 @@ const fullfillSnipeTasks = async listing => {
   const collectionTasks = snipeTasks[contractAddress];
 
   if (!collectionTasks) return;
-  console.log("found listing");
 
   for (const collectionTask of collectionTasks) {
-    const { maxPrice } = collectionTask;
-    if (maxPrice >= listingPrice) {
-      fullfillOrder(listing, collectionTask);
+    const { maxPrice, minPrice, remaining, taskId } = collectionTask;
+    const pendingSnipesAmount = pendingSnipes[taskId] ?? 0;
+
+    if (
+      maxPrice >= listingPrice &&
+      (minPrice ? minPrice <= listingPrice : true) &&
+      remaining - pendingSnipesAmount > 0
+    ) {
+      console.log("sniping");
+      // fullfillOrder(listing, collectionTask);
     }
   }
 };
 
 async function fullfillOrder(listing, collectionTask) {
   try {
-    const { walletAddress, taskOwner, privateKey, taskId } = collectionTask;
-    console.log("sniping");
+    const {
+      walletAddress,
+      taskOwner,
+      taskId,
+      privateKey,
+      remaining,
+      collectionName,
+      collectionImage,
+      collectionAddress,
+    } = collectionTask;
+    addPendingSnipe(taskId);
 
     const pendingData = {
-      property: "status",
-      value: "pending",
-      type: "pending",
+      properties: [
+        {
+          key: "status",
+          value: "pending",
+        },
+      ],
       taskId,
     };
     await updateTask(taskId, pendingData, taskOwner);
 
-    // const { price: listingPrice, protocolData } = listing;
+    const { price: listingPrice, protocolData, tokenId } = listing;
 
-    // const provider = getProvider();
-    // const signer = new ethers.Wallet(privateKey, provider);
+    const provider = getProvider();
+    const signer = new ethers.Wallet(privateKey, provider);
 
-    // console.log(protocolData);
-    // const snipe = await getClient()?.actions.buyToken({
-    //   taker: walletAddress,
-    //   signer,
-    //   skipBalanceCheck: true,
-    //   quantity: 1,
-    //   normalizeRoyalties: false,
-    //   allowInactiveOrderIds: false,
-    //   rawOrders: [
-    //     {
-    //       data: {
-    //         protocolData,
-    //       },
-    //       kind: "seaport-v1.4",
-    //     },
-    //   ],
-    //   // expectedPrice: listingPrice,
-    //   onProgress: progress => {
-    //     console.log(progress);
-    //   },
-    // });
+    console.log(protocolData);
 
-    // console.log(snipe);
+    await new Promise(resolve => setTimeout(resolve, 5000));
 
-    const fulfilledData = {
-      property: "status",
-      value: "fulfilled",
-      type: "fulfilled",
+    protocolData.parameters["orderType"] = 2;
+    protocolData.parameters["kind"] = "single-token";
+
+    await getClient()?.actions.buyToken({
+      signer,
+      items: [
+        {
+          rawOrder: {
+            kind: "seaport-v1.4",
+            data: protocolData.parameters,
+          },
+        },
+      ],
+      options: {
+        skipBalanceCheck: true,
+      },
+      onProgress: progress => {
+        console.log(progress);
+      },
+      // expectedPrice
+    });
+
+    console.log(snipe);
+
+    const snipe = {
+      transactionHash: "0x90ae89fuaef8",
+      tokenId: "123",
+      tokenName: "test",
+      tokenImage: "test",
+    };
+
+    const { transactionHash, tokenName, tokenImage } = snipe;
+    const eventTimestamp = Date.now();
+
+    removePendingSnipe(taskId);
+    const buyData = {
+      properties: [
+        {
+          key: "status",
+          value: "active",
+        },
+        {
+          key: "remaining",
+          value: remaining - 1,
+        },
+      ],
       taskId,
     };
-    await updateTask(taskId, fulfilledData, taskOwner);
+    await updateTask(taskId, buyData, taskOwner);
+
+    const activityData = {
+      collectionAddress,
+      collectionName,
+      collectionImage,
+      tokenId,
+      tokenName,
+      tokenImage,
+      buyPrice: listingPrice,
+      status: "Fulfilled",
+      taskOwner,
+      walletAddress,
+      taskId,
+      eventTimestamp,
+      transactionHash,
+    };
+    await updateActivity(activityData);
+
+    if (remaining === 1) {
+      await removeTask(taskId, taskOwner);
+    }
   } catch (err) {
     console.log(err);
-    const failedData = {
-      property: "status",
-      value: "failed",
-      type: "failed",
-      taskId,
-    };
-    await updateTask(taskId, failedData, taskOwner);
+    // const failedData = {
+    //   property: "status",
+    //   value: "failed",
+    //   type: "failed",
+    //   taskId,
+    // };
+    // await updateTask(taskId, failedData, taskOwner);
   }
 }
 
 module.exports = fullfillSnipeTasks;
-
-// {
-//   parameters: {
-//     conduitKey: '0x0000007b02230091a7ed01230072f7006a004d60a8d4e71d599b8104250f0000',
-//     consideration: [ [Object], [Object], [Object] ],
-//     counter: 0,
-//     endTime: '1678143600',
-//     offer: [ [Object] ],
-//     offerer: '0xfe697c5527ab86daa1e4c08286d2be744a0e321e',
-//     orderType: 2,
-//     salt: '0x2db9944fc9e7c687de8d07e04bc2bf85166e',
-//     startTime: '1678113480',
-//     totalOriginalConsiderationItems: 3,
-//     zone: '0x004C00500000aD104D7DBd00e3ae0A5C00560C00',
-//     zoneHash: '0x0000000000000000000000000000000000000000000000000000000000000000'
-//   },
-//   signature: '0x28d117b2f34f06832552476b6eedf35921e9fd25d90d104723f1b3bd6ba9fd2f4b9d62dd7057ee3e07d81c2efa3da2421251e603b7491b67abeeb4b22ba714c9'
-// }

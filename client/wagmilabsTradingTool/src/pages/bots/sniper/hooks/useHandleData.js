@@ -5,6 +5,8 @@ export const useHandleData = (activeSnipes, setActiveSnipes) => {
 
   const [showNewTask, setShowNewTask] = useState(false);
   const [showDeleteTask, setShowDeleteTask] = useState(false);
+  const [showRestartTaskModal, setShowRestartTaskModal] = useState(false);
+  const [restartModalData, setRestartModalData] = useState({});
 
   const toggleNewTaskModal = state => {
     setShowNewTask(state);
@@ -35,14 +37,26 @@ export const useHandleData = (activeSnipes, setActiveSnipes) => {
   };
 
   const handleTaskUpdate = data => {
-    const { type, taskId } = data;
+    const { properties, taskId } = data;
+
     const newTasks = activeSnipes.map(task => {
       if (task.taskId === taskId) {
-        return { ...task, status: type };
+        const newTask = { ...task };
+
+        properties.forEach(property => {
+          const { key, value } = property;
+          newTask[key] = value;
+        });
+
+        return newTask;
       }
       return { ...task };
     });
     setActiveSnipes(newTasks);
+  };
+
+  const toggleRestartTaskModal = state => {
+    setShowRestartTaskModal(state);
   };
 
   return {
@@ -54,5 +68,9 @@ export const useHandleData = (activeSnipes, setActiveSnipes) => {
     section,
     setSection,
     handleTaskUpdate,
+    showRestartTaskModal,
+    toggleRestartTaskModal,
+    restartModalData,
+    setRestartModalData,
   };
 };

@@ -2,11 +2,37 @@ import { Button, HStack } from "@chakra-ui/react";
 import { formatAddress } from "@Utils";
 import React from "react";
 import { useEditTask } from "../../hooks/useEditTask";
+import { RestartTaskModal } from "../modals";
 
-export const Table = ({ section, activeSnipes, toggleSnipe }) => {
+export const Table = ({
+  section,
+  activeSnipes,
+  toggleSnipe,
+  showRestartTaskModal,
+  restartModalData,
+  setRestartModalData,
+  toggleRestartTaskModal,
+}) => {
   const { removeTask, restartTask } = useEditTask(undefined, toggleSnipe);
+
+  const openRestartModal = taskId => {
+    setRestartModalData({ taskId });
+    toggleRestartTaskModal(true);
+  };
+
+  const closerestartModal = () => {
+    setRestartModalData({});
+    toggleRestartTaskModal(false);
+  };
+
   return (
     <div className="table-wrapper">
+      <RestartTaskModal
+        showRestartTaskModal={showRestartTaskModal}
+        restartModalData={restartModalData}
+        closerestartModal={closerestartModal}
+        restartTask={restartTask}
+      />
       <table cellSpacing={0} className="table">
         <thead>
           <tr>
@@ -17,6 +43,8 @@ export const Table = ({ section, activeSnipes, toggleSnipe }) => {
                 <th>Trigger price</th>
 
                 <th>QT.</th>
+
+                <th>Remaining</th>
 
                 <th>Account</th>
 
@@ -52,6 +80,7 @@ export const Table = ({ section, activeSnipes, toggleSnipe }) => {
                 maxFeePerGas,
                 status,
                 taskId,
+                remaining,
               } = snipe;
               return (
                 <tr key={index}>
@@ -63,6 +92,7 @@ export const Table = ({ section, activeSnipes, toggleSnipe }) => {
                   </td>
                   <td>{maxPrice} ETH</td>
                   <td>{maxAutoBuy}</td>
+                  <td>{remaining}</td>
                   <td>{formatAddress(walletAddress)}</td>
                   <td>{status}</td>
                   <td>
@@ -72,7 +102,7 @@ export const Table = ({ section, activeSnipes, toggleSnipe }) => {
                     </HStack>
                   </td>
                   <td>
-                    {status === "inactive" && <Button onClick={() => restartTask(taskId)}>Restart</Button>}
+                    {status === "inactive" && <Button onClick={() => openRestartModal(taskId)}>Restart</Button>}
                     <Button className="btn btn-danger" onClick={() => removeTask(taskId)}>
                       Cancel
                     </Button>

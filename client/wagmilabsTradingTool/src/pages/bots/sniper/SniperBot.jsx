@@ -9,26 +9,34 @@ import { useHandleData, useGetData } from "./hooks";
 
 const SniperBot = () => {
   const { activeSnipes, setActiveSnipes } = useGetData();
-  const { showNewTask, toggleNewTaskModal, section, setSection, toggleSnipe, handleTaskUpdate } = useHandleData(
-    activeSnipes,
-    setActiveSnipes
-  );
+  const {
+    showNewTask,
+    toggleNewTaskModal,
+    showRestartTaskModal,
+    toggleRestartTaskModal,
+    section,
+    setSection,
+    toggleSnipe,
+    handleTaskUpdate,
+    restartModalData,
+    setRestartModalData,
+  } = useHandleData(activeSnipes, setActiveSnipes);
 
   const { address } = useAccount();
   const socket = useContext(SocketContext);
-  // useEffect(() => {
-  //   if (address) {
-  //     socket.emit("joinSnipeUpdates", address);
+  useEffect(() => {
+    if (address) {
+      socket.emit("joinSnipeUpdates", address);
 
-  //     socket.off("newSnipeUpdates").on("newSnipeUpdates", data => {
-  //       handleTaskUpdate(data);
-  //     });
-  //   }
+      socket.off("newSnipeUpdates").on("newSnipeUpdates", data => {
+        handleTaskUpdate(data);
+      });
+    }
 
-  //   return () => {
-  //     socket.emit("leaveSnipeUpdates", address);
-  //   };
-  // }, [socket, address, handleTaskUpdate]);
+    return () => {
+      socket.emit("leaveSnipeUpdates", address);
+    };
+  }, [socket, address, handleTaskUpdate]);
 
   return (
     <section className="sniper-bot-section">
@@ -36,7 +44,15 @@ const SniperBot = () => {
 
       <NewTaskModal showNewTask={showNewTask} toggleNewTaskModal={toggleNewTaskModal} toggleSnipe={toggleSnipe} />
 
-      <Table section={section} activeSnipes={activeSnipes} toggleSnipe={toggleSnipe} />
+      <Table
+        section={section}
+        activeSnipes={activeSnipes}
+        toggleSnipe={toggleSnipe}
+        showRestartTaskModal={showRestartTaskModal}
+        restartModalData={restartModalData}
+        setRestartModalData={setRestartModalData}
+        toggleRestartTaskModal={toggleRestartTaskModal}
+      />
     </section>
   );
 };

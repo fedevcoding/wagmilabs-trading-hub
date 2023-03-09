@@ -168,7 +168,7 @@ function newSale(saleData) {
 
 function newSnipeUpdate(accountAddress, data) {
   console.log("sending update to ", accountAddress, "");
-  accountAddress = accountAddress.toLowerCase();
+  accountAddress = accountAddress?.toLowerCase();
   const channel = `snipeUpdates:${accountAddress}`;
 
   try {
