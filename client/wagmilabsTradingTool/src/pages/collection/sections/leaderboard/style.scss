@@ -48,6 +48,11 @@
       padding-top: 10px;
     }
 
+    tr td:first-child,
+    tr th:first-child {
+      width: 30px;
+    }
+
     tr td {
       padding: 5px 0;
     }

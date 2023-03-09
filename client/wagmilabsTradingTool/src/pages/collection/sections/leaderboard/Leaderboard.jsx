@@ -52,6 +52,7 @@ const Leaderboard = React.memo(({ address }) => {
             <table>
               <thead>
                 <tr>
+                  <th width="30" />
                   <th>Address</th>
                   <th>Total gains</th>
                   <th>Num txs</th>
@@ -91,8 +92,9 @@ const Leaderboard = React.memo(({ address }) => {
                 </tr>
               </thead>
               <tbody>
-                {holders.map(h => (
+                {holders.map((h, i) => (
                   <tr key={JSON.stringify(h)}>
+                    <td width="30">{i + 1}</td>
                     <td>
                       <Tooltip
                         label={copyState}
