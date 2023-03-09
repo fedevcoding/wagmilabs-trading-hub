@@ -59,7 +59,7 @@ const Leaderboard = React.memo(({ address }) => {
                   <th>Assets owned</th>
                   <th>Bluchip owned</th>
                   <th>Collection owned</th>
-                  <th>Portfolio value (eth)</th>
+                  <th>Portfolio value</th>
                   <th>
                     <Tooltip
                       label={"All time"}
@@ -111,17 +111,21 @@ const Leaderboard = React.memo(({ address }) => {
                         </p>
                       </Tooltip>
                     </td>
-                    <td>{roundPrice2(h.total_gain)} ETH</td>
+                    <td>
+                      <i className="fa-brands fa-ethereum" /> {roundPrice2(h.total_gain)}
+                    </td>
                     <td>{h.num_txs}</td>
                     <td>{h.num_assets_owned}</td>
                     <td>{h.num_blue_chips_owned}</td>
                     <td>{h.num_collections_owned}</td>
                     <td>
-                      {roundPrice2(h.portfolio_value_wei / 1e18)} ETH{" "}
+                      <i className="fa-brands fa-ethereum" /> {roundPrice2(h.portfolio_value_wei / 1e18)}
                       <small>({roundPriceUsd(h.portfolio_value_usd)}$)</small>
                     </td>
                     <td>{h.collection_gains_all_time}</td>
-                    <td>{roundPrice2(h.collection_volume_wei_all_time / 1e18)} ETH</td>
+                    <td>
+                      <i className="fa-brands fa-ethereum" /> {roundPrice2(h.collection_volume_wei_all_time / 1e18)}
+                    </td>
                     <td>{h.collection_assets_owned}</td>
                   </tr>
                 ))}
