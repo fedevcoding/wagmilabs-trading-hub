@@ -1,23 +1,20 @@
 import React from "react";
 import { Tooltip } from "@chakra-ui/react";
-import { Card, LoadingSpinner, Select } from "@Components";
+import { Card, LoadingSpinner } from "@Components";
 import { formatAddress, roundPrice2, roundPriceUsd } from "@Utils";
 import { useGetData } from "./useGetData";
 import { useCopy } from "@Hooks";
+import { Filters } from "./Components";
+import { useFilters } from "./useFilters";
 
 import "./style.scss";
-import { getDirections, getListSort } from "./functions";
 
 const Leaderboard = React.memo(({ address }) => {
-  console.log("address", address);
-  const listSort = getListSort();
-  const [sort, setSort] = React.useState(listSort[9]);
-  const listDirections = getDirections();
-  const [direction, setDirecton] = React.useState(listDirections[1]);
-  const { holders, loading } = useGetData(address, sort.value, direction.value);
+  const filters = useFilters();
+  const { holders, loading } = useGetData(address, filters.sort.value, filters.direction.value);
   const { copyState, copyAddress } = useCopy();
 
-  console.log("holders", holders, loading);
+  console.log("holders", holders, filters);
 
   return (
     <div id="leaderboard">
@@ -26,29 +23,7 @@ const Leaderboard = React.memo(({ address }) => {
           <LoadingSpinner />
         ) : (
           <>
-            <div className="sort-box">
-              <span>Sort direction:</span>
-              <Select
-                id="set-direction"
-                onChange={d => setDirecton(d)}
-                label="Set direction"
-                value={direction}
-                options={listDirections}
-                isSearchable={false}
-              />
-            </div>
-            <div className="sort-box">
-              <span>Sort order:</span>
-              <Select
-                id="set-sort"
-                onChange={s => setSort(s)}
-                label="Set Sort"
-                value={sort}
-                options={listSort}
-                isSearchable={false}
-              />
-            </div>
-            <div className="clearfix" />
+            <Filters {...filters} />
             <table>
               <thead>
                 <tr>

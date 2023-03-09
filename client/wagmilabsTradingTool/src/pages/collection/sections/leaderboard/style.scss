@@ -13,22 +13,29 @@
     }
   }
 
-  .sort-box {
-    float: right;
+  .table-filters {
     display: flex;
-    align-items: center;
+    .sort-box {
+      display: flex;
+      align-items: center;
+      justify-content: center;
 
-    .react-select {
-      margin-left: 1rem;
-      width: 280px;
-    }
+      span {
+        white-space: nowrap;
+        margin-right: 1rem;
+      }
 
-    #set-direction {
-      width: 170px;
-    }
+      .react-select {
+        width: 280px;
+      }
 
-    + .sort-box {
-      margin-right: 2rem;
+      #set-direction {
+        width: 170px;
+      }
+
+      + .sort-box {
+        margin-left: 2rem;
+      }
     }
   }
 
