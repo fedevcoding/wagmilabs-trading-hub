@@ -7,17 +7,21 @@ const spacesRoute = express();
 
 const { lruCache } = require("../../../services/cache/lru");
 
+const ttl = 6 * 60 * 60 * 1000;
+
+const manageEvents = async (Collection, type, set) => {
+    const res = await lruCache(Collection.find({}), {
+        key: type,
+        ttl,
+    }, set);
+    return res;
+};
+
 spacesRoute.get("/", checkAuth, async (req, res) => {
-    const ttl = 6 * 60 * 60 * 1000;
 
     try {
-        const spaces = await Spaces.find({});
+        const spaces = await manageEvents(Spaces, 'spaces');
         if (!spaces) throw new Error("Spaces not found");
-
-        await lruCache(Spaces.find({}), {
-            key: `spaces`,
-            ttl,
-        });
 
         res.status(200).json({spaces});
     }
@@ -43,10 +47,12 @@ spacesRoute.post('/', checkAuth, checkAdmin, async (req, res) => {
                 });
                 const spaces = await Spaces.create(nextEvents);
                 if (!spaces) throw Error('Something went wrong saving multiple admin spaces events');
+                await manageEvents(Spaces, 'spaces', true);
                 return res.status(200).json({spaces});
             } 
             const spaces = await Spaces.create(event);
             if (!spaces) throw Error('Something went wrong saving the admin spaces event');
+            await manageEvents(Spaces, 'spaces', true);
             return res.status(200).json({spaces});
         } else {
             throw Error('You are not authorized');
@@ -64,6 +70,7 @@ spacesRoute.delete('/', checkAuth, checkAdmin, async (req, res) => {
         if (isAdmin) {
             const spaces = await Spaces.deleteOne({_id: id});
             if (!spaces) throw Error('Something went wrong deleting all the admin spaces event');
+            await manageEvents(Spaces, 'spaces', true);
             return res.status(200).json({spaces});
         } else {
             throw Error('You are not authorized');

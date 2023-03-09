@@ -7,17 +7,22 @@ const dropsRoute = express();
 
 const { lruCache } = require("../../../services/cache/lru");
 
+
+const ttl = 6 * 60 * 60 * 1000;
+
+const manageEvents = async (Collection, type, set) => {
+    const res = await lruCache(Collection.find({}), {
+        key: type,
+        ttl,
+    }, set);
+    return res;
+};
+
 dropsRoute.get("/", checkAuth, async (req, res) => {
-    const ttl = 6 * 60 * 60 * 1000;
     
     try {
-        const drops = await Drops.find({});
+        const drops = await manageEvents(Drops, 'drops');
         if (!drops) throw new Error("Drops not found");
-
-        await lruCache(Drops.find({}), {
-            key: `drops`,
-            ttl,
-        });
 
         res.status(200).json({drops});
     }
@@ -28,7 +33,6 @@ dropsRoute.get("/", checkAuth, async (req, res) => {
 })
 
 dropsRoute.post('/', checkAuth, checkAdmin, async (req, res) => {
-    const { address } = req.userDetails;
     const isAdmin = req.isAdmin;
     const { collectionName, links, price, supply, timestamp, eventDescription } = req.body || {};
 
@@ -36,6 +40,7 @@ dropsRoute.post('/', checkAuth, checkAdmin, async (req, res) => {
         if (isAdmin) {
             const drops = await Drops.create({ collectionName, links, price, supply, timestamp, eventDescription })
             if (!drops) throw Error('Something went wrong saving the admin drops event');
+            await manageEvents(Drops, 'drops', true);
             return res.status(200).json({drops});
         } else {
             throw Error('You are not authorized');
@@ -53,6 +58,7 @@ dropsRoute.delete('/', checkAuth, checkAdmin, async (req, res) => {
         if (isAdmin) {
             const drops = await Drops.deleteOne({_id: id});
             if (!drops) throw Error('Something went wrong deleting all the admin drops event');
+            await manageEvents(Drops, 'drops', true);
             return res.status(200).json({drops});
         } else {
             throw Error('You are not authorized');
