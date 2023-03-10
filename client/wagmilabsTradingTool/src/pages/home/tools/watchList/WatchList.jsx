@@ -160,53 +160,51 @@ const WatchList = ({ tool, timeFrame, setTimeFrame, resetTime }) => {
 
         const creationDay = moment(createdAt).fromNow();
         return (
-          <>
-            <tr
-              className="single-collection-container"
-              key={index}
-              onClick={() => window.open(`/collection/${contractAddress}`, "_blank")}
-            >
-              <td>
-                <div className="image-name-container">
-                  <LazyLoadImage src={image} className="owned-image" effect="blur" placeholderSrc={placeholderImage} />
+          <tr
+            className="single-collection-container"
+            key={index}
+            onClick={() => window.open(`/collection/${contractAddress}`, "_blank")}
+          >
+            <td>
+              <div className="image-name-container">
+                <LazyLoadImage src={image} className="owned-image" effect="blur" placeholderSrc={placeholderImage} />
 
-                  <div className="minting-name-date">
-                    <p className="watchlist-name">{name || "- - -"}</p>
-                    <p className="watchlist-created-date">{creationDay}</p>
-                  </div>
+                <div className="minting-name-date">
+                  <p className="watchlist-name">{name || "- - -"}</p>
+                  <p className="watchlist-created-date">{creationDay}</p>
                 </div>
-              </td>
-              <td>
-                <div className="owned-floor-price">
-                  <i className="fa-brands fa-ethereum"></i>
-                  <p>{floorPrice || "---"}</p>
-                </div>
-              </td>
-              <td>
-                <div className="owned-floor-price">
-                  <i className="fa-brands fa-ethereum"></i>
-                  <p>{volume || "---"}</p>
-                </div>
-              </td>
-              <td>
-                <div className="owned-floor-price">
-                  <i className="fa-brands fa-ethereum"></i>
-                  <p>{totalVolume || "---"}</p>
-                </div>
-              </td>
-              <td>
-                <div className="owned-floor-price">
-                  <i className="fa-brands fa-ethereum"></i>
-                  <p>{bidValue || "---"}</p>
-                </div>
-              </td>
-              <td>
-                <p>
-                  {onSaleCount} / {tokenCount}
-                </p>
-              </td>
-            </tr>
-          </>
+              </div>
+            </td>
+            <td>
+              <div className="owned-floor-price">
+                <i className="fa-brands fa-ethereum"></i>
+                <p>{floorPrice || "---"}</p>
+              </div>
+            </td>
+            <td>
+              <div className="owned-floor-price">
+                <i className="fa-brands fa-ethereum"></i>
+                <p>{volume || "---"}</p>
+              </div>
+            </td>
+            <td>
+              <div className="owned-floor-price">
+                <i className="fa-brands fa-ethereum"></i>
+                <p>{totalVolume || "---"}</p>
+              </div>
+            </td>
+            <td>
+              <div className="owned-floor-price">
+                <i className="fa-brands fa-ethereum"></i>
+                <p>{bidValue || "---"}</p>
+              </div>
+            </td>
+            <td>
+              <p>
+                {onSaleCount} / {tokenCount}
+              </p>
+            </td>
+          </tr>
         );
       }),
     // eslint-disable-next-line react-hooks/exhaustive-deps

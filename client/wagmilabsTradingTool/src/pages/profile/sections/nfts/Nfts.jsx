@@ -574,7 +574,13 @@ const Nfts = ({
               {loadingMoreNfts &&
                 [...Array(18)].map(i => {
                   return (
-                    <SkeletonTheme baseColor="#202020" highlightColor="#444" height={"327px"} borderRadius={"10px"}>
+                    <SkeletonTheme
+                      key={i}
+                      baseColor="#202020"
+                      highlightColor="#444"
+                      height={"327px"}
+                      borderRadius={"10px"}
+                    >
                       <p>
                         <Skeleton count={1} wrapper={Box} />
                       </p>

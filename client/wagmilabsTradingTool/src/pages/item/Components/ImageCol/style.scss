@@ -26,9 +26,25 @@
     padding-bottom: 0.5rem;
     border-bottom: 1px solid var(--light-gray);
 
+    .space-between {
+      align-items: center;
+
+      .refresh-btn {
+        padding: 0.2rem 1rem;
+        font-size: 12px;
+        background-color: var(--light-dark);
+
+        &:hover {
+          background-color: var(--light-gray);
+          color: var(--light-dark);
+        }
+      }
+
+      padding-bottom: 0.5rem;
+    }
+
     .title {
       display: block;
-      padding-bottom: 0.5rem;
     }
   }
 }
