@@ -260,50 +260,48 @@ export const TransferModal = React.memo(({ showTransferModal, toggleModal }) => 
                           const { id, address } = transfer;
 
                           return (
-                            <>
-                              <HStack>
-                                <Select
+                            <HStack key={JSON.stringify(transfer)}>
+                              <Select
+                                onChange={e =>
+                                  dispatchCustom({
+                                    type: "CHANGE_TRANSFER_ADDRESS",
+                                    payload: { newAddress: e.target.value, id },
+                                  })
+                                }
+                                value={address}
+                              >
+                                <option value={undefined} style={{ display: "none" }}>
+                                  Select wallet
+                                </option>
+                                {wallets?.map(row => (
+                                  <option value={row.address} key={crypto.randomUUID()}>
+                                    {row.name}
+                                  </option>
+                                ))}
+                              </Select>
+
+                              <NumberInput value={transfer.value}>
+                                <NumberInputField
+                                  placeholder="Value (ETH)"
                                   onChange={e =>
                                     dispatchCustom({
-                                      type: "CHANGE_TRANSFER_ADDRESS",
-                                      payload: { newAddress: e.target.value, id },
+                                      type: "CHANGE_TRANSFER_VALUE",
+                                      payload: { newValue: e.target.value, id },
                                     })
                                   }
-                                  value={address}
-                                >
-                                  <option value={undefined} style={{ display: "none" }}>
-                                    Select wallet
-                                  </option>
-                                  {wallets?.map(row => (
-                                    <option value={row.address} key={crypto.randomUUID()}>
-                                      {row.name}
-                                    </option>
-                                  ))}
-                                </Select>
+                                />
+                              </NumberInput>
 
-                                <NumberInput value={transfer.value}>
-                                  <NumberInputField
-                                    placeholder="Value (ETH)"
-                                    onChange={e =>
-                                      dispatchCustom({
-                                        type: "CHANGE_TRANSFER_VALUE",
-                                        payload: { newValue: e.target.value, id },
-                                      })
-                                    }
-                                  />
-                                </NumberInput>
-
-                                <div
-                                  className={`remove ${customData.transfers.length > 1 && "active"}`}
-                                  onClick={() =>
-                                    customData.transfers.length > 1 &&
-                                    dispatchCustom({ type: "REMOVE_TRANSFER", payload: id })
-                                  }
-                                >
-                                  <i className="fa-sharp fa-solid fa-trash-can"></i>
-                                </div>
-                              </HStack>
-                            </>
+                              <div
+                                className={`remove ${customData.transfers.length > 1 && "active"}`}
+                                onClick={() =>
+                                  customData.transfers.length > 1 &&
+                                  dispatchCustom({ type: "REMOVE_TRANSFER", payload: id })
+                                }
+                              >
+                                <i className="fa-sharp fa-solid fa-trash-can"></i>
+                              </div>
+                            </HStack>
                           );
                         })}
                       </div>
