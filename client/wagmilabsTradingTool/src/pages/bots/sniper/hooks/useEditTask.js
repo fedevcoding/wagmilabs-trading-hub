@@ -76,10 +76,9 @@ export const useEditTask = (callback, toggleSnipe) => {
     }
   };
 
-  const restartTask = async taskId => {
+  const restartTask = async (taskId, privateKey) => {
     try {
       setRestartLoading(true);
-      const privateKey = "";
       const body = {
         data: {
           taskId,
@@ -87,9 +86,9 @@ export const useEditTask = (callback, toggleSnipe) => {
         },
         type: "restart",
       };
-      await pushToServer("/bots/sniper/editTask", body);
+      const walletAddress = await pushToServer("/bots/sniper/editTask", body);
 
-      toggleSnipe("restart", taskId);
+      toggleSnipe("restart", { taskId, walletAddress });
       toast({
         title: "Task restarted",
         description: "Task restarted successfully",

@@ -15,3 +15,4 @@ export { OrderInfo } from "./OrderInfo";
 export { TimeAgo } from "./TimeAgo";
 export { Card } from "./Card";
 export { Number } from "./Number";
+export { ActionModal } from "./ActionModal";

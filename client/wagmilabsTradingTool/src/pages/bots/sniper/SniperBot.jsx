@@ -12,14 +12,12 @@ const SniperBot = () => {
   const {
     showNewTask,
     toggleNewTaskModal,
-    showRestartTaskModal,
-    toggleRestartTaskModal,
     section,
     setSection,
     toggleSnipe,
     handleTaskUpdate,
-    restartModalData,
-    setRestartModalData,
+    restartTaskModalData,
+    setRestartTaskModalData,
   } = useHandleData(activeSnipes, setActiveSnipes);
 
   const { address } = useAccount();
@@ -48,10 +46,8 @@ const SniperBot = () => {
         section={section}
         activeSnipes={activeSnipes}
         toggleSnipe={toggleSnipe}
-        showRestartTaskModal={showRestartTaskModal}
-        restartModalData={restartModalData}
-        setRestartModalData={setRestartModalData}
-        toggleRestartTaskModal={toggleRestartTaskModal}
+        restartTaskModalData={restartTaskModalData}
+        setRestartTaskModalData={setRestartTaskModalData}
       />
     </section>
   );

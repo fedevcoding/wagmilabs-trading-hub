@@ -1,39 +1,25 @@
 import { Button, HStack } from "@chakra-ui/react";
+import { ActionModal } from "@Components";
 import { formatAddress } from "@Utils";
 import React from "react";
 import { useEditTask } from "../../hooks/useEditTask";
-import { RestartTaskModal } from "../modals";
 
-export const Table = ({
-  section,
-  activeSnipes,
-  toggleSnipe,
-  showRestartTaskModal,
-  restartModalData,
-  setRestartModalData,
-  toggleRestartTaskModal,
-}) => {
+export const Table = ({ section, activeSnipes, toggleSnipe, restartTaskModalData, setRestartTaskModalData }) => {
   const { removeTask, restartTask } = useEditTask(undefined, toggleSnipe);
 
-  const openRestartModal = taskId => {
-    setRestartModalData({ taskId });
-    toggleRestartTaskModal(true);
-  };
-
-  const closerestartModal = () => {
-    setRestartModalData({});
-    toggleRestartTaskModal(false);
+  const opendModal = id => {
+    setRestartTaskModalData({ show: true, id, privateKey: null, walletAddress: null, walletType: "privatekey" });
   };
 
   return (
     <div className="table-wrapper">
-      <RestartTaskModal
-        showRestartTaskModal={showRestartTaskModal}
-        restartModalData={restartModalData}
-        closerestartModal={closerestartModal}
-        restartTask={restartTask}
-      />
       <table cellSpacing={0} className="table">
+        <ActionModal
+          data={restartTaskModalData}
+          action={restartTask}
+          setData={setRestartTaskModalData}
+          type={"restartBotSnipe"}
+        />
         <thead>
           <tr>
             {section === "active" ? (
@@ -102,7 +88,7 @@ export const Table = ({
                     </HStack>
                   </td>
                   <td>
-                    {status === "inactive" && <Button onClick={() => openRestartModal(taskId)}>Restart</Button>}
+                    {status === "inactive" && <Button onClick={() => opendModal(taskId)}>Restart</Button>}
                     <Button className="btn btn-danger" onClick={() => removeTask(taskId)}>
                       Cancel
                     </Button>

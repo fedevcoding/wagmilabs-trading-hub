@@ -1,0 +1,17 @@
+.action-modal-container {
+  .modal-body {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    .action-button {
+      opacity: 0.8;
+      cursor: not-allowed;
+
+      &.active {
+        opacity: 1;
+        cursor: pointer;
+      }
+    }
+  }
+}
