@@ -8,7 +8,7 @@ import { Header, NewTaskModal, Table } from "./components";
 import { useHandleData, useGetData } from "./hooks";
 
 const SniperBot = () => {
-  const { activeSnipes, setActiveSnipes, snipeActivity } = useGetData();
+  const { activeSnipes, setActiveSnipes, snipeActivity, loadingSnipes } = useGetData();
   const {
     showNewTask,
     toggleNewTaskModal,
@@ -23,7 +23,7 @@ const SniperBot = () => {
   const { address } = useAccount();
   const socket = useContext(SocketContext);
   useEffect(() => {
-    if (address) {
+    if (address && socket && handleTaskUpdate) {
       socket.emit("joinSnipeUpdates", address);
 
       socket.off("newSnipeUpdates").on("newSnipeUpdates", data => {
@@ -49,6 +49,7 @@ const SniperBot = () => {
         restartTaskModalData={restartTaskModalData}
         setRestartTaskModalData={setRestartTaskModalData}
         snipeActivity={snipeActivity}
+        loadingSnipes={loadingSnipes}
       />
     </section>
   );

@@ -24,14 +24,14 @@
         border-radius: 10px;
         transition: background-color 250ms;
         border: 1px solid transparent;
-      }
-      & .active {
-        background-color: $lightGrey;
-        border: 1px solid black;
-      }
-      & :hover {
-        background-color: $grey1;
-        border: 1px solid black;
+        &.active {
+          background-color: $lightGrey;
+          border: 1px solid black;
+        }
+        &:hover {
+          background-color: $grey1;
+          border: 1px solid black;
+        }
       }
     }
 
@@ -91,6 +91,28 @@
       }
 
       tbody {
+        .loading-container {
+          position: absolute;
+          display: flex;
+          gap: 19px;
+          justify-content: space-between;
+          font-size: 20px;
+          top: 15%;
+          left: 50%;
+          transform: translate(-50%, 0);
+        }
+        .not-found-container {
+          position: absolute;
+          top: 25%;
+          left: 50%;
+          transform: translate(-50%, 0);
+          font-size: 18px;
+
+          img {
+            width: 170px;
+          }
+        }
+
         tr {
           transition: transform 500ms;
           cursor: pointer;

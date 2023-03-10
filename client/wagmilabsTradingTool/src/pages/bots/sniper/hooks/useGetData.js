@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 export const useGetData = () => {
   const [activeSnipes, setActiveSnipes] = useState(null);
   const [snipeActivity, setSnipeActivity] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loadingSnipes, setLoading] = useState(true);
 
   useEffect(() => {
     const getData = async () => {
@@ -24,5 +24,5 @@ export const useGetData = () => {
     getData();
   }, []);
 
-  return { activeSnipes, loading, setActiveSnipes, snipeActivity };
+  return { activeSnipes, loadingSnipes, setActiveSnipes, snipeActivity };
 };

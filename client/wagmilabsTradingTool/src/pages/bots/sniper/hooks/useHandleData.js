@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 
 export const useHandleData = (activeSnipes, setActiveSnipes) => {
   const [section, setSection] = useState("active");
@@ -39,23 +39,26 @@ export const useHandleData = (activeSnipes, setActiveSnipes) => {
     }
   };
 
-  const handleTaskUpdate = data => {
-    const { properties, taskId } = data;
+  const handleTaskUpdate = useCallback(
+    data => {
+      const { properties, taskId } = data;
 
-    const newTasks = activeSnipes.map(task => {
-      if (task.taskId === taskId) {
-        const newTask = { ...task };
+      const newTasks = activeSnipes.map(task => {
+        if (task.taskId === taskId) {
+          const newTask = { ...task };
 
-        properties.forEach(property => {
-          const { key, value } = property;
-          newTask[key] = value;
-        });
-        return newTask;
-      }
-      return { ...task };
-    });
-    setActiveSnipes(newTasks);
-  };
+          properties.forEach(property => {
+            const { key, value } = property;
+            newTask[key] = value;
+          });
+          return newTask;
+        }
+        return { ...task };
+      });
+      setActiveSnipes(newTasks);
+    },
+    [activeSnipes, setActiveSnipes]
+  );
 
   return {
     showNewTask,
