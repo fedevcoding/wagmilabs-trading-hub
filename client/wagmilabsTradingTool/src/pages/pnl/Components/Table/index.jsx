@@ -1,10 +1,10 @@
 import React from "react";
 import { useTokensInfo } from "./useTokensInfo";
 import { Row } from "./Row";
-import { Button } from "@Components";
+import { Button, LoadingSpinner } from "@Components";
 import { notFound } from "@Assets";
 
-export const Table = React.memo(({ data, taxPerc, taxedOn, currency, longTermTax }) => {
+export const Table = React.memo(({ data, taxPerc, taxedOn, currency, longTermTax, isLoading }) => {
   const paginationCount = 10;
   const [page, setPage] = React.useState(1);
   const items = data.slice((page - 1) * paginationCount, page * paginationCount);
@@ -51,6 +51,14 @@ export const Table = React.memo(({ data, taxPerc, taxedOn, currency, longTermTax
           </tr>
         </thead>
         <tbody>
+          {(isLoading && (
+            <tr>
+              <td className="row-loading" colSpan={8}>
+                <LoadingSpinner />
+              </td>
+            </tr>
+          )) ||
+            ""}
           {items.map(n => (
             <Row
               key={JSON.stringify(n)}
