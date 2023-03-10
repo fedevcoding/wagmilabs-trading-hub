@@ -28,10 +28,9 @@ const Leaderboard = React.memo(({ address }) => {
                       <th width="30" />
                       <th>Address</th>
                       <th>Total gains</th>
-                      <th>Num txs</th>
-                      <th>Assets owned</th>
-                      <th>Bluchip owned</th>
-                      <th>Collection owned</th>
+                      <th>Total TXs</th>
+                      <th>NFTs Held</th>
+                      <th>Bluechips Held</th>
                       <th>Portfolio value</th>
                       <th>
                         <Tooltip
@@ -44,7 +43,7 @@ const Leaderboard = React.memo(({ address }) => {
                           placement="top"
                           borderRadius={"7px"}
                         >
-                          Collection gains
+                          Collection Realized profits
                         </Tooltip>
                       </th>
                       <th>
@@ -61,7 +60,7 @@ const Leaderboard = React.memo(({ address }) => {
                           Collection volume
                         </Tooltip>
                       </th>
-                      <th>Collection assets owned</th>
+                      <th>Collection NFTs Held</th>
                     </tr>
                   </thead>
                   <tbody>

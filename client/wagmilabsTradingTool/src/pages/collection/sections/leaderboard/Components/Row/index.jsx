@@ -31,9 +31,9 @@ export const Row = React.memo(({ h, i }) => {
       <td>{h.num_txs}</td>
       <td>{h.num_assets_owned}</td>
       <td>{h.num_blue_chips_owned}</td>
-      <td>{h.num_collections_owned}</td>
       <td>
         <i className="fa-brands fa-ethereum" /> {roundPrice2(h.portfolio_value_wei / 1e18)}
+        <br />
         <small>({roundPriceUsd(h.portfolio_value_usd)}$)</small>
       </td>
       <td>{h.collection_gains_all_time}</td>
