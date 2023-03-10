@@ -26,13 +26,13 @@
     letter-spacing: 1.2px;
     overflow-x: scroll;
     margin-left: 10px;
-    margin-top: 30px;
+    margin-top: 42px;
   }
 
   .trending-header-cell {
     font-size: 12px;
   }
-
+  
   .trending-header-cell-1 {
     font-size: 12px;
 
@@ -46,13 +46,20 @@
   }
 
   .image-name-container {
-    padding-left: 0px;
+    padding-left: 10px !important;
     height: 80px;
 
     position: absolute;
-    background: #171719;
-    width: 120px;
+    width: 170px;
     z-index: 990;
+  }
+
+  .odd-fixed-cell {
+    background-color: #171719;
+  }
+
+  .even-fixed-cell {
+    background-color: #1E1F24;
   }
 
   .trending-image {
@@ -62,7 +69,7 @@
   .single-collection-container:hover {
     transform: '';
   }
-
+  
   .trending-floor-price {
     font-size: 12px;
     padding: 0px 30px 0px 30px;
@@ -76,7 +83,7 @@
   .trending-sales-pending{
     font-size: 12px;
   }
-
+  
   .trending-supply {
     font-size: 12px;
   }
@@ -84,17 +91,16 @@
   .trending-created-date{
     display: none;
   }
-
-  .floor-price-h {
-    padding-left: 30px;
-  }
-
-  .trending-header-inner-cell-1 {
-    width: 110px;
-    padding-right: 40px;
-  }
 }
 
+.floor-price-h {
+  padding-left: 30px;
+}
+
+.trending-header-inner-cell-1 {
+  width: 140px;
+  padding-right: 40px;
+}
 .trending-container {
   width: 100%;
   /* overflow: hidden; */

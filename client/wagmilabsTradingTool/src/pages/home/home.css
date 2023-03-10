@@ -12,6 +12,12 @@
     .info-container {
         flex-direction: column;
     }
+    .time-text {
+        font-size: 12px;
+    }
+    .tool-times div {
+        padding: 10px 10px !important;
+    }
 }
 
 .tool-names {

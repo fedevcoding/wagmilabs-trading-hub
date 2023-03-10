@@ -11,7 +11,7 @@ import { LivePulsing } from "@Components";
 
 import { setPageTitle } from "@Utils";
 import { PromoModal } from "@Components";
-import { useDisclosure } from "@chakra-ui/react";
+import { Select, useDisclosure } from "@chakra-ui/react";
 
 const Home = () => {
   const [timeFrame, setTimeFrame] = useState("1H");
@@ -65,12 +65,25 @@ const Home = () => {
     if (!clicked && (newVisited === 2 || newVisited % 4 === 0)) onOpen();
   }, [onOpen]);
 
+  const isMobile = window.screen.width < 501;
+
   return (
     <>
       <section className="home-wrapper-section">
         <div className="info-container">
           <PromoModal isOpen={isOpen} onClose={onClose} onOpen={onOpen} type={1} />
-          <div className="tool-names">
+          {isMobile ? (
+          <div style={{padding: '10px 0px'}}>
+            <Select style={{ color: "white" }} placeholder='Select option' onChange={(e)=>setTool(e.target.value)} value={tool}>
+              <option value='trending'>Trending</option>
+              <option value='minting'>Minting</option>
+              <option value='ranking'>Ranking</option>
+              <option value='owned'>Owned</option>
+              <option value='watchlist'>Watchlist</option>
+            </Select>
+          </div>
+          ) : (
+            <div className="tool-names">
             <div onClick={e => changeTool(e)} className="active home-trending-section" tool="trending">
               Trending <LivePulsing />
             </div>
@@ -87,6 +100,7 @@ const Home = () => {
               WatchList
             </div>
           </div>
+          )}
           <div className="tool-times">
             <Times tool={tool} rippleEffect={rippleEffect} changeTime={changeTime} />
           </div>

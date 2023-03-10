@@ -171,6 +171,8 @@ const Trending = ({ tool, timeFrame, setTimeFrame, resetTime }) => {
 
         const creationDay = moment(creationDate).fromNow();
 
+        const isMobile = window.screen.width < 501;
+
         return (
           <tr
             onClick={() =>
@@ -179,18 +181,33 @@ const Trending = ({ tool, timeFrame, setTimeFrame, resetTime }) => {
             className="single-collection-container"
             key={index}
           >
-            <td className="image-name-container">
-              <LazyLoadImage
-                src={image}
-                className="trending-image"
-                effect="blur"
-                placeholderSrc={placeholderImage}
-              />
-              <div className="minting-name-date">
-                <p className="trending-name">{name || "- - -"}</p>
-                <p className="trending-created-date">{creationDay}</p>
-              </div>
-            </td>
+            {isMobile ? (
+              <td className={index % 2 === 0 ? "image-name-container odd-fixed-cell" : "image-name-container even-fixed-cell"}>
+                <LazyLoadImage
+                  src={image}
+                  className="trending-image"
+                  effect="blur"
+                  placeholderSrc={placeholderImage}
+                />
+                <div className="minting-name-date">
+                  <p className="trending-name">{name || "- - -"}</p>
+                  <p className="trending-created-date">{creationDay}</p>
+                </div>
+              </td>
+            ) : (
+              <td className="image-name-container">
+                <LazyLoadImage
+                  src={image}
+                  className="trending-image"
+                  effect="blur"
+                  placeholderSrc={placeholderImage}
+                />
+                <div className="minting-name-date">
+                  <p className="trending-name">{name || "- - -"}</p>
+                  <p className="trending-created-date">{creationDay}</p>
+                </div>
+              </td>
+            )}
             <td>
               <div className="trending-floor-price">
                 <i className="fa-brands fa-ethereum"></i>
