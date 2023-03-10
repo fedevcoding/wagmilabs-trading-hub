@@ -2,9 +2,18 @@ import { Button, HStack } from "@chakra-ui/react";
 import { ActionModal } from "@Components";
 import { formatAddress } from "@Utils";
 import React from "react";
+import { placeholderImage } from "@Assets";
 import { useEditTask } from "../../hooks/useEditTask";
+import moment from "moment";
 
-export const Table = ({ section, activeSnipes, toggleSnipe, restartTaskModalData, setRestartTaskModalData }) => {
+export const Table = ({
+  section,
+  activeSnipes,
+  toggleSnipe,
+  restartTaskModalData,
+  setRestartTaskModalData,
+  snipeActivity,
+}) => {
   const { removeTask, restartTask } = useEditTask(undefined, toggleSnipe);
 
   const opendModal = id => {
@@ -43,18 +52,20 @@ export const Table = ({ section, activeSnipes, toggleSnipe, restartTaskModalData
             ) : (
               <>
                 <th>Collection</th>
+                <th>Token ID</th>
                 <th>Buy price</th>
                 <th>Account</th>
                 <th>Status</th>
-                <th>Gas</th>
-                <th>Actions</th>
+                {/* <th>Gas</th> */}
+                <th>Date</th>
+                {/* <th>Actions</th> */}
               </>
             )}
           </tr>
         </thead>
 
         <tbody>
-          {section === "active" &&
+          {section === "active" ? (
             activeSnipes?.map((snipe, index) => {
               const {
                 collectionName,
@@ -72,7 +83,7 @@ export const Table = ({ section, activeSnipes, toggleSnipe, restartTaskModalData
                 <tr key={index}>
                   <td>
                     <HStack className="name-container">
-                      <img src={collectionImage} alt="collection" />
+                      <img src={collectionImage || placeholderImage} alt="collection" />
                       <p>{collectionName}</p>
                     </HStack>
                   </td>
@@ -95,7 +106,41 @@ export const Table = ({ section, activeSnipes, toggleSnipe, restartTaskModalData
                   </td>
                 </tr>
               );
-            })}
+            })
+          ) : (
+            <>
+              {snipeActivity?.map((snipe, index) => {
+                const {
+                  eventTimestamp,
+                  tokenId,
+                  buyPrice,
+                  walletAddress,
+                  collectionImage,
+                  collectionName,
+                  status,
+                  gasPrice,
+                } = snipe;
+
+                const time = moment(eventTimestamp).format("DD/MM/YYYY HH:mm");
+                return (
+                  <tr key={index}>
+                    <td>
+                      <HStack className="name-container">
+                        <img src={collectionImage || placeholderImage} alt="collection" />
+                        <p>{collectionName}</p>
+                      </HStack>
+                    </td>
+                    <td>{tokenId}</td>
+                    <td>{buyPrice} ETH</td>
+                    <td>{formatAddress(walletAddress)}</td>
+                    <td>{status}</td>
+                    {/* <td>{gasPrice} ETH</td> */}
+                    <td>{time}</td>
+                  </tr>
+                );
+              })}
+            </>
+          )}
         </tbody>
       </table>
     </div>

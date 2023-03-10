@@ -44,23 +44,28 @@ const fullfillSnipeTasks = async listing => {
       remaining - pendingSnipesAmount > 0
     ) {
       console.log("sniping");
-      // fullfillOrder(listing, collectionTask);
+      fullfillOrder(listing, collectionTask);
     }
   }
 };
 
 async function fullfillOrder(listing, collectionTask) {
+  const {
+    walletAddress,
+    taskOwner,
+    taskId,
+    privateKey,
+    remaining,
+    collectionName,
+    collectionImage,
+    collectionAddress,
+    maxPriorityFeePerGas,
+    maxFeePerGas,
+  } = collectionTask || {};
+
+  const { price: listingPrice, tokenId, orderHash } = listing;
+
   try {
-    const {
-      walletAddress,
-      taskOwner,
-      taskId,
-      privateKey,
-      remaining,
-      collectionName,
-      collectionImage,
-      collectionAddress,
-    } = collectionTask;
     addPendingSnipe(taskId);
 
     const pendingData = {
@@ -74,50 +79,63 @@ async function fullfillOrder(listing, collectionTask) {
     };
     await updateTask(taskId, pendingData, taskOwner);
 
-    const { price: listingPrice, protocolData, tokenId } = listing;
-
     const provider = getProvider();
     const signer = new ethers.Wallet(privateKey, provider);
 
-    console.log(protocolData);
-
-    await new Promise(resolve => setTimeout(resolve, 5000));
-
-    protocolData.parameters["orderType"] = 2;
-    protocolData.parameters["kind"] = "single-token";
-
-    await getClient()?.actions.buyToken({
+    const reservoirOptions = {
       signer,
       items: [
         {
-          rawOrder: {
-            kind: "seaport-v1.4",
-            data: protocolData.parameters,
-          },
+          quantity: 1,
+          token: `${collectionAddress}:${tokenId}`,
         },
       ],
       options: {
         skipBalanceCheck: true,
       },
+      expectedPrice: parseFloat(listingPrice),
       onProgress: progress => {
         console.log(progress);
       },
-      // expectedPrice
-    });
+    };
 
-    console.log(snipe);
+    if (maxFeePerGas) reservoirOptions.options["maxFeePerGas"] = (maxFeePerGas * 1000000000).toString();
+    if (maxPriorityFeePerGas)
+      reservoirOptions.options["maxPriorityFeePerGas"] = (maxPriorityFeePerGas * 1000000000).toString();
+
+    // wait 5 seconds
+    await new Promise(resolve => setTimeout(resolve, 5000));
+
+    await getClient()?.actions.buyToken(reservoirOptions);
+    removePendingSnipe(taskId);
 
     const snipe = {
-      transactionHash: "0x90ae89fuaef8",
-      tokenId: "123",
-      tokenName: "test",
-      tokenImage: "test",
+      transactionHash: "",
+      tokenName: "",
+      tokenImage: "",
     };
 
     const { transactionHash, tokenName, tokenImage } = snipe;
     const eventTimestamp = Date.now();
 
-    removePendingSnipe(taskId);
+    const activityData = {
+      collectionAddress,
+      collectionName,
+      collectionImage,
+      tokenId,
+      tokenName,
+      tokenImage,
+      buyPrice: listingPrice,
+      gasPrice: 0,
+      status: "Fulfilled",
+      taskOwner,
+      walletAddress,
+      taskId,
+      eventTimestamp,
+      transactionHash,
+    };
+    await updateActivity("success", activityData);
+
     const buyData = {
       properties: [
         {
@@ -133,35 +151,46 @@ async function fullfillOrder(listing, collectionTask) {
     };
     await updateTask(taskId, buyData, taskOwner);
 
-    const activityData = {
-      collectionAddress,
-      collectionName,
-      collectionImage,
-      tokenId,
-      tokenName,
-      tokenImage,
-      buyPrice: listingPrice,
-      status: "Fulfilled",
-      taskOwner,
-      walletAddress,
-      taskId,
-      eventTimestamp,
-      transactionHash,
-    };
-    await updateActivity(activityData);
-
     if (remaining === 1) {
       await removeTask(taskId, taskOwner);
     }
   } catch (err) {
     console.log(err);
-    // const failedData = {
-    //   property: "status",
-    //   value: "failed",
-    //   type: "failed",
-    //   taskId,
-    // };
-    // await updateTask(taskId, failedData, taskOwner);
+    removePendingSnipe(taskId);
+    const failedData = {
+      properties: [
+        {
+          key: "status",
+          value: "active",
+        },
+        {
+          key: "remaining",
+          value: remaining - 1,
+        },
+      ],
+      taskId,
+    };
+    await updateTask(taskId, failedData, taskOwner);
+
+    const task = {
+      collectionAddress,
+      collectionName,
+      collectionImage,
+      tokenId,
+      tokenName: "",
+      tokenImage: "",
+      buyPrice: listingPrice,
+      gasPrice: 0,
+      status: "Failed",
+      taskOwner,
+      walletAddress,
+      taskId,
+      eventTimestamp: Date.now(),
+      transactionHash: "",
+      remaining,
+    };
+
+    await updateActivity("failed", task);
   }
 }
 

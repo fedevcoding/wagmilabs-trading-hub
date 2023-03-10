@@ -131,14 +131,14 @@ io.on("connection", socket => {
   });
 
   socket.on("joinSnipeUpdates", accountAddress => {
-    accountAddress = accountAddress.toLowerCase();
+    accountAddress = accountAddress?.toLowerCase();
     const channel = `snipeUpdates:${accountAddress}`;
     console.log(channel);
     socket.join(channel);
   });
 
   socket.on("leaveSnipeUpdates", accountAddress => {
-    accountAddress = accountAddress.toLowerCase();
+    accountAddress = accountAddress?.toLowerCase();
     const channel = `snipeUpdates:${accountAddress}`;
     console.log(channel);
     socket.leave(channel);
@@ -158,7 +158,7 @@ function newListing(listingData) {
 function newSale(saleData) {
   try {
     const { tokenAddress } = saleData;
-    const contractAddress = tokenAddress.toLowerCase();
+    const contractAddress = tokenAddress?.toLowerCase();
     const channel = `sales${contractAddress}`;
     io.sockets.to(channel).emit("sale", saleData);
   } catch (e) {

@@ -50,7 +50,7 @@ const SnipeScheme = new mongoose.Schema(
         taskId: {
           type: String,
           required: true,
-          unique: true,
+          // unique: true,
         },
         status: {
           type: String,
@@ -81,6 +81,10 @@ const SnipeScheme = new mongoose.Schema(
           type: String,
         },
         buyPrice: {
+          type: Number,
+          required: true,
+        },
+        gasPrice: {
           type: Number,
           required: true,
         },
@@ -120,3 +124,8 @@ const SnipeScheme = new mongoose.Schema(
 );
 
 module.exports = mongoose.model("SnipesTasks", SnipeScheme);
+
+SnipeScheme.index(
+  { "tasks.taskId": 1 },
+  { unique: true, partialFilterExpression: { "tasks.taskId": { $exists: true } } }
+);

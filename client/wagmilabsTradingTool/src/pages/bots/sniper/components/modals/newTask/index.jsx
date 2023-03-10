@@ -21,6 +21,7 @@ import { useHandleData, useSteps } from "./hooks";
 import { useGetWallets } from "@Hooks";
 import { useEditTask } from "../../../hooks/useEditTask";
 import { Loader } from "@Components";
+import { placeholderImage } from "src/assets";
 
 export const NewTaskModal = React.memo(({ showNewTask, toggleNewTaskModal, toggleSnipe }) => {
   const { step, nextStep, prevStep, resetStep } = useSteps();
@@ -71,7 +72,11 @@ export const NewTaskModal = React.memo(({ showNewTask, toggleNewTaskModal, toggl
                   {collectionAddress ? (
                     <div className="collection-container">
                       <HStack>
-                        <img src={collectionImage} alt={collectionName} className="collection-image" />
+                        <img
+                          src={collectionImage || placeholderImage}
+                          alt={collectionName}
+                          className="collection-image"
+                        />
                         <p className="collection-name">{collectionName}</p>
                       </HStack>
 

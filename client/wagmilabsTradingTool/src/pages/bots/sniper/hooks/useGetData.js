@@ -11,14 +11,10 @@ export const useGetData = () => {
       try {
         setLoading(true);
         const url = "/bots/sniper/getTasks";
-        const tasks = await getFromServer(url);
+        const { tasks, activities } = await getFromServer(url);
 
         setActiveSnipes(tasks);
-        /*
-        const { activeSnipes, snipeActivity } = data;
-        setActiveSnipes(activeSnipes);
-        setSnipeActivity(snipeActivity);
-        */
+        setSnipeActivity(activities);
       } catch (error) {
         console.log(error);
       } finally {
@@ -28,5 +24,5 @@ export const useGetData = () => {
     getData();
   }, []);
 
-  return { activeSnipes, loading, setActiveSnipes };
+  return { activeSnipes, loading, setActiveSnipes, snipeActivity };
 };

@@ -29,7 +29,6 @@ export const useHandleData = (activeSnipes, setActiveSnipes) => {
       setActiveSnipes(newTasks);
     }
     if (state === "restart") {
-      console.log(data);
       const newTasks = activeSnipes.map(task => {
         if (task.taskId === data.taskId) {
           return { ...task, status: "active", walletAddress: data.walletAddress };
@@ -51,7 +50,6 @@ export const useHandleData = (activeSnipes, setActiveSnipes) => {
           const { key, value } = property;
           newTask[key] = value;
         });
-
         return newTask;
       }
       return { ...task };

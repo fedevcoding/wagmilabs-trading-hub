@@ -17,9 +17,9 @@ export const useEditTask = (callback, toggleSnipe) => {
       setAddLoading(true);
 
       const { privateKey, maxPrice, minPrice, maxFeePerGas, maxPriorityFeePerGas, maxFeePerGasType, maxAutoBuy } = data;
-
+      console.log(maxFeePerGasType, maxFeePerGas);
       const parsedMaxPrice = parseFloat(maxPrice) || undefined;
-      const parsedMinPrice = parseFloat(minPrice) || undefined;
+      const parsedMinPrice = parseFloat(minPrice) ?? undefined;
       const parsedMaxFeePerGas = maxFeePerGasType !== "auto" ? parseFloat(maxFeePerGas) || undefined : undefined;
       const parsedMaxPriorityFeePerGas = parseFloat(maxPriorityFeePerGas) || undefined;
       const parsedMaxAutoBuy = parseFloat(maxAutoBuy) || undefined;

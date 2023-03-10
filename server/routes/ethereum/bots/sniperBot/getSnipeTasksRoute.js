@@ -11,7 +11,7 @@ getSnipeTasksRoute.get("/sniper/getTasks", checkAuth, async (req, res) => {
     const { address } = req.userDetails;
 
     const dbSnipeTasks = await Snipe.findOne({ address });
-    const { tasks: dbtasks } = dbSnipeTasks || { tasks: [] };
+    const { tasks: dbtasks, activities } = dbSnipeTasks || { tasks: [] };
 
     const serverTasks = Object.values(snipeTasks)?.flatMap(arr => arr.filter(task => task?.taskOwner === address));
 
@@ -33,7 +33,7 @@ getSnipeTasksRoute.get("/sniper/getTasks", checkAuth, async (req, res) => {
       return newTask;
     });
 
-    res.status(200).json(tasks);
+    res.status(200).json({ tasks, activities });
   } catch (e) {
     console.log(e);
     res.status(400).json(e.message);

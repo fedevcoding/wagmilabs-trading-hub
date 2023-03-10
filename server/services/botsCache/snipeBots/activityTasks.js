@@ -1,8 +1,12 @@
 const Snipes = require("../../../models/bots/SnipeModel");
 
-const updateActivity = async task => {
+const updateActivity = async (status, task) => {
   const { taskOwner } = task;
-  await Snipes.updateOne({ address: taskOwner }, { $push: { activities: task } });
+  if (status === "success") {
+    await Snipes.updateOne({ address: taskOwner }, { $push: { activities: task } });
+  } else {
+    await Snipes.updateOne({ address: taskOwner }, { $push: { activities: task } });
+  }
 };
 
 module.exports = { updateActivity };
