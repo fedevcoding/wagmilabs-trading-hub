@@ -9,9 +9,8 @@ export function useGetData(address, sort, direction) {
     const getData = async () => {
       try {
         setLoading(true);
-        const {
-          data: { holders: listHolders },
-        } = await getFromServer(`/collection/${address}/get-holders?sort=${sort}&direction=${direction}`);
+        const { data } = await getFromServer(`/collection/${address}/get-holders?sort=${sort}&direction=${direction}`);
+        const listHolders = data && data.holders ? data.holders : [];
 
         setHolders(listHolders);
       } catch (error) {
