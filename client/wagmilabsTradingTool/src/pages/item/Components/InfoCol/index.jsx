@@ -1,6 +1,9 @@
+import { Tooltip } from "@chakra-ui/react";
+import { Button } from "@Components";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { BestOfferBox, BestOfferTable, Listings, ListItem, PriceBox, TransferItem } from "..";
+import { useRefreshToken } from "../ImageCol/useRefreshToken";
 
 import "./style.scss";
 import { useGetData } from "./useGetData";
@@ -18,6 +21,8 @@ export const InfoCol = React.memo(({ details, address, id }) => {
     ownershipTokenCount,
     totalSupply,
   } = useGetData(details, address, id);
+
+  const { refreshToken } = useRefreshToken(address, id);
 
   return (
     <div className="item-name-container">
@@ -50,20 +55,38 @@ export const InfoCol = React.memo(({ details, address, id }) => {
           )) ||
             ""}
         </div>
-        {isOwner ? (
-          <div className="owner-buttons">
-            <TransferItem details={details} address={address} id={id} currency={currency} />
-            <ListItem
-              details={details}
-              address={address}
-              id={id}
-              currency={currency}
-              lastListing={listings.length ? listings[0] : null}
-            />
-          </div>
-        ) : (
-          ""
-        )}
+        <div className="top-right-buttons">
+          <Tooltip
+            closeOnClick={false}
+            hasArrow
+            label={"Refresh metadata"}
+            fontSize="s"
+            bg="black"
+            color={"white"}
+            placement="top"
+            borderRadius={"7px"}
+          >
+            <div>
+              <Button className="refresh-btn" onClick={() => refreshToken()}>
+                <i className="fa-solid fa-refresh" />
+              </Button>
+            </div>
+          </Tooltip>
+          {isOwner ? (
+            <div className="owner-buttons">
+              <TransferItem details={details} address={address} id={id} currency={currency} />
+              <ListItem
+                details={details}
+                address={address}
+                id={id}
+                currency={currency}
+                lastListing={listings.length ? listings[0] : null}
+              />
+            </div>
+          ) : (
+            ""
+          )}
+        </div>
       </div>
 
       <PriceBox
