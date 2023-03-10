@@ -42,13 +42,14 @@ export default React.memo(() => {
         </Col>
       </Row>
       <Card>
-        {data && !isLoading ? (
+        {data ? (
           <Table
             data={data}
             taxPerc={settings.taxPerc}
             taxedOn={settings.taxedOn.value}
             currency={settings.currency.value}
             longTermTax={settings.longTermTax}
+            isLoading={isLoading}
           />
         ) : (
           <LoadingSpinner />

@@ -1,14 +1,10 @@
 import React from "react";
 import { placeholderImage } from "@Assets";
 import { MoreInfo } from "../MoreInfo";
-import { Button } from "@Components";
-import { useRefreshToken } from "./useRefreshToken";
 
 import "./style.scss";
 
-export const ImageCol = React.memo(({ details, address, id }) => {
-  const { refreshToken } = useRefreshToken(address, id);
-
+export const ImageCol = React.memo(({ details, address }) => {
   return (
     <div className="image-col">
       <img
@@ -22,12 +18,7 @@ export const ImageCol = React.memo(({ details, address, id }) => {
       />
       <div className="info">
         <div className="description">
-          <div className="space-between">
-            <span className="title">Description: </span>
-            <Button className="refresh-btn" onClick={() => refreshToken()}>
-              Refresh metadata
-            </Button>
-          </div>
+          <span className="title">Description: </span>
           {details.token.description}
         </div>
         <MoreInfo details={details} address={address} />
