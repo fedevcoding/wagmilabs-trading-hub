@@ -324,38 +324,38 @@ const Trending = ({ tool, timeFrame, setTimeFrame, resetTime }) => {
         <table cellSpacing={0} className="trending-container">
           <thead className="trending-details">
             <tr>
-              <th>
-                <p>Collection</p>
+              <th className="trending-header-cell-1">
+                <p className="trending-header-inner-cell-1">Collection</p>
               </th>
-              <th>
+              <th className="trending-header-cell">
                 <div onClick={e => changeSort(e, "floor-price")}>
-                  <p>Floor Price</p>
+                  <p className="floor-price-h">Floor Price</p>
                   <i className="fa-solid fa-caret-down arrow"></i>
                 </div>
               </th>
-              <th>
+              <th className="trending-header-cell">
                 <div>
                   <p>Floor chart</p>
                 </div>
               </th>
-              <th>
+              <th className="trending-header-cell">
                 <div onClick={e => changeSort(e, "sales")}>
                   <p className="nameSelected">Sales</p>
                   <i className="fa-solid fa-caret-down arrow selected rotate"></i>
                 </div>
               </th>
-              <th>
+              <th className="trending-header-cell">
                 <div onClick={e => changeSort(e, "volume")}>
                   <p>Volume</p>
                   <i className="fa-solid fa-caret-down arrow"></i>
                 </div>
               </th>
-              <th>
+              <th className="trending-header-cell">
                 <div>
                   <p>Volume chart</p>
                 </div>
               </th>
-              <th>
+              <th className="trending-header-cell">
                 <div onClick={e => changeSort(e, "supply")}>
                   <p>Supply</p>
                   <i className="fa-solid fa-caret-down arrow"></i>

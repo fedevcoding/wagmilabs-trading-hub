@@ -268,9 +268,9 @@ function App() {
                     <>
                       <CheckWalletDisconnect />
                       <ConnectedContext.Provider value={connectedContextValues}>
-                        <div className={`${"not-responsive"}`}>
+                        {/* <div className={`${"not-responsive"}`}>
                           <p>This application is not optimized for small screens yet.</p>
-                        </div>
+                            </div> */}
                         <div id="application-wrapper">
                           <BrowserRouter>
                             <Routes>

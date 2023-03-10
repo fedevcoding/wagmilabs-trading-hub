@@ -103,7 +103,7 @@ body.overflow-hidden {
 }
 @media screen and (max-width: 1000px) {
   #application-wrapper {
-    display: none;
+    /* display: none; */
   }
 
   .not-responsive {

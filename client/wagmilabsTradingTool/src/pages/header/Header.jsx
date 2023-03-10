@@ -264,7 +264,7 @@ const Header = () => {
   const isVolumesPage = window.location.pathname === "/volumes";
 
   return (
-    <>
+    <div className="header-container">
       <RefreshToken connected={connected} setConnected={setConnected} />
       <header className="search-header">
         <img src={logoImage} onClick={() => navigate("/")} className="logo-image" alt="" />
@@ -342,7 +342,7 @@ const Header = () => {
         />
         <CartModal modalOpen={modalOpen} openCartModal={openCartModal} closeCartModal={closeCartModal} />
       </header>
-    </>
+    </div>
   );
 };
 

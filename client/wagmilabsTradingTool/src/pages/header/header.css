@@ -282,3 +282,9 @@ a {
     display: none;
   }
 }
+
+@media screen and (max-width: 500px) {
+  .header-container {
+      display: none;
+  }
+}

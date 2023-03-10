@@ -8,6 +8,12 @@
     font-family: inherit;
 }
 
+@media screen and (max-width: 500px) {
+    .info-container {
+        flex-direction: column;
+    }
+}
+
 .tool-names {
     display: flex;
     cursor: pointer;
