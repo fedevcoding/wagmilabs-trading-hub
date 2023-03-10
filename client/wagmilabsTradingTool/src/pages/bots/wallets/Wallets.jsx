@@ -43,7 +43,11 @@ const Wallets = React.memo(() => {
           setData={setConfirmDelete}
           type={"confirmDeleteWallet"}
         />
-        <RenameModal showRenameModal={showRenameModal} setShowRenameModal={setShowRenameModal} setData={renameWallet} />
+        <RenameModal
+          showRenameModal={showRenameModal}
+          setShowRenameModal={setShowRenameModal}
+          renameWallet={renameWallet}
+        />
       </div>
 
       <HStack className="options">
