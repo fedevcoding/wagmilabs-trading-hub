@@ -15,6 +15,7 @@ const defaultData = {
   maxAutoBuy: undefined,
   status: "active",
   remaining: undefined,
+  skipFlagged: true,
 };
 
 export const useHandleData = (wallets, step) => {
@@ -28,6 +29,10 @@ export const useHandleData = (wallets, step) => {
       });
     }
   }, [data.walletAddress, wallets]);
+
+  useEffect(() => {
+    console.log(data);
+  }, [data]);
 
   const handleSetData = (dataIndex, data) => {
     setData(prevData => {
@@ -84,6 +89,7 @@ export const useHandleData = (wallets, step) => {
     maxPriorityFeePerGas,
     maxAutoBuy,
     maxFeePerGasType,
+    skipFlagged,
   } = data;
   return {
     collectionAddress,
@@ -99,6 +105,7 @@ export const useHandleData = (wallets, step) => {
     maxAutoBuy,
     data,
     maxFeePerGasType,
+    skipFlagged,
     handleSetData,
     handleCollectionClick,
     resetCollection,

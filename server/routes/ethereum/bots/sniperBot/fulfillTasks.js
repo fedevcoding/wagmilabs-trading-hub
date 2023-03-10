@@ -28,20 +28,21 @@ const { updateActivity } = require("../../../../services/botsCache/snipeBots/act
 const removeTask = require("../../../../services/botsCache/snipeBots/removeTask");
 
 const fullfillSnipeTasks = async listing => {
-  const { contractAddress, price: listingPrice } = listing;
+  const { contractAddress, price: listingPrice, isFlagged } = listing;
 
   const collectionTasks = snipeTasks[contractAddress];
 
   if (!collectionTasks) return;
 
   for (const collectionTask of collectionTasks) {
-    const { maxPrice, minPrice, remaining, taskId } = collectionTask;
+    const { maxPrice, minPrice, remaining, taskId, skipFlagged } = collectionTask;
     const pendingSnipesAmount = pendingSnipes[taskId] ?? 0;
 
     if (
       maxPrice >= listingPrice &&
       (minPrice ? minPrice <= listingPrice : true) &&
-      remaining - pendingSnipesAmount > 0
+      remaining - pendingSnipesAmount > 0 &&
+      !(isFlagged && skipFlagged)
     ) {
       console.log("sniping");
       fullfillOrder(listing, collectionTask);

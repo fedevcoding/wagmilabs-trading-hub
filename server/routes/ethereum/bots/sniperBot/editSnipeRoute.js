@@ -26,6 +26,7 @@ editSnipeRoute.post("/sniper/editTask", checkAuth, async (req, res) => {
         collectionImage,
         remaining,
         taskId,
+        skipFlagged,
       } = data;
 
       if (
@@ -36,7 +37,8 @@ editSnipeRoute.post("/sniper/editTask", checkAuth, async (req, res) => {
         !maxAutoBuy ||
         !maxPriorityFeePerGas ||
         !taskId ||
-        !remaining
+        !remaining ||
+        !skipFlagged
       )
         throw new Error("missinng data");
 
@@ -53,6 +55,7 @@ editSnipeRoute.post("/sniper/editTask", checkAuth, async (req, res) => {
         collectionName,
         collectionImage,
         taskId,
+        skipFlagged,
       };
 
       await Snipe.updateOne({ address: taskOwner }, { $push: { tasks: task } }, { upsert: true });

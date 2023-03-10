@@ -58,9 +58,7 @@ export const Table = ({
                 <th>Buy price</th>
                 <th>Account</th>
                 <th>Status</th>
-                {/* <th>Gas</th> */}
                 <th>Date</th>
-                {/* <th>Actions</th> */}
               </>
             )}
           </tr>

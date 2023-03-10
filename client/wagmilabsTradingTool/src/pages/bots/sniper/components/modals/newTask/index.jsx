@@ -15,6 +15,7 @@ import {
   Radio,
   RadioGroup,
   Select,
+  Switch,
 } from "@chakra-ui/react";
 import EthereumSearch from "src/pages/search/EthereumSearch";
 import { useHandleData, useSteps } from "./hooks";
@@ -173,6 +174,11 @@ export const NewTaskModal = React.memo(({ showNewTask, toggleNewTaskModal, toggl
                   <NumberInput value={maxAutoBuy} onChange={value => handleSetData("maxAutoBuy", value)}>
                     <NumberInputField placeholder="Max auto buy" />
                   </NumberInput>
+                </HStack>
+
+                <HStack justifyContent={"center"}>
+                  <p>Skip flagged tokens</p>
+                  <Switch defaultChecked onChange={e => handleSetData("skipFlaggedTokens", e.target.value)} />
                 </HStack>
               </div>
             )
