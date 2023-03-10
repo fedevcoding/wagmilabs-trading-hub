@@ -36,6 +36,7 @@ export const ListItemModal = React.memo(
     const marketplaces = getMarketplaces();
     const [date, setDate] = React.useState(null);
     const [marketplace, setMarketplace] = React.useState(marketplaces[0]);
+    const [royaltiesPerc, setRoyaltiesPerc] = React.useState(0);
 
     const { listNft } = useListNft(
       {
@@ -76,6 +77,13 @@ export const ListItemModal = React.memo(
             </NumberInput>
             <br />
             <p className="label">
+              <b>Creator royalties percentage</b>
+            </p>
+            <NumberInput max={100} min={0} step={0.01} value={royaltiesPerc}>
+              <NumberInputField placeholder={`Value...`} onChange={e => setRoyaltiesPerc(e.target.value)} />
+            </NumberInput>
+            <br />
+            <p className="label">
               <b>Marketplace</b>
             </p>
             <Select
@@ -107,7 +115,12 @@ export const ListItemModal = React.memo(
               mr={3}
               onClick={() => {
                 if (!confirmingList)
-                  listNft(setConfirmingList, parseInt(new Date(date).getTime() / 1000).toString(), marketplace.value);
+                  listNft(
+                    setConfirmingList,
+                    parseInt(new Date(date).getTime() / 1000).toString(),
+                    marketplace.value,
+                    royaltiesPerc
+                  );
               }}
             >
               {confirmingList ? <Loader width={"20px"} height={"20px"} /> : "Confirm"}
