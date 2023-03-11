@@ -289,7 +289,7 @@ const Header = () => {
             <div className="feed-button header-links">Feed</div>
           </div>
           <div>
-            <div className="calendars-button header-links not-allowed">
+            <div className="calendars-button header-links">
               <span>Calendars</span>
 
               <div className="calendars-options-dropdown invisible">
