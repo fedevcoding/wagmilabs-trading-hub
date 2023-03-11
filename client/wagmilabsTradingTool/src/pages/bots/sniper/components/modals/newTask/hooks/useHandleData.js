@@ -30,10 +30,6 @@ export const useHandleData = (wallets, step) => {
     }
   }, [data.walletAddress, wallets]);
 
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
-
   const handleSetData = (dataIndex, data) => {
     setData(prevData => {
       return { ...prevData, [dataIndex]: data };

@@ -124,14 +124,10 @@ export const Table = ({
               ) : (
                 <>
                   {snipeActivity?.length === 0 ? (
-                    <tr>
-                      <td colSpan={8}>
-                        <div className="not-found-container">
-                          <img src={notFound} alt="not found"></img>
-                          <p>No snipes activity</p>
-                        </div>
-                      </td>
-                    </tr>
+                    <div className="not-found-container">
+                      <img src={notFound} alt="not found"></img>
+                      <p>No snipes activity</p>
+                    </div>
                   ) : (
                     snipeActivity?.map((snipe, index) => {
                       const {

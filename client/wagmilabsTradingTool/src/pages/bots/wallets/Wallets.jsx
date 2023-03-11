@@ -53,7 +53,7 @@ const Wallets = React.memo(() => {
       <HStack className="options">
         <HStack className="wallet" gap={"5px"}>
           <i className="fa-solid fa-wallet"></i>
-          <p>Wallets manager</p>
+          <p>Wallet manager</p>
         </HStack>
 
         <HStack className="actions">
