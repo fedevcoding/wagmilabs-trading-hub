@@ -3,7 +3,7 @@ import { getDirections, getListSort } from "./functions";
 
 export function useFilters() {
   const listSort = getListSort();
-  const [sort, setSort] = React.useState(listSort[9]);
+  const [sort, setSort] = React.useState(listSort[5]);
   const listDirections = getDirections();
   const [direction, setDirecton] = React.useState(listDirections[1]);
 

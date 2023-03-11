@@ -26,12 +26,10 @@ const Leaderboard = React.memo(({ address }) => {
                   <thead>
                     <tr>
                       <th width="30" />
-                      <th>Address</th>
-                      <th>Total gains</th>
-                      <th>Total TXs</th>
+                      <th width="200">Address</th>
+                      <th>Collection NFTs Held</th>
                       <th>NFTs Held</th>
                       <th>Bluechips Held</th>
-                      <th>Portfolio value</th>
                       <th>
                         <Tooltip
                           label={"All time"}
@@ -43,7 +41,7 @@ const Leaderboard = React.memo(({ address }) => {
                           placement="top"
                           borderRadius={"7px"}
                         >
-                          Collection Realized profits
+                          Collection Realized P&L
                         </Tooltip>
                       </th>
                       <th>
@@ -60,20 +58,25 @@ const Leaderboard = React.memo(({ address }) => {
                           Collection volume
                         </Tooltip>
                       </th>
-                      <th>Collection NFTs Held</th>
+                      <th>Total gains</th>
+                      <th>Portfolio value</th>
                     </tr>
                   </thead>
                   <tbody>
                     {(loading && (
                       <tr>
-                        <td colSpan={11}>
-                          <LoadingSpinner />
+                        <td colSpan={11} className="loading-row">
+                          <div>
+                            <div className="flex">
+                              <span>Loading Data</span> <LoadingSpinner />
+                            </div>
+                          </div>
                         </td>
                       </tr>
                     )) ||
                       ""}
                     {holders.map((h, i) => (
-                      <Row h={h} i={i} />
+                      <Row h={h} i={i} key={h.address} />
                     ))}
                   </tbody>
                 </table>

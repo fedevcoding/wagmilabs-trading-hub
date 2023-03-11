@@ -105,9 +105,11 @@ body.overflow-hidden {
 .not-responsive {
   display: none;
 }
+
+
 @media screen and (max-width: 1000px) {
-  #application-wrapper {
-    display: none;
+  #application-wrapper, .chakra-portal {
+    display: none !important;
   }
 
   .not-responsive {

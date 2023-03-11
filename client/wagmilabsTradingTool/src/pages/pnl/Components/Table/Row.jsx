@@ -12,13 +12,15 @@ export const Row = React.memo(
   ({ nft, allInfo, taxPerc, taxedOn, currency, tokensInfo, longTermTax, isFetchingInitialData }) => {
     const navigate = useNavigate();
     const momentDuration = moment.duration(nft.holdDuration, "seconds").humanize();
+    const { id: tokenId } = nft.nft;
+    const { address: tokenAddress } = nft.nft;
     const tokenInfo = tokensInfo[(nft.nft.address + nft.nft.id).toLowerCase()];
     const isMinted = !!allInfo.minted;
     const taxValue = getTaxValue(nft, taxedOn, currency, taxPerc, longTermTax);
 
     return (
       <tr>
-        <td className="nft-info-box" onClick={() => navigate(`/item/${nft.nft.address}/${nft.nft.id}`)}>
+        <td className="nft-info-box" onClick={() => navigate(`/item/${tokenAddress}/${tokenId}`)}>
           {isFetchingInitialData ? (
             <LoadingSpinner />
           ) : (
@@ -29,7 +31,7 @@ export const Row = React.memo(
                 effect="blur"
                 placeholderSrc={placeholderImage}
                 alt={"#" + nft.nft.id}
-                width={70}
+                width={65}
                 onError={({ currentTarget }) => {
                   currentTarget.onerror = null; // prevents looping
                   currentTarget.src = placeholderImage;
@@ -42,7 +44,7 @@ export const Row = React.memo(
                     {tokenInfo?.collection?.name || ""} <br />
                   </>
                 )}
-                {tokenInfo?.name || ""}
+                {tokenInfo?.name || tokenId}
               </div>
             </>
           )}
