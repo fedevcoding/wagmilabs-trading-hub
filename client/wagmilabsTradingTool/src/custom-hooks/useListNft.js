@@ -41,7 +41,7 @@ export const useListNft = ({ contractAddress, tokenId, listingPrice }, callback)
       const royalties = royaltiesPerc
         ? {
             automatedRoyalties: true,
-            royaltyBps: parseFloat(royaltiesPerc),
+            royaltyBps: parseFloat(royaltiesPerc) * 100,
           }
         : {};
 
