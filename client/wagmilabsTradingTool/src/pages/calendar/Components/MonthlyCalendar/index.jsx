@@ -148,10 +148,16 @@ export const MonthlyCalendar = React.memo(({ sectionData, section, refetch }) =>
         <Col className="calendar-right-inner-container-m">
           <div className="selected-date-detail">
             <div className="selected-date-title">{selectedDate?.title}</div>
-            {isAdmin && (
+            {section === "personal" ? (
               <Button colorScheme={"blue"} className="button btn-spacing" onClick={onOpen}>
                 {isAdmin ? "Add Event As Admin" : "Add Event"}
               </Button>
+            ) : (
+              isAdmin && (
+                <Button colorScheme={"blue"} className="button btn-spacing" onClick={onOpen}>
+                  Add event as admin
+                </Button>
+              )
             )}
             {renderEventsInfo()}
           </div>
