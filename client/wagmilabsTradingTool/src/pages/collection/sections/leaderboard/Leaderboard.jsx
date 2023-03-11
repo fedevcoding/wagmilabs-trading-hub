@@ -43,7 +43,7 @@ const Leaderboard = React.memo(({ address }) => {
                           placement="top"
                           borderRadius={"7px"}
                         >
-                          Collection Realized profits
+                          Collection Realized P&L
                         </Tooltip>
                       </th>
                       <th>
