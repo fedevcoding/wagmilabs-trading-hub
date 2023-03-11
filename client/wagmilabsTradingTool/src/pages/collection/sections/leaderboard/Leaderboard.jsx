@@ -65,8 +65,12 @@ const Leaderboard = React.memo(({ address }) => {
                   <tbody>
                     {(loading && (
                       <tr>
-                        <td colSpan={11}>
-                          <LoadingSpinner />
+                        <td colSpan={11} className="loading-row">
+                          <div>
+                            <div className="flex">
+                              <span>Loading Data</span> <LoadingSpinner />
+                            </div>
+                          </div>
                         </td>
                       </tr>
                     )) ||
