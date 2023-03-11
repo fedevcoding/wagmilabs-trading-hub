@@ -10,8 +10,6 @@ export const useBuyNow = (callback, quantity) => {
 
   async function buyNow(contract, tokenId, value) {
     try {
-
-      console.log(options)
       const signer = await fetchSigner();
       if (typeof quantity !== "undefined") {
         options.quantity = parseInt(quantity);

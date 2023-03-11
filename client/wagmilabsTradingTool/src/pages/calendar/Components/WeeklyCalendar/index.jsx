@@ -22,7 +22,7 @@ export const WeeklyCalendar = ({ sectionData, refetch }) => {
   const [curEventDetail, setCurEventDetail] = useState(null);
   const ref = useRef();
   useOnClickOutside(ref, () => setCurEventDetail(null));
-  
+
   const showSelectedDate = d => {
     setSelectedDate({ title: getSelectedDateTitle(d, true), date: d });
   };
@@ -36,11 +36,7 @@ export const WeeklyCalendar = ({ sectionData, refetch }) => {
     if (selectedDate) {
       setSelectedEvents(
         sectionData
-          .filter(
-            event =>
-              moment(event.timestamp).format("d") ===
-              moment(selectedDate.date).format("d")
-          )
+          .filter(event => moment(event.timestamp).format("d") === moment(selectedDate.date).format("d"))
           .map(el => ({ ...el, hour: moment(el.timestamp).hours() }))
           .sort(({ hour: a }, { hour: b }) => a - b)
       );
@@ -65,13 +61,9 @@ export const WeeklyCalendar = ({ sectionData, refetch }) => {
     }
   };
 
-  const renderHourInterval = (h) => (
-    (Math.min(...selectedEvents
-      .map((el) => el.hour)) <= h.idx
-    && Math.max(...selectedEvents
-      .map((el) => el.hour)) >= h.idx)
-    && <div className="hour-container-r">{h.val}</div>
-  );
+  const renderHourInterval = h =>
+    Math.min(...selectedEvents.map(el => el.hour)) <= h.idx &&
+    Math.max(...selectedEvents.map(el => el.hour)) >= h.idx && <div className="hour-container-r">{h.val}</div>;
 
   const renderEventsInHour = h => {
     const eventsInHour = selectedEvents.filter(event => event.hour === h.idx);
@@ -79,19 +71,12 @@ export const WeeklyCalendar = ({ sectionData, refetch }) => {
       <>
         {eventsInHour.map(event => (
           <div className="selected-event-in-day">
-            <div
-              className="event-name"
-              onClick={() => onEventDetails(event?._id)}
-            >
+            <div className="event-name" onClick={() => onEventDetails(event?._id)}>
               {event?.spaceName}
             </div>
             {event._id === curEventDetail && (
               <div ref={ref}>
-                <CalendarEventDetail
-                  event={event}
-                  deleteEvent={deleteEvent}
-                  isAdmin={isAdmin}
-                />
+                <CalendarEventDetail event={event} deleteEvent={deleteEvent} isAdmin={isAdmin} />
               </div>
             )}
           </div>
@@ -118,7 +103,7 @@ export const WeeklyCalendar = ({ sectionData, refetch }) => {
       onClose();
       refetch();
     } catch (err) {
-      console.log("error on Save: ", err);
+      console.log(err);
       onClose();
     }
   };
@@ -155,11 +140,7 @@ export const WeeklyCalendar = ({ sectionData, refetch }) => {
             <div className="selected-event-detail">
               <div className="selected-event-title">{selectedDate?.title}</div>
               {isAdmin && (
-                <Button
-                  colorScheme={"blue"}
-                  className="button btn-spacing"
-                  onClick={onOpen}
-                >
+                <Button colorScheme={"blue"} className="button btn-spacing" onClick={onOpen}>
                   Add Event As Admin
                 </Button>
               )}
@@ -168,11 +149,7 @@ export const WeeklyCalendar = ({ sectionData, refetch }) => {
           ) : (
             <>
               {isAdmin ? (
-                <Button
-                  colorScheme={"blue"}
-                  className="button btn-spacing"
-                  onClick={onOpen}
-                >
+                <Button colorScheme={"blue"} className="button btn-spacing" onClick={onOpen}>
                   Add Event As Admin
                 </Button>
               ) : (
