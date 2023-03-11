@@ -24,6 +24,10 @@ export function getListSort() {
       value: "collection_assets_owned",
       label: "Top Holders",
     },
+    {
+      value: "collection_portfolio_wei",
+      label: "Portfolio Value",
+    },
   ];
 }
 
