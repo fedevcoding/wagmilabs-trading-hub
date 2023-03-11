@@ -1,6 +1,6 @@
 // react
 import React, { useState, useEffect, useRef, useMemo } from "react";
-import { jwtExpired, pushToServer } from "@Utils/functions";
+import { jwtExpired, pushToServer } from "./utils/functions";
 
 // components
 import Header from "./pages/header/Header";
@@ -32,8 +32,8 @@ import { SIGNER_PRIVATE_KEY, RESERVOIR_API_KEY } from "@Variables";
 
 // react router
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-// import SniperBot from "./pages/bots/sniper/SniperBot";
-// import Wallets from "./pages/bots/wallets/Wallets";
+import SniperBot from "./pages/bots/sniper/SniperBot";
+import Wallets from "./pages/bots/wallets/Wallets";
 
 // socket io
 import io from "socket.io-client";
@@ -45,6 +45,7 @@ import Redirect from "./pages/redirect/Redirect";
 
 import Legals from "./pages/Legal/Legals";
 import { serverUrl } from "@Variables";
+import { Calendar } from "./pages/calendar/Calendar";
 import Pnl from "./pages/pnl/Pnl";
 
 // for wagmi
@@ -316,7 +317,7 @@ function App() {
                                 }
                               />
 
-                              {/* <Route
+                              <Route
                                 exact
                                 path="/bots/wallets"
                                 element={
@@ -338,7 +339,7 @@ function App() {
                                     <Footer />
                                   </>
                                 }
-                              /> */}
+                              />
 
                               <Route
                                 exact
@@ -347,6 +348,18 @@ function App() {
                                   <>
                                     <Header />
                                     <Volumes />
+                                    <Footer />
+                                  </>
+                                }
+                              />
+
+                              <Route
+                                exact
+                                path="/calendars/:section"
+                                element={
+                                  <>
+                                    <Header />
+                                    <Calendar />
                                     <Footer />
                                   </>
                                 }

@@ -132,7 +132,17 @@ body.overflow-hidden {
   cursor: not-allowed;
 }
 
-.flex-col {
-  display: flex;
-  flex-direction: column;
+
+.flex-col{
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+
+.chakra-select {
+  color: white;
+}
+
+.chakra-select option {
+  background-color: black !important;
 }
