@@ -43,6 +43,7 @@ const eventsRoute = require("./routes/ethereum/calendars/eventsRoute.js");
 const personalRoute = require("./routes/ethereum/calendars/personalRoute.js");
 const spacesRoute = require("./routes/ethereum/calendars/spacesRoute.js");
 const pAndLRoute = require("./routes/ethereum/pAndLRoute.js");
+const collectionHolders = require("./routes/ethereum/collections/holders.js");
 const refreshCollectionRoute = require("./routes/ethereum/collections/resfreshColelctionRoute.js");
 const statsRoute = require("./routes/ethereum/statsRoute.js");
 const getSnipeTasksRoute = require("./routes/ethereum/bots/sniperBot/getSnipeTasksRoute.js");
@@ -133,18 +134,16 @@ io.on("connection", socket => {
     socket.leave(channel);
   });
 
-  socket.on("joinSnipeUpdates", accountAddress => {
-    accountAddress = accountAddress?.toLowerCase();
-    const channel = `snipeUpdates:${accountAddress}`;
-    console.log(channel);
-    socket.join(channel);
+  socket.on("joinPendingSnipes", accountAddress => {
+    accountAddress = accountAddress.toLowerCase();
+    console.log("joining room " + accountAddress);
+    socket.join(accountAddress);
   });
 
-  socket.on("leaveSnipeUpdates", accountAddress => {
-    accountAddress = accountAddress?.toLowerCase();
-    const channel = `snipeUpdates:${accountAddress}`;
-    console.log(channel);
-    socket.leave(channel);
+  socket.on("leavePendingSnipes", accountAddress => {
+    accountAddress = accountAddress.toLowerCase();
+    console.log("leaving room " + accountAddress);
+    socket.leave(accountAddress);
   });
 });
 
@@ -221,6 +220,7 @@ app.use("/api/v1/wagmilabs/userBalances", userBalancesRoute);
 app.use("/api/v1/wagmilabs/searchCollection", searchCollectionsRoute);
 app.use("/api/v1/wagmilabs/collectionInfo", collectionInfoRoute);
 app.use("/api/v1/wagmilabs/collection", tokenRoute);
+app.use("/api/v1/wagmilabs/collection", collectionHolders);
 
 app.use("/api/v1/wagmilabs/profileItems", profileItemsRoute);
 app.use("/api/v1/wagmilabs/profileCollections", profileCollectionsRoute);
