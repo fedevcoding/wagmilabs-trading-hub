@@ -44,7 +44,6 @@ const fullfillSnipeTasks = async listing => {
       remaining - pendingSnipesAmount > 0 &&
       !(isFlagged && skipFlagged)
     ) {
-      console.log("sniping");
       fullfillOrder(listing, collectionTask);
     }
   }
@@ -64,7 +63,7 @@ async function fullfillOrder(listing, collectionTask) {
     maxFeePerGas,
   } = collectionTask || {};
 
-  const { price: listingPrice, tokenId, orderHash } = listing;
+  const { price: listingPrice, tokenId } = listing;
 
   try {
     addPendingSnipe(taskId);
@@ -94,9 +93,9 @@ async function fullfillOrder(listing, collectionTask) {
       options: {
         skipBalanceCheck: true,
       },
-      expectedPrice: parseFloat(listingPrice),
+      expectedPrice: listingPrice,
       onProgress: progress => {
-        console.log(progress);
+        // console.log(progress);
       },
     };
 
@@ -105,9 +104,9 @@ async function fullfillOrder(listing, collectionTask) {
       reservoirOptions.options["maxPriorityFeePerGas"] = (maxPriorityFeePerGas * 1000000000).toString();
 
     // wait 5 seconds
-    await new Promise(resolve => setTimeout(resolve, 5000));
+    // await new Promise(resolve => setTimeout(resolve, 5000));
 
-    await getClient()?.actions.buyToken(reservoirOptions);
+    // await getClient()?.actions.buyToken(reservoirOptions);
     removePendingSnipe(taskId);
 
     const snipe = {
@@ -149,15 +148,13 @@ async function fullfillOrder(listing, collectionTask) {
         },
       ],
       taskId,
+      remaining,
     };
     await updateTask(taskId, buyData, taskOwner);
-
-    if (remaining === 1) {
-      await removeTask(taskId, taskOwner);
-    }
   } catch (err) {
     console.log(err);
     removePendingSnipe(taskId);
+
     const failedData = {
       properties: [
         {
@@ -170,6 +167,7 @@ async function fullfillOrder(listing, collectionTask) {
         },
       ],
       taskId,
+      remaining,
     };
     await updateTask(taskId, failedData, taskOwner);
 
@@ -188,10 +186,13 @@ async function fullfillOrder(listing, collectionTask) {
       taskId,
       eventTimestamp: Date.now(),
       transactionHash: "",
-      remaining,
     };
 
     await updateActivity("failed", task);
+  } finally {
+    if (remaining === 1) {
+      await removeTask(taskId, taskOwner);
+    }
   }
 }
 

@@ -27,6 +27,7 @@ editSnipeRoute.post("/sniper/editTask", checkAuth, async (req, res) => {
         remaining,
         taskId,
         skipFlagged,
+        maxFeePerGas,
       } = data;
 
       if (
@@ -51,6 +52,7 @@ editSnipeRoute.post("/sniper/editTask", checkAuth, async (req, res) => {
         maxAutoBuy,
         remaining,
         maxPriorityFeePerGas,
+        maxFeePerGas,
         taskOwner,
         collectionName,
         collectionImage,
