@@ -112,37 +112,37 @@ io.on("connection", socket => {
 
   socket.on("joinSales", collectionAddress => {
     const channel = `sales${collectionAddress}`;
-    console.log("joining room ", channel);
+    // console.log("joining room ", channel);
     socket.join(channel);
   });
 
   socket.on("leaveSales", collectionAddress => {
     const channel = `sales${collectionAddress}`;
-    console.log("leaving room ", channel);
+    // console.log("leaving room ", channel);
     socket.leave(collectionAddress);
   });
 
   socket.on("joinListings", collectionAddress => {
     const channel = `listings${collectionAddress}`;
-    console.log("joining room ", channel);
+    // console.log("joining room ", channel);
     socket.join(channel);
   });
 
   socket.on("leaveListings", collectionAddress => {
     const channel = `listings${collectionAddress}`;
-    console.log("joining room ", channel);
+    // console.log("joining room ", channel);
     socket.leave(channel);
   });
 
   socket.on("joinPendingSnipes", accountAddress => {
-    accountAddress = accountAddress.toLowerCase();
-    console.log("joining room " + accountAddress);
+    accountAddress = accountAddress?.toLowerCase();
+    // console.log("joining room " + accountAddress);
     socket.join(accountAddress);
   });
 
   socket.on("leavePendingSnipes", accountAddress => {
-    accountAddress = accountAddress.toLowerCase();
-    console.log("leaving room " + accountAddress);
+    accountAddress = accountAddress?.toLowerCase();
+    // console.log("leaving room " + accountAddress);
     socket.leave(accountAddress);
   });
 });
@@ -169,8 +169,6 @@ function newSale(saleData) {
 }
 
 function newSnipeUpdate(accountAddress, data) {
-  console.log(data);
-  console.log("sending update to ", accountAddress, "");
   accountAddress = accountAddress?.toLowerCase();
   const channel = `snipeUpdates:${accountAddress}`;
 

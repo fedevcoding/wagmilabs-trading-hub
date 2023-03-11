@@ -26,7 +26,6 @@ export const useHandleData = (activeSnipes, setActiveSnipes) => {
         setActiveSnipes(newTasks);
       }
       if (state === "remove") {
-        console.log("removing");
         const newTasks = activeSnipes.filter(snipe => snipe.taskId !== data);
         setActiveSnipes(newTasks);
       }
