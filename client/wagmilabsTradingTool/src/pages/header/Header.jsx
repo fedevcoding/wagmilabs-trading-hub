@@ -279,7 +279,7 @@ const Header = () => {
               <div className="bots-options-dropdown invisible">
                 <div onClick={() => navigate("/bots/wallets")}>Wallets</div>
                 <div onClick={() => navigate("/bots/sniper")}>Sniper bot</div>
-                <div className="not-allowed">Contract minter</div>
+                <div className="not-allowed">Minting bot</div>
                 <div className="not-allowed">Notifications</div>
               </div>
             </div>
@@ -325,9 +325,9 @@ const Header = () => {
                 <p>Profile</p>
               </div>
 
-              <div className="switch-account-option-container not-allowed">
+              <div className="switch-account-option-container not-allowed" onClick={() => navigate("/bots/wallets")}>
                 <i className="fa-solid fa-arrows-repeat"></i>
-                <p>Switch account</p>
+                <p>Account manager</p>
               </div>
 
               <div onClick={() => logOut(setConnected)} className="logout-container">

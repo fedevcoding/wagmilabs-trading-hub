@@ -33,6 +33,9 @@ getSnipeTasksRoute.get("/sniper/getTasks", checkAuth, async (req, res) => {
       return newTask;
     });
 
+    tasks?.reverse();
+    activities?.reverse();
+
     res.status(200).json({ tasks, activities });
   } catch (e) {
     console.log(e);
