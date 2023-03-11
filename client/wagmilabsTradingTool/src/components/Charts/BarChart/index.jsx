@@ -75,29 +75,29 @@ export const BarChart = ({
           },
           ...(tooltipSuffix
             ? {
-                tooltip: {
-                  valueSuffix: tooltipSuffix,
-                  formatter: function () {
-                    let amount = this.y;
-                    if (typeof amount === "number") {
-                      amount = amount.toLocaleString("EN-us", {
-                        maximumFractionDigits: 2,
-                      });
-                    }
-                    const dollarValue = (values?.secondValue || [])[
-                      this.point.index
-                    ];
-                    const label = (values?.labels || [])[this.point.index];
-                    return (
-                      label +
-                      "<br><br>" +
-                      (dollarValue
-                        ? amount + ` ${tooltipSuffix}<br>$` + dollarValue
-                        : amount + tooltipSuffix)
-                    );
-                  },
+              tooltip: {
+                valueSuffix: tooltipSuffix,
+                formatter: function () {
+                  let amount = this.y;
+                  if (typeof amount === "number") {
+                    amount = amount.toLocaleString("EN-us", {
+                      maximumFractionDigits: 2,
+                    });
+                  }
+                  const dollarValue = (values?.secondValue || [])[
+                    this.point.index
+                  ];
+                  const label = (values?.labels || [])[this.point.index];
+                  return (
+                    label +
+                    "<br><br>" +
+                    (dollarValue
+                      ? amount + ` ${tooltipSuffix}<br>$` + dollarValue
+                      : amount + tooltipSuffix)
+                  );
                 },
-              }
+              },
+            }
             : {}),
           legend: {
             enabled: false,

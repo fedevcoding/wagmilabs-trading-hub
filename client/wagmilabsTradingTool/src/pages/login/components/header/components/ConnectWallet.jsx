@@ -16,7 +16,7 @@ const iconsMapping = value => {
     case "feed":
       return <i className="fa-regular fa-newspaper"></i>;
     default:
-      break;
+      return;
   }
 };
 

@@ -273,15 +273,22 @@ const Header = () => {
 
         <div className="header-links-container">
           <div>
-            <div className="bots-button header-links not-allowed">
+            <div className="bots-button header-links">
               <span>Bots</span>
+
+              <div className="bots-options-dropdown invisible">
+                <div onClick={() => navigate("/bots/wallets")}>Wallets</div>
+                <div onClick={() => navigate("/bots/sniper")}>Sniper bot</div>
+                <div className="not-allowed">Contract minter</div>
+                <div className="not-allowed">Notifications</div>
+              </div>
             </div>
           </div>
           <div onClick={() => navigate("/volumes")}>
             <div className={`${isVolumesPage ? "active" : ""} volumes-button header-links`}>Volumes</div>
           </div>
           <div>
-            <div className="pnl-button header-links not-allowed">
+            <div className="pnl-button header-links" onClick={() => navigate("/profitandloss")}>
               <span>P&L</span>
             </div>
           </div>
@@ -289,8 +296,15 @@ const Header = () => {
             <div className="feed-button header-links">Feed</div>
           </div>
           <div>
-            <div className="calendars-button header-links not-allowed">
+            <div className="calendars-button header-links">
               <span>Calendars</span>
+
+              <div className="calendars-options-dropdown invisible">
+                <div onClick={() => navigate("/calendars/drops")}>NFT drops</div>
+                <div onClick={() => navigate("/calendars/spaces")}>Twitter spaces</div>
+                <div onClick={() => navigate("/calendars/raffles")}>Personal</div>
+                <div onClick={() => navigate("/calendars/events")}>IRL events</div>
+              </div>
             </div>
           </div>
         </div>

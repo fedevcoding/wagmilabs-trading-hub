@@ -27,10 +27,7 @@ const Footer = () => {
         <div className="footer-gas-preset" onClick={openGasSettings}>
           <i className="fa-solid fa-bolt-lightning"></i>
           <p>Preset: {gasSettings.label}</p>
-          <GasModal
-            setGasModalOpen={setGasModalOpen}
-            gasModalOpen={gasModalOpen}
-          />
+          <GasModal setGasModalOpen={setGasModalOpen} gasModalOpen={gasModalOpen} />
         </div>
 
         <a
@@ -43,12 +40,7 @@ const Footer = () => {
           <p>{currentBlock}</p>
         </a>
 
-        <a
-          className="footer-gas-preset"
-          href="https://etherscan.io/gastracker"
-          target={"_blank"}
-          rel="noreferrer"
-        >
+        <a className="footer-gas-preset" href="https://etherscan.io/gastracker" target={"_blank"} rel="noreferrer">
           <i className="fa-solid fa-gas-pump"></i>
           <p>{blockGas}</p>
         </a>
@@ -70,27 +62,15 @@ const Footer = () => {
           <i className="fa-solid fa-scale-unbalanced"></i>
         </a>
 
-        <a
-          href="https://docs.wagmilabs.tools/trading-hub-documentation"
-          rel="noreferrer"
-          target={"_blank"}
-        >
+        <a href="https://docs.wagmilabs.tools/trading-hub-documentation" rel="noreferrer" target={"_blank"}>
           <i className="fa-regular fa-circle-info"></i>
         </a>
 
-        <a
-          href="https://discord.gg/wagmilabs"
-          target={"_blank"}
-          rel="noreferrer"
-        >
+        <a href="https://discord.gg/wagmilabs" target={"_blank"} rel="noreferrer">
           <i className="fa-brands fa-discord"></i>
         </a>
 
-        <a
-          href="https://twitter.com/wagmi_labs"
-          target={"_blank"}
-          rel="noreferrer"
-        >
+        <a href="https://twitter.com/wagmi_labs" target={"_blank"} rel="noreferrer">
           <i className="fa-brands fa-twitter"></i>
         </a>
       </div>

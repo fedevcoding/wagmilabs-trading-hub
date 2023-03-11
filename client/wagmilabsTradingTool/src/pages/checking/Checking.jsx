@@ -5,8 +5,6 @@ import Lottie from "react-lottie-player";
 import "./checking.css";
 
 const Checking = ({ setConnected, setChecking }) => {
-  // const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
-
   useEffect(() => {
     async function verify() {
       try {
@@ -47,12 +45,7 @@ const Checking = ({ setConnected, setChecking }) => {
 
   return (
     <div className="checking-text" style={{ backgroundColor: "black" }}>
-      <Lottie
-        loop
-        animationData={animationBlack}
-        play
-        style={{ width: "20vw", margin: "auto" }}
-      />
+      <Lottie loop animationData={animationBlack} play style={{ width: "20vw", margin: "auto" }} />
     </div>
   );
 };
