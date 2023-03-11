@@ -1,3 +1,4 @@
+import React from "react";
 import {
   Button,
   HStack,
@@ -10,49 +11,50 @@ import {
   ModalHeader,
   ModalOverlay,
   NumberInput,
+  NumberInputField,
   Radio,
   RadioGroup,
   Select,
+  Switch,
 } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
 import EthereumSearch from "src/pages/search/EthereumSearch";
 import { useHandleData, useSteps } from "./hooks";
+import { useGetWallets } from "@Hooks";
+import { useEditTask } from "../../../hooks/useEditTask";
+import { Loader } from "@Components";
+import { placeholderImage } from "src/assets";
 
-export const NewTaskModal = React.memo(({ showNewTask, toggleNewTask }) => {
+export const NewTaskModal = React.memo(({ showNewTask, toggleNewTaskModal, toggleSnipe }) => {
   const { step, nextStep, prevStep, resetStep } = useSteps();
-
-  const [wallets, setWallets] = useState([]);
-
+  const wallets = useGetWallets();
   const {
-    collection,
+    collectionAddress,
+    collectionImage,
+    collectionName,
     minPrice,
     maxPrice,
     walletType,
     walletAddress,
     privateKey,
+    maxPriorityFeePerGas,
+    maxFeePerGas,
+    maxAutoBuy,
+    data,
+    maxFeePerGasType,
     handleSetData,
     handleCollectionClick,
     resetCollection,
-  } = useHandleData(wallets);
-
-  useEffect(() => {
-    const wallets = JSON.parse(localStorage.getItem("wallets")) || [];
-    setWallets(wallets);
-  }, []);
-
-  useEffect(() => {
-    if (showNewTask) {
-      resetStep();
-    }
-  }, [showNewTask, resetStep]);
+    resetData,
+    isValidNextStep,
+  } = useHandleData(wallets, step);
 
   const closeNewTask = () => {
-    toggleNewTask(false);
+    toggleNewTaskModal(false);
+    resetStep();
+    resetData();
   };
 
-  const saveTask = () => {
-    closeNewTask();
-  };
+  const { saveTask, addLoading } = useEditTask(closeNewTask, toggleSnipe);
 
   return (
     <Modal isOpen={showNewTask} onClose={closeNewTask}>
@@ -66,13 +68,17 @@ export const NewTaskModal = React.memo(({ showNewTask, toggleNewTask }) => {
             <>
               <div className="step1-container">
                 <div className="option">
-                  <p>Collection</p>
+                  <p className="titles">Collection</p>
 
-                  {collection.address ? (
+                  {collectionAddress ? (
                     <div className="collection-container">
                       <HStack>
-                        <img src={collection.image} alt={collection.name} className="collection-image" />
-                        <p className="collection-name">{collection.name}</p>
+                        <img
+                          src={collectionImage || placeholderImage}
+                          alt={collectionName}
+                          className="collection-image"
+                        />
+                        <p className="collection-name">{collectionName}</p>
                       </HStack>
 
                       <i class="fa-solid fa-x" onClick={resetCollection}></i>
@@ -83,10 +89,10 @@ export const NewTaskModal = React.memo(({ showNewTask, toggleNewTask }) => {
                 </div>
 
                 <div className="option">
-                  <p>Price</p>
+                  <p className="titles">Price</p>
                   <HStack>
                     <NumberInput>
-                      <Input
+                      <NumberInputField
                         placeholder="Min"
                         value={minPrice}
                         onChange={e => handleSetData("minPrice", e.target.value)}
@@ -94,7 +100,7 @@ export const NewTaskModal = React.memo(({ showNewTask, toggleNewTask }) => {
                     </NumberInput>
                     <p>-</p>
                     <NumberInput>
-                      <Input
+                      <NumberInputField
                         placeholder="Max"
                         value={maxPrice}
                         onChange={e => handleSetData("maxPrice", e.target.value)}
@@ -104,7 +110,7 @@ export const NewTaskModal = React.memo(({ showNewTask, toggleNewTask }) => {
                 </div>
 
                 <div className="option">
-                  <p>Wallet</p>
+                  <p className="titles">Wallet</p>
                   <RadioGroup onChange={value => handleSetData("walletType", value)} defaultValue={walletType}>
                     <HStack gap={"15px"}>
                       <Radio value="privatekey">Private key</Radio>
@@ -136,42 +142,71 @@ export const NewTaskModal = React.memo(({ showNewTask, toggleNewTask }) => {
             </>
           ) : (
             step === 2 && (
-              <>
-                <p>Gas</p>
-                <HStack>
+              <div className="step2-container flex-col">
+                <HStack className="flex-col">
                   <p>Max Fee Per Gas:</p>
-                  <NumberInput>
-                    <Input placeholder="Max Fee Per Gas" />
-                  </NumberInput>
+                  <HStack width={"50%"}>
+                    <Select onChange={e => handleSetData("maxFeePerGasType", e.target.value)} className="chakra-select">
+                      <option value="auto">Auto</option>
+                      <option value="custom">Custom</option>
+                    </Select>
+                  </HStack>
+
+                  {maxFeePerGasType === "custom" && (
+                    <NumberInput value={maxFeePerGas} onChange={value => handleSetData("maxFeePerGas", value)}>
+                      <NumberInputField placeholder="Max Fee Per Gas" />
+                    </NumberInput>
+                  )}
                 </HStack>
-                <HStack>
+
+                <HStack className="flex-col">
                   <p>Max Priority Fee Per Gas:</p>
-                  <NumberInput>
-                    <Input placeholder="Max Priority Fee Per Gas" />
+                  <NumberInput
+                    value={maxPriorityFeePerGas}
+                    onChange={value => handleSetData("maxPriorityFeePerGas", value)}
+                  >
+                    <NumberInputField placeholder="Max Priority Fee Per Gas" />
                   </NumberInput>
                 </HStack>
 
-                <p>Max auto buy</p>
-                <NumberInput>
-                  <Input placeholder="Max auto buy" />
-                </NumberInput>
-              </>
+                <HStack className="flex-col">
+                  <p>Max auto buy</p>
+                  <NumberInput value={maxAutoBuy} onChange={value => handleSetData("maxAutoBuy", value)}>
+                    <NumberInputField placeholder="Max auto buy" />
+                  </NumberInput>
+                </HStack>
+
+                <HStack justifyContent={"center"}>
+                  <p>Skip flagged tokens</p>
+                  <Switch defaultChecked onChange={e => handleSetData("skipFlaggedTokens", e.target.value)} />
+                </HStack>
+              </div>
             )
           )}
         </ModalBody>
 
-        <ModalFooter>
+        <ModalFooter className="modal-footer">
           <HStack gap={"10px"}>
             {step === 1 ? (
               <>
                 <Button onClick={closeNewTask}>Cancel</Button>
-                <Button onClick={nextStep}>Next</Button>
+                <Button
+                  onClick={isValidNextStep ? nextStep : undefined}
+                  className={`${!isValidNextStep && "not-active"}`}
+                >
+                  Next
+                </Button>
               </>
             ) : (
               step === 2 && (
                 <>
                   <Button onClick={prevStep}>Back</Button>
-                  <Button onClick={saveTask}>Save</Button>
+                  <Button
+                    onClick={() => isValidNextStep && !addLoading && saveTask(data)}
+                    className={`${!isValidNextStep && "not-active"}`}
+                  >
+                    {addLoading ? <Loader width={"25px"} height="25px" /> : <p>Save</p>}
+                  </Button>
                 </>
               )
             )}

@@ -273,8 +273,15 @@ const Header = () => {
 
         <div className="header-links-container">
           <div>
-            <div className="bots-button header-links not-allowed">
+            <div className="bots-button header-links">
               <span>Bots</span>
+
+              <div className="bots-options-dropdown invisible">
+                <div onClick={() => navigate("/bots/wallets")}>Wallets</div>
+                <div onClick={() => navigate("/bots/sniper")}>Sniper bot</div>
+                <div onClick={() => navigate("/bots/contractMinter")}>Contract minter</div>
+                <div onClick={() => navigate("/bots/notifications")}>Notifications</div>
+              </div>
             </div>
           </div>
           <div onClick={() => navigate("/volumes")}>

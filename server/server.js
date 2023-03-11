@@ -1,6 +1,6 @@
 const CLIENT_URL = "http://localhost:3000";
 
-module.exports = { newSale, newListing, newPendingSnipe, CLIENT_URL };
+module.exports = { newSale, newListing, newSnipeUpdate, CLIENT_URL };
 
 // routes imports
 
@@ -44,6 +44,10 @@ const eventsRoute = require("./routes/ethereum/calendars/eventsRoute.js");
 const personalRoute = require("./routes/ethereum/calendars/personalRoute.js");
 const spacesRoute = require("./routes/ethereum/calendars/spacesRoute.js");
 const pAndLRoute = require("./routes/ethereum/pAndLRoute.js");
+const refreshCollectionRoute = require("./routes/ethereum/collections/resfreshColelctionRoute.js");
+const statsRoute = require("./routes/ethereum/statsRoute.js");
+const getSnipeTasksRoute = require("./routes/ethereum/bots/sniperBot/getSnipeTasksRoute.js");
+const editSnipeRoute = require("./routes/ethereum/bots/sniperBot/editSnipeRoute.js");
 //
 
 // port
@@ -76,8 +80,6 @@ app.use(cookieParser());
 const http = require("http");
 const server = new http.createServer(app);
 const socketIO = require("socket.io");
-const refreshCollectionRoute = require("./routes/ethereum/collections/resfreshColelctionRoute.js");
-const statsRoute = require("./routes/ethereum/statsRoute.js");
 const io = socketIO(server, {
   cors: {
     origin: CLIENT_URL,
@@ -100,7 +102,7 @@ setInterval(async () => {
   await updateGasData();
 }, 10000);
 
-io.on("connection", (socket) => {
+io.on("connection", socket => {
   setInterval(() => {
     socket.emit("ethData", ethData);
   }, 10000);
@@ -108,40 +110,42 @@ io.on("connection", (socket) => {
     socket.emit("ethData", ethData);
   });
 
-  socket.on("joinSales", (collectionAddress) => {
+  socket.on("joinSales", collectionAddress => {
     const channel = `sales${collectionAddress}`;
     console.log("joining room ", channel);
     socket.join(channel);
   });
 
-  socket.on("leaveSales", (collectionAddress) => {
+  socket.on("leaveSales", collectionAddress => {
     const channel = `sales${collectionAddress}`;
     console.log("leaving room ", channel);
     socket.leave(collectionAddress);
   });
 
-  socket.on("joinListings", (collectionAddress) => {
+  socket.on("joinListings", collectionAddress => {
     const channel = `listings${collectionAddress}`;
     console.log("joining room ", channel);
     socket.join(channel);
   });
 
-  socket.on("leaveListings", (collectionAddress) => {
+  socket.on("leaveListings", collectionAddress => {
     const channel = `listings${collectionAddress}`;
     console.log("joining room ", channel);
     socket.leave(channel);
   });
 
-  socket.on("joinPendingSnipes", (accountAddress) => {
-    accountAddress = accountAddress.toLowerCase();
-    console.log("joining room " + accountAddress);
-    socket.join(accountAddress);
+  socket.on("joinSnipeUpdates", accountAddress => {
+    accountAddress = accountAddress?.toLowerCase();
+    const channel = `snipeUpdates:${accountAddress}`;
+    console.log(channel);
+    socket.join(channel);
   });
 
-  socket.on("leavePendingSnipes", (accountAddress) => {
-    accountAddress = accountAddress.toLowerCase();
-    console.log("leaving room " + accountAddress);
-    socket.leave(accountAddress);
+  socket.on("leaveSnipeUpdates", accountAddress => {
+    accountAddress = accountAddress?.toLowerCase();
+    const channel = `snipeUpdates:${accountAddress}`;
+    console.log(channel);
+    socket.leave(channel);
   });
 });
 
@@ -158,7 +162,7 @@ function newListing(listingData) {
 function newSale(saleData) {
   try {
     const { tokenAddress } = saleData;
-    const contractAddress = tokenAddress.toLowerCase();
+    const contractAddress = tokenAddress?.toLowerCase();
     const channel = `sales${contractAddress}`;
     io.sockets.to(channel).emit("sale", saleData);
   } catch (e) {
@@ -166,12 +170,14 @@ function newSale(saleData) {
   }
 }
 
-function newPendingSnipe(accountAddress, id) {
-  accountAddress = accountAddress.toLowerCase();
-  console.log(id);
+function newSnipeUpdate(accountAddress, data) {
+  console.log(data);
+  console.log("sending update to ", accountAddress, "");
+  accountAddress = accountAddress?.toLowerCase();
+  const channel = `snipeUpdates:${accountAddress}`;
 
   try {
-    io.sockets.to(accountAddress).emit("newPendingSnipe", id);
+    io.sockets.to(channel).emit("newSnipeUpdates", data);
   } catch (e) {
     console.log(e);
   }
@@ -204,10 +210,7 @@ app.use("/api/v1/wagmilabs/activityChart", activityChartRoute);
 app.use("/api/v1/wagmilabs/collectionActivity", collectionActivityRoute);
 app.use("/api/v1/wagmilabs/tokenListPrice", tokenLisrPriceRoute);
 app.use("/api/v1/wagmilabs/profileActivity", profileActivityRoute);
-app.use(
-  "/api/v1/wagmilabs/profileTradedCollections",
-  profileTradedCollectionsRoute
-);
+app.use("/api/v1/wagmilabs/profileTradedCollections", profileTradedCollectionsRoute);
 app.use("/api/v1/wagmilabs/collectionListings", collectionListingsRoute);
 app.use("/api/v1/wagmilabs/collectionSales", collectionSalesRoute);
 app.use("/api/v1/wagmilabs/drops", dropsRoute);
@@ -236,6 +239,8 @@ app.use("/api/v1/wagmilabs/p-and-l", pAndLRoute);
 app.use("/api/v1/wagmilabs/stats", statsRoute);
 
 // bots routes
+app.use("/api/v1/wagmilabs/bots", editSnipeRoute);
+app.use("/api/v1/wagmilabs/bots", getSnipeTasksRoute);
 
 app.use("/api/v1/wagmilabs/salesBot/", saleBotRoute);
 
