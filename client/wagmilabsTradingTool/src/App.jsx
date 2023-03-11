@@ -46,6 +46,7 @@ import Redirect from "./pages/redirect/Redirect";
 import Legals from "./pages/Legal/Legals";
 import { serverUrl } from "@Variables";
 import { Calendar } from "./pages/calendar/Calendar";
+import Pnl from "./pages/pnl/Pnl";
 
 // for wagmi
 
@@ -376,7 +377,7 @@ function App() {
                                 }
                               />
 
-                              {/* <Route
+                              <Route
                                 exact
                                 path="/profitandloss"
                                 element={
@@ -386,7 +387,7 @@ function App() {
                                     <Footer />
                                   </>
                                 }
-                              /> */}
+                              />
 
                               <Route
                                 exact

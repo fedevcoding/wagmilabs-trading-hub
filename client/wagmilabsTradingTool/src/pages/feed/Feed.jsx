@@ -26,10 +26,10 @@ const Feed = React.memo(() => {
         <>
           <div className="cards">
             {news.map((n, index) => (
-              <>
+              <React.Fragment key={n.link}>
                 {index === bannerPos && <Banner />}
                 <Card key={n.link} news={n} />
-              </>
+              </React.Fragment>
             ))}
           </div>
           <Pagination
@@ -40,11 +40,7 @@ const Feed = React.memo(() => {
             }}
           />
           <div id="powered-by">
-            <a
-              title="Powered By Luckytrader"
-              href="https://www.luckytrader.com/?tag=WagmiLabs"
-              rel="sponsored"
-            >
+            <a title="Powered By Luckytrader" href="https://www.luckytrader.com/?tag=WagmiLabs" rel="sponsored">
               <img src={PoweredBy} alt="Powered By Luckytrader" width={200} />
             </a>
           </div>
