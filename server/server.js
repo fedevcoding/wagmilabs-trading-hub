@@ -26,7 +26,6 @@ const profileStatsRoute = require("./routes/ethereum/profile/profileStatsRoute.j
 const volumesRoute = require("./routes/ethereum/volumesRoute.js");
 const feedRoute = require("./routes/ethereum/feedRoute.js");
 const tokenRoute = require("./routes/ethereum/collections/token/tokenRoute.js");
-const saleBotRoute = require("./routes/ethereum/bots/saleBotRoute.js");
 const profileCollectionsRoute = require("./routes/ethereum/profile/profileCollectionsRoute.js");
 const collectionItemsRoute = require("./routes/ethereum/collections/collectionItemsRoute.js");
 const watchlistCollectionsRoute = require("./routes/ethereum/watchlistCollectionsRoute.js");
@@ -241,8 +240,6 @@ app.use("/api/v1/wagmilabs/stats", statsRoute);
 // bots routes
 app.use("/api/v1/wagmilabs/bots", editSnipeRoute);
 app.use("/api/v1/wagmilabs/bots", getSnipeTasksRoute);
-
-app.use("/api/v1/wagmilabs/salesBot/", saleBotRoute);
 
 //
 
