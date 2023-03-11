@@ -273,7 +273,7 @@ const Header = () => {
 
         <div className="header-links-container">
           <div>
-            <div className="bots-button header-links">
+            <div className="bots-button header-links not-allowed">
               <span>Bots</span>
             </div>
           </div>
