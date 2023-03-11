@@ -11,6 +11,7 @@ import {
   Button,
   NumberInput,
   NumberInputField,
+  Switch,
 } from "@chakra-ui/react";
 import { useListNft } from "@Hooks";
 import { Loader, OrderInfo, Select } from "@Components";
@@ -36,7 +37,8 @@ export const ListItemModal = React.memo(
     const marketplaces = getMarketplaces();
     const [date, setDate] = React.useState(null);
     const [marketplace, setMarketplace] = React.useState(marketplaces[0]);
-    const [royaltiesPerc, setRoyaltiesPerc] = React.useState(0);
+    const [royaltiesPerc, setRoyaltiesPerc] = React.useState(0.5);
+    const [autoRoyalties, setAutoRoyalties] = React.useState(true);
 
     const { listNft } = useListNft(
       {
@@ -77,13 +79,6 @@ export const ListItemModal = React.memo(
             </NumberInput>
             <br />
             <p className="label">
-              <b>Creator royalties percentage</b>
-            </p>
-            <NumberInput max={100} min={0} step={0.01} value={royaltiesPerc}>
-              <NumberInputField placeholder={`Value...`} onChange={e => setRoyaltiesPerc(e.target.value)} />
-            </NumberInput>
-            <br />
-            <p className="label">
               <b>Marketplace</b>
             </p>
             <Select
@@ -93,6 +88,34 @@ export const ListItemModal = React.memo(
               value={marketplace}
               options={marketplaces}
             />
+            {(marketplace.value === "opensea" && (
+              <div>
+                <br />
+                <div className="space-between">
+                  <p className="label">
+                    <b>Auto royalties</b>
+                  </p>
+                  <Switch
+                    isChecked={autoRoyalties}
+                    colorScheme="gray"
+                    onChange={e => setAutoRoyalties(e.target.checked)}
+                  />
+                </div>
+                {(!autoRoyalties && (
+                  <>
+                    <br />
+                    <p className="label">
+                      <b>Creator royalties percentage</b>
+                    </p>
+                    <NumberInput max={100} min={0.5} step={0.01} value={royaltiesPerc}>
+                      <NumberInputField placeholder={`Value...`} onChange={e => setRoyaltiesPerc(e.target.value)} />
+                    </NumberInput>
+                  </>
+                )) ||
+                  ""}
+              </div>
+            )) ||
+              ""}
             <br />
             <p className="label">
               <b>Set expiration date</b>
@@ -119,7 +142,7 @@ export const ListItemModal = React.memo(
                     setConfirmingList,
                     parseInt(new Date(date).getTime() / 1000).toString(),
                     marketplace.value,
-                    royaltiesPerc
+                    autoRoyalties ? null : royaltiesPerc
                   );
               }}
             >
