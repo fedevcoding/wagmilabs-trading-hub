@@ -1,11 +1,10 @@
 const ethers = require("ethers");
 const { getClient } = require("@reservoir0x/reservoir-sdk");
 const { createClient } = require("@reservoir0x/reservoir-sdk");
-const { CLIENT_URL, newSnipeUpdate } = require("../../../../server");
 
 // reservoir client
 createClient({
-  source: CLIENT_URL,
+  source: "app.wagmilabs.tools",
   chains: [
     {
       id: 1,
@@ -152,7 +151,6 @@ async function fullfillOrder(listing, collectionTask) {
     };
     await updateTask(taskId, buyData, taskOwner);
   } catch (err) {
-    console.log(err);
     removePendingSnipe(taskId);
 
     const failedData = {
