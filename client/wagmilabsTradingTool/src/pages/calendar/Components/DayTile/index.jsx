@@ -15,13 +15,14 @@ const dayClass = d => {
   }
 };
 
-const renderEvents = events =>
+const renderEvents = events => {
   events
     ?.map((event, index) => {
       if (index < 2) return renderEventName(event);
       else return undefined;
     })
-    ?.fiter(item => item !== undefined);
+    ?.filter(e => e !== undefined);
+};
 
 const renderEventName = event => <div className="day-event-name">{event?.collectionName || event?.eventName}</div>;
 
