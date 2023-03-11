@@ -45,17 +45,6 @@ export const useListNft = ({ contractAddress, tokenId, listingPrice }, callback)
           }
         : {};
 
-      console.log([
-        {
-          token: `${contractAddress}:${tokenId}`,
-          weiPrice,
-          orderbook,
-          orderKind,
-          expirationTime,
-          ...royalties,
-        },
-      ]);
-
       await getClient()?.actions.listToken({
         listings: [
           {
