@@ -1,14 +1,15 @@
 import React from "react";
-import { Tooltip } from "@chakra-ui/react";
+import { HStack, Tooltip } from "@chakra-ui/react";
 import { useCopy } from "@Hooks";
 import { formatAddress, roundPrice2, roundPriceUsd } from "@Utils";
+import { Number } from "@Components";
 
 export const Row = React.memo(({ h, i }) => {
   const { copyState, copyAddress } = useCopy();
 
   return (
     <tr>
-      <td width="30">{i + 1}</td>
+      <td>{i + 1}</td>
       <td>
         <Tooltip
           label={copyState}
@@ -26,17 +27,24 @@ export const Row = React.memo(({ h, i }) => {
         </Tooltip>
       </td>
       <td>
-        <i className="fa-brands fa-ethereum" /> {roundPrice2(h.total_gain)}
+        <HStack justifyContent={"center"}>
+          <i className="fa-brands fa-ethereum" />
+          <Number n={h.total_gain} crypto={true} />
+        </HStack>
       </td>
       <td>{h.num_txs}</td>
-      <td>{h.num_assets_owned}</td>
       <td>{h.num_blue_chips_owned}</td>
       <td>
         <i className="fa-brands fa-ethereum" /> {roundPrice2(h.portfolio_value_wei / 1e18)}
         <br />
         <small>({roundPriceUsd(h.portfolio_value_usd)}$)</small>
       </td>
-      <td>{h.collection_gains_all_time}</td>
+      <td>
+        <HStack justifyContent={"center"}>
+          <i className="fa-brands fa-ethereum" />
+          <Number n={h.collection_gains_all_time} crypto={true} />
+        </HStack>
+      </td>
       <td>
         <i className="fa-brands fa-ethereum" /> {roundPrice2(h.collection_volume_wei_all_time / 1e18)}
       </td>

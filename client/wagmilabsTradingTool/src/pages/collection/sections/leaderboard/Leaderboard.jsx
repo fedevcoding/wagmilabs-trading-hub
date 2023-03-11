@@ -26,9 +26,9 @@ const Leaderboard = React.memo(({ address }) => {
                   <thead>
                     <tr>
                       <th width="30" />
-                      <th>Address</th>
+                      <th width="200">Address</th>
                       <th>Total gains</th>
-                      <th>Total TXs</th>
+                      {/* <th>Total TXs</th> */}
                       <th>NFTs Held</th>
                       <th>Bluechips Held</th>
                       <th>Portfolio value</th>

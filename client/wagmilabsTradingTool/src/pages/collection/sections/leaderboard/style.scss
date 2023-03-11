@@ -9,6 +9,14 @@
 
   .card-component {
     min-height: 300px;
+    border-radius: 10px;
+    padding: 0 1rem;
+    margin: 1rem 0;
+    gap: 20px;
+    display: flex;
+    flex-direction: column;
+    background-color: transparent;
+    border: none;
 
     .spinner {
       margin: 5rem 0;
@@ -57,6 +65,7 @@
     border-top-left-radius: 10px;
     border-spacing: 0;
     border-collapse: collapse;
+    border-radius: 10px;
 
     th {
       text-align: left;
@@ -65,7 +74,8 @@
       border-left-color: transparent;
       border-bottom: 2px solid #2c2c3a;
       font-size: 14px;
-      padding: 0.5rem;
+      padding: 1rem 0.5rem;
+      text-align: center;
     }
 
     tr:first-child td {
@@ -74,7 +84,19 @@
 
     tr td:first-child,
     tr th:first-child {
-      width: 30px;
+      width: 50px;
+      text-align: right;
+    }
+
+    tr:last-child {
+      td {
+        &:first-child {
+          border-bottom-left-radius: 10px;
+        }
+        &:last-child {
+          border-bottom-right-radius: 10px;
+        }
+      }
     }
 
     tr td {
@@ -82,12 +104,12 @@
       display: table-cell;
       padding: 0.8rem 0.5rem;
       background-color: #1e1f25;
+      text-align: center;
 
       small {
         color: var(--light-gray);
       }
     }
-
     tr:nth-child(odd) td {
       background-color: #171719;
     }
