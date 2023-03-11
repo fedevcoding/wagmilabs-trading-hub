@@ -76,7 +76,7 @@ const Leaderboard = React.memo(({ address }) => {
                     )) ||
                       ""}
                     {holders.map((h, i) => (
-                      <Row h={h} i={i} />
+                      <Row h={h} i={i} key={h.address} />
                     ))}
                   </tbody>
                 </table>

@@ -45,9 +45,22 @@ export const Row = React.memo(({ h, i }) => {
         </HStack>
       </td>
       <td className="portfolio-value">
-        <i className="fa-brands fa-ethereum" /> {roundPrice2(h.portfolio_value_wei / 1e18)}
-        <br />
-        <small>({roundPriceUsd(h.portfolio_value_usd)}$)</small>
+        <Tooltip
+          label={"Includes Crypto & NFTs"}
+          closeOnClick={false}
+          hasArrow
+          fontSize="xs"
+          bg="black"
+          color={"white"}
+          placement="top"
+          borderRadius={"7px"}
+        >
+          <div>
+            <i className="fa-brands fa-ethereum" /> {roundPrice2(h.portfolio_value_wei / 1e18)}
+            <br />
+            <small>({roundPriceUsd(h.portfolio_value_usd)}$)</small>
+          </div>
+        </Tooltip>
       </td>
     </tr>
   );
