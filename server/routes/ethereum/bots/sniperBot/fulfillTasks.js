@@ -104,9 +104,9 @@ async function fullfillOrder(listing, collectionTask) {
       reservoirOptions.options["maxPriorityFeePerGas"] = (maxPriorityFeePerGas * 1000000000).toString();
 
     // wait 5 seconds
-    // await new Promise(resolve => setTimeout(resolve, 5000));
+    await new Promise(resolve => setTimeout(resolve, 5000));
 
-    // await getClient()?.actions.buyToken(reservoirOptions);
+    await getClient()?.actions.buyToken(reservoirOptions);
     removePendingSnipe(taskId);
 
     const snipe = {
