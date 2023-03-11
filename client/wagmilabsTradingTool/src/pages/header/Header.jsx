@@ -289,8 +289,15 @@ const Header = () => {
             <div className="feed-button header-links">Feed</div>
           </div>
           <div>
-            <div className="calendars-button header-links not-allowed">
+            <div className="calendars-button header-links">
               <span>Calendars</span>
+
+              <div className="calendars-options-dropdown invisible">
+                <div onClick={() => navigate("/calendars/drops")}>NFT drops</div>
+                <div onClick={() => navigate("/calendars/spaces")}>Twitter spaces</div>
+                <div onClick={() => navigate("/calendars/raffles")}>Personal</div>
+                <div onClick={() => navigate("/calendars/events")}>IRL events</div>
+              </div>
             </div>
           </div>
         </div>

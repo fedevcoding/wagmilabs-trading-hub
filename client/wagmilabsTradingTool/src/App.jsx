@@ -1,6 +1,6 @@
 // react
 import React, { useState, useEffect, useRef, useMemo } from "react";
-import { jwtExpired, pushToServer } from "@Utils/functions";
+import { jwtExpired, pushToServer } from "./utils/functions";
 
 // components
 import Header from "./pages/header/Header";
@@ -45,6 +45,7 @@ import Redirect from "./pages/redirect/Redirect";
 
 import Legals from "./pages/Legal/Legals";
 import { serverUrl } from "@Variables";
+import { Calendar } from "./pages/calendar/Calendar";
 import Pnl from "./pages/pnl/Pnl";
 
 // for wagmi
@@ -347,6 +348,18 @@ function App() {
                                   <>
                                     <Header />
                                     <Volumes />
+                                    <Footer />
+                                  </>
+                                }
+                              />
+
+                              <Route
+                                exact
+                                path="/calendars/:section"
+                                element={
+                                  <>
+                                    <Header />
+                                    <Calendar />
                                     <Footer />
                                   </>
                                 }
