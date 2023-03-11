@@ -154,7 +154,7 @@ export const NewTaskModal = React.memo(({ showNewTask, toggleNewTaskModal, toggl
 
                   {maxFeePerGasType === "custom" && (
                     <NumberInput value={maxFeePerGas} onChange={value => handleSetData("maxFeePerGas", value)}>
-                      <NumberInputField placeholder="Max Fee Per Gas" />
+                      <NumberInputField placeholder="Max Fee Per Gas (gwei)" />
                     </NumberInput>
                   )}
                 </HStack>
@@ -165,7 +165,7 @@ export const NewTaskModal = React.memo(({ showNewTask, toggleNewTaskModal, toggl
                     value={maxPriorityFeePerGas}
                     onChange={value => handleSetData("maxPriorityFeePerGas", value)}
                   >
-                    <NumberInputField placeholder="Max Priority Fee Per Gas" />
+                    <NumberInputField placeholder="Max Priority (gwei)" />
                   </NumberInput>
                 </HStack>
 

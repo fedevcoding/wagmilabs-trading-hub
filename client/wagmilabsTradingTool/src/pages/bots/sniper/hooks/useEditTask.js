@@ -109,5 +109,5 @@ export const useEditTask = (callback, toggleSnipe) => {
     }
   };
 
-  return { saveTask, addLoading, removeTask, removeLoading, restartTask };
+  return { saveTask, addLoading, removeTask, removeLoading, restartTask, restartingLoading };
 };

@@ -132,7 +132,6 @@ body.overflow-hidden {
   cursor: not-allowed;
 }
 
-
 .flex-col{
   display: flex !important;
   flex-direction: column !important;

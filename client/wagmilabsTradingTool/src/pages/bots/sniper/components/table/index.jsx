@@ -108,7 +108,7 @@ export const Table = ({
                         <td>
                           <HStack flexDirection={"column"}>
                             <p>Max priority: {maxPriorityFeePerGas}</p>
-                            <p>Max fee per gas: {maxFeePerGas || "auto"}</p>
+                            <p>Max gas: {maxFeePerGas || "auto"}</p>
                           </HStack>
                         </td>
                         <td>
@@ -142,7 +142,6 @@ export const Table = ({
                         collectionImage,
                         collectionName,
                         status,
-                        gasPrice,
                       } = snipe;
 
                       const time = moment(eventTimestamp).format("DD/MM/YYYY HH:mm");

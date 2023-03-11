@@ -279,8 +279,8 @@ const Header = () => {
               <div className="bots-options-dropdown invisible">
                 <div onClick={() => navigate("/bots/wallets")}>Wallets</div>
                 <div onClick={() => navigate("/bots/sniper")}>Sniper bot</div>
-                <div onClick={() => navigate("/bots/contractMinter")}>Contract minter</div>
-                <div onClick={() => navigate("/bots/notifications")}>Notifications</div>
+                <div className="not-allowed">Contract minter</div>
+                <div className="not-allowed">Notifications</div>
               </div>
             </div>
           </div>

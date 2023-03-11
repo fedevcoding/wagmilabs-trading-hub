@@ -12,10 +12,13 @@ import {
 } from "@chakra-ui/react";
 import { useGetWallets } from "@Hooks";
 import React, { useMemo } from "react";
+// import { useEditTask } from "src/pages/bots/sniper/hooks/useEditTask";
+// import { Loader } from "../Loader";
 import "./style.scss";
 
 export const ActionModal = React.memo(({ data, action, setData, type }) => {
   const wallets = useGetWallets();
+  // const { restartingLoading } = useEditTask(undefined, undefined);
 
   const closeModal = () => {
     if (type === "confirmDeleteWallet") {
@@ -78,10 +81,6 @@ export const ActionModal = React.memo(({ data, action, setData, type }) => {
           {type === "restartBotSnipe" && (
             <ModalBody className="modal-body">
               <h1>Choose the wallet you want to use to restart the task.</h1>
-              {/* <HStack className="little-text low-opacity">
-                <i className="fa-solid fa-triangle-exclamation"></i>
-                <p>If you haven't saved yous private key you will lose it.</p>
-              </HStack> */}
 
               <RadioGroup onChange={value => handleSetData("walletType", value)} defaultValue={data.walletType}>
                 <HStack gap={"15px"}>
@@ -115,13 +114,14 @@ export const ActionModal = React.memo(({ data, action, setData, type }) => {
                   Cancel
                 </Button>
                 <Button
-                  colorScheme="red"
+                  colorScheme={`${type === "restartBotSnipe" ? "blue" : "red"}`}
                   onClick={callAction}
                   width="50%"
                   className={`action-button ${isValidAction && "active"}`}
                 >
                   {type === "confirmDeleteWallet" && "Delete"}
                   {type === "restartBotSnipe" && "Restart"}
+                  {/* {restartingLoading && <Loader width={"25px"} height={"25px"} />} */}
                 </Button>
               </HStack>
             </ModalBody>
