@@ -2,6 +2,7 @@ import { baseUrl } from "@Variables";
 
 export function getActivityOptions() {
   return {
+    transfer: "Transfer",
     sale: "Sale",
     ask: "List",
     mint: "Minted",
@@ -27,16 +28,14 @@ export function fetchActivities(
 
     const params = {};
     if (type) {
-      params.type = type;
+      params.types = type;
     }
     if (infinityScrollEnabled) {
       params.continuation = activities.continuation;
     }
 
     let apiData = await fetch(
-      `${baseUrl}/collection/${address}/token/${id}/activities?${new URLSearchParams(
-        params
-      ).toString()}`,
+      `${baseUrl}/collection/${address}/token/${id}/activities?${new URLSearchParams(params).toString()}`,
       {
         headers: {
           "x-auth-token": localStorage.jsonwebtoken,
