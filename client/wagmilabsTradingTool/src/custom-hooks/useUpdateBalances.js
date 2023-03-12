@@ -9,7 +9,7 @@ export const useUpdateBalance = address => {
   const { setUserBalances } = useContext(UserDataContext);
 
   useEffect(() => {
-    if (isConnected && address) {
+    if (isConnected && address && typeof updateBalance === "function") {
       updateBalance(address, setUserBalances);
     }
   }, [isConnected, setUserBalances, address]);

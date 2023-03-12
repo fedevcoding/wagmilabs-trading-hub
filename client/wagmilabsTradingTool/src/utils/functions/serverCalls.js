@@ -16,7 +16,6 @@ async function getFromServer(url) {
   return data;
 }
 
-
 async function pushToServer(url, body) {
   const apiData = await fetch(`${baseUrl}${url}`, {
     method: "POST",

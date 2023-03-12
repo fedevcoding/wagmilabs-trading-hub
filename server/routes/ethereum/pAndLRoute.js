@@ -80,7 +80,7 @@ route.get("/:address", checkAuth, (req, res) => {
 
       res.status(200).json(getPAndLData(nfts.concat(nftsMinted), formatApprovalGasFees(approvalGasFees), txsGasFees));
     } catch (e) {
-      console.log("err", e);
+      console.log(e);
       res.status(500).json({ error: e });
     }
   }

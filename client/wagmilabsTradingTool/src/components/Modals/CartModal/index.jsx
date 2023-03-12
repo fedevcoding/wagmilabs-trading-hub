@@ -58,7 +58,9 @@ export const CartModal = ({ modalOpen, closeCartModal }) => {
           maxFeePerGas,
           maxPriorityFeePerGas,
         },
-        onProgress: steps => console.log(steps),
+        onProgress: steps => {
+          console.log(steps);
+        },
       });
 
       if (res.response.data.statusCode === 400) throw new Error("error");

@@ -41,7 +41,7 @@ const Leaderboard = React.memo(({ address }) => {
                           placement="top"
                           borderRadius={"7px"}
                         >
-                          Collection Realized P&L
+                          Collection P&L
                         </Tooltip>
                       </th>
                       <th>
@@ -68,7 +68,7 @@ const Leaderboard = React.memo(({ address }) => {
                         <td colSpan={11} className="loading-row">
                           <div>
                             <div className="flex">
-                              <span>Loading Data</span> <LoadingSpinner />
+                              <span>Loading data</span> <LoadingSpinner />
                             </div>
                           </div>
                         </td>

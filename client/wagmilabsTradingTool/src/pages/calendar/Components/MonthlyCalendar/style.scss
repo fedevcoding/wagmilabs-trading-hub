@@ -1,5 +1,5 @@
 .day-event-name {
-  width: 75px;
+  width: 80%;
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
@@ -54,6 +54,13 @@
 .calendar-row {
   display: flex;
   flex: 1;
+
+  &.animate-left {
+    animation: appear-left 0.7s ease-in-out;
+  }
+  &.animate-right {
+    animation: appear-right 0.7s ease-in-out;
+  }
 }
 
 .main-title {
@@ -84,4 +91,26 @@
 .hour-container-r {
   padding-top: 20px;
   padding-bottom: 5px;
+}
+
+@keyframes appear-left {
+  0% {
+    opacity: 0;
+    transform: translateX(-100%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes appear-right {
+  0% {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }

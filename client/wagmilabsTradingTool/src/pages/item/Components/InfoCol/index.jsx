@@ -1,12 +1,12 @@
+import React from "react";
 import { Tooltip } from "@chakra-ui/react";
 import { Button } from "@Components";
-import React from "react";
 import { useNavigate } from "react-router-dom";
 import { BestOfferBox, BestOfferTable, Listings, ListItem, PriceBox, TransferItem } from "..";
-import { useRefreshToken } from "../ImageCol/useRefreshToken";
+import { useRefreshToken } from "./useRefreshToken";
+import { useGetData } from "./useGetData";
 
 import "./style.scss";
-import { useGetData } from "./useGetData";
 
 export const InfoCol = React.memo(({ details, address, id }) => {
   const navigate = useNavigate();
@@ -22,7 +22,7 @@ export const InfoCol = React.memo(({ details, address, id }) => {
     totalSupply,
   } = useGetData(details, address, id);
 
-  const { refreshToken } = useRefreshToken(address, id);
+  const { refreshToken, loading: refreshingMetadata } = useRefreshToken(address, id);
 
   return (
     <div className="item-name-container">
@@ -67,8 +67,8 @@ export const InfoCol = React.memo(({ details, address, id }) => {
             borderRadius={"7px"}
           >
             <div>
-              <Button className="refresh-btn" onClick={() => refreshToken()}>
-                <i className="fa-solid fa-refresh" />
+              <Button className="refresh-btn" onClick={() => !refreshingMetadata && refreshToken()}>
+                <i className={`fa-solid fa-arrows-rotate refresh-metadata ${refreshingMetadata && "rotating"}`} />
               </Button>
             </div>
           </Tooltip>

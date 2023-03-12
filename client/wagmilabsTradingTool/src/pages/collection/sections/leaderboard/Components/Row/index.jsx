@@ -32,7 +32,7 @@ export const Row = React.memo(({ h, i }) => {
       <td className="collection-realized-pln">
         <HStack justifyContent={"center"}>
           <i className="fa-brands fa-ethereum" />
-          <Number n={h.collection_gains_all_time} crypto={true} />
+          <Number n={parseInt(h?.collection_gains_all_time) / 1000000000000000000} crypto={true} />
         </HStack>
       </td>
       <td className="collection-volume">

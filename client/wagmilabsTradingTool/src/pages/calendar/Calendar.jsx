@@ -8,6 +8,7 @@ import { useGetDrops } from "./useGetDrops";
 import { useGetEvents } from "./useGetEvents";
 import { useGetSpaces } from "./useGetSpaces";
 import { useGetPersonal } from "./useGetPersonal";
+import { setPageTitle } from "@Utils";
 
 const titles = {
   drops: "Upcoming Drops",
@@ -66,6 +67,21 @@ export const getSelectedDateTitle = (selDate, weekly) => {
   })}, ${selDate.getDate()}, ${selDate.getFullYear()}`;
 }
 
+const getPageTitle = (section) => {
+  switch (section) {
+    case "drops":
+      return "NFT Drops | Wagmi Labs";
+    case "spaces":
+      return "Twitter Spaces | Wagmi Labs";
+    case "raffles":
+      return "Personal | Wagmi Labs";
+    case "events":
+      return "IRL Events | Wagmi Labs";
+    default:
+      return;
+  }
+}
+
 export const Calendar = () => {
   const { drops, refetch: dropsRefetch } = useGetDrops();
   const { events, refetch: eventsRefetch } = useGetEvents();
@@ -73,6 +89,7 @@ export const Calendar = () => {
   const { spaces, refetch: spacesRefetch } = useGetSpaces();
   const { section } = useParams();
   const mainTitle = titles[section];
+  setPageTitle(getPageTitle(section));
 
   const renderMainTitle = () => (
     <Row className="main-title">
