@@ -26,12 +26,23 @@
   .owner-buttons,
   .top-right-buttons {
     display: flex;
-    i:not(.fa-refresh) {
+    i:not(.fa-arrows-rotate) {
       margin-right: 0.5rem;
     }
 
     .refresh-btn {
       min-width: fit-content;
+
+      .refresh-metadata {
+        color: white;
+        font-size: 20px;
+        cursor: pointer;
+        vertical-align: middle;
+      }
+
+      .refresh-metadata.rotating {
+        animation: rotating 1s linear infinite;
+      }
     }
   }
 }
