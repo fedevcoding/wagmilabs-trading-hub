@@ -1,11 +1,11 @@
 const ethers = require("ethers");
 const { getClient } = require("@reservoir0x/reservoir-sdk");
 const { createClient } = require("@reservoir0x/reservoir-sdk");
-const { CLIENT_URL, newSnipeUpdate } = require("../../../../server");
+const RESERVOIR_SOURCE = require("../../../../variables/reservoirSource");
 
 // reservoir client
 createClient({
-  source: CLIENT_URL,
+  source: RESERVOIR_SOURCE,
   chains: [
     {
       id: 1,

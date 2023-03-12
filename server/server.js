@@ -1,4 +1,4 @@
-const CLIENT_URL = "http://localhost:3000";
+const CLIENT_URL = "https://app.wagmilabs.tools";
 
 module.exports = { newSale, newListing, newSnipeUpdate, CLIENT_URL };
 

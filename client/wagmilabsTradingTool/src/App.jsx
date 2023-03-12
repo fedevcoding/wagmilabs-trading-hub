@@ -47,6 +47,7 @@ import Legals from "./pages/Legal/Legals";
 import { serverUrl } from "@Variables";
 import { Calendar } from "./pages/calendar/Calendar";
 import Pnl from "./pages/pnl/Pnl";
+import RESERVOIR_SOURCE from "./variables/reservoirSource";
 
 // for wagmi
 
@@ -66,7 +67,7 @@ const wagmiClient = createWagmiClient({
 createClient({
   apiBase: "https://api.reservoir.tools",
   apiKey: RESERVOIR_API_KEY,
-  source: "http://localhost:3000",
+  source: RESERVOIR_SOURCE,
 });
 
 // for reservoir

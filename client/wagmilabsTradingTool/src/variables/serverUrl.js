@@ -1,3 +1,3 @@
-const serverUrl = "http://localhost:5001";
+const serverUrl = "https://api.wagmilabs.tools";
 
 module.exports = serverUrl;
