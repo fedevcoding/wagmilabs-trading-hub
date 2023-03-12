@@ -102,7 +102,7 @@ async function fullfillOrder(listing, collectionTask) {
     if (maxFeePerGas) reservoirOptions.options["maxFeePerGas"] = (maxFeePerGas * 1000000000).toString();
     if (maxPriorityFeePerGas)
       reservoirOptions.options["maxPriorityFeePerGas"] = (maxPriorityFeePerGas * 1000000000).toString();
-
+    // restart server
     // wait 5 seconds
     await new Promise(resolve => setTimeout(resolve, 5000));
 
@@ -152,7 +152,6 @@ async function fullfillOrder(listing, collectionTask) {
     };
     await updateTask(taskId, buyData, taskOwner);
   } catch (err) {
-    console.log(err);
     removePendingSnipe(taskId);
 
     const failedData = {

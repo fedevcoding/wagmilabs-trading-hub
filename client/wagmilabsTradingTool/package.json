@@ -58,7 +58,7 @@
     "test": "react-app-rewired test",
     "eject": "react-scripts eject"
   },
-  "proxy": "http://localhost:5001",
+  "proxy": "https://api.wagmilabs.tools",
   "eslintConfig": {
     "extends": [
       "react-app",

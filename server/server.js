@@ -135,14 +135,14 @@ io.on("connection", socket => {
   });
 
   socket.on("joinPendingSnipes", accountAddress => {
-    accountAddress = accountAddress?.toLowerCase();
-    // console.log("joining room " + accountAddress);
+    accountAddress = accountAddress.toLowerCase();
+    console.log("joining room " + accountAddress);
     socket.join(accountAddress);
   });
 
   socket.on("leavePendingSnipes", accountAddress => {
-    accountAddress = accountAddress?.toLowerCase();
-    // console.log("leaving room " + accountAddress);
+    accountAddress = accountAddress.toLowerCase();
+    console.log("leaving room " + accountAddress);
     socket.leave(accountAddress);
   });
 });
