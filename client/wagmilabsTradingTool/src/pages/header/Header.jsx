@@ -325,9 +325,9 @@ const Header = () => {
                 <p>Profile</p>
               </div>
 
-              <div className="switch-account-option-container not-allowed" onClick={() => navigate("/bots/wallets")}>
+              <div className="switch-account-option-container" onClick={() => navigate("/bots/wallets")}>
                 <i className="fa-solid fa-arrows-repeat"></i>
-                <p>Account manager</p>
+                <p>Wallets</p>
               </div>
 
               <div onClick={() => logOut(setConnected)} className="logout-container">
