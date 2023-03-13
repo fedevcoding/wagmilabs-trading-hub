@@ -15,7 +15,7 @@ import {
 } from "@chakra-ui/react";
 import { useListNft } from "@Hooks";
 import { Loader, OrderInfo, Select } from "@Components";
-import DatePicker from "react-datepicker";
+import ReactDatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 import "./style.scss";
@@ -120,16 +120,17 @@ export const ListItemModal = React.memo(
             <p className="label">
               <b>Set expiration date</b>
             </p>
-
-            <DatePicker
+            <ReactDatePicker
               minDate={new Date().getTime()}
-              onChange={v => {
-                setDate(v);
-              }}
+              onChange={v => setDate(v)}
               selected={date}
               isClearable={true}
-              placeholderText="Select expiration date"
+              placeholderText="Select event date"
               className="date-picker"
+              showTimeSelect
+              dateFormat="Pp"
+              preventOpenOnFocus
+              showMonthYearDropdown={false}
             />
           </ModalBody>
           <ModalFooter>
