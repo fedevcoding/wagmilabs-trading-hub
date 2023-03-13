@@ -12,6 +12,7 @@ import {
   NumberInput,
   NumberInputField,
   Switch,
+  Tooltip,
 } from "@chakra-ui/react";
 import { useListNft } from "@Hooks";
 import { Loader, OrderInfo, Select } from "@Components";
@@ -93,7 +94,18 @@ export const ListItemModal = React.memo(
                 <br />
                 <div className="space-between">
                   <p className="label">
-                    <b>Auto royalties</b>
+                    <Tooltip
+                      closeOnClick={false}
+                      hasArrow
+                      label="Original creator royalties"
+                      fontSize="xs"
+                      bg="black"
+                      color={"white"}
+                      placement="top"
+                      borderRadius={"7px"}
+                    >
+                      <b>Auto royalties</b>
+                    </Tooltip>
                   </p>
                   <Switch
                     isChecked={autoRoyalties}
@@ -108,7 +120,7 @@ export const ListItemModal = React.memo(
                       <b>Creator royalties percentage</b>
                     </p>
                     <NumberInput max={100} min={0.5} step={0.01} value={royaltiesPerc}>
-                      <NumberInputField placeholder={`Value...`} onChange={e => setRoyaltiesPerc(e.target.value)} />
+                      <NumberInputField placeholder="Minimum 0.5%" onChange={e => setRoyaltiesPerc(e.target.value)} />
                     </NumberInput>
                   </>
                 )) ||
