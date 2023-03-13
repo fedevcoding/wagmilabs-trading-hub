@@ -108,7 +108,7 @@ export const ListItemModal = React.memo(
                       <b>Creator royalties percentage</b>
                     </p>
                     <NumberInput max={100} min={0.5} step={0.01} value={royaltiesPerc}>
-                      <NumberInputField placeholder={`Value...`} onChange={e => setRoyaltiesPerc(e.target.value)} />
+                      <NumberInputField placeholder="Minimum 0.5%" onChange={e => setRoyaltiesPerc(e.target.value)} />
                     </NumberInput>
                   </>
                 )) ||
