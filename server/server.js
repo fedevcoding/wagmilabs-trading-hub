@@ -80,6 +80,8 @@ app.use(cookieParser());
 const http = require("http");
 const server = new http.createServer(app);
 const socketIO = require("socket.io");
+const listingChartRoute = require("./routes/ethereum/charts/listingsChartRoute.js");
+const floorChartRoute = require("./routes/ethereum/charts/floorChartRoute.js");
 const io = socketIO(server, {
   cors: {
     origin: CLIENT_URL,
@@ -234,6 +236,10 @@ app.use("/api/v1/wagmilabs/ownedCollections", ownedCollectionsRoute);
 app.use("/api/v1/wagmilabs/refreshCollection", refreshCollectionRoute);
 app.use("/api/v1/wagmilabs/p-and-l", pAndLRoute);
 app.use("/api/v1/wagmilabs/stats", statsRoute);
+
+// collection charts
+app.use("/api/v1/wagmilabs/collectionCharts", listingChartRoute);
+app.use("/api/v1/wagmilabs/collectionCharts", floorChartRoute);
 
 // bots routes
 app.use("/api/v1/wagmilabs/bots", editSnipeRoute);

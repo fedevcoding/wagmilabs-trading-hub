@@ -787,7 +787,7 @@ const Collection = () => {
         } else if (section === "activity") {
           return <Activity address={address} />;
         } else if (section === "charts") {
-          return <Charts />;
+          return <Charts collectionAddress={address} />;
         } else if (section === "leaderboard") {
           return <Leaderboard address={address} />;
         }

@@ -6,6 +6,14 @@ const charts = [
     value: "floorPrice",
   },
   {
+    name: "Listings",
+    value: "listings",
+  },
+  {
+    name: "Owners",
+    value: "owners",
+  },
+  {
     name: "Volume",
     value: "volume",
   },
@@ -18,8 +26,8 @@ const charts = [
     value: "avgPrice",
   },
   {
-    name: "Owner count",
-    value: "ownerCount",
+    name: "Mixed chart",
+    value: "mixedChart",
   },
 ];
 
