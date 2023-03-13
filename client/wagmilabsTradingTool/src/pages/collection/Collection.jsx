@@ -5,7 +5,7 @@ import { placeholderImage, etherscan, opensea, x2y2, www, twitter, looksRare, di
 
 import Items from "./sections/items/Items";
 import Activity from "./sections/activity/Activity";
-import Charts from "./sections/charts/Charts";
+import Charts from "./sections/charts/Charts.jsx";
 import Leaderboard from "./sections/leaderboard/Leaderboard";
 
 // import { useMoralisWeb3Api } from "react-moralis";

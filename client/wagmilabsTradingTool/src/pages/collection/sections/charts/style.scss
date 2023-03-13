@@ -1,0 +1,19 @@
+#page-collection-charts {
+  .charts-selector-container {
+    color: white;
+    font-family: inherit;
+    display: flex;
+    justify-content: space-evenly;
+    div {
+      margin-top: 20px;
+      padding: 15px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.6s;
+      &.active,
+      &:hover {
+        background-color: #201f1e;
+      }
+    }
+  }
+}
