@@ -1,10 +1,10 @@
 import { HStack, Tooltip } from "@chakra-ui/react";
-import { PageWrapper } from "@Components";
+import { ActionModal, PageWrapper } from "@Components";
 import React, { useMemo } from "react";
 
 import "./style.scss";
 import { useManageData, useManageModals } from "./hooks";
-import { AddModal, ExportModal, TransferModal, ConfirmDeleteModal, RenameModal } from "./modals";
+import { AddModal, ExportModal, TransferModal, RenameModal } from "./modals";
 import { formatAddress, roundPrice } from "src/utils/formats/formats";
 import copy from "copy-to-clipboard";
 import { notFound } from "src/assets";
@@ -36,10 +36,12 @@ const Wallets = React.memo(() => {
         <AddModal showAddModal={showAddModal} toggleModal={toggleModal} toggleWallet={toggleWallet} />
         <TransferModal showTransferModal={showTransferModal} toggleModal={toggleModal} />
         <ExportModal showExportModal={showExportModal} toggleModal={toggleModal} />
-        <ConfirmDeleteModal
-          confirmDelete={confirmDelete}
-          toggleWallet={toggleWallet}
-          setConfirmDelete={setConfirmDelete}
+        {/* <ConfirmDeleteModal data={confirmDelete} action={toggleWallet} setConfirmDelete={setConfirmDelete} /> */}
+        <ActionModal
+          data={confirmDelete}
+          action={toggleWallet}
+          setData={setConfirmDelete}
+          type={"confirmDeleteWallet"}
         />
         <RenameModal
           showRenameModal={showRenameModal}
@@ -51,7 +53,7 @@ const Wallets = React.memo(() => {
       <HStack className="options">
         <HStack className="wallet" gap={"5px"}>
           <i className="fa-solid fa-wallet"></i>
-          <p>Wallets manager</p>
+          <p>Wallet manager</p>
         </HStack>
 
         <HStack className="actions">

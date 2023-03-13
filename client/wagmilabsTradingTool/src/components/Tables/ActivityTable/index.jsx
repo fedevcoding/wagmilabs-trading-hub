@@ -4,12 +4,7 @@ import { LoadingMoreActivity } from "./LoadingMoreActivity";
 
 import "./style.scss";
 
-export const ActivityTable = ({
-  collectionActivityLoading,
-  collectionActivity,
-  address,
-  loadingMoreActivity,
-}) => {
+export const ActivityTable = ({ collectionActivityLoading, collectionActivity, address, loadingMoreActivity }) => {
   return (
     <div className="collection-activity-table-container">
       <table className="collection-activity-table">
@@ -28,12 +23,8 @@ export const ActivityTable = ({
           {collectionActivityLoading ? (
             <LoadingMoreActivity />
           ) : (
-            <CollectionActivityMapping
-              collectionActivity={collectionActivity}
-              address={address}
-            />
+            <CollectionActivityMapping collectionActivity={collectionActivity} address={address} />
           )}
-
           {loadingMoreActivity && <LoadingMoreActivity />}
         </tbody>
       </table>

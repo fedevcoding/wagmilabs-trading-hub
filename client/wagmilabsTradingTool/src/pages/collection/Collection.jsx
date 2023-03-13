@@ -158,7 +158,10 @@ const Collection = () => {
     const oldItems = itemRef.current;
 
     for (let i = 0; i < oldItems.length; i++) {
-      if (oldItems[i]?.token?.tokenId === tokenId) {
+      const item = oldItems[i];
+
+      item.token.isLive = false;
+      if (item?.token?.tokenId === tokenId) {
         oldItems.splice(i, 1);
       }
     }
@@ -745,11 +748,7 @@ const Collection = () => {
         >
           Charts
         </div>
-        <div
-          section="leaderboard"
-          // onClick={e => changeCollectionSection(e)}
-          className="single-collection-section not-allowed"
-        >
+        <div section="leaderboard" onClick={e => changeCollectionSection(e)} className="single-collection-section">
           Leaderboard
         </div>
       </div>
@@ -794,7 +793,7 @@ const Collection = () => {
         } else if (section === "charts") {
           return <Charts />;
         } else if (section === "leaderboard") {
-          return <Leaderboard />;
+          return <Leaderboard address={address} />;
         }
       })()}
     </>

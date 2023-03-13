@@ -1,10 +1,10 @@
 import React from "react";
 import { useTokensInfo } from "./useTokensInfo";
 import { Row } from "./Row";
-import { Button } from "@Components";
+import { Button, LoadingSpinner } from "@Components";
 import { notFound } from "@Assets";
 
-export const Table = React.memo(({ data, taxPerc, taxedOn, currency }) => {
+export const Table = React.memo(({ data, taxPerc, taxedOn, currency, longTermTax, isLoading }) => {
   const paginationCount = 10;
   const [page, setPage] = React.useState(1);
   const items = data.slice((page - 1) * paginationCount, page * paginationCount);
@@ -37,7 +37,7 @@ export const Table = React.memo(({ data, taxPerc, taxedOn, currency }) => {
           <p>Showing {totalItems} Trades</p>
         </div>
       )}
-      <table>
+      <table cellSpacing={0}>
         <thead>
           <tr>
             <th>NFT</th>
@@ -51,15 +51,24 @@ export const Table = React.memo(({ data, taxPerc, taxedOn, currency }) => {
           </tr>
         </thead>
         <tbody>
+          {(isLoading && (
+            <tr>
+              <td className="row-loading" colSpan={8}>
+                <LoadingSpinner />
+              </td>
+            </tr>
+          )) ||
+            ""}
           {items.map(n => (
             <Row
               key={JSON.stringify(n)}
               nft={n.info}
-              isMinted={!!n.minted}
+              allInfo={n}
               taxPerc={taxPerc}
               taxedOn={taxedOn}
               currency={currency}
               tokensInfo={tokensInfo}
+              longTermTax={longTermTax}
               isFetchingInitialData={isFetchingInitialData}
             />
           ))}
@@ -67,10 +76,10 @@ export const Table = React.memo(({ data, taxPerc, taxedOn, currency }) => {
       </table>
     </>
   ) : (
-    <h3 className="text-center">
-      <img src={notFound} alt="best offer" width={100} />
+    <p className="text-center">
+      <img src={notFound} alt="best offer" width={150} />
       <br />
       No NFTs were found in this range!
-    </h3>
+    </p>
   );
 });

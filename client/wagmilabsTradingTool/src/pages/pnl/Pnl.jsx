@@ -13,7 +13,7 @@ export default React.memo(() => {
   const { address } = useAccount();
   useSetPageTitle("Portfolio P&L | Wagmi Labs");
   const { startDate, endDate, setStartDate, setEndDate } = useTimeframe();
-  const { data } = useGetData(address, startDate, endDate);
+  const { data, isLoading } = useGetData(address, startDate, endDate);
   const settings = useSettings();
 
   return (
@@ -26,6 +26,8 @@ export default React.memo(() => {
             taxPerc={settings.taxPerc}
             currency={settings.currency.value}
             taxedOn={settings.taxedOn.value}
+            taxLossHarvesting={settings.taxLossHarvesting}
+            longTermTax={settings.longTermTax}
           />
         </Col>
         <Col className="text-right settings">
@@ -34,6 +36,7 @@ export default React.memo(() => {
             endDate={endDate}
             setStartDate={setStartDate}
             setEndDate={setEndDate}
+            data={data}
             {...settings}
           />
         </Col>
@@ -45,6 +48,8 @@ export default React.memo(() => {
             taxPerc={settings.taxPerc}
             taxedOn={settings.taxedOn.value}
             currency={settings.currency.value}
+            longTermTax={settings.longTermTax}
+            isLoading={isLoading}
           />
         ) : (
           <LoadingSpinner />

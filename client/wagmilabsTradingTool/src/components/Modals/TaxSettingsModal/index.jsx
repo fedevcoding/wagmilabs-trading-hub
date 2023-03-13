@@ -11,6 +11,7 @@ import {
   NumberInput,
   NumberInputField,
   useToast,
+  Switch,
 } from "@chakra-ui/react";
 import { Select } from "@Components";
 
@@ -18,10 +19,25 @@ import "./style.scss";
 
 export const TaxSettingsModal = React.memo(({ isOpen, setIsOpen, ...settings }) => {
   const toast = useToast();
-  const { taxedOn, currency, taxPerc, setTaxedOn, setCurrency, setTaxPerc, currencies, taxedTypes } = settings;
+  const {
+    taxedOn,
+    currency,
+    taxPerc,
+    setTaxedOn,
+    setCurrency,
+    setTaxPerc,
+    currencies,
+    taxedTypes,
+    taxLossHarvesting,
+    setTaxLossHarvesting,
+    longTermTax,
+    setLongTermTax,
+  } = settings;
   const [modalTaxedOn, setModalTaxedOn] = React.useState(taxedOn);
   const [modalCurrency, setModalCurrency] = React.useState(currency);
   const [modalTaxPerc, setModalTaxPerc] = React.useState(taxPerc);
+  const [modalTaxLossHarvesting, setModalTaxLossHarvesting] = React.useState(taxLossHarvesting);
+  const [modalLongTermTax, setModalLongTermTax] = React.useState(longTermTax);
 
   return (
     <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
@@ -51,6 +67,26 @@ export const TaxSettingsModal = React.memo(({ isOpen, setIsOpen, ...settings }) 
             </div>
           </div>
           <div className="space-between input">
+            <span>Apply long & short term cap gains</span>
+            <Switch
+              isChecked={modalLongTermTax !== undefined}
+              colorScheme="gray"
+              onChange={e => setModalLongTermTax(e.target.checked ? 0 : undefined)}
+            />
+          </div>
+          {(modalLongTermTax !== undefined && (
+            <div className="space-between input">
+              <span>Long term tax %</span>
+              <div className="tax-perc">
+                <NumberInput max={100} min={0} step={0.01} value={modalLongTermTax}>
+                  <NumberInputField placeholder={`Value...`} onChange={e => setModalLongTermTax(e.target.value)} />
+                </NumberInput>
+                <span>%</span>
+              </div>
+            </div>
+          )) ||
+            ""}
+          <div className="space-between input">
             <span>Currency</span>
             <Select
               id="set-currency"
@@ -59,6 +95,14 @@ export const TaxSettingsModal = React.memo(({ isOpen, setIsOpen, ...settings }) 
               value={modalCurrency}
               options={currencies}
               isSearchable={false}
+            />
+          </div>
+          <div className="space-between input">
+            <span>Apply tax loss harvesting</span>
+            <Switch
+              isChecked={modalTaxLossHarvesting}
+              colorScheme="gray"
+              onChange={e => setModalTaxLossHarvesting(e.target.checked)}
             />
           </div>
         </ModalBody>
@@ -79,6 +123,8 @@ export const TaxSettingsModal = React.memo(({ isOpen, setIsOpen, ...settings }) 
                 setTaxedOn(modalTaxedOn);
                 setCurrency(modalCurrency);
                 setTaxPerc(modalTaxPerc);
+                setTaxLossHarvesting(modalTaxLossHarvesting);
+                setLongTermTax(modalLongTermTax === undefined ? undefined : parseFloat(modalLongTermTax));
                 setIsOpen(false);
               }
             }}

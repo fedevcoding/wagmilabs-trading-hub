@@ -1,39 +1,56 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 
 import "./style.scss";
 
 import { SocketContext } from "@Context";
 import { useAccount } from "wagmi";
 import { Header, NewTaskModal, Table } from "./components";
-import { useHandleData } from "./hooks";
+import { useHandleData, useGetData } from "./hooks";
 
 const SniperBot = () => {
-  const { showNewTask, toggleNewTask } = useHandleData();
+  const { activeSnipes, setActiveSnipes, snipeActivity, loadingSnipes } = useGetData();
+  const {
+    showNewTask,
+    toggleNewTaskModal,
+    section,
+    setSection,
+    toggleSnipe,
+    handleTaskUpdate,
+    restartTaskModalData,
+    setRestartTaskModalData,
+  } = useHandleData(activeSnipes, setActiveSnipes);
 
   const { address } = useAccount();
-  const [section, setSection] = useState("active");
-
   const socket = useContext(SocketContext);
   useEffect(() => {
-    socket.emit("joinPendingSnipes", address);
+    if (address && socket && handleTaskUpdate) {
+      socket.emit("joinSnipeUpdates", address);
 
-    socket.off("newPendingSnipe").on("newPendingSnipe", id => {
-      //   pendingStatus(id);
-    });
+      socket.off("newSnipeUpdates").on("newSnipeUpdates", data => {
+        handleTaskUpdate(data);
+      });
+    }
 
     return () => {
-      socket.emit("leavePendingSnipes", address);
+      socket.emit("leaveSnipeUpdates", address);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [socket, address, handleTaskUpdate]);
 
   return (
     <section className="sniper-bot-section">
-      <Header section={section} setSection={setSection} toggleNewTask={toggleNewTask} />
+      <Header section={section} setSection={setSection} toggleNewTaskModal={toggleNewTaskModal} />
 
-      <NewTaskModal showNewTask={showNewTask} toggleNewTask={toggleNewTask} />
+      <NewTaskModal showNewTask={showNewTask} toggleNewTaskModal={toggleNewTaskModal} toggleSnipe={toggleSnipe} />
 
-      <Table section={section} />
+      <Table
+        section={section}
+        activeSnipes={activeSnipes}
+        toggleSnipe={toggleSnipe}
+        restartTaskModalData={restartTaskModalData}
+        setRestartTaskModalData={setRestartTaskModalData}
+        snipeActivity={snipeActivity}
+        loadingSnipes={loadingSnipes}
+      />
     </section>
   );
 };
