@@ -158,7 +158,10 @@ const Collection = () => {
     const oldItems = itemRef.current;
 
     for (let i = 0; i < oldItems.length; i++) {
-      if (oldItems[i]?.token?.tokenId === tokenId) {
+      const item = oldItems[i];
+
+      item.token.isLive = false;
+      if (item?.token?.tokenId === tokenId) {
         oldItems.splice(i, 1);
       }
     }
