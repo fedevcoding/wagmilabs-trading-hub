@@ -217,7 +217,7 @@ const Items = ({
         const marketplaceIcon = item?.market?.floorAsk?.source?.icon;
         const marketplaceUrl = item?.market?.floorAsk?.source?.url;
 
-        const orderHash = item?.market?.floorAsk?.id;
+        // const orderHash = item?.market?.floorAsk?.id;
 
         let isListed = false;
         if (value) isListed = true;
@@ -232,7 +232,7 @@ const Items = ({
               className={`collection-single-item-container ${isLast && "last-token"} ${
                 isLive && "live-token-animation"
               }`}
-              key={orderHash}
+              key={JSON.stringify(item)}
             >
               <div className={`collection-item-details-container ${isInCart && "item-cart-selected"}`}>
                 <div className="collection-item-image-hover-overflow">
