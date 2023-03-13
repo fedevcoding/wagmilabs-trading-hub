@@ -15,6 +15,7 @@ export const useUpdateBalance = address => {
   }, [isConnected, setUserBalances, address]);
 
   const updateBalance = async (address, setUserBalances) => {
+    if (typeof setUserBalances !== "function") return;
     try {
       let userBalances = await fetch(`${baseUrl}/userBalances`, {
         headers: {
