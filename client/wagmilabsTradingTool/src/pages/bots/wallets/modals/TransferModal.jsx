@@ -256,11 +256,11 @@ export const TransferModal = React.memo(({ showTransferModal, toggleModal }) => 
                   ) : type === "custom" ? (
                     <div className="custom">
                       <div className="wallets">
-                        {customData.transfers.map(transfer => {
+                        {customData.transfers.map((transfer, index) => {
                           const { id, address } = transfer;
 
                           return (
-                            <HStack key={JSON.stringify(transfer)}>
+                            <HStack key={index}>
                               <Select
                                 onChange={e =>
                                   dispatchCustom({

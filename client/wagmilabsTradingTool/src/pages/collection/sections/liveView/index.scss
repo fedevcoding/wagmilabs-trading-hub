@@ -94,6 +94,13 @@ $headerHeight: 50;
     background-color: #201f1e;
     border-radius: 10px;
     cursor: pointer;
+
+    .columns-loader {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 10px;
+    }
     height: 100%;
 
     .column-header {

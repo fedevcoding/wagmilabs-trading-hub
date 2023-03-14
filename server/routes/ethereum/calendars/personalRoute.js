@@ -11,10 +11,15 @@ const ttl = 6 * 60 * 60 * 1000;
 
 const manageEvents = async (address, Collection, type, set, isAdmin) => {
   const res = await lruCache(
-      isAdmin ? Collection.find({ address: nullAddress }) : Collection.find({$or: [{ address: nullAddress }, { address }]}), {
+    isAdmin
+      ? Collection.find({ address: nullAddress })
+      : Collection.find({ $or: [{ address: nullAddress }, { address }] }),
+    {
       key: type,
       ttl,
-  }, set);
+    },
+    set
+  );
   return res;
 };
 
@@ -24,17 +29,18 @@ personalRoute.get("/", checkAuth, checkAdmin, async (req, res) => {
 
   try {
     if (isAdmin) {
-      const personal = await manageEvents(address, Events, 'events', false, true);
+      const personal = await manageEvents(address, Personal, "events", false, true);
       if (!personal) throw new Error("Personal not found");
 
       return res.status(200).json({ personal });
     } else {
-      const personal = await manageEvents(address, Events, 'events', false, false);
+      const personal = await manageEvents(address, Personal, "events", false, false);
       if (!personal) throw new Error("Personal not found");
-  
+
       return res.status(200).json({ personal });
     }
   } catch (e) {
+    console.log(e);
     return res.status(400).json({ msg: e.message });
   }
 });
@@ -43,7 +49,7 @@ personalRoute.post("/", checkAuth, checkAdmin, async (req, res) => {
   const { address } = req.userDetails;
   const isAdmin = req.isAdmin;
   let { event: evnt } = req.body || {};
-  const event = isAdmin ? {...evnt, isAdmin: true} : evnt;
+  const event = isAdmin ? { ...evnt, isAdmin: true } : evnt;
 
   try {
     const personal = await Personal.updateOne(
@@ -51,13 +57,12 @@ personalRoute.post("/", checkAuth, checkAdmin, async (req, res) => {
       { $push: { events: { $each: [event], $slice: -150 } } },
       { upsert: true }
     );
-    if (!personal)
-      throw Error("Something went wrong saving the admin personal event");
-      if (isAdmin) {
-        await manageEvents(address, Events, 'events', true, true);
-      } else {
-        await manageEvents(address, Events, 'events', true, false);
-      }
+    if (!personal) throw Error("Something went wrong saving the admin personal event");
+    if (isAdmin) {
+      await manageEvents(address, Personal, "events", true, true);
+    } else {
+      await manageEvents(address, Personal, "events", true, false);
+    }
     return res.status(200).json({ personal });
   } catch (e) {
     res.status(400).json({ msg: e.message });
@@ -71,9 +76,23 @@ personalRoute.delete("/", checkAuth, checkAdmin, async (req, res) => {
   const { id } = req.body || {};
 
   try {
-      if (isAdmin) {
+    if (isAdmin) {
+      const personal = await Personal.findOneAndUpdate(
+        { address: nullAddress },
+        {
+          $pull: {
+            events: { _id: id },
+          },
+        }
+      );
+      if (!personal) throw Error("Something went wrong deleting all the personal events");
+      await manageEvents(address, Personal, "events", true, true);
+      return res.status(200).json({ personal });
+    } else {
+      const match = await Personal.findOne({ _id: id });
+      if (match && match._id === address) {
         const personal = await Personal.findOneAndUpdate(
-          { address: nullAddress },
+          { address: address },
           {
             $pull: {
               events: { _id: id },
@@ -81,24 +100,10 @@ personalRoute.delete("/", checkAuth, checkAdmin, async (req, res) => {
           }
         );
         if (!personal) throw Error("Something went wrong deleting all the personal events");
-        await manageEvents(address, Events, 'events', true, true);
+        await manageEvents(address, Personal, "events", true, false);
         return res.status(200).json({ personal });
-      } else {
-        const match = await Personal.findOne({_id: id});
-        if (match && match._id === address) {
-          const personal = await Personal.findOneAndUpdate(
-            { address: address },
-            {
-              $pull: {
-                events: { _id: id },
-              },
-            }
-          );
-          if (!personal) throw Error("Something went wrong deleting all the personal events");
-          await manageEvents(address, Events, 'events', true, false);
-          return res.status(200).json({ personal });
-        } 
       }
+    }
   } catch (e) {
     return res.status(400).json({ msg: e.message });
   }
