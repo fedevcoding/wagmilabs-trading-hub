@@ -28,7 +28,9 @@ const { updateActivity } = require("../../../../services/botsCache/snipeBots/act
 const removeTask = require("../../../../services/botsCache/snipeBots/removeTask");
 
 const fullfillSnipeTasks = async listing => {
-  const { contractAddress, price: listingPrice, isFlagged } = listing;
+  const { contractAddress, price: listingPrice, isFlagged } = listing || {};
+
+  if (!contractAddress || !listingPrice) return;
 
   const collectionTasks = snipeTasks[contractAddress];
 

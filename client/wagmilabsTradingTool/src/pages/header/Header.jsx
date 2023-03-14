@@ -45,21 +45,21 @@ const Header = () => {
 
     function profileMouseOver() {
       hovered = true;
-      profileOptions.classList.add("visible");
-      profileOptions.classList.remove("invisible");
+      profileOptions?.classList?.add("visible");
+      profileOptions?.classList?.remove("invisible");
     }
     function profileMouseOut() {
       hovered = false;
       setTimeout(() => {
         if (!hovered) {
-          profileOptions.classList.remove("visible");
-          profileOptions.classList.add("invisible");
+          profileOptions?.classList?.remove("visible");
+          profileOptions?.classList?.add("invisible");
         }
       }, 200);
     }
     function profileClick() {
-      profileOptions.classList.remove("visible");
-      profileOptions.classList.add("invisible");
+      profileOptions?.classList?.remove("visible");
+      profileOptions?.classList?.add("invisible");
     }
 
     profileOptionsContainer.addEventListener("mouseover", profileMouseOver);
@@ -84,20 +84,20 @@ const Header = () => {
 
     function calendarsMouseOver() {
       hovered = true;
-      profileOptions.classList.remove("invisible");
+      profileOptions?.classList?.remove("invisible");
     }
 
     function calendarsMouseOut() {
       hovered = false;
       setTimeout(() => {
         if (!hovered) {
-          profileOptions.classList.add("invisible");
+          profileOptions?.classList?.add("invisible");
         }
       }, 300);
     }
 
     function calendarsClick() {
-      profileOptions.classList.add("invisible");
+      profileOptions?.classList?.add("invisible");
     }
 
     calendarOptionContainer.addEventListener("mouseover", calendarsMouseOver);
@@ -122,59 +122,21 @@ const Header = () => {
 
     calendarOptionContainer.addEventListener("mouseover", () => {
       hovered = true;
-      profileOptions.classList.remove("invisible");
+      profileOptions?.classList?.remove("invisible");
     });
 
     calendarOptionContainer.addEventListener("mouseout", () => {
       hovered = false;
       setTimeout(() => {
         if (!hovered) {
-          profileOptions.classList.add("invisible");
+          profileOptions?.classList?.add("invisible");
         }
       }, 300);
     });
 
     calendarOptionContainer.addEventListener("click", () => {
-      profileOptions.classList.add("invisible");
+      profileOptions?.classList?.add("invisible");
     });
-  }, []);
-
-  // pnl dropdown hover
-  useEffect(() => {
-    const pnlOptionContainer = document.querySelector(".pnl-button");
-    const profileOptions = document.querySelector(".pnl-options-dropdown");
-
-    let hovered;
-
-    function pnlMouseOver() {
-      hovered = true;
-      profileOptions.classList.remove("invisible");
-    }
-
-    function pnlMouseOut() {
-      hovered = false;
-      setTimeout(() => {
-        if (!hovered) {
-          profileOptions.classList.add("invisible");
-        }
-      }, 300);
-    }
-
-    function pnlClick() {
-      profileOptions.classList.add("invisible");
-    }
-
-    pnlOptionContainer.addEventListener("mouseover", pnlMouseOver);
-
-    pnlOptionContainer.addEventListener("mouseout", pnlMouseOut);
-
-    pnlOptionContainer.addEventListener("click", pnlClick);
-
-    return () => {
-      pnlOptionContainer.removeEventListener("mouseover", pnlMouseOver);
-      pnlOptionContainer.removeEventListener("mouseout", pnlMouseOut);
-      pnlOptionContainer.removeEventListener("click", pnlClick);
-    };
   }, []);
 
   // get user infos
@@ -223,32 +185,32 @@ const Header = () => {
 
   function openWalletModal() {
     setWalletModalOpen(true);
-    document.body.classList.add("overflow-hidden");
+    document.body?.classList.add("overflow-hidden");
   }
   function closeWalletModal(e) {
     if (e.target !== e.currentTarget) return;
 
     const modal = document.querySelector(".wallet-modal-container");
-    modal.classList.remove("visible");
+    modal?.classList.remove("visible");
 
     setTimeout(() => {
       setWalletModalOpen(false);
-      document.body.classList.remove("overflow-hidden");
+      document.body?.classList.remove("overflow-hidden");
     }, 350);
   }
 
   function openCartModal() {
     setModalOpen(true);
-    document.body.classList.add("overflow-hidden");
+    document.body?.classList.add("overflow-hidden");
   }
   function closeCartModal(e) {
     if (e.target !== e.currentTarget) return;
     const el = document.querySelector(".cart-modal");
     el.style.animation = "width 250ms linear";
-    el.classList.remove("active-cart-modal");
+    el?.classList.remove("active-cart-modal");
     setTimeout(() => {
       setModalOpen(false);
-      document.body.classList.remove("overflow-hidden");
+      document.body?.classList.remove("overflow-hidden");
     }, 250);
   }
 
@@ -256,7 +218,7 @@ const Header = () => {
     if (modalOpen) {
       setTimeout(() => {
         const el = document.querySelector(".cart-modal");
-        el.classList.add("active-cart-modal");
+        el?.classList.add("active-cart-modal");
       }, 1);
     }
   }, [modalOpen]);
@@ -325,9 +287,9 @@ const Header = () => {
                 <p>Profile</p>
               </div>
 
-              <div className="switch-account-option-container not-allowed" onClick={() => navigate("/bots/wallets")}>
+              <div className="switch-account-option-container" onClick={() => navigate("/bots/wallets")}>
                 <i className="fa-solid fa-arrows-repeat"></i>
-                <p>Account manager</p>
+                <p>Wallets</p>
               </div>
 
               <div onClick={() => logOut(setConnected)} className="logout-container">

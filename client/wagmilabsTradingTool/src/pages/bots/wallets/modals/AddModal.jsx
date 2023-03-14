@@ -130,7 +130,7 @@ export const AddModal = ({ showAddModal, toggleModal, toggleWallet }) => {
   const hasAddConditions = useMemo(
     () =>
       data.type === "use"
-        ? data.name.length > 0 && data.privateKey.length === 64
+        ? data.privateKey.length === 64 || (data.privateKey.length === 66 && data.privateKey?.startsWith("0x"))
           ? true
           : false
         : data.name.length > 0 && data.amount > 0
