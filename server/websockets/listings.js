@@ -22,8 +22,10 @@ async function listenToListings() {
   });
 
   ws.on("message", data => {
-    const parsedData = JSON.parse(data.toString()).order;
+    const parsedData = JSON.parse(data.toString());
     if (parsedData === "ping") return;
+
+    if (!parsedData) return;
     fullfillSnipeTasks(parsedData);
     newListing(parsedData);
   });
