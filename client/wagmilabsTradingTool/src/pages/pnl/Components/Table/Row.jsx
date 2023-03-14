@@ -52,7 +52,7 @@ export const Row = React.memo(
         <td className="td-paid">
           {isMinted ? (
             <a href={`https://etherscan.io/tx/${allInfo.minted.transaction_hash}`} target="_blank" rel="noreferrer">
-              {`${roundPrice(nft.gasFees.minted.eth)} ETH`} <br /> {roundPriceUsd(nft.gasFees.minted.usd) + "$"}
+              {nft.paid.eth + " ETH"} <br /> {roundPriceUsd(nft.paid.usd) + "$"}
             </a>
           ) : (
             <a href={`https://etherscan.io/tx/${allInfo.bought.transaction_hash}`} target="_blank" rel="noreferrer">
@@ -62,7 +62,7 @@ export const Row = React.memo(
         </td>
         <td className="td-sold">
           <a href={`https://etherscan.io/tx/${allInfo.sold.transaction_hash}`} target="_blank" rel="noreferrer">
-            {nft.sold.eth + " ETH"} <br /> {nft.sold.usd + "$"}
+            {roundPrice(nft.sold.eth) + " ETH"} <br /> {roundPriceUsd(nft.sold.usd) + "$"}
           </a>
         </td>
         <td className="td-gas-fees">

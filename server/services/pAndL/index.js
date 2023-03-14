@@ -29,6 +29,7 @@ function getNftMintedObj(minted) {
     const {
       quantity_minted: quantity,
       mint_tx_fee,
+      mint_tx_price,
       minted_timestamp: timestamp,
       minted_transaction_hash,
       ...sold
@@ -40,6 +41,7 @@ function getNftMintedObj(minted) {
         minted: {
           quantity,
           fee: mint_tx_fee / 10 ** 18,
+          price: mint_tx_price ? mint_tx_price / 10 ** 18 : 0,
           timestamp,
           transaction_hash: minted_transaction_hash,
         },
@@ -52,10 +54,15 @@ function getNftMintedObj(minted) {
 function getPAndLData(nfts, allApprovalGasFees, txsGasFees) {
   return nfts
     .map(nft => {
+      const countBundle = nfts.filter(n => n.sold.transaction_hash === nft.sold.transaction_hash).length;
+
+      const soldPrice = nft.sold.eth_price / countBundle;
+      const soldUsdPrice = nft.sold.usd_price / countBundle;
+
       const approvalGasFees = allApprovalGasFees[nft.sold.contract_address?.toLowerCase()] ?? 0;
       const soldGasFees = nft.sold.royalty_fee + nft.sold.platform_fee;
       const boughtCoef = nft.bought ? nft.bought.usd_price / nft.bought.eth_price : 0;
-      const soldCoef = nft.sold.usd_price / nft.sold.eth_price;
+      const soldCoef = soldUsdPrice / soldPrice;
       const soldGasFeesUsd = soldGasFees * soldCoef;
       const approvalGasFeesUsd = approvalGasFees * soldCoef;
 
@@ -64,6 +71,10 @@ function getPAndLData(nfts, allApprovalGasFees, txsGasFees) {
 
       const mintedFees = nft.minted?.fee || 0;
       const mintedFeesUsd = (nft.minted?.fee || 0) * soldCoef;
+      // Calcolo errato, andrebbe usato boughtCoef, ma non abbiamo il prezzo usd nel momento in cui è stato mintato
+
+      const mintedPrice = nft.minted?.price || 0;
+      const mintedPriceUsd = (nft.minted?.price || 0) * soldCoef;
       // Calcolo errato, andrebbe usato boughtCoef, ma non abbiamo il prezzo usd nel momento in cui è stato mintato
 
       const diffInSeconds =
@@ -79,12 +90,12 @@ function getPAndLData(nfts, allApprovalGasFees, txsGasFees) {
             id: nft.sold.token_id,
           },
           paid: {
-            usd: nft.bought ? nft.bought.usd_price : 0,
-            eth: nft.bought ? nft.bought.eth_price : 0,
+            usd: nft.bought ? nft.bought.usd_price : mintedPriceUsd,
+            eth: nft.bought ? nft.bought.eth_price : mintedPrice,
           },
           sold: {
-            usd: nft.sold.usd_price,
-            eth: nft.sold.eth_price,
+            usd: soldUsdPrice,
+            eth: soldPrice,
           },
           gasFees: {
             paid: {
@@ -116,15 +127,17 @@ function getPAndLData(nfts, allApprovalGasFees, txsGasFees) {
           },
           pOrL: {
             eth:
-              nft.sold.eth_price -
+              soldPrice -
               (nft.bought?.eth_price || 0) -
+              mintedPrice -
               soldGasFees -
               approvalGasFees -
               boughtGasFeesTx -
               mintedFees,
             usd:
-              nft.sold.usd_price -
+              soldUsdPrice -
               (nft.bought?.usd_price || 0) -
+              mintedPriceUsd -
               soldGasFeesUsd -
               approvalGasFeesUsd -
               boughtGasFeesTxUsd -
@@ -132,8 +145,8 @@ function getPAndLData(nfts, allApprovalGasFees, txsGasFees) {
           },
           holdDuration: diffInSeconds,
           gross: {
-            eth: nft.sold.eth_price - soldGasFees,
-            usd: nft.sold.usd_price - soldGasFeesUsd,
+            eth: soldPrice - soldGasFees,
+            usd: soldUsdPrice - soldGasFeesUsd,
           },
         },
       };
