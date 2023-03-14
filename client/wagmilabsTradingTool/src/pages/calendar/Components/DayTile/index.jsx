@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import "./style.scss";
 
 const dayClass = d => {
@@ -18,9 +18,6 @@ const dayClass = d => {
 const renderEventName = event => <div className="day-event-name">{event?.collectionName || event?.eventName}</div>;
 
 export const DayTile = ({ day, index, startIdx, showSelectedDate, events }) => {
-  useEffect(() => {
-    console.log(events);
-  }, [events]);
   return (
     <div
       key={day.date.getDate().toString()}
