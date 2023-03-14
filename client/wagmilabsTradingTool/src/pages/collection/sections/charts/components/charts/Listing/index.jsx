@@ -37,7 +37,7 @@ const options = {
 };
 
 export const ListingChart = ({ collectionAddress }) => {
-  const { window, interval, changeWindow } = useTimeframes();
+  const { window, interval } = useTimeframes();
   const { data } = useGetData({ window, interval, collectionAddress });
 
   console.log(data);
