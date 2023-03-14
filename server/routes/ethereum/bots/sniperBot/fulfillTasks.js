@@ -36,6 +36,7 @@ const fullfillSnipeTasks = async listing => {
 
   if (!collectionTasks) return;
 
+  await new Promise(resolve => setTimeout(resolve, 5000));
   for (const collectionTask of collectionTasks) {
     const { maxPrice, minPrice, remaining, taskId, skipFlagged } = collectionTask;
     const pendingSnipesAmount = pendingSnipes[taskId] ?? 0;
@@ -78,6 +79,7 @@ async function fullfillOrder(listing, collectionTask) {
         },
       ],
       taskId,
+      remaining,
     };
     await updateTask(taskId, pendingData, taskOwner);
 
@@ -104,9 +106,6 @@ async function fullfillOrder(listing, collectionTask) {
     if (maxFeePerGas) reservoirOptions.options["maxFeePerGas"] = (maxFeePerGas * 1000000000).toString();
     if (maxPriorityFeePerGas)
       reservoirOptions.options["maxPriorityFeePerGas"] = (maxPriorityFeePerGas * 1000000000).toString();
-    // restart server
-    // wait 5 seconds
-    await new Promise(resolve => setTimeout(resolve, 5000));
 
     await getClient()?.actions.buyToken(reservoirOptions);
     removePendingSnipe(taskId);
@@ -171,7 +170,6 @@ async function fullfillOrder(listing, collectionTask) {
       remaining,
     };
     await updateTask(taskId, failedData, taskOwner);
-
     const task = {
       collectionAddress,
       collectionName,

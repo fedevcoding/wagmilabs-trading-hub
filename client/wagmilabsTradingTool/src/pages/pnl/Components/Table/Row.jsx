@@ -62,7 +62,7 @@ export const Row = React.memo(
         </td>
         <td className="td-sold">
           <a href={`https://etherscan.io/tx/${allInfo.sold.transaction_hash}`} target="_blank" rel="noreferrer">
-            {nft.sold.eth + " ETH"} <br /> {nft.sold.usd + "$"}
+            {roundPrice(nft.sold.eth) + " ETH"} <br /> {roundPriceUsd(nft.sold.usd) + "$"}
           </a>
         </td>
         <td className="td-gas-fees">
