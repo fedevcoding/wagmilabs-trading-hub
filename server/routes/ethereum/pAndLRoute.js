@@ -78,7 +78,9 @@ route.get("/:address", checkAuth, (req, res) => {
       const nftsMinted = getNftMintedObj(minted);
       const txsGasFees = await getTxsGasFees(nfts);
 
-      res.status(200).json(getPAndLData(nfts.concat(nftsMinted), formatApprovalGasFees(approvalGasFees), txsGasFees));
+      const result = getPAndLData(nfts.concat(nftsMinted), formatApprovalGasFees(approvalGasFees), txsGasFees);
+
+      res.status(200).json(result);
     } catch (e) {
       console.log(e);
       res.status(500).json({ error: e });
