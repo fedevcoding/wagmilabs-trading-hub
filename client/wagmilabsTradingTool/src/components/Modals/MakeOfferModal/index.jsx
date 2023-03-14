@@ -13,12 +13,12 @@ import {
 } from "@chakra-ui/react";
 import { usePlaceBid } from "@Hooks";
 import { Loader } from "@Components";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-
-import "./style.scss";
 import { UserDataContext } from "@Context";
-import { roundPrice } from "@Utils/formats/formats";
+import { roundPrice } from "@Utils";
+import DatePicker from "react-datepicker";
+
+import "react-datepicker/dist/react-datepicker.css";
+import "./style.scss";
 
 export const MakeOfferModal = React.memo(
   ({
@@ -31,14 +31,15 @@ export const MakeOfferModal = React.memo(
       token: { name },
       market: { topBid },
     },
+    collectionBid = false,
+    currency = "weth",
   }) => {
-    const [currency] = React.useState("weth");
     const [confirmingList, setConfirmingList] = React.useState(false);
     const [price, setPrice] = React.useState(null);
     const { placeBid } = usePlaceBid(marketplace);
     const { userBalances } = useContext(UserDataContext);
     const [date, setDate] = React.useState(null);
-    const notEnoughBalance = price > parseFloat(userBalances[currency] || 0);
+    const notEnoughBalance = price > parseFloat(userBalances[currency?.toLowerCase()] || 0);
 
     return (
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
@@ -52,16 +53,14 @@ export const MakeOfferModal = React.memo(
             <p>
               Balance ETH: {roundPrice(parseFloat(userBalances.eth || 0)) || 0}
               <br />
-              Balance WETH:{" "}
-              {roundPrice(parseFloat(userBalances.weth || 0)) || 0}
+              Balance WETH: {roundPrice(parseFloat(userBalances.weth || 0)) || 0}
               <br />
             </p>
             <br />
             {topBid?.id && (
               <>
                 <p>
-                  Best offer: {topBid.price.amount.native}{" "}
-                  {topBid.price.currency.symbol}
+                  Best offer: {topBid.price.amount.native} {topBid.price.currency.symbol}
                   {` (${topBid.price.amount.usd.toLocaleString("EN-us", {
                     maximumFractionDigits: 2,
                   })}$)`}
@@ -94,9 +93,7 @@ export const MakeOfferModal = React.memo(
               className="date-picker"
             />
             {price && notEnoughBalance && (
-              <p className="balance-now-enough">
-                {currency.toUpperCase()} balance is not enough
-              </p>
+              <p className="balance-now-enough">{currency.toUpperCase()} balance is not enough</p>
             )}
           </ModalBody>
           <ModalFooter>
@@ -105,18 +102,12 @@ export const MakeOfferModal = React.memo(
               mr={3}
               onClick={async () => {
                 setConfirmingList(true);
-                await placeBid(`${address}:${tokenId}`, price, date);
+                await placeBid(collectionBid ? address : `${address}:${tokenId}`, price, date, collectionBid);
                 setConfirmingList(false);
               }}
-              isDisabled={
-                !price || parseFloat(price) <= 0 || !date || notEnoughBalance
-              }
+              isDisabled={!price || parseFloat(price) <= 0 || !date || notEnoughBalance}
             >
-              {confirmingList ? (
-                <Loader width={"20px"} height={"20px"} />
-              ) : (
-                "Confirm"
-              )}
+              {confirmingList ? <Loader width={"20px"} height={"20px"} /> : "Confirm"}
             </Button>
             <Button onClick={() => setIsOpen(false)}>Cancel</Button>
           </ModalFooter>
