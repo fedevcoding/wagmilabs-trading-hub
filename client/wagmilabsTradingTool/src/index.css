@@ -86,6 +86,10 @@ body.overflow-hidden {
   align-items: center;
 }
 
+.clearfix {
+  clear: both;
+}
+
 .text-center {
   text-align: center;
 }
@@ -101,9 +105,11 @@ body.overflow-hidden {
 .not-responsive {
   display: none;
 }
+
+
 @media screen and (max-width: 1000px) {
-  #application-wrapper {
-    display: none;
+  #application-wrapper, .chakra-portal {
+    display: none !important;
   }
 
   .not-responsive {
@@ -122,15 +128,20 @@ body.overflow-hidden {
   }
 }
 
-
-
 .not-allowed {
   cursor: not-allowed;
 }
 
+.flex-col{
+  display: flex !important;
+  flex-direction: column !important;
+}
 
-.flex-col {
-  display: flex;
-  flex-direction: column;
 
+.chakra-select {
+  color: white;
+}
+
+.chakra-select option {
+  background-color: black !important;
 }

@@ -7,10 +7,13 @@ import "./style.scss";
 
 export const ItemActivity = React.memo(({ address, id }) => {
   const [types, setTypes] = React.useState([]);
+  const [filtering, setFiltering] = React.useState(false);
   const { activities, isLoading, loadingMoreActivity } = useGetData(
     address,
     id,
-    types.map(t => t.value).join(",")
+    types.map(t => t.value).join(","),
+    filtering,
+    setFiltering
   );
   const activityOptions = getActivityOptions();
 
@@ -20,7 +23,10 @@ export const ItemActivity = React.memo(({ address, id }) => {
         <h2>Item Activity</h2>
         <Select
           id="filer-activity-type"
-          onChange={t => setTypes(t)}
+          onChange={t => {
+            setFiltering(true);
+            setTypes(t);
+          }}
           label="Choose an item"
           value={types}
           options={Object.keys(activityOptions).map(a => ({
@@ -30,9 +36,7 @@ export const ItemActivity = React.memo(({ address, id }) => {
           isMulti
         />
       </div>
-      {(types.length && !(activities?.activities || []).length && (
-        <h3>No activities for this filter</h3>
-      )) || (
+      {(types.length && !(activities?.activities || []).length && <h3>No activities for this filter</h3>) || (
         <div className="activity-table-container">
           <ActivityTable
             collectionActivityLoading={isLoading}

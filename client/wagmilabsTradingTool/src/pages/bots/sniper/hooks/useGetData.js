@@ -3,18 +3,18 @@ import { useState, useEffect } from "react";
 
 export const useGetData = () => {
   const [activeSnipes, setActiveSnipes] = useState(null);
-  const [, setSnipeActivity] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [snipeActivity, setSnipeActivity] = useState(null);
+  const [loadingSnipes, setLoading] = useState(true);
 
   useEffect(() => {
     const getData = async () => {
       try {
-        const url = "/userSnipeData";
-        const data = await getFromServer(url);
+        setLoading(true);
+        const url = "/bots/sniper/getTasks";
+        const { tasks, activities } = await getFromServer(url);
 
-        const { activeSnipes, snipeActivity } = data;
-        setActiveSnipes(activeSnipes);
-        setSnipeActivity(snipeActivity);
+        setActiveSnipes(tasks);
+        setSnipeActivity(activities);
       } catch (error) {
         console.log(error);
       } finally {
@@ -24,5 +24,5 @@ export const useGetData = () => {
     getData();
   }, []);
 
-  return { activeSnipes, loading };
+  return { activeSnipes, loadingSnipes, setActiveSnipes, snipeActivity };
 };

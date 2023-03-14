@@ -2,8 +2,8 @@ import React from "react";
 import { Card, Col, Number, Row } from "@Components";
 import { getRecap } from "./function";
 
-export const CardRecap = React.memo(({ data, taxPerc, taxedOn, currency }) => {
-  const { paid, sold, pAndL, taxes } = getRecap(data, taxPerc, taxedOn);
+export const CardRecap = React.memo(({ data, taxPerc, taxedOn, currency, taxLossHarvesting, longTermTax }) => {
+  const { paid, sold, pAndL, taxes } = getRecap(data, taxPerc, taxedOn, taxLossHarvesting, longTermTax);
 
   return (
     <Card className="recap-card">
@@ -28,7 +28,7 @@ export const CardRecap = React.memo(({ data, taxPerc, taxedOn, currency }) => {
           <p>{sold.eth + "ETH (" + sold.usd + "$)"}</p>
         </Col>
         <Col>
-          <h3>Taxes owned:</h3>
+          <h3>Taxes owed:</h3>
           <p>{currency === "usd" ? taxes[currency] + "$" : taxes[currency] + " ETH"}</p>
         </Col>
       </Row>

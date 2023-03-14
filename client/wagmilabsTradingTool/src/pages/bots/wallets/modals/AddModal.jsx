@@ -130,7 +130,7 @@ export const AddModal = ({ showAddModal, toggleModal, toggleWallet }) => {
   const hasAddConditions = useMemo(
     () =>
       data.type === "use"
-        ? data.name.length > 0 && data.privateKey.length === 64
+        ? data.privateKey.length === 64 || (data.privateKey.length === 66 && data.privateKey?.startsWith("0x"))
           ? true
           : false
         : data.name.length > 0 && data.amount > 0
@@ -202,7 +202,7 @@ export const AddModal = ({ showAddModal, toggleModal, toggleWallet }) => {
 
                       <HStack className="alert low-opacity little-text">
                         <i className="fa-solid fa-triangle-exclamation"></i>
-                        <p>Your private key not be stored on our database.</p>
+                        <p>Your private key will not be stored on our database.</p>
                       </HStack>
                     </>
                   ) : data.type === "generate" ? (
