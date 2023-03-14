@@ -16,6 +16,7 @@ import {
 import { Select } from "@Components";
 
 import "./style.scss";
+import { clientCache } from "@Utils";
 
 export const TaxSettingsModal = React.memo(({ isOpen, setIsOpen, ...settings }) => {
   const toast = useToast();
@@ -124,8 +125,22 @@ export const TaxSettingsModal = React.memo(({ isOpen, setIsOpen, ...settings }) 
                 setCurrency(modalCurrency);
                 setTaxPerc(modalTaxPerc);
                 setTaxLossHarvesting(modalTaxLossHarvesting);
-                setLongTermTax(modalLongTermTax === undefined ? undefined : parseFloat(modalLongTermTax));
+                const longTermTaxValue = modalLongTermTax === undefined ? undefined : parseFloat(modalLongTermTax);
+                setLongTermTax(longTermTaxValue);
                 setIsOpen(false);
+
+                clientCache(
+                  "profitandloss-settings",
+                  365 * 24 * 3600,
+                  {
+                    taxedOn: modalTaxedOn,
+                    currency: modalCurrency,
+                    taxPerc: modalTaxPerc,
+                    taxLossHarvesting: modalTaxLossHarvesting,
+                    longTermTax: longTermTaxValue,
+                  },
+                  true
+                );
               }
             }}
           >

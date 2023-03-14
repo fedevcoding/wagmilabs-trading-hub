@@ -29,6 +29,7 @@ function getNftMintedObj(minted) {
     const {
       quantity_minted: quantity,
       mint_tx_fee,
+      mint_tx_price,
       minted_timestamp: timestamp,
       minted_transaction_hash,
       ...sold
@@ -40,6 +41,7 @@ function getNftMintedObj(minted) {
         minted: {
           quantity,
           fee: mint_tx_fee / 10 ** 18,
+          price: mint_tx_price ? mint_tx_price / 10 ** 18 : 0,
           timestamp,
           transaction_hash: minted_transaction_hash,
         },
@@ -66,6 +68,10 @@ function getPAndLData(nfts, allApprovalGasFees, txsGasFees) {
       const mintedFeesUsd = (nft.minted?.fee || 0) * soldCoef;
       // Calcolo errato, andrebbe usato boughtCoef, ma non abbiamo il prezzo usd nel momento in cui è stato mintato
 
+      const mintedPrice = nft.minted?.price || 0;
+      const mintedPriceUsd = (nft.minted?.price || 0) * soldCoef;
+      // Calcolo errato, andrebbe usato boughtCoef, ma non abbiamo il prezzo usd nel momento in cui è stato mintato
+
       const diffInSeconds =
         (new Date(nft.sold.timestamp).getTime() -
           new Date(nft.bought ? nft.bought.timestamp : nft.minted.timestamp).getTime()) /
@@ -79,8 +85,8 @@ function getPAndLData(nfts, allApprovalGasFees, txsGasFees) {
             id: nft.sold.token_id,
           },
           paid: {
-            usd: nft.bought ? nft.bought.usd_price : 0,
-            eth: nft.bought ? nft.bought.eth_price : 0,
+            usd: nft.bought ? nft.bought.usd_price : mintedPriceUsd,
+            eth: nft.bought ? nft.bought.eth_price : mintedPrice,
           },
           sold: {
             usd: nft.sold.usd_price,
@@ -118,6 +124,7 @@ function getPAndLData(nfts, allApprovalGasFees, txsGasFees) {
             eth:
               nft.sold.eth_price -
               (nft.bought?.eth_price || 0) -
+              mintedPrice -
               soldGasFees -
               approvalGasFees -
               boughtGasFeesTx -
@@ -125,6 +132,7 @@ function getPAndLData(nfts, allApprovalGasFees, txsGasFees) {
             usd:
               nft.sold.usd_price -
               (nft.bought?.usd_price || 0) -
+              mintedPriceUsd -
               soldGasFeesUsd -
               approvalGasFeesUsd -
               boughtGasFeesTxUsd -
