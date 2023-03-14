@@ -5,7 +5,6 @@ import { SocketContext } from "@Context";
 export function useGetData(address, columnHovered, floorPrice) {
   const socket = useContext(SocketContext);
 
-
   const [hoveredListings, setHoveredListings] = useState([]);
   const [hoveredSales, setHoveredSales] = useState([]);
 
@@ -14,12 +13,12 @@ export function useGetData(address, columnHovered, floorPrice) {
   const [listings, setListings] = useState([]);
   const [sales, setSales] = useState([]);
   const [isLoading, setLoading] = useState(false);
-  const columnHoveredRef = useRef(columnHovered)
+  const columnHoveredRef = useRef(columnHovered);
 
   const [tokens, setTokens] = useState({});
 
   useEffect(() => {
-    columnHoveredRef.current = columnHovered
+    columnHoveredRef.current = columnHovered;
     if (!columnHovered.listings && hoveredListings.length > 0) {
       setTotalListings(oldListings => [...oldListings, ...hoveredListings]);
     }
@@ -27,12 +26,12 @@ export function useGetData(address, columnHovered, floorPrice) {
     if (!columnHovered.sales && hoveredSales.length > 0) {
       setTotalSales(oldSales => [...oldSales, ...hoveredSales]);
     }
-  }, [columnHovered, hoveredListings, hoveredSales])
+  }, [columnHovered, hoveredListings, hoveredSales]);
 
   useEffect(() => {
     setHoveredListings([]);
     setHoveredSales([]);
-  }, [totalListings, totalSales])
+  }, [totalListings, totalSales]);
 
   useEffect(() => {
     async function getData() {
@@ -51,16 +50,15 @@ export function useGetData(address, columnHovered, floorPrice) {
       setLoading(false);
     }
     async function getReservoirListing() {
-      const url = `https://api.reservoir.tools/tokens/floor/v1?collection=${address}`
+      const url = `https://api.reservoir.tools/tokens/floor/v1?collection=${address}`;
 
-      const api = await fetch(url)
-      const { tokens } = await api.json()
+      const api = await fetch(url);
+      const { tokens } = await api.json();
 
-      setTokens(tokens)
+      setTokens(tokens);
     }
     getData();
-    getReservoirListing()
-
+    getReservoirListing();
 
     async function listenToListings() {
       socket.on("listing", listingData => {
@@ -72,6 +70,7 @@ export function useGetData(address, columnHovered, floorPrice) {
           name,
           timestamp,
           marketplace,
+          ms,
         } = listingData;
 
         const dataObj = {
@@ -81,10 +80,13 @@ export function useGetData(address, columnHovered, floorPrice) {
           name,
           timestamp,
           marketplace,
+          ms,
         };
 
-        setTokens(old => ({ ...old, [tokenId]: price}))
-        !columnHoveredRef.current.listings ? setTotalListings(oldListings => [...oldListings, dataObj]) : setHoveredListings(oldListings => [...oldListings, dataObj]);
+        setTokens(old => ({ ...old, [tokenId]: price }));
+        !columnHoveredRef.current.listings
+          ? setTotalListings(oldListings => [...oldListings, dataObj])
+          : setHoveredListings(oldListings => [...oldListings, dataObj]);
       });
     }
 
@@ -111,19 +113,19 @@ export function useGetData(address, columnHovered, floorPrice) {
         };
 
         setTokens(old => {
-          const newTokens = { ...old }
-          delete newTokens[tokenId]
+          const newTokens = { ...old };
+          delete newTokens[tokenId];
 
-          return newTokens
-        })
-        !columnHoveredRef.current.sales ? setTotalSales(oldSales => [...oldSales, dataObj]) : setHoveredSales(oldSales => [...oldSales, dataObj]);
+          return newTokens;
+        });
+        !columnHoveredRef.current.sales
+          ? setTotalSales(oldSales => [...oldSales, dataObj])
+          : setHoveredSales(oldSales => [...oldSales, dataObj]);
       });
     }
     listenToListings();
-    listenToSales()
+    listenToSales();
   }, [address, socket, floorPrice]);
-
-
 
   useEffect(() => {
     setListings([...totalListings]?.reverse()?.splice(0, 50));

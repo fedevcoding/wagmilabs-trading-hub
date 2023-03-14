@@ -20,7 +20,7 @@ export const ProfitCalcModal = React.memo(({ isOpen, setIsOpen }) => {
         <ModalHeader>Profitability calculator</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <iframe src="https://profitcalc.wagmilabs.tools/" title="Profit Calc" />
+          <iframe src="https://profitcalc.wagmilabs.tools?modalLayout=1" title="Profit Calc" />
         </ModalBody>
         <ModalFooter>
           <Button onClick={() => setIsOpen(false)}>Close</Button>
