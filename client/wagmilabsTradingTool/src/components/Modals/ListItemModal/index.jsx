@@ -11,10 +11,12 @@ import {
   Button,
   NumberInput,
   NumberInputField,
+  Switch,
+  Tooltip,
 } from "@chakra-ui/react";
 import { useListNft } from "@Hooks";
 import { Loader, OrderInfo, Select } from "@Components";
-import DatePicker from "react-datepicker";
+import ReactDatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 import "./style.scss";
@@ -36,6 +38,8 @@ export const ListItemModal = React.memo(
     const marketplaces = getMarketplaces();
     const [date, setDate] = React.useState(null);
     const [marketplace, setMarketplace] = React.useState(marketplaces[0]);
+    const [royaltiesPerc, setRoyaltiesPerc] = React.useState(0.5);
+    const [autoRoyalties, setAutoRoyalties] = React.useState(true);
 
     const { listNft } = useListNft(
       {
@@ -85,20 +89,60 @@ export const ListItemModal = React.memo(
               value={marketplace}
               options={marketplaces}
             />
+            {(marketplace.value === "opensea" && (
+              <div>
+                <br />
+                <div className="space-between">
+                  <p className="label">
+                    <Tooltip
+                      closeOnClick={false}
+                      hasArrow
+                      label="Original creator royalties"
+                      fontSize="xs"
+                      bg="black"
+                      color={"white"}
+                      placement="top"
+                      borderRadius={"7px"}
+                    >
+                      <b>Auto royalties</b>
+                    </Tooltip>
+                  </p>
+                  <Switch
+                    isChecked={autoRoyalties}
+                    colorScheme="gray"
+                    onChange={e => setAutoRoyalties(e.target.checked)}
+                  />
+                </div>
+                {(!autoRoyalties && (
+                  <>
+                    <br />
+                    <p className="label">
+                      <b>Creator royalties percentage</b>
+                    </p>
+                    <NumberInput max={100} min={0.5} step={0.01} value={royaltiesPerc}>
+                      <NumberInputField placeholder="Minimum 0.5%" onChange={e => setRoyaltiesPerc(e.target.value)} />
+                    </NumberInput>
+                  </>
+                )) ||
+                  ""}
+              </div>
+            )) ||
+              ""}
             <br />
             <p className="label">
               <b>Set expiration date</b>
             </p>
-
-            <DatePicker
+            <ReactDatePicker
               minDate={new Date().getTime()}
-              onChange={v => {
-                setDate(v);
-              }}
+              onChange={v => setDate(v)}
               selected={date}
               isClearable={true}
-              placeholderText="Select expiration date"
+              placeholderText="Select event date"
               className="date-picker"
+              showTimeSelect
+              dateFormat="Pp"
+              preventOpenOnFocus
+              showMonthYearDropdown={false}
             />
           </ModalBody>
           <ModalFooter>
@@ -107,7 +151,12 @@ export const ListItemModal = React.memo(
               mr={3}
               onClick={() => {
                 if (!confirmingList)
-                  listNft(setConfirmingList, parseInt(new Date(date).getTime() / 1000).toString(), marketplace.value);
+                  listNft(
+                    setConfirmingList,
+                    parseInt(new Date(date).getTime() / 1000).toString(),
+                    marketplace.value,
+                    autoRoyalties ? null : royaltiesPerc
+                  );
               }}
             >
               {confirmingList ? <Loader width={"20px"} height={"20px"} /> : "Confirm"}
