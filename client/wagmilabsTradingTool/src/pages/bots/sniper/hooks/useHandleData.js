@@ -7,7 +7,6 @@ export const useHandleData = (activeSnipes, setActiveSnipes) => {
   const [showDeleteTask, setShowDeleteTask] = useState(false);
 
   const [restartTaskModalData, setRestartTaskModalData] = useState({
-    // taskId: null,
     show: false,
   });
 
@@ -22,49 +21,56 @@ export const useHandleData = (activeSnipes, setActiveSnipes) => {
   const toggleSnipe = useCallback(
     (state, data) => {
       if (state === "add") {
-        const newTasks = [data, ...activeSnipes];
-        setActiveSnipes(newTasks);
+        setActiveSnipes(oldTasks => [data, ...oldTasks]);
       }
       if (state === "remove") {
-        const newTasks = activeSnipes.filter(snipe => snipe.taskId !== data);
-        setActiveSnipes(newTasks);
+        setActiveSnipes(oldTasks => {
+          const newTasks = oldTasks.filter(snipe => snipe.taskId !== data);
+          return newTasks;
+        });
       }
       if (state === "restart") {
-        const newTasks = activeSnipes.map(task => {
-          if (task.taskId === data.taskId) {
-            return { ...task, status: "active", walletAddress: data.walletAddress };
-          }
-          return { ...task };
+        setActiveSnipes(oldTasks => {
+          const newTasks = oldTasks.map(task => {
+            if (task.taskId === data.taskId) {
+              return { ...task, status: "active", walletAddress: data.walletAddress };
+            }
+            return { ...task };
+          });
+
+          return newTasks;
         });
-        setActiveSnipes(newTasks);
       }
     },
-    [activeSnipes, setActiveSnipes]
+    [setActiveSnipes]
   );
 
   const handleTaskUpdate = useCallback(
     data => {
+      console.log(data);
       const { properties, taskId, remaining } = data;
 
       if (remaining === 1) {
         toggleSnipe("remove", taskId);
       } else {
-        const newTasks = activeSnipes.map(task => {
-          if (task.taskId === taskId) {
-            const newTask = { ...task };
+        setActiveSnipes(oldSnipes => {
+          const newTasks = oldSnipes.map(task => {
+            if (task.taskId === taskId) {
+              const newTask = { ...task };
 
-            properties.forEach(property => {
-              const { key, value } = property;
-              newTask[key] = value;
-            });
-            return newTask;
-          }
-          return { ...task };
+              properties.forEach(property => {
+                const { key, value } = property;
+                newTask[key] = value;
+              });
+              return newTask;
+            }
+            return { ...task };
+          });
+          return newTasks;
         });
-        setActiveSnipes(newTasks);
       }
     },
-    [activeSnipes, setActiveSnipes, toggleSnipe]
+    [toggleSnipe, setActiveSnipes]
   );
 
   return {

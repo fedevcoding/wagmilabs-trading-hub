@@ -112,38 +112,34 @@ io.on("connection", socket => {
 
   socket.on("joinSales", collectionAddress => {
     const channel = `sales${collectionAddress}`;
-    // console.log("joining room ", channel);
     socket.join(channel);
   });
 
   socket.on("leaveSales", collectionAddress => {
     const channel = `sales${collectionAddress}`;
-    // console.log("leaving room ", channel);
-    socket.leave(collectionAddress);
+    socket.leave(channel);
   });
 
   socket.on("joinListings", collectionAddress => {
     const channel = `listings${collectionAddress}`;
-    // console.log("joining room ", channel);
     socket.join(channel);
   });
 
   socket.on("leaveListings", collectionAddress => {
     const channel = `listings${collectionAddress}`;
-    // console.log("joining room ", channel);
     socket.leave(channel);
   });
 
-  socket.on("joinPendingSnipes", accountAddress => {
+  socket.on("joinSnipeUpdates", accountAddress => {
     accountAddress = accountAddress?.toLowerCase();
-    // console.log("joining room " + accountAddress);
-    socket.join(accountAddress);
+    const channel = `snipeUpdates:${accountAddress}`;
+    socket.join(channel);
   });
 
-  socket.on("leavePendingSnipes", accountAddress => {
+  socket.on("leaveSnipeUpdates", accountAddress => {
     accountAddress = accountAddress?.toLowerCase();
-    // console.log("leaving room " + accountAddress);
-    socket.leave(accountAddress);
+    const channel = `snipeUpdates:${accountAddress}`;
+    socket.leave(channel);
   });
 });
 
@@ -173,7 +169,7 @@ function newSnipeUpdate(accountAddress, data) {
   const channel = `snipeUpdates:${accountAddress}`;
 
   try {
-    io.sockets.to(channel).emit("newSnipeUpdates", data);
+    io.sockets.to(channel).emit("snipeUpdates", data);
   } catch (e) {
     console.log(e);
   }
