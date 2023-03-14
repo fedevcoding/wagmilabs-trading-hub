@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./style.scss";
 
 const dayClass = d => {
@@ -15,18 +15,12 @@ const dayClass = d => {
   }
 };
 
-const renderEvents = events => {
-  events
-    ?.map((event, index) => {
-      if (index < 2) return renderEventName(event);
-      else return undefined;
-    })
-    ?.filter(e => e !== undefined);
-};
-
 const renderEventName = event => <div className="day-event-name">{event?.collectionName || event?.eventName}</div>;
 
 export const DayTile = ({ day, index, startIdx, showSelectedDate, events }) => {
+  useEffect(() => {
+    console.log(events);
+  }, [events]);
   return (
     <div
       key={day.date.getDate().toString()}
@@ -34,7 +28,9 @@ export const DayTile = ({ day, index, startIdx, showSelectedDate, events }) => {
       onClick={() => showSelectedDate(day, index + startIdx)}
     >
       <div>{day.date.getDate()}</div>
-      {renderEvents(events)}
+      {events.map(e => {
+        return renderEventName(e);
+      })}
       {events.length > 2 && <div>{`+ ${events.length - 2} more`}</div>}
     </div>
   );
