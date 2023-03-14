@@ -9,7 +9,7 @@ export const usePlaceBid = marketplace => {
   const { orderbook, orderKind } = marketListingMapping[marketplace.toLowerCase()] || {};
   const toast = useToast();
 
-  async function placeBid(tokenAddress, price, date) {
+  async function placeBid(address, price, date, collectionBid = false) {
     if (price <= 0) {
       toast({
         title: "Error Place Bid NFT.",
@@ -35,17 +35,25 @@ export const usePlaceBid = marketplace => {
     const signer = await fetchSigner();
     const weiPrice = (price * 10 ** 18).toString();
 
+    const bids = [
+      {
+        weiPrice,
+        orderbook,
+        orderKind,
+        ...(collectionBid
+          ? {
+              collection: address,
+            }
+          : {
+              token: address,
+            }),
+        expirationTime: parseInt(new Date(date).getTime() / 1000).toString(),
+      },
+    ];
+
     try {
       await getClient()?.actions.placeBid({
-        bids: [
-          {
-            weiPrice,
-            orderbook,
-            orderKind,
-            token: tokenAddress,
-            expirationTime: parseInt(new Date(date).getTime() / 1000).toString(),
-          },
-        ],
+        bids,
         signer,
         options,
         onProgress: steps => {

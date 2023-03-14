@@ -539,6 +539,7 @@ const Items = ({
                 currency={collectionInfo?.floorAsk?.price?.currency?.symbol || "ETH"}
                 setIsOpen={setIsOpen}
                 marketplace={"opensea"}
+                collectionBid
               />
             </div>
           </div>
