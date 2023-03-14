@@ -54,10 +54,15 @@ function getNftMintedObj(minted) {
 function getPAndLData(nfts, allApprovalGasFees, txsGasFees) {
   return nfts
     .map(nft => {
+      const countBundle = nfts.filter(n => n.sold.transaction_hash === nft.sold.transaction_hash).length;
+
+      const soldPrice = nft.sold.eth_price / countBundle;
+      const soldUsdPrice = nft.sold.usd_price / countBundle;
+
       const approvalGasFees = allApprovalGasFees[nft.sold.contract_address?.toLowerCase()] ?? 0;
       const soldGasFees = nft.sold.royalty_fee + nft.sold.platform_fee;
       const boughtCoef = nft.bought ? nft.bought.usd_price / nft.bought.eth_price : 0;
-      const soldCoef = nft.sold.usd_price / nft.sold.eth_price;
+      const soldCoef = soldUsdPrice / soldPrice;
       const soldGasFeesUsd = soldGasFees * soldCoef;
       const approvalGasFeesUsd = approvalGasFees * soldCoef;
 
@@ -89,8 +94,8 @@ function getPAndLData(nfts, allApprovalGasFees, txsGasFees) {
             eth: nft.bought ? nft.bought.eth_price : mintedPrice,
           },
           sold: {
-            usd: nft.sold.usd_price,
-            eth: nft.sold.eth_price,
+            usd: soldUsdPrice,
+            eth: soldPrice,
           },
           gasFees: {
             paid: {
@@ -122,7 +127,7 @@ function getPAndLData(nfts, allApprovalGasFees, txsGasFees) {
           },
           pOrL: {
             eth:
-              nft.sold.eth_price -
+              soldPrice -
               (nft.bought?.eth_price || 0) -
               mintedPrice -
               soldGasFees -
@@ -130,7 +135,7 @@ function getPAndLData(nfts, allApprovalGasFees, txsGasFees) {
               boughtGasFeesTx -
               mintedFees,
             usd:
-              nft.sold.usd_price -
+              soldUsdPrice -
               (nft.bought?.usd_price || 0) -
               mintedPriceUsd -
               soldGasFeesUsd -
@@ -140,8 +145,8 @@ function getPAndLData(nfts, allApprovalGasFees, txsGasFees) {
           },
           holdDuration: diffInSeconds,
           gross: {
-            eth: nft.sold.eth_price - soldGasFees,
-            usd: nft.sold.usd_price - soldGasFeesUsd,
+            eth: soldPrice - soldGasFees,
+            usd: soldUsdPrice - soldGasFeesUsd,
           },
         },
       };
