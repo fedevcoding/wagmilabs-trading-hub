@@ -13,7 +13,7 @@ const ListingMapping = memo(({ listings, contractAddress, collectionImage }) => 
   return (
     <>
       {listings.map((listing, index) => {
-        const { image, marketplace, timestamp, tokenId, name, value, orderHash } = listing || {};
+        const { image, marketplace, timestamp, tokenId, name, value, orderHash, ms } = listing || {};
 
         const marketplaceImage = getMarketplaceImage(marketplace);
 
@@ -31,7 +31,7 @@ const ListingMapping = memo(({ listings, contractAddress, collectionImage }) => 
               <div className="wrap-text">
                 <p className="wrap-text">{name || tokenId}</p>
                 <p className="live-view-sale-time low-opacity little-text">
-                  <TimeAgo timestamp={timestamp} isUnix={true} intervalMs={1000} />
+                  <TimeAgo timestamp={timestamp} isUnix={ms ? false : true} intervalMs={1000} />
                 </p>
               </div>
             </div>
