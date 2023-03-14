@@ -1,11 +1,11 @@
 export { default as notFound } from "./notFound.svg";
 export { default as blackLogo } from "./black-logo.png";
 export { default as notVerified } from "./not-verified.png";
-export { default as blur } from "./blur.png";
 export { default as cryptopunks } from "./cryptopunks.svg";
 export { default as opensea } from "./opensea.png";
 export { default as discord } from "./discord.png";
 export { default as openseaSvg } from "./opensea.svg";
+export { default as blur } from "./blur.webp";
 export { default as discord2 } from "./discord2.svg";
 export { default as options } from "./options.svg";
 export { default as emptyStar } from "./empty-star.png";

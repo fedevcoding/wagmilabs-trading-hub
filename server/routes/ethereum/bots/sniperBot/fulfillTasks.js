@@ -1,7 +1,7 @@
 const ethers = require("ethers");
 const { getClient } = require("@reservoir0x/reservoir-sdk");
 const { createClient } = require("@reservoir0x/reservoir-sdk");
-const { CLIENT_URL, newSnipeUpdate } = require("../../../../server");
+const { CLIENT_URL } = require("../../../../server");
 
 // reservoir client
 createClient({
@@ -28,12 +28,15 @@ const { updateActivity } = require("../../../../services/botsCache/snipeBots/act
 const removeTask = require("../../../../services/botsCache/snipeBots/removeTask");
 
 const fullfillSnipeTasks = async listing => {
-  const { contractAddress, price: listingPrice, isFlagged } = listing;
+  const { contractAddress, price: listingPrice, isFlagged } = listing || {};
+
+  if (!contractAddress || !listingPrice) return;
 
   const collectionTasks = snipeTasks[contractAddress];
 
   if (!collectionTasks) return;
 
+  await new Promise(resolve => setTimeout(resolve, 5000));
   for (const collectionTask of collectionTasks) {
     const { maxPrice, minPrice, remaining, taskId, skipFlagged } = collectionTask;
     const pendingSnipesAmount = pendingSnipes[taskId] ?? 0;
@@ -76,6 +79,7 @@ async function fullfillOrder(listing, collectionTask) {
         },
       ],
       taskId,
+      remaining,
     };
     await updateTask(taskId, pendingData, taskOwner);
 
@@ -102,9 +106,6 @@ async function fullfillOrder(listing, collectionTask) {
     if (maxFeePerGas) reservoirOptions.options["maxFeePerGas"] = (maxFeePerGas * 1000000000).toString();
     if (maxPriorityFeePerGas)
       reservoirOptions.options["maxPriorityFeePerGas"] = (maxPriorityFeePerGas * 1000000000).toString();
-
-    // wait 5 seconds
-    await new Promise(resolve => setTimeout(resolve, 5000));
 
     await getClient()?.actions.buyToken(reservoirOptions);
     removePendingSnipe(taskId);
@@ -170,7 +171,6 @@ async function fullfillOrder(listing, collectionTask) {
       remaining,
     };
     await updateTask(taskId, failedData, taskOwner);
-
     const task = {
       collectionAddress,
       collectionName,

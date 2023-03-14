@@ -17,15 +17,7 @@ const titles = {
   events: "IRL Events",
 };
 
-export const daysOfTheWeek = [
-  "Sunday",
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday",
-];
+export const daysOfTheWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
 export const hoursIntervals = [
   { val: "5:00", idx: 5 },
@@ -55,7 +47,7 @@ export const hoursIntervals = [
 ];
 
 export const getSelectedDateTitle = (selDate, weekly) => {
-  if(weekly) {
+  if (weekly) {
     return `${selDate.toLocaleDateString("en-GB", {
       weekday: "long",
     })}`;
@@ -65,9 +57,9 @@ export const getSelectedDateTitle = (selDate, weekly) => {
   })}, ${selDate.toLocaleDateString("en-GB", {
     weekday: "long",
   })}, ${selDate.getDate()}, ${selDate.getFullYear()}`;
-}
+};
 
-const getPageTitle = (section) => {
+const getPageTitle = section => {
   switch (section) {
     case "drops":
       return "NFT Drops | Wagmi Labs";
@@ -80,7 +72,7 @@ const getPageTitle = (section) => {
     default:
       return;
   }
-}
+};
 
 export const Calendar = () => {
   const { drops, refetch: dropsRefetch } = useGetDrops();
@@ -100,35 +92,22 @@ export const Calendar = () => {
   return (
     <PageWrapper page="calendar">
       {renderMainTitle()}
-        <>
-          {spaces && section === "spaces" && (
-            <WeeklyCalendar sectionData={spaces} refetch={spacesRefetch} />
-          )}
-          {drops && section === "drops" &&
-          (
-            <MonthlyCalendar
-              sectionData={drops}
-              section={section}
-              refetch={dropsRefetch}
-            />
-          )}
-          {events && section === "events" &&
-          (
-            <MonthlyCalendar
-              sectionData={events}
-              section={section}
-              refetch={eventsRefetch}
-            />
-          )}
-          {personal && section === "raffles" &&
-          (
-            <MonthlyCalendar
-              sectionData={personal.map((s)=>s.events).flat()}
-              section="personal"
-              refetch={personalRefetch}
-            />
-          )}
-        </>
+      <>
+        {spaces && section === "spaces" && <WeeklyCalendar sectionData={spaces} refetch={spacesRefetch} />}
+        {drops && section === "drops" && (
+          <MonthlyCalendar sectionData={drops} section={section} refetch={dropsRefetch} />
+        )}
+        {events && section === "events" && (
+          <MonthlyCalendar sectionData={events} section={section} refetch={eventsRefetch} />
+        )}
+        {personal && section === "raffles" && (
+          <MonthlyCalendar
+            sectionData={personal.map(s => s.events).flat()}
+            section="personal"
+            refetch={personalRefetch}
+          />
+        )}
+      </>
     </PageWrapper>
   );
 };
