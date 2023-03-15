@@ -1,24 +1,14 @@
 import { getFromServer } from "@Utils";
 import { useEffect, useState } from "react";
+import Highcharts from "highcharts";
+import HighchartsReact from "highcharts-react-official";
 
-const defaultChartOptions = {
-  title: {
-    text: "Monthly Average Temperature",
-  },
-  yAxis: {
-    title: {
-      text: "Temperature (°C)",
-    },
-  },
-};
+const defaultChartOptions = {};
 
 export const useGetData = ({ collectionSlug }) => {
   const [chartOptions, setChartOptions] = useState(defaultChartOptions);
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-
-  const owners = [...data.map(item => parseInt(item.field_type))];
-  const blueChip = [...data.map(item => parseInt(item.blue_chip_rate))];
 
   useEffect(() => {
     async function getData() {
@@ -27,37 +17,68 @@ export const useGetData = ({ collectionSlug }) => {
         const url = `/collectionCharts/owners?collectionSlug=${collectionSlug}&start=${"1676125081"}`;
         const data = await getFromServer(url);
 
+        const owners = data.map(item => {
+          const { timestamp, field_type } = item;
+          const splittedDate = timestamp.split("-");
+          const formattedTimestamp = new Date(`${splittedDate[1]}-${splittedDate[0]}-${splittedDate[2]}`).getTime();
+          return [formattedTimestamp, parseInt(field_type)];
+        });
+
         const newChartOptions = {
-          title: {
-            text: "Monthly Average Temperature",
+          chart: {
+            type: "area",
+            zoomType: "x",
+            backgroundColor: "transparent",
           },
-          yAxis: [
-            {
-              title: {
-                text: "Primary Axis",
-              },
-              labels: {
-                format: "{value}",
-              },
+          title: {
+            text: "",
+            align: "left",
+          },
+          xAxis: {
+            type: "datetime",
+          },
+          yAxis: {
+            title: {
+              text: "Owners",
             },
-            {
-              title: {
-                text: "Secondary Axis",
+          },
+          legend: {
+            enabled: false,
+          },
+          plotOptions: {
+            area: {
+              borderRadius: 10,
+              fillColor: {
+                linearGradient: {
+                  x1: 0,
+                  y1: 0,
+                  x2: 0,
+                  y2: 1,
+                },
+                stops: [
+                  [0, Highcharts.getOptions().colors[0]],
+                  [1, Highcharts.color(Highcharts.getOptions().colors[0]).setOpacity(0).get("rgba")],
+                ],
               },
-              opposite: true,
-              labels: {
-                format: "{value}",
+              marker: {
+                radius: 2,
               },
+              lineWidth: 1,
+              states: {
+                hover: {
+                  lineWidth: 1,
+                },
+              },
+              threshold: null,
             },
-          ],
+          },
+
           series: [
             {
+              type: "area",
+              name: "Owners",
               data: owners,
-              yAxis: 0,
-            },
-            {
-              data: blueChip,
-              yAxis: 1,
+              borderRadius: 10,
             },
           ],
         };
