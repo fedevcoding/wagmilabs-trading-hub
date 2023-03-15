@@ -1,8 +1,5 @@
 import React, { useContext, useEffect, useState, useRef } from "react";
-import "./profile.css";
 import { baseUrl } from "@Variables";
-import Nfts from "./sections/nfts/Nfts";
-import Activity from "./sections/activity/Activity";
 import { Portal } from "react-portal";
 import { formatAddress } from "@Utils/formats/formats";
 import { useAccount, useEnsName } from "wagmi";
@@ -25,6 +22,9 @@ import { UserDataContext } from "@Context";
 import copy from "copy-to-clipboard";
 import { useSetPageTitle } from "@Hooks";
 import { ProfitCalcModal } from "@Components";
+import { Stats, Nfts, Activity } from "./Components";
+
+import "./profile.scss";
 
 const sortItemsOptions = [
   { value: "desc", label: "Newest" },
@@ -209,12 +209,6 @@ const Profile = () => {
       console.log(e);
     }
   }
-
-  const changeSection = (section, e) => {
-    document.querySelectorAll(".single-profile-section").forEach(el => el.classList.remove("selected"));
-    e.target.classList.add("selected");
-    setSection(section);
-  };
 
   const toggleListingSettings = state => {
     setOpenListingSettings(state);
@@ -706,13 +700,24 @@ const Profile = () => {
 
         <div className="profile-sections-tabs">
           <div className="profile-sections">
-            <div className="single-profile-section selected" onClick={e => changeSection("nft", e)}>
+            <div
+              className={`single-profile-section ${section === "nft" ? "selected" : ""}`}
+              onClick={() => setSection("nft")}
+            >
               NFTs
             </div>
-            <div className="single-profile-section" onClick={e => changeSection("activity", e)}>
+            <div
+              className={`single-profile-section ${section === "activity" ? "selected" : ""}`}
+              onClick={() => setSection("activity")}
+            >
               Activity
             </div>
-            <div className="single-profile-section not-allowed">Stats</div>
+            <div
+              className={`single-profile-section ${section === "stats" ? "selected" : ""}`}
+              onClick={() => setSection("stats")}
+            >
+              Stats
+            </div>
           </div>
 
           {section === "nft" && showPromoBanner && (
@@ -746,37 +751,35 @@ const Profile = () => {
           </div>
         </div>
 
-        {(() => {
-          if (section === "nft") {
-            return (
-              <Nfts
-                loadingMoreNfts={loadingMoreNfts}
-                fetchMoreItems={fetchMoreItems}
-                nftsContinuation={nftsContinuation}
-                nftsCollectionFilter={nftsCollectionFilter}
-                setNftsCollectionFilter={setNftsCollectionFilter}
-                searchCollectionText={searchCollectionText}
-                setSearchCollectionText={setSearchCollectionText}
-                selectedSortOption={selectedSortOption}
-                setSelectedSortOption={setSelectedSortOption}
-                activityTransactions={activityTransactions}
-                userItems={userItems}
-                setProfileImage={setProfileImage}
-                collections={collections}
-                loadingNfts={loadingNfts}
-                listingSettings={listingSettings}
-              />
-            );
-          } else if (section === "activity") {
-            return (
-              <Activity
-                activityTransactions={activityTransactions}
-                setActivityTransactions={setActivityTransactions}
-                userAddress={userAddress}
-              />
-            );
-          }
-        })()}
+        {(section === "nft" && (
+          <Nfts
+            loadingMoreNfts={loadingMoreNfts}
+            fetchMoreItems={fetchMoreItems}
+            nftsContinuation={nftsContinuation}
+            nftsCollectionFilter={nftsCollectionFilter}
+            setNftsCollectionFilter={setNftsCollectionFilter}
+            searchCollectionText={searchCollectionText}
+            setSearchCollectionText={setSearchCollectionText}
+            selectedSortOption={selectedSortOption}
+            setSelectedSortOption={setSelectedSortOption}
+            activityTransactions={activityTransactions}
+            userItems={userItems}
+            setProfileImage={setProfileImage}
+            collections={collections}
+            loadingNfts={loadingNfts}
+            listingSettings={listingSettings}
+          />
+        )) ||
+          ""}
+        {(section === "activity" && (
+          <Activity
+            activityTransactions={activityTransactions}
+            setActivityTransactions={setActivityTransactions}
+            userAddress={userAddress}
+          />
+        )) ||
+          ""}
+        {(section === "stats" && <Stats />) || ""}
       </section>
     </>
   );

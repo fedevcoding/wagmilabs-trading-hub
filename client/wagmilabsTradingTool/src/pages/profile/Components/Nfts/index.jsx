@@ -6,26 +6,26 @@ import moment from "moment";
 
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import "./nfts.css";
 
 import { notFound, placeholderImage } from "@Assets";
 
-import { getListingExpirationDate, roundPrice, roundPrice2 } from "@Utils/formats/formats";
+import { getListingExpirationDate, roundPrice, roundPrice2, generateRandomRangeInt } from "@Utils";
 import { Button, Tooltip, useToast } from "@chakra-ui/react";
 import { UserDataContext } from "@Context";
 import { Loader, TransferItemModal } from "@Components";
 import getMarketplaceImage from "@Utils/marketplaceImageMapping";
 import { useNavigate } from "react-router-dom";
 import { useListNft } from "@Hooks";
-import { generateRandomRangeInt } from "@Utils/formats/utils";
 import { ItemBanner } from "src/pages/collection/sections/banners/ItemBanner";
+
+import "./style.scss";
 
 const sortItemsOptions = [
   { value: "desc", label: "Newest" },
   { value: "asc", label: "Oldest" },
 ];
 
-const Nfts = ({
+export const Nfts = ({
   loadingMoreNfts,
   fetchMoreItems,
   nftsContinuation,
@@ -697,4 +697,3 @@ const SmartListModal = ({
     </>
   );
 };
-export default Nfts;
