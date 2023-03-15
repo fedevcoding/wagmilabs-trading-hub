@@ -13,9 +13,7 @@ import {
   NumberInputField,
 } from "@chakra-ui/react";
 import { useListNft } from "@Hooks";
-import { Loader, OrderInfo, Select } from "@Components";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+import { Loader, OrderInfo, Select, DatePicker } from "@Components";
 
 import "./style.scss";
 
@@ -99,6 +97,10 @@ export const ListItemModal = React.memo(
               isClearable={true}
               placeholderText="Select expiration date"
               className="date-picker"
+              showTimeSelect
+              dateFormat="Pp"
+              preventOpenOnFocus
+              showMonthYearDropdown={false}
             />
           </ModalBody>
           <ModalFooter>
