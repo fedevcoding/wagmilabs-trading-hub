@@ -407,7 +407,15 @@ const Items = ({
               </Checkbox>
               <br />
               <Checkbox defaultChecked={true} isDisabled size={"sm"} className="collection-item-marketplace-filter">
+                Blur
+              </Checkbox>
+              <br />
+              <Checkbox defaultChecked={true} isDisabled size={"sm"} className="collection-item-marketplace-filter">
                 X2Y2
+              </Checkbox>
+              <br />
+              <Checkbox defaultChecked={true} isDisabled size={"sm"} className="collection-item-marketplace-filter">
+                Magically
               </Checkbox>
               <br />
               <Checkbox defaultChecked={true} isDisabled size={"sm"} className="collection-item-marketplace-filter">
