@@ -15,9 +15,7 @@ import {
   Tooltip,
 } from "@chakra-ui/react";
 import { useListNft } from "@Hooks";
-import { Loader, OrderInfo, Select } from "@Components";
-import ReactDatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+import { Loader, OrderInfo, Select, DatePicker } from "@Components";
 
 import "./style.scss";
 
@@ -132,7 +130,7 @@ export const ListItemModal = React.memo(
             <p className="label">
               <b>Set expiration date</b>
             </p>
-            <ReactDatePicker
+            <DatePicker
               minDate={new Date().getTime()}
               onChange={v => setDate(v)}
               selected={date}

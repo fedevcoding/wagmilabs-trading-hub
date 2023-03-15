@@ -12,12 +12,10 @@ import {
   NumberInputField,
 } from "@chakra-ui/react";
 import { usePlaceBid } from "@Hooks";
-import { Loader } from "@Components";
+import { Loader, DatePicker } from "@Components";
 import { UserDataContext } from "@Context";
 import { roundPrice } from "@Utils";
-import DatePicker from "react-datepicker";
 
-import "react-datepicker/dist/react-datepicker.css";
 import "./style.scss";
 
 export const MakeOfferModal = React.memo(
@@ -91,6 +89,10 @@ export const MakeOfferModal = React.memo(
               isClearable={true}
               placeholderText="Select expiration date"
               className="date-picker"
+              showTimeSelect
+              dateFormat="Pp"
+              preventOpenOnFocus
+              showMonthYearDropdown={false}
             />
             {price && notEnoughBalance && (
               <p className="balance-now-enough">{currency.toUpperCase()} balance is not enough</p>
