@@ -1,11 +1,10 @@
 import React, { useEffect, useState, useContext, useMemo, useRef } from "react";
-import "./items.css";
+import "./items.scss";
 
 import _ from "lodash";
 import {
   NumberInput,
   NumberInputField,
-  Button,
   HStack,
   Switch,
   Checkbox,
@@ -28,7 +27,7 @@ import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import getMarketplaceImage from "@Utils/marketplaceImageMapping";
 
 import flaggedImg from "@Assets/flagged.svg";
-import { BuyNowModal, Row } from "@Components";
+import { BuyNowModal, Row, Button, MakeOfferModal } from "@Components";
 import {
   useAddItemToCart,
   useBuyNow,
@@ -67,6 +66,8 @@ const Items = ({
 
   const { buyNowModalData, showBuyNowModal, openBuyModal, closeBuynowModal, setBuyNowModalData } =
     useGetBuyNowModalFunctions();
+
+  const [isOpen, setIsOpen] = React.useState(false);
 
   useEffect(() => {
     const options = {
@@ -506,32 +507,49 @@ const Items = ({
 
         <div className="collection-item-tokens-container">
           <div className="collection-item-token-sorts">
-            <HStack gap="20px">
-              <ItemSortSelect
-                options={options}
-                changeSorting={changeSorting}
-                selectedItem={selectedItem}
-                setSelectedItem={setSelectedItem}
-              />
-              <InputGroup>
-                <i className="fa-regular fa-magnifying-glass collection-search-bar-lens"></i>
-                <Input
-                  placeholder="Search by token ID"
-                  value={searchText}
-                  className="collection-items-search-bar"
-                  onChange={({ target }) => setSearchText(target.value)}
-                ></Input>
-              </InputGroup>
+            <div className="space-between">
+              <HStack gap="20px">
+                <ItemSortSelect
+                  options={options}
+                  changeSorting={changeSorting}
+                  selectedItem={selectedItem}
+                  setSelectedItem={setSelectedItem}
+                />
+                <InputGroup>
+                  <i className="fa-regular fa-magnifying-glass collection-search-bar-lens"></i>
+                  <Input
+                    placeholder="Search by token ID"
+                    value={searchText}
+                    className="collection-items-search-bar"
+                    onChange={({ target }) => setSearchText(target.value)}
+                  ></Input>
+                </InputGroup>
 
-              <Tooltip label="Refresh Metadata" placement="top">
-                <i
-                  className={`fa-solid fa-arrows-rotate refresh-collection-metadata ${
-                    refreshingMetadata && "rotating"
-                  }`}
-                  onClick={() => !refreshingMetadata && refreshMetadata(address)}
-                ></i>
-              </Tooltip>
-            </HStack>
+                <Tooltip label="Refresh Metadata" placement="top">
+                  <i
+                    className={`fa-solid fa-arrows-rotate refresh-collection-metadata ${
+                      refreshingMetadata && "rotating"
+                    }`}
+                    onClick={() => !refreshingMetadata && refreshMetadata(address)}
+                  ></i>
+                </Tooltip>
+              </HStack>
+              <Button onClick={() => setIsOpen(true)}>Make offer</Button>
+              <MakeOfferModal
+                isOpen={isOpen}
+                address={address}
+                details={{
+                  token: {
+                    name: collectionInfo.name,
+                  },
+                  market: {},
+                }}
+                currency={collectionInfo?.floorAsk?.price?.currency?.symbol || "ETH"}
+                setIsOpen={setIsOpen}
+                marketplace={"opensea"}
+                collectionBid
+              />
+            </div>
           </div>
 
           {loadingItems ? (
