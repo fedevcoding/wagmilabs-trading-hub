@@ -1,8 +1,9 @@
-import { getFromServer } from "@Utils";
+import { getFromServer, timeInSeconds } from "@Utils";
 import { useEffect, useState } from "react";
 import Highcharts from "highcharts";
+import { rangeOptions } from "./options";
 
-export const useGetData = collectionAddress => {
+export const useGetData = (collectionAddress, range) => {
   //   const [data, setData] = useState([]);
   const [chartOptions, setChartOptions] = useState({});
   const [isLoading, setIsLoading] = useState(true);
@@ -12,7 +13,11 @@ export const useGetData = collectionAddress => {
       try {
         setIsLoading(true);
 
-        const url = `/collectionCharts/volume?collectionAddress=${collectionAddress}`;
+        const rangeInSeconds = timeInSeconds[range];
+        const granularity = rangeOptions.find(item => item.value === range).granularity;
+        const granularityInSeconds = timeInSeconds[granularity];
+
+        const url = `/collectionCharts/volume?collectionAddress=${collectionAddress}&range=${rangeInSeconds}&granularity=${granularityInSeconds}`;
         const volumeData = await getFromServer(url);
 
         const volume = volumeData.map(item => [new Date(item.tx_timestamp).getTime(), item.volume]);
@@ -83,10 +88,10 @@ export const useGetData = collectionAddress => {
         setIsLoading(false);
       }
     }
-    if (collectionAddress) {
+    if (collectionAddress && range) {
       getData();
     }
-  }, [collectionAddress]);
+  }, [collectionAddress, range]);
 
   return { isLoading, chartOptions };
 };
