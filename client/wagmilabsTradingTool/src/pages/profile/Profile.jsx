@@ -20,7 +20,7 @@ import {
 import { UserDataContext } from "@Context";
 
 import copy from "copy-to-clipboard";
-import { useSetPageTitle } from "@Hooks";
+import { useGetItems, useSetPageTitle } from "@Hooks";
 import { ProfitCalcModal } from "@Components";
 import { Stats, Nfts, Activity } from "./Components";
 
@@ -37,7 +37,6 @@ const Profile = () => {
 
   const { listingSettings, setListingSettings, profileImage, setProfileImage } = useContext(UserDataContext);
 
-  const [userItems, setUserItems] = useState([]);
   const [userAddress] = useState(address);
   const [pnl, setPnl] = useState({});
   const [userEns] = useState(ensName?.data);
@@ -45,7 +44,6 @@ const Profile = () => {
   const [activityTransactions, setActivityTransactions] = useState([]);
   const [section, setSection] = useState("nft");
   const [loadingData, setLoadingData] = useState(true);
-  const [loadingNfts, setLoadingNfts] = useState(true);
 
   const [loadingMoreNfts, setLoadingMoreNfts] = useState(false);
   const nftsContinuation = useRef();
@@ -65,6 +63,16 @@ const Profile = () => {
   const [copyState, setCopyState] = useState({ ens: "Copy", address: "Copy" });
   const [isOpen, setIsOpen] = React.useState(false);
 
+  const {
+    loading: loadingNfts,
+    setLoading: setLoadingNfts,
+    items: userItems,
+    continuation,
+    setItems: setUserItems,
+  } = useGetItems("50", selectedSortOption.value, nftsCollectionFilter);
+
+  nftsContinuation.current = continuation;
+
   useEffect(() => {
     fetchUserData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -75,11 +83,6 @@ const Profile = () => {
   useEffect(() => {
     fetchUserCollections(debounceCollectionSearch, 0, 20);
   }, [debounceCollectionSearch]);
-
-  useEffect(() => {
-    fetchUserItems();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedSortOption, nftsCollectionFilter]);
 
   async function fetchUserCollections(query, offset, limit) {
     try {
@@ -102,7 +105,6 @@ const Profile = () => {
   async function fetchMoreItems() {
     try {
       setLoadingMoreNfts(true);
-
       const continuationFilter = nftsContinuation.current ? `&continuation=${nftsContinuation.current}` : "";
       let data = await fetch(
         `${baseUrl}/profileItems?sortDirection=${selectedSortOption.value}&collection=${nftsCollectionFilter}${continuationFilter}`,
@@ -121,31 +123,6 @@ const Profile = () => {
       nftsContinuation.current = continuation;
       setUserItems(prev => [...prev, ...tokens]);
       setLoadingMoreNfts(false);
-    } catch (e) {
-      setUserItems([]);
-      setLoadingNfts(false);
-    }
-  }
-  async function fetchUserItems() {
-    try {
-      setLoadingNfts(true);
-      let data = await fetch(
-        `${baseUrl}/profileItems?sortDirection=${selectedSortOption.value}&collection=${nftsCollectionFilter}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "x-auth-token": localStorage.jsonwebtoken,
-          },
-        }
-      );
-
-      data = await data.json();
-
-      const { tokens, continuation } = data;
-      nftsContinuation.current = continuation;
-
-      setUserItems(tokens);
-      setLoadingNfts(false);
     } catch (e) {
       setUserItems([]);
       setLoadingNfts(false);
@@ -303,6 +280,8 @@ const Profile = () => {
       setCopyState(old => ({ ...old, [type]: "Copy" }));
     }, 1000);
   }
+
+  console.log(userItems);
 
   return (
     <>
