@@ -1,17 +1,21 @@
 const express = require("express");
+const { execTranseposeAPI } = require("../../../services/externalAPI/transpose");
 
 const volumeChartRoute = express();
 
-volumeChartRoute.get("/owners", async (req, res) => {
+volumeChartRoute.get("/volume", async (req, res) => {
   try {
-    const { collectionSlug, start } = req.query;
+    const { collectionAddress } = req.query;
 
-    if (!collectionSlug) throw new Error("Collection address is required");
+    if (!collectionAddress) throw new Error("Collection address is required");
 
-    const response = await fetch(
-      `https://api.nftinit.io/api/chart/?password=Gunah4423_&slug=${collectionSlug}&type=blue_chip_rate&field_type=2&start=${start}`
-    );
-    const data = await response.json();
+    const sqlQuery = `SELECT SUM(native_price) AS volume, date_trunc('day', timestamp) AS tx_timestamp
+    FROM ethereum.nft_sales
+    WHERE contract_address = '${collectionAddress}' AND timestamp >= NOW() - interval '160 hours'
+    GROUP BY tx_timestamp
+    ORDER BY tx_timestamp DESC`;
+
+    const data = await execTranseposeAPI(sqlQuery);
 
     res.status(200).json(data);
   } catch (error) {

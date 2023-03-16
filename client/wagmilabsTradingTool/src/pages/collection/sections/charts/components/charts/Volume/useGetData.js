@@ -2,26 +2,20 @@ import { getFromServer } from "@Utils";
 import { useEffect, useState } from "react";
 import Highcharts from "highcharts";
 
-const defaultChartOptions = {};
-
-export const useGetData = ({ collectionSlug }) => {
-  const [chartOptions, setChartOptions] = useState(defaultChartOptions);
-  const [data, setData] = useState([]);
+export const useGetData = collectionAddress => {
+  //   const [data, setData] = useState([]);
+  const [chartOptions, setChartOptions] = useState({});
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     async function getData() {
       try {
         setIsLoading(true);
-        const url = `/collectionCharts/owners?collectionSlug=${collectionSlug}&start=${"1676125081"}`;
-        const data = await getFromServer(url);
 
-        const owners = data.map(item => {
-          const { timestamp, field_type } = item;
-          const splittedDate = timestamp.split("-");
-          const formattedTimestamp = new Date(`${splittedDate[1]}-${splittedDate[0]}-${splittedDate[2]}`).getTime();
-          return [formattedTimestamp, parseInt(field_type)];
-        });
+        const url = `/collectionCharts/volume?collectionAddress=${collectionAddress}`;
+        const volumeData = await getFromServer(url);
+
+        const volume = volumeData.map(item => [new Date(item.tx_timestamp).getTime(), item.volume]);
 
         const newChartOptions = {
           chart: {
@@ -38,7 +32,7 @@ export const useGetData = ({ collectionSlug }) => {
           },
           yAxis: {
             title: {
-              text: "Owners",
+              text: "Volume",
             },
           },
           legend: {
@@ -75,24 +69,24 @@ export const useGetData = ({ collectionSlug }) => {
           series: [
             {
               type: "area",
-              name: "Owners",
-              data: owners,
+              name: "Volume",
+              data: volume,
               borderRadius: 10,
             },
           ],
         };
 
         setChartOptions(newChartOptions);
-
-        setData(data);
-      } catch (err) {
-        console.log(err);
+      } catch (error) {
+        console.log(error);
       } finally {
         setIsLoading(false);
       }
     }
-    getData();
-  }, [collectionSlug]);
+    if (collectionAddress) {
+      getData();
+    }
+  }, [collectionAddress]);
 
-  return { data, isLoading, chartOptions };
+  return { isLoading, chartOptions };
 };
