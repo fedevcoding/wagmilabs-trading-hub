@@ -23,3 +23,4 @@ export { useCopy } from "./useCopy";
 export { useGetWallets } from "./useGetWallets";
 export { useOnClickOutside } from "./useOnClickOutside";
 export { useGetItems } from "./useGetItems";
+export { useGetHoldingNftDistribution } from "./useGetHoldingNftDistribution";

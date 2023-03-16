@@ -15,8 +15,10 @@ profileItemsRoute.get("/", checkAuth, async (req, res) => {
     async function getTokens() {
       const filterCollectionQuery = collection && collection !== "undefined" ? `&collection=${collection}` : "";
 
+      const sortDirectionCondition = sortDirection ? `&sortDirection=${sortDirection}` : "";
+
       let items = await fetch(
-        `https://api.reservoir.tools/users/${userAddress}/tokens/v6?normalizeRoyalties=false&sortDirection=${sortDirection}&limit=${limit}&includeTopBid=false${filterCollectionQuery}${continuationFilter}`,
+        `https://api.reservoir.tools/users/${userAddress}/tokens/v6?normalizeRoyalties=false${sortDirectionCondition}&limit=${limit}&includeTopBid=false${filterCollectionQuery}${continuationFilter}`,
         {
           headers: {
             accept: "*/*",
