@@ -84,6 +84,8 @@ const listingChartRoute = require("./routes/ethereum/charts/listingsChartRoute.j
 const floorChartRoute = require("./routes/ethereum/charts/floorChartRoute.js");
 const ownersChartRoute = require("./routes/ethereum/charts/ownersChartRoute.js");
 const volumeChartRoute = require("./routes/ethereum/charts/volumeChartRoute.js");
+const salesChartRoute = require("./routes/ethereum/charts/salesChartRoute.js");
+const avgPriceChartRoute = require("./routes/ethereum/charts/avgPriceChartRoute.js");
 const io = socketIO(server, {
   cors: {
     origin: CLIENT_URL,
@@ -240,6 +242,8 @@ app.use("/api/v1/wagmilabs/collectionCharts", listingChartRoute);
 app.use("/api/v1/wagmilabs/collectionCharts", floorChartRoute);
 app.use("/api/v1/wagmilabs/collectionCharts", ownersChartRoute);
 app.use("/api/v1/wagmilabs/collectionCharts", volumeChartRoute);
+app.use("/api/v1/wagmilabs/collectionCharts", salesChartRoute);
+app.use("/api/v1/wagmilabs/collectionCharts", avgPriceChartRoute);
 
 // bots routes
 app.use("/api/v1/wagmilabs/bots", editSnipeRoute);

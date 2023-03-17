@@ -1,19 +1,17 @@
 const express = require("express");
 const { execTranseposeAPI } = require("../../../services/externalAPI/transpose");
 
-const volumeChartRoute = express();
+const avgPriceChartRoute = express();
 
-volumeChartRoute.get("/volume", async (req, res) => {
+avgPriceChartRoute.get("/avgPrice", async (req, res) => {
   try {
     const { collectionAddress, range, granularity } = req.query;
-
-    console.log(range, granularity);
 
     if (!collectionAddress) throw new Error("Collection address is required");
 
     const sqlQuery = `
     SELECT 
-      SUM(native_price) AS volume, 
+      AVG(native_price) AS avgprice, 
       TIMESTAMP 'epoch' + INTERVAL '1 second' * (FLOOR(EXTRACT(epoch FROM timestamp) / (1 * ${granularity})) * (1 * ${granularity})) AS tx_timestamp
     FROM ethereum.nft_sales
     WHERE contract_address = '${collectionAddress}' AND timestamp >= NOW() - interval '${range} seconds'
@@ -31,4 +29,4 @@ volumeChartRoute.get("/volume", async (req, res) => {
   }
 });
 
-module.exports = volumeChartRoute;
+module.exports = avgPriceChartRoute;

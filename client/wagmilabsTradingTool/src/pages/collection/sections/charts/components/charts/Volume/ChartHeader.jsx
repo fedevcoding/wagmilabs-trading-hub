@@ -1,17 +1,14 @@
 import { HStack } from "@chakra-ui/react";
+import { Select } from "@Components";
 import React from "react";
-import { rangeOptions } from "./options";
+import { rangeOptions, getRange } from "./options";
 
 const ChartHeader = ({ range, setRange }) => {
   return (
     <HStack className="chart-header">
       <h2>Amount of volume over time.</h2>
 
-      <select name="" id="" value={range} onChange={e => setRange(e.target.value)}>
-        {rangeOptions.map(option => {
-          return <option value={option.value}>{option.label}</option>;
-        })}
-      </select>
+      <Select options={rangeOptions} value={getRange(range)} onChange={d => setRange(d.value)} isSearchable={false} />
     </HStack>
   );
 };

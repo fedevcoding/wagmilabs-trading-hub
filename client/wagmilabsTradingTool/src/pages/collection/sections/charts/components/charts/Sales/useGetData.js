@@ -1,12 +1,10 @@
 import { getFromServer, timeInSeconds } from "@Utils";
 import { useEffect, useState } from "react";
 import Highcharts from "highcharts";
+import { rangeOptions } from "./options";
 
-const defaultChartOptions = {};
-
-export const useGetData = ({ collectionSlug, range }) => {
-  const [chartOptions, setChartOptions] = useState(defaultChartOptions);
-  const [data, setData] = useState([]);
+export const useGetData = (collectionAddress, range) => {
+  const [chartOptions, setChartOptions] = useState({});
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -14,19 +12,14 @@ export const useGetData = ({ collectionSlug, range }) => {
       try {
         setIsLoading(true);
 
-        const date = Math.round(Date.now() / 1000);
         const rangeInSeconds = timeInSeconds[range];
-        const start = date - rangeInSeconds;
+        const granularity = rangeOptions.find(item => item.value === range).granularity;
+        const granularityInSeconds = timeInSeconds[granularity];
 
-        const url = `/collectionCharts/owners?collectionSlug=${collectionSlug}&start=${start}`;
-        const data = await getFromServer(url);
+        const url = `/collectionCharts/sales?collectionAddress=${collectionAddress}&range=${rangeInSeconds}&granularity=${granularityInSeconds}`;
+        const salesData = await getFromServer(url);
 
-        const owners = data.map(item => {
-          const { timestamp, field_type } = item;
-          const splittedDate = timestamp.split("-");
-          const formattedTimestamp = new Date(`${splittedDate[1]}-${splittedDate[0]}-${splittedDate[2]}`).getTime();
-          return [formattedTimestamp, parseInt(field_type)];
-        });
+        const sales = salesData.map(item => [new Date(item.tx_timestamp).getTime(), item.sales]);
 
         const newChartOptions = {
           chart: {
@@ -43,7 +36,7 @@ export const useGetData = ({ collectionSlug, range }) => {
           },
           yAxis: {
             title: {
-              text: "Owners",
+              text: "Sales",
             },
           },
           legend: {
@@ -80,27 +73,24 @@ export const useGetData = ({ collectionSlug, range }) => {
           series: [
             {
               type: "area",
-              name: "Owners",
-              data: owners,
+              name: "Sales",
+              data: sales,
               borderRadius: 10,
             },
           ],
         };
 
         setChartOptions(newChartOptions);
-
-        setData(data);
-      } catch (err) {
-        console.log(err);
+      } catch (error) {
+        console.log(error);
       } finally {
         setIsLoading(false);
       }
     }
-
-    if (collectionSlug && range) {
+    if (collectionAddress && range) {
       getData();
     }
-  }, [collectionSlug, range]);
+  }, [collectionAddress, range]);
 
-  return { data, isLoading, chartOptions };
+  return { isLoading, chartOptions };
 };

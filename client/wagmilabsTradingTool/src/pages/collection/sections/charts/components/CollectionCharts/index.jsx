@@ -1,5 +1,5 @@
 import React from "react";
-import { FloorChart, ListingChart, OwnersChart, VolumeChart } from "../";
+import { AvgPriceChart, FloorChart, ListingChart, OwnersChart, SalesChart, VolumeChart } from "../";
 
 export const CollectionCharts = ({ activeChart, charts, collectionAddress, collectionSlug }) => {
   return (
@@ -14,6 +14,10 @@ export const CollectionCharts = ({ activeChart, charts, collectionAddress, colle
             return <OwnersChart collectionSlug={collectionSlug} />;
           case charts[3].value:
             return <VolumeChart collectionAddress={collectionAddress} />;
+          case charts[4].value:
+            return <SalesChart collectionAddress={collectionAddress} />;
+          case charts[5].value:
+            return <AvgPriceChart collectionAddress={collectionAddress} />;
           default:
             return "inexistent chart";
         }
