@@ -24,7 +24,7 @@ import { UserDataContext } from "@Context";
 
 import copy from "copy-to-clipboard";
 import { useSetPageTitle } from "@Hooks";
-import { ProfitCalcModal } from "@Components";
+import { LoadingSpinner, ProfitCalcModal } from "@Components";
 
 const sortItemsOptions = [
   { value: "desc", label: "Newest" },
@@ -607,17 +607,17 @@ const Profile = () => {
             <div className="profile-details-container">
               <div className="single-profile-detail">
                 <div>NFTs</div>
-                <p>{loadingData ? <Spinner /> : pnl?.nfts || 0}</p>
+                <p>{loadingData ? <LoadingSpinner width="15px" height="15px" padding="0" margin="10px 0 0 0" /> : pnl?.nfts || 0}</p>
               </div>
 
               <div className="single-profile-detail">
                 <div>Unique colletions</div>
-                <p>{loadingData ? <Spinner /> : pnl?.collections || 0}</p>
+                <p>{loadingData ? <LoadingSpinner width="15px" height="15px" padding="0" margin="10px 0 0 0" /> : pnl?.collections || 0}</p>
               </div>
 
               <div className="single-profile-detail">
                 <div>NFT transactions</div>
-                <p>{loadingData ? <Spinner /> : pnl?.totalTxs || 0}</p>
+                <p>{loadingData ? <LoadingSpinner width="15px" height="15px" padding="0" margin="10px 0 0 0" /> : pnl?.totalTxs || 0}</p>
               </div>
             </div>
           </div>
@@ -626,24 +626,30 @@ const Profile = () => {
             <div className="number-profits-losses">
               <p>
                 Mint count
-                <div className="nft-pnl-profit">{loadingData ? <Spinner /> : pnl?.mintCount || 0}</div>
+                <div className="nft-pnl-profit">
+                  {loadingData ? <LoadingSpinner width="15px" height="15px" padding="0" margin="10px 0 0 0" /> : pnl?.mintCount || 0}
+                </div>
               </p>
 
               <p>
                 Bought count
-                <div className="nft-pnl-profit">{loadingData ? <Spinner /> : pnl?.boughtCount || 0}</div>
+                <div className="nft-pnl-profit">
+                  {loadingData ? <LoadingSpinner width="15px" height="15px" padding="0" margin="10px 0 0 0" /> : pnl?.boughtCount || 0}
+                </div>
               </p>
 
               <p>
                 Sold count
-                <div className="nft-pnl-profit">{loadingData ? <Spinner /> : pnl?.soldCount || 0}</div>
+                <div className="nft-pnl-profit">
+                  {loadingData ? <LoadingSpinner width="15px" height="15px" padding="0" margin="10px 0 0 0" /> : pnl?.soldCount || 0}
+                </div>
               </p>
 
               <p>
                 Sold value
                 <div className="nft-pnl-profit">
                   {loadingData ? (
-                    <Spinner />
+                    <LoadingSpinner width="15px" height="15px" padding="0" margin="10px 0 0 0" />
                   ) : (
                     <>
                       {pnl?.soldValue || 0}
@@ -659,7 +665,7 @@ const Profile = () => {
                 NFTs avg. value
                 <div className="nft-pnl-profit">
                   {loadingData ? (
-                    <Spinner />
+                    <LoadingSpinner width="15px" height="15px" padding="0" margin="10px 0 0 0" />
                   ) : (
                     <span className={"nft-pnl-profit"}>
                       {Math.round(pnl.nftsValue * 1000) / 1000 || 0}
@@ -672,7 +678,7 @@ const Profile = () => {
                 Realized P&L
                 <div>
                   {loadingData ? (
-                    <Spinner />
+                    <LoadingSpinner width="15px" height="15px" padding="0" margin="10px 0 0 0" />
                   ) : (
                     <>
                       <span
@@ -689,7 +695,7 @@ const Profile = () => {
                 Wallet volume
                 <div>
                   {loadingData ? (
-                    <Spinner />
+                    <LoadingSpinner width="15px" height="15px" padding="0" margin="10px 0 0 0" />
                   ) : (
                     <>
                       <span className={"nft-pnl-profit"}>
@@ -779,22 +785,6 @@ const Profile = () => {
         })()}
       </section>
     </>
-  );
-};
-
-const Spinner = () => {
-  return (
-    <div className="loader-container">
-      <svg
-        className="profile-spinner"
-        width="65px"
-        height="65px"
-        viewBox="0 0 66 66"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <circle className="path" fill="none" strokeWidth="6" strokeLinecap="round" cx="33" cy="33" r="30"></circle>
-      </svg>
-    </div>
   );
 };
 
