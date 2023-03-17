@@ -43,7 +43,28 @@ route.get("/", checkAuth, async (req, res) => {
         collections[address].distribution = (collections[address].count / tokenCount) * 100;
       }
 
-      res.status(200).json({ collections, tokenCount, continuation, ok: true });
+      const sortedKeys = Object.keys(collections).sort((a, b) => collections[b].count - collections[a].count);
+      const topCollections = {};
+      let otherCount = 0;
+
+      for (let i = 0; i < sortedKeys.length; i++) {
+        const key = sortedKeys[i];
+        if (i < 10) {
+          topCollections[key] = collections[key];
+        } else {
+          otherCount += collections[key].count;
+        }
+      }
+
+      if (otherCount > 0) {
+        topCollections.Other = {
+          name: "Other",
+          count: otherCount,
+          distribution: (otherCount / tokenCount) * 100,
+        };
+      }
+
+      res.status(200).json({ collections: topCollections, tokenCount, continuation, ok: true });
     }
     getDistribution();
   } catch (e) {

@@ -6,6 +6,17 @@ import DarkUnica from "highcharts/themes/dark-unica";
 DarkUnica(Highcharts);
 
 export const PieChart = ({ items, title, countElements }) => {
+  const [margin, setMargin] = React.useState(80);
+
+  React.useLayoutEffect(() => {
+    const elemHighcharts = document.querySelector(".highcharts-background");
+    if (elemHighcharts) {
+      const widthContainer = elemHighcharts.getBoundingClientRect().width;
+      const plotWidth = document.querySelector(".highcharts-plot-background").getBoundingClientRect().width;
+      setMargin(parseInt((widthContainer - plotWidth) / 2) - 12);
+    }
+  }, []);
+
   const options = {
     chart: {
       plotBackgroundColor: null,
@@ -18,7 +29,7 @@ export const PieChart = ({ items, title, countElements }) => {
       align: "center",
       verticalAlign: "middle",
       y: 20,
-      x: 90,
+      x: margin,
     },
     tooltip: {
       pointFormat: "{series.name}: <b>{point.percentage:.1f}%</b><br />Items: <b>{point.y}</b>",
@@ -45,8 +56,10 @@ export const PieChart = ({ items, title, countElements }) => {
       borderWidth: 0,
       itemMarginBottom: 10,
       labelFormatter: function () {
-        const percentage = (this.y / this.series.yData.reduce((a, b) => a + b, 0)) * 100;
-        return `${this.name}: ${this.y} (${percentage.toFixed(1)}%)`;
+        const percentage = (this.y / countElements) * 100;
+        const text = `${this.name}: ${percentage.toFixed(1)}%`;
+
+        return `<span class="legend-row" title="${text}">${text}</span>`;
       },
     },
   };
