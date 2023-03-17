@@ -1,0 +1,16 @@
+#stats {
+  margin-bottom: 3rem;
+  .card-component {
+    color: var(--text-color);
+  }
+
+  .spinner {
+    margin-top: 5rem;
+    width: 100px;
+    height: 100px;
+  }
+
+  svg rect.highcharts-background {
+    fill: var(--secondary-color);
+  }
+}
