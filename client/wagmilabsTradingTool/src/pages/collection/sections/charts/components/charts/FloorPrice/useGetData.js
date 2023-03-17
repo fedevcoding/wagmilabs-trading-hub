@@ -1,51 +1,90 @@
 import { getFromServer } from "@Utils";
-import { createChart } from "lightweight-charts";
+import Highcharts from "highcharts";
 
 const { useState, useEffect } = require("react");
 
-export const useGetData = ({ collectionAddress }) => {
-  const [data, setData] = useState(null);
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
+export const useGetData = ({ collectionAddress, range }) => {
+  // const [data, setData] = useState([]);
+  const [chartOptions, setChartOptions] = useState({});
+  const [isLoading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const { response: data } = await getFromServer(
-          `/collectionCharts/floorPrice?collectionAddress=${collectionAddress}&startDate=${"2023-01-01"}`
+        const floorPriceData = await getFromServer(
+          `/collectionCharts/floorPrice?collectionAddress=${collectionAddress}&range=${range}`
         );
 
-        const chartData = data.map(item => ({
-          time: new Date(item.timestamp).toISOString().slice(0, 10),
-          open: item?.open?.price,
-          high: item?.high?.price,
-          low: item?.floor?.price,
-          close: item?.close?.price,
-        }));
+        const floorPrice = floorPriceData.map(item => [item[0] * 1000, item[2]]);
 
-        console.log(chartData);
-        const chartOptions = { layout: { textColor: "black", background: { type: "solid", color: "white" } } };
-        const chart = createChart(document.getElementById("twFloorChart"), chartOptions);
-        const candlestickSeries = chart.addCandlestickSeries({
-          upColor: "#26a69a",
-          downColor: "#ef5350",
-          borderVisible: false,
-          wickUpColor: "#26a69a",
-          wickDownColor: "#ef5350",
-        });
-        candlestickSeries.setData(chartData);
+        const newChartOptions = {
+          chart: {
+            type: "area",
+            zoomType: "x",
+            backgroundColor: "transparent",
+          },
+          title: {
+            text: "",
+            align: "left",
+          },
+          xAxis: {
+            type: "datetime",
+          },
+          yAxis: {
+            title: {
+              text: "Floor price",
+            },
+          },
+          legend: {
+            enabled: false,
+          },
+          plotOptions: {
+            area: {
+              borderRadius: 10,
+              fillColor: {
+                linearGradient: {
+                  x1: 0,
+                  y1: 0,
+                  x2: 0,
+                  y2: 1,
+                },
+                stops: [
+                  [0, Highcharts.getOptions().colors[0]],
+                  [1, Highcharts.color(Highcharts.getOptions().colors[0]).setOpacity(0).get("rgba")],
+                ],
+              },
+              marker: {
+                radius: 2,
+              },
+              lineWidth: 1,
+              states: {
+                hover: {
+                  lineWidth: 1,
+                },
+              },
+              threshold: null,
+            },
+          },
 
-        chart.timeScale().fitContent();
-        setData(data);
-        console.log(data);
+          series: [
+            {
+              type: "area",
+              name: "Floor price",
+              data: floorPrice,
+              borderRadius: 10,
+            },
+          ],
+        };
+
+        setChartOptions(newChartOptions);
       } catch (error) {
-        setError(error.message);
+        console.log(error);
       }
       setLoading(false);
     };
     fetchData();
-  }, [collectionAddress]);
+  }, [collectionAddress, range]);
 
-  return { data, error, loading };
+  return { isLoading, chartOptions };
 };
