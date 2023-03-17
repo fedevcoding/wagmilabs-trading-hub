@@ -1,4 +1,4 @@
-import { getFromServer } from "@Utils";
+import { getFromServer, roundPrice } from "@Utils";
 import Highcharts from "highcharts";
 
 const { useState, useEffect } = require("react");
@@ -16,7 +16,7 @@ export const useGetData = ({ collectionAddress, range }) => {
           `/collectionCharts/floorPrice?collectionAddress=${collectionAddress}&range=${range}`
         );
 
-        const floorPrice = floorPriceData.map(item => [item[0] * 1000, item[2]]);
+        const floorPrice = floorPriceData.map(item => [item[0] * 1000, roundPrice(item[2])]);
 
         const newChartOptions = {
           chart: {
@@ -38,6 +38,10 @@ export const useGetData = ({ collectionAddress, range }) => {
           },
           legend: {
             enabled: false,
+          },
+          tooltip: {
+            enabled: true,
+            valueSuffix: " ETH",
           },
           plotOptions: {
             area: {

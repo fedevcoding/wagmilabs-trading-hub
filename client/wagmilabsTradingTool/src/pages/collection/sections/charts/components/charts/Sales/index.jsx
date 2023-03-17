@@ -13,7 +13,13 @@ export function SalesChart({ collectionAddress }) {
   return (
     <div className="sales-chart-section">
       <ChartHeader setRange={setRange} range={range} />
-      {isLoading ? <LoadingSpinner /> : <HighchartsReact highcharts={Highcharts} options={chartOptions} />}
+      {isLoading ? (
+        <LoadingSpinner>
+          <p>Loading chart...</p>
+        </LoadingSpinner>
+      ) : (
+        <HighchartsReact highcharts={Highcharts} options={chartOptions} />
+      )}
     </div>
   );
 }

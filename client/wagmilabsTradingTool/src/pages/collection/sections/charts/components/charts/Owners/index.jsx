@@ -13,7 +13,13 @@ export const OwnersChart = ({ collectionSlug }) => {
     <>
       <div className="owners-chart-section">
         <ChartHeader range={range} setRange={setRange} />
-        {isLoading ? <LoadingSpinner /> : <HighchartsReact highcharts={Highcharts} options={chartOptions} />}
+        {isLoading ? (
+          <LoadingSpinner>
+            <p>Loading chart...</p>
+          </LoadingSpinner>
+        ) : (
+          <HighchartsReact highcharts={Highcharts} options={chartOptions} />
+        )}
       </div>
     </>
   );

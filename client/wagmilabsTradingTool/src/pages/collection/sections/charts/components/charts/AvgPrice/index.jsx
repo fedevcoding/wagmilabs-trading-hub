@@ -13,7 +13,13 @@ export function AvgPriceChart({ collectionAddress }) {
   return (
     <div className="avgprice-chart-section">
       <ChartHeader setRange={setRange} range={range} />
-      {isLoading ? <LoadingSpinner /> : <HighchartsReact highcharts={Highcharts} options={chartOptions} />}
+      {isLoading ? (
+        <LoadingSpinner>
+          <p>Loading chart...</p>
+        </LoadingSpinner>
+      ) : (
+        <HighchartsReact highcharts={Highcharts} options={chartOptions} />
+      )}
     </div>
   );
 }

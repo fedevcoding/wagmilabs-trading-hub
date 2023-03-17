@@ -1,4 +1,4 @@
-import { getFromServer, timeInSeconds } from "@Utils";
+import { getFromServer, roundPrice, timeInSeconds } from "@Utils";
 import { useEffect, useState } from "react";
 import Highcharts from "highcharts";
 import { rangeOptions } from "./options";
@@ -19,7 +19,7 @@ export const useGetData = (collectionAddress, range) => {
         const url = `/collectionCharts/avgPrice?collectionAddress=${collectionAddress}&range=${rangeInSeconds}&granularity=${granularityInSeconds}`;
         const avgPriceData = await getFromServer(url);
 
-        const avgPrice = avgPriceData.map(item => [new Date(item.tx_timestamp).getTime(), item.avgprice]);
+        const avgPrice = avgPriceData.map(item => [new Date(item.tx_timestamp).getTime(), roundPrice(item.avgprice)]);
 
         const newChartOptions = {
           chart: {
@@ -41,6 +41,10 @@ export const useGetData = (collectionAddress, range) => {
           },
           legend: {
             enabled: false,
+          },
+          tooltip: {
+            enabled: true,
+            valueSuffix: " ETH",
           },
           plotOptions: {
             area: {

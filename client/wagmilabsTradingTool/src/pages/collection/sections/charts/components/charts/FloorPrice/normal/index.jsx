@@ -1,18 +1,18 @@
-import React from "react";
 import { LoadingSpinner } from "@Components";
 import { HighchartsReact } from "highcharts-react-official";
 import Highcharts from "highcharts";
-import { useGetData } from "./useGetData";
+import React from "react";
 import ChartHeader from "./ChartHeader";
+import { useGetData } from "./useGetData";
 import { useRange } from "./useRange";
 
-export function VolumeChart({ collectionAddress }) {
-  const { setRange, range } = useRange();
-  const { chartOptions, isLoading } = useGetData(collectionAddress, range);
+export const NormalFloorChart = ({ collectionAddress, handleChartType }) => {
+  const { range, setRange } = useRange();
+  const { isLoading, chartOptions } = useGetData({ collectionAddress, range });
 
   return (
-    <div className="volume-chart-section">
-      <ChartHeader setRange={setRange} range={range} />
+    <div className="floorprice-chart-section">
+      <ChartHeader setRange={setRange} range={range} handleChartType={handleChartType} />
       {isLoading ? (
         <LoadingSpinner>
           <p>Loading chart...</p>
@@ -22,4 +22,4 @@ export function VolumeChart({ collectionAddress }) {
       )}
     </div>
   );
-}
+};
