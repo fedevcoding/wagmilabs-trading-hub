@@ -1,25 +1,15 @@
 import React, { useEffect, useMemo, useState, useRef } from "react";
 import "./activity.css";
 import { placeholderImage } from "@Assets";
-import {
-  formatAddress2,
-  roundPrice2,
-  formatIpfs,
-} from "@Utils/formats/formats";
+import { formatAddress2, roundPrice2, formatIpfs } from "@Utils/formats/formats";
 import { baseUrl } from "@Variables";
 import getMarketplaceImage from "@Utils/marketplaceImageMapping";
 import moment from "moment";
 import { useAccount } from "wagmi";
-import {
-  Button,
-  HStack,
-  Input,
-  NumberInput,
-  NumberInputField,
-  Select,
-} from "@chakra-ui/react";
+import { Button, HStack, Input, NumberInput, NumberInputField, Select } from "@chakra-ui/react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { LoadingSpinner } from "@Components";
 
 const activityTypeMapping = {
   list: "List",
@@ -73,11 +63,9 @@ const Activity = () => {
     min: "",
     max: "",
   });
-  const [activityMarketplaceFilter, setActivityMarketplaceFilter] =
-    useState("");
+  const [activityMarketplaceFilter, setActivityMarketplaceFilter] = useState("");
   const [activityTokenIdFilter, setActivityTokenIdFilter] = useState("");
-  const [activityContractAddressFilter, setActivityContractAddressFilter] =
-    useState("");
+  const [activityContractAddressFilter, setActivityContractAddressFilter] = useState("");
 
   const [profileActivity, setProfileActivity] = useState([]);
   const [profileActivityLoading, setProfileActivityLoading] = useState(true);
@@ -120,9 +108,7 @@ const Activity = () => {
       }
     }, options);
 
-    const target = document.querySelector(
-      ".profile-activity-single-container.last-token"
-    );
+    const target = document.querySelector(".profile-activity-single-container.last-token");
     if (target) {
       observer.current.observe(target);
     }
@@ -158,8 +144,7 @@ const Activity = () => {
     let typeUrl = "";
 
     activityCategory.forEach(item => {
-      typeUrl =
-        typeUrl + `&include${item[0].toUpperCase()}${item.slice(1)}=true`;
+      typeUrl = typeUrl + `&include${item[0].toUpperCase()}${item.slice(1)}=true`;
     });
     return typeUrl;
   };
@@ -183,23 +168,17 @@ const Activity = () => {
   };
   const getMarketplaceFilter = () => {
     const { activityMarketplaceFilter } = activityFilters;
-    const marketplaceFilter = activityMarketplaceFilter
-      ? `&marketplace=${activityMarketplaceFilter}`
-      : "";
+    const marketplaceFilter = activityMarketplaceFilter ? `&marketplace=${activityMarketplaceFilter}` : "";
     return marketplaceFilter;
   };
   const getTokenIdFilter = () => {
     const { activityTokenIdFilter } = activityFilters;
-    const tokenIdFilter = activityTokenIdFilter
-      ? `&tokenId=${activityTokenIdFilter}`
-      : "";
+    const tokenIdFilter = activityTokenIdFilter ? `&tokenId=${activityTokenIdFilter}` : "";
     return tokenIdFilter;
   };
   const getContractFilter = () => {
     const { activityContractAddressFilter } = activityFilters;
-    const contractFilter = activityContractAddressFilter
-      ? `&contractAddress=${activityContractAddressFilter}`
-      : "";
+    const contractFilter = activityContractAddressFilter ? `&contractAddress=${activityContractAddressFilter}` : "";
     return contractFilter;
   };
   const getDateFilter = () => {
@@ -209,9 +188,7 @@ const Activity = () => {
     let dateFilter = "";
 
     if (startDate && endDate) {
-      dateFilter = `&startDate=${new Date(
-        startDate
-      ).getTime()}&endDate=${new Date(endDate).getTime()}`;
+      dateFilter = `&startDate=${new Date(startDate).getTime()}&endDate=${new Date(endDate).getTime()}`;
     } else if (startDate && !endDate) {
       dateFilter = `&startDate=${new Date(startDate).getTime()}`;
     } else if (!startDate && endDate) {
@@ -255,8 +232,7 @@ const Activity = () => {
 
       if (!response.ok) throw new Error("Error loading activity");
 
-      const { activity, newOffset1, newOffset2, newOffset3, hasMoreActivity } =
-        await response.json();
+      const { activity, newOffset1, newOffset2, newOffset3, hasMoreActivity } = await response.json();
       hasMoreActivityRef.current = hasMoreActivity;
       setActivityOffsets({ 1: newOffset1, 2: newOffset2, 3: newOffset3 });
       setProfileActivity(old => [...old, ...activity]);
@@ -291,8 +267,7 @@ const Activity = () => {
 
       if (!response.ok) throw new Error("Error loading activity");
 
-      const { activity, newOffset1, newOffset2, newOffset3, hasMoreActivity } =
-        await response.json();
+      const { activity, newOffset1, newOffset2, newOffset3, hasMoreActivity } = await response.json();
       hasMoreActivityRef.current = hasMoreActivity;
       setActivityOffsets({ 1: newOffset1, 2: newOffset2, 3: newOffset3 });
       setProfileActivity(activity);
@@ -307,9 +282,7 @@ const Activity = () => {
 
   function changeActivityCategory(filter) {
     if (activityCategory.includes(filter)) {
-      const newActivityFilter = activityCategory.filter(
-        item => item !== filter
-      );
+      const newActivityFilter = activityCategory.filter(item => item !== filter);
       setActivityCategory(newActivityFilter);
     } else {
       const newActivityFilter = [...activityCategory, filter];
@@ -335,22 +308,12 @@ const Activity = () => {
   const profileActivityMapping = useMemo(
     () =>
       profileActivity.map((item, index) => {
-        const {
-          type,
-          from_address,
-          marketplace,
-          price,
-          createdAt,
-          to_address,
-          token_id,
-          transaction_hash,
-        } = item || {};
+        const { type, from_address, marketplace, price, createdAt, to_address, token_id, transaction_hash } =
+          item || {};
 
         const contractAddress = item?.contractAddress || item.contract_address;
-        let { name: tokenName, image: tokenImage } =
-          item?.tokenData?.token || {};
-        const { name: collectionName } =
-          item?.tokenData?.token?.collection || {};
+        let { name: tokenName, image: tokenImage } = item?.tokenData?.token || {};
+        const { name: collectionName } = item?.tokenData?.token?.collection || {};
         // const {tokenName, tokenImage, tokenId} = item.token
         // const {collectionName, collectionImage} = item.collection
 
@@ -365,19 +328,11 @@ const Activity = () => {
 
         return (
           <>
-            <tr
-              key={key}
-              className={`profile-activity-single-container ${isLast && "last-token"
-                }`}
-            >
+            <tr key={key} className={`profile-activity-single-container ${isLast && "last-token"}`}>
               <td className="profile-activity-single-type">
                 <div className="profile-activity-marketplace-container">
                   {marketplaceImage ? (
-                    <img
-                      src={marketplaceImage}
-                      className="profile-activity-marketplace-image"
-                      alt=""
-                    />
+                    <img src={marketplaceImage} className="profile-activity-marketplace-image" alt="" />
                   ) : (
                     <ActivityIcon type={type} />
                   )}
@@ -389,43 +344,32 @@ const Activity = () => {
                 <td className="profile-activity-single-token">
                   <img
                     src={tokenImage || placeholderImage}
-                    onError={e => e.currentTarget.src = placeholderImage}
+                    onError={e => (e.currentTarget.src = placeholderImage)}
                     alt=""
                     className="profile-activity-single-image"
                   />
                   <div className="wrap-text">
                     <p className="wrap-text">{tokenName || token_id}</p>
-                    <p className="low-opacity little-text wrap-text">
-                      {collectionName}
-                    </p>
+                    <p className="low-opacity little-text wrap-text">{collectionName}</p>
                   </div>
                 </td>
               </a>
-              <td className="profile-activity-single-price">
-                {price ? roundPrice2(price) : 0} ETH
-              </td>
+              <td className="profile-activity-single-price">{price ? roundPrice2(price) : 0} ETH</td>
               <td className="profile-activity-single-from">
-                {to_address
-                  ? formatAddress2(to_address, userAdress)
-                  : "- - -"}
+                {to_address ? formatAddress2(to_address, userAdress) : "- - -"}
               </td>
               <td className="profile-activity-single-to">
                 {from_address ? formatAddress2(from_address, userAdress) : "- - -"}
               </td>
               <td className="profile-activity-single-time">
                 <a
-                  href={`${type !== "list"
-                      ? `https://etherscan.io/tx/${transaction_hash}`
-                      : ""
-                    }`}
+                  href={`${type !== "list" ? `https://etherscan.io/tx/${transaction_hash}` : ""}`}
                   target="_blank"
                   rel="noreferrer"
                 >
                   <div className={`${type !== "list" && "activity"}`}>
                     {moment(createdAt).fromNow()}
-                    {type !== "list" && (
-                      <i className="fa-sharp fa-solid fa-up-right-from-square"></i>
-                    )}
+                    {type !== "list" && <i className="fa-sharp fa-solid fa-up-right-from-square"></i>}
                   </div>
                 </a>
               </td>
@@ -454,16 +398,14 @@ const Activity = () => {
             <div className="profile-activity-filters-categories">
               <div
                 onClick={() => changeActivityCategory("sale")}
-                className={`${activityCategory.includes("sale") ? "active" : ""
-                  }`}
+                className={`${activityCategory.includes("sale") ? "active" : ""}`}
               >
                 <i className="fa-light fa-bag-shopping"></i>
                 Sales
               </div>
               <div
                 onClick={() => changeActivityCategory("list")}
-                className={`${activityCategory.includes("list") ? "active" : ""
-                  }`}
+                className={`${activityCategory.includes("list") ? "active" : ""}`}
               >
                 <i className="fa-light fa-tag"></i>
                 Listings
@@ -472,16 +414,14 @@ const Activity = () => {
             <div className="profile-activity-filters-categories">
               <div
                 onClick={() => changeActivityCategory("mint")}
-                className={`${activityCategory.includes("mint") ? "active" : ""
-                  }`}
+                className={`${activityCategory.includes("mint") ? "active" : ""}`}
               >
                 <i className="fa-solid fa-sparkles"></i>
                 Mints
               </div>
               <div
                 onClick={() => changeActivityCategory("send")}
-                className={`${activityCategory.includes("send") ? "active" : ""
-                  }`}
+                className={`${activityCategory.includes("send") ? "active" : ""}`}
               >
                 <i className="fa-regular fa-plane-departure"></i>
                 Send
@@ -490,16 +430,14 @@ const Activity = () => {
             <div className="profile-activity-filters-categories">
               <div
                 onClick={() => changeActivityCategory("receive")}
-                className={`${activityCategory.includes("receive") ? "active" : ""
-                  }`}
+                className={`${activityCategory.includes("receive") ? "active" : ""}`}
               >
                 <i className="fa-light fa-truck"></i>
                 Receive
               </div>
               <div
                 onClick={() => changeActivityCategory("burn")}
-                className={`${activityCategory.includes("burn") ? "active" : ""
-                  }`}
+                className={`${activityCategory.includes("burn") ? "active" : ""}`}
               >
                 <i className="fa-solid fa-fire"></i>
                 Burn
@@ -508,8 +446,7 @@ const Activity = () => {
             <div className="profile-activity-filters-categories">
               <div
                 onClick={() => changeActivityCategory("buy")}
-                className={`${activityCategory.includes("buy") ? "active" : ""
-                  }`}
+                className={`${activityCategory.includes("buy") ? "active" : ""}`}
               >
                 <i className="fa-light fa-truck"></i>
                 Buy
@@ -566,9 +503,7 @@ const Activity = () => {
             <HStack>
               <NumberInput
                 value={activityPriceFilter.min}
-                onChange={value =>
-                  setActivityPriceFilter(old => ({ ...old, min: value }))
-                }
+                onChange={value => setActivityPriceFilter(old => ({ ...old, min: value }))}
               >
                 <HStack>
                   <NumberInputField placeholder="Min" />
@@ -577,9 +512,7 @@ const Activity = () => {
 
               <NumberInput
                 value={activityPriceFilter.max}
-                onChange={value =>
-                  setActivityPriceFilter(old => ({ ...old, max: value }))
-                }
+                onChange={value => setActivityPriceFilter(old => ({ ...old, max: value }))}
               >
                 <HStack>
                   <NumberInputField placeholder="Max" />
@@ -601,10 +534,7 @@ const Activity = () => {
           <div className="profile-activity-filter-section">
             <p>MARKETPLACE</p>
 
-            <Select
-              value={activityMarketplaceFilter}
-              onChange={e => setActivityMarketplaceFilter(e.target.value)}
-            >
+            <Select value={activityMarketplaceFilter} onChange={e => setActivityMarketplaceFilter(e.target.value)}>
               {activityMarketplaceMapping.map((marketplace, index) => (
                 <option key={index} value={marketplace.value}>
                   {marketplace.name}
@@ -616,10 +546,7 @@ const Activity = () => {
           <div className="profile-activity-filter-section">
             <p>TOKEN ID</p>
 
-            <NumberInput
-              value={activityTokenIdFilter}
-              onChange={value => setActivityTokenIdFilter(value)}
-            >
+            <NumberInput value={activityTokenIdFilter} onChange={value => setActivityTokenIdFilter(value)}>
               <HStack>
                 <NumberInputField placeholder="TokenId" />
               </HStack>
@@ -651,26 +578,9 @@ const Activity = () => {
                 {profileActivityLoading && (
                   <tr>
                     <td colSpan={6}>
-                      <div className="loading">
-                        Loading activity{" "}
-                        <svg
-                          className="spinner"
-                          width="65px"
-                          height="65px"
-                          viewBox="0 0 66 66"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <circle
-                            className="path"
-                            fill="none"
-                            strokeWidth="6"
-                            strokeLinecap="round"
-                            cx="33"
-                            cy="33"
-                            r="30"
-                          ></circle>
-                        </svg>{" "}
-                      </div>
+                      <LoadingSpinner>
+                        <p>Loading activity...</p>
+                      </LoadingSpinner>
                     </td>
                   </tr>
                 )}
@@ -678,26 +588,9 @@ const Activity = () => {
                 {profileActivityLoadMore && (
                   <tr>
                     <td colSpan={6}>
-                      <div className="loading">
-                        Loading more activity{" "}
-                        <svg
-                          className="spinner"
-                          width="65px"
-                          height="65px"
-                          viewBox="0 0 66 66"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <circle
-                            className="path"
-                            fill="none"
-                            strokeWidth="6"
-                            strokeLinecap="round"
-                            cx="33"
-                            cy="33"
-                            r="30"
-                          ></circle>
-                        </svg>{" "}
-                      </div>
+                      <LoadingSpinner>
+                        <p>Loading more activity...</p>
+                      </LoadingSpinner>
                     </td>
                   </tr>
                 )}
