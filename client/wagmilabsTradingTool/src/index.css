@@ -145,3 +145,8 @@ body.overflow-hidden {
 .chakra-select option {
   background-color: black !important;
 }
+
+
+.password-input{
+  -webkit-text-security: disc;
+}

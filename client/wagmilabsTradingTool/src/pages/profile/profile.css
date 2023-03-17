@@ -208,16 +208,6 @@
     margin-left: 5px;
 }
 
-.profile-spinner {
-    animation: rotator 1.4s linear infinite;
-    width: 15px;
-    height: 15px;
-}
-
-.loader-container {
-    translate: 0 7px;
-}
-
 .profile-watchList-settings {
     display: flex;
     gap: 30px;

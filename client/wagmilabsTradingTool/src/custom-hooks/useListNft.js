@@ -11,7 +11,7 @@ export const useListNft = ({ contractAddress, tokenId, listingPrice }, callback)
 
   const toast = useToast();
 
-  async function listNft(setConfirmingList, expirationTime = null, marketplaceName = null) {
+  async function listNft(setConfirmingList, expirationTime = null, marketplaceName = null, royaltiesPerc = null) {
     if (listingPrice < 0 || listingPrice === null || listingPrice === "") {
       toast({
         title: "Error listing NFT.",
@@ -38,6 +38,13 @@ export const useListNft = ({ contractAddress, tokenId, listingPrice }, callback)
 
       const weiPrice = (listingPrice * 1000000000000000000).toString();
 
+      const royalties = royaltiesPerc
+        ? {
+            automatedRoyalties: true,
+            royaltyBps: parseFloat(royaltiesPerc) * 100,
+          }
+        : {};
+
       await getClient()?.actions.listToken({
         listings: [
           {
@@ -46,6 +53,7 @@ export const useListNft = ({ contractAddress, tokenId, listingPrice }, callback)
             orderbook,
             orderKind,
             expirationTime,
+            ...royalties,
           },
         ],
         signer,

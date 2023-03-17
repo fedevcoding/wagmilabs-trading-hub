@@ -12,6 +12,8 @@ import { notFound } from "@Assets";
 
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { placeholderImage } from "@Utils/images";
+import { LoadingSpinner } from "@Components";
+import { HStack } from "@chakra-ui/react";
 
 const defaultTimeFrame = "1H";
 
@@ -148,22 +150,13 @@ const Trending = ({ tool, timeFrame, setTimeFrame, resetTime }) => {
     });
     e.currentTarget.children[1].classList.add("selected");
     e.currentTarget.children[1].classList.toggle("rotate");
-    e.currentTarget.children[1].previousElementSibling.classList.add(
-      "nameSelected"
-    );
+    e.currentTarget.children[1].previousElementSibling.classList.add("nameSelected");
   }
 
   const mappedStats = useMemo(
     () =>
       stats.map((stat, index) => {
-        const {
-          floor_price,
-          image,
-          contractAddress,
-          name,
-          totalSupply,
-          creationDate,
-        } = stat;
+        const { floor_price, image, contractAddress, name, totalSupply, creationDate } = stat;
         const sales = stat.rightSales;
         const volume = stat.volume;
         const { volumeStats } = stat;
@@ -173,19 +166,12 @@ const Trending = ({ tool, timeFrame, setTimeFrame, resetTime }) => {
 
         return (
           <tr
-            onClick={() =>
-              window.open(`/collection/${contractAddress}`, "_blank")
-            }
+            onClick={() => window.open(`/collection/${contractAddress}`, "_blank")}
             className="single-collection-container"
             key={index}
           >
             <td className="image-name-container">
-              <LazyLoadImage
-                src={image}
-                className="trending-image"
-                effect="blur"
-                placeholderSrc={placeholderImage}
-              />
+              <LazyLoadImage src={image} className="trending-image" effect="blur" placeholderSrc={placeholderImage} />
               <div className="minting-name-date">
                 <p className="trending-name">{name || "- - -"}</p>
                 <p className="trending-created-date">{creationDay}</p>
@@ -207,11 +193,7 @@ const Trending = ({ tool, timeFrame, setTimeFrame, resetTime }) => {
                       series: [
                         {
                           name: "Floor price",
-                          data: [
-                            floorStats["30day"] || 0,
-                            floorStats["7day"] || 0,
-                            floorStats["1day"] || 0,
-                          ],
+                          data: [floorStats["30day"] || 0, floorStats["7day"] || 0, floorStats["1day"] || 0],
                         },
                       ],
                       xAxis: {
@@ -257,21 +239,14 @@ const Trending = ({ tool, timeFrame, setTimeFrame, resetTime }) => {
             </td>
             <td className="trending-chart-volume">
               <div className="volume-chart">
-                {volumeStats &&
-                volumeStats["1day"] &&
-                volumeStats["7day"] &&
-                volumeStats["30day"] ? (
+                {volumeStats && volumeStats["1day"] && volumeStats["7day"] && volumeStats["30day"] ? (
                   <HighchartsReact
                     highcharts={Highcharts}
                     options={{
                       series: [
                         {
                           name: "Volume",
-                          data: [
-                            volumeStats["1day"] || 0,
-                            volumeStats["7day"] || 0,
-                            volumeStats["30day"] || 0,
-                          ],
+                          data: [volumeStats["1day"] || 0, volumeStats["7day"] || 0, volumeStats["30day"] || 0],
                           borderRadius: 5,
                         },
                       ],
@@ -365,26 +340,9 @@ const Trending = ({ tool, timeFrame, setTimeFrame, resetTime }) => {
             {loading && (
               <tr>
                 <td colSpan={7}>
-                  <div className="loading">
-                    Loading data{" "}
-                    <svg
-                      className="spinner"
-                      width="65px"
-                      height="65px"
-                      viewBox="0 0 66 66"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <circle
-                        className="path"
-                        fill="none"
-                        strokeWidth="6"
-                        strokeLinecap="round"
-                        cx="33"
-                        cy="33"
-                        r="30"
-                      ></circle>
-                    </svg>{" "}
-                  </div>
+                  <LoadingSpinner>
+                    <p>Loading data</p>
+                  </LoadingSpinner>
                 </td>
               </tr>
             )}

@@ -34,6 +34,7 @@ export const ItemActivity = React.memo(({ address, id }) => {
             label: activityOptions[a],
           }))}
           isMulti
+          isSearchable={false}
         />
       </div>
       {(types.length && !(activities?.activities || []).length && <h3>No activities for this filter</h3>) || (

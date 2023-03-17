@@ -12,6 +12,7 @@ import { useFirstRender } from "@Hooks";
 import { placeholderImage } from "@Utils/images";
 
 import { LazyLoadImage } from "react-lazy-load-image-component";
+import { LoadingSpinner } from "@Components";
 
 const defaultTimeFrame = "1H";
 
@@ -164,9 +165,7 @@ const Minting = ({ tool, timeFrame, setTimeFrame, resetTime }) => {
     });
     e.currentTarget.children[1].classList.add("selected");
     e.currentTarget.children[1].classList.toggle("rotate");
-    e.currentTarget.children[1].previousElementSibling.classList.add(
-      "nameSelected"
-    );
+    e.currentTarget.children[1].previousElementSibling.classList.add("nameSelected");
   }
 
   const mappedStats = useMemo(
@@ -189,19 +188,12 @@ const Minting = ({ tool, timeFrame, setTimeFrame, resetTime }) => {
 
         return (
           <tr
-            onClick={() =>
-              window.open(`/collection/${contractAddress}`, "_blank")
-            }
+            onClick={() => window.open(`/collection/${contractAddress}`, "_blank")}
             className="single-collection-container"
             key={index}
           >
             <td className="image-name-container">
-              <LazyLoadImage
-                src={image}
-                className="minting-image"
-                effect="blur"
-                placeholderSrc={placeholderImage}
-              />
+              <LazyLoadImage src={image} className="minting-image" effect="blur" placeholderSrc={placeholderImage} />
               <div className="minting-name-date">
                 <p className="minting-name">{name || "- - -"}</p>
                 <p className="minting-created-date">{creationDay}</p>
@@ -299,26 +291,9 @@ const Minting = ({ tool, timeFrame, setTimeFrame, resetTime }) => {
             {loading && (
               <tr>
                 <td colSpan={8}>
-                  <div className="loading">
-                    Loading data{" "}
-                    <svg
-                      className="spinner"
-                      width="65px"
-                      height="65px"
-                      viewBox="0 0 66 66"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <circle
-                        className="path"
-                        fill="none"
-                        strokeWidth="6"
-                        strokeLinecap="round"
-                        cx="33"
-                        cy="33"
-                        r="30"
-                      ></circle>
-                    </svg>{" "}
-                  </div>
+                  <LoadingSpinner>
+                    <p>Loading data</p>
+                  </LoadingSpinner>
                 </td>
               </tr>
             )}
