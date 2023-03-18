@@ -2,6 +2,7 @@ import React, { useEffect, useState, useContext, useMemo, useRef } from "react";
 import "./items.css";
 
 import _ from "lodash";
+import { useSweep } from "./useSweep";
 import {
   NumberInput,
   NumberInputField,
@@ -28,7 +29,7 @@ import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import getMarketplaceImage from "@Utils/marketplaceImageMapping";
 
 import flaggedImg from "@Assets/flagged.svg";
-import { BuyNowModal, Row } from "@Components";
+import { BuyNowModal, RangeSelector, Row } from "@Components";
 import {
   useAddItemToCart,
   useBuyNow,
@@ -38,6 +39,7 @@ import {
   useRefreshMetadata,
 } from "@Hooks";
 import { useNavigate } from "react-router-dom";
+import { roundPrice2 } from "@Utils";
 
 const Items = ({
   loadingMoreItems,
@@ -56,6 +58,9 @@ const Items = ({
   setSelectedItem,
   fetchMoreTokens,
 }) => {
+  // sweep
+  const { sweepMode, toggleSweepMode, amountToSweep, setAmountToSweep, sweepPrice } = useSweep(items);
+
   const { refreshMetadata } = useRefreshMetadata(state => setRefreshingMetadata(state));
   const { userCartItems } = useContext(UserDataContext);
   const firstRender = useFirstRender();
@@ -226,6 +231,10 @@ const Items = ({
 
         const isLast = index === items.length - 1;
 
+        const isToSweep = sweepMode && index < amountToSweep;
+
+        const isActive = sweepMode ? (isToSweep ? true : false) : isInCart;
+
         return (
           <>
             <div
@@ -234,13 +243,15 @@ const Items = ({
               }`}
               key={JSON.stringify(item)}
             >
-              <div className={`collection-item-details-container ${isInCart && "item-cart-selected"}`}>
+              <div className={`collection-item-details-container ${isActive && "item-cart-selected"}`}>
                 <div className="collection-item-image-hover-overflow">
                   <img
                     src={image || collectionImage}
                     alt=""
                     className="collection-single-item-image"
-                    onClick={() => navigate(`/item/${address}/${tokenId}`)}
+                    onClick={() => {
+                      !sweepMode && navigate(`/item/${address}/${tokenId}`);
+                    }}
                     onError={({ currentTarget }) => {
                       currentTarget.onerror = null; // prevents looping
                       currentTarget.src = collectionImage;
@@ -277,7 +288,7 @@ const Items = ({
                     </div>
                   )}
 
-                  {isInCart && (
+                  {isActive && (
                     <div className="collection-item-selected-cart-check">
                       <i className="fa-solid fa-check"></i>
                     </div>
@@ -301,7 +312,7 @@ const Items = ({
 
                   <div className="collection-item-buy-container">
                     {/* {rarityRank} */}
-                    {isListed && (
+                    {isListed && !sweepMode && (
                       <>
                         <div
                           onClick={() =>
@@ -348,7 +359,7 @@ const Items = ({
         );
       }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [items, userCartItems, collectionInfo]
+    [items, userCartItems, collectionInfo, sweepMode, amountToSweep]
   );
 
   return (
@@ -365,6 +376,24 @@ const Items = ({
 
       <div className="collection-item-section">
         <div className="collection-item-filters-container">
+          <div className="collection-item-filter-section1">
+            <div className="collection-item-filter-sweep">
+              <p>SWEEP</p>
+              <Switch colorScheme={"blue"} onChange={toggleSweepMode} />
+            </div>
+
+            {sweepMode && (
+              <>
+                <RangeSelector value={amountToSweep} onChange={setAmountToSweep} min={1} max={30} />
+                <Button width={"100%"} colorScheme="blue">
+                  {`Sweep | ${roundPrice2(sweepPrice)}ETH`}
+                </Button>
+              </>
+            )}
+          </div>
+
+          <hr className="collection-item-filter-hr" />
+
           <div className="collection-item-filter-section1">
             <div className="collection-item-filter-buynow">
               <p>BUY NOW</p>
