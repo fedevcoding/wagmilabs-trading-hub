@@ -118,6 +118,24 @@
     margin-top: 15px;
 }
 
+.collection-items-empty{
+    margin-top: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: white;
+}
+
+.collection-items-empty img{
+    width: 220px;
+}
+
+.collection-items-empty p{
+    font-size: 20px;
+    font-weight: 500;
+    margin-top: 10px;
+}
+
 
 
 .collection-item-filter-pricerange{
