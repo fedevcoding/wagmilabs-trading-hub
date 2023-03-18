@@ -6,9 +6,9 @@ import ChartHeader from "./ChartHeader";
 import { useGetData } from "./useGetData";
 import { useRange } from "./useRange";
 
-export const AdvancedFloorChart = ({ collectionAddress, handleChartType }) => {
+export const AdvancedFloorChart = ({ collectionAddress, handleChartType, floorPrice }) => {
   const { range, setRange } = useRange();
-  const { isLoading, chartOptions } = useGetData({ collectionAddress, range });
+  const { isLoading, chartOptions } = useGetData({ collectionAddress, range, floorPrice });
 
   return (
     <div className="floorprice-chart-section">

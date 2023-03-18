@@ -787,7 +787,13 @@ const Collection = () => {
         } else if (section === "activity") {
           return <Activity address={address} />;
         } else if (section === "charts") {
-          return <Charts collectionAddress={address} collectionSlug={collectionInfo?.slug} />;
+          return (
+            <Charts
+              collectionAddress={address}
+              collectionSlug={collectionInfo?.slug}
+              floorPrice={collectionInfo.floorAsk?.price?.amount?.decimal}
+            />
+          );
         } else if (section === "leaderboard") {
           return <Leaderboard address={address} />;
         }

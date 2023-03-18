@@ -7,6 +7,7 @@ export const useGetData = ({ collectionAddress, range }) => {
   // const [data, setData] = useState([]);
   const [chartOptions, setChartOptions] = useState({});
   const [isLoading, setLoading] = useState(false);
+  const [hasNoData, setHasNoData] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -15,6 +16,11 @@ export const useGetData = ({ collectionAddress, range }) => {
         const floorPriceData = await getFromServer(
           `/collectionCharts/floorPrice?collectionAddress=${collectionAddress}&range=${range}`
         );
+
+        if (!floorPriceData.length || !floorPriceData) {
+          setHasNoData(true);
+          return;
+        }
 
         const floorPrice = floorPriceData.map(item => [item[0] * 1000, roundPrice(item[2])]);
 
@@ -84,11 +90,13 @@ export const useGetData = ({ collectionAddress, range }) => {
         setChartOptions(newChartOptions);
       } catch (error) {
         console.log(error);
+        setHasNoData(true);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
     fetchData();
   }, [collectionAddress, range]);
 
-  return { isLoading, chartOptions };
+  return { isLoading, chartOptions, hasNoData };
 };

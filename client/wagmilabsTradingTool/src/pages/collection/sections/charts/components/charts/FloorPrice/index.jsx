@@ -3,7 +3,7 @@ import { AdvancedFloorChart } from "./advanced";
 import { NormalFloorChart } from "./normal";
 import { useChartType } from "./useChartType";
 
-export const FloorChart = ({ collectionAddress }) => {
+export const FloorChart = ({ collectionAddress, floorPrice }) => {
   const { chartType, handleChartType } = useChartType();
 
   return (
@@ -11,7 +11,11 @@ export const FloorChart = ({ collectionAddress }) => {
       {chartType === "normal" ? (
         <NormalFloorChart collectionAddress={collectionAddress} handleChartType={handleChartType} />
       ) : (
-        <AdvancedFloorChart collectionAddress={collectionAddress} handleChartType={handleChartType} />
+        <AdvancedFloorChart
+          collectionAddress={collectionAddress}
+          handleChartType={handleChartType}
+          floorPrice={floorPrice}
+        />
       )}
     </>
   );

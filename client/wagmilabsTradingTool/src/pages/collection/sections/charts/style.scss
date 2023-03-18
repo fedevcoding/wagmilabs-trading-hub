@@ -1,6 +1,18 @@
 #page-collection-charts {
   $chart-bg: #201f1e;
 
+  .nod-data-found {
+    margin-top: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    img {
+      width: 220px;
+    }
+  }
+
   .charts-selector-container {
     color: white;
     font-family: inherit;

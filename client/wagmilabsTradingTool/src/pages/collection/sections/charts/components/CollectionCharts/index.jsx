@@ -1,13 +1,13 @@
 import React from "react";
 import { AvgPriceChart, BuyersSellersChart, FloorChart, ListingChart, OwnersChart, SalesChart, VolumeChart } from "../";
 
-export const CollectionCharts = ({ activeChart, charts, collectionAddress, collectionSlug }) => {
+export const CollectionCharts = ({ activeChart, charts, collectionAddress, collectionSlug, floorPrice }) => {
   return (
     <div className="charts">
       {(() => {
         switch (activeChart.value) {
           case charts[0].value:
-            return <FloorChart collectionAddress={collectionAddress} />;
+            return <FloorChart collectionAddress={collectionAddress} floorPrice={floorPrice} />;
           case charts[1].value:
             return <BuyersSellersChart collectionAddress={collectionAddress} />;
           case charts[2].value:
