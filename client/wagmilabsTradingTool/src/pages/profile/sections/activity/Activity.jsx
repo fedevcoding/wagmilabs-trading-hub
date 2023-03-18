@@ -5,7 +5,6 @@ import { formatAddress2, roundPrice2, formatIpfs } from "@Utils/formats/formats"
 import { baseUrl } from "@Variables";
 import getMarketplaceImage from "@Utils/marketplaceImageMapping";
 import moment from "moment";
-import { useAccount } from "wagmi";
 import { Button, HStack, Input, NumberInput, NumberInputField, Select } from "@chakra-ui/react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -51,9 +50,7 @@ const activityMarketplaceMapping = [
   },
 ];
 
-const Activity = () => {
-  const { address: userAdress } = useAccount();
-
+const Activity = ({ userAddress, pageAddress, isOwner }) => {
   const [activityCategory, setActivityCategory] = useState(["sale"]);
   const [activityAddressFilter, setActivityAddressFilter] = useState({
     from: "",
@@ -222,7 +219,7 @@ const Activity = () => {
       const offsetFilters = getActivityOffsets();
 
       const response = await fetch(
-        `${baseUrl}/profileActivity?hello=hello${typeFilter}${addressFilter}${priceFilter}${marketplaceFilter}${tokenIdFilter}${contractFilter}${dateFilter}${offsetFilters}`,
+        `${baseUrl}/profileActivity?hello=hello${typeFilter}${addressFilter}${priceFilter}${marketplaceFilter}${tokenIdFilter}${contractFilter}${dateFilter}${offsetFilters}&address=${pageAddress}`,
         {
           headers: {
             "x-auth-token": localStorage.jsonwebtoken,
@@ -257,7 +254,7 @@ const Activity = () => {
       const dateFilter = getDateFilter();
 
       const response = await fetch(
-        `${baseUrl}/profileActivity?hello=hello${typeFilter}${addressFilter}${priceFilter}${marketplaceFilter}${tokenIdFilter}${contractFilter}${dateFilter}&offset1=0&offset2=0&offset3=0`,
+        `${baseUrl}/profileActivity?hello=hello${typeFilter}${addressFilter}${priceFilter}${marketplaceFilter}${tokenIdFilter}${contractFilter}${dateFilter}&offset1=0&offset2=0&offset3=0&address=${pageAddress}`,
         {
           headers: {
             "x-auth-token": localStorage.jsonwebtoken,
@@ -356,10 +353,10 @@ const Activity = () => {
               </a>
               <td className="profile-activity-single-price">{price ? roundPrice2(price) : 0} ETH</td>
               <td className="profile-activity-single-from">
-                {to_address ? formatAddress2(to_address, userAdress) : "- - -"}
+                {to_address ? formatAddress2(to_address, userAddress) : "- - -"}
               </td>
               <td className="profile-activity-single-to">
-                {from_address ? formatAddress2(from_address, userAdress) : "- - -"}
+                {from_address ? formatAddress2(from_address, userAddress) : "- - -"}
               </td>
               <td className="profile-activity-single-time">
                 <a

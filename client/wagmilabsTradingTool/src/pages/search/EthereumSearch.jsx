@@ -3,7 +3,7 @@ import { useDebounce } from "use-debounce";
 import "./search.scss";
 import verified from "@Assets/verified.png";
 import { baseUrl } from "@Variables";
-
+import { fetchEnsAddress } from "@wagmi/core";
 import { useFirstRender } from "@Hooks";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import { placeholderImage } from "@Utils/images";
@@ -52,7 +52,16 @@ const EthereumSearch = ({ inLogin, isHeader, usage, onClick }) => {
     try {
       setLoadingCollections(true);
 
-      let collectionsApi = await fetch(`${baseUrl}/search/${value}?showAddresses=${isHeader ? "true" : "false"}`);
+      let query = value;
+      if (isHeader && value?.endsWith(".eth")) {
+        const address = await fetchEnsAddress({
+          name: value,
+          chainId: 1,
+        });
+        query = address;
+      }
+
+      let collectionsApi = await fetch(`${baseUrl}/search/${query}?showAddresses=${isHeader ? "true" : "false"}`);
       collectionsApi = await collectionsApi.json();
 
       const fetchedCollections = collectionsApi || {};
@@ -229,7 +238,7 @@ const EthereumSearch = ({ inLogin, isHeader, usage, onClick }) => {
         <input
           type="text"
           className={`search-bar ${inLogin && "login-searchbar"}`}
-          placeholder="Search collections"
+          placeholder={`Search collection${isHeader ? ", address, ens" : ""}`}
           onChange={({ target }) => setText(target.value)}
           onClick={() => loadCollections(true)}
         ></input>

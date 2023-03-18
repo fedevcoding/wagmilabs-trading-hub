@@ -13,8 +13,6 @@ searchCollectionsRoute.get("/:query", async (req, res) => {
     let type = "collection";
     if (query.startsWith("0x") && query.length === 42) {
       type = "address";
-    } else if (query.endsWith(".eth")) {
-      type = "ens";
     }
 
     let url;
@@ -29,7 +27,6 @@ searchCollectionsRoute.get("/:query", async (req, res) => {
     if (showAddresses === "true" && type === "address") {
       const apiData = await fetch(`https://api.opensea.io/api/v1/account/${query}`);
       const { data } = await apiData.json();
-      console.log(data);
       const { profile_img_url, address } = data;
       addresses = [{ address, image: profile_img_url, isAddress: true, name: "Account" }];
     }
