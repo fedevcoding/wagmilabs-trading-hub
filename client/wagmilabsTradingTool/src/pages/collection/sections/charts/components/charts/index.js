@@ -4,3 +4,4 @@ export { VolumeChart } from "./Volume";
 export { OwnersChart } from "./Owners";
 export { SalesChart } from "./Sales";
 export { AvgPriceChart } from "./AvgPrice";
+export { BuyersSellersChart } from "./Buyers-Sellers";

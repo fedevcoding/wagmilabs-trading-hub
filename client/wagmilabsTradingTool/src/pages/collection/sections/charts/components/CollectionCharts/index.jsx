@@ -1,5 +1,5 @@
 import React from "react";
-import { AvgPriceChart, FloorChart, ListingChart, OwnersChart, SalesChart, VolumeChart } from "../";
+import { AvgPriceChart, BuyersSellersChart, FloorChart, ListingChart, OwnersChart, SalesChart, VolumeChart } from "../";
 
 export const CollectionCharts = ({ activeChart, charts, collectionAddress, collectionSlug }) => {
   return (
@@ -9,7 +9,7 @@ export const CollectionCharts = ({ activeChart, charts, collectionAddress, colle
           case charts[0].value:
             return <FloorChart collectionAddress={collectionAddress} />;
           case charts[1].value:
-            return <AvgPriceChart collectionAddress={collectionAddress} />;
+            return <BuyersSellersChart collectionAddress={collectionAddress} />;
           case charts[2].value:
             return <ListingChart collectionAddress={collectionAddress} />;
           case charts[3].value:

@@ -6,7 +6,7 @@ import { rangeOptions, getRange } from "./options";
 const ChartHeader = ({ range, setRange }) => {
   return (
     <HStack className="chart-header">
-      <h2>Amount of sales over time.</h2>
+      <h2>Buyers vs sellets over time.</h2>
 
       <Select options={rangeOptions} value={getRange(range)} onChange={d => setRange(d.value)} isSearchable={false} />
     </HStack>

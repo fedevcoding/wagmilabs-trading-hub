@@ -6,7 +6,7 @@ import { useGetData } from "./useGetData";
 import ChartHeader from "./ChartHeader";
 import { useRange } from "./useRange";
 
-export function SalesChart({ collectionAddress }) {
+export function BuyersSellersChart({ collectionAddress }) {
   const { setRange, range } = useRange();
   const { chartOptions, isLoading } = useGetData(collectionAddress, range);
 
