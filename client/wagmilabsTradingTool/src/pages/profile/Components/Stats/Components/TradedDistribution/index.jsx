@@ -5,8 +5,6 @@ import Chart from "./Chart";
 
 export const TradedDistribution = () => {
   const periods = {
-    "1d": 1,
-    "3d": 3,
     "7d": 7,
     "30d": 30,
     "3M": 90,
