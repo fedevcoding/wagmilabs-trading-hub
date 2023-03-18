@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState, useRef } from "react";
-import "./activity.css";
+import "./activity.scss";
 import { placeholderImage } from "@Assets";
 import { formatAddress2, roundPrice2, formatIpfs } from "@Utils/formats/formats";
 import { baseUrl } from "@Variables";
@@ -9,6 +9,7 @@ import { Button, HStack, Input, NumberInput, NumberInputField, Select } from "@c
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { LoadingSpinner } from "@Components";
+import { notFound } from "src/assets";
 
 const activityTypeMapping = {
   list: "List",
@@ -581,7 +582,18 @@ const Activity = ({ userAddress, pageAddress, isOwner }) => {
                     </td>
                   </tr>
                 )}
-                {!profileActivityLoading && profileActivityMapping}
+                {!profileActivityLoading && (!profileActivityMapping || profileActivityMapping?.length === 0) ? (
+                  <tr>
+                    <td colSpan={6}>
+                      <div className="profile-activity-not-found">
+                        <img src={notFound} alt="no activity" />
+                        <p>No activity found...</p>
+                      </div>
+                    </td>
+                  </tr>
+                ) : (
+                  profileActivityMapping
+                )}
                 {profileActivityLoadMore && (
                   <tr>
                     <td colSpan={6}>
