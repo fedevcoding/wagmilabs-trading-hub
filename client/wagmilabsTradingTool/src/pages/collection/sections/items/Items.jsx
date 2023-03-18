@@ -29,7 +29,7 @@ import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import getMarketplaceImage from "@Utils/marketplaceImageMapping";
 
 import flaggedImg from "@Assets/flagged.svg";
-import { BuyNowModal, RangeSelector, Row } from "@Components";
+import { BuyNowModal, Loader, RangeSelector, Row } from "@Components";
 import {
   useAddItemToCart,
   useBuyNow,
@@ -60,7 +60,8 @@ const Items = ({
   fetchMoreTokens,
 }) => {
   // sweep
-  const { sweepMode, toggleSweepMode, amountToSweep, setAmountToSweep, sweepPrice } = useSweep(items);
+  const { sweepMode, toggleSweepMode, amountToSweep, setAmountToSweep, sweepPrice, processSweep, sweepLoading } =
+    useSweep(items);
 
   const { refreshMetadata } = useRefreshMetadata(state => setRefreshingMetadata(state));
   const { userCartItems } = useContext(UserDataContext);
@@ -223,7 +224,7 @@ const Items = ({
         const marketplaceIcon = item?.market?.floorAsk?.source?.icon;
         const marketplaceUrl = item?.market?.floorAsk?.source?.url;
 
-        // const orderHash = item?.market?.floorAsk?.id;
+        const listingId = item?.market?.floorAsk?.id;
 
         let isListed = false;
         if (value) isListed = true;
@@ -343,7 +344,8 @@ const Items = ({
                                   image,
                                   marketplace,
                                   collectionName || collectionInfo?.name,
-                                  index
+                                  index,
+                                  listingId
                                 )
                           }
                         >
@@ -386,8 +388,12 @@ const Items = ({
             {sweepMode && (
               <>
                 <RangeSelector value={amountToSweep} onChange={setAmountToSweep} min={1} max={30} />
-                <Button width={"100%"} colorScheme="blue">
-                  {`Sweep | ${roundPrice2(sweepPrice)}ETH`}
+                <Button width={"100%"} colorScheme="blue" onClick={() => !sweepLoading && processSweep(sweepPrice)}>
+                  {sweepLoading ? (
+                    <Loader width={"20px"} height="20px" />
+                  ) : (
+                    <>{`Sweep | ${roundPrice2(sweepPrice)}ETH`}</>
+                  )}
                 </Button>
               </>
             )}
