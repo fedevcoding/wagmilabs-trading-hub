@@ -242,7 +242,7 @@ const Header = () => {
             <div className="bots-button header-links">
               <span>Bots</span>
 
-              <div className="bots-options-dropdown visible">
+              <div className="bots-options-dropdown invisible">
                 <div onClick={() => navigate("/bots/wallets")}>Wallets</div>
                 <div onClick={() => navigate("/bots/sniper")}>Sniper bot</div>
                 <div className="not-allowed">Minting bot</div>
