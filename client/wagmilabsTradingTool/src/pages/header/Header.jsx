@@ -231,7 +231,7 @@ const Header = () => {
       <header className="search-header">
         <img src={logoImage} onClick={() => navigate("/")} className="logo-image" alt="" />
 
-        <EthereumSearch />
+        <EthereumSearch isHeader={true} />
 
         <div className="header-links-container">
           <div>
