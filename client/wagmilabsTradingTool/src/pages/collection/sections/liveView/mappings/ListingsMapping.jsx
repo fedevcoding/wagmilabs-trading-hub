@@ -14,8 +14,9 @@ const ListingMapping = memo(({ listings, contractAddress, collectionImage, isLoa
     <>
       {isLoading ? (
         <div className="columns-loader">
-          <p>Loading...</p>
-          <LoadingSpinner />
+          <LoadingSpinner>
+            <p>Loading...</p>
+          </LoadingSpinner>
         </div>
       ) : (
         <>
