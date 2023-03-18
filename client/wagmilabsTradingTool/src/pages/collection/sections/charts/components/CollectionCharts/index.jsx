@@ -9,14 +9,16 @@ export const CollectionCharts = ({ activeChart, charts, collectionAddress, colle
           case charts[0].value:
             return <FloorChart collectionAddress={collectionAddress} />;
           case charts[1].value:
-            return <ListingChart collectionAddress={collectionAddress} />;
+            return <AvgPriceChart collectionAddress={collectionAddress} />;
           case charts[2].value:
-            return <OwnersChart collectionSlug={collectionSlug} />;
+            return <ListingChart collectionAddress={collectionAddress} />;
           case charts[3].value:
-            return <VolumeChart collectionAddress={collectionAddress} />;
+            return <OwnersChart collectionSlug={collectionSlug} />;
           case charts[4].value:
-            return <SalesChart collectionAddress={collectionAddress} />;
+            return <VolumeChart collectionAddress={collectionAddress} />;
           case charts[5].value:
+            return <SalesChart collectionAddress={collectionAddress} />;
+          case charts[6].value:
             return <AvgPriceChart collectionAddress={collectionAddress} />;
           default:
             return "inexistent chart";

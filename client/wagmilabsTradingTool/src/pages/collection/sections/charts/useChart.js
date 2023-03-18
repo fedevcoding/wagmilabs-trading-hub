@@ -6,6 +6,10 @@ const charts = [
     value: "floorPrice",
   },
   {
+    name: "Buyers/sellers",
+    value: "buyers/sellers",
+  },
+  {
     name: "Listings",
     value: "listings",
   },

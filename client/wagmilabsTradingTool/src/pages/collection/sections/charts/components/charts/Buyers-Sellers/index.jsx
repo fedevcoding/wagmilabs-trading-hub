@@ -1,0 +1,25 @@
+import React from "react";
+import { LoadingSpinner } from "@Components";
+import { HighchartsReact } from "highcharts-react-official";
+import Highcharts from "highcharts";
+import { useGetData } from "./useGetData";
+import ChartHeader from "./ChartHeader";
+import { useRange } from "./useRange";
+
+export function SalesChart({ collectionAddress }) {
+  const { setRange, range } = useRange();
+  const { chartOptions, isLoading } = useGetData(collectionAddress, range);
+
+  return (
+    <div className="sales-chart-section">
+      <ChartHeader setRange={setRange} range={range} />
+      {isLoading ? (
+        <LoadingSpinner>
+          <p>Loading chart...</p>
+        </LoadingSpinner>
+      ) : (
+        <HighchartsReact highcharts={Highcharts} options={chartOptions} />
+      )}
+    </div>
+  );
+}
