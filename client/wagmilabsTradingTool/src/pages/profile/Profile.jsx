@@ -25,7 +25,7 @@ import { UserDataContext } from "@Context";
 import copy from "copy-to-clipboard";
 import { useSetPageTitle } from "@Hooks";
 import { LoadingSpinner, ProfitCalcModal } from "@Components";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { placeholderImage } from "src/assets";
 
 const sortItemsOptions = [
@@ -35,6 +35,14 @@ const sortItemsOptions = [
 
 const Profile = () => {
   const { address: pageAddress } = useParams();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (pageAddress && (pageAddress.length !== 42 || !pageAddress.startsWith("0x"))) {
+      navigate("/notfound");
+    }
+  }, [pageAddress, navigate]);
+
   const { address } = useAccount();
   const ensName = useEnsName({ address: pageAddress });
 
