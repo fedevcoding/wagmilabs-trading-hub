@@ -55,7 +55,7 @@ const Header = () => {
           profileOptions?.classList?.remove("visible");
           profileOptions?.classList?.add("invisible");
         }
-      }, 200);
+      }, 100);
     }
     function profileClick() {
       profileOptions?.classList?.remove("visible");
@@ -85,6 +85,7 @@ const Header = () => {
     function calendarsMouseOver() {
       hovered = true;
       profileOptions?.classList?.remove("invisible");
+      calendarOptionContainer?.classList?.add("before");
     }
 
     function calendarsMouseOut() {
@@ -92,8 +93,9 @@ const Header = () => {
       setTimeout(() => {
         if (!hovered) {
           profileOptions?.classList?.add("invisible");
+          calendarOptionContainer?.classList?.remove("before");
         }
-      }, 300);
+      }, 200);
     }
 
     function calendarsClick() {
@@ -123,6 +125,7 @@ const Header = () => {
     calendarOptionContainer.addEventListener("mouseover", () => {
       hovered = true;
       profileOptions?.classList?.remove("invisible");
+      calendarOptionContainer?.classList?.add("before");
     });
 
     calendarOptionContainer.addEventListener("mouseout", () => {
@@ -130,8 +133,9 @@ const Header = () => {
       setTimeout(() => {
         if (!hovered) {
           profileOptions?.classList?.add("invisible");
+          calendarOptionContainer?.classList?.remove("before");
         }
-      }, 300);
+      }, 200);
     });
 
     calendarOptionContainer.addEventListener("click", () => {
@@ -223,7 +227,7 @@ const Header = () => {
     }
   }, [modalOpen]);
 
-  const isVolumesPage = window.location.pathname === "/volumes";
+  const section = window.location.pathname;
 
   return (
     <>
@@ -238,7 +242,7 @@ const Header = () => {
             <div className="bots-button header-links">
               <span>Bots</span>
 
-              <div className="bots-options-dropdown invisible">
+              <div className="bots-options-dropdown visible">
                 <div onClick={() => navigate("/bots/wallets")}>Wallets</div>
                 <div onClick={() => navigate("/bots/sniper")}>Sniper bot</div>
                 <div className="not-allowed">Minting bot</div>
@@ -247,15 +251,18 @@ const Header = () => {
             </div>
           </div>
           <div onClick={() => navigate("/volumes")}>
-            <div className={`${isVolumesPage ? "active" : ""} volumes-button header-links`}>Volumes</div>
+            <div className={`${section === "/volumes" ? "active" : ""} volumes-button header-links`}>Volumes</div>
           </div>
           <div>
-            <div className="pnl-button header-links" onClick={() => navigate("/profitandloss")}>
+            <div
+              className={`${section === "/profitandloss" ? "active" : ""} pnl-button header-links`}
+              onClick={() => navigate("/profitandloss")}
+            >
               <span>P&L</span>
             </div>
           </div>
           <div onClick={() => navigate("/feed")}>
-            <div className="feed-button header-links">Feed</div>
+            <div className={`${section === "/feed" ? "active" : ""} feed-button header-links`}>Feed</div>
           </div>
           <div>
             <div className="calendars-button header-links">
