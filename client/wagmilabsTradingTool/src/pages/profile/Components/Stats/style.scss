@@ -2,7 +2,23 @@
   margin-bottom: 3rem;
   .card-component {
     color: var(--text-color);
-    min-height: 430px;
+    min-height: 450px;
+
+    .tabs {
+      border: 1px solid var(--light-dark);
+      padding: 3px;
+      border-radius: 6px;
+      margin-bottom: 0;
+      .btn {
+        padding: 8px 0;
+        font-size: 12px;
+        width: 34px;
+        text-align: center;
+        &:last-child {
+          margin-right: 0;
+        }
+      }
+    }
   }
 
   .spinner {

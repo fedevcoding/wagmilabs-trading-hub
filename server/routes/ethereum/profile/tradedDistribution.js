@@ -6,7 +6,7 @@ const route = express();
 
 route.get("/", checkAuth, async (req, res) => {
   try {
-    const userAddress = "0x62fBD7F8D0668161710A0b463FD004cba42DA050"; // req.userDetails.address;
+    const userAddress = req.userDetails.address; // "0x62fBD7F8D0668161710A0b463FD004cba42DA050"
     const { days = "30" } = req.query;
 
     const today = new Date();
