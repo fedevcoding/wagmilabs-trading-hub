@@ -218,7 +218,7 @@ app.use("/api/v1/wagmilabs/personal", personalRoute);
 app.use("/api/v1/wagmilabs/spaces", spacesRoute);
 
 app.use("/api/v1/wagmilabs/userBalances", userBalancesRoute);
-app.use("/api/v1/wagmilabs/searchCollection", searchCollectionsRoute);
+app.use("/api/v1/wagmilabs/search", searchCollectionsRoute);
 app.use("/api/v1/wagmilabs/collectionInfo", collectionInfoRoute);
 app.use("/api/v1/wagmilabs/collection", tokenRoute);
 app.use("/api/v1/wagmilabs/collection", collectionHolders);

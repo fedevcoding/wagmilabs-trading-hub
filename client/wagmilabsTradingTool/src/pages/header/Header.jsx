@@ -231,7 +231,7 @@ const Header = () => {
       <header className="search-header">
         <img src={logoImage} onClick={() => navigate("/")} className="logo-image" alt="" />
 
-        <EthereumSearch />
+        <EthereumSearch isHeader={true} />
 
         <div className="header-links-container">
           <div>
@@ -285,9 +285,9 @@ const Header = () => {
           }}
         >
           <div className="pfp-options-container">
-            <img src={profileImage} alt="" className="pfp" onClick={() => navigate("/profile")} />
+            <img src={profileImage} alt="" className="pfp" onClick={() => navigate(`/profile/${address}`)} />
             <div className="profile-options invisible">
-              <div onClick={() => navigate("/profile")} className="pfp-icon-container">
+              <div onClick={() => navigate(`/profile/${address}`)} className="pfp-icon-container">
                 <i className="fa-solid fa-circle-user"></i>
                 <p>Profile</p>
               </div>
