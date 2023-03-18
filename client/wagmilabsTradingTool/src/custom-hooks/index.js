@@ -1,3 +1,5 @@
+export * from "./stats";
+
 export { useFirstRender } from "./useFirstRender";
 export { useAddItemToCart } from "./useAddItemToCart";
 export { useBuyNow } from "./useBuyNow";
@@ -23,4 +25,3 @@ export { useCopy } from "./useCopy";
 export { useGetWallets } from "./useGetWallets";
 export { useOnClickOutside } from "./useOnClickOutside";
 export { useGetItems } from "./useGetItems";
-export { useGetHoldingNftDistribution } from "./useGetHoldingNftDistribution";

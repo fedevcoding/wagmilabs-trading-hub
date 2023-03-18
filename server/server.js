@@ -17,6 +17,7 @@ const removeRefreshTokenRoute = require("./routes/ethereum/removeRefreshTokenRou
 const getWatchListRoute = require("./routes/ethereum/getWatchListRoute.js");
 const profileItemsRoute = require("./routes/ethereum/profile/profileItemsRoute");
 const holdingNftDistributionRoute = require("./routes/ethereum/profile/holdingNftDistribution");
+const tradedDistributionRoute = require("./routes/ethereum/profile/tradedDistribution");
 const collectionInfoRoute = require("./routes/ethereum/collections/collectionInfoRoute.js");
 const updateUserCartRoute = require("./routes/ethereum/profile/updateUserCartRoute.js");
 const emptyCartRoute = require("./routes/ethereum/profile/emptyCartRoute.js");
@@ -219,6 +220,7 @@ app.use("/api/v1/wagmilabs/collection", collectionHolders);
 
 app.use("/api/v1/wagmilabs/profileItems", profileItemsRoute);
 app.use("/api/v1/wagmilabs/holdingNftDistribution", holdingNftDistributionRoute);
+app.use("/api/v1/wagmilabs/tradedDistribution", tradedDistributionRoute);
 app.use("/api/v1/wagmilabs/profileCollections", profileCollectionsRoute);
 app.use("/api/v1/wagmilabs/getWatchList", getWatchListRoute);
 app.use("/api/v1/wagmilabs/trending", trendingRoute);
