@@ -9,11 +9,11 @@ import { NoDataFound } from "../..";
 
 export const ListingChart = ({ collectionAddress }) => {
   const { range, setRange } = useRange();
-  const { isLoading, chartOptions, hasNoData } = useGetData({ range, collectionAddress });
+  const { isLoading, chartOptions, hasNoData, chartType, setChartType } = useGetData({ range, collectionAddress });
 
   return (
     <div className="listings-chart-section">
-      <ChartHeader setRange={setRange} range={range} />
+      <ChartHeader setRange={setRange} range={range} chartType={chartType} setChartType={setChartType} />
       {isLoading ? (
         <LoadingSpinner margin="50px 0 0 0">
           <p>Loading chart...</p>

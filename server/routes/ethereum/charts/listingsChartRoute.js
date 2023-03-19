@@ -20,6 +20,8 @@ listingChartRoute.get("/listings", async (req, res) => {
     const allZero = data.every(item => item.todayListed === 0 && item.totalListed === 0);
     if (allZero) throw new Error("No data found");
 
+    data.sort((a, b) => new Date(a.processedAt).getTime() - new Date(b.processedAt).getTime());
+
     res.status(200).json(data);
   } catch (error) {
     res.status(500).json({ error: error.message });
