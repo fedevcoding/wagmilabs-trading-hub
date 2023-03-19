@@ -104,13 +104,18 @@
 }
 
 
-
+.collection-item-filter-sweep{
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-top: 5px;
+}
 
 .collection-item-filter-buynow{
     display: flex;
     align-items: center;
     gap: 20px;
-    /* margin-top: 25px; */
+    margin-top: 15px;
 }
 
 .collection-items-empty{

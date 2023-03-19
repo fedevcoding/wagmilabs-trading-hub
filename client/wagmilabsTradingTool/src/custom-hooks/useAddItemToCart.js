@@ -9,23 +9,13 @@ export const useAddItemToCart = (address, callback) => {
   let addItemToCart = null;
 
   try {
-    addItemToCart = async (
-      name,
-      tokenId,
-      price,
-      image,
-      marketplace,
-      collectionName,
-      index,
-      listingId
-    ) => {
+    addItemToCart = async (name, tokenId, price, image, marketplace, collectionName, index, listingId) => {
       if (
         userCartItems.find(
           i =>
             i.contractAddress === address &&
             i.tokenId.toString() === tokenId.toString() &&
-            ((!i.listingId && !listingId) ||
-              i.listingId.toLowerCase() === listingId.toLowerCase())
+            ((!i.listingId && !listingId) || i.listingId.toLowerCase() === listingId.toLowerCase())
         )
       ) {
         toast({

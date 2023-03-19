@@ -1,15 +1,6 @@
 import { baseUrl } from "@Variables";
 
-async function addToCart({
-  name,
-  collectionName,
-  tokenId,
-  price,
-  image,
-  marketplace,
-  contractAddress,
-  listingId,
-}) {
+async function addToCart({ name, collectionName, tokenId, price, image, marketplace, contractAddress, listingId }) {
   try {
     let res = await fetch(`${baseUrl}/updateUserCart`, {
       method: "POST",
