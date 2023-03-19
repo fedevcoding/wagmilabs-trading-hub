@@ -10,6 +10,7 @@ import {
   Checkbox,
   Accordion,
   AccordionButton,
+  Button as ChakraButton,
   AccordionItem,
   AccordionIcon,
   Box,
@@ -432,9 +433,9 @@ const Items = ({
               </Checkbox>
             </div>
 
-            <Button colorScheme={"blue"} onClick={applyChanges} className="collection-item-filter-apply">
+            <ChakraButton colorScheme={"blue"} onClick={applyChanges} className="collection-item-filter-apply">
               Apply
-            </Button>
+            </ChakraButton>
           </div>
 
           <hr className="collection-item-filter-hr" />
