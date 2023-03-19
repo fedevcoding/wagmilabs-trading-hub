@@ -1,7 +1,7 @@
 require("dotenv").config();
 const TRANSPOSE_API = process.env.TRANSPOSE_API;
 
-const execTranseposeAPI = async (sql) => {
+const execTranseposeAPI = async sql => {
   let result = await fetch("https://api.transpose.io/sql", {
     method: "POST",
     headers: {
