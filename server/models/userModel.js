@@ -15,7 +15,7 @@ const cartSchema = new mongoose.Schema({
   },
   listingId: {
     type: String,
-    // required: true
+    required: true,
   },
   contractAddress: {
     type: String,

@@ -59,20 +59,7 @@ const Leaderboard = React.memo(({ address }) => {
                         </Tooltip>
                       </th>
                       <th>Total gains</th>
-                      <th>
-                        <Tooltip
-                          label={"This value only considers the value of nfts without considering cryptocurrencies"}
-                          closeOnClick={false}
-                          hasArrow
-                          fontSize="xs"
-                          bg="black"
-                          color={"white"}
-                          placement="top"
-                          borderRadius={"7px"}
-                        >
-                          Portfolio value
-                        </Tooltip>
-                      </th>
+                      <th>Portfolio value</th>
                     </tr>
                   </thead>
                   <tbody>

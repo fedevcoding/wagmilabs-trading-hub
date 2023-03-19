@@ -16,3 +16,4 @@ export { TimeAgo } from "./TimeAgo";
 export { Card } from "./Card";
 export { Number } from "./Number";
 export { ActionModal } from "./ActionModal";
+export { RangeSelector } from "./RangeSelector";

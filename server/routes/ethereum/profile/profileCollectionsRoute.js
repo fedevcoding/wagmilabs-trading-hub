@@ -1,17 +1,18 @@
-const express = require("express")
-const checkAuth = require("../../../middleware/checkAuth")
-const { execTranseposeAPI } = require("../../../services/externalAPI/transpose")
+const express = require("express");
+const checkAuth = require("../../../middleware/checkAuth");
+const { execTranseposeAPI } = require("../../../services/externalAPI/transpose");
 
-const profileCollectionsRoute = express()
+const profileCollectionsRoute = express();
 
+profileCollectionsRoute.get("/", checkAuth, async (req, res) => {
+  try {
+    const userAddress = req.query?.address || req.userDetails?.address;
 
-profileCollectionsRoute.get("/", checkAuth, async (req, res)=> {
+    if (!userAddress) throw new Error("Missing user address.");
 
-    try{
-        const userAddress = req.userDetails.address
-        const {search, offset, limit} = req.query
+    const { search, offset, limit } = req.query;
 
-        const sql = `SELECT c.contract_address, c.name, c.image_url, SUM(nft_o.balance) AS amount 
+    const sql = `SELECT c.contract_address, c.name, c.image_url, SUM(nft_o.balance) AS amount 
         FROM ethereum.collections c 
         INNER JOIN ethereum.nft_owners nft_o 
         ON c.contract_address = nft_o.contract_address 
@@ -20,18 +21,15 @@ profileCollectionsRoute.get("/", checkAuth, async (req, res)=> {
         GROUP BY c.contract_address 
         ORDER BY c.last_refreshed DESC 
         OFFSET ${offset}
-        LIMIT ${limit};`
+        LIMIT ${limit};`;
 
-        const collections = await execTranseposeAPI(sql)
+    const collections = await execTranseposeAPI(sql);
 
-        res.status(200).json({collections, ok: true})
-    }
-    catch(e){
-        console.log(e)
-        res.status(400).json({ok: false, userCollections})
-    }
+    res.status(200).json({ collections, ok: true });
+  } catch (e) {
+    console.log(e);
+    res.status(400).json({ ok: false });
+  }
+});
 
-})
-
-
-module.exports = profileCollectionsRoute
+module.exports = profileCollectionsRoute;

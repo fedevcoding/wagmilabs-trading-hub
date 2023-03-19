@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState, useRef } from "react";
 import "./profile.css";
 import { baseUrl } from "@Variables";
 import Nfts from "./sections/nfts/Nfts";
-import Activity from "./sections/activity/Activity";
+import Activity from "./sections/activity/Activity.jsx";
 import { Portal } from "react-portal";
 import { formatAddress } from "@Utils/formats/formats";
 import { useAccount, useEnsName } from "wagmi";
@@ -24,7 +24,9 @@ import { UserDataContext } from "@Context";
 
 import copy from "copy-to-clipboard";
 import { useSetPageTitle } from "@Hooks";
-import { ProfitCalcModal } from "@Components";
+import { LoadingSpinner, ProfitCalcModal } from "@Components";
+import { useNavigate, useParams } from "react-router-dom";
+import { placeholderImage } from "src/assets";
 
 const sortItemsOptions = [
   { value: "desc", label: "Newest" },
@@ -32,8 +34,23 @@ const sortItemsOptions = [
 ];
 
 const Profile = () => {
+  const { address: pageAddress } = useParams();
+  const navigate = useNavigate();
+
+  const [profileImageUrl] = useState(window.location.search?.replace("?image=", ""));
+
+  console.log(profileImageUrl);
+
+  useEffect(() => {
+    if (pageAddress && (pageAddress.length !== 42 || !pageAddress.startsWith("0x"))) {
+      navigate("/notfound");
+    }
+  }, [pageAddress, navigate]);
+
   const { address } = useAccount();
-  const ensName = useEnsName({ address });
+  const ensName = useEnsName({ address: pageAddress });
+
+  const [isOwner] = useState(pageAddress?.toLowerCase() === address?.toLowerCase());
 
   const { listingSettings, setListingSettings, profileImage, setProfileImage } = useContext(UserDataContext);
 
@@ -42,7 +59,6 @@ const Profile = () => {
   const [pnl, setPnl] = useState({});
   const [userEns] = useState(ensName?.data);
   const [collections, setCollections] = useState([]);
-  const [activityTransactions, setActivityTransactions] = useState([]);
   const [section, setSection] = useState("nft");
   const [loadingData, setLoadingData] = useState(true);
   const [loadingNfts, setLoadingNfts] = useState(true);
@@ -83,12 +99,15 @@ const Profile = () => {
 
   async function fetchUserCollections(query, offset, limit) {
     try {
-      let data = await fetch(`${baseUrl}/profileCollections?search=${query}&offset=${offset}&limit=${limit}`, {
-        headers: {
-          "Content-Type": "application/json",
-          "x-auth-token": localStorage.jsonwebtoken,
-        },
-      });
+      let data = await fetch(
+        `${baseUrl}/profileCollections?search=${query}&offset=${offset}&limit=${limit}&address=${pageAddress}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "x-auth-token": localStorage.jsonwebtoken,
+          },
+        }
+      );
       data = await data.json();
 
       const { collections } = data;
@@ -105,7 +124,7 @@ const Profile = () => {
 
       const continuationFilter = nftsContinuation.current ? `&continuation=${nftsContinuation.current}` : "";
       let data = await fetch(
-        `${baseUrl}/profileItems?sortDirection=${selectedSortOption.value}&collection=${nftsCollectionFilter}${continuationFilter}`,
+        `${baseUrl}/profileItems?sortDirection=${selectedSortOption.value}&collection=${nftsCollectionFilter}&address=${pageAddress}${continuationFilter}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -130,7 +149,7 @@ const Profile = () => {
     try {
       setLoadingNfts(true);
       let data = await fetch(
-        `${baseUrl}/profileItems?sortDirection=${selectedSortOption.value}&collection=${nftsCollectionFilter}`,
+        `${baseUrl}/profileItems?sortDirection=${selectedSortOption.value}&collection=${nftsCollectionFilter}&address=${pageAddress}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -155,7 +174,7 @@ const Profile = () => {
   async function fetchUserData() {
     try {
       setLoadingData(true);
-      const res = await fetch(`${baseUrl}/profileStats/${address}`, {
+      const res = await fetch(`${baseUrl}/profileStats?address=${pageAddress}`, {
         headers: {
           "x-auth-token": localStorage.jsonwebtoken,
         },
@@ -567,7 +586,7 @@ const Profile = () => {
       <section className="profile-section-container">
         <div className="profile-container">
           <div className="profileDetails">
-            <img className="profilePfp" src={profileImage} alt="" />
+            <img className="profilePfp" src={isOwner ? profileImage : profileImageUrl || placeholderImage} alt="" />
             <div className="profile-ens-address">
               {userEns && (
                 <Tooltip
@@ -584,9 +603,9 @@ const Profile = () => {
                 </Tooltip>
               )}
 
-              <span>{userAddress && userEns && "/"}</span>
+              <span>{pageAddress && userEns && "/"}</span>
 
-              {userAddress && (
+              {pageAddress && (
                 <Tooltip
                   closeOnClick={false}
                   hasArrow
@@ -597,8 +616,8 @@ const Profile = () => {
                   placement="top"
                   borderRadius={"7px"}
                 >
-                  <span onClick={() => copyData("address", userAddress)} className="profile-address-copy">
-                    {formatAddress(userAddress)}
+                  <span onClick={() => copyData("address", pageAddress)} className="profile-address-copy">
+                    {formatAddress(pageAddress)}
                   </span>
                 </Tooltip>
               )}
@@ -607,17 +626,35 @@ const Profile = () => {
             <div className="profile-details-container">
               <div className="single-profile-detail">
                 <div>NFTs</div>
-                <p>{loadingData ? <Spinner /> : pnl?.nfts || 0}</p>
+                <p>
+                  {loadingData ? (
+                    <LoadingSpinner width="15px" height="15px" padding="0" margin="10px 0 0 0" />
+                  ) : (
+                    pnl?.nfts || 0
+                  )}
+                </p>
               </div>
 
               <div className="single-profile-detail">
                 <div>Unique colletions</div>
-                <p>{loadingData ? <Spinner /> : pnl?.collections || 0}</p>
+                <p>
+                  {loadingData ? (
+                    <LoadingSpinner width="15px" height="15px" padding="0" margin="10px 0 0 0" />
+                  ) : (
+                    pnl?.collections || 0
+                  )}
+                </p>
               </div>
 
               <div className="single-profile-detail">
                 <div>NFT transactions</div>
-                <p>{loadingData ? <Spinner /> : pnl?.totalTxs || 0}</p>
+                <p>
+                  {loadingData ? (
+                    <LoadingSpinner width="15px" height="15px" padding="0" margin="10px 0 0 0" />
+                  ) : (
+                    pnl?.totalTxs || 0
+                  )}
+                </p>
               </div>
             </div>
           </div>
@@ -626,24 +663,42 @@ const Profile = () => {
             <div className="number-profits-losses">
               <p>
                 Mint count
-                <div className="nft-pnl-profit">{loadingData ? <Spinner /> : pnl?.mintCount || 0}</div>
+                <div className="nft-pnl-profit">
+                  {loadingData ? (
+                    <LoadingSpinner width="15px" height="15px" padding="0" margin="10px 0 0 0" />
+                  ) : (
+                    pnl?.mintCount || 0
+                  )}
+                </div>
               </p>
 
               <p>
                 Bought count
-                <div className="nft-pnl-profit">{loadingData ? <Spinner /> : pnl?.boughtCount || 0}</div>
+                <div className="nft-pnl-profit">
+                  {loadingData ? (
+                    <LoadingSpinner width="15px" height="15px" padding="0" margin="10px 0 0 0" />
+                  ) : (
+                    pnl?.boughtCount || 0
+                  )}
+                </div>
               </p>
 
               <p>
                 Sold count
-                <div className="nft-pnl-profit">{loadingData ? <Spinner /> : pnl?.soldCount || 0}</div>
+                <div className="nft-pnl-profit">
+                  {loadingData ? (
+                    <LoadingSpinner width="15px" height="15px" padding="0" margin="10px 0 0 0" />
+                  ) : (
+                    pnl?.soldCount || 0
+                  )}
+                </div>
               </p>
 
               <p>
                 Sold value
                 <div className="nft-pnl-profit">
                   {loadingData ? (
-                    <Spinner />
+                    <LoadingSpinner width="15px" height="15px" padding="0" margin="10px 0 0 0" />
                   ) : (
                     <>
                       {pnl?.soldValue || 0}
@@ -659,7 +714,7 @@ const Profile = () => {
                 NFTs avg. value
                 <div className="nft-pnl-profit">
                   {loadingData ? (
-                    <Spinner />
+                    <LoadingSpinner width="15px" height="15px" padding="0" margin="10px 0 0 0" />
                   ) : (
                     <span className={"nft-pnl-profit"}>
                       {Math.round(pnl.nftsValue * 1000) / 1000 || 0}
@@ -672,7 +727,7 @@ const Profile = () => {
                 Realized P&L
                 <div>
                   {loadingData ? (
-                    <Spinner />
+                    <LoadingSpinner width="15px" height="15px" padding="0" margin="10px 0 0 0" />
                   ) : (
                     <>
                       <span
@@ -689,7 +744,7 @@ const Profile = () => {
                 Wallet volume
                 <div>
                   {loadingData ? (
-                    <Spinner />
+                    <LoadingSpinner width="15px" height="15px" padding="0" margin="10px 0 0 0" />
                   ) : (
                     <>
                       <span className={"nft-pnl-profit"}>
@@ -739,9 +794,11 @@ const Profile = () => {
                 Calcs<i className="fa-solid fa-calculator"></i>
               </span>
               <ProfitCalcModal isOpen={isOpen} setIsOpen={setIsOpen} />
-              <div className="profile-settings-button" onClick={() => toggleListingSettings(true)}>
-                Smart list settings<i className="fa-solid fa-gear"></i>
-              </div>
+              {isOwner && (
+                <div className="profile-settings-button" onClick={() => toggleListingSettings(true)}>
+                  Smart list settings<i className="fa-solid fa-gear"></i>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -759,42 +816,20 @@ const Profile = () => {
                 setSearchCollectionText={setSearchCollectionText}
                 selectedSortOption={selectedSortOption}
                 setSelectedSortOption={setSelectedSortOption}
-                activityTransactions={activityTransactions}
                 userItems={userItems}
                 setProfileImage={setProfileImage}
                 collections={collections}
                 loadingNfts={loadingNfts}
                 listingSettings={listingSettings}
+                isOwner={isOwner}
               />
             );
           } else if (section === "activity") {
-            return (
-              <Activity
-                activityTransactions={activityTransactions}
-                setActivityTransactions={setActivityTransactions}
-                userAddress={userAddress}
-              />
-            );
+            return <Activity userAddress={userAddress} pageAddress={pageAddress} isOwner={isOwner} />;
           }
         })()}
       </section>
     </>
-  );
-};
-
-const Spinner = () => {
-  return (
-    <div className="loader-container">
-      <svg
-        className="profile-spinner"
-        width="65px"
-        height="65px"
-        viewBox="0 0 66 66"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <circle className="path" fill="none" strokeWidth="6" strokeLinecap="round" cx="33" cy="33" r="30"></circle>
-      </svg>
-    </div>
   );
 };
 

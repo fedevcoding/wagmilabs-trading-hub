@@ -46,7 +46,7 @@ export const Row = React.memo(({ h, i }) => {
       </td>
       <td className="portfolio-value">
         <Tooltip
-          label={"Includes Crypto & NFTs"}
+          label={"Total value of NFTs held"}
           closeOnClick={false}
           hasArrow
           fontSize="xs"
