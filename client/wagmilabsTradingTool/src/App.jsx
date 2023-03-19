@@ -47,6 +47,7 @@ import Legals from "./pages/Legal/Legals";
 import { serverUrl } from "@Variables";
 import { Calendar } from "./pages/calendar/Calendar";
 import Pnl from "./pages/pnl/Pnl";
+import BulkListing from "./pages/bulkListing/BulkListing";
 
 // for wagmi
 
@@ -396,6 +397,18 @@ function App() {
                                   <>
                                     <Header />
                                     <Profile />
+                                    <Footer />
+                                  </>
+                                }
+                              />
+
+                              <Route
+                                exact
+                                path="/profile/bulk-listing"
+                                element={
+                                  <>
+                                    <Header />
+                                    <BulkListing />
                                     <Footer />
                                   </>
                                 }

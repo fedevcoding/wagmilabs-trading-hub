@@ -19,6 +19,7 @@ import { useNavigate } from "react-router-dom";
 import { useListNft } from "@Hooks";
 import { generateRandomRangeInt } from "@Utils/formats/utils";
 import { ItemBanner } from "src/pages/collection/sections/banners/ItemBanner";
+import { useBulk } from "./useBulk";
 
 const sortItemsOptions = [
   { value: "desc", label: "Newest" },
@@ -42,6 +43,9 @@ const Nfts = ({
   setSearchCollectionText,
   isOwner,
 }) => {
+  const { bulkActive, bulkItems, toggleBulk, changeBulkItems, clearAllBulkItems, selectAllBulkItems } =
+    useBulk(userItems);
+
   const [isOpenTransferModal, setIsOpenTransferModal] = useState(false);
   const [TransferModalDetails, setTransferModalDetails] = useState(null);
 
@@ -57,9 +61,6 @@ const Nfts = ({
 
   const [quickListData, setQuickListData] = useState({});
   const [showQuickListingModal, setShowQuickListingModal] = useState(false);
-
-  const [selectBulk, setSelectBulk] = useState(false);
-  const [bulkItems, setBulkItems] = useState([]);
 
   const [showSortItemsOptions, setShowSortItemsOptions] = useState(false);
 
@@ -123,12 +124,6 @@ const Nfts = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userItems]);
 
-  useEffect(() => {
-    if (!selectBulk) {
-      setBulkItems([]);
-    }
-  }, [selectBulk]);
-
   const handleFilterCollection = (collectionAddress, e) => {
     if (collectionAddress?.toLowerCase() === nftsCollectionFilter?.toLowerCase()) {
       setNftsCollectionFilter("");
@@ -177,48 +172,6 @@ const Nfts = ({
 
   const closeAllOptions = () => {
     document.querySelectorAll(".single-nft-options").forEach(el => el.classList.add("invisible"));
-  };
-
-  const changeBulk = state => {
-    setSelectBulk(state);
-  };
-
-  const changeBulkItems = (contractAddress, tokenId, id, e) => {
-    const container = e.target.parentNode.parentNode;
-
-    let contains = false;
-    bulkItems.forEach(item => {
-      if (item.id === id) contains = true;
-    });
-
-    if (contains) {
-      const filteredBulks = bulkItems.filter(item => item.id !== id);
-      container.classList.remove("profile-single-item-bulk-selected");
-      setBulkItems(filteredBulks);
-    } else {
-      container.classList.add("profile-single-item-bulk-selected");
-      setBulkItems(prev => [...prev, { contractAddress, tokenId, id }]);
-    }
-  };
-
-  const selectAllBulkItems = () => {
-    userItems.forEach((item, index) => {
-      const contractAddress = item?.token?.contract;
-      const tokenId = item?.token?.tokenId;
-
-      const id = contractAddress + tokenId;
-      const e = {
-        target: document.querySelectorAll(".profile-single-item-image")[index],
-      };
-
-      changeBulkItems(contractAddress, tokenId, id, e);
-    });
-  };
-  const clearAllBulkItems = () => {
-    setBulkItems([]);
-    document
-      .querySelectorAll(".profile-single-item-bulk-selected")
-      .forEach(el => el.classList.remove("profile-single-item-bulk-selected"));
   };
 
   const toggleSortOptions = () => {
@@ -295,11 +248,14 @@ const Nfts = ({
 
         const collectionImage = item?.token?.collection?.imageUrl;
         const collectionName = item?.token?.collection?.name;
-        const floor_price = item?.token?.collection?.floorAskPrice;
+        const floorPrice = item?.token?.collection?.floorAskPrice;
 
         const isLast = index === userItems.length - 1;
 
-        const id = contractAddress + tokenId;
+        const id = `${contractAddress}:${tokenId}`;
+
+        const itemData = { id, name, collectionName, image, contractAddress, tokenId, floorPrice };
+        const isSelected = bulkActive ? bulkItems.find(bulk => bulk.id === id) : false;
 
         return (
           <>
@@ -308,9 +264,12 @@ const Nfts = ({
               key={id}
               onMouseOver={() => activateList(index)}
               onMouseOut={() => deactivateList(index)}
+              onClick={() => bulkActive && changeBulkItems(itemData, isSelected)}
             >
               <div
-                className={`${selectBulk ? "profile-items-details-container-bulk" : "profile-items-details-container"}`}
+                className={`${
+                  bulkActive ? "profile-items-details-container-bulk" : "profile-items-details-container"
+                } ${isSelected && "profile-single-item-bulk-selected"}`}
               >
                 <div className="image-hover-overflow">
                   <img
@@ -318,13 +277,9 @@ const Nfts = ({
                     onError={e => (e.currentTarget.src = placeholderImage)}
                     alt=""
                     className={`profile-single-item-image ${
-                      selectBulk ? "single-item-image" : "single-item-image-scale"
+                      bulkActive ? "single-item-image" : "single-item-image-scale"
                     }`}
-                    onClick={e =>
-                      selectBulk
-                        ? changeBulkItems(contractAddress, tokenId, id, e)
-                        : navigate(`/item/${contractAddress}/${tokenId}`)
-                    }
+                    onClick={() => !bulkActive && navigate(`/item/${contractAddress}/${tokenId}`)}
                   />
                   {rarityRank && (
                     <div className="profile-items-rarity-box">
@@ -340,7 +295,7 @@ const Nfts = ({
                   )}
                 </div>
 
-                {isOwner && (
+                {isOwner && !bulkActive && (
                   <div className="option-button" onClick={() => toggleOptions(index)}>
                     <i className="fa-regular fa-ellipsis item-option-button"></i>
 
@@ -382,17 +337,15 @@ const Nfts = ({
                 <div className="profile-item-stats">
                   <div className="profile-item-name-stats">
                     <p className="single-item-name">{name || tokenId}</p>
-                    {/* <p className='single-item-collection-name'>{collectionName}</p> */}
-                    <p className="single-item-rarity">Floor price: {floor_price && roundPrice(floor_price)} ETH</p>
+                    <p className="single-item-rarity">Floor price: {floorPrice && roundPrice(floorPrice)} ETH</p>
                   </div>
                   <hr></hr>
-                  {/* getListingInfo(tokenId, contractAddress, floor_price) */}
 
                   <div
                     className="profile-list-nft inactive"
-                    onClick={() => isOwner && openSmartListingModal(tokenId, contractAddress, floor_price)}
+                    onClick={() => isOwner && openSmartListingModal(tokenId, contractAddress, floorPrice)}
                   >
-                    {isOwner && (
+                    {isOwner && !bulkActive && (
                       <>
                         <i className="fa-solid fa-tag"></i>
                         <span>Smart list</span>
@@ -418,7 +371,7 @@ const Nfts = ({
         );
       }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [userItems, bulkItems, selectBulk, isOpenTransferModal]
+    [userItems, bulkItems, bulkActive, isOpenTransferModal]
   );
 
   return (
@@ -520,15 +473,12 @@ const Nfts = ({
             </div>
           </div>
           {isOwner &&
-            (selectBulk ? (
-              <div className="profile-item-bulk-list-transfer-cancel" onClick={() => changeBulk(false)}>
+            (bulkActive ? (
+              <div className="profile-item-bulk-list-transfer-cancel" onClick={() => toggleBulk(false)}>
                 Cancel
               </div>
             ) : (
-              <div
-                className="profile-item-bulk-list-transfer not-allowed"
-                // onClick={() => changeBulk(true)}
-              >
+              <div className="profile-item-bulk-list-transfer" onClick={() => toggleBulk(true)}>
                 Bulk list / transfer
               </div>
             ))}
@@ -547,7 +497,7 @@ const Nfts = ({
         </div>
       ) : (
         <div className="profile-items-container">
-          {selectBulk && (
+          {bulkActive && (
             <>
               <div className="nfts-bulk-information-container">
                 <div>{bulkItems.length} item selected</div>
@@ -562,7 +512,12 @@ const Nfts = ({
                       Select All
                     </button>
                   )}
-                  <button className="nfts-bulk-information-list-button">List</button>
+                  <button
+                    className="nfts-bulk-information-list-button"
+                    onClick={() => navigate("/profile/bulk-listing", { state: { bulkItems } })}
+                  >
+                    List
+                  </button>
                   <button className="nfts-bulk-information-transfer-button">Transfer</button>
                 </div>
               </div>
