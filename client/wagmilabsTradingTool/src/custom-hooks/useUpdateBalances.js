@@ -9,12 +9,13 @@ export const useUpdateBalance = address => {
   const { setUserBalances } = useContext(UserDataContext);
 
   useEffect(() => {
-    if (isConnected && address) {
+    if (isConnected && address && typeof updateBalance === "function") {
       updateBalance(address, setUserBalances);
     }
   }, [isConnected, setUserBalances, address]);
 
   const updateBalance = async (address, setUserBalances) => {
+    if (typeof setUserBalances !== "function") return;
     try {
       let userBalances = await fetch(`${baseUrl}/userBalances`, {
         headers: {

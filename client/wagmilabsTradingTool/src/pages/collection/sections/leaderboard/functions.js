@@ -1,44 +1,32 @@
 export function getListSort() {
   return [
     {
-      value: "collection_gains_1d",
-      label: "Collection gains 1d",
-    },
-    {
-      value: "collection_gains_7d",
-      label: "Collection gains 7d",
-    },
-    {
-      value: "collection_gains_30d",
-      label: "Collection gains 30d",
-    },
-    {
       value: "collection_gains_all_time",
-      label: "Collection gains all time",
+      label: "Top Profit takers",
     },
     {
       value: "collection_volume_wei_1d",
-      label: "Collection volume 1d",
+      label: "Top Volume creators (1D)",
     },
     {
       value: "collection_volume_wei_7d",
-      label: "Collection volume 7d",
+      label: "Top Volume creators (7D)",
     },
     {
       value: "collection_volume_wei_30d",
-      label: "Collection volume 30d",
+      label: "Top Volume creators (30D)",
     },
     {
       value: "collection_volume_wei_all_time",
-      label: "Collection volume all time",
+      label: "Top Volume creators (All Time)",
     },
     {
       value: "collection_assets_owned",
-      label: "Collection assets owned",
+      label: "Top Holders",
     },
     {
       value: "collection_portfolio_wei",
-      label: "Collection portfolio volume",
+      label: "Portfolio Value",
     },
   ];
 }

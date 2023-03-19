@@ -77,8 +77,10 @@ export const WalletModal = ({ walletModalOpen, closeWalletModal }) => {
   async function getProvider() {
     const currentProvider = await connector?.getProvider();
 
-    const proivder = new ethers.providers.Web3Provider(currentProvider);
-    setProvider(proivder);
+    if (currentProvider) {
+      const proivder = new ethers.providers.Web3Provider(currentProvider);
+      setProvider(proivder);
+    }
   }
 
   const closeSwapModal = e => {

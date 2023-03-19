@@ -57,7 +57,7 @@ route.get("/:address", checkAuth, (req, res) => {
           transfer.token_id, transfer.quantity as quantity_minted, transfer.timestamp as minted_timestamp,
           s.timestamp, s.usd_price, s.eth_price, s.royalty_fee, s.platform_fee, s.transaction_hash
           FROM (
-              SELECT (max(t.transaction_fee) / count(token_id)) as mint_tx_fee, transfer.contract_address, transfer.transaction_hash as minted_transaction_hash
+              SELECT (max(t.transaction_fee) / count(token_id)) as mint_tx_fee, (max(t.value) / count(token_id)) as mint_tx_price, transfer.contract_address, transfer.transaction_hash as minted_transaction_hash
               FROM ethereum.nft_transfers transfer
               INNER JOIN ethereum.transactions t ON t.transaction_hash = transfer.transaction_hash
               WHERE transfer.to_address = '${address}' and transfer.category = 'mint' AND transfer.timestamp <= '${end}'
@@ -78,9 +78,11 @@ route.get("/:address", checkAuth, (req, res) => {
       const nftsMinted = getNftMintedObj(minted);
       const txsGasFees = await getTxsGasFees(nfts);
 
-      res.status(200).json(getPAndLData(nfts.concat(nftsMinted), formatApprovalGasFees(approvalGasFees), txsGasFees));
+      const result = getPAndLData(nfts.concat(nftsMinted), formatApprovalGasFees(approvalGasFees), txsGasFees);
+
+      res.status(200).json(result);
     } catch (e) {
-      console.log("err", e);
+      console.log(e);
       res.status(500).json({ error: e });
     }
   }

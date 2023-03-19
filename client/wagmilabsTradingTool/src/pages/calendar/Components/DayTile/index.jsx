@@ -15,33 +15,20 @@ const dayClass = d => {
   }
 };
 
-const renderEvents = (events) => (
-  events.map((event,index) => {
-    if(index < 2) return renderEventName(event)
-  })
-)
+const renderEventName = event => <div className="day-event-name">{event?.collectionName || event?.eventName}</div>;
 
-const renderEventName = (event) => (
-    <div className="day-event-name">
-      {event?.collectionName || event?.eventName}
-    </div>
-  );
-
-export const DayTile = ({
-  day,
-  index,
-  startIdx,
-  showSelectedDate,
-  events,
-}) => {
-  return(
+export const DayTile = ({ day, index, startIdx, showSelectedDate, events }) => {
+  return (
     <div
       key={day.date.getDate().toString()}
       className={dayClass(day)}
       onClick={() => showSelectedDate(day, index + startIdx)}
     >
       <div>{day.date.getDate()}</div>
-      {renderEvents(events)}
-      {events.length >2 && <div>{`+ ${events.length - 2} more`}</div>}
+      {events.map(e => {
+        return renderEventName(e);
+      })}
+      {events.length > 2 && <div>{`+ ${events.length - 2} more`}</div>}
     </div>
-)}
+  );
+};

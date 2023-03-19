@@ -40,29 +40,27 @@ tokenRoute.get("/:address/token/:id/activities", checkAuth, async (req, res) => 
   let { types, continuation } = req.query;
   let tokenActivities = {};
 
-  if (!["sale", "ask", "mint", "bid", "bid_cancel", "ask_cancel"].includes(types)) {
-    types = null;
-  }
-
   const params = {};
-  if (types) {
+  if (types && !types.includes(",")) {
     params.types = types;
   }
-  if (continuation) {
+  if (continuation && continuation !== "undefined") {
     params.continuation = continuation;
+  }
+
+  let urlSearchParams = new URLSearchParams(params).toString();
+  if (types && types.includes(",")) {
+    urlSearchParams += "types=" + types.split(",").join("&types=");
   }
 
   try {
     tokenActivities = await (
-      await fetch(
-        `https://api.reservoir.tools/tokens/${address}%3A${id}/activity/v4?${new URLSearchParams(params).toString()}`,
-        {
-          headers: {
-            accept: "*/*",
-            "x-api-key": "9a16bf8e-ec68-5d88-a7a5-a24044de3f38",
-          },
-        }
-      )
+      await fetch(`https://api.reservoir.tools/tokens/${address}%3A${id}/activity/v4?${urlSearchParams}`, {
+        headers: {
+          accept: "*/*",
+          "x-api-key": "9a16bf8e-ec68-5d88-a7a5-a24044de3f38",
+        },
+      })
     ).json();
   } catch (error) {
     // token not found or reservoir error

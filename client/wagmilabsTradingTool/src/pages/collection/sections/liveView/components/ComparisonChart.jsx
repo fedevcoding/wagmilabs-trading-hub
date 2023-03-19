@@ -28,7 +28,10 @@ const ComparisonChart = memo(({ totalListings, totalSales, floorPrice }) => {
       sale => sale.value < numberMaxPrice && sale.value > minPrice && sale.timestamp >= timeframe
     ).length;
     const rightListings = totalListings.filter(
-      listing => listing.value < numberMaxPrice && listing.value > minPrice && listing.timestamp * 1000 >= timeframe
+      listing =>
+        listing.value < numberMaxPrice &&
+        listing.value > minPrice &&
+        (listing.ms ? listing.timestamp : listing.timestamp * 1000) >= timeframe
     ).length;
 
     const chartOptions1 = {

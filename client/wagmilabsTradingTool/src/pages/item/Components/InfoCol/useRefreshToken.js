@@ -1,10 +1,13 @@
+import React from "react";
 import { useToast } from "@chakra-ui/react";
 
 export function useRefreshToken(address, id) {
+  const [loading, setLoading] = React.useState(false);
   const toast = useToast();
 
   const refreshToken = async () => {
     try {
+      setLoading(true);
       const url = `https://api.reservoir.tools/tokens/refresh/v1`;
 
       const options = {
@@ -29,7 +32,7 @@ export function useRefreshToken(address, id) {
       } else {
         toast({
           title: "Success",
-          description: message,
+          description: "Metadata refreshed correctly",
           status: "success",
           duration: 3000,
           isClosable: true,
@@ -44,6 +47,7 @@ export function useRefreshToken(address, id) {
         isClosable: true,
       });
     }
+    setLoading(false);
   };
-  return { refreshToken };
+  return { refreshToken, loading };
 }

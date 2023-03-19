@@ -41,20 +41,9 @@ export const useListNft = ({ contractAddress, tokenId, listingPrice }, callback)
       const royalties = royaltiesPerc
         ? {
             automatedRoyalties: true,
-            royaltyBps: parseFloat(royaltiesPerc),
+            royaltyBps: parseFloat(royaltiesPerc) * 100,
           }
         : {};
-
-      console.log([
-        {
-          token: `${contractAddress}:${tokenId}`,
-          weiPrice,
-          orderbook,
-          orderKind,
-          expirationTime,
-          ...royalties,
-        },
-      ]);
 
       await getClient()?.actions.listToken({
         listings: [

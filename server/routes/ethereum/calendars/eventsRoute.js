@@ -6,17 +6,21 @@ const eventsRoute = express();
 
 const { lruCache } = require("../../../services/cache/lru");
 
+const ttl = 6 * 60 * 60 * 1000;
+
+const manageEvents = async (Collection, type, set) => {
+    const res = await lruCache(Collection.find({}), {
+        key: type,
+        ttl,
+    }, set);
+    return res;
+};
+
 eventsRoute.get("/", checkAuth, async (req, res) => {
-    const ttl = 6 * 60 * 60 * 1000;
-
+    
     try {
-        const events = await Events.find({});
+        const events = await manageEvents(Events, 'events');
         if (!events) throw new Error("Events not found");
-
-        await lruCache(Events.find({}), {
-            key: `events`,
-            ttl,
-        });
 
         res.status(200).json({events});
     }
@@ -41,10 +45,12 @@ eventsRoute.post('/', checkAuth, checkAdmin, async (req, res) => {
                 });
                 const events = await Events.create(nextEvents);
                 if (!events) throw Error('Something went wrong saving multiple admin IRL events');
+                await manageEvents(Events, 'events', true);
                 return res.status(200).json({events});
             } 
             const events = await Events.create(event)
             if (!events) throw Error('Something went wrong saving the admin IRL event');
+            await manageEvents(Events, 'events', true);
             return res.status(200).json({events});
         } else {
             throw Error('You are not authorized');
@@ -62,6 +68,7 @@ eventsRoute.delete('/', checkAuth, checkAdmin, async (req, res) => {
         if (isAdmin) {
             const events = await Events.deleteOne({_id: id});
             if (!events) throw Error('Something went wrong deleting all the admin IRL events');
+            await manageEvents(Events, 'events', true);
             return res.status(200).json({events});
         } else {
             throw Error('You are not authorized');
