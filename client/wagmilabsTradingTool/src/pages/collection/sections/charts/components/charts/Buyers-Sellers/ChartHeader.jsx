@@ -7,7 +7,7 @@ import { rangeOptions, getRange } from "./options";
 const ChartHeader = ({ range, setRange, chartType, setChartType }) => {
   return (
     <HStack className="chart-header">
-      <h2>Buyers vs sellets over time.</h2>
+      <h2>Buyers vs sellers over time.</h2>
 
       <HStack gap={"20px"}>
         <HStack gap={"10px"}>

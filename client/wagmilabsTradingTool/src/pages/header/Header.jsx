@@ -292,12 +292,16 @@ const Header = () => {
           }}
         >
           <div className="pfp-options-container">
-            <img src={profileImage} alt="" className="pfp" onClick={() => navigate(`/profile/${address}`)} />
+            <a href={`/profile/${address}`}>
+              <img src={profileImage} alt="" className="pfp" />
+            </a>
             <div className="profile-options invisible">
-              <div onClick={() => navigate(`/profile/${address}`)} className="pfp-icon-container">
-                <i className="fa-solid fa-circle-user"></i>
-                <p>Profile</p>
-              </div>
+              <a href={`/profile/${address}`}>
+                <div onClick={() => navigate(`/profile/${address}`)} className="pfp-icon-container">
+                  <i className="fa-solid fa-circle-user"></i>
+                  <p>Profile</p>
+                </div>
+              </a>
 
               <div className="switch-account-option-container" onClick={() => navigate("/bots/wallets")}>
                 <i className="fa-solid fa-arrows-repeat"></i>

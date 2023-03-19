@@ -392,6 +392,7 @@ function App() {
                               <Route
                                 exact
                                 path="/profile/:address"
+                                key={crypto.randomUUID()}
                                 element={
                                   <>
                                     <Header />
