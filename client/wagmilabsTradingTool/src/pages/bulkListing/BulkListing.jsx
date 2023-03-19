@@ -1,11 +1,22 @@
+import { HStack } from "@chakra-ui/react";
+import { PageWrapper } from "@Components";
 import React from "react";
 import { useLocation } from "react-router-dom";
+import { Header } from "./components";
+
+import "./style.scss";
 
 const BulkListing = () => {
-  const { state } = useLocation();
+  const { state: items } = useLocation();
 
-  console.log(state);
-  return <div>BulkListing</div>;
+  return (
+    <PageWrapper page={"bulk-listing"}>
+      <div className="section-left">
+        <Header />
+      </div>
+      <div></div>
+    </PageWrapper>
+  );
 };
 
 export default BulkListing;

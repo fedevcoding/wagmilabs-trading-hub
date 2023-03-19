@@ -514,7 +514,7 @@ const Nfts = ({
                   )}
                   <button
                     className="nfts-bulk-information-list-button"
-                    onClick={() => navigate("/profile/bulk-listing", { state: { bulkItems } })}
+                    onClick={() => navigate("/profile/bulk-listing", { state: bulkItems })}
                   >
                     List
                   </button>

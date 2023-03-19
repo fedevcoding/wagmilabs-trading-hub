@@ -1,0 +1,26 @@
+#page-bulk-listing {
+  padding-top: 50px;
+  width: 90vw;
+  margin: 0 auto;
+
+  .section-left {
+    .header {
+      .marketplace-button {
+        background-color: transparent;
+        color: white;
+        border: 2px solid grey;
+        border-radius: 10px;
+        padding: 8px 25px;
+        cursor: pointer;
+
+        &.active {
+          border: 2px solid rgb(111, 58, 210);
+        }
+
+        img {
+          width: 25px;
+        }
+      }
+    }
+  }
+}
