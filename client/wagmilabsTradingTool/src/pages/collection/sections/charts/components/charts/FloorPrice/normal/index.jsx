@@ -15,7 +15,7 @@ export const NormalFloorChart = ({ collectionAddress, handleChartType }) => {
     <div className="floorprice-chart-section">
       <ChartHeader setRange={setRange} range={range} handleChartType={handleChartType} />
       {isLoading ? (
-        <LoadingSpinner>
+        <LoadingSpinner margin="50px 0 0 0">
           <p>Loading chart...</p>
         </LoadingSpinner>
       ) : hasNoData ? (

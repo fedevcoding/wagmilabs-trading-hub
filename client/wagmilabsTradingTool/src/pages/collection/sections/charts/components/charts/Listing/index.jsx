@@ -5,18 +5,21 @@ import { useGetData } from "./useGetData";
 import ChartHeader from "./ChartHeader";
 import { LoadingSpinner } from "@Components";
 import { useRange } from "./useRange";
+import { NoDataFound } from "../..";
 
 export const ListingChart = ({ collectionAddress }) => {
   const { range, setRange } = useRange();
-  const { isLoading, chartOptions } = useGetData({ range, collectionAddress });
+  const { isLoading, chartOptions, hasNoData } = useGetData({ range, collectionAddress });
 
   return (
     <div className="listings-chart-section">
       <ChartHeader setRange={setRange} range={range} />
       {isLoading ? (
-        <LoadingSpinner>
+        <LoadingSpinner margin="50px 0 0 0">
           <p>Loading chart...</p>
         </LoadingSpinner>
+      ) : hasNoData ? (
+        <NoDataFound />
       ) : (
         <HighchartsReact highcharts={Highcharts} options={chartOptions} />
       )}

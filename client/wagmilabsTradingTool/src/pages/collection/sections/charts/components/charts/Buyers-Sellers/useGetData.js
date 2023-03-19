@@ -5,6 +5,9 @@ import { rangeOptions } from "./options";
 export const useGetData = (collectionAddress, range) => {
   const [chartOptions, setChartOptions] = useState({});
   const [isLoading, setIsLoading] = useState(true);
+  const [chartType, setChartType] = useState("column");
+  const [hasNoData, setHasNoData] = useState(false);
+  const [data, setData] = useState([]);
 
   useEffect(() => {
     async function getData() {
@@ -17,54 +20,10 @@ export const useGetData = (collectionAddress, range) => {
 
         const url = `/collectionCharts/buyersSellers?collectionAddress=${collectionAddress}&range=${rangeInSeconds}&granularity=${granularityInSeconds}`;
         const data = await getFromServer(url);
-
-        const buyers = data.map(item => [new Date(item.tx_timestamp).getTime(), item.buyers]);
-        const sellers = data.map(item => [new Date(item.tx_timestamp).getTime(), item.sellers]);
-
-        const newChartOptions = {
-          chart: {
-            type: "column",
-            zoomType: "x",
-            backgroundColor: "transparent",
-          },
-
-          title: {
-            text: "",
-          },
-          legend: {
-            enabled: false,
-          },
-          xAxis: {
-            type: "datetime",
-            crosshair: true,
-          },
-          yAxis: {
-            title: {
-              text: "Amount",
-            },
-          },
-          tooltip: {
-            shared: true,
-            followPointer: true,
-          },
-
-          series: [
-            {
-              name: "Buyers",
-              data: buyers,
-              borderRadius: 3,
-            },
-            {
-              name: "Sellers",
-              data: sellers,
-              borderRadius: 3,
-            },
-          ],
-        };
-
-        setChartOptions(newChartOptions);
+        setHasNoData(false);
+        setData(data);
       } catch (error) {
-        console.log(error);
+        setHasNoData(true);
       } finally {
         setIsLoading(false);
       }
@@ -74,5 +33,53 @@ export const useGetData = (collectionAddress, range) => {
     }
   }, [collectionAddress, range]);
 
-  return { isLoading, chartOptions };
+  useEffect(() => {
+    const buyers = data.map(item => [new Date(item.tx_timestamp).getTime(), item.buyers]);
+    const sellers = data.map(item => [new Date(item.tx_timestamp).getTime(), item.sellers]);
+
+    const newChartOptions = {
+      chart: {
+        type: chartType,
+        zoomType: "x",
+        backgroundColor: "transparent",
+      },
+
+      title: {
+        text: "",
+      },
+      legend: {
+        enabled: false,
+      },
+      xAxis: {
+        type: "datetime",
+        crosshair: true,
+      },
+      yAxis: {
+        title: {
+          text: "Amount",
+        },
+      },
+      tooltip: {
+        shared: true,
+        followPointer: true,
+      },
+
+      series: [
+        {
+          name: "Buyers",
+          data: buyers,
+          borderRadius: 3,
+        },
+        {
+          name: "Sellers",
+          data: sellers,
+          borderRadius: 3,
+        },
+      ],
+    };
+
+    setChartOptions(newChartOptions);
+  }, [data, chartType]);
+
+  return { isLoading, chartOptions, chartType, setChartType, hasNoData };
 };

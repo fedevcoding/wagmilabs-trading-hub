@@ -5,9 +5,9 @@ import { getRange } from "./options";
 const { useState, useEffect } = require("react");
 
 export const useGetData = ({ collectionAddress, range, floorPrice }) => {
-  // const [data, setData] = useState([]);
   const [chartOptions, setChartOptions] = useState({});
   const [isLoading, setLoading] = useState(true);
+  const [hasNoData, setHasNoData] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -77,16 +77,16 @@ export const useGetData = ({ collectionAddress, range, floorPrice }) => {
             },
           ],
         };
-
+        setHasNoData(false);
         setChartOptions(newChartOptions);
       } catch (error) {
-        console.log(error);
+        setHasNoData(true);
       }
       setLoading(false);
     };
 
-    if (collectionAddress && range && floorPrice) fetchData();
+    if (collectionAddress && range && (floorPrice ?? 0)) fetchData();
   }, [collectionAddress, range, floorPrice]);
 
-  return { isLoading, chartOptions };
+  return { isLoading, chartOptions, hasNoData };
 };

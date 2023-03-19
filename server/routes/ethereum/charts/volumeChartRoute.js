@@ -7,8 +7,6 @@ volumeChartRoute.get("/volume", async (req, res) => {
   try {
     const { collectionAddress, range, granularity } = req.query;
 
-    console.log(range, granularity);
-
     if (!collectionAddress) throw new Error("Collection address is required");
 
     const sqlQuery = `
@@ -22,11 +20,12 @@ volumeChartRoute.get("/volume", async (req, res) => {
 
     const data = await execTranseposeAPI(sqlQuery);
 
+    if (!data || data?.length === 0) throw new Error("No data found");
+
     data.sort((a, b) => new Date(a.tx_timestamp).getTime() - new Date(b.tx_timestamp).getTime());
 
     res.status(200).json(data);
   } catch (error) {
-    console.log(error);
     res.status(500).json({ error: error.message });
   }
 });

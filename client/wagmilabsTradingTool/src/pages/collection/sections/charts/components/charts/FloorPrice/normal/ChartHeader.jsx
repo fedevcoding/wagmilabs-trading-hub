@@ -1,6 +1,7 @@
 import { HStack } from "@chakra-ui/react";
 import { Select } from "@Components";
 import React from "react";
+import { ChartSelector } from "src/components/ChartSelector";
 import { rangeOptions, getRange } from "./options";
 
 const ChartHeader = ({ range, setRange, handleChartType }) => {
@@ -8,9 +9,26 @@ const ChartHeader = ({ range, setRange, handleChartType }) => {
     <HStack className="chart-header">
       <h2>Collection floor price over time.</h2>
 
-      <button onClick={() => handleChartType("custom")}>set advanced</button>
+      <HStack gap={"20px"}>
+        <HStack gap={"10px"}>
+          <p>Period:</p>
+          <Select
+            options={rangeOptions}
+            value={getRange(range)}
+            onChange={d => setRange(d.value)}
+            isSearchable={false}
+          />
+        </HStack>
 
-      <Select options={rangeOptions} value={getRange(range)} onChange={d => setRange(d.value)} isSearchable={false} />
+        <HStack>
+          <ChartSelector
+            onChange={() => handleChartType("advanced")}
+            chart1Type={"line"}
+            chart2Type={"advanced"}
+            chartType={"line"}
+          />
+        </HStack>
+      </HStack>
     </HStack>
   );
 };

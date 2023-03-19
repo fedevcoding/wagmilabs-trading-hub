@@ -22,11 +22,12 @@ buyersSellersChartRoute.get("/buyersSellers", async (req, res) => {
 
     const data = await execTranseposeAPI(sqlQuery);
 
+    if (data?.length === 0 || !data) throw new Error("No data found");
+
     data.sort((a, b) => new Date(a.tx_timestamp).getTime() - new Date(b.tx_timestamp).getTime());
 
     res.status(200).json(data);
   } catch (error) {
-    console.log(error);
     res.status(500).json({ error: error.message });
   }
 });

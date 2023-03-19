@@ -4,9 +4,9 @@ import Highcharts from "highcharts";
 const { useState, useEffect } = require("react");
 
 export const useGetData = ({ range, collectionAddress }) => {
-  // const [data, setData] = useState([]);
   const [isLoading, setLoading] = useState(true);
   const [chartOptions, setChartOptions] = useState({});
+  const [hasNoData, setHasNoData] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -76,11 +76,10 @@ export const useGetData = ({ range, collectionAddress }) => {
           ],
         };
 
+        setHasNoData(false);
         setChartOptions(newChartOptions);
-
-        // setData(listingsData);
       } catch (error) {
-        console.log(error);
+        setHasNoData(true);
       } finally {
         setLoading(false);
       }
@@ -91,5 +90,5 @@ export const useGetData = ({ range, collectionAddress }) => {
     }
   }, [collectionAddress, range]);
 
-  return { isLoading, chartOptions };
+  return { isLoading, chartOptions, hasNoData };
 };

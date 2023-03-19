@@ -6,6 +6,7 @@ import { rangeOptions } from "./options";
 export const useGetData = (collectionAddress, range) => {
   const [chartOptions, setChartOptions] = useState({});
   const [isLoading, setIsLoading] = useState(true);
+  const [hasNoData, setHasNoData] = useState(false);
 
   useEffect(() => {
     async function getData() {
@@ -79,10 +80,10 @@ export const useGetData = (collectionAddress, range) => {
             },
           ],
         };
-
+        setHasNoData(false);
         setChartOptions(newChartOptions);
       } catch (error) {
-        console.log(error);
+        setHasNoData(true);
       } finally {
         setIsLoading(false);
       }
@@ -92,5 +93,5 @@ export const useGetData = (collectionAddress, range) => {
     }
   }, [collectionAddress, range]);
 
-  return { isLoading, chartOptions };
+  return { isLoading, chartOptions, hasNoData };
 };

@@ -6,8 +6,8 @@ const defaultChartOptions = {};
 
 export const useGetData = ({ collectionSlug, range }) => {
   const [chartOptions, setChartOptions] = useState(defaultChartOptions);
-  const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [hasNoData, setHasNoData] = useState(false);
 
   useEffect(() => {
     async function getData() {
@@ -87,10 +87,10 @@ export const useGetData = ({ collectionSlug, range }) => {
           ],
         };
 
+        setHasNoData(false);
         setChartOptions(newChartOptions);
-
-        setData(data);
       } catch (err) {
+        setHasNoData(true);
         console.log(err);
       } finally {
         setIsLoading(false);
@@ -102,5 +102,5 @@ export const useGetData = ({ collectionSlug, range }) => {
     }
   }, [collectionSlug, range]);
 
-  return { data, isLoading, chartOptions };
+  return { isLoading, chartOptions, hasNoData };
 };

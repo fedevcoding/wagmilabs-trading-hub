@@ -86,10 +86,10 @@ export const useGetData = ({ collectionAddress, range }) => {
             },
           ],
         };
+        setHasNoData(false);
 
         setChartOptions(newChartOptions);
       } catch (error) {
-        console.log(error);
         setHasNoData(true);
       } finally {
         setLoading(false);

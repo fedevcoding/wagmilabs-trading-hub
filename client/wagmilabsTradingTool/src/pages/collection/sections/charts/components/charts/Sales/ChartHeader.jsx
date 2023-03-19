@@ -8,7 +8,10 @@ const ChartHeader = ({ range, setRange }) => {
     <HStack className="chart-header">
       <h2>Amount of sales over time.</h2>
 
-      <Select options={rangeOptions} value={getRange(range)} onChange={d => setRange(d.value)} isSearchable={false} />
+      <HStack gap={"10px"}>
+        <p>Period:</p>
+        <Select options={rangeOptions} value={getRange(range)} onChange={d => setRange(d.value)} isSearchable={false} />
+      </HStack>
     </HStack>
   );
 };

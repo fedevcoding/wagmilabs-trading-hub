@@ -5,18 +5,21 @@ import React from "react";
 import ChartHeader from "./ChartHeader";
 import { useGetData } from "./useGetData";
 import { useRange } from "./useRange";
+import { NoDataFound } from "../../..";
 
 export const AdvancedFloorChart = ({ collectionAddress, handleChartType, floorPrice }) => {
   const { range, setRange } = useRange();
-  const { isLoading, chartOptions } = useGetData({ collectionAddress, range, floorPrice });
+  const { isLoading, chartOptions, hasNoData } = useGetData({ collectionAddress, range, floorPrice });
 
   return (
     <div className="floorprice-chart-section">
       <ChartHeader setRange={setRange} range={range} handleChartType={handleChartType} />
       {isLoading ? (
-        <LoadingSpinner>
+        <LoadingSpinner margin="50px 0 0 0">
           <p>Loading chart...</p>
         </LoadingSpinner>
+      ) : hasNoData ? (
+        <NoDataFound />
       ) : (
         <HighchartsReact highcharts={Highcharts} options={chartOptions} />
       )}

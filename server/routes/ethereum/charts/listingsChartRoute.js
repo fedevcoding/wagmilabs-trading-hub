@@ -17,9 +17,11 @@ listingChartRoute.get("/listings", async (req, res) => {
 
     const { data } = (await response.json())?.data || {};
 
+    const allZero = data.every(item => item.todayListed === 0 && item.totalListed === 0);
+    if (allZero) throw new Error("No data found");
+
     res.status(200).json(data);
   } catch (error) {
-    console.log(error);
     res.status(500).json({ error: error.message });
   }
 });
