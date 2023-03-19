@@ -51,7 +51,7 @@ function Chart({ data }) {
           .filter(d => d.type === "mint")
           .map(d => ({
             x: new Date(d.timestamp).getTime(),
-            y: d.price ? d.price / 10 ** 18 : 0,
+            y: d.price,
             address: d.address,
             token_id: d.token_id,
             name: d.type,
