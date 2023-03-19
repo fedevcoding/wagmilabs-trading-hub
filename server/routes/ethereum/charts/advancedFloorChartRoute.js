@@ -2,6 +2,8 @@ const express = require("express");
 
 const advancedFloorChartRoute = express();
 
+const MNEMONICHQ_API_KEY = process.env.MNEMONICHQ_API_KEY;
+
 advancedFloorChartRoute.get("/advancedFloorPrice", async (req, res) => {
   try {
     const { collectionAddress, range, granularity } = req.query;
@@ -13,7 +15,7 @@ advancedFloorChartRoute.get("/advancedFloorPrice", async (req, res) => {
       {
         headers: {
           "Content-Type": "application/json",
-          "X-API-Key": "1DeMDRFwiZu2QBfiRjRiFSeQuk8lZ9sSPEFxKbmgAnEWEdOK",
+          "X-API-Key": MNEMONICHQ_API_KEY,
         },
       }
     );

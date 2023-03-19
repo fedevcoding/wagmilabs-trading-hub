@@ -2,6 +2,8 @@ const express = require("express");
 
 const listingChartRoute = express();
 
+const NFTBANK_API_KEY = process.env.NFTBANK_API_KEY;
+
 listingChartRoute.get("/listings", async (req, res) => {
   try {
     const { collectionAddress, range } = req.query;
@@ -11,7 +13,7 @@ listingChartRoute.get("/listings", async (req, res) => {
     const response = await fetch(
       `https://api.nftbank.run/v1/collection/${collectionAddress}/market-status/listing/history?networkId=ethereum&interval=daily&window=${range}&limit=90`,
       {
-        headers: { accept: "application/json", "x-api-key": "76359d065f1b7632727fc28715b8468f" },
+        headers: { accept: "application/json", "x-api-key": NFTBANK_API_KEY },
       }
     );
 
