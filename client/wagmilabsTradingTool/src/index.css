@@ -129,7 +129,7 @@ body.overflow-hidden {
 }
 
 .not-allowed {
-  cursor: not-allowed;
+  cursor: not-allowed !important;
 }
 
 .flex-col{
@@ -144,4 +144,9 @@ body.overflow-hidden {
 
 .chakra-select option {
   background-color: black !important;
+}
+
+
+.password-input{
+  -webkit-text-security: disc;
 }

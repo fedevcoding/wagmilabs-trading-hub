@@ -3,7 +3,7 @@ import { useDebounce } from "use-debounce";
 import "./search.scss";
 import verified from "@Assets/verified.png";
 import { baseUrl } from "@Variables";
-
+import { fetchEnsAddress } from "@wagmi/core";
 import { useFirstRender } from "@Hooks";
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import { placeholderImage } from "@Utils/images";
@@ -11,7 +11,7 @@ import { placeholderImage } from "@Utils/images";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { BannerSearch } from "./BannerSearch";
 
-const EthereumSearch = ({ inLogin, usage, onClick }) => {
+const EthereumSearch = ({ inLogin, isHeader, usage, onClick }) => {
   const firstRender = useFirstRender();
 
   const [text, setText] = useState("");
@@ -42,22 +42,29 @@ const EthereumSearch = ({ inLogin, usage, onClick }) => {
   useEffect(() => {
     if (value === "" && !firstRender) {
       loadCollections(false);
-    } else if (value.startsWith("0x") && value.length === 42) {
-      fetchCollections("contract");
     } else if (value) {
-      fetchCollections("name");
+      fetchCollections();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value]);
 
-  async function fetchCollections(type) {
+  async function fetchCollections() {
     try {
       setLoadingCollections(true);
 
-      let collectionsApi = await fetch(`${baseUrl}/searchCollection/${value}/${type}`);
+      let query = value;
+      if (isHeader && value?.endsWith(".eth")) {
+        const address = await fetchEnsAddress({
+          name: value,
+          chainId: 1,
+        });
+        query = address;
+      }
+
+      let collectionsApi = await fetch(`${baseUrl}/search/${query}?showAddresses=${isHeader ? "true" : "false"}`);
       collectionsApi = await collectionsApi.json();
 
-      const { collections: fetchedCollections } = collectionsApi || {};
+      const fetchedCollections = collectionsApi || {};
 
       setLoadingCollections(false);
       setCollections(fetchedCollections);
@@ -73,11 +80,12 @@ const EthereumSearch = ({ inLogin, usage, onClick }) => {
     () =>
       collections &&
       collections.map((collection, index) => {
-        const { image, name, openseaVerificationStatus, isLocaleStorage } = collection;
+        const { image, name, openseaVerificationStatus, isLocaleStorage, isAddress } = collection || {};
 
-        const collectionId = collection.collectionId || collection.id;
+        const address = collection?.address || collection.collectionId || collection.id;
 
-        const link = `/collection/${collectionId}`;
+        let link = `/collection/${address}`;
+        if (isAddress) link = `/profile/${address}`;
 
         return (
           <React.Fragment key={JSON.stringify(collection)}>
@@ -95,11 +103,11 @@ const EthereumSearch = ({ inLogin, usage, onClick }) => {
                     <p className="searchbar-collection-name">{name || "-------"}</p>
                     {openseaVerificationStatus === "verified" && <img className="verified" src={verified} alt="" />}
                   </div>
-                  <p className="searchbar-collection-address">{collectionId}</p>
+                  <p className="searchbar-collection-address">{address}</p>
                   {isLocaleStorage && (
                     <i
                       className="fa-solid fa-xmark searchbar-collection-remove"
-                      onClick={e => removeFromLocalStorage(e, collectionId)}
+                      onClick={e => removeFromLocalStorage(e, address)}
                     ></i>
                   )}
                 </div>
@@ -111,7 +119,7 @@ const EthereumSearch = ({ inLogin, usage, onClick }) => {
                   href={link}
                   target="_blank"
                   key={index}
-                  onClick={e => addToLocalStorage(e, image, collectionId, name, openseaVerificationStatus)}
+                  onClick={e => addToLocalStorage(e, image, address, name, openseaVerificationStatus, isAddress)}
                   rel="noreferrer"
                 >
                   <LazyLoadImage
@@ -126,11 +134,11 @@ const EthereumSearch = ({ inLogin, usage, onClick }) => {
                       <p className="searchbar-collection-name">{name || "-------"}</p>
                       {openseaVerificationStatus === "verified" && <img className="verified" src={verified} alt="" />}
                     </div>
-                    <p className="searchbar-collection-address">{collectionId}</p>
+                    <p className="searchbar-collection-address">{address}</p>
                     {isLocaleStorage && (
                       <i
                         className="fa-solid fa-xmark searchbar-collection-remove"
-                        onClick={e => removeFromLocalStorage(e, collectionId)}
+                        onClick={e => removeFromLocalStorage(e, address)}
                       ></i>
                     )}
                   </div>
@@ -144,9 +152,6 @@ const EthereumSearch = ({ inLogin, usage, onClick }) => {
     [collections, usage, onClick]
   );
 
-  // function removeFromLocalStorage(image, collectionId, name, openseaVerificationStatus){
-
-  // }
   function removeFromLocalStorage(e, collectionId) {
     e.preventDefault();
 
@@ -164,7 +169,7 @@ const EthereumSearch = ({ inLogin, usage, onClick }) => {
     localStorage.setItem("clickedCollections", collectionObject);
     setCollections(clickedCollections);
   }
-  function addToLocalStorage(e, image, collectionId, name, openseaVerificationStatus) {
+  function addToLocalStorage(e, image, collectionId, name, openseaVerificationStatus, isAddress) {
     const i = document.querySelector(".searchbar-collection-remove");
     if (e.target === i) return;
 
@@ -190,6 +195,7 @@ const EthereumSearch = ({ inLogin, usage, onClick }) => {
           openseaVerificationStatus,
           time,
           isLocaleStorage: true,
+          isAddress,
         },
       ]);
     } else {
@@ -201,6 +207,7 @@ const EthereumSearch = ({ inLogin, usage, onClick }) => {
           openseaVerificationStatus,
           time,
           isLocaleStorage: true,
+          isAddress,
         },
       ]);
     }
@@ -213,6 +220,8 @@ const EthereumSearch = ({ inLogin, usage, onClick }) => {
 
       if (collections) {
         collections = JSON.parse(collections);
+
+        if (!isHeader) collections = collections.filter(collection => !collection?.isAddress);
 
         collections.sort((a, b) => b.time - a.time);
         setCollections(collections);
@@ -229,7 +238,7 @@ const EthereumSearch = ({ inLogin, usage, onClick }) => {
         <input
           type="text"
           className={`search-bar ${inLogin && "login-searchbar"}`}
-          placeholder="Search collections"
+          placeholder={`Search collection${isHeader ? ", address, ens" : ""}`}
           onChange={({ target }) => setText(target.value)}
           onClick={() => loadCollections(true)}
         ></input>

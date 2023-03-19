@@ -189,8 +189,9 @@ export const AddModal = ({ showAddModal, toggleModal, toggleWallet }) => {
                         <p>Private key</p>
                         <Input
                           value={data.privateKey}
-                          type="password"
+                          type="text"
                           placeholder="Private key"
+                          className="password-input"
                           onChange={e =>
                             dispatch({
                               type: "SET_PRIVATE_KEY",

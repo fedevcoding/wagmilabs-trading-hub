@@ -80,6 +80,14 @@ app.use(cookieParser());
 const http = require("http");
 const server = new http.createServer(app);
 const socketIO = require("socket.io");
+const listingChartRoute = require("./routes/ethereum/charts/listingsChartRoute.js");
+const floorChartRoute = require("./routes/ethereum/charts/floorChartRoute.js");
+const ownersChartRoute = require("./routes/ethereum/charts/ownersChartRoute.js");
+const volumeChartRoute = require("./routes/ethereum/charts/volumeChartRoute.js");
+const salesChartRoute = require("./routes/ethereum/charts/salesChartRoute.js");
+const avgPriceChartRoute = require("./routes/ethereum/charts/avgPriceChartRoute.js");
+const advancedFloorChartRoute = require("./routes/ethereum/charts/advancedFloorChartRoute.js");
+const buyersSellersChartRoute = require("./routes/ethereum/charts/buyersSellersChartRoute.js");
 const io = socketIO(server, {
   cors: {
     origin: CLIENT_URL,
@@ -211,7 +219,7 @@ app.use("/api/v1/wagmilabs/personal", personalRoute);
 app.use("/api/v1/wagmilabs/spaces", spacesRoute);
 
 app.use("/api/v1/wagmilabs/userBalances", userBalancesRoute);
-app.use("/api/v1/wagmilabs/searchCollection", searchCollectionsRoute);
+app.use("/api/v1/wagmilabs/search", searchCollectionsRoute);
 app.use("/api/v1/wagmilabs/collectionInfo", collectionInfoRoute);
 app.use("/api/v1/wagmilabs/collection", tokenRoute);
 app.use("/api/v1/wagmilabs/collection", collectionHolders);
@@ -230,6 +238,16 @@ app.use("/api/v1/wagmilabs/ownedCollections", ownedCollectionsRoute);
 app.use("/api/v1/wagmilabs/refreshCollection", refreshCollectionRoute);
 app.use("/api/v1/wagmilabs/p-and-l", pAndLRoute);
 app.use("/api/v1/wagmilabs/stats", statsRoute);
+
+// collection charts
+app.use("/api/v1/wagmilabs/collectionCharts", listingChartRoute);
+app.use("/api/v1/wagmilabs/collectionCharts", floorChartRoute);
+app.use("/api/v1/wagmilabs/collectionCharts", advancedFloorChartRoute);
+app.use("/api/v1/wagmilabs/collectionCharts", ownersChartRoute);
+app.use("/api/v1/wagmilabs/collectionCharts", volumeChartRoute);
+app.use("/api/v1/wagmilabs/collectionCharts", salesChartRoute);
+app.use("/api/v1/wagmilabs/collectionCharts", avgPriceChartRoute);
+app.use("/api/v1/wagmilabs/collectionCharts", buyersSellersChartRoute);
 
 // bots routes
 app.use("/api/v1/wagmilabs/bots", editSnipeRoute);

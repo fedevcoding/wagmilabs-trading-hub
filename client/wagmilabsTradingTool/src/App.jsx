@@ -391,7 +391,7 @@ function App() {
 
                               <Route
                                 exact
-                                path="/profile"
+                                path="/profile/:address"
                                 element={
                                   <>
                                     <Header />

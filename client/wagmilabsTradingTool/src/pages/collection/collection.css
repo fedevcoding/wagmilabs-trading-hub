@@ -310,14 +310,6 @@
   opacity: 1;
 }
 
-.spinner {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-
-
 .collectioninfo-fp-image {
   width: 15px;
   height: 15px;

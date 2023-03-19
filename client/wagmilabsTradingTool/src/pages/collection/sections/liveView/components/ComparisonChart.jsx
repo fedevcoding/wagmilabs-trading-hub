@@ -4,6 +4,7 @@ import HighCharts from "highcharts";
 import HC_more from "highcharts/highcharts-more";
 import { HStack, NumberInput, NumberInputField, Select } from "@chakra-ui/react";
 import { useRefreshTime } from "@Hooks";
+import { ChartSelector } from "src/components/ChartSelector";
 HC_more(HighCharts);
 
 const ComparisonChart = memo(({ totalListings, totalSales, floorPrice }) => {
@@ -118,16 +119,12 @@ const ComparisonChart = memo(({ totalListings, totalSales, floorPrice }) => {
           </HStack>
         </NumberInput>
 
-        <div className="chart-type-selector">
-          <i
-            className={`fa-solid fa-chart-simple ${chartType === "column" && "selected"}`}
-            onClick={() => setChartType("column")}
-          ></i>
-          <i
-            className={`fa-sharp fa-solid fa-chart-scatter-bubble ${chartType === "bubble" && "selected"}`}
-            onClick={() => setChartType("bubble")}
-          ></i>
-        </div>
+        <ChartSelector
+          onChange={chart => setChartType(chart)}
+          chart1Type={"column"}
+          chart2Type={"bubble"}
+          chartType={chartType}
+        />
       </div>
       <HighchartsReact highcharts={HighCharts} options={chartOptions} />
     </div>

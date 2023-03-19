@@ -1,3 +1,4 @@
 export * from "./functions";
-export * from "./formats"
-export * from "./"
+export * from "./formats";
+export * from "./";
+export { timeInSeconds } from "./timeInSeconds";

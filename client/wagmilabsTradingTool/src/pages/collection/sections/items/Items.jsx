@@ -37,6 +37,7 @@ import {
   useRefreshMetadata,
 } from "@Hooks";
 import { useNavigate } from "react-router-dom";
+import { notFound } from "src/assets";
 
 const Items = ({
   loadingMoreItems,
@@ -559,6 +560,11 @@ const Items = ({
                   <Skeleton count={18} wrapper={SkeletonWrapper} />
                 </p>
               </SkeletonTheme>
+            </div>
+          ) : itemsMapping.length === 0 ? (
+            <div className="collection-items-empty">
+              <img src={notFound} alt="" />
+              <p className="collection-items-empty-text">No items found</p>
             </div>
           ) : (
             <>

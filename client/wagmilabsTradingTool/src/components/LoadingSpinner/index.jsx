@@ -1,9 +1,9 @@
 import React from "react";
+import "./style.scss";
 
-export const LoadingSpinner = () => (
-  <div className="loading">
-    <svg className="spinner" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
-      <circle className="path" fill="none" strokeWidth="6" strokeLinecap="round" cx="33" cy="33" r="30" />
-    </svg>
+export const LoadingSpinner = ({ children, width, height, padding, margin }) => (
+  <div className="loading-spinner" style={{ padding: padding ?? "10px 0", margin: margin ?? "0" }}>
+    {children}
+    <span className="loader" style={{ width: width ?? "20px", height: height ?? "20px" }}></span>
   </div>
 );

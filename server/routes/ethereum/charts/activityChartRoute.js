@@ -1,14 +1,7 @@
 const express = require("express");
 require("dotenv").config();
 const checkAuth = require("../../../middleware/checkAuth.js");
-const {
-  last24h,
-  last30d,
-  last7d,
-  last3m,
-  last1y,
-  allTime,
-} = require("../../../services/activity/groupData");
+const { last24h, last30d, last7d, last3m, last1y, allTime } = require("../../../services/activity/groupData");
 
 const activityChartRoute = express();
 
