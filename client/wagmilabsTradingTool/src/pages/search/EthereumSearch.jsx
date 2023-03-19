@@ -10,6 +10,7 @@ import { placeholderImage } from "@Utils/images";
 
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { BannerSearch } from "./BannerSearch";
+import { Link } from "react-router-dom";
 
 const EthereumSearch = ({ inLogin, isHeader, usage, onClick }) => {
   const firstRender = useFirstRender();
@@ -114,9 +115,9 @@ const EthereumSearch = ({ inLogin, isHeader, usage, onClick }) => {
               </div>
             ) : (
               <>
-                <a
+                <Link
+                  to={{ pathname: link, search: `${isAddress ? "?image=" + image : ""}` }}
                   className="container-div"
-                  href={link}
                   target="_blank"
                   key={index}
                   onClick={e => addToLocalStorage(e, image, address, name, openseaVerificationStatus, isAddress)}
@@ -142,7 +143,7 @@ const EthereumSearch = ({ inLogin, isHeader, usage, onClick }) => {
                       ></i>
                     )}
                   </div>
-                </a>
+                </Link>
                 {index === collections.length - 1 && <BannerSearch />}
               </>
             )}
@@ -155,19 +156,11 @@ const EthereumSearch = ({ inLogin, isHeader, usage, onClick }) => {
   function removeFromLocalStorage(e, collectionId) {
     e.preventDefault();
 
-    let clickedCollections = localStorage.getItem("clickedCollections") || false;
-    let collectionObject;
-
-    if (clickedCollections) {
-      clickedCollections = JSON.parse(clickedCollections);
-      clickedCollections = clickedCollections.filter(collection => collection.collectionId !== collectionId);
-      collectionObject = JSON.stringify([...clickedCollections]);
-    } else {
-      collectionObject = JSON.stringify([]);
-    }
-
-    localStorage.setItem("clickedCollections", collectionObject);
-    setCollections(clickedCollections);
+    setCollections(prevCollections => {
+      const newCollections = prevCollections.filter(collection => collection.collectionId !== collectionId);
+      localStorage.setItem("clickedCollections", JSON.stringify(newCollections || []));
+      return newCollections;
+    });
   }
   function addToLocalStorage(e, image, collectionId, name, openseaVerificationStatus, isAddress) {
     const i = document.querySelector(".searchbar-collection-remove");
@@ -216,7 +209,7 @@ const EthereumSearch = ({ inLogin, isHeader, usage, onClick }) => {
   }
   function loadCollections(check) {
     if ((collections.length === 0 && text.length === 0) || !check) {
-      let collections = localStorage.clickedCollections || false;
+      let collections = localStorage.getItem("clickedCollections") || false;
 
       if (collections) {
         collections = JSON.parse(collections);

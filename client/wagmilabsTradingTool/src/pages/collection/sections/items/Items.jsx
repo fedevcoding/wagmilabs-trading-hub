@@ -379,7 +379,7 @@ const Items = ({
 
       <div className="collection-item-section">
         <div className="collection-item-filters-container">
-          <div className="collection-item-filter-section1">
+          {/* <div className="collection-item-filter-section1">
             <div className="collection-item-filter-sweep">
               <p>SWEEP</p>
               <Switch colorScheme={"blue"} onChange={toggleSweepMode} />
@@ -399,7 +399,7 @@ const Items = ({
             )}
           </div>
 
-          <hr className="collection-item-filter-hr" />
+          <hr className="collection-item-filter-hr" /> */}
 
           <div className="collection-item-filter-section1">
             <div className="collection-item-filter-buynow">

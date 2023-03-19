@@ -37,6 +37,10 @@ const Profile = () => {
   const { address: pageAddress } = useParams();
   const navigate = useNavigate();
 
+  const [profileImageUrl] = useState(window.location.search?.replace("?image=", ""));
+
+  console.log(profileImageUrl);
+
   useEffect(() => {
     if (pageAddress && (pageAddress.length !== 42 || !pageAddress.startsWith("0x"))) {
       navigate("/notfound");
@@ -582,7 +586,7 @@ const Profile = () => {
       <section className="profile-section-container">
         <div className="profile-container">
           <div className="profileDetails">
-            <img className="profilePfp" src={isOwner ? profileImage : placeholderImage} alt="" />
+            <img className="profilePfp" src={isOwner ? profileImage : profileImageUrl || placeholderImage} alt="" />
             <div className="profile-ens-address">
               {userEns && (
                 <Tooltip
