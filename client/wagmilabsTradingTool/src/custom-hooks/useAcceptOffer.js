@@ -1,6 +1,7 @@
 import { fetchSigner } from "@wagmi/core";
 import { getClient } from "@reservoir0x/reservoir-sdk";
 import { useToast } from "@chakra-ui/react";
+import { checkErrors } from "../utils/functions/errorHelpers";
 
 export const useAcceptOffer = () => {
   const toast = useToast();
@@ -30,7 +31,7 @@ export const useAcceptOffer = () => {
         isClosable: true,
       });
     } catch (e) {
-      const error = e?.response?.data?.message || "Something went wrong";
+      const error = checkErrors(e);
 
       toast({
         title: "Error",

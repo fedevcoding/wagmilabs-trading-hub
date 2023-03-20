@@ -5,6 +5,7 @@ import { useToast } from "@chakra-ui/react";
 import { UserDataContext } from "@Context";
 import { getListingExpirationDate } from "@Utils/formats/formats";
 import { marketListingMapping } from "@Utils/mappings";
+import { checkErrors } from "../utils/functions/errorHelpers";
 
 export const useListNft = ({ contractAddress, tokenId, listingPrice }, callback) => {
   const { listingSettings } = useContext(UserDataContext);
@@ -77,9 +78,11 @@ export const useListNft = ({ contractAddress, tokenId, listingPrice }, callback)
       if (callback && typeof callback === "function") {
         callback();
       }
+      const error = checkErrors(e);
+
       toast({
         title: "Error listing NFT.",
-        description: "There has been an error while trying to list your NFT, try again later.",
+        description: error,
         status: "error",
         duration: 3000,
         isClosable: true,

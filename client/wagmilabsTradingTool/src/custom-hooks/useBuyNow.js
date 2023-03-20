@@ -2,6 +2,7 @@ import { fetchSigner } from "@wagmi/core";
 import { getClient } from "@reservoir0x/reservoir-sdk";
 import { useGetReservoirOptions } from ".";
 import { useToast } from "@chakra-ui/react";
+import { checkErrors } from "../utils/functions/errorHelpers";
 
 export const useBuyNow = (callback, quantity) => {
   const { options } = useGetReservoirOptions();
@@ -40,11 +41,7 @@ export const useBuyNow = (callback, quantity) => {
       if (callback && typeof callback === "function") {
         callback();
       }
-      const error =
-        e?.response?.data?.message ||
-        (String(e).includes("rejected")
-          ? "Transaction rejected"
-          : "Something went wrong, try checking order availability or wallet funds");
+      const error = checkErrors(e);
 
       toast({
         title: "Error",

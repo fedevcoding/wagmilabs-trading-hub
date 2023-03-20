@@ -1,6 +1,7 @@
 import { fetchSigner } from "@wagmi/core";
 import { getClient } from "@reservoir0x/reservoir-sdk";
 import { useToast } from "@chakra-ui/react";
+import { checkErrors } from "../utils/functions/errorHelpers";
 
 export const useCancelListing = id => {
   const toast = useToast();
@@ -25,7 +26,7 @@ export const useCancelListing = id => {
         isClosable: true,
       });
     } catch (e) {
-      const error = e?.response?.data?.message || "Something went wrong";
+      const error = checkErrors(e);
 
       toast({
         title: "Error",

@@ -3,6 +3,7 @@ import { getClient } from "@reservoir0x/reservoir-sdk";
 import { useGetReservoirOptions } from ".";
 import { marketListingMapping } from "@Utils/mappings";
 import { useToast } from "@chakra-ui/react";
+import { checkErrors } from "../utils/functions/errorHelpers";
 
 export const usePlaceBid = marketplace => {
   const { options } = useGetReservoirOptions();
@@ -61,7 +62,7 @@ export const usePlaceBid = marketplace => {
         isClosable: true,
       });
     } catch (e) {
-      const error = e?.response?.data?.message || "Something went wrong";
+      const error = checkErrors(e);
 
       toast({
         title: "Error",
