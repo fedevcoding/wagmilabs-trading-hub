@@ -1,6 +1,7 @@
 import { fetchSigner } from "@wagmi/core";
-import { getClient } from "@reservoir0x/reservoir-kit-client";
+import { getClient } from "@reservoir0x/reservoir-sdk";
 import { useToast } from "@chakra-ui/react";
+import { checkErrors } from "../utils/functions/errorHelpers";
 
 export const useAcceptOffer = () => {
   const toast = useToast();
@@ -10,10 +11,12 @@ export const useAcceptOffer = () => {
       const signer = await fetchSigner();
 
       await getClient()?.actions.acceptOffer({
-        token: {
-          tokenId,
-          contract,
-        },
+        items: [
+          {
+            quantity: 1,
+            token: `${contract}:${tokenId}`,
+          },
+        ],
         signer,
         onProgress: steps => {
           console.log(steps);
@@ -28,7 +31,7 @@ export const useAcceptOffer = () => {
         isClosable: true,
       });
     } catch (e) {
-      const error = e?.response?.data?.message || "Something went wrong";
+      const error = checkErrors(e);
 
       toast({
         title: "Error",
