@@ -379,7 +379,7 @@ const Items = ({
 
       <div className="collection-item-section">
         <div className="collection-item-filters-container">
-          {/* <div className="collection-item-filter-section1">
+          <div className="collection-item-filter-section1">
             <div className="collection-item-filter-sweep">
               <p>SWEEP</p>
               <Switch colorScheme={"blue"} onChange={toggleSweepMode} />
@@ -387,7 +387,12 @@ const Items = ({
 
             {sweepMode && (
               <>
-                <RangeSelector value={amountToSweep} onChange={setAmountToSweep} min={1} max={30} />
+                <RangeSelector
+                  value={amountToSweep}
+                  onChange={value => setAmountToSweep(prev => (value <= 30 && value > 0 ? value : prev))}
+                  min={1}
+                  max={30}
+                />
                 <Button width={"100%"} colorScheme="blue" onClick={() => !sweepLoading && processSweep(sweepPrice)}>
                   {sweepLoading ? (
                     <Loader width={"20px"} height="20px" />
@@ -399,7 +404,7 @@ const Items = ({
             )}
           </div>
 
-          <hr className="collection-item-filter-hr" /> */}
+          <hr className="collection-item-filter-hr" />
 
           <div className="collection-item-filter-section1">
             <div className="collection-item-filter-buynow">

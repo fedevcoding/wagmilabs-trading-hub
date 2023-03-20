@@ -12,6 +12,8 @@ export const checkErrors = error => {
     return "Transaction rejected";
   } else if (errorHas(error, "too many reloads")) {
     return "Too many reloads, try again later";
+  } else if (errorHas(error, "not fillable")) {
+    return "One or more orders not available";
   } else {
     return "Something went wrong";
   }
