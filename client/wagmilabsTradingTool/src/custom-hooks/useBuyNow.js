@@ -1,5 +1,5 @@
 import { fetchSigner } from "@wagmi/core";
-import { getClient } from "@reservoir0x/reservoir-kit-client";
+import { getClient } from "@reservoir0x/reservoir-sdk";
 import { useGetReservoirOptions } from ".";
 import { useToast } from "@chakra-ui/react";
 
@@ -16,7 +16,12 @@ export const useBuyNow = (callback, quantity) => {
       }
 
       await getClient()?.actions.buyToken({
-        tokens: [{ tokenId, contract: contract }],
+        items: [
+          {
+            quantity: 1,
+            token: `${contract}:${tokenId}`,
+          },
+        ],
         signer,
         options,
         expectedPrice: value,

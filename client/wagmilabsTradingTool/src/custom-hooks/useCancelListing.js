@@ -1,5 +1,5 @@
 import { fetchSigner } from "@wagmi/core";
-import { getClient } from "@reservoir0x/reservoir-kit-client";
+import { getClient } from "@reservoir0x/reservoir-sdk";
 import { useToast } from "@chakra-ui/react";
 
 export const useCancelListing = id => {

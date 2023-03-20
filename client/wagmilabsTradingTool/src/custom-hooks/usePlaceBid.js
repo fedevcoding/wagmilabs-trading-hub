@@ -1,5 +1,5 @@
 import { fetchSigner } from "@wagmi/core";
-import { getClient } from "@reservoir0x/reservoir-kit-client";
+import { getClient } from "@reservoir0x/reservoir-sdk";
 import { useGetReservoirOptions } from ".";
 import { marketListingMapping } from "@Utils/mappings";
 import { useToast } from "@chakra-ui/react";

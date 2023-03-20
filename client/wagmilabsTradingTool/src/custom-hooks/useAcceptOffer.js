@@ -1,5 +1,5 @@
 import { fetchSigner } from "@wagmi/core";
-import { getClient } from "@reservoir0x/reservoir-kit-client";
+import { getClient } from "@reservoir0x/reservoir-sdk";
 import { useToast } from "@chakra-ui/react";
 
 export const useAcceptOffer = () => {
@@ -10,10 +10,12 @@ export const useAcceptOffer = () => {
       const signer = await fetchSigner();
 
       await getClient()?.actions.acceptOffer({
-        token: {
-          tokenId,
-          contract,
-        },
+        items: [
+          {
+            quantity: 1,
+            token: `${contract}:${tokenId}`,
+          },
+        ],
         signer,
         onProgress: steps => {
           console.log(steps);
