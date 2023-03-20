@@ -5,18 +5,20 @@ import { useNavigate } from "react-router-dom";
 import { UserDataContext } from "@Context";
 import emptyCart from "@Utils/database-functions/emptyCart";
 import { getFiatPrice, roundPrice } from "@Utils/formats/formats";
-import { fetchSigner } from "@wagmi/core";
-import { getClient } from "@reservoir0x/reservoir-kit-client";
+import { useBuyNow } from "@Hooks";
 import { useRemoveItemFromCart } from "@Hooks";
 
 import "./style.css";
+import { Loader } from "@Components";
 
 export const CartModal = ({ modalOpen, closeCartModal }) => {
   const toast = useToast();
-  const { userCartItems, setUserCartItems, ethData, gasSettings } = useContext(UserDataContext);
+  const { userCartItems, setUserCartItems, ethData } = useContext(UserDataContext);
   const navigate = useNavigate();
 
+  const { batchBuyNow } = useBuyNow();
   const { removeItemFromCart } = useRemoveItemFromCart();
+  const [buyLoading, setBuyLoading] = React.useState(false);
 
   function startExploring(e) {
     closeCartModal(e);
@@ -41,37 +43,14 @@ export const CartModal = ({ modalOpen, closeCartModal }) => {
 
   async function batchBuyItems() {
     try {
-      const signer = await fetchSigner();
-      const maxFeePerGas = (gasSettings.maxFeePerGas * 1000000000).toString();
-      const maxPriorityFeePerGas = (gasSettings.maxPriorityFeePerGas * 1000000000).toString();
-
-      const tokens = userCartItems.map(item => {
-        const { tokenId, contractAddress } = item;
-        return { tokenId, contract: contractAddress };
+      setBuyLoading(true);
+      const listingIds = userCartItems.map(item => {
+        return item?.listingId;
       });
-
-      let res = await getClient()?.actions.buyToken({
-        tokens,
-        signer,
-        expectedPrice: totalPrice,
-        options: {
-          maxFeePerGas,
-          maxPriorityFeePerGas,
-        },
-        onProgress: steps => {
-          console.log(steps);
-        },
-      });
-
-      if (res.response.data.statusCode === 400) throw new Error("error");
+      await batchBuyNow(listingIds, totalPrice);
     } catch (e) {
-      toast({
-        title: "Error",
-        description: "Something went wrong, try checking orders availability or wallet balance",
-        status: "error",
-        duration: 3000,
-        isClosable: true,
-      });
+    } finally {
+      setBuyLoading(false);
     }
   }
 
@@ -146,7 +125,7 @@ export const CartModal = ({ modalOpen, closeCartModal }) => {
                   </div>
 
                   <Button className="user-cart-buy-button" colorScheme={"blue"} onClick={batchBuyItems} height="50px">
-                    Complete purchase
+                    {buyLoading ? <Loader /> : <p>Complete purchase</p>}
                   </Button>
                 </div>
               </div>

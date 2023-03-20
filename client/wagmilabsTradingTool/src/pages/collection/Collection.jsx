@@ -5,7 +5,7 @@ import { placeholderImage, etherscan, opensea, x2y2, www, twitter, looksRare, di
 
 import Items from "./sections/items/Items";
 import Activity from "./sections/activity/Activity";
-import Charts from "./sections/charts/Charts";
+import Charts from "./sections/charts/Charts.jsx";
 import Leaderboard from "./sections/leaderboard/Leaderboard";
 
 // import { useMoralisWeb3Api } from "react-moralis";
@@ -741,11 +741,7 @@ const Collection = () => {
         <div section="activity" onClick={e => changeCollectionSection(e)} className="single-collection-section">
           Activity
         </div>
-        <div
-          section="charts"
-          // onClick={e => changeCollectionSection(e)}
-          className="single-collection-section not-allowed"
-        >
+        <div section="charts" onClick={e => changeCollectionSection(e)} className="single-collection-section">
           Charts
         </div>
         <div section="leaderboard" onClick={e => changeCollectionSection(e)} className="single-collection-section">
@@ -791,7 +787,13 @@ const Collection = () => {
         } else if (section === "activity") {
           return <Activity address={address} />;
         } else if (section === "charts") {
-          return <Charts />;
+          return (
+            <Charts
+              collectionAddress={address}
+              collectionSlug={collectionInfo?.slug}
+              floorPrice={collectionInfo.floorAsk?.price?.amount?.decimal}
+            />
+          );
         } else if (section === "leaderboard") {
           return <Leaderboard address={address} />;
         }

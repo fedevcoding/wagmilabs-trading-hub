@@ -14,16 +14,7 @@ updateUserCartRoute.post("/", checkAuth, async (req, res) => {
     if (!user) return res.status(404).json({ pushStatus: "error" });
 
     if (type === "add") {
-      const {
-        name,
-        tokenId,
-        price,
-        image,
-        contractAddress,
-        marketplace,
-        collectionName,
-        listingId,
-      } = req.body;
+      const { name, tokenId, price, image, contractAddress, marketplace, collectionName, listingId } = req.body;
 
       const filteredItems = [
         ...user.shoppingCart,
@@ -48,13 +39,10 @@ updateUserCartRoute.post("/", checkAuth, async (req, res) => {
 
       let filteredItems;
       if (listingId) {
-        filteredItems = user.shoppingCart.filter(
-          (item) => item.listingId?.toLowerCase() !== listingId?.toLowerCase()
-        );
+        filteredItems = user.shoppingCart.filter(item => item.listingId?.toLowerCase() !== listingId?.toLowerCase());
       } else {
         filteredItems = user.shoppingCart.filter(
-          (item) =>
-            item.contractAddress + item.tokenId !== contractAddress + tokenId
+          item => item.contractAddress + item.tokenId !== contractAddress + tokenId
         );
       }
 
@@ -65,6 +53,7 @@ updateUserCartRoute.post("/", checkAuth, async (req, res) => {
     }
   } catch (e) {
     res.status(500).json({ pushStatus: "error" });
+    console.log(e);
   }
 });
 

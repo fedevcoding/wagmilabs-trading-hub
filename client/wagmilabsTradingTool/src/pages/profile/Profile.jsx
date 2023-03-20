@@ -25,7 +25,7 @@ import { UserDataContext } from "@Context";
 import copy from "copy-to-clipboard";
 import { useSetPageTitle } from "@Hooks";
 import { LoadingSpinner, ProfitCalcModal } from "@Components";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { placeholderImage } from "src/assets";
 
 const sortItemsOptions = [
@@ -35,6 +35,18 @@ const sortItemsOptions = [
 
 const Profile = () => {
   const { address: pageAddress } = useParams();
+  const navigate = useNavigate();
+
+  const [profileImageUrl] = useState(window.location.search?.replace("?image=", ""));
+
+  console.log(profileImageUrl);
+
+  useEffect(() => {
+    if (pageAddress && (pageAddress.length !== 42 || !pageAddress.startsWith("0x"))) {
+      navigate("/notfound");
+    }
+  }, [pageAddress, navigate]);
+
   const { address } = useAccount();
   const ensName = useEnsName({ address: pageAddress });
 
@@ -574,7 +586,7 @@ const Profile = () => {
       <section className="profile-section-container">
         <div className="profile-container">
           <div className="profileDetails">
-            <img className="profilePfp" src={isOwner ? profileImage : placeholderImage} alt="" />
+            <img className="profilePfp" src={isOwner ? profileImage : profileImageUrl || placeholderImage} alt="" />
             <div className="profile-ens-address">
               {userEns && (
                 <Tooltip

@@ -129,7 +129,7 @@ body.overflow-hidden {
 }
 
 .not-allowed {
-  cursor: not-allowed;
+  cursor: not-allowed !important;
 }
 
 .flex-col{
@@ -149,4 +149,14 @@ body.overflow-hidden {
 
 .password-input{
   -webkit-text-security: disc;
+}
+
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+input[type="number"] {
+    -moz-appearance: textfield;
 }
