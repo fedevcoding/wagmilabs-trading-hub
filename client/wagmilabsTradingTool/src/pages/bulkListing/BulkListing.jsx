@@ -14,7 +14,10 @@ const BulkListing = () => {
       <div className="section-left">
         <Header />
       </div>
-      <div></div>
+      <div>
+        <h2>List {items.length} NFTs</h2>
+        <p>Royalties:</p>
+      </div>
     </PageWrapper>
   );
 };

@@ -1,9 +1,11 @@
 #page-bulk-listing {
+  display: flex;
   padding-top: 50px;
   width: 90vw;
   margin: 0 auto;
 
   .section-left {
+    flex: 0.8;
     .header {
       .marketplace-button {
         background-color: transparent;

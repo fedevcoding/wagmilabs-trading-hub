@@ -1,4 +1,4 @@
-import { HStack, NumberInput, NumberInputField } from "@chakra-ui/react";
+import { HStack, NumberInput, NumberInputField, Button } from "@chakra-ui/react";
 import React from "react";
 import getMarketplaceImage from "src/utils/marketplaceImageMapping";
 import { marketplaces } from "../../options";
@@ -28,8 +28,13 @@ export const Header = () => {
         <div>
           <p>List all as</p>
           <HStack>
+            <Button>
+              <p>Floor price</p>
+            </Button>
             <NumberInput>
-              <NumberInputField placeholder="Amount (eth)"></NumberInputField>
+              <HStack>
+                <NumberInputField placeholder="Amount (eth)"></NumberInputField>
+              </HStack>
             </NumberInput>
           </HStack>
         </div>
