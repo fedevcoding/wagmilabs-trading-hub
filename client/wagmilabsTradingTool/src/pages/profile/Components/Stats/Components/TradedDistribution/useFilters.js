@@ -13,7 +13,7 @@ export function useFilters() {
 
   const { loading, nfts } = useGetTradedNftDistribution(periods[currentPeriod]);
 
-  const items = nfts.map(n => ({
+  const items = (nfts || []).map(n => ({
     ...n,
     price: n.price && n.type === "mint" ? n.price / 10 ** 18 : n.price,
   }));

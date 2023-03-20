@@ -758,7 +758,7 @@ const Profile = () => {
           />
         )) ||
           ""}
-        {(section === "stats" && <Stats />) || ""}
+        {(section === "stats" && <Stats address={userAddress} />) || ""}
       </section>
     </>
   );
