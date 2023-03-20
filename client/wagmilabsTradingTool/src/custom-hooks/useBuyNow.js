@@ -37,7 +37,6 @@ export const useBuyNow = (callback, quantity) => {
         isClosable: true,
       });
     } catch (e) {
-      console.log(e);
       if (callback && typeof callback === "function") {
         callback();
       }
@@ -57,8 +56,10 @@ export const useBuyNow = (callback, quantity) => {
     try {
       const signer = await fetchSigner();
 
+      const items = orderIds.map(orderId => ({ quantity: 1, orderId }));
+
       let res = await getClient()?.actions.buyToken({
-        orderIds,
+        items,
         signer,
         expectedPrice: expectedPrice,
         options,
@@ -79,11 +80,7 @@ export const useBuyNow = (callback, quantity) => {
 
       return true;
     } catch (e) {
-      const error =
-        e?.response?.data?.message ||
-        (String(e).includes("rejected")
-          ? "Transaction rejected"
-          : "Something went wrong, try checking order availability or wallet funds");
+      const error = checkErrors(e);
 
       toast({
         title: "Error",

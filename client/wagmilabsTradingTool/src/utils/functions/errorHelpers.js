@@ -1,7 +1,12 @@
-export const errorHas = (error, string) => String(error).toLowerCase().includes(string);
+export const errorHas = (error, string) => {
+  if (typeof error === "object") {
+    error = JSON.stringify(error?.response?.data || error?.response || error);
+  }
+  return String(error).toLowerCase().includes(string);
+};
 
 export const checkErrors = error => {
-  if (errorHas(error, "insufficient")) {
+  if (errorHas(error, "balance too low")) {
     return "Wallet balance is insufficient to complete this transaction";
   } else if (errorHas(error, "rejected")) {
     return "Transaction rejected";
