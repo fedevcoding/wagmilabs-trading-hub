@@ -1,4 +1,12 @@
 #stats .realized-gains {
+  color: var(--text-color);
+  margin-top: 1.5rem;
+
+  h3 {
+    font-size: 21px;
+    margin-left: 1rem;
+  }
+
   table {
     width: 100%;
     margin-top: 1rem;

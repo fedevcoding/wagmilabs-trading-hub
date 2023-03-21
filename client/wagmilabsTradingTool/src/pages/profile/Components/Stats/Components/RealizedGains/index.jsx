@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, LoadingSpinner } from "@Components";
+import { LoadingSpinner } from "@Components";
 import { useGetData } from "./useGetData";
 import { formatAddress, roundPrice, roundPriceUsd } from "@Utils";
 import { useCollections } from "@reservoir0x/reservoir-kit-ui";
@@ -26,13 +26,13 @@ export const RealizedGains = React.memo(({ address }) => {
   }, {});
 
   return (
-    <Card className="realized-gains">
+    <div className="realized-gains">
       <h3>Realized gains</h3>
       {(isLoading && <LoadingSpinner />) || (
         <table>
           <thead>
             <tr>
-              <th>Address</th>
+              <th>Collection</th>
               <th>Bought Count</th>
               <th>Bought Price</th>
               <th>Bought Fee</th>
@@ -49,31 +49,31 @@ export const RealizedGains = React.memo(({ address }) => {
               <tr key={c.address}>
                 <td className="image">
                   <div>
-                    {(collections[c.address] && (
-                      <LazyLoadImage
-                        src={collections[c.address].img || placeholderImage}
-                        className="nft-img"
-                        effect="blur"
-                        placeholderSrc={placeholderImage}
-                        alt={collections[c.address].name}
-                        width={65}
-                        onError={({ currentTarget }) => {
-                          currentTarget.onerror = null; // prevents looping
-                          currentTarget.src = placeholderImage;
-                        }}
-                      />
-                    )) ||
-                      ""}
-                    <div>
-                      {formatAddress(c.address)}
-                      {(collections[c.address] && (
-                        <>
-                          <br />
-                          {collections[c.address].name}
-                        </>
-                      )) ||
-                        ""}
-                    </div>
+                    {(collections && collections[c.address] && (
+                      <>
+                        <LazyLoadImage
+                          src={collections[c.address]?.img || placeholderImage}
+                          className="nft-img"
+                          effect="blur"
+                          placeholderSrc={placeholderImage}
+                          alt={collections[c.address]?.name || ""}
+                          width={65}
+                          onError={({ currentTarget }) => {
+                            currentTarget.onerror = null; // prevents looping
+                            currentTarget.src = placeholderImage;
+                          }}
+                        />
+                        {(collections[c.address]?.name && <div>{collections[c.address].name}</div>) || ""}
+                      </>
+                    )) || (
+                      <>
+                        <img src={placeholderImage} alt="Unknown" width={65} />
+                        <div>
+                          {formatAddress(c.address)} <br />
+                          {"Unknown collection"}
+                        </div>
+                      </>
+                    )}
                   </div>
                 </td>
                 <td>{c.bought.count}</td>
@@ -112,6 +112,6 @@ export const RealizedGains = React.memo(({ address }) => {
           </tbody>
         </table>
       )}
-    </Card>
+    </div>
   );
 });
