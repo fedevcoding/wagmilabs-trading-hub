@@ -42,7 +42,7 @@ export default React.memo(() => {
         </Col>
       </Row>
       <Card>
-        {data && !(!(data || []).length && isLoading) ? (
+        {data ? (
           <Table
             data={data}
             taxPerc={settings.taxPerc}

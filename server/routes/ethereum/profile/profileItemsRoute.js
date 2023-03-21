@@ -7,7 +7,7 @@ const RESERVOIR_API_KEY = "9fc22ad1-29da-4a2d-a977-327f6bf1926f";
 
 profileItemsRoute.get("/", checkAuth, async (req, res) => {
   try {
-    const userAddress = req.userDetails.address;
+    const userAddress = req.query?.address || req.userDetails?.address;
     const { sortDirection, collection, continuation, limit = "50" } = req.query;
 
     const continuationFilter = continuation ? `&continuation=${continuation}` : "";

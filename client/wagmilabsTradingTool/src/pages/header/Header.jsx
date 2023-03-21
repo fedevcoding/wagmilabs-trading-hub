@@ -55,7 +55,7 @@ const Header = () => {
           profileOptions?.classList?.remove("visible");
           profileOptions?.classList?.add("invisible");
         }
-      }, 200);
+      }, 100);
     }
     function profileClick() {
       profileOptions?.classList?.remove("visible");
@@ -85,6 +85,7 @@ const Header = () => {
     function calendarsMouseOver() {
       hovered = true;
       profileOptions?.classList?.remove("invisible");
+      calendarOptionContainer?.classList?.add("before");
     }
 
     function calendarsMouseOut() {
@@ -92,8 +93,9 @@ const Header = () => {
       setTimeout(() => {
         if (!hovered) {
           profileOptions?.classList?.add("invisible");
+          calendarOptionContainer?.classList?.remove("before");
         }
-      }, 300);
+      }, 200);
     }
 
     function calendarsClick() {
@@ -123,6 +125,7 @@ const Header = () => {
     calendarOptionContainer.addEventListener("mouseover", () => {
       hovered = true;
       profileOptions?.classList?.remove("invisible");
+      calendarOptionContainer?.classList?.add("before");
     });
 
     calendarOptionContainer.addEventListener("mouseout", () => {
@@ -130,8 +133,9 @@ const Header = () => {
       setTimeout(() => {
         if (!hovered) {
           profileOptions?.classList?.add("invisible");
+          calendarOptionContainer?.classList?.remove("before");
         }
-      }, 300);
+      }, 200);
     });
 
     calendarOptionContainer.addEventListener("click", () => {
@@ -223,7 +227,7 @@ const Header = () => {
     }
   }, [modalOpen]);
 
-  const isVolumesPage = window.location.pathname === "/volumes";
+  const section = window.location.pathname;
 
   return (
     <>
@@ -231,7 +235,7 @@ const Header = () => {
       <header className="search-header">
         <img src={logoImage} onClick={() => navigate("/")} className="logo-image" alt="" />
 
-        <EthereumSearch />
+        <EthereumSearch isHeader={true} />
 
         <div className="header-links-container">
           <div>
@@ -247,15 +251,18 @@ const Header = () => {
             </div>
           </div>
           <div onClick={() => navigate("/volumes")}>
-            <div className={`${isVolumesPage ? "active" : ""} volumes-button header-links`}>Volumes</div>
+            <div className={`${section === "/volumes" ? "active" : ""} volumes-button header-links`}>Volumes</div>
           </div>
           <div>
-            <div className="pnl-button header-links" onClick={() => navigate("/profitandloss")}>
+            <div
+              className={`${section === "/profitandloss" ? "active" : ""} pnl-button header-links`}
+              onClick={() => navigate("/profitandloss")}
+            >
               <span>P&L</span>
             </div>
           </div>
           <div onClick={() => navigate("/feed")}>
-            <div className="feed-button header-links">Feed</div>
+            <div className={`${section === "/feed" ? "active" : ""} feed-button header-links`}>Feed</div>
           </div>
           <div>
             <div className="calendars-button header-links">
@@ -264,7 +271,12 @@ const Header = () => {
               <div className="calendars-options-dropdown invisible">
                 <div onClick={() => navigate("/calendars/drops")}>NFT drops</div>
                 <div onClick={() => navigate("/calendars/spaces")}>Twitter spaces</div>
-                <div onClick={() => navigate("/calendars/raffles")}>Personal</div>
+                <div
+                  // onClick={() => navigate("/calendars/raffles")}
+                  className="not-allowed"
+                >
+                  Personal
+                </div>
                 <div onClick={() => navigate("/calendars/events")}>IRL events</div>
               </div>
             </div>
@@ -280,12 +292,16 @@ const Header = () => {
           }}
         >
           <div className="pfp-options-container">
-            <img src={profileImage} alt="" className="pfp" onClick={() => navigate("/profile")} />
+            <a href={`/profile/${address}`}>
+              <img src={profileImage} alt="" className="pfp" />
+            </a>
             <div className="profile-options invisible">
-              <div onClick={() => navigate("/profile")} className="pfp-icon-container">
-                <i className="fa-solid fa-circle-user"></i>
-                <p>Profile</p>
-              </div>
+              <a href={`/profile/${address}`}>
+                <div onClick={() => navigate(`/profile/${address}`)} className="pfp-icon-container">
+                  <i className="fa-solid fa-circle-user"></i>
+                  <p>Profile</p>
+                </div>
+              </a>
 
               <div className="switch-account-option-container" onClick={() => navigate("/bots/wallets")}>
                 <i className="fa-solid fa-arrows-repeat"></i>

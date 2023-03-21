@@ -40,6 +40,7 @@ export const Nfts = ({
   selectedSortOption,
   setSelectedSortOption,
   setSearchCollectionText,
+  isOwner,
 }) => {
   const [isOpenTransferModal, setIsOpenTransferModal] = useState(false);
   const [TransferModalDetails, setTransferModalDetails] = useState(null);
@@ -339,29 +340,31 @@ export const Nfts = ({
                   )}
                 </div>
 
-                <div className="option-button" onClick={() => toggleOptions(index)}>
-                  <i className="fa-regular fa-ellipsis item-option-button"></i>
+                {isOwner && (
+                  <div className="option-button" onClick={() => toggleOptions(index)}>
+                    <i className="fa-regular fa-ellipsis item-option-button"></i>
 
-                  <div className="single-nft-options invisible">
-                    <div onClick={() => updateUserImage(image)}>
-                      <i className="fa-solid fa-image"></i>
-                      <p>Set as PFP</p>
-                    </div>
-                    <div
-                      onClick={() => {
-                        setTransferModalDetails({
-                          details: item,
-                          id: tokenId,
-                          address: contractAddress,
-                          currency: "ETH",
-                        });
-                      }}
-                    >
-                      <i className="fa-solid fa-arrow-up"></i>
-                      <p>Transfer</p>
+                    <div className="single-nft-options invisible">
+                      <div onClick={() => updateUserImage(image)}>
+                        <i className="fa-solid fa-image"></i>
+                        <p>Set as PFP</p>
+                      </div>
+                      <div
+                        onClick={() => {
+                          setTransferModalDetails({
+                            details: item,
+                            id: tokenId,
+                            address: contractAddress,
+                            currency: "ETH",
+                          });
+                        }}
+                      >
+                        <i className="fa-solid fa-arrow-up"></i>
+                        <p>Transfer</p>
+                      </div>
                     </div>
                   </div>
-                </div>
+                )}
 
                 <a href={`/collection/${contractAddress}`} rel="noreferrer" target="_blank">
                   <Tooltip
@@ -384,12 +387,17 @@ export const Nfts = ({
                   </div>
                   <hr></hr>
                   {/* getListingInfo(tokenId, contractAddress, floor_price) */}
+
                   <div
                     className="profile-list-nft inactive"
-                    onClick={() => openSmartListingModal(tokenId, contractAddress, floor_price)}
+                    onClick={() => isOwner && openSmartListingModal(tokenId, contractAddress, floor_price)}
                   >
-                    <i className="fa-solid fa-tag"></i>
-                    <span>Smart list</span>
+                    {isOwner && (
+                      <>
+                        <i className="fa-solid fa-tag"></i>
+                        <span>Smart list</span>
+                      </>
+                    )}
                   </div>
                 </div>
               </div>
@@ -511,19 +519,19 @@ export const Nfts = ({
               )}
             </div>
           </div>
-
-          {selectBulk ? (
-            <div className="profile-item-bulk-list-transfer-cancel" onClick={() => changeBulk(false)}>
-              Cancel
-            </div>
-          ) : (
-            <div
-              className="profile-item-bulk-list-transfer not-allowed"
-              // onClick={() => changeBulk(true)}
-            >
-              Bulk list / transfer
-            </div>
-          )}
+          {isOwner &&
+            (selectBulk ? (
+              <div className="profile-item-bulk-list-transfer-cancel" onClick={() => changeBulk(false)}>
+                Cancel
+              </div>
+            ) : (
+              <div
+                className="profile-item-bulk-list-transfer not-allowed"
+                // onClick={() => changeBulk(true)}
+              >
+                Bulk list / transfer
+              </div>
+            ))}
         </div>
       </div>
 

@@ -24,7 +24,7 @@ import { ChakraProvider } from "@chakra-ui/react";
 // wagmi / rainbowkit
 import { ReservoirKitProvider, darkTheme as reservoirDarkTheme } from "@reservoir0x/reservoir-kit-ui";
 import { chain, configureChains, WagmiConfig, createClient as createWagmiClient } from "wagmi";
-import { createClient } from "@reservoir0x/reservoir-kit-client";
+import { createClient } from "@reservoir0x/reservoir-sdk";
 import { infuraProvider } from "wagmi/providers/infura";
 import { publicProvider } from "wagmi/providers/public";
 import { getDefaultWallets, RainbowKitProvider, darkTheme } from "@rainbow-me/rainbowkit";
@@ -64,9 +64,15 @@ const wagmiClient = createWagmiClient({
   provider,
 });
 createClient({
-  apiBase: "https://api.reservoir.tools",
-  apiKey: RESERVOIR_API_KEY,
   source: "http://localhost:3000",
+  chains: [
+    {
+      id: 1,
+      apiKey: RESERVOIR_API_KEY,
+      baseApiUrl: "https://api.reservoir.tools",
+      default: true,
+    },
+  ],
 });
 
 // for reservoir
@@ -391,7 +397,7 @@ function App() {
 
                               <Route
                                 exact
-                                path="/profile"
+                                path="/profile/:address"
                                 element={
                                   <>
                                     <Header />

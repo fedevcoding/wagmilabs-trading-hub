@@ -11,6 +11,7 @@ import { placeholderImage } from "@Utils/images";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import moment from "moment";
 import { useFirstRender } from "@Hooks";
+import { LoadingSpinner } from "@Components";
 
 const WatchList = ({ tool, timeFrame, setTimeFrame, resetTime }) => {
   const [collections, setCollections] = useState([]);
@@ -256,27 +257,10 @@ const WatchList = ({ tool, timeFrame, setTimeFrame, resetTime }) => {
             </tr>
             {loading && (
               <tr>
-                <td colSpan={7}>
-                  <div className="loading">
-                    Loading data{" "}
-                    <svg
-                      className="spinner"
-                      width="65px"
-                      height="65px"
-                      viewBox="0 0 66 66"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <circle
-                        className="path"
-                        fill="none"
-                        strokeWidth="6"
-                        strokeLinecap="round"
-                        cx="33"
-                        cy="33"
-                        r="30"
-                      ></circle>
-                    </svg>{" "}
-                  </div>
+                <td colSpan={6}>
+                  <LoadingSpinner>
+                    <p>Loading data</p>
+                  </LoadingSpinner>
                 </td>
               </tr>
             )}

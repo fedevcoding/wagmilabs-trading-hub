@@ -806,10 +806,7 @@ const Profile = () => {
           />
         )) ||
           ""}
-        {(section === "activity" && (
-          <Activity userAddress={userAddress} pageAddress={pageAddress} isOwner={isOwner} />
-        )) ||
-          ""}
+        {(section === "activity" && <Activity userAddress={userAddress} pageAddress={pageAddress} />) || ""}
         {(section === "stats" && <Stats address={userAddress} />) || ""}
       </section>
     </>

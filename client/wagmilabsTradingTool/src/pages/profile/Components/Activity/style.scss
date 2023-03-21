@@ -5,6 +5,21 @@
   display: flex;
 }
 
+.profile-activity-not-found {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  color: white;
+  font-size: 20px;
+  margin-top: 50px;
+
+  img {
+    width: 220px;
+  }
+}
+
 .profile-activity-table-container {
   width: 100%;
   display: flex;
