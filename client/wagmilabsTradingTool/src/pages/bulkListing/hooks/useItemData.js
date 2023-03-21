@@ -26,18 +26,37 @@ export const useItemData = state => {
 
   const changeListPrice = (id, marketplace, price) => {
     setItems(prevItems => {
-      const newItems = prevItems.map(item => {
+      const newItems = [...prevItems];
+      newItems.forEach(item => {
         if (item.id === id) {
-          return {
-            ...item,
-            listings: { ...item.listings, [marketplace]: price },
-          };
+          item.marketplaces.forEach(marketplaceItem => {
+            if (marketplaceItem.name === marketplace) {
+              marketplaceItem.price = price;
+            }
+          });
         }
-        return item;
       });
       return newItems;
     });
   };
 
-  return { items, setMarketplace, setItems, changeListPrice };
+  const changeDuration = (id, marketplace, expiration) => {
+    expiration = new Date(expiration).getTime();
+    console.log(expiration);
+    setItems(prevItems => {
+      const newItems = [...prevItems];
+      newItems.forEach(item => {
+        if (item.id === id) {
+          item.marketplaces.forEach(marketplaceItem => {
+            if (marketplaceItem.name === marketplace) {
+              marketplaceItem.expiration = expiration;
+            }
+          });
+        }
+      });
+      return newItems;
+    });
+  };
+
+  return { items, setMarketplace, setItems, changeListPrice, changeDuration };
 };

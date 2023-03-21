@@ -20,7 +20,7 @@ export const useBulk = userItems => {
         return filteredItems;
       });
     } else {
-      itemData["marketplaces"] = [{ name: defaultMarketplace, listingPrice: 0 }];
+      itemData["marketplaces"] = [{ name: defaultMarketplace }];
       const newItems = [...bulkItems, itemData];
       setBulkItems(newItems);
     }
@@ -33,7 +33,7 @@ export const useBulk = userItems => {
       const tokenId = item?.token?.tokenId;
       const collectionName = item?.token?.collection?.name;
       const floorPrice = item?.token?.collection?.floorAskPrice;
-      const marketplaces = [{ name: defaultMarketplace, listingPrice: 0 }];
+      const marketplaces = [{ name: defaultMarketplace }];
 
       const id = `${contractAddress}:${tokenId}`;
 

@@ -1,7 +1,12 @@
+import EthLogo from "./Logos/EthLogo";
+import TableHr from "./Lines/TableHr";
+export { EthLogo };
+export { TableHr };
 export * from "./Form";
 export * from "./Charts";
 export * from "./Modals";
 export * from "./Tables";
+export * from "./Inputs";
 
 export { Loader } from "./Loader";
 export { Tabs } from "./Tabs";
@@ -17,3 +22,4 @@ export { Card } from "./Card";
 export { Number } from "./Number";
 export { ActionModal } from "./ActionModal";
 export { RangeSelector } from "./RangeSelector";
+export { ImageButton } from "./ImageButton";
