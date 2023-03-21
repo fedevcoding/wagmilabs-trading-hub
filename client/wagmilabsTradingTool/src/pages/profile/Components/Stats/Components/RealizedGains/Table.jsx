@@ -1,9 +1,12 @@
 import React from "react";
 import { formatAddress, roundPrice, roundPriceUsd } from "@Utils";
+import { useNavigate } from "react-router-dom";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { placeholderImage } from "@Assets";
 
 export const Table = React.memo(({ rows, collections }) => {
+  const navigate = useNavigate();
+
   return (
     <table>
       <thead>
@@ -24,7 +27,7 @@ export const Table = React.memo(({ rows, collections }) => {
         {rows.map(c => (
           <tr key={c.address}>
             <td className="image">
-              <div>
+              <div onClick={() => navigate(`/collection/${c.address}`)}>
                 {(collections && collections[c.address] && (
                   <>
                     <LazyLoadImage
