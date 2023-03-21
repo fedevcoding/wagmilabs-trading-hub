@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState, useRef } from "react";
-import "./activity.scss";
+import "./style.scss";
 import { placeholderImage } from "@Assets";
 import { formatAddress2, roundPrice2, formatIpfs } from "@Utils/formats/formats";
 import { baseUrl } from "@Variables";
