@@ -4,10 +4,11 @@ import { formatAddress2, roundPrice2, formatIpfs } from "@Utils";
 import { baseUrl } from "@Variables";
 import getMarketplaceImage from "@Utils/marketplaceImageMapping";
 import moment from "moment";
-import { useAccount } from "wagmi";
 import { Button, HStack, Input, NumberInput, NumberInputField, Select } from "@chakra-ui/react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { LoadingSpinner } from "@Components";
+import { notFound } from "@Assets";
 
 import "./style.scss";
 
@@ -51,9 +52,7 @@ const activityMarketplaceMapping = [
   },
 ];
 
-export const Activity = () => {
-  const { address: userAdress } = useAccount();
-
+export const Activity = ({ userAddress, pageAddress }) => {
   const [activityCategory, setActivityCategory] = useState(["sale"]);
   const [activityAddressFilter, setActivityAddressFilter] = useState({
     from: "",
@@ -222,7 +221,7 @@ export const Activity = () => {
       const offsetFilters = getActivityOffsets();
 
       const response = await fetch(
-        `${baseUrl}/profileActivity?hello=hello${typeFilter}${addressFilter}${priceFilter}${marketplaceFilter}${tokenIdFilter}${contractFilter}${dateFilter}${offsetFilters}`,
+        `${baseUrl}/profileActivity?hello=hello${typeFilter}${addressFilter}${priceFilter}${marketplaceFilter}${tokenIdFilter}${contractFilter}${dateFilter}${offsetFilters}&address=${pageAddress}`,
         {
           headers: {
             "x-auth-token": localStorage.jsonwebtoken,
@@ -257,7 +256,7 @@ export const Activity = () => {
       const dateFilter = getDateFilter();
 
       const response = await fetch(
-        `${baseUrl}/profileActivity?hello=hello${typeFilter}${addressFilter}${priceFilter}${marketplaceFilter}${tokenIdFilter}${contractFilter}${dateFilter}&offset1=0&offset2=0&offset3=0`,
+        `${baseUrl}/profileActivity?hello=hello${typeFilter}${addressFilter}${priceFilter}${marketplaceFilter}${tokenIdFilter}${contractFilter}${dateFilter}&offset1=0&offset2=0&offset3=0&address=${pageAddress}`,
         {
           headers: {
             "x-auth-token": localStorage.jsonwebtoken,
@@ -356,10 +355,10 @@ export const Activity = () => {
               </a>
               <td className="profile-activity-single-price">{price ? roundPrice2(price) : 0} ETH</td>
               <td className="profile-activity-single-from">
-                {to_address ? formatAddress2(to_address, userAdress) : "- - -"}
+                {to_address ? formatAddress2(to_address, userAddress) : "- - -"}
               </td>
               <td className="profile-activity-single-to">
-                {from_address ? formatAddress2(from_address, userAdress) : "- - -"}
+                {from_address ? formatAddress2(from_address, userAddress) : "- - -"}
               </td>
               <td className="profile-activity-single-time">
                 <a
@@ -578,53 +577,30 @@ export const Activity = () => {
                 {profileActivityLoading && (
                   <tr>
                     <td colSpan={6}>
-                      <div className="loading">
-                        Loading activity{" "}
-                        <svg
-                          className="spinner"
-                          width="65px"
-                          height="65px"
-                          viewBox="0 0 66 66"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <circle
-                            className="path"
-                            fill="none"
-                            strokeWidth="6"
-                            strokeLinecap="round"
-                            cx="33"
-                            cy="33"
-                            r="30"
-                          ></circle>
-                        </svg>{" "}
-                      </div>
+                      <LoadingSpinner>
+                        <p>Loading activity...</p>
+                      </LoadingSpinner>
                     </td>
                   </tr>
                 )}
-                {!profileActivityLoading && profileActivityMapping}
+                {!profileActivityLoading && (!profileActivityMapping || profileActivityMapping?.length === 0) ? (
+                  <tr>
+                    <td colSpan={6}>
+                      <div className="profile-activity-not-found">
+                        <img src={notFound} alt="no activity" />
+                        <p>No activity found...</p>
+                      </div>
+                    </td>
+                  </tr>
+                ) : (
+                  profileActivityMapping
+                )}
                 {profileActivityLoadMore && (
                   <tr>
                     <td colSpan={6}>
-                      <div className="loading">
-                        Loading more activity{" "}
-                        <svg
-                          className="spinner"
-                          width="65px"
-                          height="65px"
-                          viewBox="0 0 66 66"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <circle
-                            className="path"
-                            fill="none"
-                            strokeWidth="6"
-                            strokeLinecap="round"
-                            cx="33"
-                            cy="33"
-                            r="30"
-                          ></circle>
-                        </svg>{" "}
-                      </div>
+                      <LoadingSpinner>
+                        <p>Loading more activity...</p>
+                      </LoadingSpinner>
                     </td>
                   </tr>
                 )}
