@@ -25,7 +25,7 @@ const sortItemsOptions = [
   { value: "asc", label: "Oldest" },
 ];
 
-const Nfts = ({
+export const Nfts = ({
   loadingMoreNfts,
   fetchMoreItems,
   nftsContinuation,
@@ -705,4 +705,3 @@ const SmartListModal = ({
     </>
   );
 };
-export default Nfts;

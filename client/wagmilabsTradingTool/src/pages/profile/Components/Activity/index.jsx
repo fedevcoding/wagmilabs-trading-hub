@@ -51,7 +51,7 @@ const activityMarketplaceMapping = [
   },
 ];
 
-const Activity = ({ userAddress, pageAddress, isOwner }) => {
+export const Activity = ({ userAddress, pageAddress, isOwner }) => {
   const [activityCategory, setActivityCategory] = useState(["sale"]);
   const [activityAddressFilter, setActivityAddressFilter] = useState({
     from: "",
@@ -611,8 +611,6 @@ const Activity = ({ userAddress, pageAddress, isOwner }) => {
     </>
   );
 };
-
-export default Activity;
 
 const ActivityIcon = ({ type }) => {
   return (
