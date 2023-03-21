@@ -31,20 +31,13 @@ const Activity = React.memo(({ address }) => {
         <div className="collection-activity-container">
           <div className="collection-activity-chart-container">
             <div className="chart-period-container">
-              <Tabs
-                tabs={periods.map(p => p.value)}
-                active={chartPeriod}
-                setTab={value => setChartPeriod(value)}
-              />
+              <Tabs tabs={periods.map(p => p.value)} active={chartPeriod} setTab={value => setChartPeriod(value)} />
             </div>
             <div className="activity-chart-wrapper">
               {loadingChart ? (
                 <LoadingSpinner />
               ) : (
-                <ActivityChart
-                  activityChartData={activityChartData}
-                  loadingChart={loadingChart}
-                />
+                <ActivityChart activityChartData={activityChartData} loadingChart={loadingChart} />
               )}
             </div>
           </div>
