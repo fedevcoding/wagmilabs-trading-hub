@@ -10,7 +10,7 @@
   .no-elements {
     margin-top: 1rem;
     padding-bottom: 1rem;
-    text-align: center;
+    text-align: left;
   }
 
   table {
@@ -27,8 +27,13 @@
       cursor: pointer;
       display: flex;
       align-items: center;
-      justify-content: center;
+      justify-content: flex-start;
+      text-align: left;
       font-size: 12px;
+
+      > img {
+        margin-right: 0.5rem;
+      }
 
       span {
         margin-right: 0.5rem;
@@ -57,7 +62,7 @@
     tr td:first-child,
     tr th:first-child {
       width: 50px;
-      text-align: right;
+      text-align: left;
     }
 
     tr:last-child {

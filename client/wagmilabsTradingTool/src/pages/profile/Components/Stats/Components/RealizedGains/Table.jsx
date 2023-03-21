@@ -3,6 +3,8 @@ import { formatAddress, roundPrice, roundPriceUsd } from "@Utils";
 import { useNavigate } from "react-router-dom";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { placeholderImage } from "@Assets";
+import { addingProfit } from "./functions";
+import { Number } from "@Components";
 
 export const Table = React.memo(({ rows, collections }) => {
   const navigate = useNavigate();
@@ -21,10 +23,11 @@ export const Table = React.memo(({ rows, collections }) => {
           <th>Minted Count</th>
           <th>Minted Price</th>
           <th>Minted Fee</th>
+          <th>Profit</th>
         </tr>
       </thead>
       <tbody>
-        {rows.map(c => (
+        {addingProfit(rows).map(c => (
           <tr key={c.address}>
             <td className="image">
               <div onClick={() => navigate(`/collection/${c.address}`)}>
@@ -85,6 +88,9 @@ export const Table = React.memo(({ rows, collections }) => {
             <td>
               <i className="fa-brands fa-ethereum" />
               {roundPrice(c.minted.fee)}
+            </td>
+            <td>
+              <Number n={c.profit} symbol={" ETH"} />
             </td>
           </tr>
         ))}
