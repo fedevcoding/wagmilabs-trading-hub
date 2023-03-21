@@ -3,7 +3,7 @@ import React from "react";
 import getMarketplaceImage from "src/utils/marketplaceImageMapping";
 import { marketplaces } from "../../options";
 
-export const Header = () => {
+export const Header = ({ selectedMarketplaces, toggleMarketplace }) => {
   return (
     <div className="header">
       <h1>Bulk listing</h1>
@@ -15,8 +15,14 @@ export const Header = () => {
             {marketplaces.map(marketplace => {
               const { value, name, royalties } = marketplace;
               const marketplaceImage = getMarketplaceImage(value);
+              const isSelected = selectedMarketplaces.includes(value);
+
               return (
-                <HStack value={marketplace.value} className="marketplace-button">
+                <HStack
+                  value={marketplace.value}
+                  className={`marketplace-button ${isSelected && "selected"}`}
+                  onClick={() => toggleMarketplace(value, isSelected)}
+                >
                   <img src={marketplaceImage} alt={name} />
                   <p>{royalties}%</p>
                 </HStack>

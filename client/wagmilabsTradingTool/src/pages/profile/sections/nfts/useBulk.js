@@ -1,5 +1,7 @@
 import { useState } from "react";
 
+const defaultMarketplace = "opensea";
+
 export const useBulk = userItems => {
   const [bulkActive, setBulkActive] = useState(false);
   const [bulkItems, setBulkItems] = useState([]);
@@ -18,6 +20,7 @@ export const useBulk = userItems => {
         return filteredItems;
       });
     } else {
+      itemData["marketplaces"] = [{ name: defaultMarketplace, listingPrice: 0 }];
       const newItems = [...bulkItems, itemData];
       setBulkItems(newItems);
     }
@@ -30,10 +33,20 @@ export const useBulk = userItems => {
       const tokenId = item?.token?.tokenId;
       const collectionName = item?.token?.collection?.name;
       const floorPrice = item?.token?.collection?.floorAskPrice;
+      const marketplaces = [{ name: defaultMarketplace, listingPrice: 0 }];
 
       const id = `${contractAddress}:${tokenId}`;
 
-      const itemData = { id, name, collectionName, image, contractAddress, tokenId, floorPrice };
+      const itemData = {
+        id,
+        name,
+        collectionName,
+        image,
+        contractAddress,
+        tokenId,
+        floorPrice,
+        marketplaces,
+      };
       return itemData;
     });
 

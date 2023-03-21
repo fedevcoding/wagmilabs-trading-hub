@@ -1,17 +1,19 @@
+import { marketplacesData } from "../../utils/markeplacesData";
+
 export const marketplaces = [
   {
-    name: "Opensea",
-    value: "opensea",
-    royalties: 0,
+    name: marketplacesData.opensea.name,
+    value: marketplacesData.opensea.value,
+    royalties: marketplacesData.opensea.royalties,
   },
   {
-    name: "X2Y2",
-    value: "x2y2",
-    royalties: 0.5,
+    name: marketplacesData.x2y2.name,
+    value: marketplacesData.x2y2.value,
+    royalties: marketplacesData.x2y2.royalties,
   },
   {
-    name: "Looks Rare",
-    value: "looksrare",
-    royalties: 2,
+    name: marketplacesData.looksrare.name,
+    value: marketplacesData.looksrare.value,
+    royalties: marketplacesData.looksrare.royalties,
   },
 ];
