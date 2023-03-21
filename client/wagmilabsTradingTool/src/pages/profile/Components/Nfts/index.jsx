@@ -6,7 +6,6 @@ import moment from "moment";
 
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import "./nfts.css";
 
 import { notFound, placeholderImage } from "@Assets";
 
@@ -19,6 +18,8 @@ import { useNavigate } from "react-router-dom";
 import { useListNft } from "@Hooks";
 import { generateRandomRangeInt } from "@Utils/formats/utils";
 import { ItemBanner } from "src/pages/collection/sections/banners/ItemBanner";
+
+import "./style.scss";
 
 const sortItemsOptions = [
   { value: "desc", label: "Newest" },
