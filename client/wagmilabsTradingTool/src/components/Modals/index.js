@@ -12,3 +12,4 @@ export { TaxSettingsModal } from "./TaxSettingsModal";
 export { TimeframeModal } from "./TimeframeModal";
 export { ProfitCalcModal } from "./ProfitCalcModal";
 export { CustomModal } from "./CustomModal";
+export { BulkListModal } from "./BulkListModal";

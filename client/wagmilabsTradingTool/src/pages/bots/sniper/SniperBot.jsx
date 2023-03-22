@@ -27,7 +27,6 @@ const SniperBot = () => {
       socket.emit("joinSnipeUpdates", address);
 
       socket.off("newSnipeUpdates").on("snipeUpdates", data => {
-        console.log(data);
         handleTaskUpdate(data);
       });
     }

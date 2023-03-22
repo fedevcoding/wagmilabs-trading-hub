@@ -13,7 +13,6 @@ import { notFound } from "@Assets";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { placeholderImage } from "@Utils/images";
 import { LoadingSpinner } from "@Components";
-import { HStack } from "@chakra-ui/react";
 
 const defaultTimeFrame = "1H";
 

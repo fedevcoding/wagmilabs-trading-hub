@@ -7,9 +7,7 @@ const RESERVOIR_API_KEY = "9fc22ad1-29da-4a2d-a977-327f6bf1926f";
 
 profileItemsRoute.get("/", checkAuth, async (req, res) => {
   try {
-    console.log(req.query);
     const userAddress = req.query?.address || req.userDetails?.address;
-    console.log("userAddress", userAddress);
 
     const { sortDirection, collection, continuation } = req.query;
 

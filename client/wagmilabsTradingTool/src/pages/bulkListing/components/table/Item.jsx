@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { marketplacesData } from "../../../../utils/markeplacesData";
 import { marketplaces as marketplacesOptions } from "../../options";
-import { TableHr, EthLogo, MarketplaceImage, Plus, EthInput, Close } from "@Components";
+import { TableHr, EthLogo, MarketplaceImage, Plus, EthInput, Close, Image } from "@Components";
 import ReactDatePicker from "react-datepicker";
 import { roundPrice } from "../../../../utils/formats/formats";
 import { HStack } from "@chakra-ui/react";
@@ -17,7 +17,7 @@ const Item = ({ item, setMarketplace, changeListPrice, changeDuration }) => {
       <tr>
         <td style={{ verticalAlign: "top" }}>
           <div className="token">
-            <img src={image} alt="nft" />
+            <Image src={image} alt="nft" square customWidth borderRadius />
             <div className="col wrap-text">
               <p className="wrap-text">{name}</p>
               <EthLogo lowOpacity littleText text={"Floor: " + (floorPrice || "0")} size="14px" />

@@ -1,13 +1,23 @@
 import React from "react";
 import { Button, HStack } from "@chakra-ui/react";
-import { EthLogo } from "@Components";
+import { EthLogo, Loader } from "@Components";
 import { marketplaces } from "../../options";
 import { marketplacesData } from "../../../../utils/markeplacesData";
 import { roundPrice } from "../../../../utils/formats/formats";
 import { useBulkList } from "../../../../custom-hooks";
+import { BulkListModal } from "../../../../components/Modals";
 
 export const ListCheckout = React.memo(({ items }) => {
-  const { bulkListNfts } = useBulkList();
+  const [isOpen, setIsOpen] = React.useState(false);
+  const [modalData, setModalData] = React.useState({});
+  const [loading, setLoading] = React.useState(false);
+
+  const { bulkListNfts } = useBulkList(openModal);
+
+  function openModal(data) {
+    setModalData(data);
+    setIsOpen(true);
+  }
   const amount = items?.length;
 
   const marketplaceCounts = items.reduce((acc, curr) => {
@@ -45,12 +55,45 @@ export const ListCheckout = React.memo(({ items }) => {
   // return false;
   // }
 
-  const listNfts = () => {
-    console.log("listNfts");
+  const listNfts = async () => {
+    try {
+      setLoading(true);
+      const listings = items
+        .map(item => {
+          const { contractAddress, marketplaces, tokenId } = item;
+          const id = `${contractAddress}:${tokenId}`;
+          const data = marketplaces.map(m => {
+            const { name, price, expiration } = m;
+
+            const { orderKind, orderbook } = marketplacesData[name];
+
+            const weiPrice = (parseFloat(price) * 10 ** 18).toString();
+            const expirationTime = (expiration / 1000).toString();
+
+            return {
+              token: id,
+              weiPrice,
+              orderKind,
+              orderbook,
+              expirationTime,
+            };
+          });
+
+          return data;
+        })
+        .flat();
+      await bulkListNfts(listings);
+      setIsOpen(false);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <>
+      <BulkListModal isOpen={isOpen} onClose={setIsOpen} data={modalData} />
       <h2>List {amount} NFTs</h2>
       <HStack justifyContent={"space-between"}>
         <p>Marketplace fees:</p>
@@ -75,7 +118,7 @@ export const ListCheckout = React.memo(({ items }) => {
         <EthLogo text={roundPrice(totalRevenue) || 0} />
       </HStack>
       <Button width={"100%"} colorScheme="blue" onClick={listNfts}>
-        Confirm
+        {loading ? <Loader /> : <p>Confirm</p>}
       </Button>
     </>
   );

@@ -18,11 +18,8 @@ loginRoute.post("/", checkOwnership, async (req, res) => {
     const { address } = req?.body || {};
 
     if (!address) {
-      res
-        .status(403)
-        .json({ authenticated: false, message: "Missing query fields." });
+      res.status(403).json({ authenticated: false, message: "Missing query fields." });
     } else {
-
       await Stats.create({ type: "login", timestamp: Date.now(), address });
 
       const accessToken = JWT.sign(
@@ -48,7 +45,6 @@ loginRoute.post("/", checkOwnership, async (req, res) => {
       const user = await User.findOne({ address });
 
       if (user) {
-        console.log(user);
         res
           .status(200)
           .cookie("refreshJWT", refreshToken, {

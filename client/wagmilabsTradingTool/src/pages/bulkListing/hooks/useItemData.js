@@ -57,7 +57,6 @@ export const useItemData = state => {
 
   const changeDuration = (id, marketplace, expiration) => {
     expiration = new Date(expiration).getTime();
-    console.log(expiration);
     setItems(prevItems => {
       const newItems = [...prevItems];
       newItems.forEach(item => {

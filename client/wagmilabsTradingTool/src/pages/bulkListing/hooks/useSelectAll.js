@@ -7,7 +7,6 @@ export const useSelectAll = (items, setItems) => {
 
   useEffect(() => {
     for (let i = 0; i < marketplaces.length; i++) {
-      console.log("checking marketplaces");
       const marketplace = marketplaces[i].value;
       const isSelectedMarketplace =
         items.filter(item => item?.marketplaces?.find(m => m.name === marketplace)).length === items.length;
@@ -131,7 +130,6 @@ export const useSelectAll = (items, setItems) => {
           marketplaces: newMarketplaces,
         };
       });
-      console.log(newItems);
       return newItems;
     });
   };
