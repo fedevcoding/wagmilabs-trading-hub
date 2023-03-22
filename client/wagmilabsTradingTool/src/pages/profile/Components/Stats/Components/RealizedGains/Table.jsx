@@ -3,17 +3,21 @@ import { formatAddress, roundPrice, roundPriceUsd } from "@Utils";
 import { useNavigate } from "react-router-dom";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { placeholderImage } from "@Assets";
-import { addingProfit } from "./functions";
+import { sortRows } from "./functions";
 import { Number } from "@Components";
-import { Button } from "@Components";
 import { notFound } from "@Assets";
 import { useCollections } from "@reservoir0x/reservoir-kit-ui";
+import { SortableHeader } from "./SortableHeader";
+import { Pagination } from "./Pagination";
 
 export const Table = React.memo(({ rows }) => {
   const paginationCount = 10;
   const [page, setPage] = React.useState(1);
+  const [sortBy, setSortBy] = React.useState("bought-count");
+  const [sortOrder, setSortOrder] = React.useState("desc");
   const navigate = useNavigate();
-  const items = addingProfit(rows);
+
+  const items = sortRows(rows, sortBy, sortOrder);
   const totalItems = items.length;
   const itemsInPage = items.slice((page - 1) * paginationCount, page * paginationCount);
 
@@ -33,43 +37,76 @@ export const Table = React.memo(({ rows }) => {
 
   return (
     <>
-      {(totalItems > paginationCount && (
-        <div className="pagination">
-          <p>
-            Page {page} - Showing {itemsInPage.length} of {totalItems} Trades
-          </p>
-          {(page > 1 && (
-            <Button onClick={() => setPage(page - 1)}>
-              <i className="fa-solid fa-backward" />
-            </Button>
-          )) ||
-            ""}
-          {(page * paginationCount < totalItems && (
-            <Button onClick={() => setPage(page + 1)}>
-              <i className="fa-solid fa-forward" />
-            </Button>
-          )) ||
-            ""}
-        </div>
-      )) || (
-        <div className="pagination">
-          <p>Showing {totalItems} Trades</p>
-        </div>
-      )}
+      <Pagination
+        page={page}
+        setPage={setPage}
+        totalItems={totalItems}
+        paginationCount={paginationCount}
+        itemsInPage={itemsInPage}
+      />
       <table>
         <thead>
           <tr>
             <th>Collection</th>
-            <th>Bought Count</th>
-            <th>Bought Price</th>
+            <SortableHeader
+              text="Bought Count"
+              active={sortBy === "bought-count"}
+              onSort={newOrder => {
+                setSortBy("bought-count");
+                setSortOrder(newOrder);
+              }}
+            />
+            <SortableHeader
+              text="Bought Price"
+              active={sortBy === "bought-price"}
+              onSort={newOrder => {
+                setSortBy("bought-price");
+                setSortOrder(newOrder);
+              }}
+            />
             <th>Bought Fee</th>
-            <th>Sold Count</th>
-            <th>Sold Price</th>
+            <SortableHeader
+              text="Sold Count"
+              active={sortBy === "sold-count"}
+              onSort={newOrder => {
+                setSortBy("sold-count");
+                setSortOrder(newOrder);
+              }}
+            />
+            <SortableHeader
+              text="Sold Price"
+              active={sortBy === "sold-price"}
+              onSort={newOrder => {
+                setSortBy("sold-price");
+                setSortOrder(newOrder);
+              }}
+            />
             <th>Sold Fee</th>
-            <th>Minted Count</th>
-            <th>Minted Price</th>
+            <SortableHeader
+              text="Minted Count"
+              active={sortBy === "minted-count"}
+              onSort={newOrder => {
+                setSortBy("minted-count");
+                setSortOrder(newOrder);
+              }}
+            />
+            <SortableHeader
+              text="Minted Price"
+              active={sortBy === "minted-price"}
+              onSort={newOrder => {
+                setSortBy("minted-price");
+                setSortOrder(newOrder);
+              }}
+            />
             <th>Minted Fee</th>
-            <th>Net P&L</th>
+            <SortableHeader
+              text="Net P&L"
+              active={sortBy === "profit"}
+              onSort={newOrder => {
+                setSortBy("profit");
+                setSortOrder(newOrder);
+              }}
+            />
           </tr>
         </thead>
         <tbody>

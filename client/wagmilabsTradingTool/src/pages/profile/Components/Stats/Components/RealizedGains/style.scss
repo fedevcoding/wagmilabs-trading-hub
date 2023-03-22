@@ -44,6 +44,10 @@
     border-collapse: collapse;
     border-radius: 10px;
 
+    .sortable {
+      cursor: pointer;
+    }
+
     .image > div {
       cursor: pointer;
       display: flex;
