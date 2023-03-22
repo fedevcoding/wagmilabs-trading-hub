@@ -1,8 +1,5 @@
 import React, { useContext, useEffect, useState, useRef } from "react";
-import "./profile.css";
 import { baseUrl } from "@Variables";
-import Nfts from "./sections/nfts/Nfts";
-import Activity from "./sections/activity/Activity.jsx";
 import { Portal } from "react-portal";
 import { formatAddress } from "@Utils/formats/formats";
 import { useAccount, useEnsName } from "wagmi";
@@ -26,7 +23,10 @@ import copy from "copy-to-clipboard";
 import { useSetPageTitle } from "@Hooks";
 import { LoadingSpinner, ProfitCalcModal } from "@Components";
 import { useNavigate, useParams } from "react-router-dom";
-import { placeholderImage } from "src/assets";
+import { placeholderImage } from "@Assets";
+import { Nfts, Activity } from "./Components";
+
+import "./profile.scss";
 
 const sortItemsOptions = [
   { value: "desc", label: "Newest" },

@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState, useRef } from "react";
-import "./activity.scss";
+import "./style.scss";
 import { placeholderImage } from "@Assets";
 import { formatAddress2, roundPrice2, formatIpfs } from "@Utils/formats/formats";
 import { baseUrl } from "@Variables";
@@ -51,7 +51,7 @@ const activityMarketplaceMapping = [
   },
 ];
 
-const Activity = ({ userAddress, pageAddress, isOwner }) => {
+export const Activity = ({ userAddress, pageAddress, isOwner }) => {
   const [activityCategory, setActivityCategory] = useState(["sale"]);
   const [activityAddressFilter, setActivityAddressFilter] = useState({
     from: "",
@@ -614,8 +614,6 @@ const Activity = ({ userAddress, pageAddress, isOwner }) => {
     </>
   );
 };
-
-export default Activity;
 
 const ActivityIcon = ({ type }) => {
   return (

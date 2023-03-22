@@ -6,7 +6,6 @@ import moment from "moment";
 
 import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import "./nfts.css";
 
 import { notFound, placeholderImage } from "@Assets";
 
@@ -21,12 +20,14 @@ import { generateRandomRangeInt } from "@Utils/formats/utils";
 import { ItemBanner } from "src/pages/collection/sections/banners/ItemBanner";
 import { useBulk } from "./useBulk";
 
+import "./style.scss";
+
 const sortItemsOptions = [
   { value: "desc", label: "Newest" },
   { value: "asc", label: "Oldest" },
 ];
 
-const Nfts = ({
+export const Nfts = ({
   loadingMoreNfts,
   fetchMoreItems,
   nftsContinuation,
@@ -673,4 +674,3 @@ const SmartListModal = ({
     </>
   );
 };
-export default Nfts;
