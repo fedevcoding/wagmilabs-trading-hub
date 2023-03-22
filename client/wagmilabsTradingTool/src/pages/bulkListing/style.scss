@@ -45,6 +45,7 @@
               text-align: left;
             }
             .token {
+              max-width: 250px;
               display: flex;
               align-items: center;
               padding: 10px 0;
@@ -61,12 +62,16 @@
           .price-inputs,
           .marketplaces,
           .fees,
-          .dates {
+          .dates,
+          .remove-marketplace {
             padding: 10px 0;
             display: flex;
             flex-direction: column;
             gap: 15px;
             align-items: end;
+          }
+          .remove-marketplace {
+            align-items: center;
           }
         }
       }

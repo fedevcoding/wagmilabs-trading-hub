@@ -274,7 +274,10 @@ const Nfts = ({
                 <div className="image-hover-overflow">
                   <img
                     src={image}
-                    onError={e => (e.currentTarget.src = placeholderImage)}
+                    onError={({ currentTarget }) => {
+                      currentTarget.onerror = null; // prevents looping
+                      currentTarget.src = placeholderImage;
+                    }}
                     alt=""
                     className={`profile-single-item-image ${
                       bulkActive ? "single-item-image" : "single-item-image-scale"

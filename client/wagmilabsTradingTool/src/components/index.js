@@ -7,6 +7,9 @@ export * from "./Charts";
 export * from "./Modals";
 export * from "./Tables";
 export * from "./Inputs";
+export * from "./ImagesComponents";
+
+export { Plus } from "./Icons";
 
 export { Loader } from "./Loader";
 export { Tabs } from "./Tabs";

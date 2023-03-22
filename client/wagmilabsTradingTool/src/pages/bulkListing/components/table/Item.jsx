@@ -1,21 +1,21 @@
 import React from "react";
 import { marketplacesData } from "../../../../utils/markeplacesData";
-import { TableHr, EthLogo } from "@Components";
-import { EthInput } from "../../../../components/Inputs/EthInput";
+import { TableHr, EthLogo, MarketplaceImage, Plus, EthInput } from "@Components";
 import ReactDatePicker from "react-datepicker";
 import { roundPrice } from "../../../../utils/formats/formats";
+import { HStack } from "@chakra-ui/react";
 const Item = ({ item, setMarketplace, changeListPrice, changeDuration }) => {
   const { image, name, marketplaces, listPrice, id, listings, floorPrice } = item;
 
   return (
     <>
-      <TableHr colSpan={5} />
+      <TableHr colSpan={6} />
       <tr>
         <td style={{ verticalAlign: "top" }}>
           <div className="token">
             <img src={image} alt="nft" />
-            <div className="col">
-              <p>{name}</p>
+            <div className="col wrap-text">
+              <p className="wrap-text">{name}</p>
               <EthLogo lowOpacity littleText text={"Floor: " + floorPrice} size="14px" />
             </div>
           </div>
@@ -25,9 +25,16 @@ const Item = ({ item, setMarketplace, changeListPrice, changeDuration }) => {
         // onClick={() => setMarketplace(id, optionMarketplaces[1].value, true)}
         >
           <div className="marketplaces">
-            {marketplaces?.map(marketplace => {
+            {marketplaces?.map((marketplace, index) => {
               const { name } = marketplace;
-              return <p>{marketplacesData[name].name}</p>;
+              const hasAdd = index === 0 && marketplaces.length < 3;
+              return (
+                <HStack>
+                  {hasAdd && <Plus hasBg />}
+                  <p>{marketplacesData[name]?.name}</p>
+                  <MarketplaceImage name={name} />
+                </HStack>
+              );
             })}
           </div>
         </td>
@@ -65,6 +72,14 @@ const Item = ({ item, setMarketplace, changeListPrice, changeDuration }) => {
                   showMonthYearDropdown={false}
                 />
               );
+            })}
+          </div>
+        </td>
+
+        <td>
+          <div className="remove-marketplace">
+            {marketplaces?.map(() => {
+              return <p>x</p>;
             })}
           </div>
         </td>

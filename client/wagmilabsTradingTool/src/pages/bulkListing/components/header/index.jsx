@@ -2,9 +2,8 @@ import { HStack, Button } from "@chakra-ui/react";
 import React from "react";
 import getMarketplaceImage from "src/utils/marketplaceImageMapping";
 import { marketplaces } from "../../options";
-import { ImageButton } from "@Components";
+import { ImageButton, EthInput } from "@Components";
 import { useGoBack } from "../../../../custom-hooks";
-import { EthInput } from "../../../../components/Inputs/EthInput";
 import ReactDatePicker from "react-datepicker";
 
 export const Header = ({

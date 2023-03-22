@@ -116,11 +116,11 @@ export const useSelectAll = (items, setItems) => {
     // set all item prices as it's floorPrice
     setItems(prevItems => {
       const newItems = prevItems.map(item => {
-        const { floorPrice } = item || 0;
+        const { floorPrice } = item;
         const newMarketplaces = item.marketplaces.map(marketplace => {
           return {
             ...marketplace,
-            price: floorPrice,
+            price: floorPrice || 0,
           };
         });
         return {
@@ -128,6 +128,7 @@ export const useSelectAll = (items, setItems) => {
           marketplaces: newMarketplaces,
         };
       });
+      console.log(newItems);
       return newItems;
     });
   };

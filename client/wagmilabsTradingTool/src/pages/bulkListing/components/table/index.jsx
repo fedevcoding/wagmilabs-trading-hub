@@ -11,6 +11,7 @@ const Table = React.memo(({ items, setMarketplace, changeListPrice, changeDurati
           <th>List price</th>
           <th>Marketplace fee</th>
           <th>Expiration</th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
