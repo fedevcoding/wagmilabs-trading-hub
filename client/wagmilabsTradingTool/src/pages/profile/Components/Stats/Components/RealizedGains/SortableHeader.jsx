@@ -4,7 +4,7 @@ export const SortableHeader = ({ text, onSort, active }) => {
   const [sortOrder, setSortOrder] = React.useState("");
 
   const handleClick = () => {
-    const newOrder = sortOrder === "" || sortOrder === "desc" ? "asc" : "desc";
+    const newOrder = sortOrder === "" || sortOrder === "asc" ? "desc" : "asc";
     setSortOrder(newOrder);
     onSort(newOrder);
   };
