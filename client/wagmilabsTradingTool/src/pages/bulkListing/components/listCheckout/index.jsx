@@ -6,6 +6,7 @@ import { marketplacesData } from "../../../../utils/markeplacesData";
 import { roundPrice } from "../../../../utils/formats/formats";
 import { useBulkList } from "../../../../custom-hooks";
 import { BulkListModal } from "../../../../components/Modals";
+import { parseEther } from "@Utils";
 
 export const ListCheckout = React.memo(({ items }) => {
   const [isOpen, setIsOpen] = React.useState(false);
@@ -66,8 +67,7 @@ export const ListCheckout = React.memo(({ items }) => {
             const { name, price, expiration } = m;
 
             const { orderKind, orderbook } = marketplacesData[name];
-
-            const weiPrice = (parseFloat(price) * 10 ** 18).toString();
+            const weiPrice = parseEther(price, true);
             const expirationTime = (expiration / 1000).toString();
 
             return {

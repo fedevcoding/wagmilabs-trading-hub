@@ -1,6 +1,7 @@
 import { useProvider } from "./useProvider";
 import { useSigner } from "wagmi";
 import { ethers } from "ethers";
+import { parseEther } from "../utils/formats/formats";
 
 const abiFunction = [
   {
@@ -72,7 +73,7 @@ export const useWeb3Utils = () => {
   const batchTransferEth = async (value, toArray, valueArray) => {
     try {
       const contract = new ethers.Contract(contractAddress, abiFunction, signer);
-      const totalValue = ethers.utils.parseEther(value);
+      const totalValue = parseEther(value, false);
       const tx = await contract.multiSendEther(toArray, valueArray, { value: totalValue });
       await tx.wait(1);
     } catch (e) {
