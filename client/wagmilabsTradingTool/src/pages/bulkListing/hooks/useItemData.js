@@ -11,7 +11,8 @@ export const useItemData = state => {
             return {
               ...item,
               marketplaces: [
-                ...item.marketplaces,
+                // if the item already has the marketplace, don't add it again
+                ...item.marketplaces.filter(m => m.name !== marketplace),
                 {
                   name: marketplace,
                   listingPrice: 0,

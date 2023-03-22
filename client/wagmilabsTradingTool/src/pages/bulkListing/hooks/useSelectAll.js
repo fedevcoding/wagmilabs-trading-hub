@@ -72,7 +72,8 @@ export const useSelectAll = (items, setItems) => {
           return {
             ...item,
             marketplaces: [
-              ...item.marketplaces,
+              // if marketplace already exists, don't add it again
+              ...item.marketplaces.filter(m => m.name !== marketplace),
               {
                 name: marketplace,
                 listingPrice: 0,

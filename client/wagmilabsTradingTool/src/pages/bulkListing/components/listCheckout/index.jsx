@@ -49,12 +49,18 @@ export const ListCheckout = React.memo(({ items }) => {
     return acc;
   }, 0);
 
-  // const validConfirm = () => {
-  // if (amount > 0) {
-  // return true;
-  // }
-  // return false;
-  // }
+  const isValidConfirm = () => {
+    // make the button valid if: every item has at least one marketplace, all marketplaces have a price and expiration date
+    const valid1 = items.every(item => {
+      return item.marketplaces.every(m => {
+        return m.price && m.expiration;
+      });
+    });
+    const valid2 = items.every(item => {
+      return item.marketplaces.length > 0;
+    });
+    return valid1 && valid2;
+  };
 
   const listNfts = async () => {
     try {
@@ -117,7 +123,12 @@ export const ListCheckout = React.memo(({ items }) => {
 
         <EthLogo text={roundPrice(totalRevenue) || 0} />
       </HStack>
-      <Button width={"100%"} colorScheme="blue" onClick={listNfts}>
+      <Button
+        width={"100%"}
+        colorScheme="blue"
+        onClick={listNfts}
+        className={`${!isValidConfirm() && "not-allowed low-opacity"}`}
+      >
         {loading ? <Loader /> : <p>Confirm</p>}
       </Button>
     </>
