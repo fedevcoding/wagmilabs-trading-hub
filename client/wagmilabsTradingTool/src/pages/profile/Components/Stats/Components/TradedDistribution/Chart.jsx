@@ -4,12 +4,6 @@ import Highcharts from "highcharts";
 import { roundPrice2 } from "@Utils";
 import moment from "moment";
 
-const typeColors = {
-  mint: "#4caf50",
-  bought: "#2196f3",
-  sold: "#f44336",
-};
-
 function Chart({ data }) {
   const options = {
     chart: {
@@ -28,21 +22,16 @@ function Chart({ data }) {
       },
     },
     tooltip: {
-      formatter: function () {
-        return `
-            <b>NFT info:<b/>
-            <br />
-            Address: ${this.point.address}
-            <br />
-            Token ID: ${this.point.token_id}
-            <br />
-            Price: ${roundPrice2(this.y)} ETH
-            <br />
-            Date: ${moment(this.x).format("MMM DD, YYYY HH:mm")}
-            <br />
-            Type: ${this.point.type}
-            `;
-      },
+      pointFormat: `
+        <div>
+          <p>{point.readableDate}</p>
+          <br />
+          <p>Address: {point.address}</p>
+          <br />
+          <p>Price: {point.price} ETH</p>
+          <br />
+          <p>Token ID: {point.token_id}</p>
+        </div>`,
     },
     series: [
       {
@@ -54,9 +43,8 @@ function Chart({ data }) {
             y: d.price,
             address: d.address,
             token_id: d.token_id,
-            name: d.type,
-            type: d.type,
-            color: typeColors[d.type] || "#000000",
+            readableDate: moment(d.timestamp).format("MMM DD, YYYY HH:mm"),
+            price: roundPrice2(d.price),
           })),
         marker: {
           radius: 3,
@@ -71,9 +59,8 @@ function Chart({ data }) {
             y: d.price,
             address: d.address,
             token_id: d.token_id,
-            name: d.type,
-            type: d.type,
-            color: typeColors[d.type] || "#000000",
+            readableDate: moment(d.timestamp).format("MMM DD, YYYY HH:mm"),
+            price: roundPrice2(d.price),
           })),
         marker: {
           radius: 3,
@@ -88,9 +75,8 @@ function Chart({ data }) {
             y: d.price,
             address: d.address,
             token_id: d.token_id,
-            name: d.type,
-            type: d.type,
-            color: typeColors[d.type] || "#000000",
+            readableDate: moment(d.timestamp).format("MMM DD, YYYY HH:mm"),
+            price: roundPrice2(d.price),
           })),
         marker: {
           radius: 3,
