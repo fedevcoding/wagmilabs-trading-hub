@@ -53,7 +53,7 @@ export const ListCheckout = React.memo(({ items }) => {
     // make the button valid if: every item has at least one marketplace, all marketplaces have a price and expiration date
     const valid1 = items.every(item => {
       return item.marketplaces.every(m => {
-        return m.price && m.expiration;
+        return (m.price || m.price === 0) && m.expiration;
       });
     });
     const valid2 = items.every(item => {
@@ -63,6 +63,7 @@ export const ListCheckout = React.memo(({ items }) => {
   };
 
   const listNfts = async () => {
+    if (!isValidConfirm() || loading) return;
     try {
       setLoading(true);
       const listings = items

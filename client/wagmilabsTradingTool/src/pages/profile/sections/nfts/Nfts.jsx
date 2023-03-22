@@ -49,6 +49,10 @@ const Nfts = ({
   const [isOpenTransferModal, setIsOpenTransferModal] = useState(false);
   const [TransferModalDetails, setTransferModalDetails] = useState(null);
 
+  const bulkListActive = useMemo(() => {
+    return bulkItems.length > 0;
+  }, [bulkItems]);
+
   useEffect(() => {
     if (TransferModalDetails) setIsOpenTransferModal(true);
     else setIsOpenTransferModal(false);
@@ -290,6 +294,12 @@ const Nfts = ({
                     </div>
                   )}
 
+                  {isSelected && (
+                    <div className="collection-item-selected-cart-check">
+                      <i className="fa-solid fa-check"></i>
+                    </div>
+                  )}
+
                   {marketplace && (
                     <div className="profile-items-listing-box">
                       <img src={marketplaceImage} alt="" />
@@ -516,12 +526,12 @@ const Nfts = ({
                     </button>
                   )}
                   <button
-                    className="nfts-bulk-information-list-button"
-                    onClick={() => navigate("/profile/bulk-listing", { state: bulkItems })}
+                    className={`nfts-bulk-information-list-button ${!bulkListActive && "not-allowed low-opacity"}`}
+                    onClick={() => bulkListActive && navigate("/profile/bulk-listing", { state: bulkItems })}
                   >
                     List
                   </button>
-                  <button className="nfts-bulk-information-transfer-button">Transfer</button>
+                  <button className="nfts-bulk-information-transfer-button not-allowed low-opacity">Transfer</button>
                 </div>
               </div>
               <hr className="nfts-bulk-information-hr" />

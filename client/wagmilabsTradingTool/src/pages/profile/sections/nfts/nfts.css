@@ -59,11 +59,11 @@
 }
 
 .profile-items-details-container-bulk:hover {
-    border: 1px solid rgb(103, 103, 216);
+    border: 1px solid #403af8;
 }
 
 .profile-single-item-bulk-selected {
-    border: 1px solid blue !important;
+        border: 2px solid #403af8 !important;
 }
 
 .single-item-image,
