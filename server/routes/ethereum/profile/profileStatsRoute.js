@@ -1,4 +1,5 @@
 const express = require("express");
+const { parseEther } = require("../../../../client/wagmilabsTradingTool/src/utils/formats/formats");
 const checkAuth = require("../../../middleware/checkAuth");
 
 const Stats = require("../../../models/StatsModel");
@@ -22,8 +23,8 @@ profileStatsRoute.get("/", checkAuth, async (req, res) => {
 
     data = (await data.json())?.data;
     const { num_txs, num_assets_owned, num_collections_owned, total_gain, volume } = data || {};
-    const nftsValue = data?.portfolio_value_wei / 1000000000000000000;
-    const walletVolume = data?.volume / 1000000000000000000;
+    const nftsValue = parseEther(data?.portfolio_value_wei, false);
+    const walletVolume = parseEther(data?.volume, false);
 
     let data2 = await fetch(`https://restapi.nftscan.com/api/v2/statistics/overview/${address}`, {
       headers: {

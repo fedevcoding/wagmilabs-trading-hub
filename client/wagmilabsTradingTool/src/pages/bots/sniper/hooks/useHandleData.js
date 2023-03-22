@@ -47,7 +47,6 @@ export const useHandleData = (activeSnipes, setActiveSnipes) => {
 
   const handleTaskUpdate = useCallback(
     data => {
-      console.log(data);
       const { properties, taskId, remaining } = data;
 
       if (remaining === 1) {

@@ -1,4 +1,5 @@
 const express = require("express");
+const { parseEther } = require("../../../../client/wagmilabsTradingTool/src/utils/formats/formats");
 const checkAuth = require("../../../middleware/checkAuth");
 const { execTranseposeAPI } = require("../../../services/externalAPI/transpose");
 const MODULE_API_KEY = process.env.MODULE_API_KEY;
@@ -322,8 +323,8 @@ async function getListingData(
       (!marketplace || marketplace === "opensea" || marketplace === "looksrare" || marketplace === "x2y2")
     ) {
       if (!(fromAddress && fromAddress !== userAddress)) {
-        const minWeiPrice = minPrice && (minPrice * 1000000000000000000).toString();
-        const maxWeiPrice = maxPrice && (maxPrice * 1000000000000000000).toString();
+        const minWeiPrice = minPrice && parseEther(minPrice, true);
+        const maxWeiPrice = maxPrice && parseEther(maxPrice, true);
 
         const getMinMaxFilter = () => {
           if (minWeiPrice && maxWeiPrice) {
@@ -387,7 +388,7 @@ async function getListingData(
         listingsData?.forEach(item => {
           item["type"] = "list";
           item["from_address"] = userAddress;
-          item["price"] = item.price / 1000000000000000000;
+          item["price"] = parseEther(item.price, false);
           item["token_id"] = item.tokenId;
           item["tokenData"] = {
             token: {

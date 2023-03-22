@@ -2,7 +2,7 @@ export const errorHas = (error, string) => {
   if (typeof error === "object") {
     error = JSON.stringify(error?.response?.data || error?.response || error);
   }
-  return String(error).toLowerCase().includes(string);
+  return String(error?.toLowerCase()).toLowerCase().includes(string);
 };
 
 export const checkErrors = error => {
@@ -14,6 +14,8 @@ export const checkErrors = error => {
     return "Too many reloads, try again later";
   } else if (errorHas(error, "not fillable")) {
     return "One or more orders not available";
+  } else if (errorHas(error, "expirationtime")) {
+    return "Invalid expiration time";
   } else {
     return "Something went wrong";
   }

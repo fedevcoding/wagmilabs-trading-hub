@@ -20,7 +20,6 @@ export async function clientCache(
     }
   }
 
-  console.log("value", value);
   let data = value;
   if (typeof value === "function") {
     data = value();
