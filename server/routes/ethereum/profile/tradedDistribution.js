@@ -16,26 +16,29 @@ route.get("/", checkAuth, async (req, res) => {
 
     async function getNftDistribution() {
       const query = `
-        SELECT tx.mint_tx_price as price, transfer.contract_address as address, 
-        CONCAT('', transfer.token_id) as token_id, transfer.timestamp, 'mint' as type
+        SELECT list.*, CONCAT('', list.token_id) as token_id, n.name, n.image_url
         FROM (
-            SELECT (max(t.value) / count(token_id)) as mint_tx_price, transfer.contract_address, transfer.transaction_hash as minted_transaction_hash
-            FROM ethereum.nft_transfers transfer
-            INNER JOIN ethereum.transactions t ON t.transaction_hash = transfer.transaction_hash
-            WHERE transfer.to_address = '${userAddress}' and transfer.category = 'mint' AND transfer.timestamp > '${timestamp}'
-            group by transfer.transaction_hash, transfer.contract_address
-        ) tx
-        INNER JOIN ethereum.nft_transfers transfer ON transfer.contract_address = tx.contract_address AND 
-            transfer.transaction_hash = tx.minted_transaction_hash AND transfer.to_address = '${userAddress}' and transfer.category = 'mint' AND transfer.timestamp > '${timestamp}'
-        UNION ALL
-        SELECT eth_price as price, contract_address as address, CONCAT('', token_id) as token_id,  timestamp, 'bought' as type
-                FROM ethereum.nft_sales
-                WHERE buyer_address = '${userAddress}' AND timestamp > '${timestamp}'
-        UNION ALL
-        SELECT eth_price as price, contract_address as address, CONCAT('', token_id) as token_id,  timestamp, 'sold' as type
-                FROM ethereum.nft_sales
-                WHERE seller_address = '${userAddress}' AND timestamp > '${timestamp}'
-        `;
+          SELECT tx.mint_tx_price as price, transfer.contract_address as address, 
+          transfer.token_id as token_id, transfer.timestamp, 'mint' as type
+          FROM (
+              SELECT (max(t.value) / count(token_id)) as mint_tx_price, transfer.contract_address, transfer.transaction_hash as minted_transaction_hash
+              FROM ethereum.nft_transfers transfer
+              INNER JOIN ethereum.transactions t ON t.transaction_hash = transfer.transaction_hash
+              WHERE transfer.to_address = '${userAddress}' and transfer.category = 'mint' AND transfer.timestamp > '${timestamp}'
+              group by transfer.transaction_hash, transfer.contract_address
+          ) tx
+          INNER JOIN ethereum.nft_transfers transfer ON transfer.contract_address = tx.contract_address AND 
+              transfer.transaction_hash = tx.minted_transaction_hash AND transfer.to_address = '${userAddress}' and transfer.category = 'mint' AND transfer.timestamp > '${timestamp}'
+          UNION ALL
+          SELECT eth_price as price, contract_address as address, token_id,  timestamp, 'bought' as type
+                  FROM ethereum.nft_sales
+                  WHERE buyer_address = '${userAddress}' AND timestamp > '${timestamp}'
+          UNION ALL
+          SELECT eth_price as price, contract_address as address, token_id, timestamp, 'sold' as type
+                  FROM ethereum.nft_sales
+                  WHERE seller_address = '${userAddress}' AND timestamp > '${timestamp}'
+        ) list
+        LEFT JOIN ethereum.nfts n ON list.address = n.contract_address AND list.token_id = n.token_id`;
 
       const nfts = await execTranseposeAPI(query);
 

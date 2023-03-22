@@ -22,15 +22,15 @@ function Chart({ data }) {
       },
     },
     tooltip: {
+      useHTML: true,
       pointFormat: `
         <div>
           <p>{point.readableDate}</p>
-          <br />
+          <p>Name: {point.name}</p>
           <p>Address: {point.address}</p>
-          <br />
           <p>Price: {point.price} ETH</p>
-          <br />
           <p>Token ID: {point.token_id}</p>
+          <img class="bubble-chart-image" src={point.image} width="50px" height="50px"  />
         </div>`,
     },
     series: [
@@ -43,6 +43,8 @@ function Chart({ data }) {
             y: d.price,
             address: d.address,
             token_id: d.token_id,
+            name: d.name,
+            image: d.image_url,
             readableDate: moment(d.timestamp).format("MMM DD, YYYY HH:mm"),
             price: roundPrice2(d.price),
           })),
@@ -59,6 +61,8 @@ function Chart({ data }) {
             y: d.price,
             address: d.address,
             token_id: d.token_id,
+            name: d.name,
+            image: d.image_url,
             readableDate: moment(d.timestamp).format("MMM DD, YYYY HH:mm"),
             price: roundPrice2(d.price),
           })),
@@ -75,6 +79,8 @@ function Chart({ data }) {
             y: d.price,
             address: d.address,
             token_id: d.token_id,
+            name: d.name,
+            image: d.image_url,
             readableDate: moment(d.timestamp).format("MMM DD, YYYY HH:mm"),
             price: roundPrice2(d.price),
           })),
