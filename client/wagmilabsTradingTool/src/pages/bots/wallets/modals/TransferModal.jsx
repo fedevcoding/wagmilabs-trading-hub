@@ -19,6 +19,7 @@ import { MultiSelect } from "react-multi-select-component";
 import { BigNumber } from "ethers";
 import { checkErrors, roundPrice } from "@Utils";
 import { Loader } from "@Components";
+import { parseEther } from "../../../../utils/formats/formats";
 
 const nullAddress = "0x0000000000000000000000000000000000000000";
 
@@ -131,7 +132,7 @@ export const TransferModal = React.memo(({ showTransferModal, toggleModal }) => 
     try {
       const total = 100;
 
-      const toBigNumber = number => BigNumber.from((parseFloat(number) * 1000000000000000000).toString());
+      const toBigNumber = number => BigNumber.from(parseEther(number, true));
 
       if (type === "fixed") {
         const addresses = selectedWallets.map(wallet => wallet.value);

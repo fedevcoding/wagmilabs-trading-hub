@@ -1,0 +1,108 @@
+#page-bulk-listing {
+  display: flex;
+  padding-top: 50px;
+  width: 90vw;
+  gap: 100px;
+  padding-bottom: 60px;
+  margin: 0 auto;
+  color: white;
+
+  .section-left {
+    width: 80%;
+    .header {
+      .title {
+        .back-button {
+          cursor: pointer;
+          background-color: rgba(128, 128, 128, 0.107);
+          border-radius: 50%;
+          padding: 10px;
+        }
+
+        margin-bottom: 35px;
+      }
+    }
+
+    table {
+      margin-top: 35px;
+
+      thead {
+        tr {
+          th {
+            text-align: right;
+            font-weight: 500;
+            font-size: 18px;
+            &:nth-child(1) {
+              text-align: left;
+            }
+          }
+        }
+      }
+      tbody {
+        tr {
+          td {
+            overflow: visible;
+            text-align: right;
+            &:nth-child(1) {
+              text-align: left;
+            }
+            .token {
+              max-width: 250px;
+              display: flex;
+              align-items: center;
+              padding: 10px 0;
+              img {
+                width: 50px;
+              }
+            }
+            .react-datepicker-wrapper {
+              width: 10rem;
+            }
+            .marketplaces {
+              position: relative;
+              .custom-modal {
+                top: 50px;
+                right: 50%;
+                position: absolute;
+                width: 150px;
+                background-color: #1e1f25;
+                border-radius: 10px;
+                box-shadow: 0 0 10px 0 rgb(0, 0, 0);
+                padding: 7px 0;
+                cursor: pointer;
+                z-index: 9999999999;
+                p {
+                  text-align: center;
+                  padding: 8px 0;
+                  &:hover {
+                    background-color: #2e2f35;
+                  }
+                }
+              }
+            }
+          }
+          .price-inputs,
+          .marketplaces,
+          .fees,
+          .dates,
+          .remove-marketplace {
+            padding: 10px 0;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: flex-end;
+          }
+          .remove-marketplace {
+            align-items: center;
+          }
+        }
+      }
+    }
+  }
+
+  .section-right {
+    width: 20%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+}

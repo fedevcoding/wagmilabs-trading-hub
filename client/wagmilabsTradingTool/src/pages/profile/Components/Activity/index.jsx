@@ -343,7 +343,10 @@ export const Activity = ({ userAddress, pageAddress }) => {
                 <td className="profile-activity-single-token">
                   <img
                     src={tokenImage || placeholderImage}
-                    onError={e => (e.currentTarget.src = placeholderImage)}
+                    onError={({ currentTarget }) => {
+                      currentTarget.onerror = null; // prevents looping
+                      currentTarget.src = placeholderImage;
+                    }}
                     alt=""
                     className="profile-activity-single-image"
                   />

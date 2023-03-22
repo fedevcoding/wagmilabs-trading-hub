@@ -1,0 +1,10 @@
+.icon-plus-component,
+.icon-x-component {
+  cursor: pointer;
+  &.bg {
+    background-color: rgba(128, 128, 128, 0.107);
+    border-radius: 50%;
+    padding: 7px;
+    font-size: 14px;
+  }
+}

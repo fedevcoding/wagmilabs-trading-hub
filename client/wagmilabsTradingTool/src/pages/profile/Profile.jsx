@@ -39,8 +39,6 @@ const Profile = () => {
 
   const [profileImageUrl] = useState(window.location.search?.replace("?image=", ""));
 
-  console.log(profileImageUrl);
-
   useEffect(() => {
     if (pageAddress && (pageAddress.length !== 42 || !pageAddress.startsWith("0x"))) {
       navigate("/notfound");
@@ -98,6 +96,7 @@ const Profile = () => {
 
   useEffect(() => {
     fetchUserCollections(debounceCollectionSearch, 0, 20);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debounceCollectionSearch]);
 
