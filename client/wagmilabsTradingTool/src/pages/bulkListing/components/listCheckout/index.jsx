@@ -3,8 +3,11 @@ import { Button, HStack } from "@chakra-ui/react";
 import { EthLogo } from "@Components";
 import { marketplaces } from "../../options";
 import { marketplacesData } from "../../../../utils/markeplacesData";
+import { roundPrice } from "../../../../utils/formats/formats";
+import { useBulkList } from "../../../../custom-hooks";
 
 export const ListCheckout = React.memo(({ items }) => {
+  const { bulkListNfts } = useBulkList();
   const amount = items?.length;
 
   const marketplaceCounts = items.reduce((acc, curr) => {
@@ -18,24 +21,40 @@ export const ListCheckout = React.memo(({ items }) => {
     return acc;
   }, {});
 
-  // const marketplaceFees = items.reduce((acc, curr) => {
-  //   curr.marketplaces.forEach(m => {
-  //     const { name } = m;
-  //     const { royalties } = marketplacesData[name];
-  //     const fee = royalties * parseFloat(m.price) || 0;
-  //     console.log(parseFloat(m.price));
-  //     acc += fee;
-  //   });
-  //   return acc;
-  // }, 0);
-  // console.log(marketplaceFees);
+  const marketplaceFees = items.reduce((acc, curr) => {
+    curr.marketplaces.forEach(m => {
+      const { name } = m;
+      const { royalties } = marketplacesData[name];
+      const fee = (royalties * parseFloat(m.price) || 0) / 100;
+      acc += fee;
+    });
+    return acc;
+  }, 0);
+
+  const totalRevenue = items.reduce((acc, curr) => {
+    curr.marketplaces.forEach(m => {
+      acc += parseFloat(m.price) || 0;
+    });
+    return acc;
+  }, 0);
+
+  // const validConfirm = () => {
+  // if (amount > 0) {
+  // return true;
+  // }
+  // return false;
+  // }
+
+  const listNfts = () => {
+    console.log("listNfts");
+  };
 
   return (
     <>
       <h2>List {amount} NFTs</h2>
       <HStack justifyContent={"space-between"}>
         <p>Marketplace fees:</p>
-        <EthLogo text={0} />
+        <EthLogo text={roundPrice(marketplaceFees) || 0} />
       </HStack>
 
       <div>
@@ -53,9 +72,9 @@ export const ListCheckout = React.memo(({ items }) => {
       <HStack justifyContent={"space-between"}>
         <p>Revenue:</p>
 
-        <EthLogo text={"0.121"} />
+        <EthLogo text={roundPrice(totalRevenue) || 0} />
       </HStack>
-      <Button width={"100%"} colorScheme="blue">
+      <Button width={"100%"} colorScheme="blue" onClick={listNfts}>
         Confirm
       </Button>
     </>

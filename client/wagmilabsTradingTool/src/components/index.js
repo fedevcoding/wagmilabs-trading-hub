@@ -9,7 +9,7 @@ export * from "./Tables";
 export * from "./Inputs";
 export * from "./ImagesComponents";
 
-export { Plus } from "./Icons";
+export * from "./Icons";
 
 export { Loader } from "./Loader";
 export { Tabs } from "./Tabs";

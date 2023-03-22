@@ -1,11 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import { marketplacesData } from "../../../../utils/markeplacesData";
-import { TableHr, EthLogo, MarketplaceImage, Plus, EthInput } from "@Components";
+import { marketplaces as marketplacesOptions } from "../../options";
+import { TableHr, EthLogo, MarketplaceImage, Plus, EthInput, Close } from "@Components";
 import ReactDatePicker from "react-datepicker";
 import { roundPrice } from "../../../../utils/formats/formats";
 import { HStack } from "@chakra-ui/react";
+import { CustomModal } from "../../../../components/Modals/CustomModal";
 const Item = ({ item, setMarketplace, changeListPrice, changeDuration }) => {
-  const { image, name, marketplaces, listPrice, id, listings, floorPrice } = item;
+  const [modalOpen, setModalOpen] = useState(false);
+
+  const { image, name, marketplaces, id, floorPrice } = item;
 
   return (
     <>
@@ -16,26 +20,72 @@ const Item = ({ item, setMarketplace, changeListPrice, changeDuration }) => {
             <img src={image} alt="nft" />
             <div className="col wrap-text">
               <p className="wrap-text">{name}</p>
-              <EthLogo lowOpacity littleText text={"Floor: " + floorPrice} size="14px" />
+              <EthLogo lowOpacity littleText text={"Floor: " + (floorPrice || "0")} size="14px" />
             </div>
           </div>
         </td>
 
-        <td
-        // onClick={() => setMarketplace(id, optionMarketplaces[1].value, true)}
-        >
+        <td>
           <div className="marketplaces">
-            {marketplaces?.map((marketplace, index) => {
-              const { name } = marketplace;
-              const hasAdd = index === 0 && marketplaces.length < 3;
-              return (
-                <HStack>
-                  {hasAdd && <Plus hasBg />}
-                  <p>{marketplacesData[name]?.name}</p>
-                  <MarketplaceImage name={name} />
-                </HStack>
-              );
-            })}
+            {marketplaces.length > 0 ? (
+              marketplaces?.map((marketplace, index) => {
+                const { name } = marketplace;
+                const hasAdd = index === 0 && marketplaces.length < 3;
+
+                const remainingMarketplaces = marketplacesOptions.filter(option => {
+                  const isNotInMarketplaces = !marketplaces.find(marketplace => marketplace.name === option.value);
+                  return isNotInMarketplaces;
+                });
+
+                return (
+                  <HStack>
+                    {hasAdd && (
+                      <>
+                        <Plus hasBg onClick={() => setModalOpen(true)} />
+                        <CustomModal isOpen={modalOpen} setIsOpen={setModalOpen}>
+                          <>
+                            {remainingMarketplaces.map(({ value, name }) => {
+                              return (
+                                <p
+                                  onClick={() => {
+                                    setMarketplace(id, value, true);
+                                    setModalOpen(false);
+                                  }}
+                                >
+                                  {name}
+                                </p>
+                              );
+                            })}
+                          </>
+                        </CustomModal>
+                      </>
+                    )}
+                    <p>{marketplacesData[name]?.name}</p>
+                    <MarketplaceImage name={name} />
+                  </HStack>
+                );
+              })
+            ) : (
+              <>
+                <Plus hasBg onClick={() => setModalOpen(true)} />
+                <CustomModal isOpen={modalOpen} setIsOpen={setModalOpen}>
+                  <>
+                    {marketplacesOptions.map(({ value, name }) => {
+                      return (
+                        <p
+                          onClick={() => {
+                            setMarketplace(id, value, true);
+                            setModalOpen(false);
+                          }}
+                        >
+                          {name}
+                        </p>
+                      );
+                    })}
+                  </>
+                </CustomModal>
+              </>
+            )}
           </div>
         </td>
 
@@ -78,8 +128,8 @@ const Item = ({ item, setMarketplace, changeListPrice, changeDuration }) => {
 
         <td>
           <div className="remove-marketplace">
-            {marketplaces?.map(() => {
-              return <p>x</p>;
+            {marketplaces?.map(({ name }) => {
+              return <Close onClick={() => setMarketplace(id, name, false)} />;
             })}
           </div>
         </td>

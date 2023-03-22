@@ -7,12 +7,15 @@ export const useSelectAll = (items, setItems) => {
 
   useEffect(() => {
     for (let i = 0; i < marketplaces.length; i++) {
+      console.log("checking marketplaces");
       const marketplace = marketplaces[i].value;
-      const isSelectedMarketplaces =
-        items.filter(item => item.marketplaces.find(m => m.name === marketplace)).length > 0;
-
-      if (isSelectedMarketplaces)
-        setSelectedMarketplaces(prevSelectedMarketplaces => [...prevSelectedMarketplaces, marketplace]);
+      const isSelectedMarketplace =
+        items.filter(item => item?.marketplaces?.find(m => m.name === marketplace)).length === items.length;
+      if (isSelectedMarketplace) {
+        selectMarketplace(marketplace);
+      } else {
+        deselectMarketplace(marketplace);
+      }
     }
     const rightPrice = checkSamePrice(items);
     setPriceValue(rightPrice);

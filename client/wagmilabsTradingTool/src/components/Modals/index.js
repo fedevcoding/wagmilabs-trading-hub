@@ -11,3 +11,4 @@ export { PromoModal } from "./PromoModal";
 export { TaxSettingsModal } from "./TaxSettingsModal";
 export { TimeframeModal } from "./TimeframeModal";
 export { ProfitCalcModal } from "./ProfitCalcModal";
+export { CustomModal } from "./CustomModal";

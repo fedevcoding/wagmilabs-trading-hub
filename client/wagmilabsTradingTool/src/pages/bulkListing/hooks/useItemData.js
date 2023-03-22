@@ -4,24 +4,39 @@ export const useItemData = state => {
   const [items, setItems] = useState(state);
 
   const setMarketplace = (id, marketplace, isToAdd) => {
-    setItems(prevItems => {
-      const newItems = prevItems.map(item => {
-        if (item.id === id) {
-          return {
-            ...item,
-            marketplaces: [
-              ...item.marketplaces,
-              {
-                name: marketplace,
-                listingPrice: 0,
-              },
-            ],
-          };
-        }
-        return item;
+    if (isToAdd) {
+      setItems(prevItems => {
+        const newItems = prevItems.map(item => {
+          if (item.id === id) {
+            return {
+              ...item,
+              marketplaces: [
+                ...item.marketplaces,
+                {
+                  name: marketplace,
+                  listingPrice: 0,
+                },
+              ],
+            };
+          }
+          return item;
+        });
+        return newItems;
       });
-      return newItems;
-    });
+    } else {
+      setItems(prevItems => {
+        const newItems = prevItems.map(item => {
+          if (item.id === id) {
+            return {
+              ...item,
+              marketplaces: item.marketplaces.filter(m => m.name !== marketplace),
+            };
+          }
+          return item;
+        });
+        return newItems;
+      });
+    }
   };
 
   const changeListPrice = (id, marketplace, price) => {

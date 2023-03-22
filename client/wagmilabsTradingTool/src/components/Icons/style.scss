@@ -1,6 +1,7 @@
-.icon-plus-component {
+.icon-plus-component,
+.icon-x-component {
+  cursor: pointer;
   &.bg {
-    cursor: pointer;
     background-color: rgba(128, 128, 128, 0.107);
     border-radius: 50%;
     padding: 7px;

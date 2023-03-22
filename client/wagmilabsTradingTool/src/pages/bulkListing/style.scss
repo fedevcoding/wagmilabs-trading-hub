@@ -40,6 +40,7 @@
       tbody {
         tr {
           td {
+            overflow: visible;
             text-align: right;
             &:nth-child(1) {
               text-align: left;
@@ -57,6 +58,28 @@
             }
             .react-datepicker-wrapper {
               width: 10rem;
+            }
+            .marketplaces {
+              position: relative;
+              .custom-modal {
+                top: 50px;
+                right: 50%;
+                position: absolute;
+                width: 150px;
+                background-color: #1e1f25;
+                border-radius: 10px;
+                box-shadow: 0 0 10px 0 rgb(0, 0, 0);
+                padding: 7px 0;
+                cursor: pointer;
+                z-index: 9999999999;
+                p {
+                  text-align: center;
+                  padding: 8px 0;
+                  &:hover {
+                    background-color: #2e2f35;
+                  }
+                }
+              }
             }
           }
           .price-inputs,

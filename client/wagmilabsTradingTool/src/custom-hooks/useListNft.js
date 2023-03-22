@@ -4,7 +4,7 @@ import { getClient } from "@reservoir0x/reservoir-sdk";
 import { useToast } from "@chakra-ui/react";
 import { UserDataContext } from "@Context";
 import { getListingExpirationDate } from "@Utils/formats/formats";
-import { marketListingMapping } from "@Utils/mappings";
+import { marketplacesData } from "@Utils";
 import { checkErrors } from "../utils/functions/errorHelpers";
 
 export const useListNft = ({ contractAddress, tokenId, listingPrice }, callback) => {
@@ -34,8 +34,8 @@ export const useListNft = ({ contractAddress, tokenId, listingPrice }, callback)
         expirationTime = (getListingExpirationDate(listingSettings).getTime() / 1000).toString();
       }
 
-      const orderbook = marketListingMapping[marketplace].orderbook;
-      const orderKind = marketListingMapping[marketplace].orderKind;
+      const orderbook = marketplacesData[marketplace].orderbook;
+      const orderKind = marketplacesData[marketplace].orderKind;
 
       const weiPrice = (listingPrice * 1000000000000000000).toString();
 

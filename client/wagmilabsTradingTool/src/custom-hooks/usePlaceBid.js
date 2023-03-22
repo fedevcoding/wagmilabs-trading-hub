@@ -1,13 +1,13 @@
 import { fetchSigner } from "@wagmi/core";
 import { getClient } from "@reservoir0x/reservoir-sdk";
 import { useGetReservoirOptions } from ".";
-import { marketListingMapping } from "@Utils/mappings";
+import { marketplacesData } from "@Utils";
 import { useToast } from "@chakra-ui/react";
 import { checkErrors } from "../utils/functions/errorHelpers";
 
 export const usePlaceBid = marketplace => {
   const { options } = useGetReservoirOptions();
-  const { orderbook, orderKind } = marketListingMapping[marketplace.toLowerCase()] || {};
+  const { orderbook, orderKind } = marketplacesData[marketplace.toLowerCase()] || {};
   const toast = useToast();
 
   async function placeBid(tokenAddress, price, date) {
