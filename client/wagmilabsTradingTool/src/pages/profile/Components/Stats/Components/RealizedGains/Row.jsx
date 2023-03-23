@@ -25,7 +25,7 @@ export const Row = ({ c, collections }) => {
             </>
           )) || (
             <>
-              <img src={placeholderImage} alt="Unknown" width={65} />
+              <img src={placeholderImage} alt="Unknown" width={50} />
               <div>
                 {formatAddress(c.address)} <br />
                 {"Unknown collection"}
