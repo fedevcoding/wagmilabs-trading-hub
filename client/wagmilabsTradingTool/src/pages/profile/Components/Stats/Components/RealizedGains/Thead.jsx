@@ -41,7 +41,7 @@ export const Thead = ({ sortBy, setSortBy, setSortOrder }) => {
         />
         <th>Sold Fee</th>
         <SortableHeader
-          text="Minted Count"
+          text="Mint Count"
           active={sortBy === "minted-count"}
           onSort={newOrder => {
             setSortBy("minted-count");
@@ -49,7 +49,7 @@ export const Thead = ({ sortBy, setSortBy, setSortOrder }) => {
           }}
         />
         <SortableHeader
-          text="Minted Price"
+          text="Mint Price"
           active={sortBy === "minted-price"}
           onSort={newOrder => {
             setSortBy("minted-price");

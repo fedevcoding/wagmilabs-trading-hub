@@ -27,7 +27,7 @@ export const Table = React.memo(({ rows }) => {
                 <p className="text-center">
                   <img src={notFound} alt="best offer" width={150} />
                   <br />
-                  No trades found in this range!
+                  No collections found in this range!
                 </p>
               </td>
             </tr>

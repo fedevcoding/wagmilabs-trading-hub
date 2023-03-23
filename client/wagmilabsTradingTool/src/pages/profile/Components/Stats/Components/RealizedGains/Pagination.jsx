@@ -6,7 +6,7 @@ export const Pagination = ({ page, setPage, totalItems, paginationCount, itemsIn
     (totalItems > paginationCount && (
       <div className="pagination">
         <p>
-          Page {page} - Showing {itemsInPage.length} of {totalItems} Trades
+          Page {page} - Showing {itemsInPage.length} of {totalItems} Collections
         </p>
         {(page > 1 && (
           <Button onClick={() => setPage(page - 1)}>

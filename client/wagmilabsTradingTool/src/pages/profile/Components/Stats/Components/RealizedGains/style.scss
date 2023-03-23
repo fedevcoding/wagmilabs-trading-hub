@@ -37,7 +37,7 @@
   table {
     width: 100%;
     margin-top: 1.5rem;
-    background-color: #222840;
+    background-color: var(--secondary-color);
     border-top-right-radius: 10px;
     border-top-left-radius: 10px;
     border-spacing: 0;
@@ -57,11 +57,11 @@
       font-size: 12px;
 
       > img {
-        margin-right: 0.5rem;
+        margin-right: 1rem;
       }
 
       span {
-        margin-right: 0.5rem;
+        margin-right: 1rem;
 
         img {
           border-radius: 5px;
