@@ -32,7 +32,6 @@ function Chart({ data }) {
         <div>
           <p>{point.readableDate}</p>
           <p>Name: {point.name}</p>
-          <p>Address: {point.address}</p>
           <p>Price: {point.price} ETH</p>
           <p>Token ID: {point.token_id}</p>
           <img class="bubble-chart-image" src={point.image} width="50px" height="50px"  />
