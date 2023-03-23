@@ -21,6 +21,11 @@ function Chart({ data }) {
         text: "Price",
       },
     },
+    plotOptions: {
+      scatter: {
+        stickyTracking: false,
+      },
+    },
     tooltip: {
       useHTML: true,
       pointFormat: `
