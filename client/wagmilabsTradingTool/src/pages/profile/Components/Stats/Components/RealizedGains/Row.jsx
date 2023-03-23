@@ -1,6 +1,5 @@
 import React from "react";
 import { formatAddress, roundPrice, roundPriceUsd } from "@Utils";
-import { LazyLoadImage } from "react-lazy-load-image-component";
 import { placeholderImage } from "@Assets";
 import { Number, Image } from "@Components";
 import { useNavigate } from "react-router-dom";
@@ -14,18 +13,6 @@ export const Row = ({ c, collections }) => {
         <div onClick={() => navigate(`/collection/${c.address}`)}>
           {(collections && collections[c.address] && (
             <>
-              {/* <LazyLoadImage
-                src={collections[c.address]?.img || placeholderImage}
-                className="nft-img"
-                effect="blur"
-                placeholderSrc={placeholderImage}
-                alt={collections[c.address]?.name || ""}
-                width={65}
-                onError={({ currentTarget }) => {
-                  currentTarget.onerror = null; // prevents looping
-                  currentTarget.src = placeholderImage;
-                }}
-              /> */}
               <Image
                 src={collections[c.address]?.img}
                 className="nft-img"
