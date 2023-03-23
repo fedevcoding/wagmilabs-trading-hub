@@ -9,7 +9,7 @@ export const TradedDistribution = React.memo(() => {
     useFilters();
 
   return (
-    <div className="col">
+    <div className="col" id="traded-distribution">
       <Card>
         <div className="space-between">
           <h3>Traded Distribution</h3>
