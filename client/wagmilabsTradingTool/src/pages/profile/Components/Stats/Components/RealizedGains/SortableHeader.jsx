@@ -1,10 +1,10 @@
 import React from "react";
 
 export const SortableHeader = ({ text, onSort, active }) => {
-  const [sortOrder, setSortOrder] = React.useState("");
+  const [sortOrder, setSortOrder] = React.useState("desc");
 
   const handleClick = () => {
-    const newOrder = sortOrder === "" || sortOrder === "asc" ? "desc" : "asc";
+    const newOrder = sortOrder === "asc" ? "desc" : "asc";
     setSortOrder(newOrder);
     onSort(newOrder);
   };

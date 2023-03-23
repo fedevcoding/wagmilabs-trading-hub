@@ -54,3 +54,34 @@ export const sortRows = (rows, column, order) => {
 
   return addingProfit(rows).sort(compareFn);
 };
+
+export const sortOptions = [
+  {
+    value: "bought-count",
+    label: "Bought Count",
+  },
+  {
+    value: "bought-price",
+    label: "Bought Price",
+  },
+  {
+    value: "sold-count",
+    label: "Sold Count",
+  },
+  {
+    value: "sold-price",
+    label: "Sold Price",
+  },
+  {
+    value: "minted-count",
+    label: "Mint Count",
+  },
+  {
+    value: "minted-price",
+    label: "Mint Price",
+  },
+  {
+    value: "profit",
+    label: "Net P&L",
+  },
+];

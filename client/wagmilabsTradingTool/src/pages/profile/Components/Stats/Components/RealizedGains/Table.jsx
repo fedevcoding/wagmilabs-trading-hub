@@ -4,6 +4,8 @@ import { Pagination } from "./Pagination";
 import { Thead } from "./Thead";
 import { Row } from "./Row";
 import { useGetTableInfo } from "./useGetTableInfo";
+import { Select } from "@Components";
+import { sortOptions } from "./functions";
 
 export const Table = React.memo(({ rows }) => {
   const { collections, page, setPage, totalItems, paginationCount, itemsInPage, sortBy, setSortBy, setSortOrder } =
@@ -11,13 +13,30 @@ export const Table = React.memo(({ rows }) => {
 
   return (
     <>
-      <Pagination
-        page={page}
-        setPage={setPage}
-        totalItems={totalItems}
-        paginationCount={paginationCount}
-        itemsInPage={itemsInPage}
-      />
+      <div className="space-between">
+        <h3>Realized gains</h3>
+        <Pagination
+          page={page}
+          setPage={setPage}
+          totalItems={totalItems}
+          paginationCount={paginationCount}
+          itemsInPage={itemsInPage}
+        />
+        <div className="flex">
+          <span>Sort:</span>
+          <Select
+            id="sort"
+            onChange={s => {
+              setSortBy(s.value);
+              setSortOrder("desc");
+            }}
+            label="Set Sort"
+            value={sortOptions.find(s => s.value === sortBy)}
+            options={sortOptions}
+            isSearchable={false}
+          />
+        </div>
+      </div>
       <table>
         <Thead sortBy={sortBy} setSortBy={setSortBy} setSortOrder={setSortOrder} />
         <tbody>

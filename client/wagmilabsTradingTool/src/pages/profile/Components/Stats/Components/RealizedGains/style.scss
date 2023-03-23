@@ -11,15 +11,12 @@
   .no-elements {
     margin-top: 1rem;
     padding-bottom: 1rem;
-    text-align: left;
+    text-align: center;
   }
 
   .pagination {
     align-items: center;
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
+    margin-bottom: 0;
 
     .default-btn {
       min-width: 0;
@@ -31,6 +28,16 @@
 
     p {
       margin-right: 1rem;
+    }
+
+    + .flex {
+      display: flex;
+      align-items: center;
+
+      span {
+        font-size: 12px;
+        margin-right: 0.5rem;
+      }
     }
   }
 

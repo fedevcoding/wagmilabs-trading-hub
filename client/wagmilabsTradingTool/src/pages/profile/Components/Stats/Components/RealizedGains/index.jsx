@@ -12,14 +12,16 @@ export const RealizedGains = React.memo(({ address }) => {
 
   return (
     <div className="realized-gains">
-      <h3>Realized gains</h3>
       {(isLoading && <LoadingSpinner />) || (
         <>
           {(rows.length && <Table rows={rows} />) || (
-            <div className="no-elements">
-              <img src={notFound} alt="not-found" width={150} />
-              <p>No trades made</p>
-            </div>
+            <>
+              <h3>Realized gains</h3>
+              <div className="no-elements">
+                <img src={notFound} alt="not-found" width={150} />
+                <p>No collections found</p>
+              </div>
+            </>
           )}
         </>
       )}
