@@ -1,3 +1,5 @@
+const { ethers } = require("ethers");
+
 const parseEther = (value, stringity) => {
   value = value?.toString();
   if (!value) return 0;
