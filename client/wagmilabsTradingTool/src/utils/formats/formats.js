@@ -117,14 +117,14 @@ function getListingExpirationDate(listingSettings) {
   return listingExpiration;
 }
 
-const parseEther = (value, stringity) => {
+const parseEther = (value, stringify) => {
   value = value?.toString();
   if (!value) return 0;
 
-  if (stringity) {
-    return ethers.utils.parseEther(value).toString();
+  if (stringify) {
+    return ethers.utils.formatEther(value).toString();
   } else {
-    return ethers.utils.parseEther(value);
+    return parseFloat(ethers.utils.formatEther(value));
   }
 };
 
