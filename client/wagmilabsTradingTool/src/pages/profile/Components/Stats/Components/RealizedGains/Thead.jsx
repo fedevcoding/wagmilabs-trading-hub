@@ -56,7 +56,7 @@ export const Thead = ({ sortBy, setSortBy, setSortOrder }) => {
             setSortOrder(newOrder);
           }}
         />
-        <th>Minted Fee</th>
+        <th>Mint Fee</th>
         <SortableHeader
           text="Net P&L"
           active={sortBy === "profit"}
