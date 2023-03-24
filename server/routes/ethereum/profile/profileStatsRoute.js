@@ -1,6 +1,6 @@
 const express = require("express");
-const { parseEther } = require("../../../../client/wagmilabsTradingTool/src/utils/formats/formats");
 const checkAuth = require("../../../middleware/checkAuth");
+const { ethers } = require("ethers");
 
 const Stats = require("../../../models/StatsModel");
 
@@ -8,6 +8,17 @@ const UPSHOT_API_KEY = process.env.UPSHOT_API_KEY;
 const NFTSCAN_API_KEY = process.env.NFTSCAN_API_KEY;
 
 const profileStatsRoute = express();
+
+const parseEther = (value, stringity) => {
+  value = value?.toString();
+  if (!value) return 0;
+
+  if (stringity) {
+    return ethers.utils.parseEther(value).toString();
+  } else {
+    return ethers.utils.parseEther(value);
+  }
+};
 
 profileStatsRoute.get("/", checkAuth, async (req, res) => {
   try {
