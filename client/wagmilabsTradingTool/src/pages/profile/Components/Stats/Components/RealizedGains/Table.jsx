@@ -38,7 +38,7 @@ export const Table = React.memo(({ rows }) => {
         </div>
       </div>
       <table>
-        <Thead sortBy={sortBy} setSortBy={setSortBy} setSortOrder={setSortOrder} />
+        <Thead />
         <tbody>
           {(!totalItems && (
             <tr>

@@ -1,70 +1,20 @@
 import React from "react";
-import { SortableHeader } from "./SortableHeader";
 
-export const Thead = ({ sortBy, setSortBy, setSortOrder }) => {
+export const Thead = () => {
   return (
     <thead>
       <tr>
         <th>Collection</th>
-        <SortableHeader
-          text="Bought Count"
-          active={sortBy === "bought-count"}
-          onSort={newOrder => {
-            setSortBy("bought-count");
-            setSortOrder(newOrder);
-          }}
-        />
-        <SortableHeader
-          text="Bought Price"
-          active={sortBy === "bought-price"}
-          onSort={newOrder => {
-            setSortBy("bought-price");
-            setSortOrder(newOrder);
-          }}
-        />
+        <th>Bought Count</th>
+        <th>Bought Price</th>
         <th>Bought Fee</th>
-        <SortableHeader
-          text="Sold Count"
-          active={sortBy === "sold-count"}
-          onSort={newOrder => {
-            setSortBy("sold-count");
-            setSortOrder(newOrder);
-          }}
-        />
-        <SortableHeader
-          text="Sold Price"
-          active={sortBy === "sold-price"}
-          onSort={newOrder => {
-            setSortBy("sold-price");
-            setSortOrder(newOrder);
-          }}
-        />
+        <th>Sold Count</th>
+        <th>Sold Price</th>
         <th>Sold Fee</th>
-        <SortableHeader
-          text="Mint Count"
-          active={sortBy === "minted-count"}
-          onSort={newOrder => {
-            setSortBy("minted-count");
-            setSortOrder(newOrder);
-          }}
-        />
-        <SortableHeader
-          text="Mint Price"
-          active={sortBy === "minted-price"}
-          onSort={newOrder => {
-            setSortBy("minted-price");
-            setSortOrder(newOrder);
-          }}
-        />
+        <th>Mint Count</th>
+        <th>Mint Price</th>
         <th>Mint Fee</th>
-        <SortableHeader
-          text="Net P&L"
-          active={sortBy === "profit"}
-          onSort={newOrder => {
-            setSortBy("profit");
-            setSortOrder(newOrder);
-          }}
-        />
+        <th>Net P&L</th>
       </tr>
     </thead>
   );
