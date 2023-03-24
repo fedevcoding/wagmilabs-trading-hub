@@ -2,7 +2,7 @@ const express = require("express");
 const checkAuth = require("../../../middleware/checkAuth");
 const userBalancesRoute = express();
 const { Network, Alchemy } = require("alchemy-sdk");
-const { parseEther } = require("ethers/lib/utils");
+const parseEther = require("../../../services/parseEther");
 
 const ALCHEMY_API_KEY = process.env.ALCHEMY_API_KEY;
 
