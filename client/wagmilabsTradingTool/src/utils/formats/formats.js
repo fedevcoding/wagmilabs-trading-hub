@@ -124,7 +124,7 @@ const parseEther = (value, stringify) => {
   if (stringify) {
     return ethers.utils.formatEther(value);
   } else {
-    return parseFloat(ethers.utils.parseEther(value));
+    return parseFloat(ethers.utils.formatEther(value));
   }
 };
 
