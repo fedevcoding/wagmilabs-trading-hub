@@ -1,10 +1,12 @@
 import { useContext } from "react";
 import { fetchSigner } from "@wagmi/core";
-import { getClient } from "@reservoir0x/reservoir-kit-client";
+import { getClient } from "@reservoir0x/reservoir-sdk";
 import { useToast } from "@chakra-ui/react";
 import { UserDataContext } from "@Context";
 import { getListingExpirationDate } from "@Utils/formats/formats";
-import { marketListingMapping } from "@Utils/mappings";
+import { marketplacesData } from "@Utils";
+import { checkErrors } from "../utils/functions/errorHelpers";
+import { parseEther } from "../utils/formats/formats";
 
 export const useListNft = ({ contractAddress, tokenId, listingPrice }, callback) => {
   const { listingSettings } = useContext(UserDataContext);
@@ -33,10 +35,10 @@ export const useListNft = ({ contractAddress, tokenId, listingPrice }, callback)
         expirationTime = (getListingExpirationDate(listingSettings).getTime() / 1000).toString();
       }
 
-      const orderbook = marketListingMapping[marketplace].orderbook;
-      const orderKind = marketListingMapping[marketplace].orderKind;
+      const orderbook = marketplacesData[marketplace].orderbook;
+      const orderKind = marketplacesData[marketplace].orderKind;
 
-      const weiPrice = (listingPrice * 1000000000000000000).toString();
+      const weiPrice = parseEther(listingPrice, true);
 
       const royalties = royaltiesPerc
         ? {
@@ -77,9 +79,11 @@ export const useListNft = ({ contractAddress, tokenId, listingPrice }, callback)
       if (callback && typeof callback === "function") {
         callback();
       }
+      const error = checkErrors(e);
+
       toast({
         title: "Error listing NFT.",
-        description: "There has been an error while trying to list your NFT, try again later.",
+        description: error,
         status: "error",
         duration: 3000,
         isClosable: true,

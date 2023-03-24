@@ -9,7 +9,7 @@ import { useOnClickOutside } from "@Hooks";
 import { getDaysInMonth } from "./useGetDaysInMonth";
 import { adminAddresses } from "@Utils/adminAddresses";
 
-export const useMonthlyCalendar = ({sectionData, section, refetch}) => {
+export const useMonthlyCalendar = ({ sectionData, section, refetch }) => {
   const { address } = useAccount();
   const [slideLeft, setSlideLeft] = useState(true);
   const isAdmin = adminAddresses.includes(address);
@@ -28,16 +28,9 @@ export const useMonthlyCalendar = ({sectionData, section, refetch}) => {
     refetch();
   };
 
-  const initDaysInMonth = getDaysInMonth(
-    currentDate.getMonth(),
-    currentDate.getFullYear(),
-    false,
-    today
-  );
+  const initDaysInMonth = getDaysInMonth(currentDate.getMonth(), currentDate.getFullYear(), false, today);
   const [allDaysInMonth, setAllDaysInMonth] = useState(initDaysInMonth);
-  const [chunkDaysInMonth, setChunkDaysInMonth] = useState(
-    chunkArrayInGroups(initDaysInMonth, 7)
-  );
+  const [chunkDaysInMonth, setChunkDaysInMonth] = useState(chunkArrayInGroups(initDaysInMonth, 7));
 
   useEffect(() => {
     if (isLoading) {
@@ -52,9 +45,7 @@ export const useMonthlyCalendar = ({sectionData, section, refetch}) => {
       setSelectedEvents(
         sectionData
           .filter(
-            event =>
-              moment(event.timestamp).format("YYYY-MM-DD") ===
-              moment(selectedDate.date).format("YYYY-MM-DD")
+            event => moment(event.timestamp).format("YYYY-MM-DD") === moment(selectedDate.date).format("YYYY-MM-DD")
           )
           .map(el => ({ ...el, hour: moment(el.timestamp).hours() }))
           .sort(({ hour: a }, { hour: b }) => a - b)
@@ -74,7 +65,7 @@ export const useMonthlyCalendar = ({sectionData, section, refetch}) => {
   };
 
   const changeDate = back => {
-    if(slideLeft !== back) setSlideLeft(back);
+    if (slideLeft !== back) setSlideLeft(back);
     setIsLoading(true);
     setCurEventDetail(null);
     let nextDate = new Date(currentDate.getTime());
@@ -84,15 +75,8 @@ export const useMonthlyCalendar = ({sectionData, section, refetch}) => {
       nextDate.setMonth(currentDate.getMonth() + 1);
     }
     setCurrentDate(new Date(nextDate.getTime()));
-    const isToday =
-      moment(nextDate).format("YYYY-MM-DD") ===
-      moment(today).format("YYYY-MM-DD");
-    const nextAllDaysInMonth = getDaysInMonth(
-      nextDate.getMonth(),
-      nextDate.getFullYear(),
-      !isToday,
-      today,
-    );
+    const isToday = moment(nextDate).format("YYYY-MM-DD") === moment(today).format("YYYY-MM-DD");
+    const nextAllDaysInMonth = getDaysInMonth(nextDate.getMonth(), nextDate.getFullYear(), !isToday, today);
     setAllDaysInMonth(nextAllDaysInMonth);
     const nextDaysInMonth = chunkArrayInGroups(nextAllDaysInMonth, 7);
     setChunkDaysInMonth(nextDaysInMonth);
@@ -106,9 +90,7 @@ export const useMonthlyCalendar = ({sectionData, section, refetch}) => {
   const showSelectedDate = (d, idx) => {
     const allDaysInMonthCopy = [...allDaysInMonth];
     if (idx > 0) {
-      const oldSelectedIdx = allDaysInMonthCopy.findIndex(
-        el => el.isSelected
-      );
+      const oldSelectedIdx = allDaysInMonthCopy.findIndex(el => el.isSelected);
       if (oldSelectedIdx !== -1) {
         allDaysInMonthCopy[oldSelectedIdx].isSelected = false;
       }
@@ -120,9 +102,10 @@ export const useMonthlyCalendar = ({sectionData, section, refetch}) => {
     setAllDaysInMonth(allDaysInMonthCopy);
   };
 
-  const getEventsInDay = (sectionData, date) => sectionData?.filter((el)=>moment(el?.timestamp).format("YYYY-MM-DD") === moment(date).format("YYYY-MM-DD"))
+  const getEventsInDay = (sectionData, date) =>
+    sectionData?.filter(el => moment(el?.timestamp).format("YYYY-MM-DD") === moment(date).format("YYYY-MM-DD"));
 
-  return({
+  return {
     isLoading,
     showSelectedDate,
     chunkDaysInMonth,
@@ -142,5 +125,5 @@ export const useMonthlyCalendar = ({sectionData, section, refetch}) => {
     selectedDate,
     slideLeft,
     getEventsInDay,
-  })
-}
+  };
+};

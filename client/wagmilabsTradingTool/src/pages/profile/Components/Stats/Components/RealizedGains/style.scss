@@ -1,0 +1,82 @@
+#stats .realized-gains {
+  color: var(--text-color);
+  margin-top: 1.5rem;
+
+  h3 {
+    font-size: 21px;
+    margin-left: 1rem;
+  }
+
+  table {
+    width: 100%;
+    margin-top: 1rem;
+    background-color: #222840;
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+    border-spacing: 0;
+    border-collapse: collapse;
+    border-radius: 10px;
+
+    .image > div {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+
+      span {
+        margin-right: 0.5rem;
+
+        img {
+          border-radius: 5px;
+        }
+      }
+    }
+
+    th {
+      text-align: left;
+      font-weight: bold;
+      border-right-color: transparent;
+      border-left-color: transparent;
+      border-bottom: 2px solid #2c2c3a;
+      font-size: 14px;
+      padding: 1rem 0.5rem;
+      text-align: center;
+    }
+
+    tr:first-child td {
+      padding-top: 10px;
+    }
+
+    tr td:first-child,
+    tr th:first-child {
+      width: 50px;
+      text-align: right;
+    }
+
+    tr:last-child {
+      td {
+        &:first-child {
+          border-bottom-left-radius: 10px;
+        }
+        &:last-child {
+          border-bottom-right-radius: 10px;
+        }
+      }
+    }
+
+    tr td {
+      border: none;
+      display: table-cell;
+      padding: 0.8rem 0.5rem;
+      background-color: #1e1f25;
+      text-align: center;
+
+      small {
+        color: var(--light-gray);
+      }
+    }
+    tr:nth-child(odd) td {
+      background-color: #171719;
+    }
+  }
+}

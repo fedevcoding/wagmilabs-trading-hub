@@ -24,7 +24,7 @@ import { ChakraProvider } from "@chakra-ui/react";
 // wagmi / rainbowkit
 import { ReservoirKitProvider, darkTheme as reservoirDarkTheme } from "@reservoir0x/reservoir-kit-ui";
 import { chain, configureChains, WagmiConfig, createClient as createWagmiClient } from "wagmi";
-import { createClient } from "@reservoir0x/reservoir-kit-client";
+import { createClient } from "@reservoir0x/reservoir-sdk";
 import { infuraProvider } from "wagmi/providers/infura";
 import { publicProvider } from "wagmi/providers/public";
 import { getDefaultWallets, RainbowKitProvider, darkTheme } from "@rainbow-me/rainbowkit";
@@ -48,6 +48,7 @@ import { serverUrl } from "@Variables";
 import { Calendar } from "./pages/calendar/Calendar";
 import Pnl from "./pages/pnl/Pnl";
 import RESERVOIR_SOURCE from "./variables/reservoirSource";
+import BulkListing from "./pages/bulkListing/BulkListing";
 
 // for wagmi
 
@@ -65,9 +66,15 @@ const wagmiClient = createWagmiClient({
   provider,
 });
 createClient({
-  apiBase: "https://api.reservoir.tools",
-  apiKey: RESERVOIR_API_KEY,
   source: RESERVOIR_SOURCE,
+  chains: [
+    {
+      id: 1,
+      apiKey: RESERVOIR_API_KEY,
+      baseApiUrl: "https://api.reservoir.tools",
+      default: true,
+    },
+  ],
 });
 
 // for reservoir
@@ -397,6 +404,18 @@ function App() {
                                   <>
                                     <Header />
                                     <Profile />
+                                    <Footer />
+                                  </>
+                                }
+                              />
+
+                              <Route
+                                exact
+                                path="/profile/bulk-listing"
+                                element={
+                                  <>
+                                    <Header />
+                                    <BulkListing />
                                     <Footer />
                                   </>
                                 }

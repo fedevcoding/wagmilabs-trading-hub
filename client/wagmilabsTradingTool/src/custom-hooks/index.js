@@ -22,3 +22,5 @@ export { useUpdateBalance } from "./useUpdateBalances";
 export { useCopy } from "./useCopy";
 export { useGetWallets } from "./useGetWallets";
 export { useOnClickOutside } from "./useOnClickOutside";
+export { useGoBack } from "./useGoBack";
+export { useBulkList } from "./useBulkList";

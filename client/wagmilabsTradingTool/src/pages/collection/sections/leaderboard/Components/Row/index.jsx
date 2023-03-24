@@ -3,6 +3,7 @@ import { HStack, Tooltip } from "@chakra-ui/react";
 import { useCopy } from "@Hooks";
 import { formatAddress, roundPrice2, roundPriceUsd } from "@Utils";
 import { Number } from "@Components";
+import { parseEther } from "../../../../../../utils/formats/formats";
 
 export const Row = React.memo(({ h, i }) => {
   const { copyState, copyAddress } = useCopy();
@@ -32,7 +33,7 @@ export const Row = React.memo(({ h, i }) => {
       <td className="collection-realized-pln">
         <HStack justifyContent={"center"}>
           <i className="fa-brands fa-ethereum" />
-          <Number n={parseInt(h?.collection_gains_all_time) / 1000000000000000000} crypto={true} />
+          <Number n={parseEther(h?.collection_gains_all_time, false)} crypto={true} />
         </HStack>
       </td>
       <td className="collection-volume">
