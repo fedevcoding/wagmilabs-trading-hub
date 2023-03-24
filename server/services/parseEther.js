@@ -5,10 +5,9 @@ const parseEther = (value, stringify) => {
   if (!value) return 0;
 
   if (stringify) {
-    ethers.utils.parseEther;
-    return ethers.utils.parseEther(value).toString();
+    return ethers.utils.formatEther(value);
   } else {
-    return Number(ethers.utils.parseEther(value));
+    return parseFloat(ethers.utils.parseEther(value));
   }
 };
 module.exports = parseEther;

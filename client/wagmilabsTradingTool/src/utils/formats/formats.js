@@ -122,9 +122,9 @@ const parseEther = (value, stringify) => {
   if (!value) return 0;
 
   if (stringify) {
-    return ethers.utils.parseEther(value).toString();
+    return ethers.utils.formatEther(value);
   } else {
-    return Number(ethers.utils.parseEther(value));
+    return parseFloat(ethers.utils.parseEther(value));
   }
 };
 

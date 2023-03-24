@@ -24,11 +24,12 @@ userBalancesRoute.get("/", checkAuth, async (req, res) => {
     const { tokenBalances } = data;
 
     const usdc = parseInt(tokenBalances[0]?.tokenBalance) / 1000000;
-    const weth = parseEther(tokenBalances[1]?.tokenBalance, false);
+    const weth = parseEther(parseInt(tokenBalances[1]?.tokenBalance), false);
     const usdt = parseInt(tokenBalances[2]?.tokenBalance) / 1000000;
 
     res.json({ usdc, weth, usdt });
   } catch (e) {
+    console.log(e);
     res.status(500).json({ error: e });
   }
 });
