@@ -129,7 +129,7 @@ a {
   border-top-right-radius: 10px;
 }
 
-.profile-options div:last-child {
+.profile-options .logout-container {
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
 }
