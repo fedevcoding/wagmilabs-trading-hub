@@ -34,7 +34,7 @@ route.get("/", checkAuth, async (req, res) => {
         if (!collections[token.contract]) {
           collections[token.contract] = {
             count: 0,
-            name: token.name,
+            name: token.collection.name,
           };
         }
         collections[token.contract].count++;
