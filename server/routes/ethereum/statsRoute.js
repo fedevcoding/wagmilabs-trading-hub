@@ -1,13 +1,6 @@
 const express = require("express");
 const checkAuth = require("../../middleware/checkAuth");
 const { execTranseposeAPI } = require("../../services/externalAPI/transpose");
-const {
-  getTxsGasFees,
-  formatApprovalGasFees,
-  getNftObj,
-  getNftMintedObj,
-  getPAndLData,
-} = require("../../services/pAndL");
 
 const statsRoute = express();
 
@@ -42,7 +35,7 @@ statsRoute.get("/:address", checkAuth, (req, res) => {
       const querySell = `
           SELECT contract_address, usd_price, eth_price, royalty_fee, platform_fee
           FROM ethereum.nft_sales
-          WHERE seller_address = '${address}' 
+          WHERE seller_address = '${address}'
           AND ${exchangeCondition}`;
 
       const mintedNftsQuery = `
@@ -68,8 +61,6 @@ statsRoute.get("/:address", checkAuth, (req, res) => {
         mint_tx_price: m.mint_tx_price ? m.mint_tx_price / 10 ** 18 : m.mint_tx_price,
       }));
 
-      const collections = {};
-
       const emptyObj = {
         bought: {
           count: 0,
@@ -90,74 +81,93 @@ statsRoute.get("/:address", checkAuth, (req, res) => {
         },
       };
 
-      let keys = bought ? Object.keys(bought) : [];
+      let collections = {};
 
-      keys.forEach(k => {
+      (bought ? Object.keys(bought) : []).forEach(k => {
+        const address = bought[k].contract_address.toLowerCase();
+        if (!collections[address]) {
+          collections[address] = { ...emptyObj, address };
+        }
+      });
+      (sold ? Object.keys(sold) : []).forEach(k => {
+        const address = sold[k].contract_address.toLowerCase();
+        if (!collections[address]) {
+          collections[address] = { ...emptyObj, address };
+        }
+      });
+      (minted ? Object.keys(minted) : []).forEach(k => {
+        const address = minted[k].contract_address.toLowerCase();
+        if (!collections[address]) {
+          collections[address] = { ...emptyObj, address };
+        }
+      });
+
+      collections = Object.values(collections);
+
+      (bought ? Object.keys(bought) : []).forEach(k => {
         const address = bought[k].contract_address.toLowerCase();
 
-        if (!collections[address]) {
-          collections[address] = { ...emptyObj, address };
-        }
-
-        collections[address].bought = keys.reduce((acc, key) => {
-          if (bought[key].contract_address.toLowerCase() === address) {
+        collections = collections.map(c => {
+          if (c.address === address) {
             return {
-              count: acc.count + 1,
-              usd_price: acc.usd_price + bought[key].usd_price,
-              eth_price: acc.eth_price + bought[key].eth_price,
-              fee: acc.fee + bought[key].royalty_fee + bought[key].platform_fee,
+              address,
+              bought: {
+                count: c.bought.count + 1,
+                usd_price: c.bought.usd_price + bought[k].usd_price,
+                eth_price: c.bought.eth_price + bought[k].eth_price,
+                fee: c.bought.fee + bought[k].royalty_fee + bought[k].platform_fee,
+              },
+              sold: c.sold,
+              minted: c.minted,
             };
           }
-
-          return acc;
-        }, collections[address].bought);
+          return c;
+        });
       });
 
-      keys = sold ? Object.keys(sold) : [];
-      keys.forEach(k => {
+      (sold ? Object.keys(sold) : []).forEach(k => {
         const address = sold[k].contract_address.toLowerCase();
 
-        if (!collections[address]) {
-          collections[address] = { ...emptyObj, address };
-        }
-
-        collections[address].sold = keys.reduce((acc, key) => {
-          if (sold[key].contract_address.toLowerCase() === address) {
+        collections = collections.map(c => {
+          if (c.address === address) {
             return {
-              count: acc.count + 1,
-              usd_price: acc.usd_price + sold[key].usd_price,
-              eth_price: acc.eth_price + sold[key].eth_price,
-              fee: acc.fee + sold[key].royalty_fee + sold[key].platform_fee,
+              address,
+              sold: {
+                count: c.sold.count + 1,
+                usd_price: c.sold.usd_price + sold[k].usd_price,
+                eth_price: c.sold.eth_price + sold[k].eth_price,
+                fee: c.sold.fee + sold[k].royalty_fee + sold[k].platform_fee,
+              },
+              bought: c.bought,
+              minted: c.minted,
             };
           }
-
-          return acc;
-        }, collections[address].sold);
+          return c;
+        });
       });
 
-      keys = minted ? Object.keys(minted) : [];
-      keys.forEach(k => {
+      (minted ? Object.keys(minted) : []).forEach(k => {
         const address = minted[k].contract_address.toLowerCase();
 
-        if (!collections[address]) {
-          collections[address] = { ...emptyObj, address };
-        }
-
-        collections[address].minted = keys.reduce((acc, key) => {
-          if (minted[key].contract_address.toLowerCase() === address) {
+        collections = collections.map(c => {
+          if (c.address === address) {
             return {
-              count: acc.count + minted[key].quantity_minted,
-              eth_price: acc.eth_price + minted[key].mint_tx_price,
-              fee: acc.fee + minted[key].mint_tx_fee,
+              address,
+              minted: {
+                count: c.minted.count + 1,
+                eth_price: c.minted.eth_price + minted[k].mint_tx_price,
+                fee: c.minted.fee + minted[k].mint_tx_fee,
+              },
+              bought: c.bought,
+              sold: c.sold,
             };
           }
-
-          return acc;
-        }, collections[address].minted);
+          return c;
+        });
       });
 
       res.status(200).json({
-        collections: Object.values(collections),
+        collections,
       });
     } catch (e) {
       console.log(e);
