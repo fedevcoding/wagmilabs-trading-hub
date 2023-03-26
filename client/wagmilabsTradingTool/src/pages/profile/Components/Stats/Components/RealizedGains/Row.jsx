@@ -41,10 +41,6 @@ export const Row = ({ c, collections }) => {
         <i className="fa-brands fa-ethereum" />
         {roundPrice(c.bought.eth_price)}
       </td>
-      <td>
-        <i className="fa-brands fa-ethereum" />
-        {roundPrice(c.bought.fee)}
-      </td>
       <td>{c.sold.count}</td>
       <td>
         {roundPriceUsd(c.sold.usd_price)}$
@@ -52,18 +48,10 @@ export const Row = ({ c, collections }) => {
         <i className="fa-brands fa-ethereum" />
         {roundPrice(c.sold.eth_price)}
       </td>
-      <td>
-        <i className="fa-brands fa-ethereum" />
-        {roundPrice(c.sold.fee)}
-      </td>
       <td>{c.minted.count}</td>
       <td>
         <i className="fa-brands fa-ethereum" />
         {roundPrice(c.minted.eth_price)}
-      </td>
-      <td>
-        <i className="fa-brands fa-ethereum" />
-        {roundPrice(c.minted.fee)}
       </td>
       <td>
         <Number n={c.profit} symbol={" ETH"} />
