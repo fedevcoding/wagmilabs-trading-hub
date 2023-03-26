@@ -11,7 +11,7 @@ export const Thead = () => {
         <th>Sold Price</th>
         <th>Mint Count</th>
         <th>Mint Price</th>
-        <th>Net P&L</th>
+        <th>Realized P&L</th>
       </tr>
     </thead>
   );

@@ -5,7 +5,7 @@ import { useCollections } from "@reservoir0x/reservoir-kit-ui";
 export function useGetTableInfo(rows) {
   const paginationCount = 10;
   const [page, setPage] = React.useState(1);
-  const [sortBy, setSortBy] = React.useState("bought-count");
+  const [sortBy, setSortBy] = React.useState("profit");
   const [sortOrder, setSortOrder] = React.useState("desc");
 
   const items = sortRows(rows, sortBy, sortOrder);
