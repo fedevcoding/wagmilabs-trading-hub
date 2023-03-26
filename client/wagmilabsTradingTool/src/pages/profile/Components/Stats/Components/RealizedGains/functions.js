@@ -82,6 +82,6 @@ export const sortOptions = [
   },
   {
     value: "profit",
-    label: "Net P&L",
+    label: "Realized Gains",
   },
 ];
