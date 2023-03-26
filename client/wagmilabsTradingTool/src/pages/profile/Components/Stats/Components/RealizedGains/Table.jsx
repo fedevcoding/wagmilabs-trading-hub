@@ -14,7 +14,7 @@ export const Table = React.memo(({ rows }) => {
   return (
     <>
       <div className="space-between">
-        <h3>Realized gains</h3>
+        <h3>Realized Collection Gains</h3>
         <Pagination
           page={page}
           setPage={setPage}
