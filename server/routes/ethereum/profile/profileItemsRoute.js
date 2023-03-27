@@ -8,16 +8,17 @@ const RESERVOIR_API_KEY = "9fc22ad1-29da-4a2d-a977-327f6bf1926f";
 profileItemsRoute.get("/", checkAuth, async (req, res) => {
   try {
     const userAddress = req.query?.address || req.userDetails?.address;
-
-    const { sortDirection, collection, continuation } = req.query;
+    const { sortDirection, collection, continuation, limit = "50" } = req.query;
 
     const continuationFilter = continuation ? `&continuation=${continuation}` : "";
 
     async function getTokens() {
       const filterCollectionQuery = collection && collection !== "undefined" ? `&collection=${collection}` : "";
 
+      const sortDirectionCondition = sortDirection ? `&sortDirection=${sortDirection}` : "";
+
       let items = await fetch(
-        `https://api.reservoir.tools/users/${userAddress}/tokens/v6?normalizeRoyalties=false&sortDirection=${sortDirection}&limit=50&includeTopBid=false${filterCollectionQuery}${continuationFilter}`,
+        `https://api.reservoir.tools/users/${userAddress}/tokens/v6?normalizeRoyalties=false${sortDirectionCondition}&limit=${limit}&includeTopBid=false${filterCollectionQuery}${continuationFilter}`,
         {
           headers: {
             accept: "*/*",

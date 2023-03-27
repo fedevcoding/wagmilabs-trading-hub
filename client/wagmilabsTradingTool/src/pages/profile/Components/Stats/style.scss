@@ -1,8 +1,25 @@
 #stats {
   margin-bottom: 3rem;
+
+  @media screen and (max-width: 1580px) {
+    #traded-distribution {
+      h3 {
+        text-align: center;
+      }
+
+      .tabs {
+        margin-left: 0.5rem;
+      }
+    }
+  }
+
   .card-component {
     color: var(--text-color);
-    min-height: 450px;
+    min-height: 470px;
+
+    > [data-highcharts-chart] {
+      margin-top: 1rem;
+    }
 
     .tabs {
       border: 1px solid var(--light-dark);

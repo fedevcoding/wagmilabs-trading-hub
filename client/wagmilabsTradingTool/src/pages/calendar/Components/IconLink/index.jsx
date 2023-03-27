@@ -22,8 +22,11 @@ const matchIcon = type => {
   }
 };
 
-export const IconLink = ({ type, link }) => (
-  <a href={link} target={"_blank"} rel="noreferrer">
-    <img src={matchIcon(type)} alt="" width="30px" className="link-img" />
-  </a>
-);
+export const IconLink = ({ type, link }) =>
+  link ? (
+    <a href={link} target={"_blank"} rel="noreferrer">
+      <img src={matchIcon(type)} alt="" width="30px" className="link-img" />
+    </a>
+  ) : (
+    <></>
+  );

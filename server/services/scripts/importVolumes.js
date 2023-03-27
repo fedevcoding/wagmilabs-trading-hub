@@ -1,5 +1,5 @@
-const { execTranseposeAPI } = require("./externalAPI/transpose");
-const Marketplaces = require("./../models/MarketplacesModel");
+const { execTranseposeAPI } = require("../externalAPI/transpose");
+const Marketplaces = require("../../models/MarketplacesModel");
 
 // Start date
 let start = new Date("2018-01-01");
