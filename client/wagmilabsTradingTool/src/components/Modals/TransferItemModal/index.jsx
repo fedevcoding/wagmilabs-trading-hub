@@ -13,6 +13,7 @@ import {
 import { Loader } from "@Components";
 import { isValidEthAddress } from "@Utils";
 import { useTransferItem } from "@Hooks";
+import { fetchEnsAddress } from "@wagmi/core";
 
 import "./style.scss";
 
@@ -32,12 +33,7 @@ export const TransferItemModal = React.memo(
 
     const { transferNft } = useTransferItem();
 
-    const transfer = async (
-      contractAddress,
-      tokenId,
-      toAddress,
-      setConfirmingList
-    ) => {
+    const transfer = async (contractAddress, tokenId, toAddress, setConfirmingList) => {
       setConfirmingList(true);
       await transferNft(contractAddress, tokenId, toAddress);
       setConfirmingList(false);
@@ -53,13 +49,30 @@ export const TransferItemModal = React.memo(
           <ModalCloseButton />
           <ModalBody>
             <p className="label">
-              <b>Insert address</b>
+              <b>Insert address or ENS (ethereum name service)</b>
             </p>
             <Input
               placeholder={`e.g. 0x1ed3...`}
               onChange={e => {
-                setAddress(e.target.value);
-                setIsValidAddress(isValidEthAddress(e.target.value));
+                const value = e.target.value;
+                const isEns = value.endsWith(".eth");
+
+                if (isEns) {
+                  fetchEnsAddress({
+                    name: value,
+                    chainId: 1,
+                  }).then(addr => {
+                    if (addr) {
+                      setIsValidAddress(true);
+                      setAddress(addr);
+                    } else {
+                      setIsValidAddress(false);
+                    }
+                  });
+                } else {
+                  setAddress(value);
+                  setIsValidAddress(isValidEthAddress(value));
+                }
               }}
             />
 
@@ -73,21 +86,11 @@ export const TransferItemModal = React.memo(
               className="btn-confirm"
               mr={3}
               onClick={() => {
-                if (!confirmingList)
-                  transfer(
-                    contractAddress,
-                    tokenId,
-                    address,
-                    setConfirmingList
-                  );
+                if (!confirmingList) transfer(contractAddress, tokenId, address, setConfirmingList);
               }}
               isDisabled={!isValidAddress}
             >
-              {confirmingList ? (
-                <Loader width={"20px"} height={"20px"} />
-              ) : (
-                "Confirm"
-              )}
+              {confirmingList ? <Loader width={"20px"} height={"20px"} /> : "Confirm"}
             </Button>
             <Button onClick={() => setIsOpen(false)}>Cancel</Button>
           </ModalFooter>
