@@ -30,6 +30,7 @@ export const TransferItemModal = React.memo(
     const [confirmingList, setConfirmingList] = React.useState(false);
     const [address, setAddress] = React.useState(null);
     const [isValidAddress, setIsValidAddress] = React.useState(false);
+    const [sendEns, setSendEns] = React.useState(false);
 
     const { transferNft } = useTransferItem();
 
@@ -65,13 +66,16 @@ export const TransferItemModal = React.memo(
                     if (addr) {
                       setIsValidAddress(true);
                       setAddress(addr);
+                      setSendEns(true);
                     } else {
                       setIsValidAddress(false);
+                      setSendEns(false);
                     }
                   });
                 } else {
                   setAddress(value);
                   setIsValidAddress(isValidEthAddress(value));
+                  setSendEns(false);
                 }
               }}
             />
@@ -80,6 +84,8 @@ export const TransferItemModal = React.memo(
               <i className="fa fa-warning" />
               Items sent to the wrong address cannot be recovered
             </p>
+
+            {(sendEns && <p className="addr-ens">{`The nft will be sent to ${address}`}</p>) || ""}
           </ModalBody>
           <ModalFooter>
             <Button
