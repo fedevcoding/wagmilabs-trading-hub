@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useState, useRef } from "react";
-import "./style.scss";
 import { placeholderImage } from "@Assets";
-import { formatAddress2, roundPrice2, formatIpfs } from "@Utils/formats/formats";
+import { formatAddress2, roundPrice2, formatIpfs } from "@Utils";
 import { baseUrl } from "@Variables";
 import getMarketplaceImage from "@Utils/marketplaceImageMapping";
 import moment from "moment";
@@ -9,7 +8,9 @@ import { Button, HStack, Input, NumberInput, NumberInputField, Select } from "@c
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { LoadingSpinner } from "@Components";
-import { notFound } from "src/assets";
+import { notFound } from "@Assets";
+
+import "./style.scss";
 
 const activityTypeMapping = {
   list: "List",
@@ -51,7 +52,7 @@ const activityMarketplaceMapping = [
   },
 ];
 
-export const Activity = ({ userAddress, pageAddress, isOwner }) => {
+export const Activity = ({ userAddress, pageAddress }) => {
   const [activityCategory, setActivityCategory] = useState(["sale"]);
   const [activityAddressFilter, setActivityAddressFilter] = useState({
     from: "",

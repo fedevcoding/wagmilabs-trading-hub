@@ -4,12 +4,6 @@ import Highcharts from "highcharts";
 import { roundPrice2 } from "@Utils";
 import moment from "moment";
 
-const typeColors = {
-  mint: "#4caf50",
-  bought: "#2196f3",
-  sold: "#f44336",
-};
-
 function Chart({ data }) {
   const options = {
     chart: {
@@ -27,22 +21,21 @@ function Chart({ data }) {
         text: "Price",
       },
     },
-    tooltip: {
-      formatter: function () {
-        return `
-            <b>NFT info:<b/>
-            <br />
-            Address: ${this.point.address}
-            <br />
-            Token ID: ${this.point.token_id}
-            <br />
-            Price: ${roundPrice2(this.y)} ETH
-            <br />
-            Date: ${moment(this.x).format("MMM DD, YYYY HH:mm")}
-            <br />
-            Type: ${this.point.type}
-            `;
+    plotOptions: {
+      scatter: {
+        stickyTracking: false,
       },
+    },
+    tooltip: {
+      useHTML: true,
+      pointFormat: `
+        <div>
+          <p>{point.readableDate}</p>
+          <p>Name: {point.name}</p>
+          <p>Price: {point.price} ETH</p>
+          <p>Token ID: {point.token_id}</p>
+          <img class="bubble-chart-image" src={point.image} width="50px" height="50px"  />
+        </div>`,
     },
     series: [
       {
@@ -54,9 +47,10 @@ function Chart({ data }) {
             y: d.price,
             address: d.address,
             token_id: d.token_id,
-            name: d.type,
-            type: d.type,
-            color: typeColors[d.type] || "#000000",
+            name: d.name,
+            image: d.image_url,
+            readableDate: moment(d.timestamp).format("MMM DD, YYYY HH:mm"),
+            price: roundPrice2(d.price),
           })),
         marker: {
           radius: 3,
@@ -71,9 +65,10 @@ function Chart({ data }) {
             y: d.price,
             address: d.address,
             token_id: d.token_id,
-            name: d.type,
-            type: d.type,
-            color: typeColors[d.type] || "#000000",
+            name: d.name,
+            image: d.image_url,
+            readableDate: moment(d.timestamp).format("MMM DD, YYYY HH:mm"),
+            price: roundPrice2(d.price),
           })),
         marker: {
           radius: 3,
@@ -88,9 +83,10 @@ function Chart({ data }) {
             y: d.price,
             address: d.address,
             token_id: d.token_id,
-            name: d.type,
-            type: d.type,
-            color: typeColors[d.type] || "#000000",
+            name: d.name,
+            image: d.image_url,
+            readableDate: moment(d.timestamp).format("MMM DD, YYYY HH:mm"),
+            price: roundPrice2(d.price),
           })),
         marker: {
           radius: 3,
@@ -99,11 +95,7 @@ function Chart({ data }) {
     ],
   };
 
-  return (
-    <div>
-      <HighchartsReact highcharts={Highcharts} options={options} />
-    </div>
-  );
+  return <HighchartsReact highcharts={Highcharts} options={options} />;
 }
 
 export default Chart;
