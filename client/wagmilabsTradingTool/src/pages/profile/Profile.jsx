@@ -72,8 +72,6 @@ const Profile = () => {
   const [searchCollectionText, setSearchCollectionText] = useState("");
   const [debounceCollectionSearch] = useDebounce(searchCollectionText, 400);
 
-  const [showPromoBanner, setShowPromoBanner] = useState(true);
-
   const [copyState, setCopyState] = useState({ ens: "Copy", address: "Copy" });
   const [isOpen, setIsOpen] = React.useState(false);
 
@@ -751,24 +749,6 @@ const Profile = () => {
               Stats
             </div>
           </div>
-
-          {section === "nft" && showPromoBanner && (
-            <a
-              className="profile-promo-container"
-              href="https://discord.gg/wagmilabs"
-              target={"_blank"}
-              rel="noreferrer"
-              onClick={() => setShowPromoBanner(false)}
-            >
-              <i className="fa-solid fa-x profile-promo-close-btn"></i>
-
-              <h3 className="profile-promo-header">FREE beta is ending soon..!</h3>
-              <h4 className="profile-promo-body">Get whitelisted to mint the NFT pass for yearly access!</h4>
-              <Button colorScheme={"gray"} className="profile-promo-button">
-                Get Whitelisted
-              </Button>
-            </a>
-          )}
 
           <div className="profile-watchList-settings">
             <div className="profile-settings">

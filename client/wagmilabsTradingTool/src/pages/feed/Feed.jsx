@@ -2,8 +2,6 @@ import React from "react";
 import { LoadingSpinner, PageWrapper, Pagination } from "@Components";
 import { useGetNews } from "./useGetNews";
 import { Card } from "./Components";
-import { Banner } from "./Components/Banner";
-import { generateRandomRangeInt } from "@Utils/formats/utils";
 import { useSetPageTitle } from "@Hooks";
 import PoweredBy from "@Assets/poweredbyluckytrader-light.png";
 
@@ -17,17 +15,14 @@ const Feed = React.memo(() => {
     isLoading,
   } = useGetNews(currentPage);
 
-  let bannerPos = generateRandomRangeInt(0, 3);
-
   return (
     <PageWrapper page="feed">
       <h1>NFT news</h1>
       {(news && !isLoading && (
         <>
           <div className="cards">
-            {news.map((n, index) => (
+            {news.map(n => (
               <React.Fragment key={n.link}>
-                {index === bannerPos && <Banner />}
                 <Card key={n.link} news={n} />
               </React.Fragment>
             ))}

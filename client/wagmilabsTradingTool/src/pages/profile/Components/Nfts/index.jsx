@@ -9,14 +9,13 @@ import "react-loading-skeleton/dist/skeleton.css";
 
 import { notFound, placeholderImage } from "@Assets";
 
-import { getListingExpirationDate, roundPrice, roundPrice2, generateRandomRangeInt } from "@Utils";
+import { getListingExpirationDate, roundPrice, roundPrice2 } from "@Utils";
 import { Button, Tooltip, useToast } from "@chakra-ui/react";
 import { UserDataContext } from "@Context";
 import { Loader, TransferItemModal } from "@Components";
 import getMarketplaceImage from "@Utils/marketplaceImageMapping";
 import { useNavigate } from "react-router-dom";
 import { useListNft } from "@Hooks";
-import { ItemBanner } from "src/pages/collection/sections/banners/ItemBanner";
 import { useBulk } from "./useBulk";
 
 import "./style.scss";
@@ -67,11 +66,6 @@ export const Nfts = ({
   const [showQuickListingModal, setShowQuickListingModal] = useState(false);
 
   const [showSortItemsOptions, setShowSortItemsOptions] = useState(false);
-
-  const [randomPositionPromo] = useState({
-    0: generateRandomRangeInt(0, 3),
-    1: generateRandomRangeInt(4, 6),
-  });
 
   const observer = useRef(false);
 
@@ -368,18 +362,6 @@ export const Nfts = ({
                 </div>
               </div>
             </div>
-
-            {index === randomPositionPromo[0] && (
-              <div className={`single-item-container ${isLast && "last-token"}`}>
-                <ItemBanner primary></ItemBanner>
-              </div>
-            )}
-
-            {index === randomPositionPromo[1] && (
-              <div className={`single-item-container ${isLast && "last-token"}`}>
-                <ItemBanner></ItemBanner>
-              </div>
-            )}
           </>
         );
       }),
