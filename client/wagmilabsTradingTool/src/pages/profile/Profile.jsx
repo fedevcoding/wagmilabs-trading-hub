@@ -20,11 +20,11 @@ import {
 import { UserDataContext } from "@Context";
 
 import copy from "copy-to-clipboard";
-import { useSetPageTitle } from "@Hooks";
+import { useGetItems, useSetPageTitle } from "@Hooks";
 import { LoadingSpinner, ProfitCalcModal } from "@Components";
 import { useNavigate, useParams } from "react-router-dom";
 import { placeholderImage } from "@Assets";
-import { Nfts, Activity } from "./Components";
+import { Nfts, Activity, Stats } from "./Components";
 
 import "./profile.scss";
 
@@ -52,14 +52,12 @@ const Profile = () => {
 
   const { listingSettings, setListingSettings, profileImage, setProfileImage } = useContext(UserDataContext);
 
-  const [userItems, setUserItems] = useState([]);
   const [userAddress] = useState(address);
   const [pnl, setPnl] = useState({});
   const [userEns] = useState(ensName?.data);
   const [collections, setCollections] = useState([]);
   const [section, setSection] = useState("nft");
   const [loadingData, setLoadingData] = useState(true);
-  const [loadingNfts, setLoadingNfts] = useState(true);
 
   const [loadingMoreNfts, setLoadingMoreNfts] = useState(false);
   const nftsContinuation = useRef();
@@ -74,10 +72,18 @@ const Profile = () => {
   const [searchCollectionText, setSearchCollectionText] = useState("");
   const [debounceCollectionSearch] = useDebounce(searchCollectionText, 400);
 
-  const [showPromoBanner, setShowPromoBanner] = useState(true);
-
   const [copyState, setCopyState] = useState({ ens: "Copy", address: "Copy" });
   const [isOpen, setIsOpen] = React.useState(false);
+
+  const {
+    loading: loadingNfts,
+    setLoading: setLoadingNfts,
+    items: userItems,
+    continuation,
+    setItems: setUserItems,
+  } = useGetItems("50", selectedSortOption.value, nftsCollectionFilter);
+
+  nftsContinuation.current = continuation;
 
   useEffect(() => {
     fetchUserData();
@@ -89,12 +95,8 @@ const Profile = () => {
   useEffect(() => {
     fetchUserCollections(debounceCollectionSearch, 0, 20);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [debounceCollectionSearch]);
-
-  useEffect(() => {
-    fetchUserItems();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedSortOption, nftsCollectionFilter]);
+  }, [debounceCollectionSearch]);
 
   async function fetchUserCollections(query, offset, limit) {
     try {
@@ -120,7 +122,6 @@ const Profile = () => {
   async function fetchMoreItems() {
     try {
       setLoadingMoreNfts(true);
-
       const continuationFilter = nftsContinuation.current ? `&continuation=${nftsContinuation.current}` : "";
       let data = await fetch(
         `${baseUrl}/profileItems?sortDirection=${selectedSortOption.value}&collection=${nftsCollectionFilter}&address=${pageAddress}${continuationFilter}`,
@@ -139,31 +140,6 @@ const Profile = () => {
       nftsContinuation.current = continuation;
       setUserItems(prev => [...prev, ...tokens]);
       setLoadingMoreNfts(false);
-    } catch (e) {
-      setUserItems([]);
-      setLoadingNfts(false);
-    }
-  }
-  async function fetchUserItems() {
-    try {
-      setLoadingNfts(true);
-      let data = await fetch(
-        `${baseUrl}/profileItems?sortDirection=${selectedSortOption.value}&collection=${nftsCollectionFilter}&address=${pageAddress}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "x-auth-token": localStorage.jsonwebtoken,
-          },
-        }
-      );
-
-      data = await data.json();
-
-      const { tokens, continuation } = data;
-      nftsContinuation.current = continuation;
-
-      setUserItems(tokens);
-      setLoadingNfts(false);
     } catch (e) {
       setUserItems([]);
       setLoadingNfts(false);
@@ -227,12 +203,6 @@ const Profile = () => {
       console.log(e);
     }
   }
-
-  const changeSection = (section, e) => {
-    document.querySelectorAll(".single-profile-section").forEach(el => el.classList.remove("selected"));
-    e.target.classList.add("selected");
-    setSection(section);
-  };
 
   const toggleListingSettings = state => {
     setOpenListingSettings(state);
@@ -760,32 +730,25 @@ const Profile = () => {
 
         <div className="profile-sections-tabs">
           <div className="profile-sections">
-            <div className="single-profile-section selected" onClick={e => changeSection("nft", e)}>
+            <div
+              className={`single-profile-section ${section === "nft" ? "selected" : ""}`}
+              onClick={() => setSection("nft")}
+            >
               NFTs
             </div>
-            <div className="single-profile-section" onClick={e => changeSection("activity", e)}>
+            <div
+              className={`single-profile-section ${section === "activity" ? "selected" : ""}`}
+              onClick={() => setSection("activity")}
+            >
               Activity
             </div>
-            <div className="single-profile-section not-allowed">Stats</div>
-          </div>
-
-          {section === "nft" && showPromoBanner && (
-            <a
-              className="profile-promo-container"
-              href="https://discord.gg/wagmilabs"
-              target={"_blank"}
-              rel="noreferrer"
-              onClick={() => setShowPromoBanner(false)}
+            <div
+              className={`single-profile-section ${section === "stats" ? "selected" : ""}`}
+              onClick={() => setSection("stats")}
             >
-              <i className="fa-solid fa-x profile-promo-close-btn"></i>
-
-              <h3 className="profile-promo-header">FREE beta is ending soon..!</h3>
-              <h4 className="profile-promo-body">Get whitelisted to mint the NFT pass for yearly access!</h4>
-              <Button colorScheme={"gray"} className="profile-promo-button">
-                Get Whitelisted
-              </Button>
-            </a>
-          )}
+              Stats
+            </div>
+          </div>
 
           <div className="profile-watchList-settings">
             <div className="profile-settings">
@@ -802,31 +765,28 @@ const Profile = () => {
           </div>
         </div>
 
-        {(() => {
-          if (section === "nft") {
-            return (
-              <Nfts
-                loadingMoreNfts={loadingMoreNfts}
-                fetchMoreItems={fetchMoreItems}
-                nftsContinuation={nftsContinuation}
-                nftsCollectionFilter={nftsCollectionFilter}
-                setNftsCollectionFilter={setNftsCollectionFilter}
-                searchCollectionText={searchCollectionText}
-                setSearchCollectionText={setSearchCollectionText}
-                selectedSortOption={selectedSortOption}
-                setSelectedSortOption={setSelectedSortOption}
-                userItems={userItems}
-                setProfileImage={setProfileImage}
-                collections={collections}
-                loadingNfts={loadingNfts}
-                listingSettings={listingSettings}
-                isOwner={isOwner}
-              />
-            );
-          } else if (section === "activity") {
-            return <Activity userAddress={userAddress} pageAddress={pageAddress} isOwner={isOwner} />;
-          }
-        })()}
+        {(section === "nft" && (
+          <Nfts
+            loadingMoreNfts={loadingMoreNfts}
+            fetchMoreItems={fetchMoreItems}
+            nftsContinuation={nftsContinuation}
+            nftsCollectionFilter={nftsCollectionFilter}
+            setNftsCollectionFilter={setNftsCollectionFilter}
+            searchCollectionText={searchCollectionText}
+            setSearchCollectionText={setSearchCollectionText}
+            selectedSortOption={selectedSortOption}
+            setSelectedSortOption={setSelectedSortOption}
+            userItems={userItems}
+            setProfileImage={setProfileImage}
+            collections={collections}
+            loadingNfts={loadingNfts}
+            listingSettings={listingSettings}
+            isOwner={isOwner}
+          />
+        )) ||
+          ""}
+        {(section === "activity" && <Activity userAddress={userAddress} pageAddress={pageAddress} />) || ""}
+        {(section === "stats" && <Stats address={userAddress} />) || ""}
       </section>
     </>
   );

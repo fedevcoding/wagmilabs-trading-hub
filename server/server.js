@@ -16,6 +16,8 @@ const updateWatchListRoute = require("./routes/ethereum/updateWatchListRoute.js"
 const removeRefreshTokenRoute = require("./routes/ethereum/removeRefreshTokenRoute.js");
 const getWatchListRoute = require("./routes/ethereum/getWatchListRoute.js");
 const profileItemsRoute = require("./routes/ethereum/profile/profileItemsRoute");
+const holdingNftDistributionRoute = require("./routes/ethereum/profile/holdingNftDistribution");
+const tradedDistributionRoute = require("./routes/ethereum/profile/tradedDistribution");
 const collectionInfoRoute = require("./routes/ethereum/collections/collectionInfoRoute.js");
 const updateUserCartRoute = require("./routes/ethereum/profile/updateUserCartRoute.js");
 const emptyCartRoute = require("./routes/ethereum/profile/emptyCartRoute.js");
@@ -68,6 +70,8 @@ const rateLimit = require("express-rate-limit");
 // http server
 
 const app = express();
+
+app.set("trust proxy", true);
 app.use(express.json({ limit: "500mb" }));
 app.use(express.urlencoded({ limit: "500mb", extended: true }));
 app.use(cors({ credentials: true, origin: CLIENT_URL }));
@@ -189,6 +193,9 @@ const limiter = rateLimit({
   windowMs: 1000,
   max: 15,
   message: "Too many requests from this IP, please try again later.",
+  keyGenerator: function (req) {
+    return req.connection.remoteAddress;
+  },
 });
 app.use(limiter);
 
@@ -225,6 +232,8 @@ app.use("/api/v1/wagmilabs/collection", tokenRoute);
 app.use("/api/v1/wagmilabs/collection", collectionHolders);
 
 app.use("/api/v1/wagmilabs/profileItems", profileItemsRoute);
+app.use("/api/v1/wagmilabs/holdingNftDistribution", holdingNftDistributionRoute);
+app.use("/api/v1/wagmilabs/tradedDistribution", tradedDistributionRoute);
 app.use("/api/v1/wagmilabs/profileCollections", profileCollectionsRoute);
 app.use("/api/v1/wagmilabs/getWatchList", getWatchListRoute);
 app.use("/api/v1/wagmilabs/trending", trendingRoute);
