@@ -9,14 +9,13 @@ import "react-loading-skeleton/dist/skeleton.css";
 
 import { notFound, placeholderImage } from "@Assets";
 
-import { getListingExpirationDate, roundPrice, roundPrice2 } from "@Utils/formats/formats";
+import { getListingExpirationDate, roundPrice, roundPrice2, generateRandomRangeInt } from "@Utils";
 import { Button, Tooltip, useToast } from "@chakra-ui/react";
 import { UserDataContext } from "@Context";
 import { Loader, TransferItemModal } from "@Components";
 import getMarketplaceImage from "@Utils/marketplaceImageMapping";
 import { useNavigate } from "react-router-dom";
 import { useListNft } from "@Hooks";
-import { generateRandomRangeInt } from "@Utils/formats/utils";
 import { ItemBanner } from "src/pages/collection/sections/banners/ItemBanner";
 import { useBulk } from "./useBulk";
 
