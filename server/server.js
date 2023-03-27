@@ -70,6 +70,8 @@ const rateLimit = require("express-rate-limit");
 // http server
 
 const app = express();
+
+app.set("trust proxy", true);
 app.use(express.json({ limit: "500mb" }));
 app.use(express.urlencoded({ limit: "500mb", extended: true }));
 app.use(cors({ credentials: true, origin: CLIENT_URL }));
@@ -191,6 +193,9 @@ const limiter = rateLimit({
   windowMs: 1000,
   max: 15,
   message: "Too many requests from this IP, please try again later.",
+  keyGenerator: function (req) {
+    return req.connection.remoteAddress;
+  },
 });
 app.use(limiter);
 
