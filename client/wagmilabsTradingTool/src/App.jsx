@@ -52,7 +52,7 @@ import BulkListing from "./pages/bulkListing/BulkListing";
 // for wagmi
 
 const { chains, provider } = configureChains(
-  [chain.mainnet],
+  [chain.goerli],
   [infuraProvider({ apiKey: SIGNER_PRIVATE_KEY }), publicProvider()]
 );
 const { connectors } = getDefaultWallets({

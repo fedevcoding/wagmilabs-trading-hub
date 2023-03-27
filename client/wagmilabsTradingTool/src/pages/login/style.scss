@@ -210,13 +210,13 @@
     }
 
     .plans-section {
-      padding: 20px 0;
+      padding: 10px 0;
       .header {
         position: relative;
         .title {
           text-align: center;
-          padding: 30px 0;
-          font-size: 30px;
+          padding: 40px 0;
+          font-size: 34px;
         }
         .plan-selector {
           position: absolute;
@@ -231,11 +231,52 @@
         align-items: center;
 
         .plan-container {
-          height: 30rem;
-          width: 17%;
+          height: 25rem;
+          width: 15%;
           background-color: #0e0f0e;
-          box-shadow: 3px 3px 13px 2px black;
+          box-shadow: 0px 0px 8px 5px black;
+          transition: transform 0.3s ease-in-out;
+
+          &:last-child {
+            box-shadow: 0px 0px 13px 8px black;
+            background-color: #252825;
+          }
+
+          &:hover {
+            transform: translateY(-7px);
+          }
+
           border-radius: 15px;
+          padding: 0 30px;
+
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+
+          .plan-header {
+            .title {
+              text-align: center;
+              padding: 10px 0;
+              padding-top: 20px;
+              letter-spacing: 1.2px;
+              font-size: 27px;
+            }
+            .price {
+              text-align: center;
+              padding: 10px 0;
+              letter-spacing: 1.2px;
+              font-size: 22px;
+            }
+
+            border-bottom: 1px solid white;
+          }
+
+          .plan-body {
+            padding: 20px 0;
+          }
+          .plan-footer {
+            padding: 20px 0;
+          }
         }
       }
     }
