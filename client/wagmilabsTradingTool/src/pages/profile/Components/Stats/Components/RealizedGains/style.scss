@@ -97,6 +97,10 @@
       text-align: left;
     }
 
+    tr th:first-child {
+      padding-left: 2rem;
+    }
+
     tr:last-child {
       td {
         &:first-child {
