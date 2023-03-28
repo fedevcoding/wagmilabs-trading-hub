@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useAccount } from "wagmi";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 
-const ConnectWallet = ({ setWalletConnected, isHeader }) => {
+const ConnectWallet = ({ setWalletConnected, isHeader, setSignIn }) => {
   const { isConnected } = useAccount();
 
   useEffect(() => {
@@ -43,10 +43,13 @@ const ConnectWallet = ({ setWalletConnected, isHeader }) => {
                 );
               }
               return (
-                <div className={`connect-wallet-container ${!isHeader && "not-header"}`}>
+                <div
+                  className={`connect-wallet-container ${!isHeader && "not-header"}`}
+                  onClick={() => setSignIn(true)}
+                >
                   <i className="fa-solid fa-wallet"></i>
                   <button type="button" className="connect-button">
-                    Connected!
+                    Sign in
                   </button>
                 </div>
               );

@@ -2,6 +2,7 @@ import React from "react";
 
 import { Button } from "@chakra-ui/react";
 import { useSubscribe } from "../../../../custom-hooks/useSubscribe";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
 
 const Plan = ({ planOption }) => {
   const [isLoading, setIsLoading] = React.useState(false);
@@ -27,9 +28,54 @@ const Plan = ({ planOption }) => {
         <p>{planOption?.description}</p>
       </div>
       <div className="plan-footer">
-        <Button colorScheme="blue" variant="solid" size="md" className="btn" width={"100%"} onClick={buySubscription}>
-          {planOption?.buttonName}
-        </Button>
+        <ConnectButton.Custom>
+          {({ account, chain, openConnectModal, mounted }) => {
+            const ready = mounted;
+            const connected = ready && account && chain;
+
+            return (
+              <div
+                {...(!ready && {
+                  "aria-hidden": true,
+                  style: {
+                    opacity: 0,
+                    pointerEvents: "none",
+                    userSelect: "none",
+                  },
+                })}
+              >
+                {(() => {
+                  if (!connected) {
+                    return (
+                      <Button
+                        colorScheme="blue"
+                        variant="solid"
+                        size="md"
+                        className="btn"
+                        width={"100%"}
+                        onClick={openConnectModal}
+                      >
+                        {planOption?.buttonName}
+                      </Button>
+                    );
+                  }
+                  return (
+                    <Button
+                      colorScheme="blue"
+                      variant="solid"
+                      size="md"
+                      className="btn"
+                      width={"100%"}
+                      onClick={buySubscription}
+                    >
+                      {planOption?.buttonName}
+                    </Button>
+                  );
+                })()}
+              </div>
+            );
+          }}
+        </ConnectButton.Custom>
       </div>
     </div>
   );

@@ -20,14 +20,51 @@ const iconsMapping = value => {
   }
 };
 
-const ConnectWallet = ({ value, text }) => {
+const ConnectWallet = ({ value, text, setSignIn }) => {
   return (
+    // <ConnectButton.Custom>
+    //   {({ openConnectModal }) => {
+    //     return (
+    //       <div onClick={openConnectModal}>
+    //         {iconsMapping(value)}
+    //         <p>{text}</p>
+    //       </div>
+    //     );
+    //   }}
+    // </ConnectButton.Custom>
+
     <ConnectButton.Custom>
-      {({ openConnectModal }) => {
+      {({ account, chain, openConnectModal, mounted }) => {
+        const ready = mounted;
+        const connected = ready && account && chain;
+
         return (
-          <div onClick={openConnectModal}>
-            {iconsMapping(value)}
-            <p>{text}</p>
+          <div
+            {...(!ready && {
+              "aria-hidden": true,
+              style: {
+                opacity: 0,
+                pointerEvents: "none",
+                userSelect: "none",
+              },
+            })}
+          >
+            {(() => {
+              if (!connected) {
+                return (
+                  <div onClick={openConnectModal}>
+                    {iconsMapping(value)}
+                    <p>{text}</p>
+                  </div>
+                );
+              }
+              return (
+                <div onClick={() => setSignIn(true)}>
+                  {iconsMapping(value)}
+                  <p>{text}</p>
+                </div>
+              );
+            })()}
           </div>
         );
       }}

@@ -7,11 +7,11 @@ export const useSubscribe = () => {
     try {
       const signer = await fetchSigner();
       const contract = new ethers.Contract(subscriptionAddress, subscriptionsAbi, signer);
-      console.log(contract, signer);
+      console.log(signer);
       if (planId === 1) {
-        const tx = await contract.subscriptionsOpen();
-        // const receipt = await tx.wait();
-        console.log(tx);
+        const tx = await contract.subscribeBasic(1, { value: ethers.utils.parseEther(price.toString()) });
+        const receipt = await tx.wait();
+        console.log(receipt);
       } else if (planId === 2) {
         const tx = await contract.subscribePro(months, { value: ethers.utils.parseEther(price.toString()) });
         const receipt = await tx.wait();
