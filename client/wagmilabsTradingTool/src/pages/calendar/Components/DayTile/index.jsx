@@ -25,9 +25,9 @@ export const DayTile = ({ day, index, startIdx, showSelectedDate, events }) => {
       onClick={() => showSelectedDate(day, index + startIdx)}
     >
       <div>{day.date.getDate()}</div>
-      {events.map(e => {
-        return renderEventName(e);
-      })}
+      {events.map(e => (
+        <React.Fragment key={JSON.stringify(e)}>{renderEventName(e)}</React.Fragment>
+      ))}
       {events.length > 2 && <div>{`+ ${events.length - 2} more`}</div>}
     </div>
   );

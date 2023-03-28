@@ -70,7 +70,7 @@ export const WeeklyCalendar = ({ sectionData, refetch }) => {
     return (
       <>
         {eventsInHour.map(event => (
-          <div className="selected-event-in-day">
+          <div className="selected-event-in-day" key={JSON.stringify(event)}>
             <div className="event-name" onClick={() => onEventDetails(event?._id)}>
               {event?.spaceName}
             </div>
@@ -87,14 +87,14 @@ export const WeeklyCalendar = ({ sectionData, refetch }) => {
 
   const renderEventsInfo = () =>
     hoursIntervals.map(h => (
-      <>
+      <React.Fragment key={JSON.stringify(h)}>
         {selectedEvents.length > 0 && (
           <>
             {renderHourInterval(h)}
             {renderEventsInHour(h)}
           </>
         )}
-      </>
+      </React.Fragment>
     ));
 
   const onSave = async params => {
@@ -121,7 +121,9 @@ export const WeeklyCalendar = ({ sectionData, refetch }) => {
       <Row>
         <Col className="calendar-hours-inner-container">
           {hoursIntervals.map(h => (
-            <div className="calendar-hour">{h.val}</div>
+            <div className="calendar-hour" key={JSON.stringify(h)}>
+              {h.val}
+            </div>
           ))}
         </Col>
         <Col className="calendar-center-inner-container">

@@ -41,6 +41,7 @@ export const MonthlyCalendar = React.memo(({ sectionData, section, refetch }) =>
           <Row className={`calendar-row ${slideLeft ? "animate-left" : "animate-right"}`}>
             {days?.map((d, index) => (
               <DayTile
+                key={JSON.stringify(d)}
                 day={d}
                 index={index}
                 startIdx={startIdx}
@@ -100,7 +101,7 @@ export const MonthlyCalendar = React.memo(({ sectionData, section, refetch }) =>
     return (
       <>
         {eventsInHour.map(event => (
-          <div className="selected-event-in-day">
+          <div className="selected-event-in-day" key={JSON.stringify(event)}>
             <div className="event-name" onClick={() => onEventDetails(event?._id)}>
               {event?.eventName || event?.collectionName}
             </div>
@@ -117,14 +118,14 @@ export const MonthlyCalendar = React.memo(({ sectionData, section, refetch }) =>
 
   const renderEventsInfo = () =>
     hoursIntervals.map(h => (
-      <>
+      <React.Fragment key={JSON.stringify(h)}>
         {selectedEvents.length > 0 && (
           <>
             {renderHourInterval(h)}
             {renderEventsInHour(h)}
           </>
         )}
-      </>
+      </React.Fragment>
     ));
 
   return (
