@@ -1,21 +1,29 @@
 import React from "react";
-import { planOptions } from "./options";
+import { Select } from "../../../../components/Form/Select";
+import { durationSelectOptions, planOptions, getDurationSelectors } from "./options";
 import Plan from "./Plan";
 
 const Plans = () => {
+  const [durationSelector, setDurationSelector] = React.useState(durationSelectOptions[2]);
+  const durationSelectors = getDurationSelectors();
+
   return (
     <div className="plans-section">
       <div className="header">
         <h2 className="title">Plans</h2>
-        <select name="" id="" className="plan-selector">
-          <option value="">Monthly</option>
-          <option value="">Quarter</option>
-          <option value="">Semester</option>
-        </select>
+
+        <Select
+          className="plan-selector"
+          onChange={value => setDurationSelector(value)}
+          label="Set duration"
+          isSearchable={false}
+          value={durationSelector}
+          options={durationSelectors}
+        />
       </div>
       <div className="plans">
         {planOptions.map(planOption => {
-          return <Plan key={planOption.id} planOption={planOption} />;
+          return <Plan key={planOption.id} planOption={planOption} durationSelector={durationSelector} />;
         })}
       </div>
     </div>

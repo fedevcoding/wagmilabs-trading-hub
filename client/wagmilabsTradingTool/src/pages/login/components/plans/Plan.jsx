@@ -3,29 +3,33 @@ import React from "react";
 import { Button } from "@chakra-ui/react";
 import { useSubscribe } from "../../../../custom-hooks/useSubscribe";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
+import { Loader } from "../../../../components/Loader";
 
-const Plan = ({ planOption }) => {
+const Plan = ({ planOption, durationSelector }) => {
   const [isLoading, setIsLoading] = React.useState(false);
   const { subscribe } = useSubscribe();
 
-  const { planId, months, price } = planOption;
+  const monthlyPrice = planOption?.prices[durationSelector?.value];
+  const months = durationSelector?.value;
+
+  const { planId, description, buttonName, name } = planOption;
 
   const buySubscription = async () => {
     setIsLoading(true);
-    await subscribe(planId, 1, 0.06);
+    await subscribe(planId, months, monthlyPrice * months);
     setIsLoading(false);
   };
 
   return (
     <div className="plan-container">
       <div className="plan-header">
-        <h3 className="title">{planOption?.name}</h3>
+        <h3 className="title">{name}</h3>
         <p className="price">
-          {planOption?.price} ETH {planOption?.price !== 0 && <span className="low-opacity little-text">/ month</span>}
+          {monthlyPrice} ETH {monthlyPrice !== 0 && <span className="low-opacity little-text">/ month</span>}
         </p>
       </div>
       <div className="plan-body">
-        <p>{planOption?.description}</p>
+        <p>{description}</p>
       </div>
       <div className="plan-footer">
         <ConnectButton.Custom>
@@ -55,7 +59,7 @@ const Plan = ({ planOption }) => {
                         width={"100%"}
                         onClick={openConnectModal}
                       >
-                        {planOption?.buttonName}
+                        {buttonName}
                       </Button>
                     );
                   }
@@ -68,7 +72,7 @@ const Plan = ({ planOption }) => {
                       width={"100%"}
                       onClick={buySubscription}
                     >
-                      {planOption?.buttonName}
+                      {isLoading ? <Loader /> : <>{buttonName}</>}
                     </Button>
                   );
                 })()}

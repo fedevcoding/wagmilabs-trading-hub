@@ -92,6 +92,7 @@ const salesChartRoute = require("./routes/ethereum/charts/salesChartRoute.js");
 const avgPriceChartRoute = require("./routes/ethereum/charts/avgPriceChartRoute.js");
 const advancedFloorChartRoute = require("./routes/ethereum/charts/advancedFloorChartRoute.js");
 const buyersSellersChartRoute = require("./routes/ethereum/charts/buyersSellersChartRoute.js");
+const freeTrialRoute = require("./routes/ethereum/functionality/freeTrialroute.js");
 const io = socketIO(server, {
   cors: {
     origin: CLIENT_URL,
@@ -202,6 +203,7 @@ app.use(limiter);
 // http routes
 
 app.use("/api/v1/wagmilabs/login", loginRoute);
+app.use("/api/v1/wagmilabs/freeTrial", freeTrialRoute);
 app.use("/api/v1/wagmilabs/refresh", refreshRoute);
 app.use("/api/v1/wagmilabs/verify", verifyRoute);
 app.use("/api/v1/wagmilabs/setUserImage", profileImageRoute);

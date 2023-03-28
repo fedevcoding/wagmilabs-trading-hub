@@ -1,4 +1,4 @@
-const subscriptionAddress = "0x6A03f3883e97Fa03b2C00441a8148941B6c554Ee";
+const subscriptionAddress = "0x386a585F9Cc2371f61010fc62b1cE5Bfe891aD6a";
 
 const subscriptionsAbi = [
   { inputs: [], stateMutability: "nonpayable", type: "constructor" },
@@ -25,6 +25,17 @@ const subscriptionsAbi = [
     name: "changePriceWei",
     outputs: [],
     stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "ownerAddress", type: "address" }],
+    name: "checkSubscriptionAdvanced",
+    outputs: [
+      { internalType: "bool", name: "", type: "bool" },
+      { internalType: "uint256", name: "", type: "uint256" },
+      { internalType: "uint256", name: "", type: "uint256" },
+    ],
+    stateMutability: "view",
     type: "function",
   },
   {
@@ -90,6 +101,7 @@ const subscriptionsAbi = [
     stateMutability: "view",
     type: "function",
   },
+  { inputs: [], name: "withdraw", outputs: [], stateMutability: "nonpayable", type: "function" },
 ];
 
 export { subscriptionAddress, subscriptionsAbi };
