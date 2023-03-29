@@ -25,20 +25,16 @@ const Plan = ({ planOption, durationSelector }) => {
       <div className="plan-header">
         <h3 className="title">{name}</h3>
         <p className="price">
-          {monthlyPrice} ETH {monthlyPrice !== 0 && <span className="low-opacity little-text">/ month</span>}
+          {monthlyPrice} ETH{" "}
+          {monthlyPrice !== 0 ? (
+            <span className="low-opacity little-text">/ month</span>
+          ) : (
+            <span className="low-opacity little-text">(7 days)</span>
+          )}
         </p>
       </div>
       <div className="plan-body">
         <p>{description}</p>
-
-        {monthlyPrice === 0 && (
-          <>
-            <br />
-            <p className="little-text low-opacity">
-              Your wallet will need at least 25 transaction to be able to start the free trial.
-            </p>
-          </>
-        )}
       </div>
       <div className="plan-footer">
         <ConnectButton.Custom>
@@ -47,16 +43,7 @@ const Plan = ({ planOption, durationSelector }) => {
             const connected = ready && account && chain;
 
             return (
-              <div
-                {...(!ready && {
-                  "aria-hidden": true,
-                  style: {
-                    opacity: 0,
-                    pointerEvents: "none",
-                    userSelect: "none",
-                  },
-                })}
-              >
+              <>
                 {(() => {
                   if (!connected) {
                     return (
@@ -66,6 +53,7 @@ const Plan = ({ planOption, durationSelector }) => {
                         size="md"
                         className="btn"
                         width={"100%"}
+                        borderRadius="20px"
                         onClick={openConnectModal}
                       >
                         {buttonName}
@@ -78,14 +66,16 @@ const Plan = ({ planOption, durationSelector }) => {
                       variant="solid"
                       size="md"
                       className="btn"
-                      width={"100%"}
+                      width={"80%"}
+                      height="50px"
+                      borderRadius="25px"
                       onClick={buySubscription}
                     >
                       {isLoading ? <Loader /> : <>{buttonName}</>}
                     </Button>
                   );
                 })()}
-              </div>
+              </>
             );
           }}
         </ConnectButton.Custom>

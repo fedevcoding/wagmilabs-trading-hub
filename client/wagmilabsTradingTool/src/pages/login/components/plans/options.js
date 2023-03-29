@@ -7,7 +7,7 @@ export const planOptions = [
       3: 0,
       6: 0,
     },
-    description: "Try the starter plan subscription for FREE for 7 days. No hassle, no commitments.",
+    description: `Try the starter plan subscription for FREE for 7 days. No hassle, no commitments. Includes starter plan features.`,
     buttonName: "Start Trial",
   },
   {
@@ -18,7 +18,8 @@ export const planOptions = [
       3: 0.05,
       6: 0.045,
     },
-    description: "Starter plan includes all features apart from bots and wallet management features.",
+    description:
+      "Starter plan includes all features apart from bots and wallet management features. Get started today!",
     buttonName: "Get Starter",
   },
   {
@@ -29,7 +30,7 @@ export const planOptions = [
       3: 0.075,
       6: 0.06,
     },
-    description: "Pro Plan gives FULL ACCESS, includes starter plan features + ALL Bots, and Wallet Management.",
+    description: "Pro Plan gives FULL ACCESS. Includes all starter plan features plus ALL Bots and Wallet Management.",
     buttonName: "Get Pro",
   },
 ];

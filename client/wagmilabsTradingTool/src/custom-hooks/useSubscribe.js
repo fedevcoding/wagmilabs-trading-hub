@@ -11,8 +11,11 @@ export const useSubscribe = () => {
     try {
       const signer = await fetchSigner();
 
+      const sevenDayInMilliSeconds = 604800000;
+      const endDate = new Date(Date.now() + sevenDayInMilliSeconds);
       if (planId === 0) {
-        const message = "Free Trial";
+        const message = `Start your 7 day free trial today!
+Your trial will end ${endDate.toDateString()}.`;
         const address = await signer.getAddress();
         const signature = await signer.signMessage(message);
         const res = await pushToServer("/freeTrial", { signature, address, message });
