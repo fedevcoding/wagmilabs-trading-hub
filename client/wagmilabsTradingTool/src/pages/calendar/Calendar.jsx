@@ -14,7 +14,7 @@ import "./style.scss";
 const titles = {
   drops: "Upcoming Drops",
   spaces: "Twitter Spaces",
-  raffles: "Personal Calendar",
+  personal: "Personal Calendar",
   events: "IRL Events",
 };
 
@@ -66,7 +66,7 @@ const getPageTitle = section => {
       return "NFT Drops | Wagmi Labs";
     case "spaces":
       return "Twitter Spaces | Wagmi Labs";
-    case "raffles":
+    case "personal":
       return "Personal | Wagmi Labs";
     case "events":
       return "IRL Events | Wagmi Labs";
@@ -106,7 +106,7 @@ export const Calendar = () => {
           {events && section === "events" && (
             <MonthlyCalendar sectionData={events} section={section} refetch={eventsRefetch} />
           )}
-          {personal && section === "raffles" && (
+          {personal && section === "personal" && (
             <MonthlyCalendar
               sectionData={personal.map(s => s.events).flat()}
               section="personal"
