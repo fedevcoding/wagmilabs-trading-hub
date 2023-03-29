@@ -28,7 +28,6 @@ async function checkValid(address) {
         return isValid;
       } else {
         const data = await FreeTrials.findOne({ address });
-        console.log(data);
 
         if (!data) return false;
 
