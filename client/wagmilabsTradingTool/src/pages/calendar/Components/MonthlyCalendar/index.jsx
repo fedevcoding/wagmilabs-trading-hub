@@ -142,8 +142,10 @@ export const MonthlyCalendar = React.memo(({ sectionData, section, refetch }) =>
       <Row>
         <Col className="calendar-left-inner-container">
           <MonthSwitch currentDate={currentDate} changeDate={changeDate} />
-          <CalendarHeader />
-          {renderlist()}
+          <div>
+            <CalendarHeader />
+            {renderlist()}
+          </div>
         </Col>
 
         <Col className="calendar-right-inner-container-m">
