@@ -18,16 +18,15 @@ const dayClass = d => {
 const renderEventName = event => <div className="day-event-name">{event?.collectionName || event?.eventName}</div>;
 
 export const DayTile = ({ day, index, startIdx, showSelectedDate, events }) => {
+  console.log("events", events);
   return (
-    <div
-      key={day.date.getDate().toString()}
-      className={dayClass(day)}
-      onClick={() => showSelectedDate(day, index + startIdx)}
-    >
+    <div className={dayClass(day)} onClick={() => showSelectedDate(day, index + startIdx)}>
       <div>{day.date.getDate()}</div>
-      {events.map(e => (
-        <React.Fragment key={JSON.stringify(e)}>{renderEventName(e)}</React.Fragment>
-      ))}
+      {events
+        .filter(e => e)
+        .map(e => (
+          <React.Fragment key={JSON.stringify(e)}>{renderEventName(e)}</React.Fragment>
+        ))}
       {events.length > 2 && <div>{`+ ${events.length - 2} more`}</div>}
     </div>
   );

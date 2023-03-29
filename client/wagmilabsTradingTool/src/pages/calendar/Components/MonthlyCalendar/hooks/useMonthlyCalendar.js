@@ -45,7 +45,9 @@ export const useMonthlyCalendar = ({ sectionData, section, refetch }) => {
       setSelectedEvents(
         sectionData
           .filter(
-            event => moment(event.timestamp).format("YYYY-MM-DD") === moment(selectedDate.date).format("YYYY-MM-DD")
+            event =>
+              event?.timestamp &&
+              moment(event.timestamp).format("YYYY-MM-DD") === moment(selectedDate.date).format("YYYY-MM-DD")
           )
           .map(el => ({ ...el, hour: moment(el.timestamp).hours() }))
           .sort(({ hour: a }, { hour: b }) => a - b)

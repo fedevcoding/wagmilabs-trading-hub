@@ -36,7 +36,9 @@ export const WeeklyCalendar = ({ sectionData, refetch }) => {
     if (selectedDate) {
       setSelectedEvents(
         sectionData
-          .filter(event => moment(event.timestamp).format("d") === moment(selectedDate.date).format("d"))
+          .filter(
+            event => event?.timestamp && moment(event.timestamp).format("d") === moment(selectedDate.date).format("d")
+          )
           .map(el => ({ ...el, hour: moment(el.timestamp).hours() }))
           .sort(({ hour: a }, { hour: b }) => a - b)
       );
