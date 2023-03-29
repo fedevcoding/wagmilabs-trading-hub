@@ -27,7 +27,7 @@ const RefreshToken = ({ connected, setConnected }) => {
   }
 
   useEffect(() => {
-    refreshToken()
+    refreshToken();
     const intervalId = setInterval(refreshToken, 20000);
 
     return () => {

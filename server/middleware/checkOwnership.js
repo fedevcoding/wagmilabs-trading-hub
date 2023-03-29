@@ -15,7 +15,7 @@ async function checkValid(address) {
     });
 
     if (isAllowed) {
-      return true;
+      return [true, 0, 0];
     } else if (!isAllowed) {
       const provider = new ethers.providers.InfuraProvider(CHAIN_ID == 5 ? "goerli" : null, SIGNER_PRIVATE_KEY);
       const contract = new ethers.Contract(contractAddress, abi, provider);
@@ -25,21 +25,21 @@ async function checkValid(address) {
       const passType = Number(passData[1]);
       const expiration = Number(passData[2]);
       if (isValid) {
-        return isValid;
+        return [isValid, passType, expiration];
       } else {
         const data = await FreeTrials.findOne({ address });
 
-        if (!data) return false;
+        if (!data) return [false, 0, 0];
 
         const { expiration } = data;
 
-        if (expiration < Date.now()) return false;
-        return true;
+        if (expiration < Date.now()) return [false, 0, 0];
+        return [true, 3, expiration];
       }
     }
   } catch (err) {
     console.log(err);
-    return false;
+    return [false, 0, 0];
   }
 }
 
@@ -53,8 +53,11 @@ const checkOwnership = async (req, res, next) => {
   const validSignature = await checkSignature(address, signature, message);
 
   if (validSignature) {
-    const isValid = await checkValid(address);
+    // const isValid = await checkValid(address);
+    const [isValid, passType, expiration] = await checkValid(address);
+
     if (isValid) {
+      req.ownershipData = { address, passType, expiration };
       next();
     } else {
       return res

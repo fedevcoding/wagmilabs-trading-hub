@@ -1,4 +1,4 @@
-const subscriptionAddress = "0x386a585F9Cc2371f61010fc62b1cE5Bfe891aD6a";
+const subscriptionAddress = "0xC776E3F1008E14aD300E4FF9A310e83b2a2B70D1";
 
 const subscriptionsAbi = [
   { inputs: [], stateMutability: "nonpayable", type: "constructor" },
