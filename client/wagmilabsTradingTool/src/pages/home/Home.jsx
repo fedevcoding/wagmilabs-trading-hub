@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Trending from "./tools/Trending/Trending";
 import Minting from "./tools/Minting/Minting";
 import Top100 from "./tools/Top100/Top100";
@@ -10,14 +10,10 @@ import Owned from "./tools/owned/Owned";
 import { LivePulsing } from "@Components";
 
 import { setPageTitle } from "@Utils";
-import { PromoModal } from "@Components";
-import { useDisclosure } from "@chakra-ui/react";
 
 const Home = () => {
   const [timeFrame, setTimeFrame] = useState("1H");
   const [tool, setTool] = useState("trending");
-
-  const { isOpen, onOpen, onClose } = useDisclosure();
 
   function changeTime(e, time) {
     const element = e.currentTarget;
@@ -55,21 +51,10 @@ const Home = () => {
     }
   }
 
-  useEffect(() => {
-    const visitedTimes = parseInt(localStorage.getItem("visited")) || 0;
-    const newVisited = visitedTimes + 1;
-    localStorage.setItem("visited", newVisited);
-
-    const clicked = localStorage.getItem("clickedPromoTwitter") || false;
-
-    if (!clicked && (newVisited === 2 || newVisited % 4 === 0)) onOpen();
-  }, [onOpen]);
-
   return (
     <>
       <section className="home-wrapper-section">
         <div className="info-container">
-          <PromoModal isOpen={isOpen} onClose={onClose} onOpen={onOpen} type={1} />
           <div className="tool-names">
             <div onClick={e => changeTool(e)} className="active home-trending-section" tool="trending">
               Trending <LivePulsing />

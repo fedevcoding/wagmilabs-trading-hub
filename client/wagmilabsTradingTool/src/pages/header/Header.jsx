@@ -3,7 +3,7 @@ import EthereumSearch from "../search/EthereumSearch";
 import "./header.css";
 import { useNavigate } from "react-router-dom";
 
-import logoImage from "@Assets/logoBeta.png";
+import { logo } from "@Assets";
 import { baseUrl } from "@Variables";
 import RefreshToken from "../RefreshToken";
 import logOut from "@Utils/functions/logout";
@@ -233,7 +233,7 @@ const Header = () => {
     <>
       <RefreshToken connected={connected} setConnected={setConnected} />
       <header className="search-header">
-        <img src={logoImage} onClick={() => navigate("/")} className="logo-image" alt="" />
+        <img src={logo} onClick={() => navigate("/")} className="logo-image" alt="" />
 
         <EthereumSearch isHeader={true} />
 

@@ -12,8 +12,6 @@ const Home = ({ setWalletConnected }) => {
       <div className="title-connect-container">
         <div className="title">
           <h1>Enter the world of Advanced NFT Trading with the fastest platform yet...</h1>
-          <br />
-          <h4>(BETA CLOSING TODAY! MINT A PASS TOMORROW TO KEEP USING THE PLATFORM!)</h4>
         </div>
 
         <ConnectWallet setWalletConnected={setWalletConnected} isHeader={false} />
