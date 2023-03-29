@@ -755,17 +755,19 @@ const Profile = () => {
           {section === "nft" && showPromoBanner && (
             <a
               className="profile-promo-container"
-              href="https://discord.gg/wagmilabs"
+              href="https://wagmilabs.tools"
               target={"_blank"}
               rel="noreferrer"
               onClick={() => setShowPromoBanner(false)}
             >
               <i className="fa-solid fa-x profile-promo-close-btn"></i>
 
-              <h3 className="profile-promo-header">FREE beta is ending soon..!</h3>
-              <h4 className="profile-promo-body">Get whitelisted to mint the NFT pass for yearly access!</h4>
+              <h3 className="profile-promo-header">FREE BETA ENDING TODAY!</h3>
+              <h4 className="profile-promo-body">
+                Mint our NFT pass tomorrow at 12 PM EST to keep using the platform!
+              </h4>
               <Button colorScheme={"gray"} className="profile-promo-button">
-                Get Whitelisted
+                More info
               </Button>
             </a>
           )}

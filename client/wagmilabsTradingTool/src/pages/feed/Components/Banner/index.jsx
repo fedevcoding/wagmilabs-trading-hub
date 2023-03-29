@@ -6,9 +6,9 @@ import "./style.scss";
 import { Button } from "@chakra-ui/react";
 
 export const Banner = React.memo(() => {
-  const headline = "Wagmi Labs launching NFT pass mint to access Trading Hub";
+  const headline = "WAGMI LABS BETA CLOSING!";
   const summary =
-    "The Wagmi Labs Trading Hub is now in FREE Beta for a limited period of time, after that whitelisted users will be able to mint an NFT pass to keep using the product";
+    "The wagmi labs beta is finally closing and the NFT passes are minting TOMORROW (Thursday) at 12 PM EST!";
   const link = "https://discord.gg/wagmilabs";
 
   return (
@@ -19,7 +19,7 @@ export const Banner = React.memo(() => {
           <p className="feed-summary">{summary}</p>
 
           <div className="feed-banner-btn-container">
-            <Button colorScheme={"white"}>Get Whitelisted!</Button>
+            <Button colorScheme={"white"}>Get Info!</Button>
           </div>
         </Col>
         <Col>

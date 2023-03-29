@@ -12,40 +12,20 @@ export const CalendarEventDetail = ({ event, deleteEvent, isAdmin, section }) =>
           {event?.collectionName}
           {event?.spaceName}
         </span>
-        {(isAdmin || (section === 'personal' && event.isAdmin))&& (
-          <img
-            src={Delete}
-            alt=""
-            width="20px"
-            className="delete-event"
-            onClick={() => deleteEvent(event._id)}
-          />
+        {(isAdmin || (section === "personal" && event.isAdmin)) && (
+          <img src={Delete} alt="" width="20px" className="delete-event" onClick={() => deleteEvent(event._id)} />
         )}
       </div>
-      {event?.eventDescription && (
-        <div className="event-tile">{event?.eventDescription}</div>
-      )}
-      {event?.spaceDescription && (
-        <div className="event-tile">{event?.spaceDescription}</div>
-      )}
-      {event?.price && (
-        <div className="event-tile">{`PRICE: ${event?.price}`}</div>
-      )}
-      {event?.spaceHost && (
-        <div className="event-tile">{`HOST: ${event?.spaceHost}`}</div>
-      )}
-      {event?.eventLocation && (
-        <div className="event-tile">{`LOCATION: ${event?.eventLocation}`}</div>
-      )}
-      {event?.supply && (
-        <div className="event-tile">{`SUPPLY: ${event?.supply}`}</div>
-      )}
+      {event?.eventDescription && <div className="event-tile">{event?.eventDescription}</div>}
+      {event?.spaceDescription && <div className="event-tile">{event?.spaceDescription}</div>}
+      {event?.price && <div className="event-tile">{`PRICE: ${event?.price}`}</div>}
+      {event?.spaceHost && <div className="event-tile">{`HOST: ${event?.spaceHost}`}</div>}
+      {event?.eventLocation && <div className="event-tile">{`LOCATION: ${event?.eventLocation}`}</div>}
+      {event?.supply && <div className="event-tile">{`SUPPLY: ${event?.supply}`}</div>}
       {event?.links && (
         <>
           {Object.keys(event?.links).map(key => (
-            <>
-            {key && (<IconLink type={key} link={event?.links[key]} />)}
-            </>
+            <React.Fragment key={key}>{key && <IconLink type={key} link={event?.links[key]} />}</React.Fragment>
           ))}
         </>
       )}
