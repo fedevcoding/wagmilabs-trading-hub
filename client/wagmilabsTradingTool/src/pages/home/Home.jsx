@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Trending from "./tools/Trending/Trending";
 import Minting from "./tools/Minting/Minting";
 import Top100 from "./tools/Top100/Top100";

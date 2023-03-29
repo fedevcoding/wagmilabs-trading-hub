@@ -9,7 +9,6 @@ import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import { placeholderImage } from "@Utils/images";
 
 import { LazyLoadImage } from "react-lazy-load-image-component";
-import { BannerSearch } from "./BannerSearch";
 import { Link } from "react-router-dom";
 
 const EthereumSearch = ({ inLogin, isHeader, usage, onClick }) => {
@@ -144,7 +143,6 @@ const EthereumSearch = ({ inLogin, isHeader, usage, onClick }) => {
                     )}
                   </div>
                 </Link>
-                {index === collections.length - 1 && <BannerSearch />}
               </>
             )}
           </React.Fragment>
