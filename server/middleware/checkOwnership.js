@@ -16,9 +16,10 @@ async function checkValid(address) {
     if (isAllowed) {
       return true;
     } else {
-      const provider = new ethers.providers.InfuraProvider(CHAIN_ID == 5 ? "goerli" : "homestead", SIGNER_PRIVATE_KEY);
+      const provider = new ethers.providers.InfuraProvider(CHAIN_ID == 5 ? "goerli" : null, SIGNER_PRIVATE_KEY);
       const contract = new ethers.Contract(contractAddress, abi, provider);
-      const isValid = await contract.hasValidPass(address);
+      const passData = await contract.hasValidPass(address);
+      const isValid = passData[0];
       return isValid;
     }
   } catch (err) {

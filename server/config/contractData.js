@@ -1,9 +1,13 @@
-const contractAddress = "0x280cf156727ba24f83ca8193a871dfcaeb9afa9b";
+const contractAddress = "0x93eA2C0aA323F9e7abf8dfEDBe776011f6eAE680";
 const contractAbi = [
   {
     inputs: [{ internalType: "address", name: "walletAddress", type: "address" }],
     name: "hasValidPass",
-    outputs: [{ internalType: "bool", name: "", type: "bool" }],
+    outputs: [
+      { internalType: "bool", name: "", type: "bool" },
+      { internalType: "uint256", name: "", type: "uint256" },
+      { internalType: "uint256", name: "", type: "uint256" },
+    ],
     stateMutability: "view",
     type: "function",
   },
