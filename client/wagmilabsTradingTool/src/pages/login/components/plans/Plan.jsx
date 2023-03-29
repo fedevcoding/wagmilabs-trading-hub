@@ -30,6 +30,15 @@ const Plan = ({ planOption, durationSelector }) => {
       </div>
       <div className="plan-body">
         <p>{description}</p>
+
+        {monthlyPrice === 0 && (
+          <>
+            <br />
+            <p className="little-text low-opacity">
+              Your wallet will need at least 25 transaction to be able to start the free trial.
+            </p>
+          </>
+        )}
       </div>
       <div className="plan-footer">
         <ConnectButton.Custom>

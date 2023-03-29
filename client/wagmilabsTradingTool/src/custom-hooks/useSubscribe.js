@@ -2,8 +2,11 @@ import { ethers } from "ethers";
 import { subscriptionAddress, subscriptionsAbi } from "../variables/subscriptionContract";
 import { fetchSigner } from "@wagmi/core";
 import { pushToServer } from "../utils/functions/serverCalls";
+import { checkErrors } from "../utils/functions/errorHelpers";
+import { useToast } from "@chakra-ui/react";
 
 export const useSubscribe = () => {
+  const toast = useToast();
   const subscribe = async (planId, months, price) => {
     try {
       const signer = await fetchSigner();
@@ -13,7 +16,16 @@ export const useSubscribe = () => {
         const address = await signer.getAddress();
         const signature = await signer.signMessage(message);
         const res = await pushToServer("/freeTrial", { signature, address, message });
-        console.log(res);
+
+        if (res.authenticated) {
+          toast({
+            title: "Success",
+            description: "Free trial activated",
+            status: "success",
+            duration: 5000,
+            isClosable: true,
+          });
+        }
       } else {
         const contract = new ethers.Contract(subscriptionAddress, subscriptionsAbi, signer);
         if (planId === 1) {
@@ -21,15 +33,37 @@ export const useSubscribe = () => {
             value: ethers.utils.parseEther(price.toFixed(5).toString()),
           });
           await tx.wait();
+          toast({
+            title: "Success",
+            description: "Started plan activated",
+            status: "success",
+            duration: 5000,
+            isClosable: true,
+          });
         } else if (planId === 2) {
           const tx = await contract.subscribePro(months, {
             value: ethers.utils.parseEther(price.toFixed(5).toString()),
           });
           await tx.wait();
+          toast({
+            title: "Success",
+            description: "Pro plan activated",
+            status: "success",
+            duration: 5000,
+            isClosable: true,
+          });
         }
       }
     } catch (error) {
-      console.log(error);
+      const message = checkErrors(String(error));
+
+      toast({
+        title: "Error",
+        description: message,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
     }
   };
 

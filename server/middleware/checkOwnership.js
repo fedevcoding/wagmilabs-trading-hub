@@ -3,6 +3,7 @@ require("dotenv").config();
 const { contractAddress, abi } = require("../config/contractData");
 const allowedAddresses = require("../config/allowedAddresses");
 const { checkSignature } = require("../services/checkSignature");
+const FreeTrials = require("../models/FreeTrials");
 
 const SIGNER_PRIVATE_KEY = process.env.SIGNER_PRIVATE_KEY;
 const CHAIN_ID = process.env.CHAIN_ID;
@@ -15,7 +16,7 @@ async function checkValid(address) {
 
     if (isAllowed) {
       return true;
-    } else {
+    } else if (!isAllowed) {
       const provider = new ethers.providers.InfuraProvider(CHAIN_ID == 5 ? "goerli" : "homestead", SIGNER_PRIVATE_KEY);
       const contract = new ethers.Contract(contractAddress, abi, provider);
       const passData = await contract.hasValidPass(address);
@@ -23,7 +24,19 @@ async function checkValid(address) {
       const isValid = passData[0];
       const passType = Number(passData[1]);
       const expiration = Number(passData[2]);
-      return isValid;
+      if (isValid) {
+        return isValid;
+      } else {
+        const data = await FreeTrials.findOne({ address });
+        console.log(data);
+
+        if (!data) return false;
+
+        const { expiration } = data;
+
+        if (expiration < Date.now()) return false;
+        return true;
+      }
     }
   } catch (err) {
     console.log(err);

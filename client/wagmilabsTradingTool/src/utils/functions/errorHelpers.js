@@ -2,6 +2,8 @@ export const errorHas = (error, string) => {
   if (typeof error === "object") {
     error = JSON.stringify(error?.response?.data || error?.response || error);
   }
+
+  console.log(error);
   return String(error?.toLowerCase()).toLowerCase().includes(string);
 };
 
@@ -16,6 +18,14 @@ export const checkErrors = error => {
     return "One or more orders not available";
   } else if (errorHas(error, "expirationtime")) {
     return "Invalid expiration time";
+  } else if (errorHas(error, "insufficient funds")) {
+    return "Insufficient funds";
+  } else if (errorHas(error, "have a free trial")) {
+    return "Free trial already active";
+  } else if (errorHas(error, "insufficient transactions")) {
+    return "You need to have at least 25 transactions to start a free trial";
+  } else if (errorHas(error, "already subscribed")) {
+    return "You are already subscribed to this plan";
   } else {
     return "Something went wrong";
   }

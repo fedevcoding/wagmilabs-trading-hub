@@ -30,14 +30,14 @@ freeTrialRoute.post("/", async (req, res) => {
       });
     } else if (!hasEnoughTransactions) {
       return res.status(400).json({
-        message: `You need to have at least ${requiredTransactions} transactions to get a free trial.`,
+        message: `Insufficient transactions, you need to have at least ${requiredTransactions} transactions to get a free trial.`,
         authenticated: false,
       });
     } else {
       return res.status(400).json({ message: "Failed to authenticate.", authenticated: false });
     }
 
-    res.json(validSignature);
+    res.status(200).json({ authenticated: true });
   } catch (e) {
     if (e.code === 11000) {
       return res.status(400).json({
