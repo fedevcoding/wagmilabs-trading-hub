@@ -81,7 +81,7 @@ const Profile = () => {
     items: userItems,
     continuation,
     setItems: setUserItems,
-  } = useGetItems("50", selectedSortOption.value, nftsCollectionFilter);
+  } = useGetItems("50", selectedSortOption.value, nftsCollectionFilter, pageAddress);
 
   nftsContinuation.current = continuation;
 
