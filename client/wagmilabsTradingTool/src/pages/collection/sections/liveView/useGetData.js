@@ -45,8 +45,8 @@ export function useGetData(address, columnHovered, floorPrice) {
         getFromServer(listingsUrl),
       ]);
 
-      setTotalSales(totalSales);
-      setTotalListings(totalListings);
+      setTotalSales(totalSales || []);
+      setTotalListings(totalListings || []);
       setLoading(false);
     }
     async function getReservoirListing() {
