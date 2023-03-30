@@ -1,4 +1,4 @@
-const contractAddress = "0x453296a7C5fbaC94c766eF1bCCC57b396b86538f";
+const contractAddress = "0x93eA2C0aA323F9e7abf8dfEDBe776011f6eAE680";
 const contractAbi = [
   {
     inputs: [{ internalType: "address", name: "walletAddress", type: "address" }],
