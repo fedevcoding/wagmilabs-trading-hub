@@ -48,6 +48,7 @@ import { serverUrl } from "@Variables";
 import { Calendar } from "./pages/calendar/Calendar";
 import Pnl from "./pages/pnl/Pnl";
 import BulkListing from "./pages/bulkListing/BulkListing";
+import MintingBot from "./pages/bots/minting/MintingBot";
 
 // for wagmi
 
@@ -343,6 +344,17 @@ function App() {
                                   <>
                                     <Header />
                                     <SniperBot />
+                                    <Footer />
+                                  </>
+                                }
+                              />
+                              <Route
+                                exact
+                                path="/bots/minting"
+                                element={
+                                  <>
+                                    <Header />
+                                    <MintingBot />
                                     <Footer />
                                   </>
                                 }
