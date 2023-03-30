@@ -125,7 +125,7 @@ const SignModal = ({ setConnected, setWalletConnected }) => {
             <p className="login-error">{errorMessage}</p>
 
             {errorMessage.includes("not have") && (
-              <a href="https://wagmilabs.tools" target={"_blank"} rel="noreferrer">
+              <a href="https://mint.wagmilabs.tools" target={"_blank"} rel="noreferrer">
                 <Button className={`sign-message-button ${"active"}`}>Mint</Button>
               </a>
             )}
