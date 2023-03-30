@@ -272,7 +272,7 @@ const Header = () => {
                 <div onClick={() => navigate("/calendars/drops")}>NFT drops</div>
                 <div onClick={() => navigate("/calendars/spaces")}>Twitter spaces</div>
                 <div
-                  // onClick={() => navigate("/calendars/raffles")}
+                  // onClick={() => navigate("/calendars/personal")}
                   className="not-allowed"
                 >
                   Personal

@@ -6,7 +6,7 @@ import "./style.scss";
 export const CalendarHeader = () => (
   <Row className="calendar-row">
     {daysOfTheWeek.map(d => (
-      <div className="calendar-header">
+      <div className="calendar-header" key={d}>
         <div>{d}</div>
       </div>
     ))}

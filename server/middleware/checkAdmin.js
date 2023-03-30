@@ -6,7 +6,7 @@ const checkAdmin = async (req, res, next) => {
   try {
     const { address } = req.userDetails;
 
-    const isAdmin = adminAddresses.includes(address.toLowerCase());
+    const isAdmin = adminAddresses.map(list => list.toLowerCase()).includes(address.toLowerCase());
 
     req.isAdmin = isAdmin;
     next();

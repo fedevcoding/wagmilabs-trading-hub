@@ -12,10 +12,8 @@ export function useGetEvents() {
 
     const eventsUrl = `/events`;
 
-    const [{events}] = await Promise.all([
-      getFromServer(eventsUrl),
-    ]);
-    
+    const [{ events }] = await Promise.all([getFromServer(eventsUrl)]);
+
     setEvents(events);
     setLoading(false);
   }
@@ -24,5 +22,5 @@ export function useGetEvents() {
     getData();
   }, [socket]);
 
-  return {isLoading, events, refetch: getData};
+  return { isLoading, events, refetch: getData };
 }

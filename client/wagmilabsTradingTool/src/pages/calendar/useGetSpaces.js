@@ -12,10 +12,8 @@ export function useGetSpaces() {
 
     const spacesUrl = `/spaces`;
 
-    const [{spaces}] = await Promise.all([
-      getFromServer(spacesUrl),
-    ]);
-    
+    const [{ spaces }] = await Promise.all([getFromServer(spacesUrl)]);
+
     setSpaces(spaces);
     setLoading(false);
   }
@@ -24,5 +22,5 @@ export function useGetSpaces() {
     getData();
   }, [socket]);
 
-  return {isLoading, spaces, refetch: getData};
+  return { isLoading, spaces, refetch: getData };
 }
