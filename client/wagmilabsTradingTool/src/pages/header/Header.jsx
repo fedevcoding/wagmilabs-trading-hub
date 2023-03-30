@@ -255,8 +255,12 @@ const Header = () => {
               <span>Bots</span>
 
               <div className="bots-options-dropdown invisible">
-                <div onClick={() => navigate("/bots/wallets")}>Wallets</div>
-                <div onClick={() => navigate("/bots/sniper")}>Sniper bot</div>
+                <div onClick={() => isPro && navigate("/bots/wallets")} className={`${!isPro && "not-allowed"}`}>
+                  Wallets
+                </div>
+                <div onClick={() => isPro && navigate("/bots/sniper")} className={`${!isPro && "not-allowed"}`}>
+                  Sniper bot
+                </div>
                 <div className="not-allowed">Minting bot</div>
                 <div className="not-allowed">Notifications</div>
               </div>

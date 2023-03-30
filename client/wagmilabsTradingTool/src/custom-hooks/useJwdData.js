@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 export const useJwtData = () => {
   const [isFree, setIsFree] = useState(false);
   const [isPro, setIsPro] = useState(false);
+  const [loadedJwtData, setLoaded] = useState(false);
   const [expiration, setExpiration] = useState(0);
 
   useEffect(() => {
@@ -19,10 +20,12 @@ export const useJwtData = () => {
         setExpiration(expirationNumber);
         if (passType === 3) setIsFree(true);
         if (passType === 2 || passType === 0) setIsPro(true);
+
+        setLoaded(true);
       }
     };
     setData();
   }, []);
 
-  return { isPro, isFree, expiration };
+  return { isPro, isFree, expiration, loadedJwtData };
 };
