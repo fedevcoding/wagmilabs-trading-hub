@@ -51,9 +51,10 @@ const Plan = ({ planOption, durationSelector }) => {
                         colorScheme="blue"
                         variant="solid"
                         size="md"
-                        className="btn now-allowed"
-                        width={"100%"}
-                        borderRadius="20px"
+                        className="btn not-allowed"
+                        width={"80%"}
+                        height="50px"
+                        borderRadius="25px"
                         // onClick={openConnectModal}
                       >
                         {buttonName}
