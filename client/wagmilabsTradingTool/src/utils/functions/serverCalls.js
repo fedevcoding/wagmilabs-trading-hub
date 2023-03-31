@@ -9,7 +9,10 @@ async function getFromServer(url) {
     },
   });
 
-  if (!apiData.ok) throw new Error("error fetching data");
+  if (!apiData.ok) {
+    const data = await apiData.json();
+    throw new Error(data?.message);
+  }
 
   const data = await apiData.json();
 
@@ -26,7 +29,10 @@ async function pushToServer(url, body) {
     body: JSON.stringify(body),
   });
 
-  if (!apiData.ok) throw new Error("error fetching data");
+  if (!apiData.ok) {
+    const data = await apiData.json();
+    throw new Error(data?.message);
+  }
 
   const data = await apiData.json();
 
@@ -43,7 +49,10 @@ async function deleteFromServer(url, body) {
     body: JSON.stringify(body),
   });
 
-  if (!apiData.ok) throw new Error("error fetching data");
+  if (!apiData.ok) {
+    const data = await apiData.json();
+    throw new Error(data?.message);
+  }
 
   const data = await apiData.json();
 

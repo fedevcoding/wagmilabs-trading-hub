@@ -15,8 +15,12 @@ import { useUpdateBalance } from "@Hooks";
 
 import { fetchEnsName } from "@wagmi/core";
 import { useAccount } from "wagmi";
+import { useJwtData } from "../../custom-hooks/useJwdData";
+import moment from "moment";
 
 const Header = () => {
+  const { isPro, isFree, expiration } = useJwtData();
+
   const {
     setEns,
     setProfileImage,
@@ -229,9 +233,17 @@ const Header = () => {
 
   const section = window.location.pathname;
 
+  console.log(expiration);
+
   return (
     <>
       <RefreshToken connected={connected} setConnected={setConnected} />
+      {isFree && (
+        <header className="expiration-header">
+          <p>FREE Trial ending in {moment(expiration).toNow()}</p>
+        </header>
+      )}
+
       <header className="search-header">
         <img src={logo} onClick={() => navigate("/")} className="logo-image" alt="" />
 
@@ -243,8 +255,12 @@ const Header = () => {
               <span>Bots</span>
 
               <div className="bots-options-dropdown invisible">
-                <div onClick={() => navigate("/bots/wallets")}>Wallets</div>
-                <div onClick={() => navigate("/bots/sniper")}>Sniper bot</div>
+                <div onClick={() => isPro && navigate("/bots/wallets")} className={`${!isPro && "not-allowed"}`}>
+                  Wallets
+                </div>
+                <div onClick={() => isPro && navigate("/bots/sniper")} className={`${!isPro && "not-allowed"}`}>
+                  Sniper bot
+                </div>
                 <div className="not-allowed">Minting bot</div>
                 <div className="not-allowed">Notifications</div>
               </div>

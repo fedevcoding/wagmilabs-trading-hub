@@ -7,7 +7,7 @@ import "./style.scss";
 import EthereumSearch from "src/pages/search/EthereumSearch";
 import Links from "./components/Links";
 
-const Header = ({ setConnected, setWalletConnected }) => {
+const Header = ({ setConnected, setWalletConnected, setSignIn }) => {
   return (
     <>
       <header className="login-header">
@@ -17,9 +17,14 @@ const Header = ({ setConnected, setWalletConnected }) => {
           <EthereumSearch inLogin={true} />
         </div>
 
-        <Links />
+        <Links setSignIn={setSignIn} />
 
-        <ConnectWallet setConnected={setConnected} setWalletConnected={setWalletConnected} isHeader={true} />
+        <ConnectWallet
+          setConnected={setConnected}
+          setWalletConnected={setWalletConnected}
+          isHeader={true}
+          setSignIn={setSignIn}
+        />
       </header>
     </>
   );
