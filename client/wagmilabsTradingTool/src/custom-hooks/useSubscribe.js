@@ -32,7 +32,7 @@ Your trial will end ${endDate.toDateString()}.`;
       } else {
         const contract = new ethers.Contract(subscriptionAddress, subscriptionsAbi, signer);
         if (planId === 1) {
-          const tx = await contract.subscribeBasic(months, {
+          const tx = await contract.subscribeBasic(months, [], {
             value: ethers.utils.parseEther(price.toFixed(5).toString()),
           });
           await tx.wait();
@@ -44,7 +44,7 @@ Your trial will end ${endDate.toDateString()}.`;
             isClosable: true,
           });
         } else if (planId === 2) {
-          const tx = await contract.subscribePro(months, {
+          const tx = await contract.subscribePro(months, [], {
             value: ethers.utils.parseEther(price.toFixed(5).toString()),
           });
           await tx.wait();
