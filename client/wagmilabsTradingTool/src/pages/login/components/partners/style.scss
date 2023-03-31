@@ -1,0 +1,102 @@
+.investors {
+  width: 100vw;
+  margin: 0 auto;
+  margin-top: 100px;
+  .imgContainer {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding: 30px;
+    background-color: black;
+  }
+
+  .vcImg {
+    height: 120px;
+    cursor: pointer;
+
+    @media screen and (max-width: 1300px) {
+      height: 100px;
+    }
+
+    @media screen and (max-width: 1000px) {
+      height: 70px;
+    }
+
+    @media screen and (max-width: 500px) {
+      height: 50px;
+    }
+
+    @media screen and (max-width: 350px) {
+      height: 37px;
+    }
+  }
+
+  .entreprenistonImg {
+    height: 120px;
+    width: auto;
+    margin-right: 30px;
+    margin-left: 38px;
+    cursor: pointer;
+
+    @media screen and (max-width: 1300px) {
+      height: 100px;
+    }
+
+    @media screen and (max-width: 1000px) {
+      height: 70px;
+    }
+
+    @media screen and (max-width: 500px) {
+      height: 50px;
+    }
+
+    @media screen and (max-width: 350px) {
+      height: 45px;
+    }
+  }
+
+  .luckyTraderImg {
+    height: 120px;
+    margin-left: 40px;
+    cursor: pointer;
+    margin-right: 15px;
+
+    @media screen and (max-width: 1300px) {
+      height: 100px;
+    }
+
+    @media screen and (max-width: 1000px) {
+      height: 70px;
+    }
+
+    @media screen and (max-width: 500px) {
+      height: 50px;
+    }
+
+    @media screen and (max-width: 350px) {
+      height: 46px;
+    }
+  }
+
+  .mikImg {
+    height: 125px;
+    margin-left: 40px;
+    cursor: pointer;
+
+    @media screen and (max-width: 1300px) {
+      height: 103px;
+    }
+
+    @media screen and (max-width: 1000px) {
+      height: 74px;
+    }
+
+    @media screen and (max-width: 500px) {
+      height: 52px;
+    }
+
+    @media screen and (max-width: 350px) {
+      height: 48px;
+    }
+  }
+}

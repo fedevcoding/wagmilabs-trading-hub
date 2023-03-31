@@ -50,6 +50,7 @@ const SignModal = ({ setConnected, setSignIn }) => {
           if (authenticated && token) {
             localStorage.setItem("jsonwebtoken", token);
             setConnected(true);
+            if (window.location.pathname !== "/") window.location.href = "/";
           } else {
             setHasError(true);
             setErrorMessage(res.message);

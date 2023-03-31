@@ -48,6 +48,7 @@ import { serverUrl } from "@Variables";
 import { Calendar } from "./pages/calendar/Calendar";
 import Pnl from "./pages/pnl/Pnl";
 import BulkListing from "./pages/bulkListing/BulkListing";
+import Plans from "./pages/login/components/plans/Plans";
 
 // for wagmi
 
@@ -137,7 +138,7 @@ function App() {
         } else if (jsonwebtoken) {
           setChecking(true);
         } else {
-          if (pathname !== "/") window.location.href = "/";
+          if (pathname !== "/" && pathname !== "/plans") window.location.href = "/";
           setConnected(false);
         }
         setLoading(false);
@@ -148,12 +149,8 @@ function App() {
 
   // set colors based on states
   useEffect(() => {
-    if (!connected) {
-      document.body.style.background = "#0e0f0e";
-    } else {
-      document.body.style.background = "#0E0F0E";
-    }
-  }, [connected, checking]);
+    document.body.style.background = "#0E0F0E";
+  }, []);
 
   // socket io connection
   useEffect(() => {
@@ -268,7 +265,16 @@ function App() {
                     <>
                       <BrowserRouter>
                         <Routes>
-                          <Route exact path="/" element={<Login setConnected={setConnected} connected={connected} />} />
+                          <Route
+                            exact
+                            path="/"
+                            element={<Login setConnected={setConnected} connected={connected} plans={false} />}
+                          />
+                          <Route
+                            exact
+                            path="/plans"
+                            element={<Login setConnected={setConnected} connected={connected} plans={true} />}
+                          />
                           <Route exact path="/legal" element={<Legals />} />
                         </Routes>
                       </BrowserRouter>
@@ -355,6 +361,17 @@ function App() {
                                   <>
                                     <Header />
                                     <Volumes />
+                                    <Footer />
+                                  </>
+                                }
+                              />
+                              <Route
+                                exact
+                                path="/plans"
+                                element={
+                                  <>
+                                    <Header />
+                                    <Plans plans={true} />
                                     <Footer />
                                   </>
                                 }

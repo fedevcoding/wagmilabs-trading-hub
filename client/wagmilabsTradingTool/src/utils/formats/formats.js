@@ -119,6 +119,7 @@ function getListingExpirationDate(listingSettings) {
 
 const parseEther = (value, stringify) => {
   value = value?.toString();
+  console.log(value);
   if (!value) return 0;
 
   if (stringify) {
@@ -128,8 +129,20 @@ const parseEther = (value, stringify) => {
   }
 };
 
+const ethToWei = (value, stringify) => {
+  value = value?.toString();
+  if (!value) return 0;
+
+  if (stringify) {
+    return ethers.utils.parseEther(value).toString();
+  } else {
+    return parseFloat(ethers.utils.parseEther(value));
+  }
+};
+
 module.exports = {
   parseEther,
+  ethToWei,
   formatAddress,
   formatContractAddress,
   formatAddress2,

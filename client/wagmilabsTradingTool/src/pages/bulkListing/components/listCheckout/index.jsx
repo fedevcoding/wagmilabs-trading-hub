@@ -3,10 +3,9 @@ import { Button, HStack } from "@chakra-ui/react";
 import { EthLogo, Loader } from "@Components";
 import { marketplaces } from "../../options";
 import { marketplacesData } from "../../../../utils/markeplacesData";
-import { roundPrice } from "../../../../utils/formats/formats";
+import { ethToWei, roundPrice } from "../../../../utils/formats/formats";
 import { useBulkList } from "../../../../custom-hooks";
 import { BulkListModal } from "../../../../components/Modals";
-import { parseEther } from "@Utils";
 
 export const ListCheckout = React.memo(({ items }) => {
   const [isOpen, setIsOpen] = React.useState(false);
@@ -63,6 +62,7 @@ export const ListCheckout = React.memo(({ items }) => {
   };
 
   const listNfts = async () => {
+    console.log(isValidConfirm());
     if (!isValidConfirm() || loading) return;
     try {
       setLoading(true);
@@ -74,7 +74,7 @@ export const ListCheckout = React.memo(({ items }) => {
             const { name, price, expiration } = m;
 
             const { orderKind, orderbook } = marketplacesData[name];
-            const weiPrice = parseEther(price, true);
+            const weiPrice = ethToWei(price, true);
             const expirationTime = (expiration / 1000).toString();
 
             return {

@@ -2,13 +2,14 @@ import React from "react";
 import { Select } from "../../../../components/Form/Select";
 import { durationSelectOptions, planOptions, getDurationSelectors } from "./options";
 import Plan from "./Plan";
+import "./style.scss";
 
-const Plans = () => {
+const Plans = ({ plans }) => {
   const [durationSelector, setDurationSelector] = React.useState(durationSelectOptions[2]);
   const durationSelectors = getDurationSelectors();
 
   return (
-    <div className="plans-section">
+    <div className={`plans-section ${plans && "plans-route"}`}>
       <div className="header">
         <h2 className="title">Plans</h2>
 

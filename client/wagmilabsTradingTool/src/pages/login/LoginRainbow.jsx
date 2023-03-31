@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./style.scss";
 
 import "@rainbow-me/rainbowkit/styles.css";
@@ -12,10 +12,23 @@ import Footer from "./components/footer/Footer";
 import { Reviews } from "./components/reviews/Reviews.jsx";
 import { Comparison } from "./components/comparison/Comparison";
 import Plans from "./components/plans/Plans";
+import Partners from "./components/partners/Partners";
 
-const Login = ({ setConnected }) => {
+const Login = ({ setConnected, plans }) => {
   const [walletConnected, setWalletConnected] = useState(false);
   const [signIn, setSignIn] = useState(false);
+
+  const goToPlans = () => {
+    setSignIn(false);
+    const planSection = document.querySelector(".plans-section");
+    planSection.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
+  useEffect(() => {
+    if (plans) {
+      goToPlans();
+    }
+  }, [plans]);
 
   return (
     <>
@@ -28,8 +41,10 @@ const Login = ({ setConnected }) => {
         </div>
         <div className="section2">
           <hr className="hr"></hr>
-          <Plans />
+          <Plans plans={plans} />
+          <hr className="hr"></hr>
           <Reviews />
+          <Partners />
           <Comparison />
           <Footer />
         </div>

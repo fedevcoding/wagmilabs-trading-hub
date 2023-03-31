@@ -324,6 +324,11 @@ const Header = () => {
                 <p>Wallets</p>
               </div>
 
+              <div onClick={() => navigate("/plans")} className="switch-account-option-container">
+                <i className="fa-solid fa-tags"></i>
+                <p>Plans</p>
+              </div>
+
               <div onClick={() => logOut(setConnected)} className="logout-container">
                 <i className="fa-solid fa-arrow-right-from-bracket"></i>
                 <p>Log Out</p>

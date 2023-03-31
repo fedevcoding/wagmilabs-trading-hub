@@ -89,7 +89,7 @@ export const ListItemModal = React.memo(
               value={marketplace}
               options={marketplaces}
             />
-            {(marketplace.value === "opensea" && (
+            {/* {(marketplace.value === "opensea" && (
               <div>
                 <br />
                 <div className="space-between">
@@ -127,7 +127,7 @@ export const ListItemModal = React.memo(
                   ""}
               </div>
             )) ||
-              ""}
+              ""} */}
             <br />
             <p className="label">
               <b>Set expiration date</b>

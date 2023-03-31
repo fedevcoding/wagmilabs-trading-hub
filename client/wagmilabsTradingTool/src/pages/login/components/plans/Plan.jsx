@@ -51,10 +51,10 @@ const Plan = ({ planOption, durationSelector }) => {
                         colorScheme="blue"
                         variant="solid"
                         size="md"
-                        className="btn"
+                        className="btn now-allowed"
                         width={"100%"}
                         borderRadius="20px"
-                        onClick={openConnectModal}
+                        // onClick={openConnectModal}
                       >
                         {buttonName}
                       </Button>
@@ -65,11 +65,11 @@ const Plan = ({ planOption, durationSelector }) => {
                       colorScheme="blue"
                       variant="solid"
                       size="md"
-                      className="btn"
+                      className="btn not-allowed"
                       width={"80%"}
                       height="50px"
                       borderRadius="25px"
-                      onClick={buySubscription}
+                      // onClick={buySubscription}
                     >
                       {isLoading ? <Loader /> : <>{buttonName}</>}
                     </Button>

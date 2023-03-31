@@ -6,7 +6,8 @@ import { UserDataContext } from "@Context";
 import { getListingExpirationDate } from "@Utils/formats/formats";
 import { marketplacesData } from "@Utils";
 import { checkErrors } from "../utils/functions/errorHelpers";
-import { parseEther } from "../utils/formats/formats";
+import { parseEther } from "ethers/lib/utils";
+import { ethToWei } from "../utils/formats/formats";
 
 export const useListNft = ({ contractAddress, tokenId, listingPrice }, callback) => {
   const { listingSettings } = useContext(UserDataContext);
@@ -38,7 +39,7 @@ export const useListNft = ({ contractAddress, tokenId, listingPrice }, callback)
       const orderbook = marketplacesData[marketplace].orderbook;
       const orderKind = marketplacesData[marketplace].orderKind;
 
-      const weiPrice = parseEther(listingPrice, true);
+      const weiPrice = ethToWei(listingPrice, true);
 
       const royalties = royaltiesPerc
         ? {
