@@ -1,0 +1,206 @@
+.minting-bot-section {
+  $grey1: #1e1e1e;
+  $lightGrey: #3d3d3d;
+
+  padding: 0 50px 60px 50px;
+  color: white;
+
+  .options {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 30px 0;
+
+    .options-left {
+      display: flex;
+      align-items: center;
+      gap: 30px;
+
+      button {
+        background-color: transparent;
+        color: white;
+        font-size: 16px;
+        padding: 10px 20px;
+        border-radius: 10px;
+        transition: background-color 250ms;
+        border: 1px solid transparent;
+        &.active {
+          background-color: $lightGrey;
+          border: 1px solid black;
+        }
+        &:hover {
+          background-color: $grey1;
+          border: 1px solid black;
+        }
+      }
+    }
+
+    .options-right {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+
+      & button {
+        background-color: $lightGrey;
+        border: 1px solid black;
+        color: white;
+        border-radius: 10px;
+        padding: 22px 15px;
+        transition: background-color 0.2s;
+
+        &:hover {
+          background-color: $grey1;
+        }
+      }
+    }
+  }
+
+  .table-wrapper {
+    border-radius: 10px;
+
+    color: white;
+    height: 70vh;
+    display: block;
+    background-color: $lightGrey;
+    margin: 0 auto;
+    overflow-y: scroll;
+    table-layout: fixed;
+    position: relative;
+    font-family: inherit;
+    letter-spacing: 1.2px;
+    overflow-x: hidden;
+
+    .table {
+      width: 100%;
+
+      & * {
+        text-align: center;
+      }
+
+      tr th {
+        display: table-cell;
+        position: sticky;
+        top: 0px;
+        text-align: center;
+        border-bottom: 2px solid $grey1;
+        background-color: $grey1;
+        padding: 20px 0;
+        z-index: 1;
+        color: white;
+      }
+
+      tbody {
+        .loading-container {
+          position: absolute;
+          display: flex;
+          gap: 19px;
+          justify-content: space-between;
+          font-size: 20px;
+          top: 15%;
+          left: 50%;
+          transform: translate(-50%, 0);
+        }
+        .not-found-container {
+          position: absolute;
+          top: 25%;
+          left: 50%;
+          transform: translate(-50%, 0);
+          font-size: 18px;
+
+          img {
+            width: 170px;
+          }
+        }
+
+        tr {
+          transition: transform 500ms;
+          cursor: pointer;
+          &:nth-child(even) {
+            background-color: #1e1e1e;
+          }
+          &:hover {
+            transform: scale(1.02);
+          }
+          td {
+            .name-container {
+              gap: 10px;
+              padding: 20px 0;
+              margin-left: 30px;
+              img {
+                width: 50px;
+                height: 50px;
+                object-fit: contain;
+
+                border-radius: 10px;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.new-snipe-task-modal {
+  .search-bar {
+    padding: 15px 0 15px 40px;
+    width: 100%;
+  }
+
+  .step1-container {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+
+    .option {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+
+      .titles {
+        font-size: 22px;
+      }
+    }
+
+    .collection-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      i {
+        cursor: pointer;
+      }
+
+      .collection-image {
+        width: 35px;
+        height: 35px;
+        object-fit: contain;
+
+        border-radius: 50%;
+      }
+      .collection-name {
+        font-size: 16px;
+        font-weight: 500;
+      }
+    }
+  }
+
+  .step2-container {
+    gap: 35px;
+    .flex-col {
+      gap: 12px;
+    }
+  }
+
+  .modal-footer {
+    .not-active {
+      cursor: not-allowed;
+      opacity: 0.8;
+    }
+  }
+}
+// .sniper-bot-single-task {
+//   background-color: rgb(57, 57, 57);
+//   height: 80px;
+// }

@@ -261,7 +261,9 @@ const Header = () => {
                 <div onClick={() => isPro && navigate("/bots/sniper")} className={`${!isPro && "not-allowed"}`}>
                   Sniper bot
                 </div>
-                <div className="not-allowed">Minting bot</div>
+                <div onClick={() => isPro && navigate("/bots/minting")} className={`${!isPro && "not-allowed"}`}>
+                  Minting bot
+                </div>
                 <div className="not-allowed">Notifications</div>
               </div>
             </div>
