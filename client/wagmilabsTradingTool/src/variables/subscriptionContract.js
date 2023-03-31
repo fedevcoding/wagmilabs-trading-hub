@@ -1,7 +1,25 @@
-const subscriptionAddress = "0x3eCAdF262d2Fd66957F6D8b6af4Df5407a80b9c7";
+const subscriptionAddress = "0x8000E87eA19133d8b692846c56cC51734f164B08";
 
 const subscriptionsAbi = [
   { inputs: [], stateMutability: "nonpayable", type: "constructor" },
+  {
+    inputs: [
+      {
+        components: [
+          { internalType: "address", name: "subscriptionRecepient", type: "address" },
+          { internalType: "uint256", name: "subscriptionMonths", type: "uint256" },
+          { internalType: "uint256", name: "subscriptionType", type: "uint256" },
+        ],
+        internalType: "struct AdminSubscribe[]",
+        name: "data",
+        type: "tuple[]",
+      },
+    ],
+    name: "adminSubscribe",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
   {
     inputs: [{ internalType: "address", name: "", type: "address" }],
     name: "basicAddressExpiration",
@@ -53,10 +71,34 @@ const subscriptionsAbi = [
     type: "function",
   },
   {
+    inputs: [
+      { internalType: "bytes32[]", name: "proof", type: "bytes32[]" },
+      { internalType: "bytes32", name: "leaf", type: "bytes32" },
+    ],
+    name: "isDiscounted",
+    outputs: [{ internalType: "bool", name: "", type: "bool" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
     inputs: [{ internalType: "address", name: "", type: "address" }],
     name: "proAddressExpiration",
     outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
     stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "uint256", name: "_discountPerc", type: "uint256" }],
+    name: "setDiscountPerc",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "bytes32", name: "_root", type: "bytes32" }],
+    name: "setDiscountRoot",
+    outputs: [],
+    stateMutability: "nonpayable",
     type: "function",
   },
   {
@@ -67,14 +109,20 @@ const subscriptionsAbi = [
     type: "function",
   },
   {
-    inputs: [{ internalType: "uint256", name: "months", type: "uint256" }],
+    inputs: [
+      { internalType: "uint256", name: "months", type: "uint256" },
+      { internalType: "bytes32[]", name: "proof", type: "bytes32[]" },
+    ],
     name: "subscribeBasic",
     outputs: [],
     stateMutability: "payable",
     type: "function",
   },
   {
-    inputs: [{ internalType: "uint256", name: "months", type: "uint256" }],
+    inputs: [
+      { internalType: "uint256", name: "months", type: "uint256" },
+      { internalType: "bytes32[]", name: "proof", type: "bytes32[]" },
+    ],
     name: "subscribePro",
     outputs: [],
     stateMutability: "payable",
@@ -103,5 +151,4 @@ const subscriptionsAbi = [
   },
   { inputs: [], name: "withdraw", outputs: [], stateMutability: "nonpayable", type: "function" },
 ];
-
 export { subscriptionAddress, subscriptionsAbi };
