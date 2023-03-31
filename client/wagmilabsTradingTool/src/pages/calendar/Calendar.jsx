@@ -1,6 +1,5 @@
 import React from "react";
-import { PageWrapper, Row } from "@Components";
-import "./style.scss";
+import { PageWrapper, Row, LoadingSpinner } from "@Components";
 import { useParams } from "react-router-dom";
 import { MonthlyCalendar } from "./Components/MonthlyCalendar";
 import { WeeklyCalendar } from "./Components/WeeklyCalendar";
@@ -10,10 +9,12 @@ import { useGetSpaces } from "./useGetSpaces";
 import { useGetPersonal } from "./useGetPersonal";
 import { setPageTitle } from "@Utils";
 
+import "./style.scss";
+
 const titles = {
   drops: "Upcoming Drops",
   spaces: "Twitter Spaces",
-  raffles: "Personal Calendar",
+  personal: "Personal Calendar",
   events: "IRL Events",
 };
 
@@ -65,7 +66,7 @@ const getPageTitle = section => {
       return "NFT Drops | Wagmi Labs";
     case "spaces":
       return "Twitter Spaces | Wagmi Labs";
-    case "raffles":
+    case "personal":
       return "Personal | Wagmi Labs";
     case "events":
       return "IRL Events | Wagmi Labs";
@@ -75,13 +76,15 @@ const getPageTitle = section => {
 };
 
 export const Calendar = () => {
-  const { drops, refetch: dropsRefetch } = useGetDrops();
-  const { events, refetch: eventsRefetch } = useGetEvents();
-  const { personal, refetch: personalRefetch } = useGetPersonal();
-  const { spaces, refetch: spacesRefetch } = useGetSpaces();
+  const { drops, refetch: dropsRefetch, isLoading: loadDrops } = useGetDrops();
+  const { events, refetch: eventsRefetch, isLoading: loadEvents } = useGetEvents();
+  const { personal, refetch: personalRefetch, isLoading: loadPersonal } = useGetPersonal();
+  const { spaces, refetch: spacesRefetch, isLoading: loadSpaces } = useGetSpaces();
   const { section } = useParams();
   const mainTitle = titles[section];
   setPageTitle(getPageTitle(section));
+
+  const isLoading = loadDrops || loadEvents || loadPersonal || loadSpaces;
 
   const renderMainTitle = () => (
     <Row className="main-title">
@@ -92,22 +95,26 @@ export const Calendar = () => {
   return (
     <PageWrapper page="calendar">
       {renderMainTitle()}
-      <>
-        {spaces && section === "spaces" && <WeeklyCalendar sectionData={spaces} refetch={spacesRefetch} />}
-        {drops && section === "drops" && (
-          <MonthlyCalendar sectionData={drops} section={section} refetch={dropsRefetch} />
-        )}
-        {events && section === "events" && (
-          <MonthlyCalendar sectionData={events} section={section} refetch={eventsRefetch} />
-        )}
-        {personal && section === "raffles" && (
-          <MonthlyCalendar
-            sectionData={personal.map(s => s.events).flat()}
-            section="personal"
-            refetch={personalRefetch}
-          />
-        )}
-      </>
+      {isLoading ? (
+        <LoadingSpinner width="100px" height="100px" margin="3rem 0" />
+      ) : (
+        <>
+          {spaces && section === "spaces" && <WeeklyCalendar sectionData={spaces} refetch={spacesRefetch} />}
+          {drops && section === "drops" && (
+            <MonthlyCalendar sectionData={drops} section={section} refetch={dropsRefetch} />
+          )}
+          {events && section === "events" && (
+            <MonthlyCalendar sectionData={events} section={section} refetch={eventsRefetch} />
+          )}
+          {personal && section === "personal" && (
+            <MonthlyCalendar
+              sectionData={personal.map(s => s.events).flat()}
+              section="personal"
+              refetch={personalRefetch}
+            />
+          )}
+        </>
+      )}
     </PageWrapper>
   );
 };

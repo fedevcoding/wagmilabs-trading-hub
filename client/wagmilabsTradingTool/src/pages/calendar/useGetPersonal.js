@@ -12,10 +12,8 @@ export function useGetPersonal() {
 
     const personalUrl = `/personal`;
 
-    const [{personal}] = await Promise.all([
-      getFromServer(personalUrl),
-    ]);
-    
+    const [{ personal }] = await Promise.all([getFromServer(personalUrl)]);
+
     setPersonal(personal);
     setLoading(false);
   }
@@ -24,5 +22,5 @@ export function useGetPersonal() {
     getData();
   }, [socket]);
 
-  return {isLoading, personal, refetch: getData};
+  return { isLoading, personal, refetch: getData };
 }

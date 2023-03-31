@@ -12,10 +12,8 @@ export function useGetDrops() {
 
     const dropsUrl = `/drops`;
 
-    const [{drops}] = await Promise.all([
-      getFromServer(dropsUrl),
-    ]);
-    
+    const [{ drops }] = await Promise.all([getFromServer(dropsUrl)]);
+
     setDrops(drops);
     setLoading(false);
   }
@@ -24,5 +22,5 @@ export function useGetDrops() {
     getData();
   }, [socket]);
 
-  return {isLoading, drops, refetch: getData};
+  return { isLoading, drops, refetch: getData };
 }

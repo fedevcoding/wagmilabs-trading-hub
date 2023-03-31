@@ -74,7 +74,7 @@ export const WeeklyScheduler = React.memo(({ hoursIntervals, sectionData, showSe
   return (
     <Row className="calendar-row">
       {daysOfTheWeek.map((d, dayIndex) => (
-        <div className="weekday-calendar-column">
+        <div className="weekday-calendar-column" key={d}>
           <div className="weekday-calendar-inner-column">
             <div className="weekday-col-title">{d}</div>
             {hoursIntervals.map(h => (
@@ -88,11 +88,12 @@ export const WeeklyScheduler = React.memo(({ hoursIntervals, sectionData, showSe
                     ? activeHourClass(usedHoursBlocks[dayIndex].find(el => el.hour === h.idx))
                     : "hour-section"
                 }
+                key={JSON.stringify(h)}
               >
                 {getEventsInWeekday(dayIndex).map(event => (
-                  <>
+                  <React.Fragment key={JSON.stringify(event)}>
                     {moment(event?.timestamp).hours() === h.idx && <div className="hour-slot">{event?.spaceName}</div>}
-                  </>
+                  </React.Fragment>
                 ))}
               </div>
             ))}
