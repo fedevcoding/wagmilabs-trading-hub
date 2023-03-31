@@ -15,16 +15,17 @@ const ACCESS_JWT_SECONDS = 200;
 
 loginRoute.post("/", checkOwnership, async (req, res) => {
   try {
-    const { address } = req?.body || {};
+    const { passType, expiration, address } = req?.ownershipData || {};
 
     if (!address) {
       res.status(403).json({ authenticated: false, message: "Missing query fields." });
     } else {
       await Stats.create({ type: "login", timestamp: Date.now(), address });
-
       const accessToken = JWT.sign(
         {
           address,
+          passType,
+          expiration,
         },
         JWT_PRIVATE_KEY,
         {
@@ -32,9 +33,11 @@ loginRoute.post("/", checkOwnership, async (req, res) => {
         }
       );
 
-      const refreshToken = await JWT.sign(
+      const refreshToken = JWT.sign(
         {
           address,
+          passType,
+          expiration,
         },
         JWT_REFRESH_PRIVATE_KEY,
         {

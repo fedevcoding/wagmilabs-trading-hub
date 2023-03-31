@@ -2,7 +2,7 @@ export const marketplacesData = {
   opensea: {
     name: "Opensea",
     value: "opensea",
-    royalties: 0,
+    royalties: 0.5,
     orderbook: "opensea",
     orderKind: "seaport-v1.4",
   },
@@ -16,7 +16,7 @@ export const marketplacesData = {
   looksrare: {
     name: "Looks Rare",
     value: "looksrare",
-    royalties: 2,
+    royalties: 1.5,
     orderbook: "looks-rare",
     orderKind: "looks-rare",
   },
@@ -24,5 +24,10 @@ export const marketplacesData = {
     name: "Blur",
     value: "blur",
     royalties: 0,
+  },
+  sudoswap: {
+    name: "Sudoswap",
+    value: "sudoswap",
+    royalties: 0.5,
   },
 };

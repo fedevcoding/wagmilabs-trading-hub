@@ -6,8 +6,6 @@ import { useSignMessage, useAccount } from "wagmi";
 import { Loader } from "@Components";
 import { baseUrl } from "@Variables";
 
-import { useDisconnect } from "wagmi";
-
 import "./style.scss";
 
 const message = `Welcome to Wagmi Labs!
@@ -21,9 +19,7 @@ Your authentication status will reset after 24 hours.
 
 If you're connecting a hardware wallet, you'll need to sign the message on your device, too.`;
 
-const SignModal = ({ setConnected, setWalletConnected }) => {
-  const { disconnect } = useDisconnect();
-
+const SignModal = ({ setConnected, setSignIn }) => {
   const [acceptTerms, setAcceptTerms] = useState(false);
   const [loadingSign, setLoadingSign] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
@@ -54,6 +50,7 @@ const SignModal = ({ setConnected, setWalletConnected }) => {
           if (authenticated && token) {
             localStorage.setItem("jsonwebtoken", token);
             setConnected(true);
+            if (window.location.pathname !== "/") window.location.href = "/";
           } else {
             setHasError(true);
             setErrorMessage(res.message);
@@ -82,8 +79,7 @@ const SignModal = ({ setConnected, setWalletConnected }) => {
 
   const disconnectWallet = e => {
     if (e.target !== e.currentTarget) return;
-    setWalletConnected(false);
-    disconnect();
+    setSignIn(false);
   };
 
   useEffect(() => {
@@ -93,6 +89,11 @@ const SignModal = ({ setConnected, setWalletConnected }) => {
     };
   }, []);
 
+  const goToPlans = () => {
+    setSignIn(false);
+    const planSection = document.querySelector(".plans-section");
+    planSection.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
   return (
     <div className="sign-message-container-overlay" onClick={e => disconnectWallet(e)}>
       <div className="sign-message-container-box">
@@ -125,9 +126,9 @@ const SignModal = ({ setConnected, setWalletConnected }) => {
             <p className="login-error">{errorMessage}</p>
 
             {errorMessage.includes("not have") && (
-              <a href="https://mint.wagmilabs.tools" target={"_blank"} rel="noreferrer">
-                <Button className={`sign-message-button ${"active"}`}>Mint</Button>
-              </a>
+              <Button className={`sign-message-button ${"active"}`} onClick={goToPlans}>
+                Plans
+              </Button>
             )}
           </>
         )}

@@ -1,34 +1,26 @@
-const express = require("express")
-const checkAuth = require("../../../middleware/checkAuth")
-const { execTranseposeAPI } = require("../../../services/externalAPI/transpose")
+const express = require("express");
+const checkAuth = require("../../../middleware/checkAuth");
+const { execTranseposeAPI } = require("../../../services/externalAPI/transpose");
 
-const tokenLisrPriceRoute = express()
+const tokenLisrPriceRoute = express();
 
-const GOMU_API_KEY = process.env.GOMU_API_KEY
+const GOMU_API_KEY = process.env.GOMU_API_KEY;
 
 const royaltieMapping = {
-    "opensea": 2.5,
-    "x2y2": 0.5,
-    "looksrare": 2,
-}
-
-
+  opensea: 0.5,
+  x2y2: 0.5,
+  looksrare: 1.5,
+};
 
 tokenLisrPriceRoute.get("/", checkAuth, async (req, res) => {
+  try {
+    const { address } = req.userDetails;
+    const { tokenId, contractAddress, marketplace, listingType, ethPrice } = req.query;
 
-
-    try {
-        const { address } = req.userDetails
-        const { tokenId, contractAddress, marketplace, listingType, ethPrice } = req.query
-
-
-
-        if (!address) {
-            res.status(400).json({ message: "There was a problem fetching the data", ok: false })
-        }
-        else {
-
-            const query = `
+    if (!address) {
+      res.status(400).json({ message: "There was a problem fetching the data", ok: false });
+    } else {
+      const query = `
     WITH last_tx AS (
         SELECT
             *
@@ -72,82 +64,84 @@ tokenLisrPriceRoute.get("/", checkAuth, async (req, res) => {
           AND n.contract_address = last_tx.contract_address
           AND n.category = 'mint'
         ) AS mint_count;
-            `
+            `;
 
-            const buyData = await execTranseposeAPI(query)
+      const buyData = await execTranseposeAPI(query);
 
-            const defaultCreatorFee = 0
-            const royaltiesDataApi = await fetch(`https://api.gomu.co/rest/overview/contract?contractAddress=${contractAddress}&skipTraits=true`, {
-                headers: {
-                    "gomu-api-key": GOMU_API_KEY
-                }
-            })
-
-            const royaltiesData = (await royaltiesDataApi.json())?.data?.royalty
-            const creatorRoyalties = royaltiesData[marketplace]?.percentage || royaltiesData["opensea"]?.percentage || defaultCreatorFee
-            const royalties = royaltieMapping[marketplace]
-
-
-            const buyPrice = buyData?.[0]?.price
-            const buyTransactionFee = buyData?.[0]?.transaction_fee
-
-
-            const listingPrice = getListPrice(buyPrice, buyTransactionFee, creatorRoyalties, royalties, listingType, ethPrice)
-
-            res.status(200).json({ listingPrice })
+      const defaultCreatorFee = 0;
+      const royaltiesDataApi = await fetch(
+        `https://api.gomu.co/rest/overview/contract?contractAddress=${contractAddress}&skipTraits=true`,
+        {
+          headers: {
+            "gomu-api-key": GOMU_API_KEY,
+          },
         }
+      );
 
+      const royaltiesData = (await royaltiesDataApi.json())?.data?.royalty;
+      const creatorRoyalties =
+        royaltiesData[marketplace]?.percentage || royaltiesData["opensea"]?.percentage || defaultCreatorFee;
+      const royalties = royaltieMapping[marketplace];
+
+      const buyPrice = buyData?.[0]?.price;
+      const buyTransactionFee = buyData?.[0]?.transaction_fee;
+
+      const listingPrice = getListPrice(
+        buyPrice,
+        buyTransactionFee,
+        creatorRoyalties,
+        royalties,
+        listingType,
+        ethPrice
+      );
+
+      res.status(200).json({ listingPrice });
     }
-
-    catch (e) {
-        console.log(e)
-        res.status(400).json({ message: "There was a problem fetching the data", ok: false })
-    }
-
-})
-
-
-
-
+  } catch (e) {
+    console.log(e);
+    res.status(400).json({ message: "There was a problem fetching the data", ok: false });
+  }
+});
 
 function getListPrice(buyPrice, buyTransactionFee, creatorRoyalties, royalties, listingType, ethPrice) {
+  try {
+    if (listingType.includes("profit")) {
+      const listingArr = listingType.split("-");
 
-    try {
-        if (listingType.includes("profit")) {
-            const listingArr = listingType.split("-")
+      const value = Number(listingArr[1]);
+      const type = listingArr[2];
 
-            const value = Number(listingArr[1])
-            const type = listingArr[2]
-
-            switch (type) {
-                case "%":
-                    const calculationPerc = roundCalculations((((buyPrice + buyTransactionFee + ((value * buyPrice) + (buyTransactionFee))) * 100) / (100 - (royalties + creatorRoyalties))))
-                    return calculationPerc
-                case "eth":
-                    const calculationEth = roundCalculations((((buyPrice + buyTransactionFee + value) * 100) / (100 - (royalties + creatorRoyalties))))
-                    return calculationEth
-                case "usd":
-                    const calculationUsd = roundCalculations((((buyPrice + buyTransactionFee + (value / ethPrice)) * 100) / (100 - (royalties + creatorRoyalties))))
-                    return calculationUsd
-            }
-        }
-        else if (listingType === "break-even") {
-            const calculation = roundCalculations((((buyPrice + buyTransactionFee) * 100) / (100 - (royalties + creatorRoyalties))))
-            return calculation
-        }
+      switch (type) {
+        case "%":
+          const calculationPerc = roundCalculations(
+            ((buyPrice + buyTransactionFee + (value * buyPrice + buyTransactionFee)) * 100) /
+              (100 - (royalties + creatorRoyalties))
+          );
+          return calculationPerc;
+        case "eth":
+          const calculationEth = roundCalculations(
+            ((buyPrice + buyTransactionFee + value) * 100) / (100 - (royalties + creatorRoyalties))
+          );
+          return calculationEth;
+        case "usd":
+          const calculationUsd = roundCalculations(
+            ((buyPrice + buyTransactionFee + value / ethPrice) * 100) / (100 - (royalties + creatorRoyalties))
+          );
+          return calculationUsd;
+      }
+    } else if (listingType === "break-even") {
+      const calculation = roundCalculations(
+        ((buyPrice + buyTransactionFee) * 100) / (100 - (royalties + creatorRoyalties))
+      );
+      return calculation;
     }
-    catch (e) {
-        console.log(e)
-    }
-
+  } catch (e) {
+    console.log(e);
+  }
 }
 
+const roundCalculations = calculation => {
+  return calculation ? Math.ceil(calculation * 100000) / 100000.0 : 0;
+};
 
-
-
-const roundCalculations = (calculation) => {
-    return calculation ? Math.ceil(calculation * 100000) / 100000.00000 : 0;
-}
-
-
-module.exports = tokenLisrPriceRoute
+module.exports = tokenLisrPriceRoute;

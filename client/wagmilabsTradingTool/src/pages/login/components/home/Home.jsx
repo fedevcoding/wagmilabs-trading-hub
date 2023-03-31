@@ -6,7 +6,7 @@ import "react-html5video/dist/styles.css";
 
 import "./style.scss";
 import { loginVideo } from "src/assets";
-const Home = ({ setWalletConnected }) => {
+const Home = ({ setWalletConnected, setSignIn }) => {
   return (
     <div className="login-home">
       <div className="title-connect-container">
@@ -14,7 +14,7 @@ const Home = ({ setWalletConnected }) => {
           <h1>Enter the world of Advanced NFT Trading with the fastest platform yet...</h1>
         </div>
 
-        <ConnectWallet setWalletConnected={setWalletConnected} isHeader={false} />
+        <ConnectWallet setWalletConnected={setWalletConnected} isHeader={false} setSignIn={setSignIn} />
       </div>
 
       <div className="video-container">

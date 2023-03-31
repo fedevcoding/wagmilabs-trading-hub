@@ -1,5 +1,5 @@
 import ConnectWallet from "./ConnectWallet";
-import React, { useMemo } from "react";
+import React from "react";
 
 const links = {
   trends: "Trends",
@@ -10,27 +10,13 @@ const links = {
   feed: "Feed",
 };
 
-const Links = ({ setWalletConnected, setMessage, setConnected }) => {
+const Links = ({ setSignIn }) => {
   return (
     <div className="links-container">
-      {useMemo(
-        () =>
-          Object.keys(links).map(key => {
-            const text = links[key];
-            return (
-              <ConnectWallet
-                setConnected={setConnected}
-                setMessage={setMessage}
-                setWalletConnected={setWalletConnected}
-                text={text}
-                value={key}
-                key={key}
-              />
-            );
-          }),
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        [setConnected, setMessage, setWalletConnected]
-      )}
+      {Object.keys(links).map(key => {
+        const text = links[key];
+        return <ConnectWallet text={text} value={key} key={key} setSignIn={setSignIn} />;
+      })}
     </div>
   );
 };

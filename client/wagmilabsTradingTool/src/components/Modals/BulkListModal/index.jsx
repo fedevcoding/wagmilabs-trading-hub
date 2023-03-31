@@ -1,14 +1,14 @@
 import React from "react";
 import { Modal, ModalBody, ModalContent, ModalOverlay, Progress } from "@chakra-ui/react";
 
-// import "./index.scss";
+import "./style.scss";
 
 export const BulkListModal = React.memo(({ isOpen, onClose, data }) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose} isCentered>
       <div className="bulk-list-modal-container">
         <ModalOverlay backdropFilter="blur(5px)" />
-        <ModalContent className="promo-modal">
+        <ModalContent className="modal-content">
           <i className="fa-solid fa-x close-btn" onClick={onClose}></i>
           <ModalBody className="modal-body">
             <h1 className="title">{data.type === "approve" ? "Approve" : "Sign"} transactions</h1>
