@@ -1,4 +1,4 @@
-const subscriptionAddress = "0x8000E87eA19133d8b692846c56cC51734f164B08";
+const subscriptionAddress = "0xa4747a1272e8d09fd4600a82f3ba86f39e616036";
 
 const subscriptionsAbi = [
   { inputs: [], stateMutability: "nonpayable", type: "constructor" },
@@ -18,13 +18,6 @@ const subscriptionsAbi = [
     name: "adminSubscribe",
     outputs: [],
     stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [{ internalType: "address", name: "", type: "address" }],
-    name: "basicAddressExpiration",
-    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
-    stateMutability: "view",
     type: "function",
   },
   {
@@ -57,6 +50,44 @@ const subscriptionsAbi = [
     type: "function",
   },
   {
+    inputs: [],
+    name: "getActiveBasics",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "getActivePros",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "getAllActiveAmount",
+    outputs: [
+      { internalType: "uint256", name: "", type: "uint256" },
+      { internalType: "uint256", name: "", type: "uint256" },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "addr", type: "address" }],
+    name: "getBasicSubscriptionOfAddress",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "addr", type: "address" }],
+    name: "getproSubscriptionOfAddress",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
     inputs: [{ internalType: "address", name: "walletAddress", type: "address" }],
     name: "hasValidBasicSubscription",
     outputs: [{ internalType: "bool", name: "", type: "bool" }],
@@ -77,13 +108,6 @@ const subscriptionsAbi = [
     ],
     name: "isDiscounted",
     outputs: [{ internalType: "bool", name: "", type: "bool" }],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [{ internalType: "address", name: "", type: "address" }],
-    name: "proAddressExpiration",
-    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
     stateMutability: "view",
     type: "function",
   },
