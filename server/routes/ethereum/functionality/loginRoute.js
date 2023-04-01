@@ -20,7 +20,8 @@ loginRoute.post("/", checkOwnership, async (req, res) => {
     if (!address) {
       res.status(403).json({ authenticated: false, message: "Missing query fields." });
     } else {
-      await Stats.create({ type: "login", timestamp: Date.now(), address });
+      console.log(passType);
+      await Stats.create({ type: "login", timestamp: Date.now(), address, passType });
       const accessToken = JWT.sign(
         {
           address,

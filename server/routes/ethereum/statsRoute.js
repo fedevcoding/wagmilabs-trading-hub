@@ -6,7 +6,7 @@ const statsRoute = express();
 
 const Stats = require("../../models/StatsModel");
 
-statsRoute.post("/", checkAuth, async (req, res) => {
+statsRoute.post("/", async (req, res) => {
   const { type, timestamp, address } = req.body || {};
 
   try {
