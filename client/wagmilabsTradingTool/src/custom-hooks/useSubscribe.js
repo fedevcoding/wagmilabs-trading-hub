@@ -36,6 +36,8 @@ Your trial will end ${endDate.toDateString()}.`;
             value: ethers.utils.parseEther(price.toFixed(5).toString()),
           });
           await tx.wait();
+
+          await pushToServer("/stats", { type: "boughtBasic", timestamp: Date.now() });
           toast({
             title: "Success",
             description: "Started plan activated",
@@ -48,6 +50,8 @@ Your trial will end ${endDate.toDateString()}.`;
             value: ethers.utils.parseEther(price.toFixed(5).toString()),
           });
           await tx.wait();
+          await pushToServer("/stats", { type: "boughtPro", timestamp: Date.now() });
+
           toast({
             title: "Success",
             description: "Pro plan activated",
