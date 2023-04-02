@@ -1,7 +1,7 @@
 const { ethers } = require("ethers");
 require("dotenv").config();
 const { contractAddress, abi } = require("../config/contractData");
-const allowedAddresses = require("../config/allowedAddresses");
+const { allowedAddresses } = require("../config/allowedAddresses");
 const { checkSignature } = require("../services/checkSignature");
 const FreeTrials = require("../models/FreeTrials");
 
