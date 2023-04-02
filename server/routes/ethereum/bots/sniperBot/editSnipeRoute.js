@@ -80,8 +80,6 @@ editSnipeRoute.post("/sniper/editTask", checkAuth, checkPro, async (req, res) =>
 
       const walletAddress = (await web3.eth.accounts.privateKeyToAccount(privateKey)).address;
 
-      console.log(walletAddress);
-
       const snipe = (
         await Snipe.findOneAndUpdate(
           { address: taskOwner, "tasks.taskId": taskId },

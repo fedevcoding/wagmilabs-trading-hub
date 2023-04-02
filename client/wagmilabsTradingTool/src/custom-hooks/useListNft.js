@@ -6,7 +6,6 @@ import { UserDataContext } from "@Context";
 import { getListingExpirationDate } from "@Utils/formats/formats";
 import { marketplacesData } from "@Utils";
 import { checkErrors } from "../utils/functions/errorHelpers";
-import { parseEther } from "ethers/lib/utils";
 import { ethToWei } from "../utils/formats/formats";
 
 export const useListNft = ({ contractAddress, tokenId, listingPrice }, callback) => {

@@ -1,13 +1,14 @@
 const { ethers } = require("ethers");
 require("dotenv").config();
 const { contractAddress, abi } = require("../config/contractData");
-const allowedAddresses = require("../config/allowedAddresses");
+const { allowedAddresses } = require("../config/allowedAddresses");
 const { checkSignature } = require("../services/checkSignature");
 const FreeTrials = require("../models/FreeTrials");
 
 const SIGNER_PRIVATE_KEY = process.env.SIGNER_PRIVATE_KEY;
 const CHAIN_ID = process.env.CHAIN_ID;
 
+// passtypes: 0 = wagmi pass, 1 = basic sub, 2 = pro sub, 3 = free trial, 4 = allowed/partnership
 async function checkValid(address) {
   try {
     const isAllowed = allowedAddresses.find(allowedAddress => {
@@ -15,7 +16,7 @@ async function checkValid(address) {
     });
 
     if (isAllowed) {
-      return [true, 0, 0];
+      return [true, 4, 0];
     } else if (!isAllowed) {
       const provider = new ethers.providers.InfuraProvider(CHAIN_ID == 5 ? "goerli" : null, SIGNER_PRIVATE_KEY);
       const contract = new ethers.Contract(contractAddress, abi, provider);
@@ -53,16 +54,13 @@ const checkOwnership = async (req, res, next) => {
   const validSignature = await checkSignature(address, signature, message);
 
   if (validSignature) {
-    // const isValid = await checkValid(address);
     const [isValid, passType, expiration] = await checkValid(address);
 
     if (isValid) {
       req.ownershipData = { address, passType, expiration };
       next();
     } else {
-      return res
-        .status(400)
-        .json({ message: "Seems you do not have a wagmi labs pass in your wallet", authenticated: false });
+      return res.status(400).json({ message: "Seems you do not have an active subscription.", authenticated: false });
     }
   } else {
     return res.status(400).json({ message: "Failed to authenticate.", authenticated: false });
