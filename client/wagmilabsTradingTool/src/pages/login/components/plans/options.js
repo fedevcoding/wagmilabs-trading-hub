@@ -19,7 +19,7 @@ export const planOptions = [
       6: 0.045,
     },
     description:
-      "Starter plan includes all features apart from bots and wallet management features. Get started today!",
+      "Starter plan includes all features apart from bots and wallet generator & manager. Get started today!",
     buttonName: "Get Starter",
   },
   {

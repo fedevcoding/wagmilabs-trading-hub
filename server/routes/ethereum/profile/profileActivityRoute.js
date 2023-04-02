@@ -2,6 +2,7 @@ const express = require("express");
 const { parseEther } = require("../../../../client/wagmilabsTradingTool/src/utils/formats/formats");
 const checkAuth = require("../../../middleware/checkAuth");
 const { execTranseposeAPI } = require("../../../services/externalAPI/transpose");
+const { SQL_BURNER_ADDRESS } = require("../../../services/burnerAddresses");
 const MODULE_API_KEY = process.env.MODULE_API_KEY;
 
 const profileActivityRoute = express();
@@ -28,35 +29,35 @@ const type1Query = (includeSale, includeBuy, userAddress) => {
 };
 const type2Query = (includeMint, includeBurn, includeSend, includeReceive, userAddress) => {
   if (includeMint && includeBurn && includeSend && includeReceive) {
-    return `WHERE ((to_address = '${userAddress}' AND from_address IS NULL) OR (from_address = '${userAddress}' AND to_address IS NULL) OR (from_address = '${userAddress}' OR to_address = '${userAddress}'))`;
+    return `WHERE ((to_address = '${userAddress}' AND from_address IS NULL) OR (from_address = '${userAddress}' AND to_address IN (${SQL_BURNER_ADDRESS}) ) OR (from_address = '${userAddress}' OR to_address = '${userAddress}'))`;
   } else if (includeMint && includeBurn && includeSend && !includeReceive) {
-    return `WHERE ((to_address = '${userAddress}' AND from_address IS NULL) OR (from_address = '${userAddress}' AND to_address IS NULL) OR (from_address = '${userAddress}'))`;
+    return `WHERE ((to_address = '${userAddress}' AND from_address IS NULL) OR (from_address = '${userAddress}' AND to_address IN (${SQL_BURNER_ADDRESS}) ) OR (from_address = '${userAddress}'))`;
   } else if (includeMint && includeBurn && !includeSend && includeReceive) {
-    return `WHERE ((to_address = '${userAddress}' AND from_address IS NULL) OR (from_address = '${userAddress}' AND to_address IS NULL) OR (to_address = '${userAddress}'))`;
+    return `WHERE ((to_address = '${userAddress}' AND from_address IS NULL) OR (from_address = '${userAddress}' AND to_address IN (${SQL_BURNER_ADDRESS}) ) OR (to_address = '${userAddress}'))`;
   } else if (includeMint && !includeBurn && includeSend && includeReceive) {
-    return `WHERE ((to_address = '${userAddress}' AND from_address IS NULL) OR ((from_address = '${userAddress}' AND to_address IS NOT NULL) OR to_address = '${userAddress}'))`;
+    return `WHERE ((to_address = '${userAddress}' AND from_address IS NULL) OR ((from_address = '${userAddress}' AND to_address NOT IN (${SQL_BURNER_ADDRESS})) OR to_address = '${userAddress}'))`;
   } else if (!includeMint && includeBurn && includeSend && includeReceive) {
-    return `WHERE ((from_address = '${userAddress}' AND to_address IS NULL) OR (from_address = '${userAddress}' OR (to_address = '${userAddress}' AND from_address IS NOT NULL)))`;
+    return `WHERE ((from_address = '${userAddress}' AND to_address IN (${SQL_BURNER_ADDRESS}) ) OR (from_address = '${userAddress}' OR (to_address = '${userAddress}' AND from_address NOT IN (${SQL_BURNER_ADDRESS}))))`;
   } else if (includeMint && includeBurn && !includeSend && !includeReceive) {
-    return `WHERE ((to_address = '${userAddress}' AND from_address IS NULL) OR (from_address = '${userAddress}' AND to_address IS NULL))`;
+    return `WHERE ((to_address = '${userAddress}' AND from_address IS NULL) OR (from_address = '${userAddress}' AND to_address IN (${SQL_BURNER_ADDRESS}) ))`;
   } else if (includeMint && !includeBurn && includeSend && !includeReceive) {
-    return `WHERE ((to_address = '${userAddress}' AND from_address IS NULL) OR (from_address = '${userAddress}' AND to_address IS NOT NULL))`;
+    return `WHERE ((to_address = '${userAddress}' AND from_address IS NULL) OR (from_address = '${userAddress}' AND to_address NOT IN (${SQL_BURNER_ADDRESS})))`;
   } else if (includeMint && !includeBurn && !includeSend && includeReceive) {
     return `WHERE ((to_address = '${userAddress}' AND from_address IS NULL) OR (to_address = '${userAddress}'))`;
   } else if (!includeMint && includeBurn && includeSend && !includeReceive) {
-    return `WHERE ((from_address = '${userAddress}' AND to_address IS NULL) OR (from_address = '${userAddress}'))`;
+    return `WHERE ((from_address = '${userAddress}' AND to_address IN (${SQL_BURNER_ADDRESS}) ) OR (from_address = '${userAddress}'))`;
   } else if (!includeMint && includeBurn && !includeSend && includeReceive) {
-    return `WHERE ((from_address = '${userAddress}' AND to_address IS NULL) OR (to_address = '${userAddress}' AND from_address IS NOT NULL))`;
+    return `WHERE ((from_address = '${userAddress}' AND to_address IN (${SQL_BURNER_ADDRESS}) ) OR (to_address = '${userAddress}' AND from_address NOT IN (${SQL_BURNER_ADDRESS})))`;
   } else if (!includeMint && !includeBurn && includeSend && includeReceive) {
-    return `WHERE (from_address = '${userAddress}' OR to_address = '${userAddress}' AND from_address IS NOT NULL AND to_address IS NOT NULL)`;
+    return `WHERE (from_address = '${userAddress}' OR to_address = '${userAddress}') AND from_address NOT IN (${SQL_BURNER_ADDRESS}) AND to_address NOT IN (${SQL_BURNER_ADDRESS})`;
   } else if (includeMint && !includeBurn && !includeSend && !includeReceive) {
     return `WHERE (to_address = '${userAddress}' AND from_address IS NULL)`;
   } else if (!includeMint && includeBurn && !includeSend && !includeReceive) {
-    return `WHERE (from_address = '${userAddress}' AND to_address IS NULL)`;
+    return `WHERE (from_address = '${userAddress}' AND to_address IN (${SQL_BURNER_ADDRESS}) )`;
   } else if (!includeMint && !includeBurn && includeSend && !includeReceive) {
-    return `WHERE (from_address = '${userAddress}' AND to_address IS NOT NULL)`;
+    return `WHERE (from_address = '${userAddress}' AND to_address NOT IN (${SQL_BURNER_ADDRESS}))`;
   } else if (!includeMint && !includeBurn && !includeSend && includeReceive) {
-    return `WHERE (to_address = '${userAddress}' AND from_address IS NOT NULL)`;
+    return `WHERE (to_address = '${userAddress}' AND from_address NOT IN (${SQL_BURNER_ADDRESS}))`;
   } else {
     return `WHERE to_address = ''`;
   }
@@ -208,7 +209,7 @@ profileActivityRoute.get("/", checkAuth, async (req, res) => {
                 SELECT 
                     CASE 
                         WHEN to_address = '${userAddress}' AND from_address IS NULL THEN 'mint'
-                        WHEN from_address = '${userAddress}' AND to_address IS NULL THEN 'burn'
+                        WHEN from_address = '${userAddress}' AND to_address IN (${SQL_BURNER_ADDRESS}) THEN 'burn'
                         WHEN from_address = '${userAddress}' THEN 'send'
                         ELSE 'receive'
                     END AS type,
@@ -251,6 +252,7 @@ profileActivityRoute.get("/", checkAuth, async (req, res) => {
             FROM sales s
             WHERE s.transaction_hash = sales.transaction_hash) AS tx_count
         `;
+
     const onChainActivity =
       includeBurn || includeBuy || includeMint || includeReceive || includeSale || includeSend
         ? await execTranseposeAPI(SQL)
