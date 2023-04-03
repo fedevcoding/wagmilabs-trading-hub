@@ -20,7 +20,7 @@ export const BannerSearch = () => {
   return (
     <>
       {!hiddenBanner ? (
-        <a className="container-div" href="https://discord.gg/wagmilabs" target="_blank" rel="noreferrer">
+        <a className="container-div" href="https://wagmilabs.tools" target="_blank" rel="noreferrer">
           <LazyLoadImage
             visibleByDefault={true}
             src={image}
@@ -30,9 +30,9 @@ export const BannerSearch = () => {
           />
           <div className="searchbar-collection-infos">
             <div className="name-verified-container">
-              <p className="searchbar-collection-name">Secure yourself a whitelist!</p>
+              <p className="searchbar-collection-name">FREE BETA closing today!</p>
             </div>
-            <p className="searchbar-collection-address">Join our discord...</p>
+            <p className="searchbar-collection-address">Mint a pass</p>
             <i className="fa-solid fa-xmark searchbar-collection-remove" onClick={() => hideSearchBanner(true)}></i>
           </div>
         </a>

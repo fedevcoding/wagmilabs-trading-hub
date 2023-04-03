@@ -43,11 +43,11 @@ export const PromoModal = React.memo(({ isOpen, onClose, type }) => {
             <ModalContent className="promo-modal-2">
               <i className="fa-solid fa-x close-btn" onClick={onClose}></i>
               <ModalBody className="modal-body">
-                <h1 className="title">FREE BETA CLOSING 😰</h1>
+                <h1 className="title">FREE BETA CLOSING TODAY😰</h1>
               </ModalBody>
 
               <ModalBody className="modal-body">
-                <h3 className="body">Keep using our platform by minting our NFT pass END OF MARCH!</h3>
+                <h3 className="body">Keep using our platform by minting our NFT pass TOMORROW, 12 PM EST!!</h3>
               </ModalBody>
             </ModalContent>
           )
