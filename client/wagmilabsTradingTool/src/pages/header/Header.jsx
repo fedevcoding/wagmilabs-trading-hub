@@ -240,7 +240,7 @@ const Header = () => {
       <RefreshToken connected={connected} setConnected={setConnected} />
       {isFree && (
         <header className="expiration-header">
-          <p>FREE Trial ending in {moment(expiration).toNow()}</p>
+          <p>FREE Trial ending {moment(expiration).fromNow()}</p>
         </header>
       )}
 
