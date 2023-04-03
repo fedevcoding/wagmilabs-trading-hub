@@ -18,7 +18,6 @@ const dayClass = d => {
 const renderEventName = event => <div className="day-event-name">{event?.collectionName || event?.eventName}</div>;
 
 export const DayTile = ({ day, index, startIdx, showSelectedDate, events }) => {
-  console.log("events", events);
   return (
     <div className={dayClass(day)} onClick={() => showSelectedDate(day, index + startIdx)}>
       <div>{day.date.getDate()}</div>
