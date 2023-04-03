@@ -2,8 +2,6 @@ export const errorHas = (error, string) => {
   if (typeof error === "object") {
     error = JSON.stringify(error?.response?.data || error?.response || error);
   }
-
-  console.log(error);
   return String(error?.toLowerCase()).toLowerCase().includes(string);
 };
 
