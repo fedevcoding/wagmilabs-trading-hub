@@ -1,26 +1,25 @@
 import React from "react";
 import ConnectWallet from "../connect/ConnectWallet";
+import { videoThumbnail } from "@Assets";
 
 import { DefaultPlayer as Video } from "react-html5video";
 import "react-html5video/dist/styles.css";
 
 import "./style.scss";
 import { loginVideo } from "src/assets";
-const Home = ({ setWalletConnected }) => {
+const Home = ({ setWalletConnected, setSignIn }) => {
   return (
     <div className="login-home">
       <div className="title-connect-container">
         <div className="title">
           <h1>Enter the world of Advanced NFT Trading with the fastest platform yet...</h1>
-          <br />
-          <h4>(BETA CLOSING TODAY! MINT A PASS TOMORROW TO KEEP USING THE PLATFORM!)</h4>
         </div>
 
-        <ConnectWallet setWalletConnected={setWalletConnected} isHeader={false} />
+        <ConnectWallet setWalletConnected={setWalletConnected} isHeader={false} setSignIn={setSignIn} />
       </div>
 
       <div className="video-container">
-        <Video controls={["PlayPause", "Seek", "Time", "Volume", "Fullscreen"]} playsInline>
+        <Video controls={["PlayPause", "Seek", "Time", "Volume", "Fullscreen"]} playsInline poster={videoThumbnail}>
           <source src={loginVideo} type="video/webm" />
         </Video>
       </div>

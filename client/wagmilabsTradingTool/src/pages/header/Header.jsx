@@ -3,7 +3,7 @@ import EthereumSearch from "../search/EthereumSearch";
 import "./header.css";
 import { useNavigate } from "react-router-dom";
 
-import logoImage from "@Assets/logoBeta.png";
+import { logo } from "@Assets";
 import { baseUrl } from "@Variables";
 import RefreshToken from "../RefreshToken";
 import logOut from "@Utils/functions/logout";
@@ -15,8 +15,12 @@ import { useUpdateBalance } from "@Hooks";
 
 import { fetchEnsName } from "@wagmi/core";
 import { useAccount } from "wagmi";
+import { useJwtData } from "../../custom-hooks/useJwdData";
+import moment from "moment";
 
 const Header = () => {
+  const { isPro, isFree, expiration } = useJwtData();
+
   const {
     setEns,
     setProfileImage,
@@ -229,11 +233,19 @@ const Header = () => {
 
   const section = window.location.pathname;
 
+  console.log(expiration);
+
   return (
     <>
       <RefreshToken connected={connected} setConnected={setConnected} />
+      {isFree && (
+        <header className="expiration-header">
+          <p>FREE Trial ending {moment(expiration).fromNow()}</p>
+        </header>
+      )}
+
       <header className="search-header">
-        <img src={logoImage} onClick={() => navigate("/")} className="logo-image" alt="" />
+        <img src={logo} onClick={() => navigate("/")} className="logo-image" alt="" />
 
         <EthereumSearch isHeader={true} />
 
@@ -243,8 +255,12 @@ const Header = () => {
               <span>Bots</span>
 
               <div className="bots-options-dropdown invisible">
-                <div onClick={() => navigate("/bots/wallets")}>Wallets</div>
-                <div onClick={() => navigate("/bots/sniper")}>Sniper bot</div>
+                <div onClick={() => isPro && navigate("/bots/wallets")} className={`${!isPro && "not-allowed"}`}>
+                  Wallets
+                </div>
+                <div onClick={() => isPro && navigate("/bots/sniper")} className={`${!isPro && "not-allowed"}`}>
+                  Sniper bot
+                </div>
                 <div className="not-allowed">Minting bot</div>
                 <div className="not-allowed">Notifications</div>
               </div>
@@ -272,8 +288,8 @@ const Header = () => {
                 <div onClick={() => navigate("/calendars/drops")}>NFT drops</div>
                 <div onClick={() => navigate("/calendars/spaces")}>Twitter spaces</div>
                 <div
-                  onClick={() => navigate("/calendars/personal")}
-                  // className="not-allowed"
+                  // onClick={() => navigate("/calendars/personal")}
+                  className="not-allowed"
                 >
                   Personal
                 </div>
@@ -306,6 +322,11 @@ const Header = () => {
               <div className="switch-account-option-container" onClick={() => navigate("/bots/wallets")}>
                 <i className="fa-solid fa-arrows-repeat"></i>
                 <p>Wallets</p>
+              </div>
+
+              <div onClick={() => navigate("/plans")} className="switch-account-option-container">
+                <i className="fa-solid fa-tags"></i>
+                <p>Plans</p>
               </div>
 
               <div onClick={() => logOut(setConnected)} className="logout-container">

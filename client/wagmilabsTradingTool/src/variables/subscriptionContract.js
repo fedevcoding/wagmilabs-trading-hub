@@ -1,0 +1,178 @@
+const subscriptionAddress = "0xa4747a1272e8d09fd4600a82f3ba86f39e616036";
+
+const subscriptionsAbi = [
+  { inputs: [], stateMutability: "nonpayable", type: "constructor" },
+  {
+    inputs: [
+      {
+        components: [
+          { internalType: "address", name: "subscriptionRecepient", type: "address" },
+          { internalType: "uint256", name: "subscriptionMonths", type: "uint256" },
+          { internalType: "uint256", name: "subscriptionType", type: "uint256" },
+        ],
+        internalType: "struct AdminSubscribe[]",
+        name: "data",
+        type: "tuple[]",
+      },
+    ],
+    name: "adminSubscribe",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "newOwner", type: "address" }],
+    name: "changeOwner",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "uint256", name: "monthlyPrice", type: "uint256" },
+      { internalType: "uint256", name: "monthsAmount", type: "uint256" },
+      { internalType: "uint256", name: "planType", type: "uint256" },
+    ],
+    name: "changePriceWei",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "ownerAddress", type: "address" }],
+    name: "checkSubscriptionAdvanced",
+    outputs: [
+      { internalType: "bool", name: "", type: "bool" },
+      { internalType: "uint256", name: "", type: "uint256" },
+      { internalType: "uint256", name: "", type: "uint256" },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "getActiveBasics",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "getActivePros",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "getAllActiveAmount",
+    outputs: [
+      { internalType: "uint256", name: "", type: "uint256" },
+      { internalType: "uint256", name: "", type: "uint256" },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "addr", type: "address" }],
+    name: "getBasicSubscriptionOfAddress",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "addr", type: "address" }],
+    name: "getproSubscriptionOfAddress",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "walletAddress", type: "address" }],
+    name: "hasValidBasicSubscription",
+    outputs: [{ internalType: "bool", name: "", type: "bool" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "walletAddress", type: "address" }],
+    name: "hasValidProSubscription",
+    outputs: [{ internalType: "bool", name: "", type: "bool" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "bytes32[]", name: "proof", type: "bytes32[]" },
+      { internalType: "bytes32", name: "leaf", type: "bytes32" },
+    ],
+    name: "isDiscounted",
+    outputs: [{ internalType: "bool", name: "", type: "bool" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "uint256", name: "_discountPerc", type: "uint256" }],
+    name: "setDiscountPerc",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "bytes32", name: "_root", type: "bytes32" }],
+    name: "setDiscountRoot",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "bool", name: "_open", type: "bool" }],
+    name: "setOpen",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "uint256", name: "months", type: "uint256" },
+      { internalType: "bytes32[]", name: "proof", type: "bytes32[]" },
+    ],
+    name: "subscribeBasic",
+    outputs: [],
+    stateMutability: "payable",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "uint256", name: "months", type: "uint256" },
+      { internalType: "bytes32[]", name: "proof", type: "bytes32[]" },
+    ],
+    name: "subscribePro",
+    outputs: [],
+    stateMutability: "payable",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "uint256", name: "months", type: "uint256" }],
+    name: "subscriptionsBasicPrice",
+    outputs: [{ internalType: "uint256", name: "monthPrice", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "subscriptionsOpen",
+    outputs: [{ internalType: "bool", name: "", type: "bool" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "uint256", name: "months", type: "uint256" }],
+    name: "subscriptionsProPrice",
+    outputs: [{ internalType: "uint256", name: "monthPrice", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  { inputs: [], name: "withdraw", outputs: [], stateMutability: "nonpayable", type: "function" },
+];
+export { subscriptionAddress, subscriptionsAbi };

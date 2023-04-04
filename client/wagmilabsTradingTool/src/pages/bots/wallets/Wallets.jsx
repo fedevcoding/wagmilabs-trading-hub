@@ -8,8 +8,11 @@ import { AddModal, ExportModal, TransferModal, RenameModal } from "./modals";
 import { formatAddress, roundPrice } from "src/utils/formats/formats";
 import copy from "copy-to-clipboard";
 import { notFound } from "src/assets";
+import { useSecurePro } from "../../../custom-hooks/useSecurePro";
 
 const Wallets = React.memo(() => {
+  useSecurePro();
+
   const { showAddModal, showExportModal, showTransferModal, toggleModal } = useManageModals();
   const { wallets, toggleWallet, reloadBalances, loadingBalances, renameWallet } = useManageData();
 

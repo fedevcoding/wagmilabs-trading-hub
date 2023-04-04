@@ -40,6 +40,10 @@ const userSchema = mongoose.Schema(
       unique: true,
       immutable: true,
     },
+    passType: {
+      type: Number,
+      required: true,
+    },
     profileImage: {},
     watchList: {
       collectionWatchList: [String],

@@ -19,6 +19,7 @@ const activityTypeMapping = {
   receive: "Receive",
   send: "Send",
   mint: "Mint",
+  burn: "Burn",
 };
 
 const activityMarketplaceMapping = [
@@ -358,10 +359,18 @@ export const Activity = ({ userAddress, pageAddress }) => {
               </a>
               <td className="profile-activity-single-price">{price ? roundPrice2(price) : 0} ETH</td>
               <td className="profile-activity-single-from">
-                {to_address ? formatAddress2(to_address, userAddress) : "- - -"}
+                {type === "list" || type === "receive" || type === "send" ? (
+                  <>{from_address ? formatAddress2(from_address, userAddress) : "- - -"}</>
+                ) : (
+                  <>{to_address ? formatAddress2(to_address, userAddress) : "- - -"}</>
+                )}
               </td>
               <td className="profile-activity-single-to">
-                {from_address ? formatAddress2(from_address, userAddress) : "- - -"}
+                {type === "list" || type === "receive" || type === "send" ? (
+                  <> {to_address ? formatAddress2(to_address, userAddress) : "- - -"}</>
+                ) : (
+                  <> {from_address ? formatAddress2(from_address, userAddress) : "- - -"}</>
+                )}
               </td>
               <td className="profile-activity-single-time">
                 <a

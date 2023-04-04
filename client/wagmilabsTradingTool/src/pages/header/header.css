@@ -296,3 +296,15 @@ a {
     display: none;
   }
 }
+
+
+
+.expiration-header{
+  font-size: 16px;
+  letter-spacing: 1.1px;
+  font-weight: 600;
+  color: black;
+  text-align: center;
+  background-color: #b04976;
+  padding: 5px 0;
+}

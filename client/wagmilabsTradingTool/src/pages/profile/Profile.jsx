@@ -60,7 +60,6 @@ const Profile = () => {
   const [loadingData, setLoadingData] = useState(true);
 
   const [loadingMoreNfts, setLoadingMoreNfts] = useState(false);
-  const nftsContinuation = useRef();
 
   const [openListingSettings, setOpenListingSettings] = useState(false);
   const [stageListingSettings, setStageListingSettings] = useState(listingSettings);
@@ -72,20 +71,16 @@ const Profile = () => {
   const [searchCollectionText, setSearchCollectionText] = useState("");
   const [debounceCollectionSearch] = useDebounce(searchCollectionText, 400);
 
-  const [showPromoBanner, setShowPromoBanner] = useState(true);
-
   const [copyState, setCopyState] = useState({ ens: "Copy", address: "Copy" });
   const [isOpen, setIsOpen] = React.useState(false);
 
+  const nftsContinuation = useRef(null);
   const {
     loading: loadingNfts,
     setLoading: setLoadingNfts,
     items: userItems,
-    continuation,
     setItems: setUserItems,
-  } = useGetItems("50", selectedSortOption.value, nftsCollectionFilter);
-
-  nftsContinuation.current = continuation;
+  } = useGetItems("50", selectedSortOption.value, nftsCollectionFilter, pageAddress, nftsContinuation);
 
   useEffect(() => {
     fetchUserData();
@@ -125,6 +120,7 @@ const Profile = () => {
     try {
       setLoadingMoreNfts(true);
       const continuationFilter = nftsContinuation.current ? `&continuation=${nftsContinuation.current}` : "";
+
       let data = await fetch(
         `${baseUrl}/profileItems?sortDirection=${selectedSortOption.value}&collection=${nftsCollectionFilter}&address=${pageAddress}${continuationFilter}`,
         {
@@ -140,6 +136,7 @@ const Profile = () => {
       const { tokens, continuation } = data;
 
       nftsContinuation.current = continuation;
+
       setUserItems(prev => [...prev, ...tokens]);
       setLoadingMoreNfts(false);
     } catch (e) {
@@ -751,26 +748,6 @@ const Profile = () => {
               Stats
             </div>
           </div>
-
-          {section === "nft" && showPromoBanner && (
-            <a
-              className="profile-promo-container"
-              href="https://wagmilabs.tools"
-              target={"_blank"}
-              rel="noreferrer"
-              onClick={() => setShowPromoBanner(false)}
-            >
-              <i className="fa-solid fa-x profile-promo-close-btn"></i>
-
-              <h3 className="profile-promo-header">FREE BETA ENDING TODAY!</h3>
-              <h4 className="profile-promo-body">
-                Mint our NFT pass tomorrow at 12 PM EST to keep using the platform!
-              </h4>
-              <Button colorScheme={"gray"} className="profile-promo-button">
-                More info
-              </Button>
-            </a>
-          )}
 
           <div className="profile-watchList-settings">
             <div className="profile-settings">

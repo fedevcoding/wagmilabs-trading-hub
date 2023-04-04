@@ -4,11 +4,12 @@ const Snipe = require("../../../../models/bots/SnipeModel");
 const removeTask = require("../../../../services/botsCache/snipeBots/removeTask");
 const addSnipe = require("../../../../services/botsCache/snipeBots/addSnipe");
 const Web3 = require("web3");
+const checkPro = require("../../../../middleware/checkPro");
 const web3 = new Web3();
 
 const editSnipeRoute = express();
 
-editSnipeRoute.post("/sniper/editTask", checkAuth, async (req, res) => {
+editSnipeRoute.post("/sniper/editTask", checkAuth, checkPro, async (req, res) => {
   try {
     const { data, type } = req.body;
     const { address: taskOwner } = req.userDetails;
@@ -78,8 +79,6 @@ editSnipeRoute.post("/sniper/editTask", checkAuth, async (req, res) => {
       if (!taskId || !privateKey) throw new Error("missing data");
 
       const walletAddress = (await web3.eth.accounts.privateKeyToAccount(privateKey)).address;
-
-      console.log(walletAddress);
 
       const snipe = (
         await Snipe.findOneAndUpdate(

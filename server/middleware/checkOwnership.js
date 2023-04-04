@@ -1,43 +1,70 @@
-const Web3 = require("web3")
-const { ethers } = require("ethers")
-require("dotenv").config()
-const { contractAddress, abi } = require("../config/contractData")
+const { ethers } = require("ethers");
+require("dotenv").config();
+const { contractAddress, abi } = require("../config/contractData");
+const { allowedAddresses } = require("../config/allowedAddresses");
+const { checkSignature } = require("../services/checkSignature");
+const FreeTrials = require("../models/FreeTrials");
 
-const checkOwnership = async (req, res, next) => {
+const SIGNER_PRIVATE_KEY = process.env.SIGNER_PRIVATE_KEY;
+const CHAIN_ID = process.env.CHAIN_ID;
 
-    const { address, signature, message } = req.body
+// passtypes: 0 = wagmi pass, 1 = basic sub, 2 = pro sub, 3 = free trial, 4 = allowed/partnership
+async function checkValid(address) {
+  try {
+    const isAllowed = allowedAddresses.find(allowedAddress => {
+      return allowedAddress.toLowerCase() === address.toLowerCase();
+    });
 
+    if (isAllowed) {
+      return [true, 4, 0];
+    } else if (!isAllowed) {
+      const provider = new ethers.providers.InfuraProvider(CHAIN_ID == 5 ? "goerli" : null, SIGNER_PRIVATE_KEY);
+      const contract = new ethers.Contract(contractAddress, abi, provider);
+      const passData = await contract.hasValidPass(address);
 
-    async function checkBalance() {
+      const isValid = passData[0];
+      const passType = Number(passData[1]);
+      const expiration = Number(passData[2]);
+      if (isValid) {
+        return [isValid, passType, expiration];
+      } else {
+        const data = await FreeTrials.findOne({ address });
 
-        const provider = new ethers.providers.InfuraProvider(null, process.env.SIGNER_PRIVATE_KEY);
-        const contract = new ethers.Contract(contractAddress, abi, provider);
-        const balance = await contract.balanceOf(address)
-        return balance.toString()
+        if (!data) return [false, 0, 0];
+
+        const { expiration } = data;
+
+        if (expiration < Date.now()) return [false, 0, 0];
+        return [true, 3, expiration];
+      }
     }
-
-
-    const web3 = new Web3(new Web3.providers.HttpProvider(process.env.ETHEREUM_NETWORK));
-
-    if (address == undefined || address.length === 0 || signature == undefined || signature.length < 132) {
-        return res.status(400).json({ message: "Failed to authenticate.", authenticated: false })
-    }
-
-    const signerAddress = await web3.eth.accounts.recover(message, signature)
-
-    if (signerAddress.toLocaleLowerCase() === address.toLocaleLowerCase()) {
-        const balance = await checkBalance()
-        if (balance >= 0) {
-            next()
-        }
-        else {
-            return res.status(400).json({ message: "Seems you do not have a wagmi labs pass in your wallet :(", authenticated: false })
-        }
-    }
-    else {
-        return res.status(400).json({ message: "Failed to authenticate.", authenticated: false })
-    }
-
+  } catch (err) {
+    console.log(err);
+    return [false, 0, 0];
+  }
 }
 
-module.exports = checkOwnership
+const checkOwnership = async (req, res, next) => {
+  const { address, signature, message } = req.body;
+
+  if (address == undefined || address.length === 0 || signature == undefined || signature.length < 132) {
+    return res.status(400).json({ message: "Failed to authenticate.", authenticated: false });
+  }
+
+  const validSignature = await checkSignature(address, signature, message);
+
+  if (validSignature) {
+    const [isValid, passType, expiration] = await checkValid(address);
+
+    if (isValid) {
+      req.ownershipData = { address, passType, expiration };
+      next();
+    } else {
+      return res.status(400).json({ message: "Seems you do not have an active subscription.", authenticated: false });
+    }
+  } else {
+    return res.status(400).json({ message: "Failed to authenticate.", authenticated: false });
+  }
+};
+
+module.exports = checkOwnership;

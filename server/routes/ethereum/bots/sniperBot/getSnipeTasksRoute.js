@@ -3,10 +3,11 @@ const checkAuth = require("../../../../middleware/checkAuth");
 const snipeTasks = require("../../../../services/botsCache/snipeBots/snipeTasks");
 const Snipe = require("../../../../models/bots/SnipeModel");
 const removeTask = require("../../../../services/botsCache/snipeBots/removeTask");
+const checkPro = require("../../../../middleware/checkPro");
 
 const getSnipeTasksRoute = express();
 
-getSnipeTasksRoute.get("/sniper/getTasks", checkAuth, async (req, res) => {
+getSnipeTasksRoute.get("/sniper/getTasks", checkAuth, checkPro, async (req, res) => {
   try {
     const { address } = req.userDetails;
 

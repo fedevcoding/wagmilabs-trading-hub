@@ -1,18 +1,23 @@
-const mongoose = require("mongoose")
+const mongoose = require("mongoose");
 
-const StatsSchema = mongoose.Schema({
+const StatsSchema = mongoose.Schema(
+  {
     address: {
-        type: String,
+      type: String,
     },
     type: {
-        type: String,
+      type: String,
     },
     timestamp: {
-        type: Number,
-    }
-}, {
-    timestamps: true
-})
+      type: Number,
+    },
+    passType: {
+      type: Number,
+    },
+  },
+  {
+    timestamps: true,
+  }
+);
 
-module.exports = mongoose.model("Stats", StatsSchema)
-
+module.exports = mongoose.model("Stats", StatsSchema);
