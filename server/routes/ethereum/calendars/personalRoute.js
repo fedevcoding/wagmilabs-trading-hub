@@ -78,20 +78,17 @@ personalRoute.delete("/", checkAuth, checkAdmin, async (req, res) => {
       await manageEvents(address, Personal, true);
       return res.status(200).json({ personal });
     } else {
-      const match = await Personal.findOne({ _id: id });
-      if (match && match._id === address) {
-        const personal = await Personal.findOneAndUpdate(
-          { address: address },
-          {
-            $pull: {
-              events: { _id: id },
-            },
-          }
-        );
-        if (!personal) throw Error("Something went wrong deleting all the personal events");
-        await manageEvents(address, Personal, false);
-        return res.status(200).json({ personal });
-      }
+      const personal = await Personal.findOneAndUpdate(
+        { address: address },
+        {
+          $pull: {
+            events: { _id: id },
+          },
+        }
+      );
+      if (!personal) throw Error("Something went wrong deleting all the personal events");
+      await manageEvents(address, Personal, false);
+      return res.status(200).json({ personal });
     }
   } catch (e) {
     return res.status(400).json({ msg: e.message });
