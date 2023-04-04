@@ -287,12 +287,7 @@ const Header = () => {
               <div className="calendars-options-dropdown invisible">
                 <div onClick={() => navigate("/calendars/drops")}>NFT drops</div>
                 <div onClick={() => navigate("/calendars/spaces")}>Twitter spaces</div>
-                <div
-                  // onClick={() => navigate("/calendars/personal")}
-                  className="not-allowed"
-                >
-                  Personal
-                </div>
+                <div onClick={() => navigate("/calendars/personal")}>Personal</div>
                 <div onClick={() => navigate("/calendars/events")}>IRL events</div>
               </div>
             </div>
