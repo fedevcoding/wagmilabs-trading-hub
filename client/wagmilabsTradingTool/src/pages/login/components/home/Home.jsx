@@ -21,7 +21,7 @@ const Home = ({ setWalletConnected }) => {
 
       <div className="video-container">
         <Video controls={["PlayPause", "Seek", "Time", "Volume", "Fullscreen"]} playsInline>
-          <source src={loginVideo} type="video/webm" />
+          <source src={loginVideo} type="video/mp4" />
         </Video>
       </div>
     </div>
