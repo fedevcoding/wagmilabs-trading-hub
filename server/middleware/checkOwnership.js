@@ -11,8 +11,10 @@ const CHAIN_ID = process.env.CHAIN_ID;
 // passtypes: 0 = wagmi pass, 1 = basic sub, 2 = pro sub, 3 = free trial, 4 = allowed/partnership
 async function checkValid(address) {
   try {
+    // check if in allowed addresses there is an address that matches the address passed and has valid expiration
+    const currentdate = Date.now();
     const isAllowed = allowedAddresses.find(allowedAddress => {
-      return allowedAddress.toLowerCase() === address.toLowerCase();
+      return allowedAddress.address.toLowerCase() === address.toLowerCase() && allowedAddress.expiration > currentdate;
     });
 
     if (isAllowed) {
