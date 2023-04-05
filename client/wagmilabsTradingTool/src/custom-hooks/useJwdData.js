@@ -12,14 +12,14 @@ export const useJwtData = () => {
       const jsonwebtoken = localStorage.getItem("jsonwebtoken");
 
       if (jsonwebtoken) {
-        // 0 = pass, 1 = basic subscription, 2 = pro subscription, 3 = free trial
+        // 0 = pass, 1 = basic subscription, 2 = pro subscription, 3 = free trial, 4 = allowed/partnership
         const decoded = await jwt_decode(jsonwebtoken);
         const { passType, expiration } = decoded;
 
         const expirationNumber = Number(expiration);
         setExpiration(expirationNumber);
         if (passType === 3) setIsFree(true);
-        if (passType === 2 || passType === 0) setIsPro(true);
+        if (passType === 2 || passType === 0 || passType === 4) setIsPro(true);
 
         setLoaded(true);
       }
