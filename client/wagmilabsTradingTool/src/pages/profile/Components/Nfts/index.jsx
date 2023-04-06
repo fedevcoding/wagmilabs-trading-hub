@@ -123,6 +123,8 @@ export const Nfts = ({
   }, [userItems]);
 
   const handleFilterCollection = (collectionAddress, e) => {
+    nftsContinuation.current = null;
+
     if (collectionAddress?.toLowerCase() === nftsCollectionFilter?.toLowerCase()) {
       setNftsCollectionFilter("");
     } else {
@@ -173,6 +175,7 @@ export const Nfts = ({
   };
 
   const toggleSortOptions = () => {
+    nftsContinuation.current = null;
     setShowSortItemsOptions(old => !old);
   };
 
