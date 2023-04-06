@@ -2,7 +2,7 @@ const express = require("express");
 require("dotenv").config();
 const checkAuth = require("../../../../middleware/checkAuth");
 const { execTranseposeAPI } = require("../../../../services/externalAPI/transpose");
-
+const RESERVOIR_API_KEY = process.env.RESERVOIR_API_KEY;
 const tokenRoute = express();
 
 tokenRoute.get("/:address/token/:id/details", checkAuth, async (req, res) => {
@@ -16,7 +16,7 @@ tokenRoute.get("/:address/token/:id/details", checkAuth, async (req, res) => {
         {
           headers: {
             accept: "*/*",
-            "x-api-key": "9a16bf8e-ec68-5d88-a7a5-a24044de3f38",
+            "x-api-key": RESERVOIR_API_KEY,
           },
         }
       )
@@ -58,7 +58,7 @@ tokenRoute.get("/:address/token/:id/activities", checkAuth, async (req, res) => 
       await fetch(`https://api.reservoir.tools/tokens/${address}%3A${id}/activity/v4?${urlSearchParams}`, {
         headers: {
           accept: "*/*",
-          "x-api-key": "9a16bf8e-ec68-5d88-a7a5-a24044de3f38",
+          "x-api-key": RESERVOIR_API_KEY,
         },
       })
     ).json();
