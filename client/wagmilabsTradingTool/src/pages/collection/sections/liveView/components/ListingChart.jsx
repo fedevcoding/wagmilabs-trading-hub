@@ -5,7 +5,6 @@ import { HStack, NumberInput, NumberInputField } from "@chakra-ui/react";
 
 const columns = 25;
 
-
 const defaultChartSettings = {
   title: {
     text: "Listings wall",
@@ -42,16 +41,15 @@ const ListingChart = memo(({ floorPrice, tokensData }) => {
   useEffect(() => {
     if (floorPrice) {
       const numberOffset = Number(offset);
+      console.log(numberOffset);
 
-      if(numberOffset === 0) {
+      if (numberOffset === 0) {
         setChartOptions(defaultChartSettings);
-      };
+      }
 
       const tokens = { ...tokensData };
       const maxPrice = floorPrice + columns * numberOffset;
-      Object.keys(tokens).forEach(
-        key => tokens[key] >= maxPrice && delete tokens[key]
-      );
+      Object.keys(tokens).forEach(key => tokens[key] >= maxPrice && delete tokens[key]);
 
       const values = Object.values(tokens);
       const min = Math.min(...values);
@@ -59,8 +57,8 @@ const ListingChart = memo(({ floorPrice, tokensData }) => {
 
       const obj = {};
       for (let i = min; i <= max; i += numberOffset) {
-        let valueMin = Number(i).toFixed(2);
-        let valueMax = Number.parseFloat(i + numberOffset).toFixed(2);
+        let valueMin = Number(i).toFixed(3);
+        let valueMax = Number.parseFloat(i + numberOffset).toFixed(3);
         obj[`${valueMin}-${valueMax}`] = 0;
       }
 
@@ -76,7 +74,6 @@ const ListingChart = memo(({ floorPrice, tokensData }) => {
 
       const keys = Object.keys(obj);
       const chartValues = Object.values(obj);
-
 
       const newChartSettings = {
         series: [
@@ -116,15 +113,11 @@ const ListingChart = memo(({ floorPrice, tokensData }) => {
   return (
     <div className="listingWallChart">
       <HStack className="chart-options">
-        <NumberInput value={offset} >
+        <NumberInput value={offset}>
           <HStack>
             <NumberInputField
               placeholder="Offset"
-              onChange={e =>
-                setOffset(
-                  e.target.value.length > 0 ? e.target.value : 0
-                )
-              }
+              onChange={e => setOffset(e.target.value.length > 0 ? e.target.value : 0)}
             />
           </HStack>
         </NumberInput>
