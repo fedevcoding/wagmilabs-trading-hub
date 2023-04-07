@@ -10,17 +10,10 @@ export const useGetBuyNowModalFunctions = () => {
     marketplace: "",
     contract: "",
     collectionName: "",
+    orderHash: "",
   });
 
-  function openBuyModal(
-    name,
-    image,
-    tokenId,
-    price,
-    marketplace,
-    contract,
-    collectionName
-  ) {
+  function openBuyModal(name, image, tokenId, price, marketplace, contract, collectionName, orderHash) {
     document.body.style.overflow = "hidden";
     setBuyNowModalData({
       name,
@@ -30,14 +23,16 @@ export const useGetBuyNowModalFunctions = () => {
       marketplace,
       contract,
       collectionName,
+      orderHash,
     });
     setShowBuyNowModal(true);
   }
 
   function closeBuynowModal(e, force) {
-    if (!force) if (e.target !== e.currentTarget) return;
+    if (!force) if (e.target !== e.currentTarget) return false;
     document.body.style.overflow = "unset";
     setShowBuyNowModal(false);
+    return true;
   }
 
   return {

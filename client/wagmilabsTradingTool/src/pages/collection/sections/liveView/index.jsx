@@ -9,7 +9,7 @@ import BubbleChart from "./components/BubbleChart";
 import ListingChart from "./components/ListingChart";
 import ComparisonChart from "./components/ComparisonChart";
 
-const LiveView = memo(({ address, floorPrice, collectionImage }) => {
+const LiveView = memo(({ address, floorPrice, collectionImage, collectionName }) => {
   const [columnHovered, setColumnHovered] = useState({
     listings: false,
     sales: false,
@@ -34,6 +34,7 @@ const LiveView = memo(({ address, floorPrice, collectionImage }) => {
             contractAddress={address}
             collectionImage={collectionImage}
             isLoading={isLoading}
+            collectionName={collectionName}
           />
         </Column>
 

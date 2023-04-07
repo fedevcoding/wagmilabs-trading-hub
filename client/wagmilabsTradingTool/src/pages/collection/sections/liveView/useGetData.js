@@ -71,6 +71,7 @@ export function useGetData(address, columnHovered, floorPrice) {
           timestamp,
           marketplace,
           ms,
+          orderHash,
         } = listingData;
 
         const dataObj = {
@@ -81,6 +82,7 @@ export function useGetData(address, columnHovered, floorPrice) {
           timestamp,
           marketplace,
           ms,
+          orderHash,
         };
 
         setTokens(old => ({ ...old, [tokenId]: price }));
@@ -125,6 +127,11 @@ export function useGetData(address, columnHovered, floorPrice) {
     }
     listenToListings();
     listenToSales();
+
+    return () => {
+      socket.off("listing");
+      socket.off("sale");
+    };
   }, [address, socket, floorPrice]);
 
   useEffect(() => {

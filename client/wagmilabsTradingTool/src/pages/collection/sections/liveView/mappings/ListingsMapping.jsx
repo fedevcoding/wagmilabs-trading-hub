@@ -4,10 +4,15 @@ import getMarketplaceImage from "@Utils/marketplaceImageMapping";
 import { Button } from "@chakra-ui/react";
 import { useBuyNow } from "@Hooks";
 import { LoadingSpinner, TimeAgo } from "@Components";
+import { getTokenUrl } from "../../../../../utils/getDataFrommarketplace";
+import { useGetBuyNowModalFunctions } from "../../../../../custom-hooks";
+import { BuyNowModal } from "../../../../../components/Modals/BuyNowModal";
 
 const orderHashes = {};
 
-const ListingMapping = memo(({ listings, contractAddress, collectionImage, isLoading }) => {
+const ListingMapping = memo(({ listings, contractAddress, collectionImage, isLoading, collectionName }) => {
+  const { buyNowModalData, showBuyNowModal, openBuyModal, closeBuynowModal } = useGetBuyNowModalFunctions();
+
   const { buyNow } = useBuyNow();
 
   return (
@@ -20,20 +25,30 @@ const ListingMapping = memo(({ listings, contractAddress, collectionImage, isLoa
         </div>
       ) : (
         <>
+          {
+            <BuyNowModal
+              buyNowModalData={buyNowModalData}
+              showBuyNowModal={showBuyNowModal}
+              buyNow={buyNow}
+              closeBuynowModal={closeBuynowModal}
+            />
+          }
           {listings.map((listing, index) => {
             const { image, marketplace, timestamp, tokenId, name, value, orderHash, ms } = listing || {};
 
             const marketplaceImage = getMarketplaceImage(marketplace);
 
-            const toAnimate = index === 0 && !orderHashes[orderHash] ? true : false;
+            const toAnimate = index === 0 && !orderHashes[orderHash];
 
             if (toAnimate) {
               orderHashes[orderHash] = true;
             }
 
+            const link = getTokenUrl(marketplace, tokenId, contractAddress);
+            const wagmiLink = `/item/${contractAddress}/${tokenId}`;
             const randomUUID = crypto.randomUUID();
             return (
-              <div key={randomUUID} className={`single-item-row ${toAnimate ? "new-listing" : ""}`}>
+              <a key={randomUUID} href={wagmiLink} className={`single-item-row ${toAnimate ? "new-listing" : ""}`}>
                 <div className="token-info-container wrap-text">
                   <img src={image || collectionImage} className="item-image" alt="" />
                   <div className="wrap-text">
@@ -47,17 +62,32 @@ const ListingMapping = memo(({ listings, contractAddress, collectionImage, isLoa
                 <div className="flex-col-left">
                   <p>{roundPrice(value)} ETH</p>
                   <div className="sales-logos">
-                    <img src={marketplaceImage} alt="" />
+                    <a href={link} target="_blank" rel="noreferrer">
+                      <img src={marketplaceImage} alt="" />
+                    </a>
                     <Button
                       colorScheme={"blue"}
-                      onClick={() => buyNow(contractAddress, tokenId, value)}
+                      onClick={e => {
+                        e.preventDefault();
+                        openBuyModal(
+                          name,
+                          image,
+                          tokenId,
+                          value,
+                          marketplace,
+                          contractAddress,
+                          collectionName,
+                          orderHash
+                        );
+                        // buyNow(orderHash, value);
+                      }}
                       className="buy-now-btn"
                     >
                       Buy
                     </Button>
                   </div>
                 </div>
-              </div>
+              </a>
             );
           })}
           <style>
