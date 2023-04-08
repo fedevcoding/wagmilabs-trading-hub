@@ -13,6 +13,9 @@ const FreeTrialsSchema = mongoose.Schema(
       required: true,
       immutable: true,
     },
+    fromCatchmint: {
+      type: Boolean,
+    },
   },
   {
     timestamps: true,

@@ -135,11 +135,11 @@ export function useGetData(address, columnHovered, floorPrice) {
   }, [address, socket, floorPrice]);
 
   useEffect(() => {
-    setListings([...totalListings]?.reverse()?.splice(0, 50));
+    setListings([...totalListings].splice(0, 50));
   }, [totalListings]);
 
   useEffect(() => {
-    setSales([...totalSales]?.reverse()?.splice(0, 50));
+    setSales([...totalSales].splice(0, 50));
   }, [totalSales]);
 
   return { isLoading, totalListings, totalSales, listings, sales, tokens };
