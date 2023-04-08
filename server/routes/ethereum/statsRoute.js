@@ -5,13 +5,16 @@ const { execTranseposeAPI } = require("../../services/externalAPI/transpose");
 const statsRoute = express();
 
 const Stats = require("../../models/StatsModel");
+const { isTeam } = require("../../config/allowedAddresses");
 
 statsRoute.post("/", async (req, res) => {
-  const { type, timestamp, address, fromCatchmint } = req.body || {};
+  const { type, timestamp, fromCatchmint } = req.body || {};
+  const { address } = req.userDetails || {};
 
   try {
     const stats = await Stats.create({ type, timestamp, address, fromCatchmint });
     if (!stats) throw Error("Something went wrong saving the stats");
+
     res.status(200).json({});
   } catch (e) {
     console.log(e);

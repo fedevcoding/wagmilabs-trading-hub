@@ -127,7 +127,7 @@ const SignModal = ({ setConnected, setSignIn }) => {
 
             {errorMessage.includes("not have") && (
               <Button className={`sign-message-button ${"active"}`} onClick={goToPlans}>
-                Plans
+                Start free trial
               </Button>
             )}
           </>

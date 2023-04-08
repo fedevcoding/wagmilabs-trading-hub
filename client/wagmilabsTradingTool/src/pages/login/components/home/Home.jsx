@@ -1,5 +1,6 @@
 import React from "react";
 import ConnectWallet from "../connect/ConnectWallet";
+import { videoThumbnail } from "@Assets";
 
 import { DefaultPlayer as Video } from "react-html5video";
 import "react-html5video/dist/styles.css";
@@ -18,7 +19,7 @@ const Home = ({ setWalletConnected, setSignIn }) => {
       </div>
 
       <div className="video-container">
-        <Video controls={["PlayPause", "Seek", "Time", "Volume", "Fullscreen"]} playsInline>
+        <Video controls={["PlayPause", "Seek", "Time", "Volume", "Fullscreen"]} playsInline poster={videoThumbnail}>
           <source src={loginVideo} type="video/webm" />
         </Video>
       </div>

@@ -12,7 +12,7 @@ export const CalendarEventDetail = ({ event, deleteEvent, isAdmin, section }) =>
           {event?.collectionName}
           {event?.spaceName}
         </span>
-        {(isAdmin || (section === "personal" && event.isAdmin)) && (
+        {(isAdmin || (section === "personal" && !event.isAdmin)) && (
           <img src={Delete} alt="" width="20px" className="delete-event" onClick={() => deleteEvent(event._id)} />
         )}
       </div>

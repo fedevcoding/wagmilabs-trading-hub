@@ -4,7 +4,8 @@ const JWT = require("jsonwebtoken");
 const checkOwnership = require("../../../middleware/checkOwnership.js");
 const User = require("../../../models/userModel.js");
 const Stats = require("../../../models/StatsModel.js");
-const fallbackPfp = require("../../../images/userPfp.svg");
+// const fallbackPfp = require("../../../images/userPfp.png");
+const { isTeam } = require("../../../config/allowedAddresses.js");
 
 const loginRoute = express();
 
@@ -20,8 +21,10 @@ loginRoute.post("/", checkOwnership, async (req, res) => {
     if (!address) {
       res.status(403).json({ authenticated: false, message: "Missing query fields." });
     } else {
-      console.log(passType);
-      await Stats.create({ type: "login", timestamp: Date.now(), address, passType });
+      const partOfTeam = isTeam(address);
+      if (!partOfTeam) {
+        await Stats.create({ type: "login", timestamp: Date.now(), address, passType });
+      }
       const accessToken = JWT.sign(
         {
           address,
@@ -49,6 +52,9 @@ loginRoute.post("/", checkOwnership, async (req, res) => {
       const user = await User.findOne({ address });
 
       if (user) {
+        user.passType = passType;
+        await user.save();
+
         res
           .status(200)
           .cookie("refreshJWT", refreshToken, {
@@ -69,6 +75,7 @@ loginRoute.post("/", checkOwnership, async (req, res) => {
         User.create({
           address,
           profileImage,
+          passType,
           listSettings: {
             price: {
               type: "break-even",
@@ -123,7 +130,7 @@ async function getProfileImage(address) {
   try {
     pfp = await fetch(`https://api.opensea.io/api/v1/account/${address}`);
     pfp = await pfp.json();
-    pfp = pfp?.data?.profile_img_url || fallbackPfp;
+    pfp = pfp?.data?.profile_img_url || "https://upload.wikimedia.org/wikipedia/commons/2/2c/Default_pfp.svg";
 
     return pfp;
   } catch (err) {

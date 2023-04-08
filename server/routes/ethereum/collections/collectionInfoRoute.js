@@ -1,6 +1,8 @@
 const express = require("express");
 const checkAuth = require("../../../middleware/checkAuth");
 const Stats = require("../../../models/StatsModel");
+const { isTeam } = require("../../../config/allowedAddresses");
+
 
 const collectionInfoRoute = express();
 
@@ -11,8 +13,9 @@ collectionInfoRoute.get("/:address", checkAuth, (req, res) => {
 
   async function getData() {
     try {
-      if (userAddress) {
-        await Stats.create({ type: "collectionInfo", timestamp: Date.now(), address: req.params.address });
+      const isPartTeam = isTeam(userAddress);
+      if (!isPartTeam) {
+        await Stats.create({ type: "collectionInfo", timestamp: Date.now(), address: userAddress });
       }
 
       const { address } = req.params;
