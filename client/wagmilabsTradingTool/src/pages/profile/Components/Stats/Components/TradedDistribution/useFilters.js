@@ -1,7 +1,7 @@
 import { useGetTradedNftDistribution } from "@Hooks";
 import React from "react";
 
-export function useFilters() {
+export function useFilters(address) {
   const periods = {
     "7d": 7,
     "30d": 30,
@@ -11,7 +11,7 @@ export function useFilters() {
   };
   const [currentPeriod, setPeriod] = React.useState("30d");
 
-  const { loading, nfts } = useGetTradedNftDistribution(periods[currentPeriod]);
+  const { loading, nfts } = useGetTradedNftDistribution(address, periods[currentPeriod]);
 
   const items = (nfts || []).map(n => ({
     ...n,
