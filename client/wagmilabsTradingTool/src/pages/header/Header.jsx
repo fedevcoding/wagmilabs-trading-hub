@@ -233,8 +233,6 @@ const Header = () => {
 
   const section = window.location.pathname;
 
-  console.log(expiration);
-
   return (
     <>
       <RefreshToken connected={connected} setConnected={setConnected} />

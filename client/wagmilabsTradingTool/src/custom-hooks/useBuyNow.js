@@ -9,18 +9,15 @@ export const useBuyNow = (callback, quantity) => {
 
   const toast = useToast();
 
-  async function buyNow(contract, tokenId, value) {
+  async function buyNow(orderHash, value) {
     try {
       const signer = await fetchSigner();
-      if (typeof quantity !== "undefined") {
-        options.quantity = parseInt(quantity);
-      }
 
       await getClient()?.actions.buyToken({
         items: [
           {
-            quantity: 1,
-            token: `${contract}:${tokenId}`,
+            quantity,
+            orderId: orderHash,
           },
         ],
         signer,

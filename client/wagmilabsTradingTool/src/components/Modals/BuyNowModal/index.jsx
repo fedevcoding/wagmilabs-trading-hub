@@ -7,13 +7,7 @@ import { UserDataContext } from "@Context";
 
 import "./style.scss";
 
-export const BuyNowModal = ({
-  showBuyNowModal,
-  buyNowModalData,
-  buyNow,
-  closeBuynowModal,
-  quantity = null,
-}) => {
+export const BuyNowModal = ({ showBuyNowModal, buyNowModalData, buyNow, closeBuynowModal, quantity = null }) => {
   const [buying, setBuying] = useState(false);
   const { cryptoPrices } = useContext(UserDataContext);
 
@@ -22,28 +16,27 @@ export const BuyNowModal = ({
 
     try {
       setBuying(true);
-      const { contract, tokenId, value } = buyNowModalData;
-      await buyNow(contract, tokenId, value);
+      const { orderHash, value } = buyNowModalData;
+      await buyNow(orderHash, value);
       setBuying(false);
     } catch (err) {
       setBuying(false);
     }
   };
 
+  const close = e => {
+    const close = closeBuynowModal(e);
+    if (close) setBuying(false);
+  };
+
   return (
     <>
       {showBuyNowModal && (
-        <div
-          className="buynow-modal-overlay"
-          onClick={e => closeBuynowModal(e)}
-        >
+        <div className="buynow-modal-overlay" onClick={close}>
           <div className="buynow-modal">
             <header className="buynow-modal-header">
               <p>Checkout</p>
-              <i
-                className="fa-regular fa-xmark"
-                onClick={e => closeBuynowModal(e)}
-              />
+              <i className="fa-regular fa-xmark" onClick={close} />
             </header>
 
             <div className="buynow-modal-body">
@@ -52,9 +45,7 @@ export const BuyNowModal = ({
 
                 <div>
                   <p>{buyNowModalData.name}</p>
-                  <p className="low-opacity little-text">
-                    {buyNowModalData.collectionName}
-                  </p>
+                  <p className="low-opacity little-text">{buyNowModalData.collectionName}</p>
                 </div>
               </div>
 
@@ -69,8 +60,7 @@ export const BuyNowModal = ({
                     <p>{buyNowModalData.price}</p>
                   </div>
                   <p className="low-opacity little-text">
-                    ${" "}
-                    {getFiatPrice(buyNowModalData.price, cryptoPrices.ethPrice)}
+                    $ {getFiatPrice(buyNowModalData.price, cryptoPrices.ethPrice)}
                   </p>
                 </div>
               </div>
@@ -80,9 +70,7 @@ export const BuyNowModal = ({
                   <div className="space-between">
                     <p>Quantity:</p>
 
-                    <div className="buy-now-modal-currency-container">
-                      {quantity}
-                    </div>
+                    <div className="buy-now-modal-currency-container">{quantity}</div>
                   </div>
 
                   <hr />
@@ -93,23 +81,12 @@ export const BuyNowModal = ({
                     <div className="buy-now-modal-currency-container">
                       <div className="buy-now-modal-ethereum-price">
                         <i className="fa-brands fa-ethereum"></i>
-                        <p>
-                          {parseFloat(
-                            (
-                              buyNowModalData.price * parseInt(quantity)
-                            ).toFixed(12)
-                          )}
-                        </p>
+                        <p>{parseFloat((buyNowModalData.price * parseInt(quantity)).toFixed(12))}</p>
                       </div>
                       <p className="low-opacity little-text">
                         ${" "}
                         {parseFloat(
-                          (
-                            getFiatPrice(
-                              buyNowModalData.price,
-                              cryptoPrices.ethPrice
-                            ) * parseInt(quantity)
-                          ).toFixed(12)
+                          (getFiatPrice(buyNowModalData.price, cryptoPrices.ethPrice) * parseInt(quantity)).toFixed(12)
                         )}
                       </p>
                     </div>

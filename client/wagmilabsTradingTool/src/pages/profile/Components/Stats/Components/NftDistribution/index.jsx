@@ -2,8 +2,8 @@ import React from "react";
 import { Card, LoadingSpinner, PieChart } from "@Components";
 import { useGetHoldingNftDistribution } from "@Hooks";
 
-export const NftDistribution = () => {
-  const { loading, distribution, tokenCount } = useGetHoldingNftDistribution();
+export const NftDistribution = ({ address }) => {
+  const { loading, distribution, tokenCount } = useGetHoldingNftDistribution(address);
 
   return (
     <div className="col">

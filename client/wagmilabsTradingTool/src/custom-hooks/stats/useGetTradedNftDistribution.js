@@ -1,13 +1,13 @@
 import React from "react";
 import { baseUrl } from "@Variables";
 
-export function useGetTradedNftDistribution(days = "30") {
+export function useGetTradedNftDistribution(address, days = "30") {
   const [loading, setLoading] = React.useState(false);
   const [nfts, setNfts] = React.useState([]);
 
   React.useEffect(() => {
     (async () => {
-      let url = `${baseUrl}/tradedDistribution?days=${days}`;
+      let url = `${baseUrl}/tradedDistribution?days=${days}&userAddress=${address}`;
 
       try {
         setLoading(true);
@@ -29,7 +29,7 @@ export function useGetTradedNftDistribution(days = "30") {
         setLoading(false);
       }
     })();
-  }, [days]);
+  }, [days, address]);
 
   return {
     loading,
