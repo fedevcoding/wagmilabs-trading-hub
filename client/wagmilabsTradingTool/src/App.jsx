@@ -110,6 +110,9 @@ function App() {
     usdt: 0,
   });
   const [ens, setEns] = useState("");
+
+  const [fromCatchMint, setFromCatchMint] = useState(false);
+
   const activeGasRef = useRef(gasSettings.value);
 
   // set checking in base of tokens
@@ -184,6 +187,10 @@ function App() {
       setCryptoPrices(currencyPrices);
       setEthData(data);
     });
+
+    const fromCatchMint = window.location.search.includes("catchmint");
+    setFromCatchMint(fromCatchMint);
+
     return () => socket.off("disconnect");
   }, []);
 
@@ -217,6 +224,7 @@ function App() {
       ethData,
       connected,
       setConnected,
+      fromCatchMint,
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [
@@ -234,6 +242,7 @@ function App() {
       userBalances,
       setUserBalances,
       ethData,
+      fromCatchMint,
     ]
   );
 

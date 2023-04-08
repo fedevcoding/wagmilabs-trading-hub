@@ -8,7 +8,7 @@ const freeTrialRoute = express();
 
 freeTrialRoute.post("/", async (req, res) => {
   try {
-    const { signature, address, message } = req?.body || {};
+    const { signature, address, message, fromCatchmint } = req?.body || {};
 
     if (address == undefined || address.length === 0 || signature == undefined || signature.length < 132) {
       return res.status(400).json({ message: "Failed to authenticate.", authenticated: false });
@@ -27,6 +27,7 @@ freeTrialRoute.post("/", async (req, res) => {
       await FreeTrials.create({
         address,
         expiration: Date.now() + sevenDaysInMilliseconds,
+        fromCatchmint,
       });
     } else if (!hasEnoughTransactions) {
       return res.status(400).json({
