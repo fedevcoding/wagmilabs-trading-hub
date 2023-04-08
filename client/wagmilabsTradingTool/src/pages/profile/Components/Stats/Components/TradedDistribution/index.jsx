@@ -4,9 +4,9 @@ import Chart from "./Chart";
 import { HStack, NumberInput, NumberInputField } from "@chakra-ui/react";
 import { useFilters } from "./useFilters";
 
-export const TradedDistribution = React.memo(() => {
+export const TradedDistribution = React.memo(({address}) => {
   const { items, loading, periods, currentPeriod, maxPrice, minPrice, setMaxPrice, setMinPrice, setPeriod } =
-    useFilters();
+    useFilters(address);
 
   return (
     <div className="col" id="traded-distribution">

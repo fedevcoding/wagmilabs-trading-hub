@@ -1,7 +1,7 @@
 import React from "react";
 import { baseUrl } from "@Variables";
 
-export function useGetHoldingNftDistribution(limit = "200") {
+export function useGetHoldingNftDistribution(address, limit = "200") {
   const [loading, setLoading] = React.useState(false);
   const [tokenCount, setTokenCount] = React.useState(0);
   const [distribution, setDistribution] = React.useState([]);
@@ -9,7 +9,7 @@ export function useGetHoldingNftDistribution(limit = "200") {
 
   React.useEffect(() => {
     (async () => {
-      let url = `${baseUrl}/holdingNftDistribution?limit=${limit}`;
+      let url = `${baseUrl}/holdingNftDistribution?limit=${limit}&userAddress=${address}`;
 
       try {
         setLoading(true);
@@ -33,7 +33,7 @@ export function useGetHoldingNftDistribution(limit = "200") {
         setLoading(false);
       }
     })();
-  }, [limit]);
+  }, [limit, address]);
 
   return {
     loading,

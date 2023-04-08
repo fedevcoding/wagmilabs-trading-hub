@@ -3,6 +3,7 @@ const checkAuth = require("../../../middleware/checkAuth");
 const Stats = require("../../../models/StatsModel");
 const { isTeam } = require("../../../config/allowedAddresses");
 
+
 const collectionInfoRoute = express();
 
 const RESERVOIR_API_KEY = process.env.RESERVOIR_API_KEY;

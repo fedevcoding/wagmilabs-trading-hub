@@ -3,6 +3,7 @@ import { roundPrice } from "@Utils/formats/formats";
 import etherscan from "@Assets/etherscan.svg";
 import getMarketplaceImage from "@Utils/marketplaceImageMapping";
 import { LoadingSpinner, TimeAgo } from "@Components";
+import { getTokenUrl } from "../../../../../utils/getDataFrommarketplace";
 
 const salesHashes = {};
 
@@ -28,7 +29,7 @@ const SalesMapping = memo(({ sales, address, collectionImage, isLoading }) => {
               salesHashes[transactionHash] = true;
             }
 
-            const itemLink = `https://opensea.io/assets/${address}/${tokenId}`;
+            const itemLink = getTokenUrl(marketplace, tokenId, address);
             const randomUUID = crypto.randomUUID();
             return (
               <a
@@ -49,7 +50,7 @@ const SalesMapping = memo(({ sales, address, collectionImage, isLoading }) => {
                 <div className="flex-col-left">
                   <p>{roundPrice(value)} ETH</p>
                   <div className="sales-logos">
-                    <a href={itemLink}>
+                    <a href={itemLink} target="_blank" rel="noreferrer">
                       <img src={marketplaceImage} alt="" />
                     </a>
                     <a href={`https://etherscan.io/tx/${transactionHash}`} target="_blank" rel="noreferrer">

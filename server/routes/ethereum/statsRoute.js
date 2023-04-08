@@ -8,12 +8,16 @@ const Stats = require("../../models/StatsModel");
 const { isTeam } = require("../../config/allowedAddresses");
 
 statsRoute.post("/", async (req, res) => {
-  const { type, timestamp } = req.body || {};
+  const { type, timestamp, fromCatchmint } = req.body || {};
   const { address } = req.userDetails || {};
 
   try {
-    const stats = await Stats.create({ type, timestamp, address });
-    if (!stats) throw Error("Something went wrong saving the stats");
+    const partOfTeam = isTeam(address);
+
+    if (!partOfTeam) {
+      const stats = await Stats.create({ type, timestamp, address, fromCatchmint });
+      if (!stats) throw Error("Something went wrong saving the stats");
+    }
 
     res.status(200).json({});
   } catch (e) {
@@ -25,7 +29,7 @@ statsRoute.post("/", async (req, res) => {
 statsRoute.get("/:address", checkAuth, (req, res) => {
   async function getData() {
     try {
-      const { address } = req.params || {}; // "0x62fBD7F8D0668161710A0b463FD004cba42DA050";
+      const { address } = req.params || {};
 
       const exchangeCondition = "exchange_name IN('opensea', 'blur', 'x2y2', 'sudoswap', 'looksrare')";
 

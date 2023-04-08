@@ -7,8 +7,8 @@ export const Stats = React.memo(({ address }) => {
   return (
     <div id="stats">
       <div className="row">
-        <NftDistribution />
-        <TradedDistribution />
+        <NftDistribution address={address} />
+        <TradedDistribution address={address} />
       </div>
       <RealizedGains address={address} />
     </div>

@@ -325,7 +325,8 @@ const Items = ({
                               value,
                               marketplace,
                               address,
-                              collectionName || collectionInfo?.name
+                              collectionName || collectionInfo?.name,
+                              listingId
                             )
                           }
                         >

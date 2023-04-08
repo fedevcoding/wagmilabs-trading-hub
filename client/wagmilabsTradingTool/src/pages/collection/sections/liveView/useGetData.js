@@ -71,6 +71,7 @@ export function useGetData(address, columnHovered, floorPrice) {
           timestamp,
           marketplace,
           ms,
+          orderHash,
         } = listingData;
 
         const dataObj = {
@@ -81,6 +82,7 @@ export function useGetData(address, columnHovered, floorPrice) {
           timestamp,
           marketplace,
           ms,
+          orderHash,
         };
 
         setTokens(old => ({ ...old, [tokenId]: price }));
@@ -125,14 +127,19 @@ export function useGetData(address, columnHovered, floorPrice) {
     }
     listenToListings();
     listenToSales();
+
+    return () => {
+      socket.off("listing");
+      socket.off("sale");
+    };
   }, [address, socket, floorPrice]);
 
   useEffect(() => {
-    setListings([...totalListings]?.reverse()?.splice(0, 50));
+    setListings([...totalListings].splice(0, 50));
   }, [totalListings]);
 
   useEffect(() => {
-    setSales([...totalSales]?.reverse()?.splice(0, 50));
+    setSales([...totalSales].splice(0, 50));
   }, [totalSales]);
 
   return { isLoading, totalListings, totalSales, listings, sales, tokens };
