@@ -4,8 +4,12 @@ import { fetchSigner } from "@wagmi/core";
 import { pushToServer } from "../utils/functions/serverCalls";
 import { checkErrors } from "../utils/functions/errorHelpers";
 import { useToast } from "@chakra-ui/react";
+import { useContext } from "react";
+import { UserDataContext } from "../context/userContext";
 
 export const useSubscribe = () => {
+  const { fromCatchmint } = useContext(UserDataContext);
+
   const toast = useToast();
   const subscribe = async (planId, months, price) => {
     try {
@@ -18,7 +22,7 @@ export const useSubscribe = () => {
 Your trial will end ${endDate.toDateString()}.`;
         const address = await signer.getAddress();
         const signature = await signer.signMessage(message);
-        const res = await pushToServer("/freeTrial", { signature, address, message });
+        const res = await pushToServer("/freeTrial", { signature, address, message, fromCatchmint });
 
         if (res.authenticated) {
           toast({
@@ -37,7 +41,7 @@ Your trial will end ${endDate.toDateString()}.`;
           });
           await tx.wait();
 
-          await pushToServer("/stats", { type: "boughtBasic", timestamp: Date.now() });
+          await pushToServer("/stats", { type: "boughtBasic", timestamp: Date.now(), fromCatchmint });
           toast({
             title: "Success",
             description: "Started plan activated",
@@ -50,7 +54,7 @@ Your trial will end ${endDate.toDateString()}.`;
             value: ethers.utils.parseEther(price.toFixed(5).toString()),
           });
           await tx.wait();
-          await pushToServer("/stats", { type: "boughtPro", timestamp: Date.now() });
+          await pushToServer("/stats", { type: "boughtPro", timestamp: Date.now(), fromCatchmint });
 
           toast({
             title: "Success",

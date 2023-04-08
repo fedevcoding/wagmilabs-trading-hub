@@ -7,10 +7,10 @@ const statsRoute = express();
 const Stats = require("../../models/StatsModel");
 
 statsRoute.post("/", async (req, res) => {
-  const { type, timestamp, address } = req.body || {};
+  const { type, timestamp, address, fromCatchmint } = req.body || {};
 
   try {
-    const stats = await Stats.create({ type, timestamp, address });
+    const stats = await Stats.create({ type, timestamp, address, fromCatchmint });
     if (!stats) throw Error("Something went wrong saving the stats");
     res.status(200).json({});
   } catch (e) {
