@@ -29,7 +29,7 @@ export function useGetTradedNftDistribution(address, days = "30") {
         setLoading(false);
       }
     })();
-  }, [days]);
+  }, [days, address]);
 
   return {
     loading,
