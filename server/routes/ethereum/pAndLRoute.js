@@ -74,7 +74,11 @@ route.get("/:address", checkAuth, (req, res) => {
         execTranseposeAPI(mintedNftsQuery),
       ]);
 
-      const nfts = getNftObj(bought, sold);
+      // if nfts has same tranction hash as one of the minted nfts, remove it from the bought array
+      const mintedHashes = minted.map(nft => nft.transaction_hash);
+      const soldFiltered = sold.filter(nft => !mintedHashes.includes(nft.transaction_hash));
+
+      const nfts = getNftObj(bought, soldFiltered);
       const nftsMinted = getNftMintedObj(minted);
       const txsGasFees = await getTxsGasFees(nfts);
 
