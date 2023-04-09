@@ -52,11 +52,11 @@ export const Row = React.memo(
         <td className="td-paid">
           {isMinted ? (
             <a href={`https://etherscan.io/tx/${allInfo.minted.transaction_hash}`} target="_blank" rel="noreferrer">
-              {nft.paid.eth + " ETH"} <br /> {roundPriceUsd(nft.paid.usd) + "$"}
+              {roundPrice(nft.paid.eth) + " ETH"} <br /> {roundPriceUsd(nft.paid.usd) + "$"}
             </a>
           ) : (
             <a href={`https://etherscan.io/tx/${allInfo.bought.transaction_hash}`} target="_blank" rel="noreferrer">
-              {nft.paid.eth + " ETH"} <br /> {nft.paid.usd + "$"}
+              {roundPrice(nft.paid.eth) + " ETH"} <br /> {roundPriceUsd(nft.paid.usd) + "$"}
             </a>
           )}
         </td>
