@@ -22,8 +22,8 @@ export const useJwtData = () => {
         const expirationNumber = Number(expiration);
         setExpiration(expirationNumber);
 
-        if (expiration < Date.now()) {
-          await logOut(expirationNumber);
+        if (expirationNumber < Date.now()) {
+          await logOut(setConnected);
         }
 
         if (passType === 3) setIsFree(true);
@@ -33,7 +33,7 @@ export const useJwtData = () => {
       }
     };
     setData();
-  }, []);
+  }, [setConnected]);
 
   return { isPro, isFree, expiration, loadedJwtData };
 };
