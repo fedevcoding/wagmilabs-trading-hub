@@ -1,4 +1,4 @@
-export const marketplacesData = {
+const marketplacesData = {
   opensea: {
     name: "Opensea",
     value: "opensea",
@@ -31,3 +31,5 @@ export const marketplacesData = {
     royalties: 0.5,
   },
 };
+
+module.exports = marketplacesData;
