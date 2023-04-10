@@ -1,10 +1,11 @@
 const express = require("express");
+const checkAuth = require("../../../middleware/checkAuth");
 
 const advancedFloorChartRoute = express();
 
 const MNEMONICHQ_API_KEY = process.env.MNEMONICHQ_API_KEY;
 
-advancedFloorChartRoute.get("/advancedFloorPrice", async (req, res) => {
+advancedFloorChartRoute.get("/advancedFloorPrice", checkAuth, async (req, res) => {
   try {
     const { collectionAddress, range, granularity } = req.query;
 

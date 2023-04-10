@@ -1,8 +1,9 @@
 const express = require("express");
+const checkAuth = require("../../../middleware/checkAuth");
 
 const floorChartRoute = express();
 
-floorChartRoute.get("/floorPrice", async (req, res) => {
+floorChartRoute.get("/floorPrice", checkAuth, async (req, res) => {
   try {
     const { collectionAddress, range } = req.query;
 

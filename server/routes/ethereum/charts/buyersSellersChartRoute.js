@@ -1,9 +1,10 @@
 const express = require("express");
 const { execTranseposeAPI } = require("../../../services/externalAPI/transpose");
+const checkAuth = require("../../../middleware/checkAuth");
 
 const buyersSellersChartRoute = express();
 
-buyersSellersChartRoute.get("/buyersSellers", async (req, res) => {
+buyersSellersChartRoute.get("/buyersSellers", checkAuth, async (req, res) => {
   try {
     const { collectionAddress, range, granularity } = req.query;
 

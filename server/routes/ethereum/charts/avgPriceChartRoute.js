@@ -1,9 +1,10 @@
 const express = require("express");
 const { execTranseposeAPI } = require("../../../services/externalAPI/transpose");
+const checkAuth = require("../../../middleware/checkAuth");
 
 const avgPriceChartRoute = express();
 
-avgPriceChartRoute.get("/avgPrice", async (req, res) => {
+avgPriceChartRoute.get("/avgPrice", checkAuth, async (req, res) => {
   try {
     const { collectionAddress, range, granularity } = req.query;
 
