@@ -1,10 +1,11 @@
 const express = require("express");
+const checkAuth = require("../../../middleware/checkAuth");
 
 const listingChartRoute = express();
 
 const NFTBANK_API_KEY = process.env.NFTBANK_API_KEY;
 
-listingChartRoute.get("/listings", async (req, res) => {
+listingChartRoute.get("/listings", checkAuth, async (req, res) => {
   try {
     const { collectionAddress, range } = req.query;
 

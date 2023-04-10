@@ -1,8 +1,9 @@
 const express = require("express");
+const checkAuth = require("../../../middleware/checkAuth");
 
 const ownersChartRoute = express();
 
-ownersChartRoute.get("/owners", async (req, res) => {
+ownersChartRoute.get("/owners", checkAuth, async (req, res) => {
   try {
     const { collectionSlug, start } = req.query || {};
 

@@ -1,9 +1,10 @@
 const express = require("express");
 const { execTranseposeAPI } = require("../../../services/externalAPI/transpose");
+const checkAuth = require("../../../middleware/checkAuth");
 
 const volumeChartRoute = express();
 
-volumeChartRoute.get("/volume", async (req, res) => {
+volumeChartRoute.get("/volume", checkAuth, async (req, res) => {
   try {
     const { collectionAddress, range, granularity } = req.query;
 
