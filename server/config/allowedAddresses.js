@@ -432,6 +432,61 @@ const allowedAddresses = [
   ////////////////////////////////////////////////////////
   ////////////////////////////////////////////////////////
   ////////////////////////////////////////////////////////
+  {
+    address: "0xA30024Af5B789997535dF14bE2253C4557e6Cf23",
+    expiration: 1683702821000,
+  },
+  {
+    address: "0x25d0d7E0ffFFB4Bd7d1088316cC0F54915582534",
+    expiration: 1683702821000,
+  },
+  {
+    address: "0x980F18a06a74005ff6BaA867fF617198db85a590",
+    expiration: 1683702821000,
+  },
+  {
+    address: "0xd5DE6C8017AB7d3C86618fA73e9477FFfa3809A1",
+    expiration: 1683702821000,
+  },
+  {
+    address: "0x09d76B985204A3B906a1931B0A58C9D5435283A5",
+    expiration: 1683702821000,
+  },
+  {
+    address: "0xFD81c12352Ff25Ca56eE6D45cE6E166825167eD7",
+    expiration: 1683702821000,
+  },
+  {
+    address: "0x23E1877499a6d3E69a0816FdafC1ABB5117da0f8",
+    expiration: 1683702821000,
+  },
+  {
+    address: "0x437Dc2BC0953D4FB01D342307278C8C57cC8b274",
+    expiration: 1683702821000,
+  },
+  {
+    address: "0x709E7eFf5d8B4B7A4Ea6d4739457571cC70e02bb",
+    expiration: 1683702821000,
+  },
+  {
+    address: "0x122E1fabC58D0E64F27C49Cdb45773f8214562e0",
+    expiration: 1683702821000,
+  },
+  {
+    address: "0x850323397544f6E40eCc4C7cA65F0AD5B6945d94",
+    expiration: 1683702821000,
+  },
+  {
+    address: "0xf2fd05E5E5AF0b6b977F8C0F6D16c9f17d21a0f4",
+    expiration: 1683702821000,
+  },
+  {
+    address: "0xB0fB2791C05416c41EbA718502a738a0e2CbA77E",
+    expiration: 1683702821000,
+  },
+  ////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////
 ];
 
 const isTeam = address => teamAddresses.find(a => a?.toLowerCase() === address?.toLowerCase())?.length > 0;
