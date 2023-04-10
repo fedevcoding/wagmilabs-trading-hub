@@ -119,8 +119,9 @@ function App() {
   // set checking in base of tokens
   useEffect(() => {
     async function view() {
+      const fromCatchMint = window.location.search.includes("catchmint");
       try {
-        await pushToServer("/stats", { type: "view", timestamp: Date.now() });
+        await pushToServer("/stats", { type: "view", timestamp: Date.now(), fromCatchMint });
       } catch (e) {
         console.log(e);
       }

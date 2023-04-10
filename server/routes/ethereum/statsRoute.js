@@ -8,14 +8,14 @@ const Stats = require("../../models/StatsModel");
 const { isTeam } = require("../../config/allowedAddresses");
 
 statsRoute.post("/", async (req, res) => {
-  const { type, timestamp, fromCatchmint } = req.body || {};
+  const { type, timestamp, fromCatchMint } = req.body || {};
   const { address } = req.userDetails || {};
 
   try {
     const partOfTeam = isTeam(address);
 
     if (!partOfTeam) {
-      const stats = await Stats.create({ type, timestamp, address, fromCatchmint });
+      const stats = await Stats.create({ type, timestamp, address, fromCatchMint });
       if (!stats) throw Error("Something went wrong saving the stats");
     }
 

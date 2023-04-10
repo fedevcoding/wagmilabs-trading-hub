@@ -1,16 +1,11 @@
 const express = require("express");
 const checkAuth = require("../../../middleware/checkAuth");
 const { execTranseposeAPI } = require("../../../services/externalAPI/transpose");
+const marketplacesData = require("../../../utils/marketplacesData");
 
 const tokenLisrPriceRoute = express();
 
 const GOMU_API_KEY = process.env.GOMU_API_KEY;
-
-const royaltieMapping = {
-  opensea: 0.5,
-  x2y2: 0.5,
-  looksrare: 1.5,
-};
 
 tokenLisrPriceRoute.get("/", checkAuth, async (req, res) => {
   try {
@@ -81,7 +76,7 @@ tokenLisrPriceRoute.get("/", checkAuth, async (req, res) => {
       const royaltiesData = (await royaltiesDataApi.json())?.data?.royalty;
       const creatorRoyalties =
         royaltiesData[marketplace]?.percentage || royaltiesData["opensea"]?.percentage || defaultCreatorFee;
-      const royalties = royaltieMapping[marketplace];
+      const royalties = marketplacesData[marketplace]?.royalties || 0;
 
       const buyPrice = buyData?.[0]?.price;
       const buyTransactionFee = buyData?.[0]?.transaction_fee;
