@@ -1,8 +1,7 @@
 import { baseUrl } from "@Variables";
 
 async function logOut(setConnected) {
-
-  try{
+  try {
     let result = await fetch(`${baseUrl}/removeRefreshToken`, {
       headers: {
         "Content-Type": "application/json",
@@ -12,15 +11,12 @@ async function logOut(setConnected) {
     });
     result = await result.json();
     if (result.ok) {
-      setConnected(false)
+      setConnected(false);
       document.body.style.background = "linear-gradient(to right, #3494E6, #EC6EAD)";
-      window.location.href = "/"
+      window.location.href = "/";
       localStorage.removeItem("jsonwebtoken");
     }
-  }
-  catch(e){
-
-  }
+  } catch (e) {}
 }
 
 export default logOut;
