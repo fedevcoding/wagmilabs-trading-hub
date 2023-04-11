@@ -28,6 +28,7 @@
     "lru-cache": "^7.14.1",
     "mongoose": "^6.5.1",
     "node-fetch": "^2.6.7",
+    "pg": "^8.10.0",
     "reconnecting-websocket": "^4.4.0",
     "socket.io": "^4.5.4",
     "web3": "^1.7.5",

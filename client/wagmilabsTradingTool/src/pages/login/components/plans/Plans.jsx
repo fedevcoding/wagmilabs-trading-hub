@@ -5,7 +5,7 @@ import Plan from "./Plan";
 import "./style.scss";
 
 const Plans = ({ plans }) => {
-  const [durationSelector, setDurationSelector] = React.useState(durationSelectOptions[2]);
+  const [durationSelector, setDurationSelector] = React.useState(durationSelectOptions[0]);
   const durationSelectors = getDurationSelectors();
 
   return (
