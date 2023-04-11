@@ -16,8 +16,8 @@ freeTrialRoute.post("/", async (req, res) => {
 
     const validSignature = await checkSignature(address, signature, message);
 
-    // check if user has at least 50 transactions
-    const requiredTransactions = 25;
+    // check if user has at least 10 transactions
+    const requiredTransactions = 10;
     const SQL = `SELECT * FROM ethereum.transactions WHERE from_address = '${address}' OR to_address = '${address}' LIMIT ${requiredTransactions}`;
     const result = await execTranseposeAPI(SQL);
     const hasEnoughTransactions = result.length >= requiredTransactions;
