@@ -11,7 +11,6 @@ const client = new Client({
 
 const connectDB = async () => {
   try {
-    console.log(postgres_uri);
     await client.connect();
     console.log("connected to postgres");
 
