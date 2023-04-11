@@ -61,7 +61,7 @@ const port = process.env.PORT || 5001;
 require("dotenv").config();
 const cors = require("cors");
 const express = require("express");
-const connectDB = require("./config/db");
+const { connectDB } = require("./config/db");
 const cookieParser = require("cookie-parser");
 const getCoinsGasData = require("./websockets/coinsGasData.js");
 const rateLimit = require("express-rate-limit");

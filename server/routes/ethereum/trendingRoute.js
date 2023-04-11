@@ -1,6 +1,7 @@
 const express = require("express");
 const checkAuth = require("../../middleware/checkAuth");
 const Ranking = require("../../models/RankingModel");
+const { client } = require("../../config/db");
 
 const trendingRoute = express();
 
@@ -12,50 +13,102 @@ trendingRoute.get("/:time", checkAuth, (req, res) => {
 
       const rightTime = new Date().getTime() - userTime;
 
-      const trendingCollections = await Ranking.aggregate([
-        {
-          $unwind: "$sales",
-        },
-        {
-          $match: {
-            "sales.saleTime": { $gt: rightTime },
-            "sales.value": { $gt: 0 },
-          },
-        },
-        {
-          $group: {
-            _id: "$_id",
-            volume: { $sum: "$sales.value" },
-            firstDoc: { $first: "$$ROOT" },
-            rightSales: { $sum: 1 },
-          },
-        },
-        {
-          $match: { rightSales: { $gt: 0 } },
-        },
-        {
-          $addFields: {
-            "firstDoc.volume": "$volume",
-            "firstDoc.rightSales": "$rightSales",
-          },
-        },
-        {
-          $replaceRoot: {
-            newRoot: "$firstDoc",
-          },
-        },
-        {
-          $sort: {
-            rightSales: -1,
-            volume: -1,
-          },
-        },
-        {
-          $limit: 50,
-        },
-      ]);
+      // const trendingCollections = await Ranking.aggregate([
+      //   {
+      //     $unwind: "$sales",
+      //   },
+      //   {
+      //     $match: {
+      //       "sales.saleTime": { $gt: rightTime },
+      //       "sales.value": { $gt: 0 },
+      //     },
+      //   },
+      //   {
+      //     $group: {
+      //       _id: "$_id",
+      //       volume: { $sum: "$sales.value" },
+      //       firstDoc: { $first: "$$ROOT" },
+      //       rightSales: { $sum: 1 },
+      //     },
+      //   },
+      //   {
+      //     $match: { rightSales: { $gt: 0 } },
+      //   },
+      //   {
+      //     $addFields: {
+      //       "firstDoc.volume": "$volume",
+      //       "firstDoc.rightSales": "$rightSales",
+      //     },
+      //   },
+      //   {
+      //     $replaceRoot: {
+      //       newRoot: "$firstDoc",
+      //     },
+      //   },
+      //   {
+      //     $sort: {
+      //       rightSales: -1,
+      //       volume: -1,
+      //     },
+      //   },
+      //   {
+      //     $limit: 50,
+      //   },
+      // ]);
 
-      res.status(200).json({ trendingCollections, time });
+      const trendingColl = await client
+        .query(
+          `
+          SELECT
+          salesCount,
+          salesVolume,
+          sales.contract_address,
+          collections.name,
+          collections.total_supply,
+          collections.floor_price,
+          collections.created_date,
+          collections.slug,
+          collections.image 
+       FROM
+          (
+             SELECT
+                COUNT(1) as salesCount,
+                SUM(value) as salesVolume,
+                contract_address 
+             FROM
+                sales 
+             WHERE
+                timestamp >= ${rightTime} 
+             GROUP BY
+                contract_address 
+             ORDER BY
+                salesCount DESC LIMIT 50 
+          )
+          as sales 
+          LEFT JOIN
+             collections 
+             ON sales.contract_address = collections.contract_address;
+        `
+        )
+        .catch(e => console.log(e));
+
+      const formattedTrendingColl = trendingColl?.rows?.map(coll => {
+        return {
+          contractAddress: coll.contract_address,
+          creationDate: coll.created_date,
+          floorStats: {},
+          floor_price: coll.floor_price,
+          name: coll.name,
+          image: coll.image,
+          slug: coll.slug,
+          totalSupply: coll.total_supply,
+          rightSales: coll.salescount,
+          volume: coll.salesvolume,
+          volumeStats: {},
+        };
+      });
+
+      res.status(200).json({ trendingCollections: formattedTrendingColl, time });
     } catch (e) {
       res.status(500).json({ error: e });
     }
