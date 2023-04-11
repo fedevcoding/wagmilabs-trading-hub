@@ -11,8 +11,8 @@ import {
   Button,
   NumberInput,
   NumberInputField,
-  Switch,
-  Tooltip,
+  //Switch,
+  //Tooltip,
 } from "@chakra-ui/react";
 import { useListNft } from "@Hooks";
 import { Loader, OrderInfo, Select } from "@Components";
@@ -38,8 +38,12 @@ export const ListItemModal = React.memo(
     const marketplaces = getMarketplaces();
     const [date, setDate] = React.useState(null);
     const [marketplace, setMarketplace] = React.useState(marketplaces[0]);
-    const [royaltiesPerc, setRoyaltiesPerc] = React.useState(0.5);
-    const [autoRoyalties, setAutoRoyalties] = React.useState(true);
+    const [royaltiesPerc,
+      //setRoyaltiesPerc
+    ] = React.useState(0.5);
+    const [autoRoyalties,
+      //setAutoRoyalties
+    ] = React.useState(true);
 
     const { listNft } = useListNft(
       {

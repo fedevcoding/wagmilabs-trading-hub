@@ -15,7 +15,7 @@ const Plans = ({ plans }) => {
   return (
     <div className={`plans-section ${plans && "plans-route"}`}>
       <div className="header">
-        <h2 className="title">Pricing</h2>
+        <h2 className="title">Plans</h2>
 
         {/* <Select
           className="plan-selector"
