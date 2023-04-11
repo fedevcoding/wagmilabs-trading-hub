@@ -7,7 +7,7 @@ import "react-html5video/dist/styles.css";
 
 import "./style.scss";
 // import { loginVideo } from "src/assets";
-import { collPreview } from "../../../../assets";
+import { collPreview } from "@Assets";
 const Home = ({ setWalletConnected, setSignIn }) => {
   return (
     <div className="login-home">
