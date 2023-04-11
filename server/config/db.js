@@ -9,8 +9,8 @@ const client = new Client({
 
 const connectDB = async () => {
   try {
-    await client.connect();
-    console.log("connected to postgres");
+    // await client.connect();
+    // console.log("connected to postgres");
 
     mongoose.set("strictQuery", false);
     await mongoose.connect(process.env.MONGO_DB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
