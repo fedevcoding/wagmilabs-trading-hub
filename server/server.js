@@ -268,7 +268,7 @@ app.use("/api/v1/wagmilabs/bots", getSnipeTasksRoute);
 
 // listen server
 
-server.listen(`0.0.0.0:${port}`, async () => {
+server.listen(`0.0.0.1:${port}`, async () => {
   console.log("App is listening on port " + port);
   await connectDB();
   require("./websockets/sales");
