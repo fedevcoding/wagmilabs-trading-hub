@@ -3,12 +3,15 @@ const path = require("path");
 require("dotenv").config({ path: path.resolve(__dirname, "../.env") });
 const { Client } = require("pg");
 
+const postgres_uri = process.env.POSTGRES_URI;
+
 const client = new Client({
-  connectionString: process.env.POSTGRES_URI,
+  connectionString: postgres_uri,
 });
 
 const connectDB = async () => {
   try {
+    console.log(postgres_uri);
     await client.connect();
     console.log("connected to postgres");
 
