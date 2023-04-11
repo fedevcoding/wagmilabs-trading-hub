@@ -7,7 +7,7 @@ export const planOptions = [
       3: 0,
       6: 0,
     },
-    description: `Try the starter plan subscription for FREE for 7 days. No hassle, no commitments. Includes all features apart from bots.`,
+    description: `Start your trial for FREE for 7 days. No hassle, no commitments. Includes all features apart from bots.`,
     buttonName: "Start Trial",
   },
   // {
