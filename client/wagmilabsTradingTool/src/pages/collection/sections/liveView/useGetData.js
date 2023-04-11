@@ -20,11 +20,11 @@ export function useGetData(address, columnHovered, floorPrice) {
   useEffect(() => {
     columnHoveredRef.current = columnHovered;
     if (!columnHovered.listings && hoveredListings.length > 0) {
-      setTotalListings(oldListings => [...oldListings, ...hoveredListings]);
+      setTotalListings(oldListings => [...hoveredListings, ...oldListings]);
     }
 
     if (!columnHovered.sales && hoveredSales.length > 0) {
-      setTotalSales(oldSales => [...oldSales, ...hoveredSales]);
+      setTotalSales(oldSales => [...hoveredSales, ...oldSales]);
     }
   }, [columnHovered, hoveredListings, hoveredSales]);
 
@@ -87,8 +87,8 @@ export function useGetData(address, columnHovered, floorPrice) {
 
         setTokens(old => ({ ...old, [tokenId]: price }));
         !columnHoveredRef.current.listings
-          ? setTotalListings(oldListings => [...oldListings, dataObj])
-          : setHoveredListings(oldListings => [...oldListings, dataObj]);
+          ? setTotalListings(oldListings => [dataObj, ...oldListings])
+          : setHoveredListings(oldListings => [dataObj, ...oldListings]);
       });
     }
 
@@ -121,8 +121,8 @@ export function useGetData(address, columnHovered, floorPrice) {
           return newTokens;
         });
         !columnHoveredRef.current.sales
-          ? setTotalSales(oldSales => [...oldSales, dataObj])
-          : setHoveredSales(oldSales => [...oldSales, dataObj]);
+          ? setTotalSales(oldSales => [dataObj, ...oldSales])
+          : setHoveredSales(oldSales => [dataObj, ...oldSales]);
       });
     }
     listenToListings();
