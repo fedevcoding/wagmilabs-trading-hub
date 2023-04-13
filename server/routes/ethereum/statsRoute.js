@@ -1,6 +1,6 @@
 const express = require("express");
 const checkAuth = require("../../middleware/checkAuth");
-const { execTranseposeAPI } = require("../../services/externalAPI/transpose");
+const { ranseposeAPI } = require("../../services/externalAPI/transpose");
 
 const statsRoute = express();
 
