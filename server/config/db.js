@@ -7,6 +7,7 @@ const postgres_uri = process.env.POSTGRES_URI;
 
 const client = new Client({
   connectionString: postgres_uri,
+  keepAlive: true,
 });
 
 const connectDB = async () => {

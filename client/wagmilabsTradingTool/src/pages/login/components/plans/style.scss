@@ -8,11 +8,21 @@
 
     .title {
       text-align: center;
-      padding: 40px 0;
-      font-size: 34px;
+      padding: 40px 0 20px 0;
+      font-size: 44px;
 
       @media screen and (max-width: 500px) {
         font-size: 30px;
+      }
+    }
+
+    .subtitle {
+      text-align: center;
+      font-size: 22px;
+      padding: 0 0 50px 0;
+
+      @media screen and (max-width: 500px) {
+        font-size: 18px;
       }
     }
 
@@ -46,8 +56,8 @@
     }
 
     .plan-container {
-      height: 25rem;
-      width: 15rem;
+      height: 29rem;
+      width: 19rem;
       background-color: #0e0f0e;
       box-shadow: 0px 0px 8px 5px black;
       margin-top: 15px;
@@ -92,7 +102,7 @@
           padding: 10px 0;
           padding-top: 20px;
           letter-spacing: 1.2px;
-          font-size: 28px;
+          font-size: 30px;
 
           @media screen and (max-width: 1100px) {
             font-size: 22px;
@@ -107,7 +117,7 @@
           text-align: center;
           padding: 10px 0;
           letter-spacing: 1.2px;
-          font-size: 22px;
+          font-size: 23px;
           font-weight: 600;
 
           @media screen and (max-width: 1100px) {
@@ -125,6 +135,7 @@
       .plan-body {
         padding: 20px 0;
         text-align: center;
+        font-size: 20px;
       }
 
       .plan-footer {
@@ -135,7 +146,7 @@
         margin-bottom: 15px;
 
         button {
-          font-size: 18px;
+          font-size: 20px;
         }
       }
     }

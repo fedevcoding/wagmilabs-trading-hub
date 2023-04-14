@@ -43,5 +43,5 @@ export { default as looksrare } from "./looksrare.svg";
 export { default as loginBackground } from "./loginBackground.svg";
 export { default as linkedin } from "./linkedin.png";
 export { default as videoThumbnail } from "./video-thumbnail.svg";
-export { default as collPreview } from "./coll.png";
+export { default as preview } from "./intro.mp4";
 export * from "./pfps";
