@@ -17,9 +17,11 @@ import { fetchEnsName } from "@wagmi/core";
 import { useAccount } from "wagmi";
 import { useJwtData } from "../../custom-hooks/useJwdData";
 import moment from "moment";
+import { useSubscribe } from "../../custom-hooks/useSubscribe";
 
 const Header = () => {
   const { isPro, isFree, expiration } = useJwtData();
+  const { subscribe } = useSubscribe();
 
   const {
     setEns,
@@ -239,6 +241,9 @@ const Header = () => {
       {isFree && (
         <header className="expiration-header">
           <p>FREE Trial ending {moment(expiration).fromNow()}</p>
+          <p className="upgrade" onClick={() => subscribe(2, 1, 0.03)}>
+            Upgrade now!
+          </p>
         </header>
       )}
 

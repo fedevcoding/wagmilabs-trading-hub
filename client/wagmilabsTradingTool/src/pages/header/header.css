@@ -307,4 +307,15 @@ a {
   text-align: center;
   background-color: #b04976;
   padding: 5px 0;
+
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+}
+
+.expiration-header .upgrade{
+  color: white;
+  font-weight: 400;
+  cursor: pointer;
+  text-decoration: underline;
 }

@@ -66,6 +66,7 @@ Your trial will end ${endDate.toDateString()}.`;
         }
       }
     } catch (error) {
+      console.log(error);
       const message = checkErrors(String(error));
 
       toast({

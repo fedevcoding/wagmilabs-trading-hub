@@ -1,13 +1,11 @@
 import React from "react";
 import ConnectWallet from "../connect/ConnectWallet";
-// import { videoThumbnail } from "@Assets";
+import { videoThumbnail, preview } from "@Assets";
 
-// import { DefaultPlayer as Video } from "react-html5video";
+import { DefaultPlayer as Video } from "react-html5video";
 import "react-html5video/dist/styles.css";
 
 import "./style.scss";
-// import { loginVideo } from "src/assets";
-import { collPreview } from "../../../../assets";
 const Home = ({ setWalletConnected, setSignIn }) => {
   return (
     <div className="login-home">
@@ -20,10 +18,9 @@ const Home = ({ setWalletConnected, setSignIn }) => {
       </div>
 
       <div className="video-container">
-        {/* <Video controls={["PlayPause", "Seek", "Time", "Volume", "Fullscreen"]} playsInline poster={videoThumbnail}>
-          <source src={loginVideo} type="video/webm" />
-        </Video> */}
-        <img src={collPreview} alt="video-thumbnail" className="collection-preview" />
+        <Video controls={["PlayPause", "Seek", "Time", "Volume", "Fullscreen"]} playsInline poster={videoThumbnail}>
+          <source src={preview} type="video/webm" />
+        </Video>
       </div>
     </div>
   );
