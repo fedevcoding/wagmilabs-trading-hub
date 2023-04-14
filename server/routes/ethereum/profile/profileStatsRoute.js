@@ -4,6 +4,7 @@ const checkAuth = require("../../../middleware/checkAuth");
 
 const Stats = require("../../../models/StatsModel");
 const { isTeam } = require("../../../config/allowedAddresses");
+const { execTranseposeAPI } = require("../../../services/externalAPI/transpose");
 
 const UPSHOT_API_KEY = process.env.UPSHOT_API_KEY;
 const NFTSCAN_API_KEY = process.env.NFTSCAN_API_KEY;
@@ -31,12 +32,21 @@ profileStatsRoute.get("/", checkAuth, async (req, res) => {
     const nftsValue = parseEther(data?.portfolio_value_wei, false);
     const walletVolume = parseEther(data?.volume, false);
 
-    let data2 = await fetch(`https://restapi.nftscan.com/api/v2/statistics/overview/${address}`, {
-      headers: {
-        "X-API-KEY": NFTSCAN_API_KEY,
-      },
-    });
-    data2 = (await data2.json())?.data;
+    const sql = `
+    SELECT 
+    COALESCE(mint_count, 0) as mint_count, 
+    COALESCE(sold_count, 0) as sold_count,
+    COALESCE(bought_count, 0) as bought_count,
+    COALESCE(sold_value, 0) / POWER(10, 18) as sold_value
+FROM 
+    (SELECT 
+        (SELECT count(quantity) FROM ethereum.nft_transfers WHERE from_address IS NULL AND to_address = '${address}') as mint_count,
+        (SELECT count(quantity) FROM ethereum.nft_sales WHERE seller_address = '${address}') as sold_count,
+        (SELECT count(quantity) FROM ethereum.nft_sales WHERE buyer_address = '${address}') as bought_count,
+        (SELECT sum(price) FROM ethereum.nft_sales WHERE seller_address = '${address}') as sold_value
+    ) as subquery;
+    `;
+    const data2 = (await execTranseposeAPI(sql))?.[0];
 
     const { mint_count, sold_count, bought_count, sold_value } = data2 || {};
 
