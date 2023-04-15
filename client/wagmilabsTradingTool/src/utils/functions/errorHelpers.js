@@ -19,7 +19,7 @@ export const checkErrors = error => {
   } else if (errorHas(error, "insufficient funds")) {
     return "Insufficient funds";
   } else if (errorHas(error, "have a free trial")) {
-    return "Free trial already active";
+    return "Free trial already active/used";
   } else if (errorHas(error, "insufficient transactions")) {
     return "You need to have at least 25 transactions to start a free trial";
   } else if (errorHas(error, "already subscribed")) {
