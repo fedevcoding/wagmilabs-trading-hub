@@ -267,7 +267,7 @@ app.use("/api/v1/wagmilabs/collectionCharts", buyersSellersChartRoute);
 app.use("/api/v1/wagmilabs/bots", editSnipeRoute);
 app.use("/api/v1/wagmilabs/bots", getSnipeTasksRoute);
 
-app.use("/charting_library/tradingView/1", twChartRoute);
+app.use("/charting_library/tradingView", twChartRoute);
 
 //
 

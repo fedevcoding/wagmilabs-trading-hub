@@ -12,21 +12,21 @@ const configurationData = {
   darkMode: true,
 };
 
+let symbol_name = "";
+
 export default {
+  setSymbolName: name => {
+    symbol_name = name;
+  },
   onReady: callback => {
     setTimeout(() => callback(configurationData));
   },
   resolveSymbol: async (symbolName, onSymbolResolvedCallback, onResolveErrorCallback, extension) => {
-    const data = symbolName.split(":");
-
-    const ticker = data[0];
-    const name = data[1];
-
     const symbolInfo = {
-      ticker,
-      //   name: "symbolItem.symbol",
-      description: name,
-      type: "NFT",
+      ticker: symbolName,
+      name: "",
+      description: symbol_name,
+      type: symbol_name,
       session: "24x7",
       minmov: 1,
       pricescale: 100,

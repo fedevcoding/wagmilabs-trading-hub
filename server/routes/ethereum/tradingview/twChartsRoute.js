@@ -1,54 +1,86 @@
 const express = require("express");
+const checkTradingviewAuth = require("../../../middleware/tradingviewCheckAuth");
 require("dotenv").config();
 
 const twChartRoute = express();
 
-let savedcontent;
+const database = {
+  // address: [
+  //   {
+  //     name: "Chart 1",
+  //     id: "0x0",
+  //   },
+  //   {
+  //     name: "Chart 2",
+  //     id: "0x01",
+  //   },
+  // ]
+};
 
-twChartRoute.post("/charts", (req, res) => {
-  const data = req.body;
+twChartRoute.post("/:collectionAddress/charts", checkTradingviewAuth, (req, res) => {
+  const { address } = req.userDetails;
 
-  //   console.log(data);
-  const { name, content, symbol, resolution } = data;
-  console.log(name, resolution);
+  const { name, content, resolution } = req.body;
+  const contractAddress = JSON.parse(content).symbol;
+  const symbol = JSON.parse(content).symbol_type;
 
-  savedcontent = content;
+  const data = {
+    name,
+    content,
+    resolution,
+    symbol,
+    id: contractAddress,
+    timestamp: Date.now() / 1000,
+  };
 
-  res.json({ status: "ok", id: 1 });
+  if (!database[address.toLowerCase()]) {
+    database[address.toLowerCase()] = [data];
+  } else {
+    const filteredData = database[address.toLowerCase()]?.filter(chart => chart.id !== contractAddress) || [];
+
+    database[address.toLowerCase()] = [...filteredData, data];
+  }
+
+  res.json({ status: "ok", id: contractAddress });
 });
 
-twChartRoute.get("/charts", (req, res) => {
-  const { chart } = req.query;
+twChartRoute.get("/:collectionAddress/charts", checkTradingviewAuth, (req, res) => {
+  const { address } = req.userDetails;
 
-  if (chartId) {
+  const { chart } = req.query;
+  const { collectionAddress } = req.params;
+
+  if (chart) {
+    const chartData = database[address.toLowerCase()]?.find(userchart => userchart.id === chart);
     const response = {
       status: "ok",
       data: {
-        name: "test",
-        content: savedcontent,
-        id: 1,
-        timestamp: 1681632814,
+        ...chartData,
       },
     };
 
     res.json(response);
   } else {
+    const charts = database[address.toLowerCase()]?.filter(chart => chart.id === collectionAddress) || [];
+
     const response = {
       status: "ok",
-      data: [
-        {
-          name: "test",
-          // content: savedcontent,
-          symbol: "test",
-          id: 1,
-          resolution: "H",
-          timestamp: 1681632814,
-        },
-      ],
+      data: charts,
     };
 
     res.json(response);
   }
+});
+
+twChartRoute.delete("/:collectionAddress/charts", checkTradingviewAuth, (req, res) => {
+  const { address } = req.userDetails;
+  const { chart } = req.query;
+
+  const filteredData = database[address.toLowerCase()]?.filter(userchart => userchart.id !== chart) || [];
+
+  database[address.toLowerCase()] = filteredData;
+
+  res.json({ status: "ok" });
 });
 
 module.exports = twChartRoute;

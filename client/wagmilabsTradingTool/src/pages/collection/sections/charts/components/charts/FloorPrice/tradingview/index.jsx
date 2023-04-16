@@ -2,20 +2,18 @@ import React, { useEffect, useRef } from "react";
 // import { getFromServer } from "../../../../../../../utils/functions/serverCalls";
 // import { createChart } from "lightweight-charts";
 import datafeed from "./datafeed";
-import { useAccount } from "wagmi";
 import { widget } from "../../../../../../../../charting_library";
 
 const TradingviewFloor = ({ collectionAddress, collectionName }) => {
-  const { address } = useAccount();
   const chartContainerRef = useRef();
 
   useEffect(() => {
     const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
     const tvWidget = new widget({
-      symbol: `${collectionAddress}:${collectionName}`, // default symbol
+      symbol: collectionAddress,
       datafeed: datafeed,
-      interval: "H", // default interval
+      interval: "H",
       container: chartContainerRef.current,
       library_path: "/charting_library/",
       fullscreen: false,
@@ -37,11 +35,16 @@ const TradingviewFloor = ({ collectionAddress, collectionName }) => {
       enabled_features: ["header_saveload"],
       timezone,
       client_id: "wagmilabs.tools",
-      user_id: address,
+      user_id: localStorage.getItem("jsonwebtoken"),
       charts_storage_url: "tradingView",
-      charts_storage_api_version: "1",
+      charts_storage_api_version: collectionAddress,
       load_last_chart: true,
+      restConfig: {
+        url: "https://api.wagmilabs.com",
+        access_token: localStorage.jsonwebtoken,
+      },
     });
+    tvWidget._options.datafeed.setSymbolName(collectionName);
 
     return () => {
       tvWidget.remove();
