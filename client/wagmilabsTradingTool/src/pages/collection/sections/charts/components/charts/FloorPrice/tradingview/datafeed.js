@@ -29,7 +29,7 @@ export default {
       type: symbol_name,
       session: "24x7",
       minmov: 1,
-      pricescale: 100,
+      pricescale: 1000,
       has_intraday: true,
       has_no_volume: false,
       has_weekly_and_monthly: true,
@@ -49,6 +49,7 @@ export default {
         from * 1000
       }&to=${to * 1000}`
     );
+
     // const from = to - 1000 * 60 * 60 * 24 * 30 ** 2;
 
     let bars = [];
