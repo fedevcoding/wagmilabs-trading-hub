@@ -9,11 +9,10 @@ const TradingviewFloor = ({ collectionAddress, collectionName }) => {
   const chartContainerRef = useRef();
 
   useEffect(() => {
+    const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
     const tvWidget = new widget({
-      symbol: JSON.stringify({
-        ticker: collectionAddress,
-        name: collectionName,
-      }), // default symbol
+      symbol: `${collectionAddress}:${collectionName}`, // default symbol
       datafeed: datafeed,
       interval: "H", // default interval
       container: chartContainerRef.current,
@@ -35,7 +34,7 @@ const TradingviewFloor = ({ collectionAddress, collectionName }) => {
       ],
       theme: "Dark",
       enabled_features: ["header_saveload"],
-      timezone: "Europe/Rome",
+      timezone,
     });
 
     return () => {

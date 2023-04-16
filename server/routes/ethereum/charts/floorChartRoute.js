@@ -158,6 +158,7 @@ floorChartRoute.get("/floorPriceTW", async (req, res) => {
     `;
 
     const { rows: candleSticks } = await client.query(floorSql);
+
     let startDate = Date.now();
     const result = candleSticks.map((row, index) => {
       const prev = candleSticks?.[index - 1];

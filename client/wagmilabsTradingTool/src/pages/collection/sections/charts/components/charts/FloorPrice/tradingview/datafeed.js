@@ -17,9 +17,10 @@ export default {
     setTimeout(() => callback(configurationData));
   },
   resolveSymbol: async (symbolName, onSymbolResolvedCallback, onResolveErrorCallback, extension) => {
-    const symbolData = JSON.parse(symbolName);
+    const data = symbolName.split(":");
 
-    const { ticker, name } = symbolData;
+    const ticker = data[0];
+    const name = data[1];
 
     const symbolInfo = {
       ticker,
@@ -81,4 +82,6 @@ export default {
       });
     }
   },
+  subscribeBars: () => {},
+  unsubscribeBars: () => {},
 };
