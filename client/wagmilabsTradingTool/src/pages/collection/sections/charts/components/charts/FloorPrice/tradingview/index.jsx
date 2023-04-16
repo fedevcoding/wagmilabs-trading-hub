@@ -2,10 +2,11 @@ import React, { useEffect, useRef } from "react";
 // import { getFromServer } from "../../../../../../../utils/functions/serverCalls";
 // import { createChart } from "lightweight-charts";
 import datafeed from "./datafeed";
-
+import { useAccount } from "wagmi";
 import { widget } from "../../../../../../../../charting_library";
 
 const TradingviewFloor = ({ collectionAddress, collectionName }) => {
+  const { address } = useAccount();
   const chartContainerRef = useRef();
 
   useEffect(() => {
@@ -35,6 +36,11 @@ const TradingviewFloor = ({ collectionAddress, collectionName }) => {
       theme: "Dark",
       enabled_features: ["header_saveload"],
       timezone,
+      client_id: "wagmilabs.tools",
+      user_id: address,
+      charts_storage_url: "tradingView",
+      charts_storage_api_version: "1",
+      load_last_chart: true,
     });
 
     return () => {

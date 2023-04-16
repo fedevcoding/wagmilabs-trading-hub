@@ -1,6 +1,7 @@
 const express = require("express");
 const { client } = require("../../../config/db");
 const { execTranseposeAPI } = require("../../../services/externalAPI/transpose");
+const checkAuth = require("../../../middleware/checkAuth");
 
 const floorChartRoute = express();
 
@@ -87,7 +88,7 @@ function fillVolumeGaps(volumeData, granularity) {
   return volumeData;
 }
 
-floorChartRoute.get("/floorPrice", async (req, res) => {
+floorChartRoute.get("/floorPrice", checkAuth, async (req, res) => {
   try {
     const { collectionAddress, range } = req.query;
 
@@ -110,7 +111,7 @@ floorChartRoute.get("/floorPrice", async (req, res) => {
   }
 });
 
-floorChartRoute.get("/floorPriceTW", async (req, res) => {
+floorChartRoute.get("/floorPriceTW", checkAuth, async (req, res) => {
   try {
     const { collectionAddress, resolution, from, to } = req.query;
 
