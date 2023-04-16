@@ -7,6 +7,11 @@ import { widget } from "../../../../../../../../charting_library";
 const TradingviewFloor = ({ collectionAddress, collectionName }) => {
   const chartContainerRef = useRef();
 
+  const getJwtToken = () => {
+    const token = localStorage.getItem("jsonwebtoken");
+    return token;
+  };
+
   useEffect(() => {
     const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
@@ -35,14 +40,17 @@ const TradingviewFloor = ({ collectionAddress, collectionName }) => {
       enabled_features: ["header_saveload"],
       timezone,
       client_id: "wagmilabs.tools",
-      user_id: localStorage.getItem("jsonwebtoken"),
+      user_id: getJwtToken(),
       charts_storage_url: "tradingView",
       charts_storage_api_version: collectionAddress,
       load_last_chart: true,
-      restConfig: {
-        url: "https://api.wagmilabs.com",
-        access_token: localStorage.jsonwebtoken,
-      },
+      auto_save_delay: 5,
+    });
+    tvWidget.subscribe("onAutoSaveNeeded", callback => {
+      // tvWidget.save();
+      console.log(callback);
+      console.log("hello");
+      tvWidget.save();
     });
     tvWidget._options.datafeed.setSymbolName(collectionName);
 
