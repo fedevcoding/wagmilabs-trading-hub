@@ -59,7 +59,6 @@
     "test": "react-app-rewired test",
     "eject": "react-scripts eject"
   },
-  "proxy": "http://localhost:5001",
   "eslintConfig": {
     "extends": [
       "react-app",
