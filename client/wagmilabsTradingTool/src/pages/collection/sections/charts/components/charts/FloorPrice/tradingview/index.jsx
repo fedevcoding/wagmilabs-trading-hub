@@ -44,13 +44,10 @@ const TradingviewFloor = ({ collectionAddress, collectionName }) => {
       charts_storage_url: "tradingView",
       charts_storage_api_version: collectionAddress,
       load_last_chart: true,
-      auto_save_delay: 5,
+      auto_save_delay: 8,
     });
-    tvWidget.subscribe("onAutoSaveNeeded", callback => {
-      // tvWidget.save();
-      console.log(callback);
-      console.log("hello");
-      tvWidget.save();
+    tvWidget.subscribe("onAutoSaveNeeded", () => {
+      tvWidget.saveChartToServer();
     });
     tvWidget._options.datafeed.setSymbolName(collectionName);
 

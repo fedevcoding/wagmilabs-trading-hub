@@ -9,7 +9,7 @@ const checkTradingviewAuth = async (req, res, next) => {
   }
 
   try {
-    const userDetails = await JWT.verify(token, process.env.JWT_PRIVATE_KEY);
+    const userDetails = await JWT.decode(token, process.env.JWT_PRIVATE_KEY);
 
     const { address } = userDetails;
 
