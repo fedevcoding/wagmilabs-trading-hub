@@ -65,6 +65,8 @@ const { connectDB } = require("./config/db");
 const cookieParser = require("cookie-parser");
 const getCoinsGasData = require("./websockets/coinsGasData.js");
 const rateLimit = require("express-rate-limit");
+const multer = require("multer");
+const forms = multer();
 //
 
 // http server
@@ -75,8 +77,8 @@ app.set("trust proxy", true);
 app.use(express.json({ limit: "500mb" }));
 app.use(express.urlencoded({ limit: "500mb", extended: true }));
 app.use(cors({ credentials: true, origin: CLIENT_URL }));
-
 app.use(cookieParser());
+app.use(forms.array());
 //
 
 // socket io
@@ -93,6 +95,7 @@ const avgPriceChartRoute = require("./routes/ethereum/charts/avgPriceChartRoute.
 const advancedFloorChartRoute = require("./routes/ethereum/charts/advancedFloorChartRoute.js");
 const buyersSellersChartRoute = require("./routes/ethereum/charts/buyersSellersChartRoute.js");
 const freeTrialRoute = require("./routes/ethereum/functionality/freeTrialroute.js");
+const twChartRoute = require("./routes/ethereum/tradingview/twChartsRoute.js");
 const io = socketIO(server, {
   cors: {
     origin: CLIENT_URL,
@@ -263,6 +266,8 @@ app.use("/api/v1/wagmilabs/collectionCharts", buyersSellersChartRoute);
 // bots routes
 app.use("/api/v1/wagmilabs/bots", editSnipeRoute);
 app.use("/api/v1/wagmilabs/bots", getSnipeTasksRoute);
+
+app.use("/charting_library/tradingView", twChartRoute);
 
 //
 

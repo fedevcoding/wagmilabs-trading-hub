@@ -1,0 +1,82 @@
+.whatsnew-modal {
+  height: 55vh;
+  max-width: unset !important;
+  width: 40vw !important;
+  border-radius: 14px !important;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly !important;
+
+  .close-btn {
+    position: absolute;
+    top: 25px;
+    right: 25px;
+    cursor: pointer;
+    z-index: 999;
+  }
+
+  .modal-body {
+    display: flex;
+    align-items: center;
+    flex: unset;
+    letter-spacing: 1.2px;
+    padding: 0;
+
+    .whatsnew-img {
+      width: 460px;
+      // height: 300px;
+    }
+
+    .title {
+      font-size: 38px;
+    }
+
+    .body {
+      font-size: 22px;
+      font-weight: 400;
+    }
+
+    .button {
+      font-size: 18px;
+      padding: 25px 20px;
+      border-radius: 9px;
+    }
+  }
+}
+
+.promo-modal-2 {
+  border-radius: 14px !important;
+
+  .close-btn {
+    position: absolute;
+    top: 25px;
+    right: 25px;
+    cursor: pointer;
+    z-index: 999;
+  }
+
+  .modal-body {
+    position: relative;
+
+    .title {
+      font-size: 33px;
+      padding: 0 30px;
+      text-align: center;
+    }
+
+    .body {
+      font-size: 22px;
+      font-weight: 400;
+      padding: 10px 5px;
+      text-align: center;
+    }
+
+    .button {
+      font-size: 18px;
+      padding: 25px 20px;
+      border-radius: 9px;
+    }
+  }
+}

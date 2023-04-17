@@ -4,7 +4,7 @@ import { PageWrapper } from "@Components";
 import { ChartSelector, CollectionCharts } from "./components";
 import useChart from "./useChart";
 
-const Charts = ({ collectionAddress, collectionSlug, floorPrice }) => {
+const Charts = ({ collectionAddress, collectionSlug, floorPrice, collectionName }) => {
   const { charts, activeChart, changeChart } = useChart();
 
   return (
@@ -17,6 +17,7 @@ const Charts = ({ collectionAddress, collectionSlug, floorPrice }) => {
         collectionAddress={collectionAddress}
         collectionSlug={collectionSlug}
         floorPrice={floorPrice}
+        collectionName={collectionName}
       />
     </PageWrapper>
   );

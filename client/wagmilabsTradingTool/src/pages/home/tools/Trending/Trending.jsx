@@ -13,10 +13,18 @@ import { notFound } from "@Assets";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { placeholderImage } from "@Utils/images";
 import { LoadingSpinner } from "@Components";
+import { PromoModal } from "../../../../components/Modals/PromoModal";
+import { useDisclosure } from "@chakra-ui/hooks";
+import { WhatsNewModal } from "../../../../components/Modals/WhatsNewModal";
 
 const defaultTimeFrame = "1H";
 
+const whatsNewType = "whatsnew1";
+
 const Trending = ({ tool, timeFrame, setTimeFrame, resetTime }) => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isOpen: whatsNewOpen, onOpen: openWhatsNew, onClose: closeWhatsNew } = useDisclosure();
+
   const firstRender = useFirstRender();
 
   const [stats, setStats] = useState([]);
@@ -52,6 +60,14 @@ const Trending = ({ tool, timeFrame, setTimeFrame, resetTime }) => {
 
   // refresh interval
   useEffect(() => {
+    const openedWhatsNew = localStorage.getItem(whatsNewType);
+
+    if (openedWhatsNew) {
+      onOpen();
+    } else {
+      openWhatsNew();
+    }
+
     const refreshInterval = setInterval(getTrending, 5000);
 
     return () => {
@@ -294,6 +310,8 @@ const Trending = ({ tool, timeFrame, setTimeFrame, resetTime }) => {
 
   return (
     <>
+      <WhatsNewModal isOpen={whatsNewOpen} onClose={closeWhatsNew} type={whatsNewType} />
+      <PromoModal isOpen={isOpen} onClose={onClose} />
       <div className="table-container">
         <table cellSpacing={0} className="trending-container">
           <thead className="trending-details">

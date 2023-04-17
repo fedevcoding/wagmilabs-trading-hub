@@ -777,6 +777,7 @@ const Collection = () => {
               collectionAddress={address}
               collectionSlug={collectionInfo?.slug}
               floorPrice={collectionInfo.floorAsk?.price?.amount?.decimal}
+              collectionName={collectionInfo?.name}
             />
           );
         } else if (section === "leaderboard") {
