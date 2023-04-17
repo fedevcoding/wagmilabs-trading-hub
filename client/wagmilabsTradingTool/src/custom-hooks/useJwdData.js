@@ -8,6 +8,7 @@ export const useJwtData = () => {
 
   const [isFree, setIsFree] = useState(false);
   const [isPro, setIsPro] = useState(false);
+  const [isPartnership, setIsPartnership] = useState(false);
   const [loadedJwtData, setLoaded] = useState(false);
   const [expiration, setExpiration] = useState(0);
 
@@ -21,13 +22,18 @@ export const useJwtData = () => {
         const { passType, expiration } = decoded;
         const expirationNumber = Number(expiration);
         setExpiration(expirationNumber);
+        console.log(passType);
 
-        if (passType === 3 && expirationNumber < Date.now()) {
+        if ((passType === 3 || passType === 4) && expirationNumber < Date.now()) {
           await logOut(setConnected);
         }
 
+        if (passType === 4) {
+          setIsPartnership(true);
+          setIsPro(true);
+        }
         if (passType === 3) setIsFree(true);
-        if (passType === 2 || passType === 0 || passType === 4) setIsPro(true);
+        if (passType === 2 || passType === 0) setIsPro(true);
 
         setLoaded(true);
       }
@@ -35,5 +41,5 @@ export const useJwtData = () => {
     setData();
   }, [setConnected]);
 
-  return { isPro, isFree, expiration, loadedJwtData };
+  return { isPro, isFree, expiration, loadedJwtData, isPartnership };
 };

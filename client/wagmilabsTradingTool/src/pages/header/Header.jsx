@@ -20,7 +20,7 @@ import moment from "moment";
 import { useSubscribe } from "../../custom-hooks/useSubscribe";
 
 const Header = () => {
-  const { isPro, isFree, expiration } = useJwtData();
+  const { isPro, isFree, isPartnership, expiration } = useJwtData();
   const { subscribe } = useSubscribe();
 
   const {
@@ -182,8 +182,6 @@ const Header = () => {
 
       const { gasSettings, profileImage, listSettings, shoppingCart } = userData || {};
 
-      // const { snipingBotTasks } = bots || {};
-
       setGasSettings({ ...gasSettings, maxFeePerGas: 0 });
       setProfileImage(profileImage);
       setListingSettings(listSettings);
@@ -238,9 +236,11 @@ const Header = () => {
   return (
     <>
       <RefreshToken connected={connected} setConnected={setConnected} />
-      {isFree && (
+      {(isFree || isPartnership) && (
         <header className="expiration-header">
-          <p>FREE Trial ending {moment(expiration).fromNow()}</p>
+          <p>
+            FREE {isPartnership ? "period" : "Trial"} ending {moment(expiration).fromNow()}
+          </p>
           <p className="upgrade" onClick={() => subscribe(2, 1, 0.03)}>
             Upgrade now!
           </p>
