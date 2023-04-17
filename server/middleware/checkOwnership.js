@@ -18,7 +18,8 @@ async function checkValid(address) {
     });
 
     if (isAllowed) {
-      return [true, 4, 0];
+      const { expiration } = isAllowed;
+      return [true, 4, expiration];
     } else if (!isAllowed) {
       const provider = new ethers.providers.InfuraProvider(CHAIN_ID == 5 ? "goerli" : null, SIGNER_PRIVATE_KEY);
       const contract = new ethers.Contract(contractAddress, abi, provider);
