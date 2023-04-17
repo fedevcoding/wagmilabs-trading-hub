@@ -16,12 +16,15 @@ import { LoadingSpinner } from "@Components";
 import { PromoModal } from "../../../../components/Modals/PromoModal";
 import { useDisclosure } from "@chakra-ui/hooks";
 import { WhatsNewModal } from "../../../../components/Modals/WhatsNewModal";
+import { useJwtData } from "../../../../custom-hooks/useJwdData";
 
 const defaultTimeFrame = "1H";
 
 const whatsNewType = "whatsnew1";
 
 const Trending = ({ tool, timeFrame, setTimeFrame, resetTime }) => {
+  const { isFree, isPartnership } = useJwtData();
+
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { isOpen: whatsNewOpen, onOpen: openWhatsNew, onClose: closeWhatsNew } = useDisclosure();
 
@@ -311,7 +314,7 @@ const Trending = ({ tool, timeFrame, setTimeFrame, resetTime }) => {
   return (
     <>
       <WhatsNewModal isOpen={whatsNewOpen} onClose={closeWhatsNew} type={whatsNewType} />
-      <PromoModal isOpen={isOpen} onClose={onClose} />
+      {isFree && isPartnership && <PromoModal isOpen={isOpen} onClose={onClose} />}
       <div className="table-container">
         <table cellSpacing={0} className="trending-container">
           <thead className="trending-details">
