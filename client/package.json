@@ -8,6 +8,7 @@
     "start": "node server.js",
     "deploy": "cd wagmilabsTradingTool && npm run build && cd ../.. && git add . && git commit -m \"deploy\" && git push"
   },
+  "proxy": "https://api.wagmilabs.tools",
   "keywords": [],
   "author": "",
   "license": "ISC",
