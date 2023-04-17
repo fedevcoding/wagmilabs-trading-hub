@@ -11,25 +11,26 @@ const CHAIN_ID = process.env.CHAIN_ID;
 // passtypes: 0 = wagmi pass, 1 = basic sub, 2 = pro sub, 3 = free trial, 4 = allowed/partnership
 async function checkValid(address) {
   try {
-    // check if in allowed addresses there is an address that matches the address passed and has valid expiration
-    const currentdate = Date.now();
-    const isAllowed = allowedAddresses.find(allowedAddress => {
-      return allowedAddress.address.toLowerCase() === address.toLowerCase() && allowedAddress.expiration > currentdate;
-    });
+    const provider = new ethers.providers.InfuraProvider(CHAIN_ID == 5 ? "goerli" : null, SIGNER_PRIVATE_KEY);
+    const contract = new ethers.Contract(contractAddress, abi, provider);
+    const passData = await contract.hasValidPass(address);
 
-    if (isAllowed) {
-      const { expiration } = isAllowed;
-      return [true, 4, expiration];
-    } else if (!isAllowed) {
-      const provider = new ethers.providers.InfuraProvider(CHAIN_ID == 5 ? "goerli" : null, SIGNER_PRIVATE_KEY);
-      const contract = new ethers.Contract(contractAddress, abi, provider);
-      const passData = await contract.hasValidPass(address);
+    const isValid = passData[0];
+    const passType = Number(passData[1]);
+    const expiration = Number(passData[2]);
+    if (isValid) {
+      return [isValid, passType, expiration];
+    } else if (!isValid) {
+      const currentdate = Date.now();
+      const isAllowed = allowedAddresses.find(allowedAddress => {
+        return (
+          allowedAddress.address.toLowerCase() === address.toLowerCase() && allowedAddress.expiration > currentdate
+        );
+      });
 
-      const isValid = passData[0];
-      const passType = Number(passData[1]);
-      const expiration = Number(passData[2]);
-      if (isValid) {
-        return [isValid, passType, expiration];
+      if (isAllowed) {
+        const { expiration } = isAllowed;
+        return [true, 4, expiration];
       } else {
         const data = await FreeTrials.findOne({ address });
 

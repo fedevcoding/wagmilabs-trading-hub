@@ -22,6 +22,7 @@ export const useJwtData = () => {
         const { passType, expiration } = decoded;
         const expirationNumber = Number(expiration);
         setExpiration(expirationNumber);
+        console.log(passType);
 
         if ((passType === 3 || passType === 4) && expirationNumber < Date.now()) {
           await logOut(setConnected);

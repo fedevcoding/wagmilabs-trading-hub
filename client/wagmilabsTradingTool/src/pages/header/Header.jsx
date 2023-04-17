@@ -182,8 +182,6 @@ const Header = () => {
 
       const { gasSettings, profileImage, listSettings, shoppingCart } = userData || {};
 
-      // const { snipingBotTasks } = bots || {};
-
       setGasSettings({ ...gasSettings, maxFeePerGas: 0 });
       setProfileImage(profileImage);
       setListingSettings(listSettings);
@@ -240,7 +238,9 @@ const Header = () => {
       <RefreshToken connected={connected} setConnected={setConnected} />
       {(isFree || isPartnership) && (
         <header className="expiration-header">
-          <p>FREE Trial ending {moment(expiration).fromNow()}</p>
+          <p>
+            FREE {isPartnership ? "period" : "Trial"} ending {moment(expiration).fromNow()}
+          </p>
           <p className="upgrade" onClick={() => subscribe(2, 1, 0.03)}>
             Upgrade now!
           </p>
