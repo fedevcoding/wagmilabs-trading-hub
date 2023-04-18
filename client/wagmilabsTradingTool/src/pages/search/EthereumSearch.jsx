@@ -19,9 +19,12 @@ const EthereumSearch = ({ inLogin, isHeader, usage, onClick }) => {
   const [loadingCollections, setLoadingCollections] = useState(false);
   const [collections, setCollections] = useState([]);
 
-  useEffect(() => {
-    function removeCollections(e) {
-      if (collections.length > 0) {
+  function removeCollections(e, force) {
+    if (collections.length > 0) {
+      if (force) {
+        setCollections([]);
+        return;
+      } else {
         const collectionsContainer = document.querySelector(".container");
         const searchbar = document.querySelector(".search-bar");
 
@@ -31,12 +34,15 @@ const EthereumSearch = ({ inLogin, isHeader, usage, onClick }) => {
         setCollections([]);
       }
     }
+  }
 
+  useEffect(() => {
     window.addEventListener("click", removeCollections);
 
     return () => {
       window.removeEventListener("click", removeCollections);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [collections]);
 
   useEffect(() => {
@@ -117,7 +123,7 @@ const EthereumSearch = ({ inLogin, isHeader, usage, onClick }) => {
                 <Link
                   to={{ pathname: link, search: `${isAddress ? "?image=" + image : ""}` }}
                   className="container-div"
-                  target="_blank"
+                  // target="_blank"
                   key={index}
                   onClick={e => addToLocalStorage(e, image, address, name, openseaVerificationStatus, isAddress)}
                   rel="noreferrer"
@@ -148,6 +154,7 @@ const EthereumSearch = ({ inLogin, isHeader, usage, onClick }) => {
           </React.Fragment>
         );
       }),
+          // eslint-disable-next-line react-hooks/exhaustive-deps
     [collections, usage, onClick]
   );
 
@@ -161,6 +168,8 @@ const EthereumSearch = ({ inLogin, isHeader, usage, onClick }) => {
     });
   }
   function addToLocalStorage(e, image, collectionId, name, openseaVerificationStatus, isAddress) {
+    removeCollections(null, true);
+
     const i = document.querySelector(".searchbar-collection-remove");
     if (e.target === i) return;
 
