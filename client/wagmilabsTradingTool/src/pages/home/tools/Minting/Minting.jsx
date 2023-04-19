@@ -248,7 +248,7 @@ const Minting = ({ tool, timeFrame, setTimeFrame, resetTime }) => {
               </th>
               <th>
                 <div onClick={e => changeSort(e, "mint-price")}>
-                  <p>Mint price</p>
+                  <p>Avg mint price</p>
                   <i className="fa-solid fa-caret-down arrow"></i>
                 </div>
               </th>

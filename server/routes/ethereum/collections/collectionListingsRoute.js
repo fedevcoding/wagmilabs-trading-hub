@@ -1,6 +1,7 @@
 const express = require("express");
 const checkAuth = require("../../../middleware/checkAuth");
-const Listings = require("../../../models/ListingsModel");
+// const Listings = require("../../../models/ListingsModel");
+const { client } = require("../../../config/db");
 
 const collectionListingsRoute = express();
 
@@ -18,17 +19,30 @@ collectionListingsRoute.get("/:address", checkAuth, (req, res) => {
 
       const sevenDaysAgo = new Date().getTime() - 7 * 24 * 60 * 60 * 1000;
 
-      const totalListings = (
-        await Listings.aggregate([
-          { $match: { contractAddress: lowerCased } },
-          { $match: { "listings.timestamp": { $gte: sevenDaysAgo } } },
-          { $unwind: "$listings" },
-          { $sort: { "listings.timestamp": -1 } },
-          { $group: { _id: "$contractAddress", listings: { $push: "$listings" } } },
-          { $project: { _id: 0, listings: { $slice: ["$listings", 2000] } } },
-        ])
-      )[0].listings;
+      // const totalListings = (
+      //   await Listings.aggregate([
+      //     { $match: { contractAddress: lowerCased } },
+      //     { $match: { "listings.timestamp": { $gte: sevenDaysAgo } } },
+      //     { $unwind: "$listings" },
+      //     { $sort: { "listings.timestamp": -1 } },
+      //     { $group: { _id: "$contractAddress", listings: { $push: "$listings" } } },
+      //     { $project: { _id: 0, listings: { $slice: ["$listings", 2000] } } },
+      //   ])
+      // )[0].listings;
 
+      const totalListings = (
+        await client.query(
+          `SELECT * FROM listings WHERE contract_address = '${lowerCased}' AND timestamp > ${sevenDaysAgo} ORDER BY timestamp DESC LIMIT 2000`
+        )
+      ).rows.map(listing => {
+        return {
+          ...listing,
+          tokenAddress: listing.contract_address,
+          orderHash: listing.order_hash,
+          tokenId: listing.token_id,
+          timestamp: parseInt(listing.timestamp),
+        };
+      });
       res.status(200).json({ totalListings, status: "success", ok: true });
     } catch (e) {
       console.log(e);
