@@ -45,6 +45,10 @@ const TradingviewFloor = ({ collectionAddress, collectionName }) => {
       charts_storage_api_version: collectionAddress,
       load_last_chart: true,
       auto_save_delay: 8,
+      loading_screen: {
+        foregroundColor: "#f2f2f2",
+        backgroundColor: "#f2f2f2",
+      },
     });
     tvWidget.subscribe("onAutoSaveNeeded", () => {
       tvWidget.saveChartToServer();
