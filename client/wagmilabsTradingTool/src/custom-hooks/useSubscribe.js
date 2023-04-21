@@ -6,6 +6,9 @@ import { checkErrors } from "../utils/functions/errorHelpers";
 import { useToast } from "@chakra-ui/react";
 import { useContext } from "react";
 import { UserDataContext } from "../context/userContext";
+import ReactGA from "react-ga";
+
+ReactGA.initialize("GTM-WWSJ25L");
 
 export const useSubscribe = () => {
   const { fromCatchMint } = useContext(UserDataContext);
@@ -25,6 +28,11 @@ Your trial will end ${endDate.toDateString()}.`;
         const res = await pushToServer("/freeTrial", { signature, address, message, fromCatchMint });
 
         if (res.authenticated) {
+          ReactGA.event({
+            category: "freetrial",
+            action: "Created free trial",
+          });
+
           toast({
             title: "Success",
             description: "Free trial activated",
@@ -40,7 +48,10 @@ Your trial will end ${endDate.toDateString()}.`;
             value: ethers.utils.parseEther(price.toFixed(5).toString()),
           });
           await tx.wait();
-
+          ReactGA.event({
+            category: "subscription",
+            action: "Created subscription",
+          });
           await pushToServer("/stats", { type: "boughtBasic", timestamp: Date.now(), fromCatchMint });
           toast({
             title: "Success",
@@ -54,6 +65,10 @@ Your trial will end ${endDate.toDateString()}.`;
             value: ethers.utils.parseEther(price.toFixed(5).toString()),
           });
           await tx.wait();
+          ReactGA.event({
+            category: "subscription",
+            action: "Created subscription",
+          });
           await pushToServer("/stats", { type: "boughtPro", timestamp: Date.now(), fromCatchMint });
 
           toast({
