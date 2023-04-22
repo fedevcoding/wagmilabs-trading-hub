@@ -8,8 +8,6 @@ const RESERVOIR_API_KEY = "9fc22ad1-29da-4a2d-a977-327f6bf1926f";
 route.get("/", checkAuth, async (req, res) => {
   try {
     const { continuation, limit = "200", userAddress } = req.query;
-    console.log(userAddress);
-    console.log(req.query);
 
     const continuationFilter = continuation ? `&continuation=${continuation}` : "";
 

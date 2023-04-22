@@ -11,7 +11,7 @@ import { placeholderImage } from "@Utils/images";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import moment from "moment";
 import { useFirstRender } from "@Hooks";
-import { LoadingSpinner } from "@Components";
+import { LoadingSpinner, TableLink } from "@Components";
 
 const WatchList = ({ tool, timeFrame, setTimeFrame, resetTime }) => {
   const [collections, setCollections] = useState([]);
@@ -161,10 +161,11 @@ const WatchList = ({ tool, timeFrame, setTimeFrame, resetTime }) => {
 
         const creationDay = moment(createdAt).fromNow();
         return (
-          <tr
+          <TableLink
             className="single-collection-container"
             key={index}
-            onClick={() => window.open(`/collection/${contractAddress}`, "_blank")}
+            // onClick={() => window.open(`/collection/${contractAddress}`, "_blank")}
+            to={`/collection/${contractAddress}`}
           >
             <td>
               <div className="image-name-container">
@@ -205,7 +206,7 @@ const WatchList = ({ tool, timeFrame, setTimeFrame, resetTime }) => {
                 {onSaleCount} / {tokenCount}
               </p>
             </td>
-          </tr>
+          </TableLink>
         );
       }),
     // eslint-disable-next-line react-hooks/exhaustive-deps

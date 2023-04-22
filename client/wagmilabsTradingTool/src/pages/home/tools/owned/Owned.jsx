@@ -8,7 +8,7 @@ import { placeholderImage } from "@Utils/images";
 
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { useFirstRender } from "@Hooks";
-import { LoadingSpinner } from "@Components";
+import { LoadingSpinner, TableLink } from "@Components";
 
 const Owned = ({ setTimeFrame, tool, timeFrame, resetTime }) => {
   const [collections, setCollections] = useState([]);
@@ -169,10 +169,11 @@ const Owned = ({ setTimeFrame, tool, timeFrame, resetTime }) => {
         const volume = collectionData?.volume[time];
 
         return (
-          <tr
+          <TableLink
             key={index}
             className="single-collection-container"
-            onClick={() => window.open(`/collection/${address}`, "_blank")}
+            // onClick={() => window.open(`/collection/${address}`, "_blank")}
+            to={`/collection/${address}`}
           >
             <td className="image-name-container">
               <LazyLoadImage src={image} className="owned-image" effect="blur" placeholderSrc={placeholderImage} />
@@ -208,7 +209,7 @@ const Owned = ({ setTimeFrame, tool, timeFrame, resetTime }) => {
             <td className="owned-total-sales">
               <p>{owned}</p>
             </td>
-          </tr>
+          </TableLink>
         );
       }),
     // eslint-disable-next-line react-hooks/exhaustive-deps

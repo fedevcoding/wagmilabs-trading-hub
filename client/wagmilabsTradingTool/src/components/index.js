@@ -26,3 +26,4 @@ export { Number } from "./Number";
 export { ActionModal } from "./ActionModal";
 export { RangeSelector } from "./RangeSelector";
 export { ImageButton } from "./ImageButton";
+export { TableLink } from "./Links";

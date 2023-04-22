@@ -161,7 +161,7 @@ function formatApprovalGasFees(approvalGasFees) {
       output[value.collection_address.toLowerCase()] = value.approval_gas_fees / 10 ** 18;
     }
   } else {
-    console.log("Error approvalGasFees undefined");
+    // console.log("Error approvalGasFees undefined");
   }
   return output;
 }

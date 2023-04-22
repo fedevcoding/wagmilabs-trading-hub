@@ -41,7 +41,7 @@ const ListingChart = memo(({ floorPrice, tokensData }) => {
   useEffect(() => {
     if (floorPrice) {
       const numberOffset = Number(offset);
-      console.log(numberOffset);
+      // console.log(numberOffset);
 
       if (numberOffset === 0) {
         setChartOptions(defaultChartSettings);

@@ -12,7 +12,7 @@ import { notFound } from "@Assets";
 
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import { placeholderImage } from "@Utils/images";
-import { LoadingSpinner } from "@Components";
+import { LoadingSpinner, TableLink } from "@Components";
 import { PromoModal } from "../../../../components/Modals/PromoModal";
 import { useDisclosure } from "@chakra-ui/hooks";
 import { WhatsNewModal } from "../../../../components/Modals/WhatsNewModal";
@@ -180,8 +180,9 @@ const Trending = ({ tool, timeFrame, setTimeFrame, resetTime }) => {
         const creationDay = moment(creationDate).fromNow();
 
         return (
-          <tr
-            onClick={() => window.open(`/collection/${contractAddress}`, "_blank")}
+          <TableLink
+            to={`/collection/${contractAddress}`}
+            // onClick={() => window.open(`/collection/${contractAddress}`, "_blank")}
             className="single-collection-container"
             key={index}
           >
@@ -302,7 +303,7 @@ const Trending = ({ tool, timeFrame, setTimeFrame, resetTime }) => {
             <td className="trending-supply">
               <p>{totalSupply}</p>
             </td>
-          </tr>
+          </TableLink>
         );
       }),
     [stats]
