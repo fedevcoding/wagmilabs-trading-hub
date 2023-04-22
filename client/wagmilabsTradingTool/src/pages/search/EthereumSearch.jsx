@@ -154,7 +154,7 @@ const EthereumSearch = ({ inLogin, isHeader, usage, onClick }) => {
           </React.Fragment>
         );
       }),
-          // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [collections, usage, onClick]
   );
 
@@ -168,10 +168,9 @@ const EthereumSearch = ({ inLogin, isHeader, usage, onClick }) => {
     });
   }
   function addToLocalStorage(e, image, collectionId, name, openseaVerificationStatus, isAddress) {
-    removeCollections(null, true);
-
     const i = document.querySelector(".searchbar-collection-remove");
     if (e.target === i) return;
+    removeCollections(null, true);
 
     let clickedCollections = localStorage.getItem("clickedCollections") || false;
     let collectionObject;

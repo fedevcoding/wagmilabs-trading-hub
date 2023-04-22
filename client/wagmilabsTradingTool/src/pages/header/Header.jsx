@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import EthereumSearch from "../search/EthereumSearch";
 import "./header.css";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { logo } from "@Assets";
 import { baseUrl } from "@Variables";
@@ -306,9 +306,9 @@ const Header = () => {
           }}
         >
           <div className="pfp-options-container">
-            <a href={`/profile/${address}`}>
+            <Link to={`/profile/${address}`}>
               <img src={profileImage} alt="" className="pfp" />
-            </a>
+            </Link>
             <div className="profile-options invisible">
               <a href={`/profile/${address}`}>
                 <div onClick={() => navigate(`/profile/${address}`)} className="pfp-icon-container">

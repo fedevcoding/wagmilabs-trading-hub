@@ -193,12 +193,7 @@ const BubbleChart = memo(({ totalListings, totalSales, floorPrice }) => {
           </HStack>
 
           <HStack>
-            <Select
-              onChange={e => setMaxTime(e.target.value)}
-              color="white"
-              colorScheme={"white"}
-              defaultValue={21600000}
-            >
+            <Select onChange={e => setMaxTime(e.target.value)} defaultValue={21600000}>
               <option value={300000}>5 minutes</option>
               <option value={1800000}>30 minutes</option>
               <option value={7200000}>2 hours</option>
