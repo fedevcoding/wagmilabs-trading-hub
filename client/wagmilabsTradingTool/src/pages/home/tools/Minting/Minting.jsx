@@ -12,7 +12,7 @@ import { useFirstRender } from "@Hooks";
 import { placeholderImage } from "@Utils/images";
 
 import { LazyLoadImage } from "react-lazy-load-image-component";
-import { LoadingSpinner } from "@Components";
+import { LoadingSpinner, TableLink } from "@Components";
 
 const defaultTimeFrame = "1H";
 
@@ -187,8 +187,9 @@ const Minting = ({ tool, timeFrame, setTimeFrame, resetTime }) => {
         const creationDay = moment(creationDate).fromNow();
 
         return (
-          <tr
-            onClick={() => window.open(`/collection/${contractAddress}`, "_blank")}
+          <TableLink
+            // onClick={() => window.open(`/collection/${contractAddress}`, "_blank")}
+            to={`/collection/${contractAddress}`}
             className="single-collection-container"
             key={index}
           >
@@ -231,7 +232,7 @@ const Minting = ({ tool, timeFrame, setTimeFrame, resetTime }) => {
             <td className="minting-total-mints">
               <p>{totalMints || "- - -"}</p>
             </td>
-          </tr>
+          </TableLink>
         );
       }),
     [stats]

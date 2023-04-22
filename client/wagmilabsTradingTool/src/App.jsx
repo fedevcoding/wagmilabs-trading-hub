@@ -31,7 +31,7 @@ import { getDefaultWallets, RainbowKitProvider, darkTheme } from "@rainbow-me/ra
 import { SIGNER_PRIVATE_KEY, RESERVOIR_API_KEY } from "@Variables";
 
 // react router
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, useParams } from "react-router-dom";
 import SniperBot from "./pages/bots/sniper/SniperBot";
 import Wallets from "./pages/bots/wallets/Wallets";
 
@@ -324,7 +324,12 @@ function App() {
                                 path="/collection/:address"
                                 element={
                                   <>
-                                    <Header /> <Collection /> <Footer />{" "}
+                                    <Header />
+                                    {/* <CollectionWrapper /> */}
+                                    <KeyWrapper keyName={"address"}>
+                                      <Collection />
+                                    </KeyWrapper>
+                                    <Footer />
                                   </>
                                 }
                               />
@@ -430,7 +435,9 @@ function App() {
                                 element={
                                   <>
                                     <Header />
-                                    <Profile />
+                                    <KeyWrapper keyName={"address"}>
+                                      <Profile />
+                                    </KeyWrapper>
                                     <Footer />
                                   </>
                                 }
@@ -465,5 +472,17 @@ function App() {
     </ChakraProvider>
   );
 }
+
+const KeyWrapper = ({ children, keyName }) => {
+  const key = useParams()[keyName];
+
+  return (
+    <div>
+      {React.Children.map(children, child => {
+        return React.cloneElement(child, { key });
+      })}
+    </div>
+  );
+};
 
 export default App;

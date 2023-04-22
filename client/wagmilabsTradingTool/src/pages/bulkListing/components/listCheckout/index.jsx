@@ -62,7 +62,7 @@ export const ListCheckout = React.memo(({ items }) => {
   };
 
   const listNfts = async () => {
-    console.log(isValidConfirm());
+    // console.log(isValidConfirm());
     if (!isValidConfirm() || loading) return;
     try {
       setLoading(true);
