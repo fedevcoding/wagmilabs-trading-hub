@@ -73,7 +73,8 @@ floorChartRoute.get("/floorPriceTW", checkAuth, async (req, res) => {
       const prev = candleSticks?.[index - 1];
 
       // add 2 hours
-      const time = new Date(row.time).getTime() + 2 * 60 * 60 * 1000;
+      const time = new Date(row.time).getTime();
+      // + 2 * 60 * 60 * 1000;
 
       if (time < startDate) startDate = time;
 
