@@ -1,6 +1,6 @@
 const CLIENT_URL = "http://localhost:3000";
 
-module.exports = { newSale, newListing, newSnipeUpdate, CLIENT_URL };
+module.exports = { newSale, newListing, newSnipeUpdate, newFloorChange, CLIENT_URL };
 
 // routes imports
 
@@ -51,6 +51,22 @@ const statsRoute = require("./routes/ethereum/statsRoute.js");
 const getSnipeTasksRoute = require("./routes/ethereum/bots/sniperBot/getSnipeTasksRoute.js");
 const editSnipeRoute = require("./routes/ethereum/bots/sniperBot/editSnipeRoute.js");
 //
+
+const { createClient } = require("@reservoir0x/reservoir-sdk");
+const RESERVOIR_API_KEY = process.env.RESERVOIR_API_KEY;
+
+// reservoir client
+createClient({
+  source: CLIENT_URL,
+  chains: [
+    {
+      id: 1,
+      apiKey: RESERVOIR_API_KEY,
+      baseApiUrl: "https://api.reservoir.tools",
+      default: true,
+    },
+  ],
+});
 
 // port
 const port = process.env.PORT || 5001;
@@ -135,6 +151,15 @@ io.on("connection", socket => {
     const channel = `sales${collectionAddress}`;
     socket.leave(channel);
   });
+  socket.on("joinFloorChanges", collectionAddress => {
+    const channel = `floorChanges-${collectionAddress}`;
+    socket.join(channel);
+  });
+
+  socket.on("leaveFloorChanges", collectionAddress => {
+    const channel = `floorChanges-${collectionAddress}`;
+    socket.leave(channel);
+  });
 
   socket.on("joinListings", collectionAddress => {
     const channel = `listings${collectionAddress}`;
@@ -175,6 +200,17 @@ function newSale(saleData) {
     const contractAddress = tokenAddress?.toLowerCase();
     const channel = `sales${contractAddress}`;
     io.sockets.to(channel).emit("sale", saleData);
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+function newFloorChange(floorChangeData) {
+  try {
+    const { contractAddress } = floorChangeData;
+    const lowerContractAddress = contractAddress?.toLowerCase();
+    const channel = `floorChanges-${lowerContractAddress}`;
+    io.sockets.to(channel).emit("floor_change", floorChangeData);
   } catch (e) {
     console.log(e);
   }
@@ -278,5 +314,6 @@ server.listen(port, async () => {
   await connectDB();
   require("./websockets/sales");
   require("./websockets/listings");
+  require("./websockets/floorChanges");
 });
 //

@@ -21,9 +21,9 @@ import { UserDataContext } from "@Context";
 
 import copy from "copy-to-clipboard";
 import { useGetItems, useSetPageTitle } from "@Hooks";
-import { LoadingSpinner, ProfitCalcModal } from "@Components";
-import { useNavigate, useParams } from "react-router-dom";
-import { placeholderImage } from "@Assets";
+import { LoadingSpinner, ProfitCalcModal, Image } from "@Components";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { placeholderImage, opensea } from "@Assets";
 import { Nfts, Activity, Stats } from "./Components";
 
 import "./profile.scss";
@@ -589,6 +589,10 @@ const Profile = () => {
                   </span>
                 </Tooltip>
               )}
+              <span>{pageAddress && userEns && "/"}</span>
+              <Link to={`https://opensea.io/${pageAddress}`} target="_blank" rel="noreferrer">
+                <Image src={opensea} width={"25px"} pointer />
+              </Link>
             </div>
 
             <div className="profile-details-container">

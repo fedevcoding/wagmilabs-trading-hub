@@ -1,9 +1,11 @@
 const ethers = require("ethers");
 
-const INFURA_NETWORK_URL = process.env.ETHEREUM_NETWORK;
+const SIGNER_PRIVATE_KEY = process.env.SIGNER_PRIVATE_KEY;
 
-const provider = new ethers.providers.JsonRpcProvider(INFURA_NETWORK_URL);
+const provider = new ethers.providers.InfuraProvider("homestead", SIGNER_PRIVATE_KEY);
 
-const getProvider = () => provider;
+const getProvider = () => {
+  return provider;
+};
 
 module.exports = getProvider;
