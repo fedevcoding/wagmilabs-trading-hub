@@ -13,7 +13,6 @@ async function listenToListings() {
   const ws = new WebSocket(WEBSOCKET_URL);
 
   ws.on("open", () => {
-    console.log("Connected to WebSocket server");
     ws.send(JSON.stringify({ channel: CHANNELS.TOKEN_LISTINGS }));
 
     setInterval(() => {
