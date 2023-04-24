@@ -1,4 +1,5 @@
 const CLIENT_URL = "https://app.wagmilabs.tools";
+const RESERVOIR_SOURCE = "app.wagmilabs.tools";
 
 module.exports = { newSale, newListing, newSnipeUpdate, newFloorChange, CLIENT_URL };
 
@@ -57,7 +58,7 @@ const RESERVOIR_API_KEY = process.env.RESERVOIR_API_KEY;
 
 // reservoir client
 createClient({
-  source: CLIENT_URL,
+  source: RESERVOIR_SOURCE,
   chains: [
     {
       id: 1,
