@@ -29,6 +29,7 @@ const chartResolutions = {
 };
 
 let symbol_name = "";
+let updateIntervals = [];
 
 export const useDatafeed = () => {
   const socket = useContext(SocketContext);
@@ -113,14 +114,16 @@ export const useDatafeed = () => {
     },
     subscribeBars: (symbolInfo, resolution, onRealtimeCallback, subscriberUID, onResetCacheNeededCallback) => {
       const resolutionInMinutes = chartResolutions[resolution];
-      setInterval(() => {
+      const newInterval = setInterval(() => {
         const lastBar = lastBarsCache.get(symbolInfo.full_name);
-        const { close, open, high, low, volume } = lastBar;
+        const { close } = lastBar;
         const time = Date.now();
         const bar = { time, close, open: close, high: close, low: close };
         lastBarsCache.set(symbolInfo.full_name, bar);
         onRealtimeCallback(bar);
       }, resolutionInMinutes * 60 * 1000);
+
+      updateIntervals.push(newInterval);
 
       socket.emit("joinFloorChanges", symbolInfo.ticker.toLowerCase());
       socket.on("floor_change", data => {
@@ -139,6 +142,11 @@ export const useDatafeed = () => {
         onRealtimeCallback(bar);
       });
     },
-    unsubscribeBars: () => {},
+    unsubscribeBars: listenerGuid => {
+      const contractAddress = listenerGuid?.split("-")[0];
+
+      clearInterval(updateIntervals[0]);
+      socket.emit("leaveFloorChanges", contractAddress.toLowerCase());
+    },
   };
 };
