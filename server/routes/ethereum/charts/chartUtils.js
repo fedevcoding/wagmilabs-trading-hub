@@ -1,4 +1,5 @@
 const chartResolutions = {
+  // "1S": 0.01666666666
   1: 1,
   5: 5,
   15: 15,
