@@ -1,21 +1,5 @@
 const ethers = require("ethers");
 const { getClient } = require("@reservoir0x/reservoir-sdk");
-const { createClient } = require("@reservoir0x/reservoir-sdk");
-const RESERVOIR_SOURCE = require("../../../../variables/reservoirSource");
-
-// reservoir client
-createClient({
-  source: RESERVOIR_SOURCE,
-  chains: [
-    {
-      id: 1,
-      apiKey: "9a16bf8e-ec68-5d88-a7a5-a24044de3f38",
-      baseApiUrl: "https://api.reservoir.tools",
-      default: true,
-    },
-  ],
-});
-
 const snipeTasks = require("../../../../services/botsCache/snipeBots/snipeTasks");
 const getProvider = require("../../../../services/ethers/getProvider");
 const updateTask = require("../../../../services/botsCache/snipeBots/updateTask");
@@ -37,6 +21,7 @@ const fullfillSnipeTasks = async listing => {
   if (!collectionTasks) return;
 
   await new Promise(resolve => setTimeout(resolve, 5000));
+
   for (const collectionTask of collectionTasks) {
     const { maxPrice, minPrice, remaining, taskId, skipFlagged } = collectionTask;
     const pendingSnipesAmount = pendingSnipes[taskId] ?? 0;
@@ -66,7 +51,7 @@ async function fullfillOrder(listing, collectionTask) {
     maxFeePerGas,
   } = collectionTask || {};
 
-  const { price: listingPrice, tokenId } = listing;
+  const { price: listingPrice, tokenId, orderHash } = listing;
 
   try {
     addPendingSnipe(taskId);
@@ -87,27 +72,26 @@ async function fullfillOrder(listing, collectionTask) {
     const signer = new ethers.Wallet(privateKey, provider);
 
     const reservoirOptions = {
-      signer,
       items: [
         {
           quantity: 1,
-          token: `${collectionAddress}:${tokenId}`,
+          orderId: orderHash,
         },
       ],
+      signer,
       options: {
         skipBalanceCheck: true,
       },
       expectedPrice: listingPrice,
       onProgress: progress => {
-        // console.log(progress);
+        console.log(progress);
       },
     };
 
-    if (maxFeePerGas) reservoirOptions.options["maxFeePerGas"] = (maxFeePerGas * 1000000000).toString();
+    if (maxFeePerGas) reservoirOptions.options["maxFeePerGas"] = Math.round(maxFeePerGas * 1000000000).toString();
     if (maxPriorityFeePerGas)
-      reservoirOptions.options["maxPriorityFeePerGas"] = (maxPriorityFeePerGas * 1000000000).toString();
-
-    await getClient()?.actions.buyToken(reservoirOptions);
+      reservoirOptions.options["maxPriorityFeePerGas"] = Math.round(maxPriorityFeePerGas * 1000000000).toString();
+    await getClient()?.actions?.buyToken(reservoirOptions);
     removePendingSnipe(taskId);
 
     const snipe = {

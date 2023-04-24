@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef, useContext } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-import { placeholderImage, etherscan, opensea, x2y2, www, twitter, looksRare, discord, gem } from "@Assets";
+import { placeholderImage, etherscan, opensea, x2y2, www, twitter, looksRare, discord, magically } from "@Assets";
 
 import Items from "./sections/items/Items";
 import Activity from "./sections/activity/Activity";
@@ -533,8 +533,8 @@ const Collection = () => {
               </a>
             }
             {
-              <a href={`https://www.gem.xyz/collection/${address}/`} target={"_blank"} rel="noreferrer">
-                <img src={gem} alt="" />
+              <a href={`https://magically.gg/collection/${address}/`} target={"_blank"} rel="noreferrer">
+                <img src={magically} alt="" />
               </a>
             }
             {collectionInfo.externalUrl && (

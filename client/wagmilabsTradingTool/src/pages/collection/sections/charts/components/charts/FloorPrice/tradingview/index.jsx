@@ -1,11 +1,12 @@
 import React, { useEffect, useRef } from "react";
 // import { getFromServer } from "../../../../../../../utils/functions/serverCalls";
 // import { createChart } from "lightweight-charts";
-import datafeed from "./datafeed";
+import { useDatafeed } from "./datafeed";
 import { widget } from "../../../../../../../../charting_library";
 
 const TradingviewFloor = ({ collectionAddress, collectionName }) => {
   const chartContainerRef = useRef();
+  const datafeed = useDatafeed();
 
   const getJwtToken = () => {
     const token = localStorage.getItem("jsonwebtoken");
