@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import EthereumSearch from "../search/EthereumSearch";
-import "./header.css";
+import "./header.scss";
 import { Link, useNavigate } from "react-router-dom";
 
 import { logo } from "@Assets";
@@ -248,7 +248,9 @@ const Header = () => {
       )}
 
       <header className="search-header">
-        <img src={logo} onClick={() => navigate("/")} className="logo-image" alt="" />
+        <Link to="/">
+          <img src={logo} className="logo-image" alt="" />
+        </Link>
 
         <EthereumSearch isHeader={true} />
 

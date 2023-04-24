@@ -38,7 +38,7 @@ const TradingviewFloor = ({ collectionAddress, collectionName }) => {
         "symbol_info",
       ],
       theme: "Dark",
-      enabled_features: ["header_saveload"],
+      enabled_features: ["header_saveload", "seconds_resolution"],
       timezone,
       client_id: "wagmilabs.tools",
       user_id: getJwtToken(),
@@ -54,7 +54,9 @@ const TradingviewFloor = ({ collectionAddress, collectionName }) => {
     tvWidget.subscribe("onAutoSaveNeeded", () => {
       tvWidget.saveChartToServer();
     });
-    tvWidget._options.datafeed.setSymbolName(collectionName);
+    tvWidget?._options?.datafeed?.setSymbolName(collectionName);
+
+    // tvWidget.applyOverrides({ "mainSeriesProperties.showCountdown": true });
 
     return () => {
       tvWidget.remove();

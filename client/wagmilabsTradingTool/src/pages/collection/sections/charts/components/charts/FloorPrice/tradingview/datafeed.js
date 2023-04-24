@@ -6,11 +6,26 @@ import { getFromServer } from "../../../../../../../../utils/functions/serverCal
 const lastBarsCache = new Map();
 const configurationData = {
   supported_resolutions: ["1", "5", "15", "30", "60", "120", "360", "D", "W", "M"],
-  supports_group_request: true,
-  supports_marks: false,
-  supports_search: false,
-  supports_timescale_marks: true,
-  darkMode: true,
+  // supports_group_request: true,
+  // supports_marks: true,
+  // supports_search: false,
+  // supports_timescale_marks: true,
+  // darkMode: true,
+  exchanges: ["opensea", "x2y2", "blur"],
+  supports_time: true,
+};
+const chartResolutions = {
+  // "1S": 0.01666666666
+  1: 1,
+  5: 5,
+  15: 15,
+  30: 30,
+  60: 60,
+  120: 120,
+  360: 360,
+  "1D": 60 * 24,
+  "1W": 60 * 24 * 7,
+  "1M": 60 * 24 * 30,
 };
 
 let symbol_name = "";
@@ -33,17 +48,21 @@ export const useDatafeed = () => {
         type: symbol_name,
         session: "24x7",
         minmov: 1,
-        pricescale: 1000,
+        pricescale: 10000,
         has_intraday: true,
         has_no_volume: false,
         has_weekly_and_monthly: true,
         supported_resolutions: configurationData.supported_resolutions,
         volume_precision: 2,
+        has_seconds: true,
       };
 
       onSymbolResolvedCallback(symbolInfo);
     },
-
+    // getServerTime: callback => {
+    //   console.log("Countdown time: " + Math.floor(new Date().getTime() / 1000));
+    //   callback(Math.floor(new Date().getTime() / 1000));
+    // },
     getBars: async (symbolInfo, resolution, periodParams, onHistoryCallback, onErrorCallback) => {
       try {
         const { to, firstDataRequest, from } = periodParams;
@@ -93,14 +112,32 @@ export const useDatafeed = () => {
       }
     },
     subscribeBars: (symbolInfo, resolution, onRealtimeCallback, subscriberUID, onResetCacheNeededCallback) => {
-      // socket.emit("joinFloorChanges", symbolInfo.ticker.toLowerCase());
-      // socket.on("floor_change", data => {
-      //   console.log(data);
-      // });
-      // const bar = { time: 1682235487000, close: 10, open: 0.05, high: 12, low: 0.03, volume: 10 };
-      // setTimeout(() => {
-      //   onRealtimeCallback(bar);
-      // }, 5000);
+      const resolutionInMinutes = chartResolutions[resolution];
+      setInterval(() => {
+        const lastBar = lastBarsCache.get(symbolInfo.full_name);
+        const { close, open, high, low, volume } = lastBar;
+        const time = Date.now();
+        const bar = { time, close, open: close, high: close, low: close };
+        lastBarsCache.set(symbolInfo.full_name, bar);
+        onRealtimeCallback(bar);
+      }, resolutionInMinutes * 60 * 1000);
+
+      socket.emit("joinFloorChanges", symbolInfo.ticker.toLowerCase());
+      socket.on("floor_change", data => {
+        const { floorPrice } = data;
+
+        const { time, open, high, low, volume } = lastBarsCache.get(symbolInfo.full_name);
+        const bar = {
+          time,
+          close: floorPrice,
+          open,
+          high: floorPrice >= high ? floorPrice : high,
+          low: floorPrice <= low ? floorPrice : low,
+          volume,
+        };
+        lastBarsCache.set(symbolInfo.full_name, bar);
+        onRealtimeCallback(bar);
+      });
     },
     unsubscribeBars: () => {},
   };

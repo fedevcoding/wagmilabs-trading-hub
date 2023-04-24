@@ -12,6 +12,11 @@
   top: 0;
   z-index: 99;
   /* margin-bottom: 40px; */
+
+  a {
+    display: flex;
+    align-items: center;
+  }
 }
 
 .logo-image {
@@ -68,7 +73,8 @@
   background-color: #262626;
 }
 
-.bots-button.before::before, .calendars-button.before::before{
+.bots-button.before::before,
+.calendars-button.before::before {
   background: transparent;
   display: block;
   position: absolute;
@@ -79,7 +85,6 @@
   width: 100%;
   z-index: -1;
 }
-
 
 .input-lens-container {
   display: flex;
@@ -182,13 +187,11 @@ a {
   padding: 10px;
 }
 
-
 .calendars-button,
 .bots-button,
 .pnl-button {
   position: relative;
 }
-
 
 .calendars-options-dropdown.invisible,
 .bots-options-dropdown.invisible,
@@ -297,9 +300,7 @@ a {
   }
 }
 
-
-
-.expiration-header{
+.expiration-header {
   font-size: 16px;
   letter-spacing: 1.1px;
   font-weight: 600;
@@ -313,7 +314,7 @@ a {
   gap: 30px;
 }
 
-.expiration-header .upgrade{
+.expiration-header .upgrade {
   color: white;
   font-weight: 400;
   cursor: pointer;
