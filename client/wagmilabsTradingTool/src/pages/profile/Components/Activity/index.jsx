@@ -359,14 +359,14 @@ export const Activity = ({ userAddress, pageAddress }) => {
               </a>
               <td className="profile-activity-single-price">{price ? roundPrice2(price) : 0} ETH</td>
               <td className="profile-activity-single-from">
-                {type === "list" || type === "receive" || type === "send" ? (
+                {type === "list" || type === "receive" || type === "send" || "mint" ? (
                   <>{from_address ? formatAddress2(from_address, userAddress) : "- - -"}</>
                 ) : (
                   <>{to_address ? formatAddress2(to_address, userAddress) : "- - -"}</>
                 )}
               </td>
               <td className="profile-activity-single-to">
-                {type === "list" || type === "receive" || type === "send" ? (
+                {type === "list" || type === "receive" || type === "send" || "mint" ? (
                   <> {to_address ? formatAddress2(to_address, userAddress) : "- - -"}</>
                 ) : (
                   <> {from_address ? formatAddress2(from_address, userAddress) : "- - -"}</>
