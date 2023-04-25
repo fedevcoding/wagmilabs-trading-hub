@@ -50,6 +50,7 @@ import Pnl from "./pages/pnl/Pnl";
 import RESERVOIR_SOURCE from "./variables/reservoirSource";
 import BulkListing from "./pages/bulkListing/BulkListing";
 import Plans from "./pages/login/components/plans/Plans";
+import { useLocationParams } from "./custom-hooks/useLocationParams";
 
 // for wagmi
 
@@ -91,6 +92,7 @@ const socket = io(serverUrl);
 
 function App() {
   // states
+  const { source } = useLocationParams();
   const [userBalances, setUserBalances] = useState({
     eth: 0,
     weth: 0,
@@ -112,22 +114,10 @@ function App() {
   });
   const [ens, setEns] = useState("");
 
-  const [fromCatchMint, setFromCatchMint] = useState(false);
-
   const activeGasRef = useRef(gasSettings.value);
 
   // set checking in base of tokens
   useEffect(() => {
-    async function view() {
-      const fromCatchMint = window.location.search.includes("catchmint");
-      try {
-        await pushToServer("/stats", { type: "view", timestamp: Date.now(), fromCatchMint });
-      } catch (e) {
-        console.log(e);
-      }
-    }
-    view();
-
     async function verify() {
       const { pathname } = window.location;
       const { jsonwebtoken } = localStorage;
@@ -151,6 +141,19 @@ function App() {
     }
     verify();
   }, []);
+
+  // stats
+  useEffect(() => {
+    async function view() {
+      try {
+        console.log("pushing witrh source: ", source || "direct");
+        await pushToServer("/stats", { type: "view", timestamp: Date.now(), source });
+      } catch (e) {
+        console.log(e);
+      }
+    }
+    source !== undefined && view();
+  }, [source]);
 
   // set colors based on states
   useEffect(() => {
@@ -190,9 +193,6 @@ function App() {
       setEthData(data);
     });
 
-    const fromCatchMint = window.location.search.includes("catchmint");
-    setFromCatchMint(fromCatchMint);
-
     return () => socket.off("disconnect");
   }, []);
 
@@ -226,7 +226,6 @@ function App() {
       ethData,
       connected,
       setConnected,
-      fromCatchMint,
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [
@@ -244,7 +243,6 @@ function App() {
       userBalances,
       setUserBalances,
       ethData,
-      fromCatchMint,
     ]
   );
 

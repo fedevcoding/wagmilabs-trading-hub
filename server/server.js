@@ -84,6 +84,7 @@ const getCoinsGasData = require("./websockets/coinsGasData.js");
 const rateLimit = require("express-rate-limit");
 const multer = require("multer");
 const forms = multer();
+const requestIp = require("request-ip");
 //
 
 // http server
@@ -96,6 +97,7 @@ app.use(express.urlencoded({ limit: "500mb", extended: true }));
 app.use(cors({ credentials: true, origin: CLIENT_URL }));
 app.use(cookieParser());
 app.use(forms.array());
+app.use(requestIp.mw());
 //
 
 // socket io

@@ -7,6 +7,7 @@ import { Loader } from "@Components";
 import { baseUrl } from "@Variables";
 
 import "./style.scss";
+import { useLocationParams } from "../../../../custom-hooks/useLocationParams";
 
 const message = `Welcome to Wagmi Labs!
 
@@ -20,6 +21,7 @@ Your authentication status will reset after 24 hours.
 If you're connecting a hardware wallet, you'll need to sign the message on your device, too.`;
 
 const SignModal = ({ setConnected, setSignIn }) => {
+  const { source } = useLocationParams();
   const [acceptTerms, setAcceptTerms] = useState(false);
   const [loadingSign, setLoadingSign] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
@@ -37,7 +39,7 @@ const SignModal = ({ setConnected, setSignIn }) => {
           const options = {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ address, signature, message }),
+            body: JSON.stringify({ address, signature, message, source }),
             credentials: "include",
           };
 

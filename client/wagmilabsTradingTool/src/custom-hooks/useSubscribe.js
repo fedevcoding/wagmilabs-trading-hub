@@ -4,16 +4,14 @@ import { fetchSigner } from "@wagmi/core";
 import { pushToServer } from "../utils/functions/serverCalls";
 import { checkErrors } from "../utils/functions/errorHelpers";
 import { useToast } from "@chakra-ui/react";
-import { useContext } from "react";
-import { UserDataContext } from "../context/userContext";
 import ReactGA from "react-ga";
+import { useLocationParams } from "./useLocationParams";
 
 ReactGA.initialize("GTM-WWSJ25L");
 
 export const useSubscribe = () => {
-  const { fromCatchMint } = useContext(UserDataContext);
-
   const toast = useToast();
+  const { source } = useLocationParams();
   const subscribe = async (planId, months, price) => {
     try {
       const signer = await fetchSigner();
@@ -25,7 +23,7 @@ export const useSubscribe = () => {
 Your trial will end ${endDate.toDateString()}.`;
         const address = await signer.getAddress();
         const signature = await signer.signMessage(message);
-        const res = await pushToServer("/freeTrial", { signature, address, message, fromCatchMint });
+        const res = await pushToServer("/freeTrial", { signature, address, message });
 
         if (res.authenticated) {
           ReactGA.event({
@@ -52,7 +50,7 @@ Your trial will end ${endDate.toDateString()}.`;
             category: "subscription",
             action: "Created subscription",
           });
-          await pushToServer("/stats", { type: "boughtBasic", timestamp: Date.now(), fromCatchMint });
+          await pushToServer("/stats", { type: "boughtBasic", timestamp: Date.now(), source });
           toast({
             title: "Success",
             description: "Started plan activated",
@@ -69,7 +67,7 @@ Your trial will end ${endDate.toDateString()}.`;
             category: "subscription",
             action: "Created subscription",
           });
-          await pushToServer("/stats", { type: "boughtPro", timestamp: Date.now(), fromCatchMint });
+          await pushToServer("/stats", { type: "boughtPro", timestamp: Date.now(), source });
 
           toast({
             title: "Success",

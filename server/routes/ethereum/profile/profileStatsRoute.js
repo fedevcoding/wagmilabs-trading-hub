@@ -2,8 +2,6 @@ const express = require("express");
 const checkAuth = require("../../../middleware/checkAuth");
 
 const Stats = require("../../../models/StatsModel");
-const parseEther = require("../../../services/parseEther");
-const { isTeam } = require("../../../config/allowedAddresses");
 const { execTranseposeAPI } = require("../../../services/externalAPI/transpose");
 
 const UPSHOT_API_KEY = process.env.UPSHOT_API_KEY;
@@ -14,11 +12,6 @@ profileStatsRoute.get("/", checkAuth, async (req, res) => {
   try {
     const address = req.query?.address || req.userDetails?.address;
     if (!address) throw new Error("No address provided");
-
-    const isPartTeam = isTeam(address);
-    if (!isPartTeam) {
-      await Stats.create({ type: "profileStats", timestamp: Date.now(), address });
-    }
 
     let data = await fetch(`https://api.upshot.xyz/v2/wallets/${address}/stats`, {
       headers: {
