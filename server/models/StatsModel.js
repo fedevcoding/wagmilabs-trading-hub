@@ -14,9 +14,6 @@ const StatsSchema = mongoose.Schema(
     passType: {
       type: Number,
     },
-    fromCatchMint: {
-      type: Boolean,
-    },
   },
   {
     timestamps: true,

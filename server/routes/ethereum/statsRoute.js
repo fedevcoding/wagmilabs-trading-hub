@@ -4,19 +4,23 @@ const { execTranseposeAPI } = require("../../services/externalAPI/transpose");
 
 const statsRoute = express();
 
-const Stats = require("../../models/StatsModel");
 const { isTeam } = require("../../config/allowedAddresses");
+const { client } = require("../../config/db");
 
 statsRoute.post("/", async (req, res) => {
-  const { type, timestamp, fromCatchMint } = req.body || {};
+  const { type, timestamp, source } = req.body || {};
   const { address } = req.userDetails || {};
 
   try {
     const partOfTeam = isTeam(address);
 
     if (!partOfTeam) {
-      const stats = await Stats.create({ type, timestamp, address, fromCatchMint });
-      if (!stats) throw Error("Something went wrong saving the stats");
+      const ip = req.clientIp;
+      await client.query(
+        "INSERT INTO stats (type, timestamp, source, address, ip_address) VALUES ($1, $2, $3, $4, $5)",
+        [type, timestamp, source, address, ip]
+      );
+      // const stats = await Stats.create({ type, timestamp, address, fromCatchMint });
     }
 
     res.status(200).json({});

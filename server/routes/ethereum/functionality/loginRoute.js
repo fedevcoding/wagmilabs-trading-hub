@@ -6,6 +6,7 @@ const User = require("../../../models/userModel.js");
 const Stats = require("../../../models/StatsModel.js");
 // const fallbackPfp = require("../../../images/userPfp.png");
 const { isTeam } = require("../../../config/allowedAddresses.js");
+const { client } = require("../../../config/db.js");
 
 const loginRoute = express();
 
@@ -17,13 +18,19 @@ const ACCESS_JWT_SECONDS = 200;
 loginRoute.post("/", checkOwnership, async (req, res) => {
   try {
     const { passType, expiration, address } = req?.ownershipData || {};
+    const { source } = req?.body || "";
 
     if (!address) {
       res.status(403).json({ authenticated: false, message: "Missing query fields." });
     } else {
       const partOfTeam = isTeam(address);
       if (!partOfTeam) {
-        await Stats.create({ type: "login", timestamp: Date.now(), address, passType });
+        const ip = req.clientIp;
+        const timestamp = Date.now();
+        await client.query(
+          "INSERT INTO stats (type, timestamp, source, address, ip_address) VALUES ($1, $2, $3, $4, $5)",
+          ["login", timestamp, source, address, ip]
+        );
       }
       const accessToken = JWT.sign(
         {

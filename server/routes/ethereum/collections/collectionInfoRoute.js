@@ -1,8 +1,6 @@
 const express = require("express");
 const checkAuth = require("../../../middleware/checkAuth");
 const Stats = require("../../../models/StatsModel");
-const { isTeam } = require("../../../config/allowedAddresses");
-
 
 const collectionInfoRoute = express();
 
@@ -13,11 +11,6 @@ collectionInfoRoute.get("/:address", checkAuth, (req, res) => {
 
   async function getData() {
     try {
-      const isPartTeam = isTeam(userAddress);
-      if (!isPartTeam) {
-        await Stats.create({ type: "collectionInfo", timestamp: Date.now(), address: userAddress });
-      }
-
       const { address } = req.params;
       const dataApi = await fetch(
         `https://api.reservoir.tools/collections/v5?id=${address}&includeTopBid=true&includeAttributes=false&includeOwnerCount=false&includeSalesCount=false&normalizeRoyalties=false`,
