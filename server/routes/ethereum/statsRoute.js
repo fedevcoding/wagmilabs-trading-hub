@@ -6,8 +6,9 @@ const statsRoute = express();
 
 const { isTeam } = require("../../config/allowedAddresses");
 const { client } = require("../../config/db");
+const adduserData = require("../../middleware/addUserData");
 
-statsRoute.post("/", async (req, res) => {
+statsRoute.post("/", adduserData, async (req, res) => {
   const { type, timestamp, source } = req.body || {};
   const { address } = req.userDetails || {};
 
