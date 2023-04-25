@@ -3,7 +3,7 @@ const checkAuth = require("../../../middleware/checkAuth");
 const { execTranseposeAPI } = require("../../../services/externalAPI/transpose");
 const parseEther = require("../../../services/parseEther");
 const { SQL_BURNER_ADDRESS } = require("../../../services/burnerAddresses");
-const MODULE_API_KEY = process.env.MODULE_API_KEY;
+const UPSHOT_API_KEY = process.env.UPSHOT_API_KEY;
 
 const profileActivityRoute = express();
 
@@ -352,35 +352,46 @@ async function getListingData(
           if (startDate) startDate = startDate / 1000;
           if (endDate) endDate = endDate / 1000;
           if (startDate && endDate) {
-            return `&listedAfter=${startDate}&listedBefore=${endDate}`;
+            return `&start=${startDate}&end=${endDate}`;
           } else if (startDate && !endDate) {
-            return `&listedAfter=${startDate}`;
+            return `&start=${startDate}`;
           } else if (endDate && !startDate) {
-            return `&listedAfter=1580489577000&listedBefore=${endDate}`;
+            return `&start=0&end=${endDate}`;
           } else {
-            return `&listedAfter=1580489577000`;
+            return `&start=1`;
           }
         };
 
-        const minMaxFilter = getMinMaxFilter();
-        const marketplaceFilter = getMarketplaceFilter();
-        const tokenIdFilter = getTokenIdFilter();
-        const contractFilter = getContractFilter();
+        // const minMaxFilter = getMinMaxFilter();
+        // const marketplaceFilter = getMarketplaceFilter();
+        // const tokenIdFilter = getTokenIdFilter();
+        // const contractFilter = getContractFilter();
         const dateFilter = getDateFilter();
 
+        // const listingsApiData = await fetch(
+        //   `https://api.modulenft.xyz/api/v2/eth/nft/listings?active=true${dateFilter}&count=${
+        //     listingsLimit + 1
+        //   }&offset=${offset3}&sortDirection=timeDesc&seller=${userAddress}&withMetadata=false${minMaxFilter}${marketplaceFilter}${tokenIdFilter}${contractFilter}`,
+        //   {
+        //     headers: {
+        //       "X-API-KEY": MODULE_API_KEY,
+        //     },
+        //   }
+        // );
         const listingsApiData = await fetch(
-          `https://api.modulenft.xyz/api/v2/eth/nft/listings?active=true${dateFilter}&count=${
+          `https://api.upshot.xyz/v2/wallets/0xfe697C5527ab86DaA1e4c08286D2bE744a0E321E/events?types=ASK&${dateFilter}&include_count=false&include_asset_metadata=true&limit=${
             listingsLimit + 1
-          }&offset=${offset3}&sortDirection=timeDesc&seller=${userAddress}&withMetadata=false${minMaxFilter}${marketplaceFilter}${tokenIdFilter}${contractFilter}`,
+          }&offset=${offset3}`,
           {
             headers: {
-              "X-API-KEY": MODULE_API_KEY,
+              "x-api-key": UPSHOT_API_KEY,
             },
           }
         );
+
         const listingDataResult = await listingsApiData.json();
 
-        listingsData = listingDataResult?.data ? listingDataResult.data : [];
+        listingsData = listingDataResult?.data?.events || [];
 
         if (listingsData.length > listingsLimit) hasMoreListings = true;
         else hasMoreListings = false;
@@ -389,14 +400,15 @@ async function getListingData(
 
         listingsData?.forEach(item => {
           item["type"] = "list";
-          item["from_address"] = userAddress;
-          item["price"] = parseEther(item.price, false);
-          item["token_id"] = item.tokenId;
+          item["createdAt"] = item.timestamp * 1000;
+          item["createdat"] = item.timestamp * 1000;
+          item["marketplace"] = item.market_name;
+          item["price"] = parseEther(item.wei, false);
           item["tokenData"] = {
             token: {
-              name: item?.tokenName || item?.metadata?.name,
-              image: item?.metadata?.image,
-              collection: { name: item?.collection },
+              name: item?.asset_name || "",
+              image: item?.image_url || "",
+              collection: { name: item?.collection_name },
             },
           };
         });
