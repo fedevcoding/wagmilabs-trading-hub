@@ -74,6 +74,8 @@ editSnipeRoute.post("/sniper/editTask", checkAuth, checkPro, async (req, res) =>
 
       res.status(200).json("task removed");
     } else if (type === "restart") {
+      console.log(data);
+
       const { taskId, privateKey } = data;
 
       if (!taskId || !privateKey) throw new Error("missing data");
@@ -86,7 +88,7 @@ editSnipeRoute.post("/sniper/editTask", checkAuth, checkPro, async (req, res) =>
           { $set: { "tasks.$.status": "active", "tasks.$.walletAddress": walletAddress } },
           { new: true, arrayFilters: [{ "tasks.taskId": taskId }] }
         )
-      )?.tasks?.[0]?.["_doc"];
+      )?.tasks?.find(task => task.taskId === taskId)?.["_doc"];
 
       if (!snipe) throw new Error("task not found");
 

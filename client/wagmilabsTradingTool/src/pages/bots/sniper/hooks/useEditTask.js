@@ -87,7 +87,7 @@ export const useEditTask = (callback, toggleSnipe) => {
       };
       const walletAddress = await pushToServer("/bots/sniper/editTask", body);
 
-      toggleSnipe("restart", { taskId, walletAddress });
+      await toggleSnipe("restart", { taskId, walletAddress });
       toast({
         title: "Task restarted",
         description: "Task restarted successfully",

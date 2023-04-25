@@ -29,10 +29,10 @@ console.warn = function () {};
 const theme = {
   primary: "#FFF",
   secondary: "#A9A9A9",
-  interactive: "#000",
+  interactive: "#A9A9A9",
   container: "#4E4E5A",
   module: "#222633",
-  accent: "#71FF98",
+  accent: "#4E4E5A",
   outline: "#CC1",
   dialog: "#000",
   fontFamily: "Poppins",
