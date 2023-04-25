@@ -7,7 +7,6 @@ const { isTeam } = require("../../../config/allowedAddresses");
 const { execTranseposeAPI } = require("../../../services/externalAPI/transpose");
 
 const UPSHOT_API_KEY = process.env.UPSHOT_API_KEY;
-const NFTSCAN_API_KEY = process.env.NFTSCAN_API_KEY;
 
 const profileStatsRoute = express();
 
@@ -28,8 +27,9 @@ profileStatsRoute.get("/", checkAuth, async (req, res) => {
     });
 
     data = (await data.json())?.data;
-    const { num_txs, num_assets_owned, num_collections_owned, total_gain, volume } = data || {};
-    const nftsValue = parseEther(data?.portfolio_value_wei, false);
+    const { num_txs, num_assets_owned, num_collections_owned, total_gain, volume, portfolio_value_wei } = data || {};
+
+    const nftsValue = parseEther(portfolio_value_wei !== "[object Object]" ? portfolio_value_wei : "0", false);
     const walletVolume = parseEther(data?.volume, false);
 
     const sql = `
