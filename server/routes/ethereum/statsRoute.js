@@ -10,7 +10,7 @@ const adduserData = require("../../middleware/addUserData");
 
 statsRoute.post("/", adduserData, async (req, res) => {
   const { type, timestamp, source } = req.body || {};
-  const { address } = req.userDetails || {};
+  const { address, passType } = req.userDetails || {};
 
   try {
     const partOfTeam = isTeam(address);
@@ -18,8 +18,8 @@ statsRoute.post("/", adduserData, async (req, res) => {
     if (!partOfTeam) {
       const ip = req.clientIp;
       await client.query(
-        "INSERT INTO stats (type, timestamp, source, address, ip_address) VALUES ($1, $2, $3, $4, $5)",
-        [type, timestamp, source, address, ip]
+        "INSERT INTO stats (type, timestamp, source, address, ip_address, pass_type) VALUES ($1, $2, $3, $4, $5)",
+        [type, timestamp, source, address, ip, passType]
       );
       // const stats = await Stats.create({ type, timestamp, address, fromCatchMint });
     }
