@@ -3,6 +3,7 @@ const checkAuth = require("../../../middleware/checkAuth");
 
 const Stats = require("../../../models/StatsModel");
 const { execTranseposeAPI } = require("../../../services/externalAPI/transpose");
+const parseEther = require("../../../services/parseEther");
 
 const UPSHOT_API_KEY = process.env.UPSHOT_API_KEY;
 
