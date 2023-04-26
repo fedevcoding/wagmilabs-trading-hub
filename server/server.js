@@ -139,12 +139,12 @@ setInterval(async () => {
 let users = {};
 
 io.on("connection", socket => {
-  const { address } = socket.handshake;
+  const { remoteAddress } = socket.conn;
 
-  users[address] = users[address] ? users[address] + 1 : 1;
+  users[remoteAddress] = users[remoteAddress] ? users[remoteAddress] + 1 : 1;
 
   socket.on("disconnect", () => {
-    users[address] = users[address] ? users[address] - 1 : 0;
+    users[remoteAddress] = users[remoteAddress] ? users[remoteAddress] - 1 : 0;
   });
 
   setInterval(() => {
