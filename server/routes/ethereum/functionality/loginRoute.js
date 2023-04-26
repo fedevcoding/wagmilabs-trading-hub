@@ -28,8 +28,8 @@ loginRoute.post("/", checkOwnership, async (req, res) => {
         const ip = req.clientIp;
         const timestamp = Date.now();
         await client.query(
-          "INSERT INTO stats (type, timestamp, source, address, ip_address) VALUES ($1, $2, $3, $4, $5)",
-          ["login", timestamp, source, address, ip]
+          "INSERT INTO stats (type, timestamp, source, address, ip_address, pass_type) VALUES ($1, $2, $3, $4, $5)",
+          ["login", timestamp, source, address, ip, passType]
         );
       }
       const accessToken = JWT.sign(
