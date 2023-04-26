@@ -1,6 +1,6 @@
 // react
 import React, { useState, useEffect, useRef, useMemo } from "react";
-import { jwtExpired, pushToServer } from "./utils/functions";
+import { getFromServer, jwtExpired, pushToServer } from "./utils/functions";
 
 // components
 import Header from "./pages/header/Header";
@@ -87,10 +87,10 @@ const theme = reservoirDarkTheme({
 });
 
 // for socket io
-const socket = io(serverUrl);
 
 function App() {
   // states
+  const [socket, setSocket] = useState(null);
   const { source } = useLocationParams();
   const [userBalances, setUserBalances] = useState({
     eth: 0,
@@ -159,45 +159,53 @@ function App() {
     document.body.style.background = "#0E0F0E";
   }, []);
 
+  useEffect(() => {
+    if (connected && !loading && !checking) {
+      const socket = io(serverUrl);
+      setSocket(socket);
+    }
+  }, [connected, checking, loading]);
+
   // socket io connection
   useEffect(() => {
-    socket.on("ethData", data => {
-      const { gasMapping, currencyPrices } = data;
-      switch (activeGasRef.current) {
-        case "custom":
-          break;
-        case "instant":
-          setGasSettings(prev => ({
-            ...prev,
-            maxFeePerGas: gasMapping["instantGas"].maxFeePerGas,
-          }));
-          break;
-        case "fast":
-          setGasSettings(prev => ({
-            ...prev,
-            maxFeePerGas: gasMapping["fastGas"].maxFeePerGas,
-          }));
-          break;
-        case "standard":
-          setGasSettings(prev => ({
-            ...prev,
-            maxFeePerGas: gasMapping["standardGas"].maxFeePerGas,
-          }));
-          break;
-        default:
-          break;
-      }
+    if (socket) {
+      socket.on("ethData", data => {
+        const { gasMapping, currencyPrices } = data;
+        switch (activeGasRef.current) {
+          case "custom":
+            break;
+          case "instant":
+            setGasSettings(prev => ({
+              ...prev,
+              maxFeePerGas: gasMapping["instantGas"].maxFeePerGas,
+            }));
+            break;
+          case "fast":
+            setGasSettings(prev => ({
+              ...prev,
+              maxFeePerGas: gasMapping["fastGas"].maxFeePerGas,
+            }));
+            break;
+          case "standard":
+            setGasSettings(prev => ({
+              ...prev,
+              maxFeePerGas: gasMapping["standardGas"].maxFeePerGas,
+            }));
+            break;
+          default:
+            break;
+        }
 
-      setCryptoPrices(currencyPrices);
-      setEthData(data);
-    });
-
-    return () => socket.off("disconnect");
-  }, []);
+        setCryptoPrices(currencyPrices);
+        setEthData(data);
+      });
+      return () => socket.off("disconnect");
+    }
+  }, [socket]);
 
   useEffect(() => {
-    gasSettings.value && socket.emit("getEthData");
-  }, [gasSettings.value]);
+    gasSettings.value && socket && socket.emit("getEthData");
+  }, [gasSettings.value, socket]);
 
   // set gas setting ref when it changes
   useEffect(() => {
