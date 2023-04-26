@@ -140,7 +140,7 @@ setInterval(async () => {
 let users = {};
 
 io.on("connection", socket => {
-  const { remoteAddress } = socket.handshake;
+  const { remoteAddress } = socket.conn;
 
   users[remoteAddress] = users[remoteAddress] ? users[remoteAddress] + 1 : 1;
 
