@@ -1,7 +1,6 @@
 const express = require("express");
 const checkAuth = require("../../../middleware/checkAuth");
 const { execTranseposeAPI } = require("../../../services/externalAPI/transpose");
-const parseEther = require("../../../services/parseEther");
 const { SQL_BURNER_ADDRESS } = require("../../../services/burnerAddresses");
 const parseEther = require("../../../services/parseEther");
 const UPSHOT_API_KEY = process.env.UPSHOT_API_KEY;
