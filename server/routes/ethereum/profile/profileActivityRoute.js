@@ -1,8 +1,8 @@
 const express = require("express");
-const { parseEther } = require("../../../../client/wagmilabsTradingTool/src/utils/formats/formats");
 const checkAuth = require("../../../middleware/checkAuth");
 const { execTranseposeAPI } = require("../../../services/externalAPI/transpose");
 const { SQL_BURNER_ADDRESS } = require("../../../services/burnerAddresses");
+const parseEther = require("../../../services/parseEther");
 const UPSHOT_API_KEY = process.env.UPSHOT_API_KEY;
 
 const profileActivityRoute = express();
