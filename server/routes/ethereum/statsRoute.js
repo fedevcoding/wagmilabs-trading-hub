@@ -18,7 +18,7 @@ statsRoute.post("/", adduserData, async (req, res) => {
     if (!partOfTeam) {
       const ip = req.clientIp;
       await client.query(
-        "INSERT INTO stats (type, timestamp, source, address, ip_address, pass_type) VALUES ($1, $2, $3, $4, $5)",
+        "INSERT INTO stats (type, timestamp, source, address, ip_address, pass_type) VALUES ($1, $2, $3, $4, $5, $6)",
         [type, timestamp, source, address, ip, passType]
       );
       // const stats = await Stats.create({ type, timestamp, address, fromCatchMint });
