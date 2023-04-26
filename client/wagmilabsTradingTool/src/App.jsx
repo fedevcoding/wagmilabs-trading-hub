@@ -1,6 +1,6 @@
 // react
 import React, { useState, useEffect, useRef, useMemo } from "react";
-import { getFromServer, jwtExpired, pushToServer } from "./utils/functions";
+import { jwtExpired, pushToServer } from "./utils/functions";
 
 // components
 import Header from "./pages/header/Header";
