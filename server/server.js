@@ -137,7 +137,17 @@ setInterval(async () => {
   await updateGasData();
 }, 10000);
 
+let users = {};
+
 io.on("connection", socket => {
+  const { address } = socket.handshake;
+
+  users[address] = users[address] ? users[address] + 1 : 1;
+
+  socket.on("disconnect", () => {
+    users[address] = users[address] ? users[address] - 1 : 0;
+  });
+
   setInterval(() => {
     socket.emit("ethData", ethData);
   }, 10000);
@@ -243,6 +253,17 @@ const limiter = rateLimit({
 app.use(limiter);
 
 // http routes
+
+app.get("/api/v1/data/activeUsers", (req, res) => {
+  const password = process.env.DATA_ACCESS_PASSWORD;
+  const { accessPassword } = req.query;
+
+  if (password !== accessPassword) {
+    return res.status(401).send("Unauthorized");
+  }
+
+  res.json(users);
+});
 
 app.use("/api/v1/wagmilabs/login", loginRoute);
 app.use("/api/v1/wagmilabs/freeTrial", freeTrialRoute);
