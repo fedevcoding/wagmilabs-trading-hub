@@ -147,7 +147,6 @@ function App() {
   useEffect(() => {
     async function view() {
       try {
-        console.log("pushing witrh source: ", source || "direct");
         await pushToServer("/stats", { type: "view", timestamp: Date.now(), source });
       } catch (e) {
         console.log(e);

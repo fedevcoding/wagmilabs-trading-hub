@@ -28,7 +28,7 @@ async function listenToFloorChanges() {
   });
 
   ws.on("close", function close() {
-    console.log("Disconnected from sales WebSocket server");
+    console.log("Disconnected from floor changes WebSocket server");
     setTimeout(() => {
       console.log("trying to reconnect");
       listenToFloorChanges();

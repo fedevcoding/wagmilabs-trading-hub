@@ -4,6 +4,7 @@ const JWT = require("jsonwebtoken");
 const checkOwnership = require("../../../middleware/checkOwnership.js");
 const User = require("../../../models/userModel.js");
 const { insertStats } = require("../../../utils/utils.js");
+const { saveAddress } = require("@sharemint/sdk");
 
 const loginRoute = express();
 
@@ -22,6 +23,8 @@ loginRoute.post("/", checkOwnership, async (req, res) => {
     } else {
       const ip = req.clientIp;
       const timestamp = Date.now();
+
+      await saveAddress({ slug: "wagmilabs", address });
       await insertStats({
         type: "login",
         timestamp,
