@@ -77,7 +77,7 @@ const port = process.env.PORT || 5001;
 require("dotenv").config();
 const cors = require("cors");
 const express = require("express");
-const { connectDB } = require("./config/db");
+const { connectDB, client } = require("./config/db");
 const cookieParser = require("cookie-parser");
 const getCoinsGasData = require("./websockets/coinsGasData.js");
 const rateLimit = require("express-rate-limit");
@@ -115,6 +115,7 @@ const buyersSellersChartRoute = require("./routes/ethereum/charts/buyersSellersC
 const freeTrialRoute = require("./routes/ethereum/functionality/freeTrialroute.js");
 const twChartRoute = require("./routes/ethereum/tradingview/twChartsRoute.js");
 const ipRoute = require("./routes/ethereum/ipRoute.js");
+const { insertStats } = require("./utils/utils.js");
 const io = socketIO(server, {
   cors: {
     origin: CLIENT_URL,
@@ -139,9 +140,11 @@ setInterval(async () => {
 
 let users = {};
 let idIps = {};
+let timeSpent = {};
 
 io.on("connection", socket => {
   const { id } = socket;
+  let userAddress;
 
   setInterval(() => {
     socket.emit("ethData", ethData);
@@ -150,7 +153,12 @@ io.on("connection", socket => {
   socket.on("getEthData", () => {
     socket.emit("ethData", ethData);
   });
-  socket.on("disconnect", () => {
+  socket.on("disconnect", async () => {
+    const date = Date.now();
+    const time = date - timeSpent[id];
+    delete timeSpent[id];
+    console.log(time);
+
     const ip = idIps[id];
     if (ip) {
       users[ip] = users[ip] - 1;
@@ -158,8 +166,23 @@ io.on("connection", socket => {
         delete users[ip];
       }
     }
+
+    const timestamp = Date.now();
+    if (!isNaN(time)) {
+      await insertStats({
+        type: "usage_time",
+        address: userAddress,
+        ip_address: ip,
+        timestamp,
+        pass_type: null,
+        extra_data: time,
+      });
+    }
   });
-  socket.on("join", ip => {
+  socket.on("join", data => {
+    const { ip, address } = data;
+    userAddress = address;
+    timeSpent[id] = Date.now();
     users[ip] = users[ip] ? users[ip] + 1 : 1;
     idIps[id] = ip;
   });

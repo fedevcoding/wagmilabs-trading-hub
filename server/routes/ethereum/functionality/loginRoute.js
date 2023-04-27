@@ -3,10 +3,7 @@ require("dotenv").config();
 const JWT = require("jsonwebtoken");
 const checkOwnership = require("../../../middleware/checkOwnership.js");
 const User = require("../../../models/userModel.js");
-const Stats = require("../../../models/StatsModel.js");
-// const fallbackPfp = require("../../../images/userPfp.png");
-const { isTeam } = require("../../../config/allowedAddresses.js");
-const { client } = require("../../../config/db.js");
+const { insertStats } = require("../../../utils/utils.js");
 
 const loginRoute = express();
 
@@ -23,15 +20,17 @@ loginRoute.post("/", checkOwnership, async (req, res) => {
     if (!address) {
       res.status(403).json({ authenticated: false, message: "Missing query fields." });
     } else {
-      const partOfTeam = isTeam(address);
-      if (!partOfTeam) {
-        const ip = req.clientIp;
-        const timestamp = Date.now();
-        await client.query(
-          "INSERT INTO stats (type, timestamp, source, address, ip_address, pass_type) VALUES ($1, $2, $3, $4, $5, $6)",
-          ["login", timestamp, source, address, ip, passType]
-        );
-      }
+      const ip = req.clientIp;
+      const timestamp = Date.now();
+      await insertStats({
+        type: "login",
+        timestamp,
+        source,
+        address,
+        ip_address: ip,
+        pass_type: passType,
+        extra_data: null,
+      });
       const accessToken = JWT.sign(
         {
           address,
