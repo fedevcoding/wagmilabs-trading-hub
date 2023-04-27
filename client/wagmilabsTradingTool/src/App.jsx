@@ -1,6 +1,6 @@
 // react
 import React, { useState, useEffect, useRef, useMemo } from "react";
-import { jwtExpired, pushToServer } from "./utils/functions";
+import { getFromServer, jwtExpired, pushToServer } from "./utils/functions";
 
 // components
 import Header from "./pages/header/Header";
@@ -160,11 +160,20 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if (connected && !loading && !checking) {
-      const socket = io(serverUrl);
-      setSocket(socket);
+    async function connectSocket() {
+      try {
+        const socket = io(serverUrl);
+        const ip = await getFromServer("/ip_address");
+        socket.emit("join", ip);
+        setSocket(socket);
+      } catch (e) {
+        console.log(e);
+      }
     }
-  }, [connected, checking, loading]);
+    if (connected && !loading && !checking && !socket) {
+      connectSocket();
+    }
+  }, [connected, checking, loading, socket]);
 
   // socket io connection
   useEffect(() => {

@@ -114,6 +114,7 @@ const advancedFloorChartRoute = require("./routes/ethereum/charts/advancedFloorC
 const buyersSellersChartRoute = require("./routes/ethereum/charts/buyersSellersChartRoute.js");
 const freeTrialRoute = require("./routes/ethereum/functionality/freeTrialroute.js");
 const twChartRoute = require("./routes/ethereum/tradingview/twChartsRoute.js");
+const ipRoute = require("./routes/ethereum/ipRoute.js");
 const io = socketIO(server, {
   cors: {
     origin: CLIENT_URL,
@@ -137,20 +138,30 @@ setInterval(async () => {
 }, 10000);
 
 let users = {};
+let idIps = {};
 
 io.on("connection", socket => {
-  const { address } = socket.request.client._peername;
-  users[address] = users[address] ? users[address] + 1 : 1;
-
-  socket.on("disconnect", () => {
-    users[address] = users[address] ? users[address] - 1 : 0;
-  });
+  const { id } = socket;
 
   setInterval(() => {
     socket.emit("ethData", ethData);
   }, 10000);
+
   socket.on("getEthData", () => {
     socket.emit("ethData", ethData);
+  });
+  socket.on("disconnect", () => {
+    const ip = idIps[id];
+    if (ip) {
+      users[ip] = users[ip] - 1;
+      if (users[ip] === 0) {
+        delete users[ip];
+      }
+    }
+  });
+  socket.on("join", ip => {
+    users[ip] = users[ip] ? users[ip] + 1 : 1;
+    idIps[id] = ip;
   });
 
   socket.on("joinSales", collectionAddress => {
@@ -262,6 +273,8 @@ app.get("/api/v1/data/activeUsers", (req, res) => {
 
   res.json(users);
 });
+
+app.use("/api/v1/wagmilabs/ip_address", ipRoute);
 
 app.use("/api/v1/wagmilabs/login", loginRoute);
 app.use("/api/v1/wagmilabs/freeTrial", freeTrialRoute);
