@@ -84,7 +84,7 @@ const Collection = () => {
   const [liveItems, setLiveItems] = useState(true);
 
   useEffect(() => {
-    if (address) {
+    if (address && socket) {
       if (!address.startsWith("0x") || address.length !== 42) {
         navigate("notfound");
       } else {
@@ -111,7 +111,7 @@ const Collection = () => {
       };
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [address]);
+  }, [address, socket]);
 
   function addNewListing(listingData) {
     const { tokenId, price, image, name, timestamp, marketplace, rarity, rarityRank, orderHash, isFlagged } =
