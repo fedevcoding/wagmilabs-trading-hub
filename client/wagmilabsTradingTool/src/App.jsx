@@ -23,7 +23,7 @@ import { ChakraProvider } from "@chakra-ui/react";
 
 // wagmi / rainbowkit
 import { ReservoirKitProvider, darkTheme as reservoirDarkTheme } from "@reservoir0x/reservoir-kit-ui";
-import { chain, configureChains, WagmiConfig, createClient as createWagmiClient } from "wagmi";
+import { chain, configureChains, WagmiConfig, createClient as createWagmiClient, useAccount } from "wagmi";
 import { createClient } from "@reservoir0x/reservoir-sdk";
 import { infuraProvider } from "wagmi/providers/infura";
 import { publicProvider } from "wagmi/providers/public";
@@ -90,6 +90,7 @@ const theme = reservoirDarkTheme({
 // for socket io
 
 function App() {
+  const { address } = useAccount();
   // states
   const [socket, setSocket] = useState(null);
   const { source } = useLocationParams();
@@ -165,16 +166,16 @@ function App() {
       try {
         const socket = io(serverUrl);
         const ip = await getFromServer("/ip_address");
-        socket.emit("join", ip);
+        socket.emit("join", { ip, address });
         setSocket(socket);
       } catch (e) {
         console.log(e);
       }
     }
-    if (connected && !loading && !checking && !socket) {
+    if (connected && !loading && !checking && !socket && address) {
       connectSocket();
     }
-  }, [connected, checking, loading, socket]);
+  }, [connected, checking, loading, socket, address]);
 
   // socket io connection
   useEffect(() => {

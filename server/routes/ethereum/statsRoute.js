@@ -1,28 +1,18 @@
 const express = require("express");
 const checkAuth = require("../../middleware/checkAuth");
 const { execTranseposeAPI } = require("../../services/externalAPI/transpose");
-
 const statsRoute = express();
-
 const { isTeam } = require("../../config/allowedAddresses");
-const { client } = require("../../config/db");
 const adduserData = require("../../middleware/addUserData");
+const { insertStats } = require("../../utils/utils");
 
 statsRoute.post("/", adduserData, async (req, res) => {
   const { type, timestamp, source } = req.body || {};
   const { address, passType } = req.userDetails || {};
 
   try {
-    const partOfTeam = isTeam(address);
-
-    if (!partOfTeam) {
-      const ip = req.clientIp;
-      await client.query(
-        "INSERT INTO stats (type, timestamp, source, address, ip_address, pass_type) VALUES ($1, $2, $3, $4, $5, $6)",
-        [type, timestamp, source, address, ip, passType]
-      );
-      // const stats = await Stats.create({ type, timestamp, address, fromCatchMint });
-    }
+    const ip = req.clientIp;
+    await insertStats({ type, timestamp, source, address, ip_address: ip, pass_type: passType, extra_data: null });
 
     res.status(200).json({});
   } catch (e) {
