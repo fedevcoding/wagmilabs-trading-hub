@@ -62,7 +62,6 @@ const fetch = require("node-fetch");
     }
 
     console.log("All data saved successfully.");
-    process.exit();
   } catch (error) {
     console.error("Error saving data to database:", error);
   }

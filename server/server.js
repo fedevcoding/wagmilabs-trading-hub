@@ -157,7 +157,6 @@ io.on("connection", socket => {
     const date = Date.now();
     const time = date - timeSpent[id];
     delete timeSpent[id];
-    console.log(time);
 
     const ip = idIps[id];
     if (ip) {
