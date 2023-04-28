@@ -1,6 +1,5 @@
 const CLIENT_URL = "http://localhost:3000";
-
-module.exports = { newSale, newListing, newSnipeUpdate, newFloorChange, CLIENT_URL };
+module.exports = { CLIENT_URL };
 
 // routes imports
 
@@ -50,6 +49,31 @@ const refreshCollectionRoute = require("./routes/ethereum/collections/resfreshCo
 const statsRoute = require("./routes/ethereum/statsRoute.js");
 const getSnipeTasksRoute = require("./routes/ethereum/bots/sniperBot/getSnipeTasksRoute.js");
 const editSnipeRoute = require("./routes/ethereum/bots/sniperBot/editSnipeRoute.js");
+const listingChartRoute = require("./routes/ethereum/charts/listingsChartRoute.js");
+const floorChartRoute = require("./routes/ethereum/charts/floorChartRoute.js");
+const ownersChartRoute = require("./routes/ethereum/charts/ownersChartRoute.js");
+const volumeChartRoute = require("./routes/ethereum/charts/volumeChartRoute.js");
+const salesChartRoute = require("./routes/ethereum/charts/salesChartRoute.js");
+const avgPriceChartRoute = require("./routes/ethereum/charts/avgPriceChartRoute.js");
+const advancedFloorChartRoute = require("./routes/ethereum/charts/advancedFloorChartRoute.js");
+const buyersSellersChartRoute = require("./routes/ethereum/charts/buyersSellersChartRoute.js");
+const freeTrialRoute = require("./routes/ethereum/functionality/freeTrialroute.js");
+const twChartRoute = require("./routes/ethereum/tradingview/twChartsRoute.js");
+const ipRoute = require("./routes/ethereum/ipRoute.js");
+//
+// libraries
+require("dotenv").config();
+const cors = require("cors");
+const express = require("express");
+const { connectDB } = require("./config/db");
+const cookieParser = require("cookie-parser");
+const rateLimit = require("express-rate-limit");
+const multer = require("multer");
+const forms = multer();
+const requestIp = require("request-ip");
+const { initIo } = require("./socketio/socket.js");
+const { getGasData } = require("./services/gasData/gasData.js");
+
 //
 
 const { createClient } = require("@reservoir0x/reservoir-sdk");
@@ -58,6 +82,7 @@ const RESERVOIR_API_KEY = process.env.RESERVOIR_API_KEY;
 // reservoir client
 createClient({
   source: CLIENT_URL,
+
   chains: [
     {
       id: 1,
@@ -70,20 +95,6 @@ createClient({
 
 // port
 const port = process.env.PORT || 5001;
-//
-
-// imports
-
-require("dotenv").config();
-const cors = require("cors");
-const express = require("express");
-const { connectDB, client } = require("./config/db");
-const cookieParser = require("cookie-parser");
-const getCoinsGasData = require("./websockets/coinsGasData.js");
-const rateLimit = require("express-rate-limit");
-const multer = require("multer");
-const forms = multer();
-const requestIp = require("request-ip");
 //
 
 // http server
@@ -100,176 +111,9 @@ app.use(requestIp.mw());
 //
 
 // socket io
-
 const http = require("http");
 const server = new http.createServer(app);
-const socketIO = require("socket.io");
-const listingChartRoute = require("./routes/ethereum/charts/listingsChartRoute.js");
-const floorChartRoute = require("./routes/ethereum/charts/floorChartRoute.js");
-const ownersChartRoute = require("./routes/ethereum/charts/ownersChartRoute.js");
-const volumeChartRoute = require("./routes/ethereum/charts/volumeChartRoute.js");
-const salesChartRoute = require("./routes/ethereum/charts/salesChartRoute.js");
-const avgPriceChartRoute = require("./routes/ethereum/charts/avgPriceChartRoute.js");
-const advancedFloorChartRoute = require("./routes/ethereum/charts/advancedFloorChartRoute.js");
-const buyersSellersChartRoute = require("./routes/ethereum/charts/buyersSellersChartRoute.js");
-const freeTrialRoute = require("./routes/ethereum/functionality/freeTrialroute.js");
-const twChartRoute = require("./routes/ethereum/tradingview/twChartsRoute.js");
-const ipRoute = require("./routes/ethereum/ipRoute.js");
-const { insertStats } = require("./utils/utils.js");
-const io = socketIO(server, {
-  cors: {
-    origin: CLIENT_URL,
-  },
-});
-
-app.set("socketio", io);
-
-let ethData;
-async function updateGasData() {
-  try {
-    let currentEthData = await getCoinsGasData();
-    ethData = currentEthData;
-  } catch (e) {
-    console.log(e);
-  }
-}
-updateGasData();
-setInterval(async () => {
-  await updateGasData();
-}, 10000);
-
-let users = {};
-let idIps = {};
-let timeSpent = {};
-
-io.on("connection", socket => {
-  const { id } = socket;
-  let userAddress;
-
-  setInterval(() => {
-    socket.emit("ethData", ethData);
-  }, 10000);
-
-  socket.on("getEthData", () => {
-    socket.emit("ethData", ethData);
-  });
-  socket.on("disconnect", async () => {
-    const date = Date.now();
-    const time = date - timeSpent[id];
-    delete timeSpent[id];
-
-    const ip = idIps[id];
-    if (ip) {
-      users[ip] = users[ip] - 1;
-      if (users[ip] === 0) {
-        delete users[ip];
-      }
-    }
-
-    const timestamp = Date.now();
-    if (!isNaN(time)) {
-      await insertStats({
-        type: "usage_time",
-        address: userAddress,
-        ip_address: ip,
-        timestamp,
-        pass_type: null,
-        extra_data: time,
-      });
-    }
-  });
-  socket.on("join", data => {
-    const { ip, address } = data;
-    userAddress = address;
-    timeSpent[id] = Date.now();
-    users[ip] = users[ip] ? users[ip] + 1 : 1;
-    idIps[id] = ip;
-  });
-
-  socket.on("joinSales", collectionAddress => {
-    const channel = `sales${collectionAddress}`;
-    socket.join(channel);
-  });
-
-  socket.on("leaveSales", collectionAddress => {
-    const channel = `sales${collectionAddress}`;
-    socket.leave(channel);
-  });
-  socket.on("joinFloorChanges", collectionAddress => {
-    const channel = `floorChanges-${collectionAddress}`;
-    socket.join(channel);
-  });
-
-  socket.on("leaveFloorChanges", collectionAddress => {
-    const channel = `floorChanges-${collectionAddress}`;
-    socket.leave(channel);
-  });
-
-  socket.on("joinListings", collectionAddress => {
-    const channel = `listings${collectionAddress}`;
-    socket.join(channel);
-  });
-
-  socket.on("leaveListings", collectionAddress => {
-    const channel = `listings${collectionAddress}`;
-    socket.leave(channel);
-  });
-
-  socket.on("joinSnipeUpdates", accountAddress => {
-    accountAddress = accountAddress?.toLowerCase();
-    const channel = `snipeUpdates:${accountAddress}`;
-    socket.join(channel);
-  });
-
-  socket.on("leaveSnipeUpdates", accountAddress => {
-    accountAddress = accountAddress?.toLowerCase();
-    const channel = `snipeUpdates:${accountAddress}`;
-    socket.leave(channel);
-  });
-});
-
-function newListing(listingData) {
-  try {
-    const contractAddress = listingData?.contractAddress?.toLowerCase();
-    const channel = `listings${contractAddress}`;
-    io.sockets.to(channel).emit("listing", listingData);
-  } catch (e) {
-    console.log(e);
-  }
-}
-
-function newSale(saleData) {
-  try {
-    const { tokenAddress } = saleData;
-    const contractAddress = tokenAddress?.toLowerCase();
-    const channel = `sales${contractAddress}`;
-    io.sockets.to(channel).emit("sale", saleData);
-  } catch (e) {
-    console.log(e);
-  }
-}
-
-function newFloorChange(floorChangeData) {
-  try {
-    const { contractAddress } = floorChangeData;
-    const lowerContractAddress = contractAddress?.toLowerCase();
-    const channel = `floorChanges-${lowerContractAddress}`;
-    io.sockets.to(channel).emit("floor_change", floorChangeData);
-  } catch (e) {
-    console.log(e);
-  }
-}
-
-function newSnipeUpdate(accountAddress, data) {
-  accountAddress = accountAddress?.toLowerCase();
-  const channel = `snipeUpdates:${accountAddress}`;
-
-  try {
-    io.sockets.to(channel).emit("snipeUpdates", data);
-  } catch (e) {
-    console.log(e);
-  }
-}
+const socketIo = initIo(server);
 
 // rate limit
 
@@ -355,11 +199,9 @@ app.use("/api/v1/wagmilabs/collectionCharts", volumeChartRoute);
 app.use("/api/v1/wagmilabs/collectionCharts", salesChartRoute);
 app.use("/api/v1/wagmilabs/collectionCharts", avgPriceChartRoute);
 app.use("/api/v1/wagmilabs/collectionCharts", buyersSellersChartRoute);
-
 // bots routes
 app.use("/api/v1/wagmilabs/bots", editSnipeRoute);
 app.use("/api/v1/wagmilabs/bots", getSnipeTasksRoute);
-
 app.use("/tradingView", twChartRoute);
 
 //
@@ -369,8 +211,10 @@ app.use("/tradingView", twChartRoute);
 server.listen(port, async () => {
   console.log("App is listening on port " + port);
   await connectDB();
+  await getGasData();
   require("./websockets/sales");
   require("./websockets/listings");
   require("./websockets/floorChanges");
 });
 //
+module.exports = { socketIo };
