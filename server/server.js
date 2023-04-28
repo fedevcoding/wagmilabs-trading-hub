@@ -117,6 +117,7 @@ const freeTrialRoute = require("./routes/ethereum/functionality/freeTrialroute.j
 const twChartRoute = require("./routes/ethereum/tradingview/twChartsRoute.js");
 const ipRoute = require("./routes/ethereum/ipRoute.js");
 const { insertStats } = require("./utils/utils.js");
+const { allowedAddresses } = require("./config/allowedAddresses.js");
 const io = socketIO(server, {
   cors: {
     origin: CLIENT_URL,
@@ -293,8 +294,8 @@ app.get("/api/v1/data/activeUsers", (req, res) => {
   if (password !== accessPassword) {
     return res.status(401).send("Unauthorized");
   }
-
-  res.json(users);
+  const partnershipUsers = allowedAddresses.filter(address => address.expiration > Date.now()).length;
+  res.json({ users, partnershipUsers });
 });
 
 app.use("/api/v1/wagmilabs/ip_address", ipRoute);
