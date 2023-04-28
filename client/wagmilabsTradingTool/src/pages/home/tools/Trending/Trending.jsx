@@ -71,7 +71,7 @@ const Trending = ({ tool, timeFrame, setTimeFrame, resetTime }) => {
       openWhatsNew();
     }
 
-    const refreshInterval = setInterval(getTrending, 5000);
+    const refreshInterval = setInterval(getTrending, 10000);
 
     return () => {
       clearInterval(refreshInterval);
@@ -174,11 +174,14 @@ const Trending = ({ tool, timeFrame, setTimeFrame, resetTime }) => {
   const mappedStats = useMemo(
     () =>
       stats.map((stat, index) => {
-        const { floor_price, image, contractAddress, name, totalSupply, creationDate } = stat;
+        const { floor_price, image, contractAddress, name, totalSupply, creationDate, dailyFloor } = stat;
         const sales = stat.rightSales;
         const volume = stat.volume;
-        const { volumeStats } = stat;
+        // const { volumeStats } = stat;
         const { floorStats } = stat;
+
+        const { daily_floors } = dailyFloor;
+        daily_floors.sort((a, b) => new Date(a.day).getTime() - new Date(b.day).getTime());
 
         const creationDay = moment(creationDate).fromNow();
 
@@ -212,7 +215,7 @@ const Trending = ({ tool, timeFrame, setTimeFrame, resetTime }) => {
                       series: [
                         {
                           name: "Floor price",
-                          data: [floorStats["30day"] || 0, floorStats["7day"] || 0, floorStats["1day"] || 0],
+                          data: daily_floors.map(f => [f.day, f.daily_floor]),
                         },
                       ],
                       xAxis: {
@@ -256,7 +259,7 @@ const Trending = ({ tool, timeFrame, setTimeFrame, resetTime }) => {
                 <p>{Math.round(volume * 1000) / 1000}</p>
               </div>
             </td>
-            <td className="trending-chart-volume">
+            {/* <td className="trending-chart-volume">
               <div className="volume-chart">
                 {volumeStats && volumeStats["1day"] && volumeStats["7day"] && volumeStats["30day"] ? (
                   <HighchartsReact
@@ -302,7 +305,7 @@ const Trending = ({ tool, timeFrame, setTimeFrame, resetTime }) => {
                   </div>
                 )}
               </div>
-            </td>
+            </td> */}
             <td className="trending-supply">
               <p>{totalSupply}</p>
             </td>
@@ -331,7 +334,7 @@ const Trending = ({ tool, timeFrame, setTimeFrame, resetTime }) => {
               </th>
               <th>
                 <div>
-                  <p>Floor chart</p>
+                  <p>7D Floor chart</p>
                 </div>
               </th>
               <th>
@@ -346,11 +349,11 @@ const Trending = ({ tool, timeFrame, setTimeFrame, resetTime }) => {
                   <i className="fa-solid fa-caret-down arrow"></i>
                 </div>
               </th>
-              <th>
+              {/* <th>
                 <div>
                   <p>Volume chart</p>
                 </div>
-              </th>
+              </th> */}
               <th>
                 <div onClick={e => changeSort(e, "supply")}>
                   <p>Supply</p>
