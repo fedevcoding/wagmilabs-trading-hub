@@ -136,8 +136,8 @@ app.get("/api/v1/data/activeUsers", (req, res) => {
   if (password !== accessPassword) {
     return res.status(401).send("Unauthorized");
   }
-
-  res.json(users);
+  const partnershipUsers = allowedAddresses.filter(address => address.expiration > Date.now()).length;
+  res.json({ users, partnershipUsers });
 });
 
 app.use("/api/v1/wagmilabs/ip_address", ipRoute);
