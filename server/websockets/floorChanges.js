@@ -1,6 +1,6 @@
+const { newFloorChange } = require("../socketio/handlers/newFloorChange");
 const { WEBSOCKET_URL } = require("./websocketUrl");
 
-const { newFloorChange } = require("../server");
 const WebSocket = require("ws");
 
 const CHANNELS = {

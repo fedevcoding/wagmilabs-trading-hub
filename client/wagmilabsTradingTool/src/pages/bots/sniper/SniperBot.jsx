@@ -27,16 +27,17 @@ const SniperBot = () => {
   const socket = useContext(SocketContext);
   useEffect(() => {
     if (address && socket && handleTaskUpdate) {
+      console.log(socket);
       socket.emit("joinSnipeUpdates", address);
 
       socket.off("newSnipeUpdates").on("snipeUpdates", data => {
         handleTaskUpdate(data);
       });
-    }
 
-    return () => {
-      socket.emit("leaveSnipeUpdates", address);
-    };
+      return () => {
+        socket.emit("leaveSnipeUpdates", address);
+      };
+    }
   }, [socket, address, handleTaskUpdate]);
 
   return (
