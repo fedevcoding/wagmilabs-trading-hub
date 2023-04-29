@@ -1,5 +1,5 @@
-const { newSnipeUpdate } = require("../../../server");
 const Snipe = require("../../../models/bots/SnipeModel");
+const { newSnipeUpdate } = require("../../../socketio/handlers/newSnipeUpdate");
 const snipeTasks = require("./snipeTasks");
 
 async function updateTask(id, data, taskOwner) {

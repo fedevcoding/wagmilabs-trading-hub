@@ -1,4 +1,4 @@
-const newSale = require("../socketio/handlers/newSale");
+const { newSale } = require("../socketio/handlers/newSale");
 const { WEBSOCKET_URL, LOCAL_WEBSOCKET_URL } = require("./websocketUrl");
 
 const WebSocket = require("ws");

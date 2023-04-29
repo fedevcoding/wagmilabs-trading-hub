@@ -1,11 +1,19 @@
 const socketIO = require("socket.io");
-const { CLIENT_URL } = require("../server");
 const sendEthDataHandler = require("./handlers/sendEthData");
 const { socketIpStatsHandler, socketIpStatsDisconnectHandler } = require("./handlers/ipStats");
+const { handleSaleSocket } = require("./handlers/newSale");
+const { handleFloorChangeSocket } = require("./handlers/newFloorChange");
+const { handleListingSocket } = require("./handlers/newListing");
+const { handleSnipeSocket } = require("./handlers/newSnipeUpdate");
+const { CLIENT_URL } = require("../variables");
 
 let users = {};
 let idIps = {};
 let timeSpent = {};
+
+const getUsers = () => {
+  return users;
+};
 
 const initIo = server => {
   const io = socketIO(server, {
@@ -26,51 +34,14 @@ const onConnection = socket => {
 
   sendEthDataHandler(socket);
   socketIpStatsHandler(socket, id, userAddress, users, idIps, timeSpent);
-
-  //   socket.on("joinSales", collectionAddress => {
-  //     const channel = `sales${collectionAddress}`;
-  //     socket.join(channel);
-  //   });
-
-  //   socket.on("leaveSales", collectionAddress => {
-  //     const channel = `sales${collectionAddress}`;
-  //     socket.leave(channel);
-  //   });
-  //   socket.on("joinFloorChanges", collectionAddress => {
-  //     const channel = `floorChanges-${collectionAddress}`;
-  //     socket.join(channel);
-  //   });
-
-  //   socket.on("leaveFloorChanges", collectionAddress => {
-  //     const channel = `floorChanges-${collectionAddress}`;
-  //     socket.leave(channel);
-  //   });
-
-  //   socket.on("joinListings", collectionAddress => {
-  //     const channel = `listings${collectionAddress}`;
-  //     socket.join(channel);
-  //   });
-
-  //   socket.on("leaveListings", collectionAddress => {
-  //     const channel = `listings${collectionAddress}`;
-  //     socket.leave(channel);
-  //   });
-
-  //   socket.on("joinSnipeUpdates", accountAddress => {
-  //     accountAddress = accountAddress?.toLowerCase();
-  //     const channel = `snipeUpdates:${accountAddress}`;
-  //     socket.join(channel);
-  //   });
-
-  //   socket.on("leaveSnipeUpdates", accountAddress => {
-  //     accountAddress = accountAddress?.toLowerCase();
-  //     const channel = `snipeUpdates:${accountAddress}`;
-  //     socket.leave(channel);
-  //   });
+  handleSaleSocket(socket);
+  handleFloorChangeSocket(socket);
+  handleListingSocket(socket);
+  handleSnipeSocket(socket);
 };
 
 const onDisconnectSocket = async (id, userAddress) => {
   await socketIpStatsDisconnectHandler(id, userAddress, users, idIps, timeSpent);
 };
 
-module.exports = { initIo };
+module.exports = { initIo, getUsers };

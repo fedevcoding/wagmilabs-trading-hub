@@ -19,8 +19,7 @@ const socketIpStatsDisconnectHandler = async (id, userAddress, users, idIps, tim
 
   const ip = idIps[id];
   if (ip) {
-    const user = users[ip];
-    users[ip] = user - 1;
+    users[ip] = users[ip] - 1;
     if (users[ip] === 0) {
       delete users[ip];
     }

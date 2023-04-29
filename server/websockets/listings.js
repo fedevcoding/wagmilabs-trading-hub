@@ -2,7 +2,7 @@ const { WEBSOCKET_URL, LOCAL_WEBSOCKET_URL } = require("./websocketUrl");
 
 const fullfillSnipeTasks = require("../routes/ethereum/bots/sniperBot/fulfillTasks");
 const WebSocket = require("ws");
-const newListing = require("../socketio/handlers/newListing");
+const { newListing } = require("../socketio/handlers/newListing");
 
 const CHANNELS = {
   TOKEN_LISTINGS: "tokenListings",
