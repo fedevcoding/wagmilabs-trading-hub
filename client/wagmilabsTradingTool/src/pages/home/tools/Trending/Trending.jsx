@@ -315,7 +315,7 @@ const Trending = ({ tool, timeFrame, setTimeFrame, resetTime }) => {
   return (
     <>
       <WhatsNewModal isOpen={whatsNewOpen} onClose={closeWhatsNew} type={whatsNewType} />
-      {isFree && isPartnership && <PromoModal isOpen={isOpen} onClose={onClose} />}
+      {(isFree || isPartnership) && <PromoModal isOpen={isOpen} onClose={onClose} />}
       <div className="table-container">
         <table cellSpacing={0} className="trending-container">
           <thead className="trending-details">

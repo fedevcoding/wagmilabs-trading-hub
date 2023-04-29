@@ -16,68 +16,69 @@ export const useSubscribe = () => {
     try {
       const signer = await fetchSigner();
 
-      const sevenDayInMilliSeconds = 604800000;
-      const endDate = new Date(Date.now() + sevenDayInMilliSeconds);
-      if (planId === 0) {
-        const message = `Start your 7 day free trial today!
-Your trial will end ${endDate.toDateString()}.`;
-        const address = await signer.getAddress();
-        const signature = await signer.signMessage(message);
-        const res = await pushToServer("/freeTrial", { signature, address, message });
+      // const sevenDayInMilliSeconds = 604800000;
+      // const endDate = new Date(Date.now() + sevenDayInMilliSeconds);
+      // if (planId === 0) {
+      //         const message = `Start your 7 day free trial today!
+      // Your trial will end ${endDate.toDateString()}.`;
+      //         const address = await signer.getAddress();
+      //         const signature = await signer.signMessage(message);
+      //         const res = await pushToServer("/freeTrial", { signature, address, message });
 
-        if (res.authenticated) {
-          ReactGA.event({
-            category: "freetrial",
-            action: "Created free trial",
-          });
+      //         if (res.authenticated) {
+      //           ReactGA.event({
+      //             category: "freetrial",
+      //             action: "Created free trial",
+      //           });
 
-          toast({
-            title: "Success",
-            description: "Free trial activated",
-            status: "success",
-            duration: 5000,
-            isClosable: true,
-          });
-        }
-      } else {
-        const contract = new ethers.Contract(subscriptionAddress, subscriptionsAbi, signer);
-        if (planId === 1) {
-          const tx = await contract.subscribeBasic(months, [], {
-            value: ethers.utils.parseEther(price.toFixed(5).toString()),
-          });
-          await tx.wait();
-          ReactGA.event({
-            category: "subscription",
-            action: "Created subscription",
-          });
-          await pushToServer("/stats", { type: "boughtBasic", timestamp: Date.now(), source });
-          toast({
-            title: "Success",
-            description: "Started plan activated",
-            status: "success",
-            duration: 5000,
-            isClosable: true,
-          });
-        } else if (planId === 2) {
-          const tx = await contract.subscribePro(months, [], {
-            value: ethers.utils.parseEther(price.toFixed(5).toString()),
-          });
-          await tx.wait();
-          ReactGA.event({
-            category: "subscription",
-            action: "Created subscription",
-          });
-          await pushToServer("/stats", { type: "boughtPro", timestamp: Date.now(), source });
+      //           toast({
+      //             title: "Success",
+      //             description: "Free trial activated",
+      //             status: "success",
+      //             duration: 5000,
+      //             isClosable: true,
+      //           });
+      //         }
+      // } else {
+      const contract = new ethers.Contract(subscriptionAddress, subscriptionsAbi, signer);
+      // if (planId === 1) {
+      //   const tx = await contract.subscribeBasic(months, [], {
+      //     value: ethers.utils.parseEther(price.toFixed(5).toString()),
+      //   });
+      //   await tx.wait();
+      //   ReactGA.event({
+      //     category: "subscription",
+      //     action: "Created subscription",
+      //   });
+      //   await pushToServer("/stats", { type: "boughtBasic", timestamp: Date.now(), source });
+      //   toast({
+      //     title: "Success",
+      //     description: "Started plan activated",
+      //     status: "success",
+      //     duration: 5000,
+      //     isClosable: true,
+      //   });
+      // }
+      if (planId === 2) {
+        const tx = await contract.subscribePro(months, [], {
+          value: ethers.utils.parseEther(price.toFixed(5).toString()),
+        });
+        await tx.wait();
+        ReactGA.event({
+          category: "subscription",
+          action: "Created subscription",
+        });
+        await pushToServer("/stats", { type: "boughtPro", timestamp: Date.now(), source });
 
-          toast({
-            title: "Success",
-            description: "Pro plan activated",
-            status: "success",
-            duration: 5000,
-            isClosable: true,
-          });
-        }
+        toast({
+          title: "Success",
+          description: "Pro plan activated",
+          status: "success",
+          duration: 5000,
+          isClosable: true,
+        });
       }
+      // }
     } catch (error) {
       console.log(error);
       const message = checkErrors(String(error));

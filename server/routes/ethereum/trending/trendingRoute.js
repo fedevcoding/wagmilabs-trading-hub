@@ -1,11 +1,11 @@
 const express = require("express");
-const checkAuth = require("../../middleware/checkAuth");
-const Ranking = require("../../models/RankingModel");
-const { client } = require("../../config/db");
+const checkAuth = require("../../../middleware/checkAuth");
+const { client } = require("../../../config/db");
+const checkTrendingPro = require("./middlewares/checkTrendingPro");
 
 const trendingRoute = express();
 
-trendingRoute.get("/:time", checkAuth, (req, res) => {
+trendingRoute.get("/:time", checkAuth, checkTrendingPro, (req, res) => {
   async function getData() {
     try {
       const { time } = req.params;

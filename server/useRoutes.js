@@ -1,4 +1,4 @@
-const trendingRoute = require("./routes/ethereum/trendingRoute.js");
+const trendingRoute = require("./routes/ethereum/trending/trendingRoute.js");
 const mintingRoute = require("./routes/ethereum/mintingRoute.js");
 const rankingRoute = require("./routes/ethereum/rankingRoute.js");
 const verifyRoute = require("./routes/ethereum/functionality/verifyRoute.js");

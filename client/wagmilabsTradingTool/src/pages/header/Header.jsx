@@ -236,11 +236,17 @@ const Header = () => {
   return (
     <>
       <RefreshToken connected={connected} setConnected={setConnected} />
-      {(isFree || isPartnership) && (
+      {isPartnership && (
         <header className="expiration-header">
-          <p>
-            FREE {isPartnership ? "period" : "Trial"} ending {moment(expiration).fromNow()}
+          <p>FREE pro ending {moment(expiration).fromNow()}</p>
+          <p className="upgrade" onClick={() => subscribe(2, 1, 0.03)}>
+            Upgrade now!
           </p>
+        </header>
+      )}
+      {isFree && (
+        <header className="expiration-header">
+          <p>Access more features and instant data</p>
           <p className="upgrade" onClick={() => subscribe(2, 1, 0.03)}>
             Upgrade now!
           </p>
