@@ -6,7 +6,6 @@ export const useLocationParams = () => {
   useEffect(() => {
     const params = new URLSearchParams(window?.location?.search);
     const source = params.get("utm_source") || "";
-    console.log(source);
     setSource(source);
   }, []);
 

@@ -1,6 +1,6 @@
+const { newFloorChange } = require("../socketio/handlers/newFloorChange");
 const { WEBSOCKET_URL } = require("./websocketUrl");
 
-const { newFloorChange } = require("../server");
 const WebSocket = require("ws");
 
 const CHANNELS = {
@@ -28,7 +28,7 @@ async function listenToFloorChanges() {
   });
 
   ws.on("close", function close() {
-    console.log("Disconnected from sales WebSocket server");
+    console.log("Disconnected from floor changes WebSocket server");
     setTimeout(() => {
       console.log("trying to reconnect");
       listenToFloorChanges();

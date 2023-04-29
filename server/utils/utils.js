@@ -15,4 +15,6 @@ const insertStats = async ({ type, timestamp, source, address, ip_address, pass_
     });
 };
 
-module.exports = { insertStats };
+const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+module.exports = { insertStats, wait };
