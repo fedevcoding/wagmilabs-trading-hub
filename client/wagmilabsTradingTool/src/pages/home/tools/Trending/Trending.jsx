@@ -16,7 +16,7 @@ import { LoadingSpinner, TableLink } from "@Components";
 import { PromoModal } from "../../../../components/Modals/PromoModal";
 import { useDisclosure } from "@chakra-ui/hooks";
 import { WhatsNewModal } from "../../../../components/Modals/WhatsNewModal";
-import { useJwtData } from "../../../../custom-hooks/useJwdData";
+import { useJwtData } from "../../../../custom-hooks/useJwtData";
 
 const defaultTimeFrame = "1H";
 

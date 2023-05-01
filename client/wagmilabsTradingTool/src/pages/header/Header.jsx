@@ -15,7 +15,7 @@ import { useUpdateBalance } from "@Hooks";
 
 import { fetchEnsName } from "@wagmi/core";
 import { useAccount } from "wagmi";
-import { useJwtData } from "../../custom-hooks/useJwdData";
+import { useJwtData } from "@Hooks";
 import moment from "moment";
 import { useSubscribe } from "../../custom-hooks/useSubscribe";
 
