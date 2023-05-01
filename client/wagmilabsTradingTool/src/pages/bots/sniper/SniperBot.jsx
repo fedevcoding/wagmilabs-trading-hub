@@ -7,9 +7,11 @@ import { useAccount } from "wagmi";
 import { Header, NewTaskModal, Table } from "./components";
 import { useHandleData, useGetData } from "./hooks";
 import { useSecurePro } from "../../../custom-hooks/useSecurePro";
+import { useSetPageTitle } from "../../../custom-hooks";
 
 const SniperBot = () => {
   useSecurePro();
+  useSetPageTitle("Sniper bot | Wagmi Labs");
 
   const { activeSnipes, setActiveSnipes, snipeActivity, loadingSnipes } = useGetData();
   const {

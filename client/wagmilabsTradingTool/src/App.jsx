@@ -50,6 +50,7 @@ import Pnl from "./pages/pnl/Pnl";
 import BulkListing from "./pages/bulkListing/BulkListing";
 import Plans from "./pages/login/components/plans/Plans";
 import { useLocationParams } from "./custom-hooks/useLocationParams";
+import GetAccess from "./pages/getAccess/GetAccess";
 
 // for wagmi
 
@@ -470,6 +471,17 @@ function App() {
                               />
 
                               <Route exact path="/legal" element={<Legals />} />
+                              <Route
+                                exact
+                                path="/requiresPremium"
+                                element={
+                                  <>
+                                    <Header />
+                                    <GetAccess />
+                                    <Footer />
+                                  </>
+                                }
+                              />
 
                               <Route path="*" element={<Redirect />} />
                             </Routes>

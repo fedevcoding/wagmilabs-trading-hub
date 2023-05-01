@@ -9,9 +9,11 @@ import { formatAddress, roundPrice } from "src/utils/formats/formats";
 import copy from "copy-to-clipboard";
 import { notFound } from "src/assets";
 import { useSecurePro } from "../../../custom-hooks/useSecurePro";
+import { useSetPageTitle } from "../../../custom-hooks";
 
 const Wallets = React.memo(() => {
   useSecurePro();
+  useSetPageTitle("Wallet manager | Wagmi Labs");
 
   const { showAddModal, showExportModal, showTransferModal, toggleModal } = useManageModals();
   const { wallets, toggleWallet, reloadBalances, loadingBalances, renameWallet } = useManageData();

@@ -8,7 +8,7 @@ export const useSecurePro = () => {
 
   useEffect(() => {
     if (loadedJwtData && !isPro) {
-      navigate("/notfound");
+      navigate("/requiresPremium");
     }
   }, [isPro, navigate, loadedJwtData]);
 };

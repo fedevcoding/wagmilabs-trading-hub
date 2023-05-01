@@ -8,7 +8,7 @@ import "./home.scss";
 import WatchList from "./tools/watchList/WatchList";
 import Owned from "./tools/owned/Owned";
 import { LivePulsing } from "@Components";
-
+import { useNavigate } from "react-router-dom";
 import { setPageTitle } from "@Utils";
 import { useJwtData } from "@Hooks";
 
@@ -17,18 +17,28 @@ const Home = () => {
 
   const [timeFrame, setTimeFrame] = useState("1H");
   const [tool, setTool] = useState("trending");
+  const navigate = useNavigate();
 
   function changeTime(e, time) {
     const element = e.currentTarget;
 
     if (tool === "trending" && !isPro) {
-      if (time === "1M" || time === "5M" || time === "10M" || time === "30M") return;
+      if (time === "1M" || time === "5M" || time === "10M" || time === "30M") {
+        navigate("/plans");
+        return;
+      }
     }
     if (tool === "minting" && !isPro) {
-      if (time === "1M" || time === "2M" || time === "5M" || time === "15M" || time === "30M") return;
+      if (time === "1M" || time === "2M" || time === "5M" || time === "15M" || time === "30M") {
+        navigate("/plans");
+        return;
+      }
     }
     if (tool === "ranking" && !isPro) {
-      if (time === "1M" || time === "5M" || time === "10M" || time === "30M") return;
+      if (time === "1M" || time === "5M" || time === "10M" || time === "30M") {
+        navigate("/plans");
+        return;
+      }
     }
 
     document.querySelectorAll(".tool-times div").forEach(time => {
