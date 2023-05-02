@@ -29,7 +29,7 @@ export const PromoModal = React.memo(({ isOpen, onClose }) => {
           </ModalBody>
 
           <ModalBody className="modal-body">
-            <h3 className="body">Show us some love ❤️😊</h3>
+            <h3 className="body">Upgrade to PRO 📈👑</h3>
           </ModalBody>
 
           <ModalBody className="modal-body">
