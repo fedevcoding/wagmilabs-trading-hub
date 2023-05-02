@@ -1,27 +1,40 @@
-.gas-modal-container {
+.gas-modal-container{
+  position: absolute;
   bottom: 40px;
   opacity: 0;
+  transition: opacity 250ms;
+}
+.gas-modal-container.visible {
+  opacity: 1;
+}
+
+
+.gas-modal-relative{
+  position: relative;
+  cursor: default;
+}
+
+.has-premium{
+  cursor: pointer;
+}
+
+.gas-modal-flex {
   width: 150px;
   padding: 10px 15px;
   height: 190px;
   border-radius: 5px;
   background-color: #1e1e1e;
   box-shadow: #000000e3 0px 0px 19px 5px;
-  position: absolute;
   color: white;
-  transition: opacity 250ms;
-
   display: flex;
   flex-direction: column;
 }
 
-.gas-modal-container.visible {
-  opacity: 1;
-}
-
-.gas-modal-container.extend {
+.gas-modal-container.extend .gas-modal-flex{
   height: 360px;
 }
+
+
 
 .gas-modal-title {
   font-size: 14px;
@@ -48,11 +61,11 @@
   transition: background-color 150ms;
 }
 
-.gas-modal-single-preset:hover {
+.has-premium .gas-modal-single-preset:hover {
   background-color: #2e2e2e;
 }
 .gas-modal-single-preset.active {
-  background-color: #525252;
+  background-color: #525252 !important;
 }
 
 .gas-modal-custom-extend {

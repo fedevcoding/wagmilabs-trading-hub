@@ -1,0 +1,25 @@
+.premium-lock {
+  position: absolute !important;
+  box-sizing: border-box;
+  cursor: pointer;
+  line-height: 1.75;
+  text-transform: uppercase;
+  min-width: 64px;
+  border-radius: 8px;
+  color: rgb(255, 255, 255);
+  background-color: rgb(137, 101, 211);
+  font-weight: 600;
+  font-size: 12px;
+  padding: 9px 14px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  letter-spacing: 1.1px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: rgba(0, 0, 0, 0.2) 0px 3px 1px -2px, rgba(0, 0, 0, 0.14) 0px 2px 2px 0px,
+    rgba(0, 0, 0, 0.12) 0px 1px 5px 0px;
+
+  z-index: 10;
+}

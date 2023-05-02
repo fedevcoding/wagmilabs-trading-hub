@@ -1,5 +1,6 @@
 import EthLogo from "./Logos/EthLogo";
 import TableHr from "./Lines/TableHr";
+import PremiumLock from "./PremiumLock/PremiumLock";
 export { EthLogo };
 export { TableHr };
 export * from "./Form";
@@ -27,3 +28,4 @@ export { ActionModal } from "./ActionModal";
 export { RangeSelector } from "./RangeSelector";
 export { ImageButton } from "./ImageButton";
 export { TableLink } from "./Links";
+export { PremiumLock };

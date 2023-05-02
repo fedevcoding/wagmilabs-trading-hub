@@ -5,9 +5,13 @@ import HC_more from "highcharts/highcharts-more";
 import { HStack, NumberInput, NumberInputField, Select } from "@chakra-ui/react";
 import { useRefreshTime } from "@Hooks";
 import { ChartSelector } from "src/components/ChartSelector";
+import PremiumLock from "../../../../../components/PremiumLock/PremiumLock";
+import { useJwtData } from "../../../../../custom-hooks/useJwtData";
 HC_more(HighCharts);
 
 const ComparisonChart = memo(({ totalListings, totalSales, floorPrice }) => {
+  const { isPro } = useJwtData();
+
   const [chartType, setChartType] = React.useState("column");
 
   const [maxPrice, setMaxPrice] = React.useState(floorPrice + (floorPrice / 100) * 20);
@@ -104,29 +108,32 @@ const ComparisonChart = memo(({ totalListings, totalSales, floorPrice }) => {
 
   return (
     <div className="sale-list-comparison-chart">
-      <div className="options-container">
-        <HStack>
-          <Select onChange={e => setTime(e.target.value)} color="white" colorScheme={"white"} defaultValue={300000}>
-            <option value={60000}>1 minute</option>
-            <option value={300000}>5 minutes</option>
-            <option value={600000}>10 minutes</option>
-          </Select>
-        </HStack>
-
-        <NumberInput value={maxPrice}>
+      <PremiumLock>Unlock trade momentum</PremiumLock>
+      <div className={`${!isPro ? "premium-overlay" : ""}`}>
+        <div className="options-container">
           <HStack>
-            <NumberInputField placeholder="Max price (ETH)" onChange={e => setMaxPrice(e.target.value)} />
+            <Select onChange={e => setTime(e.target.value)} color="white" colorScheme={"white"} defaultValue={300000}>
+              <option value={60000}>1 minute</option>
+              <option value={300000}>5 minutes</option>
+              <option value={600000}>10 minutes</option>
+            </Select>
           </HStack>
-        </NumberInput>
 
-        <ChartSelector
-          onChange={chart => setChartType(chart)}
-          chart1Type={"column"}
-          chart2Type={"bubble"}
-          chartType={chartType}
-        />
+          <NumberInput value={maxPrice}>
+            <HStack>
+              <NumberInputField placeholder="Max price (ETH)" onChange={e => setMaxPrice(e.target.value)} />
+            </HStack>
+          </NumberInput>
+
+          <ChartSelector
+            onChange={chart => setChartType(chart)}
+            chart1Type={"column"}
+            chart2Type={"bubble"}
+            chartType={chartType}
+          />
+        </div>
+        <HighchartsReact highcharts={HighCharts} options={chartOptions} />
       </div>
-      <HighchartsReact highcharts={HighCharts} options={chartOptions} />
     </div>
   );
 });

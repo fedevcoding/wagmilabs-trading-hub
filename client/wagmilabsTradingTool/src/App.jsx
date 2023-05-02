@@ -243,6 +243,7 @@ function App() {
       ethData,
       connected,
       setConnected,
+      loading,
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [
@@ -260,6 +261,7 @@ function App() {
       userBalances,
       setUserBalances,
       ethData,
+      loading,
     ]
   );
 

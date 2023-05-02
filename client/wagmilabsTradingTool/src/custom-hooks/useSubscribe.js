@@ -6,12 +6,17 @@ import { checkErrors } from "../utils/functions/errorHelpers";
 import { useToast } from "@chakra-ui/react";
 import ReactGA from "react-ga";
 import { useLocationParams } from "./useLocationParams";
+import { useContext } from "react";
+import { UserDataContext } from "../context/userContext";
+import logOut from "../utils/functions/logout";
 
 ReactGA.initialize("GTM-WWSJ25L");
 
 export const useSubscribe = () => {
   const toast = useToast();
   const { source } = useLocationParams();
+  const { connected, loading, setConnected } = useContext(UserDataContext);
+
   const subscribe = async (planId, months, price) => {
     try {
       const signer = await fetchSigner();
@@ -70,13 +75,17 @@ export const useSubscribe = () => {
         });
         await pushToServer("/stats", { type: "boughtPro", timestamp: Date.now(), source });
 
-        toast({
-          title: "Success",
-          description: "Pro plan activated",
-          status: "success",
-          duration: 5000,
-          isClosable: true,
-        });
+        if (connected && !loading) {
+          await logOut(setConnected);
+        } else {
+          toast({
+            title: "Success",
+            description: "Pro plan activated",
+            status: "success",
+            duration: 5000,
+            isClosable: true,
+          });
+        }
       }
       // }
     } catch (error) {
