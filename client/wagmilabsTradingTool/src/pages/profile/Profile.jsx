@@ -27,6 +27,7 @@ import { placeholderImage, opensea } from "@Assets";
 import { Nfts, Activity, Stats } from "./Components";
 
 import "./profile.scss";
+import { useJwtData } from "../../custom-hooks/useJwtData";
 
 const sortItemsOptions = [
   { value: "desc", label: "Newest" },
@@ -36,6 +37,7 @@ const sortItemsOptions = [
 const Profile = () => {
   const { address: pageAddress } = useParams();
   const navigate = useNavigate();
+  const { isFree, isPartnership } = useJwtData();
 
   const [profileImageUrl] = useState(window.location.search?.replace("?image=", ""));
 
@@ -752,6 +754,18 @@ const Profile = () => {
               Stats
             </div>
           </div>
+
+          {(isFree || isPartnership) && section === "nft" && (
+            <div className="profile-promo-container" onClick={() => navigate("/plans")}>
+              <i className="fa-solid fa-x profile-promo-close-btn"></i>
+
+              <h3 className="profile-promo-header">Liking our platform ?</h3>
+              <h4 className="profile-promo-body">Access all the features and quicker data!</h4>
+              <Button colorScheme={"gray"} className="profile-promo-button">
+                Plans
+              </Button>
+            </div>
+          )}
 
           <div className="profile-watchList-settings">
             <div className="profile-settings">

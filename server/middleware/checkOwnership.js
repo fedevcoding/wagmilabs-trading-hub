@@ -10,30 +10,30 @@ const CHAIN_ID = process.env.CHAIN_ID;
 // passtypes: 0 = wagmi pass, 1 = basic sub, 2 = pro sub, 3 = free trial, 4 = allowed/partnership, 5 = free access
 async function checkValid(address) {
   try {
-    // let passType;
-    // let expiration;
-    // const provider = new ethers.providers.InfuraProvider(CHAIN_ID == 5 ? "goerli" : null, SIGNER_PRIVATE_KEY);
-    // const contract = new ethers.Contract(contractAddress, abi, provider);
-    // const passData = await contract.hasValidPass(address);
-    // const isValid = passData[0];
-    // if (isValid) {
-    //   passType = Number(passData[1]);
-    //   expiration = Number(passData[2]);
-    //   return [passType, expiration];
-    // }
-    // const currentdate = Date.now();
-    // const isAllowed = allowedAddresses.find(allowedAddress => {
-    //   return allowedAddress.address.toLowerCase() === address.toLowerCase() && allowedAddress.expiration > currentdate;
-    // });
-    // if (isAllowed) {
-    //   const { expiration } = isAllowed;
-    //   passType = 4;
-    //   return [passType, expiration];
-    // }
-    // passType = 5;
-    // expiration = 1998388898000;
-    // return [passType, expiration];
-    return [4, 1998388898000];
+    let passType;
+    let expiration;
+    const provider = new ethers.providers.InfuraProvider(CHAIN_ID == 5 ? "goerli" : null, SIGNER_PRIVATE_KEY);
+    const contract = new ethers.Contract(contractAddress, abi, provider);
+    const passData = await contract.hasValidPass(address);
+    const isValid = passData[0];
+    if (isValid) {
+      passType = Number(passData[1]);
+      expiration = Number(passData[2]);
+      return [passType, expiration];
+    }
+    const currentdate = Date.now();
+    const isAllowed = allowedAddresses.find(allowedAddress => {
+      return allowedAddress.address.toLowerCase() === address.toLowerCase() && allowedAddress.expiration > currentdate;
+    });
+    if (isAllowed) {
+      const { expiration } = isAllowed;
+      passType = 4;
+      return [passType, expiration];
+    }
+    passType = 5;
+    expiration = 1998388898000;
+    return [passType, expiration];
+    // return [5, 1998388898000];
   } catch (err) {
     console.log(err);
     // return [false, 0, 0];

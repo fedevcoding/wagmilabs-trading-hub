@@ -158,6 +158,7 @@ function App() {
   // set colors based on states
   useEffect(() => {
     document.body.style.background = "#0E0F0E";
+    localStorage.setItem("mainPromo", false);
   }, []);
 
   useEffect(() => {
