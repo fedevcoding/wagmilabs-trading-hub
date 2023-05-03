@@ -3382,6 +3382,13 @@ const allowedAddresses = [
     address: "0x34917580e0794e66f87A9b757f197EaAD49e3Af0",
     expiration: 1685199893000,
   },
+  /////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////
+  {
+    address: "0x3E7e371A2Ead7920fa56BDaB98FD992CEd797e99",
+    expiration: 1685798247000,
+  },
 ];
 
 const isTeam = address => teamAddresses.find(a => a?.toLowerCase() === address?.toLowerCase())?.length > 0;
