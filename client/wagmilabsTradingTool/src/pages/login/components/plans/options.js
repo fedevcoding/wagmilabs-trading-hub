@@ -18,7 +18,7 @@ export const planOptions = [
       3: 0,
       6: 0,
     },
-    description: `Use our platform for FREE. No hassle, no commitments. Some features are locked and require PRO access.`,
+    description: `Use our platform for FREE. No hassle, no commitments, in a highly equipped version.`,
     buttonName: "Get started",
   },
   // {

@@ -29,7 +29,7 @@ const Plan = ({ planOption, durationSelector }) => {
           {monthlyPrice !== 0 ? (
             <span className="low-opacity little-text">/ month</span>
           ) : (
-            <span className="low-opacity little-text">(forever)</span>
+            <span className="low-opacity little-text"></span>
           )}
         </p>
       </div>
