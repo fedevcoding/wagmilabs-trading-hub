@@ -29,7 +29,7 @@ const Plans = ({ plans }) => {
       </div>
       <div className="plans">
         {planOptions.map(planOption => {
-          return <Plan key={planOption.id} planOption={planOption} durationSelector={durationSelector} />;
+          return <Plan key={planOption.planId} planOption={planOption} durationSelector={durationSelector} />;
         })}
       </div>
     </div>

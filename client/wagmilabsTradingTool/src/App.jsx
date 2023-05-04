@@ -51,6 +51,7 @@ import RESERVOIR_SOURCE from "./variables/reservoirSource";
 import BulkListing from "./pages/bulkListing/BulkListing";
 import Plans from "./pages/login/components/plans/Plans";
 import { useLocationParams } from "./custom-hooks/useLocationParams";
+import GetAccess from "./pages/getAccess/GetAccess";
 
 // for wagmi
 
@@ -158,6 +159,7 @@ function App() {
   // set colors based on states
   useEffect(() => {
     document.body.style.background = "#0E0F0E";
+    localStorage.setItem("mainPromo", false);
   }, []);
 
   useEffect(() => {
@@ -243,6 +245,7 @@ function App() {
       ethData,
       connected,
       setConnected,
+      loading,
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [
@@ -260,6 +263,7 @@ function App() {
       userBalances,
       setUserBalances,
       ethData,
+      loading,
     ]
   );
 
@@ -471,6 +475,17 @@ function App() {
                               />
 
                               <Route exact path="/legal" element={<Legals />} />
+                              <Route
+                                exact
+                                path="/requiresPremium"
+                                element={
+                                  <>
+                                    <Header />
+                                    <GetAccess />
+                                    <Footer />
+                                  </>
+                                }
+                              />
 
                               <Route path="*" element={<Redirect />} />
                             </Routes>

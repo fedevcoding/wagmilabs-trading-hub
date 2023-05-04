@@ -29,7 +29,7 @@ const Plan = ({ planOption, durationSelector }) => {
           {monthlyPrice !== 0 ? (
             <span className="low-opacity little-text">/ month</span>
           ) : (
-            <span className="low-opacity little-text">(7 days)</span>
+            <span className="low-opacity little-text">(forever)</span>
           )}
         </p>
       </div>
@@ -37,15 +37,31 @@ const Plan = ({ planOption, durationSelector }) => {
         <p>{description}</p>
       </div>
       <div className="plan-footer">
-        <ConnectButton.Custom>
-          {({ account, chain, openConnectModal, mounted }) => {
-            const ready = mounted;
-            const connected = ready && account && chain;
+        {monthlyPrice !== 0 ? (
+          <ConnectButton.Custom>
+            {({ account, chain, openConnectModal, mounted }) => {
+              const ready = mounted;
+              const connected = ready && account && chain;
 
-            return (
-              <>
-                {(() => {
-                  if (!connected) {
+              return (
+                <>
+                  {(() => {
+                    if (!connected) {
+                      return (
+                        <Button
+                          colorScheme="blue"
+                          variant="solid"
+                          size="md"
+                          className="btn"
+                          width={"80%"}
+                          height="50px"
+                          borderRadius="25px"
+                          onClick={openConnectModal}
+                        >
+                          {buttonName}
+                        </Button>
+                      );
+                    }
                     return (
                       <Button
                         colorScheme="blue"
@@ -55,31 +71,36 @@ const Plan = ({ planOption, durationSelector }) => {
                         width={"80%"}
                         height="50px"
                         borderRadius="25px"
-                        onClick={openConnectModal}
+                        onClick={buySubscription}
                       >
-                        {buttonName}
+                        {isLoading ? <Loader /> : <>{buttonName}</>}
                       </Button>
                     );
-                  }
-                  return (
-                    <Button
-                      colorScheme="blue"
-                      variant="solid"
-                      size="md"
-                      className="btn"
-                      width={"80%"}
-                      height="50px"
-                      borderRadius="25px"
-                      onClick={buySubscription}
-                    >
-                      {isLoading ? <Loader /> : <>{buttonName}</>}
-                    </Button>
-                  );
-                })()}
-              </>
-            );
-          }}
-        </ConnectButton.Custom>
+                  })()}
+                </>
+              );
+            }}
+          </ConnectButton.Custom>
+        ) : (
+          <Button
+            colorScheme="blue"
+            variant="solid"
+            size="md"
+            className="btn"
+            width={"80%"}
+            height="50px"
+            borderRadius="25px"
+            onClick={() =>
+              window.scrollTo({
+                top: 0,
+                left: 0,
+                behavior: "smooth",
+              })
+            }
+          >
+            {buttonName}
+          </Button>
+        )}
       </div>
     </div>
   );
