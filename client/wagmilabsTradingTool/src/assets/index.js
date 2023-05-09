@@ -46,4 +46,5 @@ export { default as videoThumbnail } from "./video-thumbnail.svg";
 export { default as preview } from "./intro.mp4";
 export { default as whatsnew } from "./whatsnew.png";
 export { default as magically } from "./magically.png";
+export { default as testBanner } from "./test-banner.png";
 export * from "./pfps";
