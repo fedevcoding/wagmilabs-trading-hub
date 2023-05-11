@@ -5,8 +5,11 @@ import { UserDataContext } from "@Context";
 import updateGasSettings from "@Utils/database-functions/updateGasSettings";
 
 import "./style.css";
+import PremiumLock from "../../PremiumLock/PremiumLock";
+import { useJwtData } from "../../../custom-hooks/useJwtData";
 
 export const GasModal = ({ setGasModalOpen, gasModalOpen }) => {
+  const { isPro } = useJwtData();
   const toast = useToast();
 
   const gasModalOpenRef = useRef(gasModalOpen);
@@ -22,13 +25,14 @@ export const GasModal = ({ setGasModalOpen, gasModalOpen }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const closeModal = e => {
+  const closeModal = (e, force = false) => {
     if (gasModalOpenRef.current) {
       const modalContainer = document.querySelector(".gas-modal-container");
       const footerGasPreset = document.querySelector(".footer-gas-preset");
-
-      const path = e.composedPath();
-      if (path.includes(footerGasPreset)) return;
+      if (!force) {
+        const path = e.composedPath();
+        if (path.includes(footerGasPreset)) return;
+      }
 
       modalContainer.classList.remove("visible");
       setTimeout(() => {
@@ -38,6 +42,7 @@ export const GasModal = ({ setGasModalOpen, gasModalOpen }) => {
   };
 
   function openCustom() {
+    if (!isPro) return;
     changePreset("custom");
     document.querySelector(".gas-modal-container").classList.add("extend");
     setCustom(true);
@@ -75,6 +80,7 @@ export const GasModal = ({ setGasModalOpen, gasModalOpen }) => {
 
   async function changePreset(value, type) {
     try {
+      if (!isPro) return;
       const allPresets = document.querySelectorAll(".gas-modal-single-preset");
       const presetName = `.${value}-gas-preset`;
       const selectedPreset = document.querySelector(presetName);
@@ -122,11 +128,10 @@ export const GasModal = ({ setGasModalOpen, gasModalOpen }) => {
           break;
         case "custom":
           const maxFeePerGas =
-            document.querySelector(".gas-modal-maxFeePerGas-input")?.value ||
-            gasSettings?.custom?.maxFeePerGas;
+            document.querySelector(".gas-modal-maxFeePerGas-input")?.value || gasSettings?.custom?.maxFeePerGas;
           const maxPriorityFeePerGas =
-            document.querySelector(".gas-modal-maxPriorityFeePerGas-input")
-              ?.value || gasSettings?.custom?.maxPriorityFeePerGas;
+            document.querySelector(".gas-modal-maxPriorityFeePerGas-input")?.value ||
+            gasSettings?.custom?.maxPriorityFeePerGas;
 
           newGasSetting = {
             maxFeePerGas,
@@ -143,6 +148,16 @@ export const GasModal = ({ setGasModalOpen, gasModalOpen }) => {
       const updateResult = await updateGasSettings(newGasSetting);
       if (updateResult) setGasSettings(newGasSetting);
       else throw new Error("Error updating gas settings");
+
+      if (value === "custom" && type === "save") {
+        toast({
+          title: "Success",
+          description: "Gas settings updated",
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+        });
+      }
     } catch (e) {
       toast({
         title: "Error",
@@ -158,84 +173,80 @@ export const GasModal = ({ setGasModalOpen, gasModalOpen }) => {
     <>
       {gasModalOpen && (
         <div className="gas-modal-container">
-          <p className="gas-modal-title">Gas preset</p>
+          <PremiumLock callBack={() => closeModal(undefined, true)}>Unlock</PremiumLock>
+          <div className={`gas-modal-relative ${isPro ? "has-premium" : ""}`}>
+            <div className={`gas-modal-flex ${!isPro ? "premium-overlay-2" : ""}`}>
+              <p className="gas-modal-title">Gas preset</p>
 
-          <div className="gas-modal-presets-container">
-            <div
-              className="gas-modal-single-preset instant-gas-preset active"
-              onClick={() => changePreset("instant")}
-            >
-              <i className="fa-solid fa-bolt"></i>
-              <p>Instant</p>
-            </div>
-
-            <div
-              className="gas-modal-single-preset fast-gas-preset"
-              onClick={() => changePreset("fast")}
-            >
-              <i className="fa-sharp fa-solid fa-rocket-launch"></i>
-              <p>Fast</p>
-            </div>
-
-            <div
-              className="gas-modal-single-preset standard-gas-preset"
-              onClick={() => changePreset("standard")}
-            >
-              <i className="fa-solid fa-truck"></i>
-              <p>Standard</p>
-            </div>
-
-            <div
-              className="gas-modal-single-preset custom-gas-preset"
-              onClick={openCustom}
-            >
-              <i className="fa-solid fa-gear"></i>
-              <p>Custom</p>
-            </div>
-
-            {custom && (
-              <>
-                <hr className="gas-modal-hr" />
-
-                <div className="gas-modal-custom-extend">
-                  <div>
-                    <p>Max Fee per Gas</p>
-                    <HStack>
-                      <Input
-                        _placeholder={"1.5"}
-                        color="white"
-                        className="gas-modal-maxFeePerGas-input"
-                        defaultValue={gasSettings.custom.maxFeePerGas}
-                      />
-                    </HStack>
-                  </div>
-
-                  <div>
-                    <p>Max Priority Fee per Gas</p>
-
-                    <HStack>
-                      <Input
-                        _placeholder={"40"}
-                        color="white"
-                        className="gas-modal-maxPriorityFeePerGas-input"
-                        defaultValue={gasSettings.custom.maxPriorityFeePerGas}
-                      />
-                    </HStack>
-                  </div>
-
-                  <div>
-                    <Button
-                      className="gas-modal-save-button"
-                      height={"30px"}
-                      colorScheme="blue"
-                      onClick={() => changePreset("custom", "save")}
-                    >
-                      Save
-                    </Button>
-                  </div>
+              <div className="gas-modal-presets-container">
+                <div
+                  className="gas-modal-single-preset instant-gas-preset active"
+                  onClick={() => changePreset("instant")}
+                >
+                  <i className="fa-solid fa-bolt"></i>
+                  <p>Instant</p>
                 </div>
-              </>
-            )}
+
+                <div className="gas-modal-single-preset fast-gas-preset" onClick={() => changePreset("fast")}>
+                  <i className="fa-sharp fa-solid fa-rocket-launch"></i>
+                  <p>Fast</p>
+                </div>
+
+                <div className="gas-modal-single-preset standard-gas-preset" onClick={() => changePreset("standard")}>
+                  <i className="fa-solid fa-truck"></i>
+                  <p>Standard</p>
+                </div>
+
+                <div className="gas-modal-single-preset custom-gas-preset" onClick={openCustom}>
+                  <i className="fa-solid fa-gear"></i>
+                  <p>Custom</p>
+                </div>
+
+                {custom && (
+                  <>
+                    <hr className="gas-modal-hr" />
+
+                    <div className="gas-modal-custom-extend">
+                      <div>
+                        <p>Max Fee per Gas</p>
+                        <HStack>
+                          <Input
+                            _placeholder={"1.5"}
+                            color="white"
+                            className="gas-modal-maxFeePerGas-input"
+                            defaultValue={gasSettings.custom.maxFeePerGas}
+                          />
+                        </HStack>
+                      </div>
+
+                      <div>
+                        <p>Max Priority Fee per Gas</p>
+
+                        <HStack>
+                          <Input
+                            _placeholder={"40"}
+                            color="white"
+                            className="gas-modal-maxPriorityFeePerGas-input"
+                            defaultValue={gasSettings.custom.maxPriorityFeePerGas}
+                          />
+                        </HStack>
+                      </div>
+
+                      <div>
+                        <Button
+                          className="gas-modal-save-button"
+                          height={"30px"}
+                          colorScheme="blue"
+                          onClick={() => changePreset("custom", "save")}
+                        >
+                          Save
+                        </Button>
+                      </div>
+                    </div>
+                  </>
+                )}
+              </div>
+            </div>
           </div>
         </div>
       )}

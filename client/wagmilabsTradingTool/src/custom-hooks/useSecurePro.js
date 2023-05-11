@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useJwtData } from "./useJwdData";
+import { useJwtData } from "./useJwtData";
 
 export const useSecurePro = () => {
   const { isPro, loadedJwtData } = useJwtData();
@@ -8,7 +8,7 @@ export const useSecurePro = () => {
 
   useEffect(() => {
     if (loadedJwtData && !isPro) {
-      navigate("/notfound");
+      navigate("/requiresPremium");
     }
   }, [isPro, navigate, loadedJwtData]);
 };

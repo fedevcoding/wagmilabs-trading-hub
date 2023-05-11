@@ -1,11 +1,11 @@
 const express = require("express");
-const checkAuth = require("../../middleware/checkAuth");
-const Ranking = require("../../models/RankingModel");
-const { client } = require("../../config/db");
+const checkAuth = require("../..//../middleware/checkAuth");
+const { client } = require("../..//../config/db");
+const checkRankingPro = require("./middlewares/checkRankingPro");
 
 const rankingRoute = express();
 
-rankingRoute.get("/:time", checkAuth, (req, res) => {
+rankingRoute.get("/:time", checkAuth, checkRankingPro, (req, res) => {
   async function getData() {
     try {
       const { time } = req.params || {};
