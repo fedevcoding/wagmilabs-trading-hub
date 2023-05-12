@@ -13,52 +13,6 @@ mintingRoute.get("/:time", checkAuth, checkMintingPro, (req, res) => {
 
       const minTime = new Date().getTime() - userTime;
 
-      //   let mintingCollections = await Minting.aggregate([
-      //     {
-      //       $unwind: "$mints",
-      //     },
-      //     {
-      //       $match: {
-      //         "mints.mintTime": { $gt: minTime },
-      //       },
-      //     },
-      //     {
-      //       $group: {
-      //         _id: "$_id",
-      //         uniqueMinters: { $addToSet: "$mints.minterAddress" },
-      //         volume: { $sum: "$mints.value" },
-      //         firstDoc: { $first: "$$ROOT" },
-      //         rightMints: { $sum: "$mints.amount" },
-      //       },
-      //     },
-      //     {
-      //       $unset: "firstDoc.mints",
-      //     },
-      //     {
-      //       $match: { rightMints: { $gt: 0 } },
-      //     },
-      //     {
-      //       $addFields: {
-      //         "firstDoc.volume": "$volume",
-      //         "firstDoc.rightMints": "$rightMints",
-      //         "firstDoc.uniqueMinters": { $size: "$uniqueMinters" },
-      //       },
-      //     },
-      //     {
-      //       $replaceRoot: {
-      //         newRoot: "$firstDoc",
-      //       },
-      //     },
-      //     {
-      //       $sort: {
-      //         rightMints: -1,
-      //       },
-      //     },
-      //     {
-      //       $limit: 50,
-      //     },
-      //   ]);
-
       const sql = `
                     SELECT unique_minters, volume, right_mints, collections.name, mints.contract_address, collections.total_supply, collections.floor_price, collections.created_date, collections.slug, collections.image 
                     FROM 
