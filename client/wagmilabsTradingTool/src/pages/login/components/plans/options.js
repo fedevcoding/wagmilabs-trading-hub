@@ -1,14 +1,25 @@
 export const planOptions = [
+  // {
+  //   planId: 0,
+  //   name: "Free Trial 📒",
+  //   prices: {
+  //     1: 0,
+  //     3: 0,
+  //     6: 0,
+  //   },
+  //   description: `Start your trial for FREE for 7 days. No hassle, no commitments. Includes all features apart from bots.`,
+  //   buttonName: "Start Trial",
+  // },
   {
     planId: 0,
-    name: "Free Trial 📒",
+    name: "Free 📒",
     prices: {
       1: 0,
       3: 0,
       6: 0,
     },
-    description: `Start your trial for FREE for 7 days. No hassle, no commitments. Includes all features apart from bots.`,
-    buttonName: "Start Trial",
+    description: `Use our platform for FREE. No hassle, no commitments, in a highly equipped version.`,
+    buttonName: "Get started",
   },
   // {
   //   planId: 1,

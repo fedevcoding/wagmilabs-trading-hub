@@ -4,19 +4,43 @@ import Minting from "./tools/Minting/Minting";
 import Top100 from "./tools/Top100/Top100";
 import rippleEffect from "@Utils/functions/rippleEffect";
 
-import "./home.css";
+import "./home.scss";
 import WatchList from "./tools/watchList/WatchList";
 import Owned from "./tools/owned/Owned";
 import { LivePulsing } from "@Components";
-
+import { useNavigate } from "react-router-dom";
 import { setPageTitle } from "@Utils";
+import { useJwtData } from "@Hooks";
 
 const Home = () => {
+  const { isPro } = useJwtData();
+
   const [timeFrame, setTimeFrame] = useState("1H");
   const [tool, setTool] = useState("trending");
+  const navigate = useNavigate();
 
   function changeTime(e, time) {
     const element = e.currentTarget;
+
+    if (tool === "trending" && !isPro) {
+      if (time === "1M" || time === "5M" || time === "10M" || time === "30M") {
+        navigate("/plans");
+        return;
+      }
+    }
+    if (tool === "minting" && !isPro) {
+      if (time === "1M" || time === "2M" || time === "5M" || time === "15M" || time === "30M") {
+        navigate("/plans");
+        return;
+      }
+    }
+    if (tool === "ranking" && !isPro) {
+      if (time === "1M" || time === "5M" || time === "10M" || time === "30M") {
+        navigate("/plans");
+        return;
+      }
+    }
+
     document.querySelectorAll(".tool-times div").forEach(time => {
       time.classList.remove("active");
     });
@@ -73,7 +97,7 @@ const Home = () => {
             </div>
           </div>
           <div className="tool-times">
-            <Times tool={tool} rippleEffect={rippleEffect} changeTime={changeTime} />
+            <Times tool={tool} rippleEffect={rippleEffect} changeTime={changeTime} isPro={isPro} />
           </div>
         </div>
 
@@ -105,21 +129,21 @@ const Tool = ({ tool, timeFrame, setTimeFrame, resetTime }) => {
   }
 };
 
-const Times = ({ tool, changeTime }) => {
+const Times = ({ tool, changeTime, isPro }) => {
   switch (tool) {
     case "trending":
       return (
         <>
-          <div className="trending-1M" onClick={e => changeTime(e, "1M")}>
+          <div className={`trending-1M ${!isPro ? "premium" : ""}`} onClick={e => changeTime(e, "1M")}>
             1M
           </div>
-          <div className="trending-5M" onClick={e => changeTime(e, "5M")}>
+          <div className={`trending-5M ${!isPro ? "premium" : ""}`} onClick={e => changeTime(e, "5M")}>
             5M
           </div>
-          <div className="trending-10M" onClick={e => changeTime(e, "10M")}>
+          <div className={`trending-10M ${!isPro ? "premium" : ""}`} onClick={e => changeTime(e, "10M")}>
             10M
           </div>
-          <div className="trending-30M" onClick={e => changeTime(e, "30M")}>
+          <div className={`trending-30M ${!isPro ? "premium" : ""}`} onClick={e => changeTime(e, "30M")}>
             30M
           </div>
           <div className="trending-1H" onClick={e => changeTime(e, "1H")}>
@@ -142,19 +166,19 @@ const Times = ({ tool, changeTime }) => {
     case "minting":
       return (
         <>
-          <div className="minting-1M" onClick={e => changeTime(e, "1M")}>
+          <div className={`minting-1M ${!isPro ? "premium" : ""}`} onClick={e => changeTime(e, "1M")}>
             1M
           </div>
-          <div className="minting-2M" onClick={e => changeTime(e, "2M")}>
+          <div className={`minting-2M ${!isPro ? "premium" : ""}`} onClick={e => changeTime(e, "2M")}>
             2M
           </div>
-          <div className="minting-5M" onClick={e => changeTime(e, "5M")}>
+          <div className={`minting-5M ${!isPro ? "premium" : ""}`} onClick={e => changeTime(e, "5M")}>
             5M
           </div>
-          <div className="minting-15M" onClick={e => changeTime(e, "15M")}>
+          <div className={`minting-15M ${!isPro ? "premium" : ""}`} onClick={e => changeTime(e, "15M")}>
             15M
           </div>
-          <div className="minting-30M" onClick={e => changeTime(e, "30M")}>
+          <div className={`minting-30M ${!isPro ? "premium" : ""}`} onClick={e => changeTime(e, "30M")}>
             30M
           </div>
           <div className="minting-1H" onClick={e => changeTime(e, "1H")}>
@@ -171,16 +195,16 @@ const Times = ({ tool, changeTime }) => {
     case "ranking":
       return (
         <>
-          <div className="ranking-1M" onClick={e => changeTime(e, "1M")}>
+          <div className={`ranking-1M ${!isPro ? "premium" : ""}`} onClick={e => changeTime(e, "1M")}>
             1M
           </div>
-          <div className="ranking-5M" onClick={e => changeTime(e, "5M")}>
+          <div className={`ranking-5M ${!isPro ? "premium" : ""}`} onClick={e => changeTime(e, "5M")}>
             5M
           </div>
-          <div className="ranking-10M" onClick={e => changeTime(e, "10M")}>
+          <div className={`ranking-10M ${!isPro ? "premium" : ""}`} onClick={e => changeTime(e, "10M")}>
             10M
           </div>
-          <div className="ranking-30M" onClick={e => changeTime(e, "30M")}>
+          <div className={`ranking-30M ${!isPro ? "premium" : ""}`} onClick={e => changeTime(e, "30M")}>
             30M
           </div>
           <div className="ranking-1H" onClick={e => changeTime(e, "1H")}>

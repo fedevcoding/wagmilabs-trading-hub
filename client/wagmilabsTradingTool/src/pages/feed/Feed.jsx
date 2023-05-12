@@ -6,8 +6,11 @@ import { useSetPageTitle } from "@Hooks";
 import PoweredBy from "@Assets/poweredbyluckytrader-light.png";
 
 import "./style.scss";
+import { useSecurePro } from "../../custom-hooks/useSecurePro";
 
 const Feed = React.memo(() => {
+  useSecurePro();
+
   useSetPageTitle("Feed | Wagmi Labs");
   const [currentPage, setCurrentPage] = React.useState(1);
   const {

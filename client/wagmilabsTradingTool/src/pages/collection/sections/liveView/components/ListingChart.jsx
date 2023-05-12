@@ -2,6 +2,8 @@ import React, { memo, useEffect, useState } from "react";
 import HighchartsReact from "highcharts-react-official";
 import HighCharts from "highcharts";
 import { HStack, NumberInput, NumberInputField } from "@chakra-ui/react";
+import PremiumLock from "../../../../../components/PremiumLock/PremiumLock";
+import { useJwtData } from "../../../../../custom-hooks/useJwtData";
 
 const columns = 25;
 
@@ -18,6 +20,7 @@ const defaultChartSettings = {
 };
 
 const ListingChart = memo(({ floorPrice, tokensData }) => {
+  const { isPro } = useJwtData();
   const [offset, setOffset] = useState(0);
 
   const [chartOptions, setChartOptions] = useState(defaultChartSettings);
@@ -112,18 +115,22 @@ const ListingChart = memo(({ floorPrice, tokensData }) => {
 
   return (
     <div className="listingWallChart">
-      <HStack className="chart-options">
-        <NumberInput value={offset}>
-          <HStack>
-            <NumberInputField
-              placeholder="Offset"
-              onChange={e => setOffset(e.target.value.length > 0 ? e.target.value : 0)}
-            />
-          </HStack>
-        </NumberInput>
-      </HStack>
+      <PremiumLock>Unlock listings wall</PremiumLock>
 
-      <HighchartsReact highcharts={HighCharts} options={chartOptions} />
+      <div className={`${!isPro ? "premium-overlay" : ""}`}>
+        <HStack className="chart-options">
+          <NumberInput value={offset}>
+            <HStack>
+              <p>Step </p>
+              <NumberInputField
+                placeholder="Offset"
+                onChange={e => setOffset(e.target.value.length > 0 ? e.target.value : 0)}
+              />
+            </HStack>
+          </NumberInput>
+        </HStack>
+        <HighchartsReact highcharts={HighCharts} options={chartOptions} />
+      </div>
     </div>
   );
 });

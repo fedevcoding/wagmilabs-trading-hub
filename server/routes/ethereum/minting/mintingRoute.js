@@ -1,11 +1,11 @@
 const express = require("express");
-const checkAuth = require("../../middleware/checkAuth");
-const Minting = require("../../models/MintingModel");
-const { client } = require("../../config/db");
+const checkAuth = require("../../../middleware/checkAuth");
+const { client } = require("../../../config/db");
+const checkMintingPro = require("./middlewares/checkMintingPro");
 
 const mintingRoute = express();
 
-mintingRoute.get("/:time", checkAuth, (req, res) => {
+mintingRoute.get("/:time", checkAuth, checkMintingPro, (req, res) => {
   async function getData() {
     try {
       const { time } = req.params || {};

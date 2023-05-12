@@ -15,12 +15,12 @@ import { useUpdateBalance } from "@Hooks";
 
 import { fetchEnsName } from "@wagmi/core";
 import { useAccount } from "wagmi";
-import { useJwtData } from "../../custom-hooks/useJwdData";
+import { useJwtData } from "@Hooks";
 import moment from "moment";
 import { useSubscribe } from "../../custom-hooks/useSubscribe";
 
 const Header = () => {
-  const { isPro, isFree, isPartnership, expiration } = useJwtData();
+  const { isFree, isPartnership, expiration } = useJwtData();
   const { subscribe } = useSubscribe();
 
   const {
@@ -236,11 +236,17 @@ const Header = () => {
   return (
     <>
       <RefreshToken connected={connected} setConnected={setConnected} />
-      {(isFree || isPartnership) && (
+      {isPartnership && (
         <header className="expiration-header">
-          <p>
-            FREE {isPartnership ? "period" : "Trial"} ending {moment(expiration).fromNow()}
+          <p>FREE pro ending {moment(expiration).fromNow()}</p>
+          <p className="upgrade" onClick={() => subscribe(2, 1, 0.03)}>
+            Upgrade now!
           </p>
+        </header>
+      )}
+      {isFree && (
+        <header className="expiration-header">
+          <p>Access more features and instant data</p>
           <p className="upgrade" onClick={() => subscribe(2, 1, 0.03)}>
             Upgrade now!
           </p>
@@ -260,12 +266,8 @@ const Header = () => {
               <span>Bots</span>
 
               <div className="bots-options-dropdown invisible">
-                <div onClick={() => isPro && navigate("/bots/wallets")} className={`${!isPro && "not-allowed"}`}>
-                  Wallets
-                </div>
-                <div onClick={() => isPro && navigate("/bots/sniper")} className={`${!isPro && "not-allowed"}`}>
-                  Sniper bot
-                </div>
+                <div onClick={() => navigate("/bots/wallets")}>Wallets</div>
+                <div onClick={() => navigate("/bots/sniper")}>Sniper bot</div>
                 <div className="not-allowed">Minting bot</div>
                 <div className="not-allowed">Notifications</div>
               </div>

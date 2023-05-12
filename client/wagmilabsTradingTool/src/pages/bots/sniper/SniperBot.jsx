@@ -7,9 +7,11 @@ import { useAccount } from "wagmi";
 import { Header, NewTaskModal, Table } from "./components";
 import { useHandleData, useGetData } from "./hooks";
 import { useSecurePro } from "../../../custom-hooks/useSecurePro";
+import { useSetPageTitle } from "../../../custom-hooks";
 
 const SniperBot = () => {
   useSecurePro();
+  useSetPageTitle("Sniper bot | Wagmi Labs");
 
   const { activeSnipes, setActiveSnipes, snipeActivity, loadingSnipes } = useGetData();
   const {
@@ -27,16 +29,17 @@ const SniperBot = () => {
   const socket = useContext(SocketContext);
   useEffect(() => {
     if (address && socket && handleTaskUpdate) {
+      console.log(socket);
       socket.emit("joinSnipeUpdates", address);
 
       socket.off("newSnipeUpdates").on("snipeUpdates", data => {
         handleTaskUpdate(data);
       });
-    }
 
-    return () => {
-      socket.emit("leaveSnipeUpdates", address);
-    };
+      return () => {
+        socket.emit("leaveSnipeUpdates", address);
+      };
+    }
   }, [socket, address, handleTaskUpdate]);
 
   return (
