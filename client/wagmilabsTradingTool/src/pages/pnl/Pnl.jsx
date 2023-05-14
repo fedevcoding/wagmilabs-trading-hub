@@ -2,7 +2,6 @@ import React from "react";
 import { Card, Col, LoadingSpinner, PageWrapper, Row } from "@Components";
 import { CardRecap, SettingsAndFilters, Table } from "./Components";
 import { useSetPageTitle } from "@Hooks";
-
 import "./style.scss";
 import { useTimeframe } from "./useTimeframe";
 import { useGetData } from "./useGetData";
@@ -37,6 +36,12 @@ export default React.memo(() => {
             setStartDate={setStartDate}
             setEndDate={setEndDate}
             data={data}
+            taxPerc={settings.taxPerc}
+            currency={settings.currency.value}
+            taxedOn={settings.taxedOn.value}
+            taxLossHarvesting={settings.taxLossHarvesting}
+            longTermTax={settings.longTermTax}
+            address={address}
             {...settings}
           />
         </Col>
