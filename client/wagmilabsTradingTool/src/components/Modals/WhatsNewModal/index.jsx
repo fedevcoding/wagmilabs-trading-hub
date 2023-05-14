@@ -24,9 +24,9 @@ export const WhatsNewModal = React.memo(({ isOpen, onClose, type }) => {
           </ModalBody>
 
           <ModalBody className="modal-body">
-            <div>
-              <p>-Added tradingview floor price chart! 👑</p>
-              <img src={whatsnew} className="whatsnew-img" alt="tradingview"></img>
+            <div className="flex">
+              <p>-Added PNL export image! 👑</p>
+              <img src={whatsnew} className="whatsnew-img" alt="tradingview" style={{ width: "200px" }}></img>
             </div>
           </ModalBody>
 

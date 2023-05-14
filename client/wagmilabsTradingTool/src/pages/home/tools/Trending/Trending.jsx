@@ -20,7 +20,7 @@ import { useJwtData } from "../../../../custom-hooks/useJwtData";
 
 const defaultTimeFrame = "1H";
 
-const whatsNewType = "whatsnew1";
+const whatsNewType = "whatsnew2";
 
 const Trending = ({ tool, timeFrame, setTimeFrame, resetTime }) => {
   const { isFree, isPartnership } = useJwtData();
