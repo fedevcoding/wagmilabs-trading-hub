@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/static/css/main.25209cbe.css",
-    "main.js": "/static/js/main.f721968b.js",
+    "main.css": "/static/css/main.31e147dd.css",
+    "main.js": "/static/js/main.572d7562.js",
     "static/js/5000.a447016a.chunk.js": "/static/js/5000.a447016a.chunk.js",
     "static/js/6966.d2d55852.chunk.js": "/static/js/6966.d2d55852.chunk.js",
     "static/js/7997.044a1898.chunk.js": "/static/js/7997.044a1898.chunk.js",
@@ -68,7 +68,6 @@
     "static/media/question.png": "/static/media/question.06fe110f4be5b9d9400b.png",
     "static/media/feed-banner.jpeg": "/static/media/feed-banner.b638092af630b23d0b36.jpeg",
     "static/media/magically.png": "/static/media/magically.0565c4c60cfaf43561d8.png",
-    "static/media/whatsnew.png": "/static/media/whatsnew.fb6ab7dd2d71351cbb92.png",
     "static/media/inter-all-600-normal.woff": "/static/media/inter-all-600-normal.d8872b2170f87e73c798.woff",
     "static/media/inter-all-500-normal.woff": "/static/media/inter-all-500-normal.83e7a0ab5dc3177d4723.woff",
     "static/media/inter-all-400-normal.woff": "/static/media/inter-all-400-normal.8c804432e8c67741aac0.woff",
@@ -78,8 +77,10 @@
     "static/media/inter-latin-ext-variable-wghtOnly-normal.woff2": "/static/media/inter-latin-ext-variable-wghtOnly-normal.fad2a547f18821b21f1f.woff2",
     "static/media/logoBeta.png": "/static/media/logoBeta.e52577819006f41b8372.png",
     "static/media/ibm-plex-mono-all-400-normal.woff": "/static/media/ibm-plex-mono-all-400-normal.9cde15d0fcce7c20b054.woff",
+    "static/media/banner-pnl.png": "/static/media/banner-pnl.d060d6ec87d6f46f2ab4.png",
     "static/media/black-logo.png": "/static/media/black-logo.3a85b62907ad9381bee0.png",
     "static/media/inter-latin-variable-wghtOnly-normal.woff2": "/static/media/inter-latin-variable-wghtOnly-normal.5eb4a7768219776c5b91.woff2",
+    "static/media/whatsnew.png": "/static/media/whatsnew.d9e9fdb06a761cca00a6.png",
     "static/media/profile.png": "/static/media/profile.c2be7c9ec3ad61bc056d.png",
     "static/media/PRomo.jpg": "/static/media/PRomo.e84d3648f4c7aa1f1666.jpg",
     "static/media/nansel.jpg": "/static/media/nansel.c2b280455aa88fd85408.jpg",
@@ -148,8 +149,8 @@
     "static/media/twitter2.svg": "/static/media/twitter2.046f0e991c8bdf4c74dd33489d1a4574.svg",
     "static/media/delete.svg": "/static/media/delete.321d985cbeb9c91f04ec239df9ee6ae3.svg",
     "static/media/cryptopunks.svg": "/static/media/cryptopunks.2f944e7e58ee64b11641bd04d8f30649.svg",
-    "main.25209cbe.css.map": "/static/css/main.25209cbe.css.map",
-    "main.f721968b.js.map": "/static/js/main.f721968b.js.map",
+    "main.31e147dd.css.map": "/static/css/main.31e147dd.css.map",
+    "main.572d7562.js.map": "/static/js/main.572d7562.js.map",
     "5000.a447016a.chunk.js.map": "/static/js/5000.a447016a.chunk.js.map",
     "6966.d2d55852.chunk.js.map": "/static/js/6966.d2d55852.chunk.js.map",
     "7997.044a1898.chunk.js.map": "/static/js/7997.044a1898.chunk.js.map",
@@ -212,7 +213,7 @@
     "3381.1146cf57.chunk.js.map": "/static/js/3381.1146cf57.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.25209cbe.css",
-    "static/js/main.f721968b.js"
+    "static/css/main.31e147dd.css",
+    "static/js/main.572d7562.js"
   ]
 }
