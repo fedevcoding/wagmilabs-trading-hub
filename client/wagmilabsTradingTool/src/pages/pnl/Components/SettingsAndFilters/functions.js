@@ -84,43 +84,61 @@ const getCtxColor = data => {
   }
 };
 
-export function downloadPnlImage(data, paid, sold, pAndL, taxes, address, profileImage) {
+export function downloadPnlImage(data, paid, sold, pAndL, address, profileImage, { startDate, endDate }) {
+  if (!data?.length) return;
+
   const canvas = document.createElement("canvas");
-  canvas.height = 373;
-  canvas.width = 350;
+  canvas.height = 604;
+  canvas.width = 528;
   const ctx = canvas.getContext("2d");
-  const img = new Image();
-  const img2 = new Image();
-  img.src = bannerPnl;
-  img2.src = profileImage;
-
   const holdDurationStatus = avgHodlTime(data);
+  const status = pAndL?.eth > 0 ? "Winner 👑" : "Loser 📉";
 
-  img.onload = () => {
-    const status = pAndL?.eth > 0 ? "Winner 👑" : "Loser 📉";
-    ctx.drawImage(img, 0, 0);
-    // ctx.drawImage(img2, 130, 0);
-    ctx.font = "20px poppins";
-    ctx.fillText(formatAddress(address), 130, 50);
+  const banner = new Image();
+  const pfp = new Image();
+
+  banner.onload = () => {
+    ctx.drawImage(banner, 0, 0);
+
+    ctx.save();
+    ctx.beginPath();
+    ctx.arc(75, 65, 35, 0, Math.PI * 2, false);
+    ctx.strokeStyle = "red";
+    ctx.stroke();
+    ctx.clip();
+    ctx.drawImage(pfp, 40, 30, 70, 70);
+    ctx.restore();
+
+    ctx.font = "25px poppins";
+    ctx.fillText(formatAddress(address), 140, 77);
+
+    ctx.fillText(
+      `Period: ${moment(startDate).format("MMM DD, YYYY")} - ${moment(endDate).format("MMM DD, YYYY")}`,
+      40,
+      170
+    );
 
     ctx.fillStyle = getCtxColor(paid?.eth);
-    ctx.fillText(`Total spent: ${roundPrice(paid?.eth)} ETH`, 40, 130);
+    ctx.fillText(`Total spent: ${roundPrice(paid?.eth)} ETH`, 40, 240);
 
     ctx.fillStyle = getCtxColor(sold?.eth);
-    ctx.fillText(`Total sold: ${roundPrice(sold?.eth)} ETH`, 40, 160);
+    ctx.fillText(`Total sold: ${roundPrice(sold?.eth)} ETH`, 40, 290);
 
     ctx.fillStyle = getCtxColor(pAndL?.eth);
-    ctx.fillText(`Net P&L: ${roundPrice(pAndL?.eth)} ETH`, 40, 190);
+    ctx.fillText(`Net P&L: ${roundPrice(pAndL?.eth)} ETH`, 40, 340);
 
     ctx.fillStyle = "black";
-    ctx.fillText(`Status: ${status}`, 40, 230);
-    ctx.fillText(`HODL: ${holdDurationStatus}`, 40, 260);
-    ctx.fillStyle = "white";
-    ctx.fillText(`app.wagmilabs.tools`, 55, 340);
-    download(canvas, "test.png");
-  };
+    ctx.fillText(`Status: ${status}`, 40, 410);
+    ctx.fillText(`HODL: ${holdDurationStatus}`, 40, 460);
 
-  console.log(data);
+    ctx.fillStyle = "white";
+    ctx.fillText(`app.wagmilabs.tools`, 135, 560);
+    download(canvas, "P&L_wagmilabs.png");
+  };
+  banner.src = bannerPnl;
+
+  pfp.crossOrigin = "anonymous";
+  pfp.src = `${profileImage}.png`;
 }
 
 function download(canvas, filename) {

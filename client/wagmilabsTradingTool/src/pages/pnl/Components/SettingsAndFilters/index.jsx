@@ -25,7 +25,7 @@ export const SettingsAndFilters = React.memo(
 
     const { profileImage } = useContext(UserDataContext);
 
-    const { paid, sold, pAndL, taxes } = getRecap(data, taxPerc, taxedOn, taxLossHarvesting, longTermTax);
+    const { paid, sold, pAndL } = getRecap(data, taxPerc, taxedOn, taxLossHarvesting, longTermTax);
 
     return (
       <>
@@ -42,7 +42,7 @@ export const SettingsAndFilters = React.memo(
             <div />
             <Button
               className="btn-settings btn-export"
-              onClick={() => downloadPnlImage(data, paid, sold, pAndL, taxes, address, profileImage)}
+              onClick={() => downloadPnlImage(data, paid, sold, pAndL, address, profileImage, { startDate, endDate })}
             >
               Share PNL
               <i className="fa-solid fa-share" />
