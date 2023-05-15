@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/static/css/main.31e147dd.css",
-    "main.js": "/static/js/main.572d7562.js",
+    "main.js": "/static/js/main.a1c4e9f2.js",
     "static/js/5000.a447016a.chunk.js": "/static/js/5000.a447016a.chunk.js",
     "static/js/6966.d2d55852.chunk.js": "/static/js/6966.d2d55852.chunk.js",
     "static/js/7997.044a1898.chunk.js": "/static/js/7997.044a1898.chunk.js",
@@ -63,8 +63,8 @@
     "static/js/4163.a7c658cb.chunk.js": "/static/js/4163.a7c658cb.chunk.js",
     "static/js/4726.81132218.chunk.js": "/static/js/4726.81132218.chunk.js",
     "static/js/3381.1146cf57.chunk.js": "/static/js/3381.1146cf57.chunk.js",
-    "static/media/intro.mp4": "/static/media/intro.55e8f3226605a8571323.mp4",
-    "static/media/video-thumbnail.svg": "/static/media/video-thumbnail.bd8b30547dcf0748020403934f7b095a.svg",
+    "static/media/intro.mp4": "/static/media/intro.71703dab20ab44bd532e.mp4",
+    "static/media/video-thumbnail.png": "/static/media/video-thumbnail.949f9b93e6bf1c247e3d.png",
     "static/media/question.png": "/static/media/question.06fe110f4be5b9d9400b.png",
     "static/media/feed-banner.jpeg": "/static/media/feed-banner.b638092af630b23d0b36.jpeg",
     "static/media/magically.png": "/static/media/magically.0565c4c60cfaf43561d8.png",
@@ -150,7 +150,7 @@
     "static/media/delete.svg": "/static/media/delete.321d985cbeb9c91f04ec239df9ee6ae3.svg",
     "static/media/cryptopunks.svg": "/static/media/cryptopunks.2f944e7e58ee64b11641bd04d8f30649.svg",
     "main.31e147dd.css.map": "/static/css/main.31e147dd.css.map",
-    "main.572d7562.js.map": "/static/js/main.572d7562.js.map",
+    "main.a1c4e9f2.js.map": "/static/js/main.a1c4e9f2.js.map",
     "5000.a447016a.chunk.js.map": "/static/js/5000.a447016a.chunk.js.map",
     "6966.d2d55852.chunk.js.map": "/static/js/6966.d2d55852.chunk.js.map",
     "7997.044a1898.chunk.js.map": "/static/js/7997.044a1898.chunk.js.map",
@@ -214,6 +214,6 @@
   },
   "entrypoints": [
     "static/css/main.31e147dd.css",
-    "static/js/main.572d7562.js"
+    "static/js/main.a1c4e9f2.js"
   ]
 }
