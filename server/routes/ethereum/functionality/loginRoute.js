@@ -137,7 +137,7 @@ module.exports = loginRoute;
 
 async function getProfileImage(address) {
   try {
-    pfp = await fetch(`https://api.opensea.io/api/v1/account/${address}`);
+    let pfp = await fetch(`https://api.opensea.io/api/v1/account/${address}`);
     pfp = await pfp.json();
     pfp = pfp?.data?.profile_img_url || "https://upload.wikimedia.org/wikipedia/commons/2/2c/Default_pfp.svg";
 

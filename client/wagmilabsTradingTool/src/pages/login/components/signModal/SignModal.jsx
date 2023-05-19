@@ -5,6 +5,7 @@ import { Button, Checkbox } from "@chakra-ui/react";
 import { useSignMessage, useAccount } from "wagmi";
 import { Loader } from "@Components";
 import { baseUrl } from "@Variables";
+import ReactGA from "react-ga";
 
 import "./style.scss";
 import { useLocationParams } from "../../../../custom-hooks/useLocationParams";
@@ -19,6 +20,8 @@ By signing, you accept Wagmi Labs' Terms of Service, which you can find here: ht
 Your authentication status will reset after 24 hours.
 
 If you're connecting a hardware wallet, you'll need to sign the message on your device, too.`;
+
+ReactGA.initialize("GTM-WWSJ25L");
 
 const SignModal = ({ setConnected, setSignIn }) => {
   const { source } = useLocationParams();
@@ -51,7 +54,14 @@ const SignModal = ({ setConnected, setSignIn }) => {
 
           if (authenticated && token) {
             localStorage.setItem("jsonwebtoken", token);
+
             setConnected(true);
+
+            ReactGA.event({
+              category: "login",
+              action: "Logged in",
+            });
+
             if (window.location.pathname !== "/") window.location.href = "/";
           } else {
             setHasError(true);
