@@ -5,6 +5,7 @@ const checkOwnership = require("../../../middleware/checkOwnership.js");
 const User = require("../../../models/userModel.js");
 const { insertStats } = require("../../../utils/utils.js");
 const { saveAddress } = require("@sharemint/sdk");
+const { wasAllowed } = require("../../../config/allowedAddresses.js");
 
 const loginRoute = express();
 
@@ -34,6 +35,22 @@ loginRoute.post("/", checkOwnership, async (req, res) => {
         pass_type: passType,
         extra_data: null,
       });
+
+      if (passType !== 4) {
+        const userWasAllowed = wasAllowed(address);
+        if (userWasAllowed) {
+          await insertStats({
+            type: "partnership_comeback",
+            timestamp,
+            source,
+            address,
+            ip_address: ip,
+            pass_type: passType,
+            extra_data: null,
+          });
+        }
+      }
+
       const accessToken = JWT.sign(
         {
           address,

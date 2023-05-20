@@ -7,7 +7,7 @@ const insertStats = async ({ type, timestamp, source, address, ip_address, pass_
   if (partOfTeam) return;
   await client
     .query(
-      "INSERT INTO stats (type, timestamp, source, address, ip_address, pass_type, extra_data) VALUES ($1, $2, $3, $4, $5, $6, $7)",
+      "INSERT INTO stats (type, timestamp, source, address, ip_address, pass_type, extra_data) SELECT $1, $2, $3, $4, $5, $6, $7 WHERE NOT EXISTS (SELECT 1 FROM stats WHERE address = $4 AND type = $1)",
       [type, timestamp, source, address, ip_address, pass_type, extra_data]
     )
     .catch(e => {

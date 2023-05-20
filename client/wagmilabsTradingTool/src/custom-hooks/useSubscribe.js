@@ -4,13 +4,10 @@ import { fetchSigner } from "@wagmi/core";
 import { pushToServer } from "../utils/functions/serverCalls";
 import { checkErrors } from "../utils/functions/errorHelpers";
 import { useToast } from "@chakra-ui/react";
-import ReactGA from "react-ga";
 import { useLocationParams } from "./useLocationParams";
 import { useContext } from "react";
 import { UserDataContext } from "../context/userContext";
 import logOut from "../utils/functions/logout";
-
-ReactGA.initialize("GTM-WWSJ25L");
 
 export const useSubscribe = () => {
   const toast = useToast();
@@ -69,9 +66,10 @@ export const useSubscribe = () => {
           value: ethers.utils.parseEther(price.toFixed(5).toString()),
         });
         await tx.wait();
-        ReactGA.event({
-          category: "subscription",
-          action: "Created subscription",
+        window?.gtag("event", "subscription", {
+          event_category: "subscription",
+          event_label: "subscription",
+          value: "subscription",
         });
         await pushToServer("/stats", { type: "boughtPro", timestamp: Date.now(), source });
 
