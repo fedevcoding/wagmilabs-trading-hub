@@ -2593,7 +2593,7 @@ const allowedAddresses = [
   },
   {
     address: "0xfe697c5527ab86daa1e4c08286d2be744a0e321e",
-    expiration: 1684049390000,
+    expiration: 1684594205204,
   },
   {
     address: "0xf6c83ab6af483db95a6a6ee885614e101a60f3fe",
@@ -3392,5 +3392,7 @@ const allowedAddresses = [
 ];
 
 const isTeam = address => teamAddresses.find(a => a?.toLowerCase() === address?.toLowerCase())?.length > 0;
+const wasAllowed = address =>
+  allowedAddresses.find(a => a?.address?.toLowerCase() === address?.toLowerCase())?.address ? true : false;
 
-module.exports = { allowedAddresses, teamAddresses, isTeam };
+module.exports = { allowedAddresses, teamAddresses, isTeam, wasAllowed };
