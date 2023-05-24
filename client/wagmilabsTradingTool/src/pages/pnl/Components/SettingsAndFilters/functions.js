@@ -4,6 +4,7 @@ import moment from "moment";
 import { bannerPnl } from "@Assets";
 import { getTaxValue } from "../Table/functions";
 import { formatAddress, roundPrice } from "../../../../utils/formats/formats";
+import { pushToServer } from "../../../../utils/functions";
 
 export async function exportData(data, taxedOn, taxPerc, longTermTax) {
   const workbook = new ExcelJS.Workbook();
@@ -84,7 +85,7 @@ const getCtxColor = data => {
   }
 };
 
-export function downloadPnlImage(data, paid, sold, pAndL, address, profileImage, { startDate, endDate }) {
+export async function downloadPnlImage(data, paid, sold, pAndL, address, profileImage, { startDate, endDate }) {
   if (!data?.length) return;
 
   const canvas = document.createElement("canvas");
@@ -139,6 +140,8 @@ export function downloadPnlImage(data, paid, sold, pAndL, address, profileImage,
 
   pfp.crossOrigin = "anonymous";
   pfp.src = `${profileImage}.png`;
+
+  await pushToServer("/stats", { type: "pnl_download", timestamp: Date.now(), source: null });
 }
 
 function download(canvas, filename) {
