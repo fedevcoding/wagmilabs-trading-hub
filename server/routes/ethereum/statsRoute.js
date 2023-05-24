@@ -2,7 +2,6 @@ const express = require("express");
 const checkAuth = require("../../middleware/checkAuth");
 const { execTranseposeAPI } = require("../../services/externalAPI/transpose");
 const statsRoute = express();
-const { isTeam } = require("../../config/allowedAddresses");
 const adduserData = require("../../middleware/addUserData");
 const { insertStats } = require("../../utils/utils");
 
