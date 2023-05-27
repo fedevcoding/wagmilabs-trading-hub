@@ -56,6 +56,7 @@ const freeTrialRoute = require("./routes/ethereum/functionality/freeTrialroute.j
 const twChartRoute = require("./routes/ethereum/tradingview/twChartsRoute.js");
 const ipRoute = require("./routes/ethereum/ipRoute.js");
 const activeUsersRoute = require("./routes/ethereum/activeUsersRoute.js");
+const addEmailRoute = require("./routes/ethereum/addEmailRoute.js");
 
 const useRoutes = app => {
   // team analytics
@@ -69,6 +70,7 @@ const useRoutes = app => {
   app.use("/api/v1/wagmilabs/verify", verifyRoute);
   app.use("/api/v1/wagmilabs/removeRefreshToken", removeRefreshTokenRoute);
   app.use("/api/v1/wagmilabs/refreshCollection", refreshCollectionRoute);
+  app.use("/api/v1/wagmilabs/addEmail", addEmailRoute);
 
   // user routes
   app.use("/api/v1/wagmilabs/setUserImage", profileImageRoute);

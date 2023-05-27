@@ -3,11 +3,12 @@ require("dotenv").config();
 const { contractAddress, abi } = require("../config/contractData");
 const { allowedAddresses } = require("../config/allowedAddresses");
 const { checkSignature } = require("../services/checkSignature");
+const { client } = require("../config/db");
 
 const SIGNER_PRIVATE_KEY = process.env.SIGNER_PRIVATE_KEY;
 const CHAIN_ID = process.env.CHAIN_ID;
 
-// passtypes: 0 = wagmi pass, 1 = basic sub, 2 = pro sub, 3 = free trial, 4 = allowed/partnership, 5 = free access
+// passtypes: 0 = wagmi pass, 1 = basic sub, 2 = pro sub, 3 = free trial, 4 = allowed/partnership, 5 = free access, 6 email pro
 async function checkValid(address) {
   try {
     let passType;
@@ -30,13 +31,23 @@ async function checkValid(address) {
       passType = 4;
       return [passType, expiration];
     }
+    const addressInEmail = (await client.query(`SELECT * FROM mails WHERE address = '${address}'`)).rows[0];
+    if (addressInEmail) {
+      const msAmount = 2592000000;
+
+      const { timestamp } = addressInEmail;
+      const expiration = parseInt(timestamp) + msAmount;
+      if (expiration > Date.now()) {
+        return [6, expiration];
+      }
+    }
+
     passType = 5;
     expiration = 1998388898000;
     return [passType, expiration];
-    // return [5, 1998388898000];
   } catch (err) {
     console.log(err);
-    // return [false, 0, 0];
+    return [false, 0, 0];
   }
 }
 

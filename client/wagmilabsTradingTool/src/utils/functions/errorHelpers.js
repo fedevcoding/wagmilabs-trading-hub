@@ -24,6 +24,10 @@ export const checkErrors = error => {
     return "You need to have at least 25 transactions to start a free trial";
   } else if (errorHas(error, "already subscribed")) {
     return "You are already subscribed to this plan";
+  } else if (errorHas(error, "mails_address_key")) {
+    return "Already claimed free pro";
+  } else if (errorHas(error, "mails_email_key")) {
+    return "Email already in use";
   } else {
     return "Something went wrong";
   }
