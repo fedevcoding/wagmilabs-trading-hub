@@ -17,7 +17,7 @@ export const useJwtData = () => {
       const jsonwebtoken = localStorage.getItem("jsonwebtoken");
 
       if (jsonwebtoken) {
-        // 0 = pass, 1 = basic subscription, 2 = pro subscription, 3 = free trial, 4 = allowed/partnership, 5 = free access
+        // 0 = pass, 1 = basic subscription, 2 = pro subscription, 3 = free trial, 4 = allowed/partnership, 5 = free access, 6 = email pro
 
         const decoded = await jwt_decode(jsonwebtoken);
         const { passType, expiration } = decoded;
@@ -28,7 +28,7 @@ export const useJwtData = () => {
           await logOut(setConnected);
         }
 
-        if (passType === 4) {
+        if (passType === 4 || passType === 6) {
           setIsPartnership(true);
           setIsPro(true);
         }
