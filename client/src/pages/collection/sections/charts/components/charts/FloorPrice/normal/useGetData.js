@@ -1,7 +1,7 @@
 import { getFromServer, roundPrice } from "@Utils";
 import Highcharts from "highcharts";
 
-const { useState, useEffect } = require("react");
+import { useState, useEffect } from "react";
 
 export const useGetData = ({ collectionAddress, range }) => {
   // const [data, setData] = useState([]);
