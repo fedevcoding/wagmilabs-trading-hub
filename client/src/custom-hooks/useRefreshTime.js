@@ -1,4 +1,4 @@
-const { useEffect, useState } = require("react");
+import { useState, useEffect } from "react";
 
 export const useRefreshTime = time => {
   const [refresh, setRefresh] = useState(false);

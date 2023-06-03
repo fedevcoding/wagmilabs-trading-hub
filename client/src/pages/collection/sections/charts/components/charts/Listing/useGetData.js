@@ -1,7 +1,7 @@
 import { getFromServer } from "@Utils";
 import Highcharts from "highcharts";
 
-const { useState, useEffect } = require("react");
+import { useState, useEffect } from "react";
 
 export const useGetData = ({ range, collectionAddress }) => {
   const [isLoading, setLoading] = useState(true);
