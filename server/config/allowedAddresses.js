@@ -3389,6 +3389,29 @@ const allowedAddresses = [
     address: "0x3E7e371A2Ead7920fa56BDaB98FD992CEd797e99",
     expiration: 1685798247000,
   },
+  /////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////
+  {
+    address: "0x805cb1A0b88AE74257396FE6373b9E685BA0ae2f",
+    expiration: 1688389456000,
+  },
+  {
+    address: "0xC4d726B9Bb2DEB3Cbc6710c721955c6357eF4A83",
+    expiration: 1688389456000,
+  },
+  {
+    address: "0x003600e3b6685Dce299F6D5ED4AE9A166cC9782b",
+    expiration: 1688389456000,
+  },
+  {
+    address: "0xA325D4151Dab5AFE66f92C65026e6b973f936C5F",
+    expiration: 1688389456000,
+  },
+  {
+    address: "0x5cD50C40a235197D2Ef2a9968e6cA195854f9608",
+    expiration: 1688389456000,
+  },
 ];
 
 const isTeam = address => teamAddresses.find(a => a?.toLowerCase() === address?.toLowerCase())?.length > 0;
