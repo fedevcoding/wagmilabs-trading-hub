@@ -15,7 +15,7 @@ const defaultData = {
   maxAutoBuy: undefined,
   status: "active",
   remaining: undefined,
-  skipFlagged: true,
+  skipFlagged: false,
 };
 
 export const useHandleData = (wallets, step) => {
