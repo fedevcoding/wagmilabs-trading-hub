@@ -9,9 +9,9 @@ reviewRoute.post("/review", async (req, res) => {
   if (!review) return res.status(400).json({ message: "No review found" });
   await insertStats({
     address: null,
-    extra_data: review,
+    extra_data: null,
     ip_address: req.clientIp,
-    pass_type: null,
+    pass_type: review?.toString(),
     source: "website",
     timestamp: Date.now(),
     type: "review",
