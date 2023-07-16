@@ -37,7 +37,7 @@ const app = express();
 app.set("trust proxy", true);
 app.use(express.json({ limit: "500mb" }));
 app.use(express.urlencoded({ limit: "500mb", extended: true }));
-app.use(cors({ credentials: true, origin: "*" }));
+app.use(cors({ credentials: true, origin: ["https://app.wagmilabs.tools", "http://wagmilabs.tools"] }));
 app.use(cookieParser());
 app.use(forms.array());
 app.use(requestIp.mw());
