@@ -1,11 +1,11 @@
-import React, { useContext, useEffect } from "react";
+import React from "react";
 
 import "./style.scss";
 
-import { SocketContext } from "@Context";
-import { useAccount } from "wagmi";
-import { Header, NewTaskModal, Table } from "./components";
-import { useHandleData, useGetData } from "./hooks";
+// import { SocketContext } from "@Context";
+// import { useAccount } from "wagmi";
+// import { Header, NewTaskModal, Table } from "./components";
+// import { useHandleData, useGetData } from "./hooks";
 import { useSecurePro } from "../../../custom-hooks/useSecurePro";
 import { useSetPageTitle } from "../../../custom-hooks";
 
@@ -13,38 +13,41 @@ const SniperBot = () => {
   useSecurePro();
   useSetPageTitle("Sniper bot | Wagmi Labs");
 
-  const { activeSnipes, setActiveSnipes, snipeActivity, loadingSnipes } = useGetData();
-  const {
-    showNewTask,
-    toggleNewTaskModal,
-    section,
-    setSection,
-    toggleSnipe,
-    handleTaskUpdate,
-    restartTaskModalData,
-    setRestartTaskModalData,
-  } = useHandleData(activeSnipes, setActiveSnipes);
+  // const { activeSnipes, setActiveSnipes, snipeActivity, loadingSnipes } = useGetData();
+  // const {
+  //   showNewTask,
+  //   toggleNewTaskModal,
+  //   section,
+  //   setSection,
+  //   toggleSnipe,
+  //   handleTaskUpdate,
+  //   restartTaskModalData,
+  //   setRestartTaskModalData,
+  // } = useHandleData(activeSnipes, setActiveSnipes);
 
-  const { address } = useAccount();
-  const socket = useContext(SocketContext);
-  useEffect(() => {
-    if (address && socket && handleTaskUpdate) {
-      console.log(socket);
-      socket.emit("joinSnipeUpdates", address);
+  // const { address } = useAccount();
+  // const socket = useContext(SocketContext);
+  // useEffect(() => {
+  //   if (address && socket && handleTaskUpdate) {
+  //     console.log(socket);
+  //     socket.emit("joinSnipeUpdates", address);
 
-      socket.off("newSnipeUpdates").on("snipeUpdates", data => {
-        handleTaskUpdate(data);
-      });
+  //     socket.off("newSnipeUpdates").on("snipeUpdates", data => {
+  //       handleTaskUpdate(data);
+  //     });
 
-      return () => {
-        socket.emit("leaveSnipeUpdates", address);
-      };
-    }
-  }, [socket, address, handleTaskUpdate]);
+  //     return () => {
+  //       socket.emit("leaveSnipeUpdates", address);
+  //     };
+  //   }
+  // }, [socket, address, handleTaskUpdate]);
 
   return (
     <section className="sniper-bot-section">
-      <Header section={section} setSection={setSection} toggleNewTaskModal={toggleNewTaskModal} />
+      <h1 style={{ textAlign: "center" }}>
+        Bots are currently disabled, they will come out more powerfull in V2, Say tuned!
+      </h1>
+      {/* <Header section={section} setSection={setSection} toggleNewTaskModal={toggleNewTaskModal} />
 
       <NewTaskModal showNewTask={showNewTask} toggleNewTaskModal={toggleNewTaskModal} toggleSnipe={toggleSnipe} />
 
@@ -56,7 +59,7 @@ const SniperBot = () => {
         setRestartTaskModalData={setRestartTaskModalData}
         snipeActivity={snipeActivity}
         loadingSnipes={loadingSnipes}
-      />
+      /> */}
     </section>
   );
 };

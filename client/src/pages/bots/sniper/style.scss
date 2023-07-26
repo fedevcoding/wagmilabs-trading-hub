@@ -1,4 +1,9 @@
 .sniper-bot-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--page-height);
+
   $grey1: #1e1e1e;
   $lightGrey: #3d3d3d;
 
