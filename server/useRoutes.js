@@ -42,8 +42,8 @@ const pAndLRoute = require("./routes/ethereum/pAndLRoute.js");
 const collectionHolders = require("./routes/ethereum/collections/holders.js");
 const refreshCollectionRoute = require("./routes/ethereum/collections/resfreshColelctionRoute.js");
 const statsRoute = require("./routes/ethereum/statsRoute.js");
-const getSnipeTasksRoute = require("./routes/ethereum/bots/sniperBot/getSnipeTasksRoute.js");
-const editSnipeRoute = require("./routes/ethereum/bots/sniperBot/editSnipeRoute.js");
+// const getSnipeTasksRoute = require("./routes/ethereum/bots/sniperBot/getSnipeTasksRoute.js");
+// const editSnipeRoute = require("./routes/ethereum/bots/sniperBot/editSnipeRoute.js");
 const listingChartRoute = require("./routes/ethereum/charts/listingsChartRoute.js");
 const floorChartRoute = require("./routes/ethereum/charts/floorChartRoute.js");
 const ownersChartRoute = require("./routes/ethereum/charts/ownersChartRoute.js");
@@ -129,7 +129,7 @@ const useRoutes = app => {
   app.use("/api/v1/wagmilabs/collectionCharts", buyersSellersChartRoute);
 
   // bots routes
-  app.use("/api/v1/wagmilabs/bots", editSnipeRoute);
-  app.use("/api/v1/wagmilabs/bots", getSnipeTasksRoute);
+  // app.use("/api/v1/wagmilabs/bots", editSnipeRoute);
+  // app.use("/api/v1/wagmilabs/bots", getSnipeTasksRoute);
 };
 module.exports = useRoutes;
