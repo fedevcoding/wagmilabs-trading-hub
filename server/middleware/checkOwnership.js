@@ -1,12 +1,14 @@
 const { ethers } = require("ethers");
 require("dotenv").config();
-const { contractAddress, abi } = require("../config/contractData");
+const { contractAddress, abi, osDropContractAddress } = require("../config/contractData");
 const { allowedAddresses } = require("../config/allowedAddresses");
 const { checkSignature } = require("../services/checkSignature");
 const { client } = require("../config/db");
 
 const SIGNER_PRIVATE_KEY = process.env.SIGNER_PRIVATE_KEY;
 const CHAIN_ID = process.env.CHAIN_ID;
+
+const osDropExpiration = new Date("2023-09-28T00:00:00.000Z").getTime();
 
 // passtypes: 0 = wagmi pass, 1 = basic sub, 2 = pro sub, 3 = free trial, 4 = allowed/partnership, 5 = free access, 6 email pro
 async function checkValid(address) {
@@ -15,6 +17,7 @@ async function checkValid(address) {
     let expiration;
     const provider = new ethers.providers.InfuraProvider(CHAIN_ID == 5 ? "goerli" : null, SIGNER_PRIVATE_KEY);
     const contract = new ethers.Contract(contractAddress, abi, provider);
+    const contract2 = new ethers.Contract(osDropContractAddress, abi, provider);
     const passData = await contract.hasValidPass(address);
     const isValid = passData[0];
     if (isValid) {
@@ -31,6 +34,13 @@ async function checkValid(address) {
       passType = 4;
       return [passType, expiration];
     }
+
+    const isOsDrop = await contract2.balanceOf(address);
+    if (isOsDrop > 0 && osDropExpiration > Date.now()) {
+      passType = 4;
+      return [passType, osDropExpiration];
+    }
+
     const addressInEmail = (await client.query(`SELECT * FROM mails WHERE address = '${address}'`)).rows[0];
     if (addressInEmail) {
       const msAmount = 2592000000;

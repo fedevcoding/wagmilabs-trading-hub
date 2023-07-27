@@ -12,8 +12,10 @@ const contractAbi = [
     type: "function",
   },
 ];
+const osDropContractAddress = "0x7d64004337a1379a0e955448dcf6c80692f3610f";
 
 module.exports = {
   contractAddress,
   abi: contractAbi,
+  osDropContractAddress,
 };
