@@ -70,9 +70,9 @@ server.listen(port, async () => {
   console.log("App is listening on port " + port);
   await connectDB();
   useRoutes(app);
-  require("./websockets/sales");
-  require("./websockets/listings");
-  require("./websockets/floorChanges");
+  // require("./websockets/sales");
+  // require("./websockets/listings");
+  // require("./websockets/floorChanges");
   await getGasData();
 });
 //

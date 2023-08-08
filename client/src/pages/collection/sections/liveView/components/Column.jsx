@@ -1,17 +1,17 @@
-import React from 'react'
-import ColumnHeader from './ColumnHeader.jsx'
+import React from "react";
+import ColumnHeader from "./ColumnHeader.jsx";
 
 const Column = ({ children, type, columnHovered, changeHover }) => {
-
   return (
-    <div className='column' onMouseEnter={() => changeHover(type, true)} onMouseLeave={() => changeHover(type, false)}>
-      <ColumnHeader type={type} columnHovered={columnHovered}/>
+    <div className="column" onMouseEnter={() => changeHover(type, true)} onMouseLeave={() => changeHover(type, false)}>
+      <ColumnHeader type={type} columnHovered={columnHovered} />
 
-      <div className={"items"}>
+      {/* <div className={"items"}>
         {children}
-      </div>
+      </div> */}
+      <p>Closed for maintainance</p>
     </div>
-  )
-}
+  );
+};
 
-export default Column
+export default Column;

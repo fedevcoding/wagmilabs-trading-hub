@@ -719,14 +719,28 @@ const Collection = () => {
           <p>Items</p>
           <LivePulsing notActive={!liveItems} />
         </div>
-        <div section="liveview" onClick={e => changeCollectionSection(e)} className="single-collection-section flex-15">
+        <div
+          section="liveview"
+          onClick={
+            e => {}
+            // changeCollectionSection(e)
+          }
+          className="single-collection-section flex-15 not-allowed"
+        >
           <p>Live view</p>
           <LivePulsing />
         </div>
         <div section="activity" onClick={e => changeCollectionSection(e)} className="single-collection-section">
           Activity
         </div>
-        <div section="charts" onClick={e => changeCollectionSection(e)} className="single-collection-section">
+        <div
+          section="charts"
+          onClick={
+            e => {}
+            // changeCollectionSection(e)
+          }
+          className="single-collection-section flex-15 not-allowed"
+        >
           Charts
         </div>
         <div section="leaderboard" onClick={e => changeCollectionSection(e)} className="single-collection-section">

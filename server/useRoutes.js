@@ -92,8 +92,8 @@ const useRoutes = app => {
   app.use("/api/v1/wagmilabs/tokenListPrice", tokenLisrPriceRoute);
   app.use("/api/v1/wagmilabs/profileActivity", profileActivityRoute);
   app.use("/api/v1/wagmilabs/profileTradedCollections", profileTradedCollectionsRoute);
-  app.use("/api/v1/wagmilabs/collectionListings", collectionListingsRoute);
-  app.use("/api/v1/wagmilabs/collectionSales", collectionSalesRoute);
+  // app.use("/api/v1/wagmilabs/collectionListings", collectionListingsRoute);
+  // app.use("/api/v1/wagmilabs/collectionSales", collectionSalesRoute);
   app.use("/api/v1/wagmilabs/drops", dropsRoute);
   app.use("/api/v1/wagmilabs/events", eventsRoute);
   app.use("/api/v1/wagmilabs/personal", personalRoute);
@@ -107,9 +107,9 @@ const useRoutes = app => {
   app.use("/api/v1/wagmilabs/holdingNftDistribution", holdingNftDistributionRoute);
   app.use("/api/v1/wagmilabs/tradedDistribution", tradedDistributionRoute);
   app.use("/api/v1/wagmilabs/profileCollections", profileCollectionsRoute);
-  app.use("/api/v1/wagmilabs/trending", trendingRoute);
-  app.use("/api/v1/wagmilabs/minting", mintingRoute);
-  app.use("/api/v1/wagmilabs/ranking", rankingRoute);
+  // app.use("/api/v1/wagmilabs/trending", trendingRoute);
+  // app.use("/api/v1/wagmilabs/minting", mintingRoute);
+  // app.use("/api/v1/wagmilabs/ranking", rankingRoute);
   app.use("/api/v1/wagmilabs/volumes", volumesRoute);
   app.use("/api/v1/wagmilabs/feed", feedRoute);
   app.use("/api/v1/wagmilabs/collectionItems", collectionItemsRoute);
@@ -119,14 +119,14 @@ const useRoutes = app => {
   app.use("/api/v1/wagmilabs/stats", statsRoute);
 
   // collection charts
-  app.use("/api/v1/wagmilabs/collectionCharts", listingChartRoute);
-  app.use("/api/v1/wagmilabs/collectionCharts", floorChartRoute);
-  app.use("/api/v1/wagmilabs/collectionCharts", advancedFloorChartRoute);
-  app.use("/api/v1/wagmilabs/collectionCharts", ownersChartRoute);
-  app.use("/api/v1/wagmilabs/collectionCharts", volumeChartRoute);
-  app.use("/api/v1/wagmilabs/collectionCharts", salesChartRoute);
-  app.use("/api/v1/wagmilabs/collectionCharts", avgPriceChartRoute);
-  app.use("/api/v1/wagmilabs/collectionCharts", buyersSellersChartRoute);
+  // app.use("/api/v1/wagmilabs/collectionCharts", listingChartRoute);
+  // app.use("/api/v1/wagmilabs/collectionCharts", floorChartRoute);
+  // app.use("/api/v1/wagmilabs/collectionCharts", advancedFloorChartRoute);
+  // app.use("/api/v1/wagmilabs/collectionCharts", ownersChartRoute);
+  // app.use("/api/v1/wagmilabs/collectionCharts", volumeChartRoute);
+  // app.use("/api/v1/wagmilabs/collectionCharts", salesChartRoute);
+  // app.use("/api/v1/wagmilabs/collectionCharts", avgPriceChartRoute);
+  // app.use("/api/v1/wagmilabs/collectionCharts", buyersSellersChartRoute);
 
   // bots routes
   // app.use("/api/v1/wagmilabs/bots", editSnipeRoute);
