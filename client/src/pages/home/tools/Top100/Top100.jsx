@@ -22,7 +22,7 @@ const Top100 = ({ tool, timeFrame, setTimeFrame, resetTime }) => {
   const firstRender = useFirstRender();
 
   const [stats, setStats] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const time = times[timeFrame];
   const timeRef = useRef(time);
@@ -63,19 +63,16 @@ const Top100 = ({ tool, timeFrame, setTimeFrame, resetTime }) => {
 
   async function getTop(loading) {
     try {
-      if (!loading) loading = false;
-      setLoading(loading);
-
-      let data = await fetch(`${baseUrl}/ranking/${timeRef.current}`, {
-        headers: {
-          "x-auth-token": localStorage.jsonwebtoken,
-        },
-      });
-      data = await data.json();
-
-      const { rankingCollections, time } = data;
-
-      if (time === timeRef.current) sortData(rankingCollections);
+      // if (!loading) loading = false;
+      // setLoading(loading);
+      // let data = await fetch(`${baseUrl}/ranking/${timeRef.current}`, {
+      //   headers: {
+      //     "x-auth-token": localStorage.jsonwebtoken,
+      //   },
+      // });
+      // data = await data.json();
+      // const { rankingCollections, time } = data;
+      // if (time === timeRef.current) sortData(rankingCollections);
     } catch (e) {
       console.log(e);
       sortData([]);
@@ -153,144 +150,144 @@ const Top100 = ({ tool, timeFrame, setTimeFrame, resetTime }) => {
     e.currentTarget.children[1].previousElementSibling.classList.add("nameSelected");
   }
 
-  const mappedStats = useMemo(
-    () =>
-      stats.map((stat, index) => {
-        const { floor_price, image, contractAddress, name, totalSupply, creationDate } = stat;
-        const sales = stat.rightSales;
-        const volume = stat.volume;
-        const { volumeStats } = stat;
-        const { floorStats } = stat;
+  // const mappedStats = useMemo(
+  //   () =>
+  //     stats.map((stat, index) => {
+  //       const { floor_price, image, contractAddress, name, totalSupply, creationDate } = stat;
+  //       const sales = stat.rightSales;
+  //       const volume = stat.volume;
+  //       const { volumeStats } = stat;
+  //       const { floorStats } = stat;
 
-        const creationDay = moment(creationDate).fromNow();
+  //       const creationDay = moment(creationDate).fromNow();
 
-        return (
-          <TableLink
-            // onClick={() => window.open(`/collection/${contractAddress}`, "_blank")}
-            to={`/collection/${contractAddress}`}
-            className="single-collection-container"
-            key={index}
-          >
-            <td className="image-name-container">
-              <LazyLoadImage src={image} className="top100-image" effect="blur" placeholderSrc={placeholderImage} />
-              <div className="top100-name-date">
-                <p className="top100-name">{name}</p>
-                <p className="top100-created-date">{creationDay}</p>
-              </div>
-            </td>
-            <td>
-              <div className="top100-floor-price">
-                <i className="fa-brands fa-ethereum"></i>
-                <p>{floor_price}</p>
-              </div>
-            </td>
-            <td className="top100-chart-floor-price">
-              <div className="fp-chart">
-                {floorStats && (
-                  <HighchartsReact
-                    className="chart"
-                    highcharts={Highcharts}
-                    options={{
-                      series: [
-                        {
-                          name: "Floor price",
-                          data: [floorStats["30day"] || 0, floorStats["7day"] || 0, floorStats["1day"] || 0],
-                        },
-                      ],
-                      xAxis: {
-                        categories: ["30 DAYS", "7 DAYS", "1 DAY"],
-                        visible: false,
-                      },
-                      yAxis: {
-                        visible: false,
-                      },
-                      legend: {
-                        enabled: false,
-                      },
-                      title: {
-                        text: "",
-                      },
-                      chart: {
-                        type: "spline",
-                        width: 160,
-                        height: 80,
-                        backgroundColor: "transparent",
-                        borderRadius: 10,
-                      },
-                      tooltip: {
-                        followPointer: true,
-                        hideDelay: 200,
-                        outside: true,
-                      },
-                    }}
-                  />
-                )}
-              </div>
-            </td>
-            <td className="top100-sales filtered">
-              <p>{sales}</p>
-            </td>
-            <td>
-              <div className="top100-volume">
-                <i className="fa-brands fa-ethereum"></i>
-                <p>{Math.round(volume * 1000) / 1000}</p>
-              </div>
-            </td>
-            <td className="top100-chart-volume">
-              <div className="volume-chart">
-                {volumeStats && volumeStats["1day"] && volumeStats["7day"] && volumeStats["30day"] ? (
-                  <HighchartsReact
-                    highcharts={Highcharts}
-                    options={{
-                      series: [
-                        {
-                          name: "Volume",
-                          data: [volumeStats["1day"] || 0, volumeStats["7day"] || 0, volumeStats["30day"] || 0],
-                          borderRadius: 5,
-                        },
-                      ],
-                      xAxis: {
-                        categories: ["1 DAY", "7 DAYS", "30 DAYS"],
-                        visible: false,
-                      },
-                      yAxis: {
-                        visible: false,
-                      },
-                      legend: {
-                        enabled: false,
-                      },
-                      title: {
-                        text: "",
-                      },
-                      chart: {
-                        type: "column",
-                        width: 160,
-                        height: 80,
-                        backgroundColor: "transparent",
-                      },
-                      tooltip: {
-                        followPointer: true,
-                        followTouchMove: true,
-                        hideDelay: 200,
-                        outside: true,
-                      },
-                    }}
-                  />
-                ) : (
-                  <div className="no-data">
-                    <p className="low-opacity">No data yet</p>
-                  </div>
-                )}
-              </div>
-            </td>
-            <td className="top100-supply">
-              <p>{totalSupply}</p>
-            </td>
-          </TableLink>
-        );
-      }),
-    [stats]
-  );
+  //       return (
+  //         <TableLink
+  //           // onClick={() => window.open(`/collection/${contractAddress}`, "_blank")}
+  //           to={`/collection/${contractAddress}`}
+  //           className="single-collection-container"
+  //           key={index}
+  //         >
+  //           <td className="image-name-container">
+  //             <LazyLoadImage src={image} className="top100-image" effect="blur" placeholderSrc={placeholderImage} />
+  //             <div className="top100-name-date">
+  //               <p className="top100-name">{name}</p>
+  //               <p className="top100-created-date">{creationDay}</p>
+  //             </div>
+  //           </td>
+  //           <td>
+  //             <div className="top100-floor-price">
+  //               <i className="fa-brands fa-ethereum"></i>
+  //               <p>{floor_price}</p>
+  //             </div>
+  //           </td>
+  //           <td className="top100-chart-floor-price">
+  //             <div className="fp-chart">
+  //               {floorStats && (
+  //                 <HighchartsReact
+  //                   className="chart"
+  //                   highcharts={Highcharts}
+  //                   options={{
+  //                     series: [
+  //                       {
+  //                         name: "Floor price",
+  //                         data: [floorStats["30day"] || 0, floorStats["7day"] || 0, floorStats["1day"] || 0],
+  //                       },
+  //                     ],
+  //                     xAxis: {
+  //                       categories: ["30 DAYS", "7 DAYS", "1 DAY"],
+  //                       visible: false,
+  //                     },
+  //                     yAxis: {
+  //                       visible: false,
+  //                     },
+  //                     legend: {
+  //                       enabled: false,
+  //                     },
+  //                     title: {
+  //                       text: "",
+  //                     },
+  //                     chart: {
+  //                       type: "spline",
+  //                       width: 160,
+  //                       height: 80,
+  //                       backgroundColor: "transparent",
+  //                       borderRadius: 10,
+  //                     },
+  //                     tooltip: {
+  //                       followPointer: true,
+  //                       hideDelay: 200,
+  //                       outside: true,
+  //                     },
+  //                   }}
+  //                 />
+  //               )}
+  //             </div>
+  //           </td>
+  //           <td className="top100-sales filtered">
+  //             <p>{sales}</p>
+  //           </td>
+  //           <td>
+  //             <div className="top100-volume">
+  //               <i className="fa-brands fa-ethereum"></i>
+  //               <p>{Math.round(volume * 1000) / 1000}</p>
+  //             </div>
+  //           </td>
+  //           <td className="top100-chart-volume">
+  //             <div className="volume-chart">
+  //               {volumeStats && volumeStats["1day"] && volumeStats["7day"] && volumeStats["30day"] ? (
+  //                 <HighchartsReact
+  //                   highcharts={Highcharts}
+  //                   options={{
+  //                     series: [
+  //                       {
+  //                         name: "Volume",
+  //                         data: [volumeStats["1day"] || 0, volumeStats["7day"] || 0, volumeStats["30day"] || 0],
+  //                         borderRadius: 5,
+  //                       },
+  //                     ],
+  //                     xAxis: {
+  //                       categories: ["1 DAY", "7 DAYS", "30 DAYS"],
+  //                       visible: false,
+  //                     },
+  //                     yAxis: {
+  //                       visible: false,
+  //                     },
+  //                     legend: {
+  //                       enabled: false,
+  //                     },
+  //                     title: {
+  //                       text: "",
+  //                     },
+  //                     chart: {
+  //                       type: "column",
+  //                       width: 160,
+  //                       height: 80,
+  //                       backgroundColor: "transparent",
+  //                     },
+  //                     tooltip: {
+  //                       followPointer: true,
+  //                       followTouchMove: true,
+  //                       hideDelay: 200,
+  //                       outside: true,
+  //                     },
+  //                   }}
+  //                 />
+  //               ) : (
+  //                 <div className="no-data">
+  //                   <p className="low-opacity">No data yet</p>
+  //                 </div>
+  //               )}
+  //             </div>
+  //           </td>
+  //           <td className="top100-supply">
+  //             <p>{totalSupply}</p>
+  //           </td>
+  //         </TableLink>
+  //       );
+  //     }),
+  //   [stats]
+  // );
 
   return (
     <>
@@ -347,14 +344,14 @@ const Top100 = ({ tool, timeFrame, setTimeFrame, resetTime }) => {
             )}
           </thead>
           <tbody>
-            {!loading && stats.length === 0 ? (
-              <div className="watchlist-not-found">
-                <img src={notFound} alt="" />
-                <p>No collections found...</p>
-              </div>
-            ) : (
-              mappedStats
-            )}
+            {/* {!loading && stats.length === 0 ? ( */}
+            <div className="trending-not-found">
+              <img src={notFound} alt="" />
+              <p>This page is in maintainance for upgrades...</p>
+            </div>
+            {/* ) : ( */}
+            {/* mappedStats */}
+            {/* )} */}
           </tbody>
         </table>
       </div>
