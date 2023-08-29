@@ -1,7 +1,6 @@
 const { connectDB } = require("../../config/db");
 const Drops = require("../../models/calendars/DropsModel");
 require("dotenv").config();
-const fetch = require("node-fetch");
 
 (async () => {
   try {
