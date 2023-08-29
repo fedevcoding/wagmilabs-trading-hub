@@ -1,7 +1,7 @@
 const express = require("express");
 const checkAuth = require("../../../middleware/checkAuth");
 // const Listings = require("../../../models/ListingsModel");
-const { client } = require("../../../config/db");
+const { client, prisma } = require("../../../config/db");
 
 const collectionListingsRoute = express();
 
@@ -17,7 +17,7 @@ collectionListingsRoute.get("/:address", checkAuth, (req, res) => {
       // const totalListings = (await Listings.findOne({ contractAddress: lowerCased }, { listings: { $slice: -2000 } }))
       // ?.listings;
 
-      const sevenDaysAgo = new Date().getTime() - 7 * 24 * 60 * 60 * 1000;
+      // const sevenDaysAgo = new Date(new Date().getTime() - 7 * 24 * 60 * 60 * 1000).toISOString();
 
       // const totalListings = (
       //   await Listings.aggregate([
@@ -30,17 +30,16 @@ collectionListingsRoute.get("/:address", checkAuth, (req, res) => {
       //   ])
       // )[0].listings;
 
+      // const totalListings = [];
       const totalListings = (
-        await client.query(
-          `SELECT * FROM listings WHERE contract_address = '${lowerCased}' AND timestamp > ${sevenDaysAgo} ORDER BY timestamp DESC LIMIT 2000`
-        )
-      ).rows.map(listing => {
+        await prisma.$queryRaw`SELECT * FROM listing WHERE contract_address = ${lowerCased} AND valid_from IS NOT NULL ORDER BY valid_from DESC LIMIT 1000`
+      )?.map(listing => {
         return {
           ...listing,
           tokenAddress: listing.contract_address,
           orderHash: listing.order_hash,
           tokenId: listing.token_id,
-          timestamp: parseInt(listing.timestamp),
+          timestamp: new Date(listing.valid_from).getTime(),
         };
       });
       res.status(200).json({ totalListings, status: "success", ok: true });

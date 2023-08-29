@@ -1,6 +1,6 @@
 const express = require("express");
 const checkAuth = require("../../../middleware/checkAuth");
-const { client } = require("../../../config/db");
+const { prisma } = require("../../../config/db");
 const checkTrendingPro = require("./middlewares/checkTrendingPro");
 
 const trendingRoute = express();
@@ -11,55 +11,51 @@ trendingRoute.get("/:time", checkAuth, checkTrendingPro, (req, res) => {
       const { time } = req.params;
       const userTime = parseInt(time);
 
-      const rightTime = new Date().getTime() - userTime;
+      const rightTime = new Date(new Date().getTime() - userTime).toISOString();
 
-      const trendingColl = await client
-        .query(
-          `
+      const trendingColl = await prisma.$queryRaw`
           SELECT
           salesCount,
           salesVolume,
           sales.contract_address,
-          collections.name,
-          collections.total_supply,
-          collections.floor_price,
-          collections.created_date,
-          collections.slug,
-          collections.image 
+          collection.name,
+          collection.total_supply,
+          collection.floor_price,
+          collection.created_at,
+          collection.slug,
+          collection.image 
        FROM
           (
              SELECT
-                COUNT(1) as salesCount,
+                COUNT(*) as salesCount,
                 SUM(value) as salesVolume,
                 contract_address 
              FROM
-                sales 
+                "sale"
              WHERE
-                timestamp >= ${rightTime} 
+                timestamp >= ${rightTime}::timestamp
              GROUP BY
                 contract_address 
              ORDER BY
-                salesCount DESC LIMIT 50 
+                salesCount DESC LIMIT 50
           )
           as sales 
           LEFT JOIN
-             collections 
-             ON sales.contract_address = collections.contract_address;
-        `
-        )
-        .catch(e => console.log(e));
+             "collection"
+             ON sales.contract_address = collection.contract_address;
+             `.catch(e => console.log(e));
 
-      const formattedTrendingColl = trendingColl?.rows?.map(coll => {
+      const formattedTrendingColl = trendingColl?.map(coll => {
         return {
           contractAddress: coll.contract_address,
-          creationDate: coll.created_date,
+          creationDate: coll.created_at,
           floorStats: {},
           floor_price: coll.floor_price,
           name: coll.name,
           image: coll.image,
           slug: coll.slug,
           totalSupply: coll.total_supply,
-          rightSales: coll.salescount,
+          rightSales: parseInt(coll.salescount),
           volume: coll.salesvolume,
           volumeStats: {},
         };
@@ -67,6 +63,7 @@ trendingRoute.get("/:time", checkAuth, checkTrendingPro, (req, res) => {
 
       res.status(200).json({ trendingCollections: formattedTrendingColl, time });
     } catch (e) {
+      console.log(e);
       res.status(500).json({ error: e });
     }
   }

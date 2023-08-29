@@ -1,15 +1,15 @@
 import React from "react";
 import "./style.scss";
 import { PageWrapper } from "@Components";
-// import { ChartSelector, CollectionCharts } from "./components";
-// import useChart from "./useChart";
+import { ChartSelector, CollectionCharts } from "./components";
+import useChart from "./useChart";
 
 const Charts = ({ collectionAddress, collectionSlug, floorPrice, collectionName }) => {
-  // const { charts, activeChart, changeChart } = useChart();
+  const { charts, activeChart, changeChart } = useChart();
 
   return (
     <PageWrapper page="collection-charts">
-      {/* <ChartSelector charts={charts} activeChart={activeChart} changeChart={changeChart} />
+      <ChartSelector charts={charts} activeChart={activeChart} changeChart={changeChart} />
 
       <CollectionCharts
         activeChart={activeChart}
@@ -18,7 +18,7 @@ const Charts = ({ collectionAddress, collectionSlug, floorPrice, collectionName 
         collectionSlug={collectionSlug}
         floorPrice={floorPrice}
         collectionName={collectionName}
-      /> */}
+      />
     </PageWrapper>
   );
 };

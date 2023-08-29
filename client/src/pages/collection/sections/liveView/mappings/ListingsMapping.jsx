@@ -54,7 +54,7 @@ const ListingMapping = memo(({ listings, contractAddress, collectionImage, isLoa
                   <div className="wrap-text">
                     <p className="wrap-text">{name || tokenId}</p>
                     <p className="live-view-sale-time low-opacity little-text">
-                      <TimeAgo timestamp={timestamp} isUnix={ms ? false : true} intervalMs={1000} />
+                      <TimeAgo timestamp={timestamp} isUnix={false} intervalMs={1000} />
                     </p>
                   </div>
                 </div>

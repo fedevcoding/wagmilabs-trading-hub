@@ -39,8 +39,8 @@ const BubbleChart = memo(({ totalListings, totalSales, floorPrice }) => {
   useEffect(() => {
     const listingData = totalListings
       ?.map(listing => {
-        const { value, timestamp, name, image, tokenId, marketplace, ms } = listing;
-        const realTimestamp = ms ? timestamp : timestamp * 1000;
+        const { value, timestamp, name, image, tokenId, marketplace } = listing;
+        const realTimestamp = timestamp;
 
         const rightTime = Date.now() - maxTime;
 

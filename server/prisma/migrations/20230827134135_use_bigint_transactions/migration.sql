@@ -1,0 +1,5 @@
+-- AlterTable
+ALTER TABLE "transaction" ALTER COLUMN "gas_price" SET DATA TYPE BIGINT,
+ALTER COLUMN "max_fee_per_gas" SET DATA TYPE BIGINT,
+ALTER COLUMN "max_priority_fee_per_gas" SET DATA TYPE BIGINT,
+ALTER COLUMN "nonce" SET DATA TYPE BIGINT;

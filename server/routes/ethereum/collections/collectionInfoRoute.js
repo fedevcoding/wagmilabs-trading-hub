@@ -7,7 +7,7 @@ const collectionInfoRoute = express();
 const RESERVOIR_API_KEY = process.env.RESERVOIR_API_KEY;
 
 collectionInfoRoute.get("/:address", checkAuth, (req, res) => {
-  const { address: userAddress } = req.userDetails || {};
+  // const { address: userAddress } = req.userDetails || {};
 
   async function getData() {
     try {

@@ -1,15 +1,16 @@
-import { LivePulsing } from '@Components'
-import React from 'react'
+import { LivePulsing } from "@Components";
+import React from "react";
 
 const ColumnHeader = ({ type, columnHovered }) => {
-    return (
-        <div className='column-header'>
-            <div className='title'>
-                <p>{type === "listings" ? "Listings" : "Sales"}</p>
-                <LivePulsing notActive={columnHovered[type]}/>
-            </div>
-        </div>
-    )
-}
+  return (
+    <div className="column-header">
+      <div className="title">
+        <p>{type === "listings" ? "Listings" : "Sales"}</p>
+        <LivePulsing notActive={true} />
+        {/* <LivePulsing notActive={columnHovered[type]} /> */}
+      </div>
+    </div>
+  );
+};
 
-export default ColumnHeader
+export default ColumnHeader;

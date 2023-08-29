@@ -10,24 +10,24 @@ import ListingChart from "./components/ListingChart";
 import ComparisonChart from "./components/ComparisonChart";
 
 const LiveView = memo(({ address, floorPrice, collectionImage, collectionName }) => {
-  // const [columnHovered, setColumnHovered] = useState({
-  //   listings: false,
-  //   sales: false,
-  // });
+  const [columnHovered, setColumnHovered] = useState({
+    listings: false,
+    sales: false,
+  });
 
-  // const { isLoading, sales, listings, totalListings, totalSales, tokens } = useGetData(
-  //   address,
-  //   columnHovered,
-  //   floorPrice
-  // );
+  const { isLoading, sales, listings, totalListings, totalSales, tokens } = useGetData(
+    address,
+    columnHovered,
+    floorPrice
+  );
 
-  // const changeHover = (type, hovered) => {
-  //   setColumnHovered(prev => ({ ...prev, [type]: hovered }));
-  // };
+  const changeHover = (type, hovered) => {
+    setColumnHovered(prev => ({ ...prev, [type]: hovered }));
+  };
 
   return (
     <PageWrapper page="collection-live-view">
-      {/* <div className="live-view-section">
+      <div className="live-view-section">
         <Column type="listings" columnHovered={columnHovered} changeHover={changeHover}>
           <ListingMapping
             listings={listings}
@@ -55,7 +55,7 @@ const LiveView = memo(({ address, floorPrice, collectionImage, collectionName })
 
       <div>
         {!isLoading && <BubbleChart totalListings={totalListings} totalSales={totalSales} floorPrice={floorPrice} />}
-      </div> */}
+      </div>
     </PageWrapper>
   );
 });

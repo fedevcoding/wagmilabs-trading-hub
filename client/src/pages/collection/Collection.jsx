@@ -8,7 +8,6 @@ import Activity from "./sections/activity/Activity";
 import Charts from "./sections/charts/Charts.jsx";
 import Leaderboard from "./sections/leaderboard/Leaderboard";
 
-// import { useMoralisWeb3Api } from "react-moralis";
 import "./collection.css";
 
 import { baseUrl } from "@Variables";
@@ -321,11 +320,21 @@ const Collection = () => {
       const { name } = data;
       setPageTitle(`${name} | Wagmi Labs`);
 
-      const openseContractDataApi = await fetch(`https://api.opensea.io/api/v1/asset_contract/${address}`);
+      const openseContractDataApi = await fetch(`https://api.opensea.io/api/v1/asset_contract/${address}`, {
+        headers: {
+          "Content-Type": "application/json",
+          "X-API-KEY": "2b069923a89d416aa68613d5543306e0",
+        },
+      });
       const openseContractData = await openseContractDataApi.json();
       const { slug } = openseContractData?.collection || data;
 
-      const openseaDataApi = await fetch(`https://api.opensea.io/api/v1/collection/${slug}`);
+      const openseaDataApi = await fetch(`https://api.opensea.io/api/v1/collection/${slug}`, {
+        headers: {
+          "Content-Type": "application/json",
+          "X-API-KEY": "2b069923a89d416aa68613d5543306e0",
+        },
+      });
       const openseaData = (await openseaDataApi.json())?.collection;
 
       const royalties =
@@ -717,30 +726,17 @@ const Collection = () => {
           onClick={e => changeCollectionSection(e)}
         >
           <p>Items</p>
-          <LivePulsing notActive={!liveItems} />
+          {/* <LivePulsing notActive={!liveItems} /> */}
+          <LivePulsing notActive={true} />
         </div>
-        <div
-          section="liveview"
-          onClick={
-            e => {}
-            // changeCollectionSection(e)
-          }
-          className="single-collection-section flex-15 not-allowed"
-        >
+        <div section="liveview" onClick={e => changeCollectionSection(e)} className="single-collection-section flex-15">
           <p>Live view</p>
-          <LivePulsing />
+          <LivePulsing notActive={true} />
         </div>
         <div section="activity" onClick={e => changeCollectionSection(e)} className="single-collection-section">
           Activity
         </div>
-        <div
-          section="charts"
-          onClick={
-            e => {}
-            // changeCollectionSection(e)
-          }
-          className="single-collection-section flex-15 not-allowed"
-        >
+        <div section="charts" onClick={e => changeCollectionSection(e)} className="single-collection-section">
           Charts
         </div>
         <div section="leaderboard" onClick={e => changeCollectionSection(e)} className="single-collection-section">

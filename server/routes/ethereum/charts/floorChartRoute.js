@@ -1,5 +1,5 @@
 const express = require("express");
-const { client } = require("../../../config/db");
+const { client, prisma } = require("../../../config/db");
 const { execTranseposeAPI } = require("../../../services/externalAPI/transpose");
 const checkAuth = require("../../../middleware/checkAuth");
 const { chartResolutions, fillFloorGaps, fillVolumeGaps } = require("./chartUtils");
@@ -32,6 +32,7 @@ floorChartRoute.get("/floorPrice", checkAuth, async (req, res) => {
 floorChartRoute.get("/floorPriceTW", checkAuth, async (req, res) => {
   try {
     const { collectionAddress, resolution, from } = req.query;
+    const timestamp = new Date(parseInt(from)).toISOString();
 
     if (!collectionAddress) throw new Error("Collection address is required");
 
@@ -39,34 +40,80 @@ floorChartRoute.get("/floorPriceTW", checkAuth, async (req, res) => {
 
     if (!granularity) throw new Error("Invalid resolution");
 
-    const floorSql = `
-      WITH daily_data AS (
-        SELECT
-          TIMESTAMP 'epoch' + INTERVAL '1 second' * (FLOOR(EXTRACT(epoch FROM to_timestamp(timestamp / 1000.0)) / (1 * ${granularity} * 60)) * (1 * ${granularity} * 60)) AS time,
-          floor_price,
-          ROW_NUMBER() OVER (PARTITION BY TIMESTAMP 'epoch' + INTERVAL '1 second' * (FLOOR(EXTRACT(epoch FROM to_timestamp(timestamp / 1000.0)) / (1 * ${granularity} * 60)) * (1 * ${granularity} * 60)) ORDER BY timestamp DESC) AS reverse_rank
-        FROM
-          floor_changes
-        WHERE
-          contract_address = '${collectionAddress}'
-        AND timestamp >= ${from}
-        ORDER BY timestamp
-      )
-      
-      SELECT
-        time,
-        MIN(floor_price) FILTER (WHERE reverse_rank = 1) AS close,
-        MAX(floor_price) AS high,
-        MIN(floor_price) AS low
-      FROM
-        daily_data
-      GROUP BY
-        time
-      ORDER BY
-        time;
-    `;
+    //     const floorSql = `
+    //       WITH daily_data AS (
+    //         SELECT
+    //           TIMESTAMP 'epoch' + INTERVAL '1 second' * (FLOOR(EXTRACT(epoch FROM to_timestamp(timestamp / 1000.0)) / (1 * ${granularity} * 60)) * (1 * ${granularity} * 60)) AS time,
+    //           floor_price,
+    //           ROW_NUMBER() OVER (PARTITION BY TIMESTAMP 'epoch' + INTERVAL '1 second' * (FLOOR(EXTRACT(epoch FROM to_timestamp(timestamp / 1000.0)) / (1 * ${granularity} * 60)) * (1 * ${granularity} * 60)) ORDER BY timestamp DESC) AS reverse_rank
+    //         FROM
+    //           floor_changes
+    //         WHERE
+    //           contract_address = '${collectionAddress}'
+    //         AND timestamp >= ${timestamp}
+    //         ORDER BY timestamp
+    //       )
 
-    const { rows: candleSticks } = await client.query(floorSql);
+    //       SELECT
+    //         time,
+    //         MIN(floor_price) FILTER (WHERE reverse_rank = 1) AS close,
+    //         MAX(floor_price) AS high,
+    //         MIN(floor_price) AS low
+    //       FROM
+    //         daily_data
+    //       GROUP BY
+    //         time
+    //       ORDER BY
+    //         time;
+    //     `;
+
+    //     const sql = prisma.$queryRaw`SELECT
+    //     TIMESTAMP 'epoch' + INTERVAL '1 second' * (
+    //         FLOOR(EXTRACT(EPOCH FROM timestamp AT TIME ZONE 'UTC') / (1 * ${granularity} * 60))
+    //         * (1 * ${granularity} * 60)
+    //     ) AS TIME,
+    //     FLOOR_PRICE,
+    //     ROW_NUMBER() OVER (
+    //         PARTITION BY TIMESTAMP 'epoch' + INTERVAL '1 second' * (
+    //             FLOOR(EXTRACT(EPOCH FROM timestamp AT TIME ZONE 'UTC') / (1 * ${granularity} * 60))
+    //             * (1 * ${granularity} * 60)
+    //         )
+    //         ORDER BY timestamp DESC
+    //     ) AS REVERSE_RANK
+    // FROM
+    //     "collection_floor_change"
+    // WHERE
+    //     CONTRACT_ADDRESS = ${collectionAddress}
+    //     AND timestamp >= ${from}
+    // ORDER BY
+    //     timestamp;
+    // `;
+
+    const candleSticks = await prisma.$queryRaw`
+WITH DAILY_DATA AS
+	(SELECT TIMESTAMP 'epoch' + INTERVAL '1 second' * (
+        FLOOR(EXTRACT(EPOCH FROM timestamp AT TIME ZONE 'UTC') / (1 * ${granularity} * 60))
+        * (1 * ${granularity} * 60)
+    ) AS TIME,
+			FLOOR_PRICE,
+			ROW_NUMBER() OVER (PARTITION BY TIMESTAMP 'epoch' + INTERVAL '1 second' * (
+            FLOOR(EXTRACT(EPOCH FROM timestamp AT TIME ZONE 'UTC') / (1 * ${granularity} * 60))
+            * (1 * ${granularity} * 60)
+        )
+				ORDER BY timestamp DESC) AS REVERSE_RANK
+		FROM "collection_floor_change"
+		WHERE CONTRACT_ADDRESS = ${collectionAddress}
+			AND timestamp >= ${timestamp}::timestamp
+		ORDER BY timestamp)
+SELECT TIME,
+	MIN(FLOOR_PRICE) FILTER (
+		WHERE REVERSE_RANK = 1) AS CLOSE,
+	MAX(FLOOR_PRICE) AS HIGH,
+	MIN(FLOOR_PRICE) AS LOW
+FROM DAILY_DATA
+GROUP BY TIME
+ORDER BY TIME;
+`;
 
     let startDate = Date.now();
     const result = candleSticks.map((row, index) => {
