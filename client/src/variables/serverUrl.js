@@ -1,3 +1,3 @@
-const serverUrl = "https://api.wagmilabs.tools";
+const serverUrl = "https://wagmiapi.wagmilabs.tools";
 
 module.exports = serverUrl;
