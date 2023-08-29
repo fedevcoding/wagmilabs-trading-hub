@@ -14,6 +14,8 @@ const { initIo } = require("./socketio/socket.js");
 const { getGasData } = require("./services/gasData/gasData.js");
 const { CLIENT_URL } = require("./variables/index.js");
 const { createClient } = require("@reservoir0x/reservoir-sdk");
+const fetch = require("node-fetch");
+globalThis.fetch = fetch;
 const RESERVOIR_API_KEY = process.env.RESERVOIR_API_KEY;
 
 // reservoir client
