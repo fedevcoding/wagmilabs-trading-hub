@@ -9,10 +9,10 @@ const charts = [
     name: "Buyers/sellers",
     value: "buyers/sellers",
   },
-  {
-    name: "Listings",
-    value: "listings",
-  },
+  // {
+  //   name: "Listings",
+  //   value: "listings",
+  // },
   {
     name: "Owners",
     value: "owners",

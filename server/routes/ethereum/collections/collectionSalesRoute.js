@@ -1,7 +1,7 @@
 const express = require("express");
 const checkAuth = require("../../../middleware/checkAuth");
 // const Sales = require("../../../models/SalesModel");
-const { client } = require("../../../config/db");
+const { client, prisma } = require("../../../config/db");
 
 const collectionSalesRoute = express();
 
@@ -18,7 +18,7 @@ collectionSalesRoute.get("/:address", checkAuth, (req, res) => {
       // (await Sales.findOne({ contractAddress: lowerCasedAddress }, { sales: { $slice: -2000 } }))?.sales || [];
 
       // get all total sales of the last 7 days in descending order
-      const sevenDaysAgo = new Date().getTime() - 7 * 24 * 60 * 60 * 1000;
+      // const sevenDaysAgo = new Date(new Date().getTime() - 7 * 24 * 60 * 60 * 1000).toISOString();
 
       // const totalSales = (
       //   await Sales.aggregate([
@@ -31,19 +31,20 @@ collectionSalesRoute.get("/:address", checkAuth, (req, res) => {
       //   ])
       // )[0].sales;
 
-      const totalSales = (
-        await client.query(
-          `SELECT * FROM sales WHERE contract_address = '${lowerCasedAddress}' AND timestamp > ${sevenDaysAgo} ORDER BY timestamp DESC LIMIT 2000`
-        )
-      ).rows.map(sale => {
-        return {
-          ...sale,
-          tokenAddress: sale.contract_address,
-          transactionHash: sale.transaction_hash,
-          tokenId: sale.token_id,
-          timestamp: parseInt(sale.timestamp),
-        };
-      });
+      const totalSales = // await client.query(
+        //   `SELECT * FROM sales WHERE contract_address = '${lowerCasedAddress}' AND timestamp > ${sevenDaysAgo} ORDER BY timestamp DESC LIMIT 2000`
+        // )
+        (
+          await prisma.$queryRaw`SELECT * FROM sale WHERE contract_address = ${lowerCasedAddress} ORDER BY timestamp DESC LIMIT 1000`
+        )?.map(sale => {
+          return {
+            ...sale,
+            tokenAddress: sale.contract_address,
+            transactionHash: sale.transaction_hash,
+            tokenId: sale.token_id,
+            timestamp: new Date(sale.timestamp).getTime(),
+          };
+        });
 
       res.status(200).json({ totalSales, status: "success", ok: true });
     } catch (e) {

@@ -1,6 +1,6 @@
 const express = require("express");
 const checkAuth = require("../..//../middleware/checkAuth");
-const { client } = require("../..//../config/db");
+const { prisma } = require("../../../config/db");
 const checkRankingPro = require("./middlewares/checkRankingPro");
 
 const rankingRoute = express();
@@ -11,55 +11,52 @@ rankingRoute.get("/:time", checkAuth, checkRankingPro, (req, res) => {
       const { time } = req.params || {};
       const userTime = parseInt(time);
 
-      const rightTime = new Date().getTime() - userTime;
+      const rightTime = new Date(new Date().getTime() - userTime).toISOString();
 
-      const rankingColl = await client
-        .query(
-          `
+      const rankingColl = await prisma.$queryRaw`
       SELECT
       salesCount,
       salesVolume,
       sales.contract_address,
-      collections.name,
-      collections.total_supply,
-      collections.floor_price,
-      collections.created_date,
-      collections.slug,
-      collections.image 
+      collection.name,
+      collection.total_supply,
+      collection.floor_price,
+      collection.created_at,
+      collection.slug,
+      collection.image 
    FROM
       (
          SELECT
-            COUNT(1) as salesCount,
+            COUNT(*) as salesCount,
             SUM(value) as salesVolume,
             contract_address 
          FROM
-            sales 
+            "sale"
          WHERE
-            timestamp >= ${rightTime} 
+            timestamp >= ${rightTime}::timestamp
+            AND currency = 'ETH'
          GROUP BY
             contract_address 
          ORDER BY
-         salesVolume DESC LIMIT 50 
+            salesVolume DESC LIMIT 50
       )
       as sales 
       LEFT JOIN
-         collections 
-         ON sales.contract_address = collections.contract_address;
-    `
-        )
-        .catch(e => console.log(e));
+         "collection"
+         ON sales.contract_address = collection.contract_address;
+         `.catch(e => console.log(e));
 
-      const formattedRankingColl = rankingColl?.rows?.map(coll => {
+      const formattedRankingColl = rankingColl?.map(coll => {
         return {
           contractAddress: coll.contract_address,
-          creationDate: coll.created_date,
+          creationDate: coll.created_at,
           floorStats: {},
           floor_price: coll.floor_price,
           name: coll.name,
           image: coll.image,
           slug: coll.slug,
           totalSupply: coll.total_supply,
-          rightSales: coll.salescount,
+          rightSales: parseInt(coll.salescount),
           volume: coll.salesvolume,
           volumeStats: {},
         };

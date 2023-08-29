@@ -6,10 +6,8 @@ const Column = ({ children, type, columnHovered, changeHover }) => {
     <div className="column" onMouseEnter={() => changeHover(type, true)} onMouseLeave={() => changeHover(type, false)}>
       <ColumnHeader type={type} columnHovered={columnHovered} />
 
-      {/* <div className={"items"}>
-        {children}
-      </div> */}
-      <p>Closed for maintainance</p>
+      <div className={"items"}>{children}</div>
+      {/* <p>Closed for maintainance</p> */}
     </div>
   );
 };
