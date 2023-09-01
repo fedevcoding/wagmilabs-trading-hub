@@ -4523,7 +4523,7 @@
           }));
         if (d) return d.getAllCharts().then(e);
         try {
-          const t = await fetch(`https://api.wagmilabs.tools/${p("charts")}`);
+          const t = await fetch(`https://wagmiapi.wagmilabs.tools/${p("charts")}`);
           if (!t.ok) throw new Error(`Getting chart content response was not OK. Status: ${t.status}.`);
           const i = await t.json();
           if ("ok" !== i.status) throw new Error("Get chart content request failed: " + i.message);
@@ -4536,7 +4536,7 @@
         if (d) d.removeChart(e);
         else
           try {
-            const t = await fetch(`https://api.wagmilabs.tools/${p("charts")}&chart=${encodeURIComponent(e)}`, {
+            const t = await fetch(`https://wagmiapi.wagmilabs.tools/${p("charts")}&chart=${encodeURIComponent(e)}`, {
               method: "DELETE",
             });
             if (!t.ok) throw new Error(`Remove chart response was not OK. Status: ${t.status}.`);
@@ -4556,7 +4556,7 @@
           for (const t in c) e.append(t, c[t]);
           let t = p("charts");
           null != l && (t += `&chart=${encodeURIComponent(l)}`);
-          const i = await fetch(`https://api.wagmilabs.tools/${t}`, { method: "POST", body: e });
+          const i = await fetch(`https://wagmiapi.wagmilabs.tools/${t}`, { method: "POST", body: e });
           if (!i.ok) throw new Error(`Saving chart content response was not OK. Status: ${i.status}.`);
           const s = await i.json();
           if ("ok" !== s.status) throw new Error("Saving chart content request failed: " + s.message);
@@ -4572,7 +4572,7 @@
         };
         if (d) return d.getChartContent(e.id).then(e => t(e));
         try {
-          const i = await fetch(`https://api.wagmilabs.tools/${p("charts")}&chart=${encodeURIComponent(e.id)}`);
+          const i = await fetch(`https://wagmiapi.wagmilabs.tools/${p("charts")}&chart=${encodeURIComponent(e.id)}`);
           if (!i.ok) throw new Error(`Getting chart content response was not OK. Status: ${i.status}.`);
           const s = await i.json();
           if ("ok" !== s.status) throw new Error("Get chart content request failed: " + s.message);
