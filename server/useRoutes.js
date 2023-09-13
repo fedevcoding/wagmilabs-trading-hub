@@ -108,7 +108,7 @@ const useRoutes = app => {
   app.use("/api/v1/wagmilabs/tradedDistribution", tradedDistributionRoute);
   app.use("/api/v1/wagmilabs/profileCollections", profileCollectionsRoute);
   app.use("/api/v1/wagmilabs/trending", trendingRoute);
-  // app.use("/api/v1/wagmilabs/minting", mintingRoute);
+  app.use("/api/v1/wagmilabs/minting", mintingRoute);
   app.use("/api/v1/wagmilabs/ranking", rankingRoute);
   app.use("/api/v1/wagmilabs/volumes", volumesRoute);
   app.use("/api/v1/wagmilabs/feed", feedRoute);
