@@ -62,16 +62,16 @@ const Minting = ({ tool, timeFrame, setTimeFrame, resetTime }) => {
 
   async function getMinting(loading) {
     try {
-      // if (!loading) loading = false;
-      // setLoading(loading);
-      // let data = await fetch(`${baseUrl}/minting/${timeRef.current}`, {
-      //   headers: {
-      //     "x-auth-token": localStorage.jsonwebtoken,
-      //   },
-      // });
-      // data = await data.json();
-      // const { mintingCollections, time } = data;
-      // if (timeRef.current === time) sortData(mintingCollections);
+      if (!loading) loading = false;
+      setLoading(loading);
+      let data = await fetch(`${baseUrl}/minting/${timeRef.current}`, {
+        headers: {
+          "x-auth-token": localStorage.jsonwebtoken,
+        },
+      });
+      data = await data.json();
+      const { mintingCollections, time } = data;
+      if (timeRef.current === time) sortData(mintingCollections);
     } catch (e) {
       console.log(e);
       sortData([]);
@@ -165,75 +165,75 @@ const Minting = ({ tool, timeFrame, setTimeFrame, resetTime }) => {
     e.currentTarget.children[1].previousElementSibling.classList.add("nameSelected");
   }
 
-  // const mappedStats = useMemo(
-  //   () =>
-  //     stats.map((stat, index) => {
-  //       const {
-  //         creationDate,
-  //         image,
-  //         contractAddress,
-  //         name,
-  //         totalMints,
-  //         uniqueMinters,
-  //         volume,
-  //         floor_price,
-  //         mintPrice,
-  //         rightMints,
-  //       } = stat;
+  const mappedStats = useMemo(
+    () =>
+      stats.map((stat, index) => {
+        const {
+          creationDate,
+          image,
+          contractAddress,
+          name,
+          totalMints,
+          uniqueMinters,
+          volume,
+          floor_price,
+          mintPrice,
+          rightMints,
+        } = stat;
 
-  //       const creationDay = moment(creationDate).fromNow();
+        const creationDay = moment(creationDate).fromNow();
 
-  //       return (
-  //         <TableLink
-  //           // onClick={() => window.open(`/collection/${contractAddress}`, "_blank")}
-  //           to={`/collection/${contractAddress}`}
-  //           className="single-collection-container"
-  //           key={index}
-  //         >
-  //           <td className="image-name-container">
-  //             <LazyLoadImage src={image} className="minting-image" effect="blur" placeholderSrc={placeholderImage} />
-  //             <div className="minting-name-date">
-  //               <p className="minting-name">{name || "- - -"}</p>
-  //               <p className="minting-created-date">{creationDay}</p>
-  //             </div>
-  //           </td>
-  //           <td>
-  //             <div className="minting-mint-price">
-  //               <i className="fa-brands fa-ethereum"></i>
-  //               <p>{mintPrice ? roundPrice(mintPrice) : 0}</p>
-  //             </div>
-  //           </td>
-  //           <td className="minting-chart-floor-price">
-  //             <div className="minting-floor-price">
-  //               <i className="fa-brands fa-ethereum"></i>
-  //               <p>{floor_price ? roundPrice(floor_price) : 0}</p>
-  //             </div>
-  //           </td>
-  //           <td className="minting-sales filtered">
-  //             <div className="minting-right-mints">{rightMints || "- - -"}</div>
-  //           </td>
-  //           <td>
-  //             <div className="minting-volume">
-  //               <i className="fa-brands fa-ethereum"></i>
-  //               <p>{volume ? roundPrice(volume) : 0}</p>
-  //             </div>
-  //           </td>
-  //           <td className="minting-chart-mint">
-  //             <div className="mint-chart">
-  //               <p className="low-opacity little-text">Coming soon</p>
-  //             </div>
-  //           </td>
-  //           <td className="minting-unique-minters">
-  //             <p>{uniqueMinters || "- - -"}</p>
-  //           </td>
-  //           <td className="minting-total-mints">
-  //             <p>{totalMints || "- - -"}</p>
-  //           </td>
-  //         </TableLink>
-  //       );
-  //     }),
-  //   [stats]
-  // );
+        return (
+          <TableLink
+            // onClick={() => window.open(`/collection/${contractAddress}`, "_blank")}
+            to={`/collection/${contractAddress}`}
+            className="single-collection-container"
+            key={index}
+          >
+            <td className="image-name-container">
+              <LazyLoadImage src={image} className="minting-image" effect="blur" placeholderSrc={placeholderImage} />
+              <div className="minting-name-date">
+                <p className="minting-name">{name || "- - -"}</p>
+                <p className="minting-created-date">{creationDay}</p>
+              </div>
+            </td>
+            <td>
+              <div className="minting-mint-price">
+                <i className="fa-brands fa-ethereum"></i>
+                <p>{mintPrice ? roundPrice(mintPrice) : 0}</p>
+              </div>
+            </td>
+            <td className="minting-chart-floor-price">
+              <div className="minting-floor-price">
+                <i className="fa-brands fa-ethereum"></i>
+                <p>{floor_price ? roundPrice(floor_price) : 0}</p>
+              </div>
+            </td>
+            <td className="minting-sales filtered">
+              <div className="minting-right-mints">{rightMints || "- - -"}</div>
+            </td>
+            <td>
+              <div className="minting-volume">
+                <i className="fa-brands fa-ethereum"></i>
+                <p>{volume ? roundPrice(volume) : 0}</p>
+              </div>
+            </td>
+            <td className="minting-chart-mint">
+              <div className="mint-chart">
+                <p className="low-opacity little-text">Coming soon</p>
+              </div>
+            </td>
+            <td className="minting-unique-minters">
+              <p>{uniqueMinters || "- - -"}</p>
+            </td>
+            <td className="minting-total-mints">
+              <p>{totalMints || "- - -"}</p>
+            </td>
+          </TableLink>
+        );
+      }),
+    [stats]
+  );
 
   return (
     <>
@@ -297,14 +297,14 @@ const Minting = ({ tool, timeFrame, setTimeFrame, resetTime }) => {
             )}
           </thead>
           <tbody>
-            {/* {!loading && stats.length === 0 ? ( */}
-            <div className="trending-not-found">
-              <img src={notFound} alt="" />
-              <p>This page is in maintainance for upgrades...</p>
-            </div>
-            {/* ) : ( */}
-            {/* mappedStats */}
-            {/* )} */}
+            {!loading && stats.length === 0 ? (
+              <div className="watchlist-not-found">
+                <img src={notFound} alt="" />
+                <p>No collections found...</p>
+              </div>
+            ) : (
+              mappedStats
+            )}
           </tbody>
         </table>
       </div>

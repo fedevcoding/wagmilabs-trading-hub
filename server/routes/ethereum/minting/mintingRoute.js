@@ -1,6 +1,6 @@
 const express = require("express");
 const checkAuth = require("../../../middleware/checkAuth");
-const { client } = require("../../../config/db");
+const { prisma } = require("../../../config/db");
 const checkMintingPro = require("./middlewares/checkMintingPro");
 
 const mintingRoute = express();
@@ -11,87 +11,62 @@ mintingRoute.get("/:time", checkAuth, checkMintingPro, (req, res) => {
       const { time } = req.params || {};
       const userTime = parseInt(time);
 
-      const minTime = new Date().getTime() - userTime;
+      const minTime = new Date(new Date().getTime() - userTime).toISOString();
 
-      //   let mintingCollections = await Minting.aggregate([
-      //     {
-      //       $unwind: "$mints",
-      //     },
-      //     {
-      //       $match: {
-      //         "mints.mintTime": { $gt: minTime },
-      //       },
-      //     },
-      //     {
-      //       $group: {
-      //         _id: "$_id",
-      //         uniqueMinters: { $addToSet: "$mints.minterAddress" },
-      //         volume: { $sum: "$mints.value" },
-      //         firstDoc: { $first: "$$ROOT" },
-      //         rightMints: { $sum: "$mints.amount" },
-      //       },
-      //     },
-      //     {
-      //       $unset: "firstDoc.mints",
-      //     },
-      //     {
-      //       $match: { rightMints: { $gt: 0 } },
-      //     },
-      //     {
-      //       $addFields: {
-      //         "firstDoc.volume": "$volume",
-      //         "firstDoc.rightMints": "$rightMints",
-      //         "firstDoc.uniqueMinters": { $size: "$uniqueMinters" },
-      //       },
-      //     },
-      //     {
-      //       $replaceRoot: {
-      //         newRoot: "$firstDoc",
-      //       },
-      //     },
-      //     {
-      //       $sort: {
-      //         rightMints: -1,
-      //       },
-      //     },
-      //     {
-      //       $limit: 50,
-      //     },
-      //   ]);
+      const mintingCollections = await prisma.$queryRaw`
+SELECT
+    unique_minters,
+    volume,
+    right_mints,
+    collection.contract_address,
+    collection.name,
+    collection.total_supply,
+    collection.floor_price,
+    collection.created_at,
+    collection.slug,
+    collection.image
+FROM
+    (
+        SELECT
+            COUNT(DISTINCT m.minter_address) as unique_minters,
+            SUM(m.value) as volume,
+            COUNT(*) as right_mints,
+            m.contract_address
+        FROM
+            mint m
+        WHERE
+            m.timestamp > ${minTime}::timestamp
+        GROUP BY
+            m.contract_address
+        ORDER BY
+            right_mints DESC
+        LIMIT 50
+    ) as mints
+LEFT JOIN
+    collection
+ON
+    mints.contract_address = collection.contract_address;
+         `.catch(e => console.log(e));
 
-      const sql = `
-                    SELECT unique_minters, volume, right_mints, collections.name, mints.contract_address, collections.total_supply, collections.floor_price, collections.created_date, collections.slug, collections.image 
-                    FROM 
-                        (SELECT COUNT(DISTINCT minter_address) as unique_minters, SUM(value) as volume, SUM(amount) as right_mints, contract_address 
-                        FROM mints 
-                        WHERE timestamp > ${minTime} 
-                        GROUP BY contract_address 
-                        ORDER BY right_mints DESC 
-                        LIMIT 50
-                        ) as mints
-                    LEFT JOIN collections ON mints.contract_address = collections.contract_address;
-        `;
-
-      const mintingCollections = await client.query(sql);
-
-      const formattedMintingColelctions = mintingCollections?.rows?.map(coll => {
+      const formattedMintingColelctions = mintingCollections?.map(coll => {
         return {
           contractAddress: coll.contract_address,
-          creationDate: coll.created_date,
+          creationDate: coll.created_at,
           floor_price: coll.floor_price,
           name: coll.name,
           image: coll.image,
           slug: coll.slug,
-          totalMints: coll.total_supply,
-          rightMints: coll.right_mints,
-          volume: coll.volume,
-          uniqueMinters: coll.unique_minters,
-          mintPrice: coll.volume / coll.right_mints,
+          totalMints: parseInt(coll.total_supply),
+          rightMints: parseInt(coll.right_mints),
+          volume: parseInt(coll.volume),
+          uniqueMinters: parseInt(coll.unique_minters),
+          mintPrice: parseInt(coll.volume) / parseInt(coll.right_mints),
         };
       });
 
       res.status(200).json({ mintingCollections: formattedMintingColelctions, time });
     } catch (e) {
+      console.log(e);
       res.status(500).json({ error: e });
     }
   }
