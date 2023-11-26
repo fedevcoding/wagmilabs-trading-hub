@@ -1,6 +1,5 @@
 const express = require("express");
 const checkAuth = require("../../../middleware/checkAuth");
-const Stats = require("../../../models/StatsModel");
 
 const collectionInfoRoute = express();
 
@@ -13,7 +12,7 @@ collectionInfoRoute.get("/:address", checkAuth, (req, res) => {
     try {
       const { address } = req.params;
       const dataApi = await fetch(
-        `https://api.reservoir.tools/collections/v5?id=${address}&includeTopBid=true&includeAttributes=false&includeOwnerCount=false&includeSalesCount=false&normalizeRoyalties=false`,
+        `https://api.reservoir.tools/collections/v7?id=${address}&includeTopBid=true&includeAttributes=false&includeOwnerCount=false&includeSalesCount=true&normalizeRoyalties=false`,
         {
           headers: {
             "x-api-key": RESERVOIR_API_KEY,
@@ -24,7 +23,7 @@ collectionInfoRoute.get("/:address", checkAuth, (req, res) => {
 
       if (!data) return res.status(200).json({ exists: false, error: "Collection not found" });
 
-      const attributesApi = await fetch(`https://api.reservoir.tools/collections/${address}/attributes/all/v2`);
+      const attributesApi = await fetch(`https://api.reservoir.tools/collections/${address}/attributes/all/v3`);
       const { attributes } = await attributesApi.json();
 
       data["attributes"] = attributes;

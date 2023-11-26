@@ -17,4 +17,6 @@ const insertStats = async ({ type, timestamp, source, address, ip_address, pass_
 
 const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
 
-module.exports = { insertStats, wait };
+const IS_DEV = process.env.NODE_ENV === "development";
+
+module.exports = { insertStats, wait, IS_DEV };

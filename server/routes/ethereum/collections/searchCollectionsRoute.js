@@ -6,7 +6,7 @@ const searchCollectionsRoute = express();
 searchCollectionsRoute.get("/:query", async (req, res) => {
   try {
     const { query } = req.params;
-    const { showAddresses } = req.query;
+    // const { showAddresses } = req.query;
 
     if (!query) throw new Error("Missing query fields.");
 
@@ -23,15 +23,15 @@ searchCollectionsRoute.get("/:query", async (req, res) => {
     const data = await execReservoirApi(url, true);
     const { collections } = data;
 
-    let addresses = undefined;
-    if (showAddresses === "true" && type === "address") {
-      const apiData = await fetch(`https://api.opensea.io/api/v1/account/${query}`);
-      const { data } = await apiData.json();
-      const { profile_img_url, address } = data;
-      addresses = [{ address, image: profile_img_url, isAddress: true, name: "Account" }];
-    }
+    // let addresses = undefined;
+    // if (showAddresses === "true" && type === "address") {
+    //   const apiData = await fetch(`https://api.opensea.io/api/v1/account/${query}`);
+    //   const { data } = await apiData.json();
+    //   const { profile_img_url, address } = data;
+    //   addresses = [{ address, image: profile_img_url, isAddress: true, name: "Account" }];
+    // }
 
-    if (addresses) collections.push(...addresses);
+    // if (addresses) collections.push(...addresses);
 
     res.status(200).json(collections);
   } catch (e) {

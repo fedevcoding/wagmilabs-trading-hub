@@ -320,44 +320,40 @@ const Collection = () => {
       const { name } = data;
       setPageTitle(`${name} | Wagmi Labs`);
 
-      const openseContractDataApi = await fetch(`https://api.opensea.io/api/v1/asset_contract/${address}`, {
-        headers: {
-          "Content-Type": "application/json",
-          "X-API-KEY": "2b069923a89d416aa68613d5543306e0",
-        },
-      });
-      const openseContractData = await openseContractDataApi.json();
-      const { slug } = openseContractData?.collection || data;
+      // const openseContractDataApi = await fetch(`https://api.opensea.io/api/v1/asset_contract/${address}`, {
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //     "X-Api-Key": "",
+      //   },
+      // });
+      // const openseContractData = await openseContractDataApi.json();
+      // const { slug } = openseContractData?.collection || data;
 
-      const openseaDataApi = await fetch(`https://api.opensea.io/api/v1/collection/${slug}`, {
-        headers: {
-          "Content-Type": "application/json",
-          "X-API-KEY": "2b069923a89d416aa68613d5543306e0",
-        },
-      });
-      const openseaData = (await openseaDataApi.json())?.collection;
+      // const openseaDataApi = await fetch(`https://api.opensea.io/api/v1/collection/${slug}`, {
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //     "X-API-KEY": "2b069923a89d416aa68613d5543306e0",
+      //   },
+      // });
+      // const openseaData = (await openseaDataApi.json())?.collection;
 
-      const royalties =
-        openseaData?.dev_seller_fee_basis_point ||
-        openseContractData?.dev_seller_fee_basis_points ||
-        data?.royalties?.bps ||
-        "";
-      const createdDate = openseaData?.created_date || openseContractData?.created_date;
-      const marketCap = openseaData?.stats?.market_cap;
-      const avgPrice = openseaData?.stats?.average_price;
-      const owners = openseaData?.stats?.num_owners || openseContractData?.owner;
-      const daySales = openseaData?.stats?.one_day_sales;
-      const totalSales = openseaData?.stats?.total_sales;
-      const ercType = openseContractData?.schema_name;
+      const royalties = data?.royalties?.bps || "";
+      // const createdDate = openseaData?.created_date || openseContractData?.created_date;
+      // const marketCap = openseaData?.stats?.market_cap;
+      // const avgPrice = openseaData?.stats?.average_price;
+      // const owners = openseaData?.stats?.num_owners || openseContractData?.owner;
+      // const daySales = openseaData?.stats?.one_day_sales;
+      // const totalSales = openseaData?.stats?.total_sales;
+      // const ercType = openseContractData?.schema_name;
 
       data["collectionRoyalties"] = royalties;
-      data["createdAt"] = createdDate;
-      data["marketCap"] = marketCap;
-      data["avgPrice"] = avgPrice;
-      data["ownerCount"] = owners;
-      data["oneDaySales"] = daySales;
-      data["totalSales"] = totalSales;
-      data["ercType"] = ercType;
+      // data["createdAt"] = createdDate;
+      // data["marketCap"] = marketCap;
+      // data["avgPrice"] = avgPrice;
+      // data["ownerCount"] = owners;
+      // data["oneDaySales"] = daySales;
+      // data["totalSales"] = totalSales;
+      // data["ercType"] = ercType;
 
       setCollectionInfo(data);
       setLoadingCollection(false);
@@ -628,7 +624,7 @@ const Collection = () => {
               <Loader />
             ) : (
               <div>
-                <p>{collectionInfo.oneDaySales || "- - -"}</p>
+                <p>{collectionInfo?.salesCount?.["1day"] || "- - -"}</p>
               </div>
             )}
           </div>
@@ -709,7 +705,7 @@ const Collection = () => {
                 <Loader />
               ) : (
                 <div>
-                  <p>{collectionInfo.totalSales || "- - -"}</p>
+                  <p>{collectionInfo?.salesCount?.["allTime"] || "- - -"}</p>
                 </div>
               )}
             </div>
