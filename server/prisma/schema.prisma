@@ -8,9 +8,9 @@ datasource db {
 }
 
 model block {
-  block_number      Int           @id
-  timestamp         DateTime      @db.Timestamptz(6)
-  block_hash        String        @unique
+  block_number      Int      @id
+  timestamp         DateTime @db.Timestamptz(6)
+  block_hash        String   @unique
   parent_hash       String
   nonce             String
   miner             String
@@ -19,59 +19,9 @@ model block {
   gas_limit         Int
   gas_used          Int
   transaction_count Int
-  transactions      transaction[]
 
   @@index([block_number])
   @@index([timestamp])
-}
-
-model transaction {
-  transaction_hash         String   @id
-  block_number             Int
-  timestamp                DateTime @db.Timestamptz(6)
-  gas_limit                Int
-  gas_used                 Int
-  gas_price                BigInt?
-  transaction_fee          Float?
-  max_fee_per_gas          BigInt?
-  max_priority_fee_per_gas BigInt?
-  from                     String
-  to                       String?
-  contract_address         String?
-  data                     String?
-  nonce                    BigInt
-  log_count                Int
-  value                    Float
-  transaction_index        Int
-  block                    block    @relation(fields: [block_number], references: [block_number])
-  logs                     log[]
-
-  @@index([block_number])
-  @@index([timestamp])
-  @@index([transaction_hash])
-  @@index([from])
-  @@index([to])
-  @@index([contract_address])
-}
-
-model log {
-  id               String      @id
-  transaction_hash String
-  log_index        Int
-  block_number     Int
-  address          String
-  timestamp        DateTime    @db.Timestamptz(6)
-  data             String
-  topic_0          String?
-  topic_1          String?
-  topic_2          String?
-  topic_3          String?
-  transaction      transaction @relation(fields: [transaction_hash], references: [transaction_hash])
-
-  @@unique([transaction_hash, log_index])
-  @@index([transaction_hash])
-  @@index([block_number])
-  @@index([topic_0, topic_1, topic_2, topic_3])
 }
 
 // model bid {
@@ -159,25 +109,67 @@ model mint {
   id               String     @id
   block_number     Int
   contract_address String
+  operator_address String
   token_id         String
   transaction_hash String
   timestamp        DateTime   @db.Timestamptz(6)
-  is_batch         Boolean    @default(false)
+  is_batch         Boolean
   batch_size       Int?
   batch_index      Int?
   total_value      Float
   value            Float
-  quantity         String     @default("1")
+  quantity         String
   minter_address   String
-  // transaction_fee  Float?
+  transaction_fee  Float?
+  log_index        Int
+  erc_type         erc_type
   collection       collection @relation(fields: [contract_address], references: [contract_address])
 
   @@unique([contract_address, token_id, transaction_hash, minter_address])
   @@index([contract_address, timestamp])
+  @@index([operator_address])
   @@index([contract_address, token_id])
   @@index([contract_address, value])
   @@index([transaction_hash])
+  @@index([block_number])
+  @@index([erc_type])
   @@index([timestamp])
+  @@index([log_index])
+}
+
+model transfer {
+  id               String        @id
+  block_number     Int
+  contract_address String
+  operator_address String
+  token_id         String
+  transaction_hash String
+  timestamp        DateTime      @db.Timestamptz(6)
+  is_batch         Boolean
+  batch_size       Int?
+  batch_index      Int?
+  from             String
+  to               String
+  amount           String
+  transaction_fee  Float?
+  log_index        Int
+  type             transfer_type
+  erc_type         erc_type
+  collection       collection    @relation(fields: [contract_address], references: [contract_address])
+
+  @@unique([contract_address, token_id, transaction_hash, from, to])
+  @@index([contract_address, type])
+  @@index([contract_address, timestamp])
+  @@index([operator_address])
+  @@index([contract_address, token_id])
+  @@index([transaction_hash])
+  @@index([block_number])
+  @@index([timestamp])
+  @@index([log_index])
+  @@index([erc_type])
+  @@index([from])
+  @@index([type])
+  @@index([to])
 }
 
 model collection_floor_change {
@@ -195,17 +187,24 @@ model collection_floor_change {
 }
 
 model token {
-  id               String               @id
+  id String @id
+
+  total_supply String // updatable PROBLEM
+
+  remaining_supply String // updatable PROBLEM
+  total_burns      String // updatable PROBLEM
+
+  owner String? // updatable PROBLEM
+
   contract_address String
   token_id         String
-  name             String?
-  description      String?
-  image            String?
-  media            String?
-  quantity         String
-  rarity_rank      Int?
-  is_flagged       Boolean              @default(false)
-  owner            String
+  name             String? // updatable
+  description      String? // updatable
+  image            String? // updatable
+  media            String? // updatable
+  rarity_rank      Int? // updatable
+  erc_type         erc_type
+  is_flagged       Boolean              @default(false) // updatable
   collection       collection           @relation(fields: [contract_address], references: [contract_address])
   attribute        AttributesOnTokens[]
 
@@ -217,6 +216,7 @@ model token {
   @@index([owner])
 }
 
+// DELETABLE
 model attribute {
   id               String               @id
   contract_address String
@@ -253,7 +253,7 @@ model sale {
   value            Float
   currency         String
   quantity         String
-  order_hash       String
+  order_hash       String?
   from             String
   to               String
   sale_type        sale_type
@@ -266,6 +266,52 @@ model sale {
   @@index([transaction_hash])
 }
 
+model owners {
+  id               String @id
+  contract_address String
+  token_id         String
+  owner            String
+  quantity         String
+
+  @@unique([contract_address, owner, token_id])
+  @@index([contract_address])
+  @@index([contract_address, owner])
+  @@index([owner])
+  @@index([quantity])
+  @@index([token_id])
+}
+
+model profile {
+  id         String    @id
+  address    String    @unique
+  created_at DateTime  @default(now()) @db.Timestamptz(6)
+  plan_type  plan_type
+  image      String    @default("https://storage.googleapis.com/opensea-static/opensea-profile/10.png")
+
+  // profile_setting profile_setting?
+  @@index([address])
+  @@index([plan_type])
+}
+
+// model profile_setting {
+//   id         String  @id
+//   profile_id String  @unique
+//   settings   Json
+//   profile    profile @relation(fields: [profile_id], references: [id], onDelete: Cascade)
+// }
+
+// quick models from old db
+model mails {
+  id         String   @id
+  address    String   @unique
+  email      String   @unique
+  ip_address String
+  timestamp  DateTime @default(now()) @db.Timestamptz(6)
+
+  @@index([address])
+  @@index([email])
+}
+
 model tradingview_chart {
   id               String   @id
   address          String
@@ -275,68 +321,10 @@ model tradingview_chart {
   updated_at       DateTime @default(now()) @db.Timestamptz(6)
   content          Json
   name             String
-}
 
-model transfer {
-  id               String     @id
-  block_number     Int
-  contract_address String
-  token_id         String
-  transaction_hash String
-  from             String
-  to               String
-  amount           String
-  timestamp        DateTime   @db.Timestamptz(6)
-  // transaction_fee  Float?
-  collection       collection @relation(fields: [contract_address], references: [contract_address])
-
-  @@unique([contract_address, token_id, transaction_hash])
-  @@index([contract_address, timestamp])
-  @@index([contract_address, token_id])
-  @@index([transaction_hash])
-  @@index([block_number])
-  @@index([from])
-  @@index([to])
-}
-
-model owners {
-  id               String @id
-  contract_address String
-  address          String
-  quantity         String
-  token_id         String
-
-  @@unique([contract_address, address, token_id])
-  @@index([contract_address])
-  @@index([contract_address, address])
+  @@unique([address, resolution, symbol, contract_address])
   @@index([address])
-  @@index([quantity])
-  @@index([token_id])
-}
-
-//////////////////////////////////////////////////////////
-
-model email {
-  id        String   @id
-  email     String   @unique
-  address   String   @unique
-  timestamp DateTime @default(now()) @db.Timestamptz(6)
-}
-
-model profile {
-  id              String           @id
-  address         String           @unique
-  created_at      DateTime         @default(now()) @db.Timestamptz(6)
-  pass_type       Int
-  image           String           @default("https://storage.googleapis.com/opensea-static/opensea-profile/10.png")
-  profile_setting profile_setting?
-}
-
-model profile_setting {
-  id         String  @id
-  profile_id String  @unique
-  settings   Json
-  profile    profile @relation(fields: [profile_id], references: [id], onDelete: Cascade)
+  @@index([contract_address])
 }
 
 model stat {
@@ -346,10 +334,16 @@ model stat {
   source     String?
   address    String?
   ip_address String?
-  pass_type  Int?
+  plan_type  plan_type?
   extra_data String?
+
+  @@index([type])
+  @@index([timestamp])
+  @@index([plan_type])
 }
 
+//
+// ENUMS
 enum erc_type {
   ERC721
   ERC1155
@@ -375,4 +369,16 @@ enum stats_type {
   pnl_download
   partnership_comeback
   bought_pro
+}
+
+enum plan_type {
+  free
+  pro
+  founder_pass
+  partnership
+}
+
+enum transfer_type {
+  burn
+  transfer
 }

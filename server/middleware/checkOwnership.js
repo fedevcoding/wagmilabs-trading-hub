@@ -3,7 +3,6 @@ require("dotenv").config();
 const { contractAddress, abi, osDropContractAddress } = require("../config/contractData");
 const { allowedAddresses } = require("../config/allowedAddresses");
 const { checkSignature } = require("../services/checkSignature");
-const { client } = require("../config/db");
 
 const SIGNER_PRIVATE_KEY = process.env.SIGNER_PRIVATE_KEY;
 const CHAIN_ID = process.env.CHAIN_ID;
@@ -41,16 +40,16 @@ async function checkValid(address) {
       return [passType, osDropExpiration];
     }
 
-    const addressInEmail = (await client.query(`SELECT * FROM mails WHERE address = '${address}'`)).rows[0];
-    if (addressInEmail) {
-      const msAmount = 2592000000;
+    // const addressInEmail = (await client.query(`SELECT * FROM mails WHERE address = '${address}'`)).rows[0];
+    // if (addressInEmail) {
+    //   const msAmount = 2592000000;
 
-      const { timestamp } = addressInEmail;
-      const expiration = parseInt(timestamp) + msAmount;
-      if (expiration > Date.now()) {
-        return [6, expiration];
-      }
-    }
+    //   const { timestamp } = addressInEmail;
+    //   const expiration = parseInt(timestamp) + msAmount;
+    //   if (expiration > Date.now()) {
+    //     return [6, expiration];
+    //   }
+    // }
 
     passType = 5;
     expiration = 1998388898000;

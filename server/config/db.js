@@ -4,7 +4,7 @@ require("dotenv").config({ path: path.resolve(__dirname, "../.env") });
 const { Client } = require("pg");
 const { PrismaClient } = require("@prisma/client");
 
-const postgres_uri = process.env.POSTGRES_URI;
+const postgres_uri = process.env.DATABASE_URL;
 
 const client = new Client({
   connectionString: postgres_uri,
@@ -17,6 +17,7 @@ const connectDB = async () => {
   try {
     await client.connect();
     await prisma.$connect();
+
     console.log("connected to postgres");
 
     mongoose.set("strictQuery", false);

@@ -2,6 +2,7 @@ const express = require("express");
 const checkTradingviewAuth = require("../../../middleware/tradingviewCheckAuth");
 const { client } = require("../../../config/db");
 require("dotenv").config();
+const crypto = require("crypto");
 
 const twChartRoute = express();
 
@@ -16,11 +17,11 @@ twChartRoute.post("/:collectionAddress/charts", checkTradingviewAuth, async (req
 
     await client.query(
       `WITH deleted_chart AS (
-        DELETE FROM chart_layouts WHERE id = '${contractAddress}' AND address = '${address}'
+        DELETE FROM tradingview_chart WHERE contract_address = '${contractAddress}' AND address = '${address}'
         RETURNING *
       )
-      INSERT INTO chart_layouts (address, name, content, resolution, symbol, id, timestamp)
-      VALUES ('${address}', '${name}', '${content}', '${resolution}', '${symbol}', '${contractAddress}', '${timestamp}')
+      INSERT INTO tradingview_chart (id, address, name, content, resolution, symbol, contract_address, timestamp)
+      VALUES ('${crypto.randomUUID()}', '${address}', '${name}', '${content}', '${resolution}', '${symbol}', '${contractAddress}', '${timestamp}')
       RETURNING *
       `
     );
@@ -39,7 +40,7 @@ twChartRoute.get("/:collectionAddress/charts", checkTradingviewAuth, async (req,
     const { collectionAddress } = req.params;
 
     const { rows: charts } = await client.query(
-      `SELECT * FROM chart_layouts WHERE address = '${address}' AND id = '${collectionAddress}'`
+      `SELECT * FROM tradingview_chart WHERE address = '${address}' AND contract_address = '${collectionAddress}'`
     );
 
     charts.forEach(chart => {
@@ -71,7 +72,7 @@ twChartRoute.delete("/:collectionAddress/charts", checkTradingviewAuth, async (r
     const { address } = req.userDetails;
     const { chart } = req.query;
 
-    await client.query(`DELETE FROM chart_layouts WHERE id = '${chart}' AND address = '${address}'`);
+    await client.query(`DELETE FROM tradingview_chart WHERE contract_address = '${chart}' AND address = '${address}'`);
 
     res.json({ status: "ok" });
   } catch (error) {
