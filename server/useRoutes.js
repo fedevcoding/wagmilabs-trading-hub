@@ -57,12 +57,12 @@ const twChartRoute = require("./routes/ethereum/tradingview/twChartsRoute.js");
 const ipRoute = require("./routes/ethereum/ipRoute.js");
 const activeUsersRoute = require("./routes/ethereum/activeUsersRoute.js");
 // const addEmailRoute = require("./routes/ethereum/addEmailRoute.js");
-const reviewRoute = require("./routes/ethereum/functionality/review.js");
+// const reviewRoute = require("./routes/ethereum/functionality/review.js");
 
 const useRoutes = app => {
   // team analytics
   app.use("/api/v1/data/", activeUsersRoute);
-  app.use("/api/v1/data/", reviewRoute);
+  // app.use("/api/v1/data/", reviewRoute);
 
   // utils routes
   app.use("/api/v1/wagmilabs/ip_address", ipRoute);
