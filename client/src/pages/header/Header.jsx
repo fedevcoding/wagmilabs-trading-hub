@@ -82,44 +82,44 @@ const Header = () => {
   }, []);
 
   // calendars dropdown hover
-  useEffect(() => {
-    const calendarOptionContainer = document.querySelector(".calendars-button");
-    const profileOptions = document.querySelector(".calendars-options-dropdown");
+  // useEffect(() => {
+  //   const calendarOptionContainer = document.querySelector(".calendars-button");
+  //   const profileOptions = document.querySelector(".calendars-options-dropdown");
 
-    let hovered;
+  //   let hovered;
 
-    function calendarsMouseOver() {
-      hovered = true;
-      profileOptions?.classList?.remove("invisible");
-      calendarOptionContainer?.classList?.add("before");
-    }
+  //   function calendarsMouseOver() {
+  //     hovered = true;
+  //     profileOptions?.classList?.remove("invisible");
+  //     calendarOptionContainer?.classList?.add("before");
+  //   }
 
-    function calendarsMouseOut() {
-      hovered = false;
-      setTimeout(() => {
-        if (!hovered) {
-          profileOptions?.classList?.add("invisible");
-          calendarOptionContainer?.classList?.remove("before");
-        }
-      }, 200);
-    }
+  //   function calendarsMouseOut() {
+  //     hovered = false;
+  //     setTimeout(() => {
+  //       if (!hovered) {
+  //         profileOptions?.classList?.add("invisible");
+  //         calendarOptionContainer?.classList?.remove("before");
+  //       }
+  //     }, 200);
+  //   }
 
-    function calendarsClick() {
-      profileOptions?.classList?.add("invisible");
-    }
+  //   function calendarsClick() {
+  //     profileOptions?.classList?.add("invisible");
+  //   }
 
-    calendarOptionContainer.addEventListener("mouseover", calendarsMouseOver);
+  //   calendarOptionContainer.addEventListener("mouseover", calendarsMouseOver);
 
-    calendarOptionContainer.addEventListener("mouseout", calendarsMouseOut);
+  //   calendarOptionContainer.addEventListener("mouseout", calendarsMouseOut);
 
-    calendarOptionContainer.addEventListener("click", calendarsClick);
+  //   calendarOptionContainer.addEventListener("click", calendarsClick);
 
-    return () => {
-      calendarOptionContainer.removeEventListener("mouseover", calendarsMouseOver);
-      calendarOptionContainer.removeEventListener("mouseout", calendarsMouseOut);
-      calendarOptionContainer.removeEventListener("click", calendarsClick);
-    };
-  }, []);
+  //   return () => {
+  //     calendarOptionContainer.removeEventListener("mouseover", calendarsMouseOver);
+  //     calendarOptionContainer.removeEventListener("mouseout", calendarsMouseOut);
+  //     calendarOptionContainer.removeEventListener("click", calendarsClick);
+  //   };
+  // }, []);
 
   // bot dropdown hover
   useEffect(() => {
@@ -288,15 +288,17 @@ const Header = () => {
             <div className={`${section === "/feed" ? "active" : ""} feed-button header-links`}>Feed</div>
           </div>
           <div>
-            <div className="calendars-button header-links">
+            <div className="calendars-button header-links not-allowed">
               <span>Calendars</span>
 
+            {/*
               <div className="calendars-options-dropdown invisible">
                 <div onClick={() => navigate("/calendars/drops")}>NFT drops</div>
                 <div onClick={() => navigate("/calendars/spaces")}>Twitter spaces</div>
                 <div onClick={() => navigate("/calendars/personal")}>Personal</div>
                 <div onClick={() => navigate("/calendars/events")}>IRL events</div>
               </div>
+            */}
             </div>
           </div>
         </div>
